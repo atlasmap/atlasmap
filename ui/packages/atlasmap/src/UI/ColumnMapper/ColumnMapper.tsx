@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Canvas, ICanvasProps } from "../Canvas";
-import React, { FunctionComponent } from "react";
-import { css } from "@patternfly/react-styles";
-import styles from "./ColumnMapper.module.css";
+import { Canvas, ICanvasProps } from '../Canvas';
+import React, { FunctionComponent } from 'react';
+import { css } from '@patternfly/react-styles';
+import styles from './ColumnMapper.module.css';
 
 export interface IColumnMapperProps extends ICanvasProps {}
 

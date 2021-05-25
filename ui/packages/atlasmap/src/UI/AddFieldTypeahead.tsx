@@ -18,16 +18,16 @@ import React, {
   FunctionComponent,
   ReactElement,
   useCallback,
-} from "react";
+} from 'react';
 import {
   Select,
   SelectGroup,
   SelectOption,
   SelectProps,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 
-import styles from "./AddFieldTypeahead.module.css";
-import { useToggle } from "../Atlasmap/utils";
+import styles from './AddFieldTypeahead.module.css';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IAddFieldTypeaheadField {
   label: string;
@@ -85,7 +85,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
   const filterFields = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       try {
-        const searchValueRX = new RegExp(e.target.value, "i");
+        const searchValueRX = new RegExp(e.target.value, 'i');
         return renderOptions(fields.filter((f) => searchValueRX.test(f.label)));
       } catch (err) {}
       return renderOptions(fields);
@@ -93,7 +93,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
     [fields],
   );
 
-  const onSelect: SelectProps["onSelect"] = useCallback(
+  const onSelect: SelectProps['onSelect'] = useCallback(
     (_e, f) => {
       (f as IAddFieldTypeaheadField).onAdd();
       toggleOff();
@@ -104,7 +104,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
   return (
     <div {...props}>
       <Select
-        variant={"typeahead"}
+        variant={'typeahead'}
         typeAheadAriaLabel={ariaLabelTypeAhead}
         onToggle={toggle}
         isOpen={state}

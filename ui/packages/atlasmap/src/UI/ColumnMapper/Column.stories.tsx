@@ -13,24 +13,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Column, ColumnBody, SearchableColumnHeader } from ".";
-import { boolean, number } from "@storybook/addon-knobs";
+import { Column, ColumnBody, SearchableColumnHeader } from '.';
+import { boolean, number } from '@storybook/addon-knobs';
 
-import React from "react";
-import { action } from "@storybook/addon-actions";
+import React from 'react';
+import { action } from '@storybook/addon-actions';
 
 export default {
-  title: "ColumnMapper",
+  title: 'ColumnMapper',
   component: Column,
   includeStories: [], // or don't load this file at all
 };
 
 export const example = () => (
   <Column
-    totalColumns={number("Total number of columns", 1)}
-    visible={boolean("Is visible", true)}
+    totalColumns={number('Total number of columns', 1)}
+    visible={boolean('Is visible', true)}
   >
-    <SearchableColumnHeader title={"Header"} onSearch={action("onSearch")} />
+    <SearchableColumnHeader title={'Header'} onSearch={action('onSearch')} />
     <ColumnBody>
       <p>I can scroll.</p>
       <p>

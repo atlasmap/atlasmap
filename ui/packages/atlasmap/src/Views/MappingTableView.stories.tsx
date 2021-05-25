@@ -13,32 +13,32 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { MappingTableView } from "../Views";
-import React from "react";
-import { action } from "@storybook/addon-actions";
-import { boolean } from "@storybook/addon-knobs";
-import decorators from "../stories/decorators";
-import { mappings } from "../stories/sampleData";
+import { MappingTableView } from '../Views';
+import React from 'react';
+import { action } from '@storybook/addon-actions';
+import { boolean } from '@storybook/addon-knobs';
+import decorators from '../stories/decorators';
+import { mappings } from '../stories/sampleData';
 
 export default {
-  title: "AtlasMap|Views",
+  title: 'AtlasMap|Views',
   decorators,
 };
 
 export const mappingTableView = () => (
   <MappingTableView
     mappings={mappings}
-    onSelectMapping={action("onSelectMapping")}
-    shouldShowMappingPreview={() => boolean("shouldShowMappingPreview", false)}
-    onFieldPreviewChange={action("onFieldPreviewChange")}
+    onSelectMapping={action('onSelectMapping')}
+    shouldShowMappingPreview={() => boolean('shouldShowMappingPreview', false)}
+    onFieldPreviewChange={action('onFieldPreviewChange')}
   />
 );
 
 export const mappingTableViewNoMappings = () => (
   <MappingTableView
     mappings={[]}
-    onSelectMapping={action("onSelectMapping")}
-    shouldShowMappingPreview={() => boolean("shouldShowMappingPreview", false)}
-    onFieldPreviewChange={action("onFieldPreviewChange")}
+    onSelectMapping={action('onSelectMapping')}
+    shouldShowMappingPreview={() => boolean('shouldShowMappingPreview', false)}
+    onFieldPreviewChange={action('onFieldPreviewChange')}
   />
 );

@@ -18,12 +18,12 @@ import {
   MAPPINGS_FIELD_ID_PREFIX,
   SOURCES_FIELD_ID_PREFIX,
   TARGETS_FIELD_ID_PREFIX,
-} from "../Columns";
-import React, { FunctionComponent, MouseEvent } from "react";
+} from '../Columns';
+import React, { FunctionComponent, MouseEvent } from 'react';
 
-import { IAtlasmapMapping } from "../../../Views";
-import { NodesArc } from "../../../UI";
-import styles from "./SourceMappingTargetLinks.module.css";
+import { IAtlasmapMapping } from '../../../Views';
+import { NodesArc } from '../../../UI';
+import styles from './SourceMappingTargetLinks.module.css';
 
 export interface ISourceMappingTargetLinksEvents {
   onMouseOver: (mapping: IAtlasmapMapping) => void;
@@ -57,9 +57,9 @@ export const SourceMappingTargetLinks: FunctionComponent<
     const isHighlighted = m.id === highlightedMappingId;
     const isSelected = m.id === selectedMappingId;
     const color = isSelected
-      ? "var(--pf-global--active-color--100)"
+      ? 'var(--pf-global--active-color--100)'
       : isHighlighted
-      ? "var(--pf-global--active-color--400)"
+      ? 'var(--pf-global--active-color--400)'
       : undefined;
     return [
       ...m.sourceFields.map((s) => (
@@ -92,20 +92,20 @@ export const SourceMappingTargetLinks: FunctionComponent<
     <>
       {links}
       <NodesArc
-        start={"dnd-start"}
-        end={"dnd-target-mapping"}
-        color={"var(--pf-global--active-color--400)"}
+        start={'dnd-start'}
+        end={'dnd-target-mapping'}
+        color={'var(--pf-global--active-color--400)'}
       />
 
       <NodesArc
-        start={"dnd-start"}
-        end={"dnd-new-mapping"}
-        color={"var(--pf-global--active-color--400)"}
+        start={'dnd-start'}
+        end={'dnd-new-mapping'}
+        color={'var(--pf-global--active-color--400)'}
       />
       <NodesArc
-        start={"dnd-new-mapping"}
-        end={"dnd-target-field"}
-        color={"var(--pf-global--active-color--400)"}
+        start={'dnd-new-mapping'}
+        end={'dnd-target-field'}
+        color={'var(--pf-global--active-color--400)'}
       />
     </>
   );

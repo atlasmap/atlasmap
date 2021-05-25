@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Column, ColumnMapper, Columns, NodeRefProvider } from "../UI";
+import { Column, ColumnMapper, Columns, NodeRefProvider } from '../UI';
 import {
   IMappingDocumentEvents,
   IMappingsColumnData,
@@ -27,17 +27,17 @@ import {
   SourceMappingTargetLinks,
   SourcesColumn,
   TargetsColumn,
-} from "./ColumnMapperView";
-import React, { FunctionComponent, useState } from "react";
+} from './ColumnMapperView';
+import React, { FunctionComponent, useState } from 'react';
 
-import { IAtlasmapMapping } from "./models";
+import { IAtlasmapMapping } from './models';
 
 export interface ISourceMappingTargetViewProps
   extends ISourcesColumnData,
     IMappingsColumnData,
     ITargetsColumnData,
     ISourceMappingTargetLinksData {
-  onSelectMapping: ISourceMappingTargetLinksEvents["onSelectMapping"];
+  onSelectMapping: ISourceMappingTargetLinksEvents['onSelectMapping'];
   sourceEvents: ISourceColumnCallbacks;
   mappingEvents: IMappingDocumentEvents;
   targetEvents: ITargetsColumnCallbacks;
@@ -66,10 +66,10 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
     const handleMouseOut = () => setHighlightedMappingId(undefined);
 
     return (
-      <ColumnMapper role={"main"}>
+      <ColumnMapper role={'main'}>
         <NodeRefProvider>
           <Columns>
-            <Column data-testid={"column-source-area"} totalColumns={3}>
+            <Column data-testid={'column-source-area'} totalColumns={3}>
               <SourcesColumn
                 sourceProperties={sourceProperties}
                 constants={constants}
@@ -78,7 +78,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
                 {...sourceEvents}
               />
             </Column>
-            <Column data-testid={"column-mappings-area"} totalColumns={3}>
+            <Column data-testid={'column-mappings-area'} totalColumns={3}>
               <MappingsColumn
                 mappings={mappings}
                 selectedMappingId={selectedMappingId}
@@ -92,7 +92,7 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
                 canDrop={mappingEvents.canDrop}
               />
             </Column>
-            <Column data-testid={"column-target-area"} totalColumns={3}>
+            <Column data-testid={'column-target-area'} totalColumns={3}>
               <TargetsColumn
                 targetProperties={targetProperties}
                 showMappingPreview={showMappingPreview}

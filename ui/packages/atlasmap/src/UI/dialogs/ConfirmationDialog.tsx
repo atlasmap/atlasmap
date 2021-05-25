@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Modal } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+import { Button, Modal } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
 export type ConfirmCallback = () => void;
 export type CancelCallback = () => void;
@@ -48,21 +48,21 @@ export const ConfirmationDialog: FunctionComponent<IConfirmationDialogProps> =
         onClose={onCancel}
         actions={[
           <Button
-            key={"confirm"}
-            variant={"primary"}
+            key={'confirm'}
+            variant={'primary'}
             onClick={onConfirm}
             aria-label="Confirm"
-            data-testid={"confirmation-dialog-confirm-button"}
+            data-testid={'confirmation-dialog-confirm-button'}
             isDisabled={!onConfirm}
           >
             Confirm
           </Button>,
           <Button
-            key={"cancel"}
-            variant={"link"}
+            key={'cancel'}
+            variant={'link'}
             onClick={onCancel}
             aria-label="Cancel"
-            data-testid={"confirmation-dialog-cancel-button"}
+            data-testid={'confirmation-dialog-cancel-button'}
           >
             Cancel
           </Button>,

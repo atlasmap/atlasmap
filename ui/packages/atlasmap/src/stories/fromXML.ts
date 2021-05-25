@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IAtlasmapField, IAtlasmapGroup, IAtlasmapMapping } from "../Views";
+import { IAtlasmapField, IAtlasmapGroup, IAtlasmapMapping } from '../Views';
 
 interface Restrictions {
   restriction: any[];
@@ -89,21 +89,21 @@ export function xmlToFieldGroup(
       id,
       name: jf.name,
       type: jf.fieldType,
-      previewValue: "",
+      previewValue: '',
       path: jf.path,
-      scope: "current",
+      scope: 'current',
       mappings,
       hasTransformations:
         mappings.length > 0 &&
-        (jf.name.startsWith("a") ||
-          jf.name.startsWith("b") ||
-          jf.name.startsWith("c")),
+        (jf.name.startsWith('a') ||
+          jf.name.startsWith('b') ||
+          jf.name.startsWith('c')),
       isAttribute: false,
-      isCollection: jf.collectionType === "LIST",
+      isCollection: jf.collectionType === 'LIST',
       isInCollection: false,
       isConnected: false,
-      isDisabled: jf.collectionType === "COMPLEX",
-      amField: {} as IAtlasmapField["amField"],
+      isDisabled: jf.collectionType === 'COMPLEX',
+      amField: {} as IAtlasmapField['amField'],
       enumeration: false,
     };
   };
@@ -116,7 +116,7 @@ export function xmlToFieldGroup(
     ),
     isCollection: false,
     isInCollection: false,
-    amField: {} as IAtlasmapField["amField"],
+    amField: {} as IAtlasmapField['amField'],
   });
 
   return xml.XmlInspectionResponse.xmlDocument.fields.field.map((f) =>

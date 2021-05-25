@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ColumnHeader } from ".";
-import React from "react";
+import { ColumnHeader } from '.';
+import React from 'react';
 
 export default {
-  title: "ColumnMapper",
+  title: 'ColumnMapper',
   component: ColumnHeader,
   includeStories: [], // or don't load this file at all
 };
@@ -25,15 +25,15 @@ export default {
 export const example = () => (
   <div style={{ width: 300, minHeight: 300 }}>
     <ColumnHeader
-      title={"Source"}
+      title={'Source'}
       actions={[
-        <div key={"1"}>
+        <div key={'1'}>
           <button>#1</button>
         </div>,
-        <div key={"2"}>
+        <div key={'2'}>
           <button>#2</button>
         </div>,
-        <div key={"1"}>
+        <div key={'1'}>
           <button>#1</button>
         </div>,
       ]}

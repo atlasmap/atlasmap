@@ -13,15 +13,15 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { FolderCloseIcon, FolderOpenIcon } from "@patternfly/react-icons";
+import { FolderCloseIcon, FolderOpenIcon } from '@patternfly/react-icons';
 import React, {
   PropsWithChildren,
   ReactElement,
   forwardRef,
   useRef,
-} from "react";
-import { Tooltip } from "@patternfly/react-core";
-import styles from "./DocumentGroup.module.css";
+} from 'react';
+import { Tooltip } from '@patternfly/react-core';
+import styles from './DocumentGroup.module.css';
 
 export interface IDocumentGroupProps {
   name: string;
@@ -44,7 +44,7 @@ export const DocumentGroup = forwardRef<
   const handleRef = (el: HTMLSpanElement | null) => {
     spanRef.current = el;
     if (ref) {
-      if (typeof ref === "function") {
+      if (typeof ref === 'function') {
         ref(el);
       } else {
         // @ts-ignore

@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, InputGroup, TextInput } from "@patternfly/react-core";
-import { ColumnHeader, IColumnHeaderProps } from "./ColumnHeader";
-import React, { FormEvent, FunctionComponent, useRef } from "react";
+import { Button, InputGroup, TextInput } from '@patternfly/react-core';
+import { ColumnHeader, IColumnHeaderProps } from './ColumnHeader';
+import React, { FormEvent, FunctionComponent, useRef } from 'react';
 
-import { SearchIcon } from "@patternfly/react-icons";
+import { SearchIcon } from '@patternfly/react-icons';
 
 export interface ISearchableColumnHeaderProps extends IColumnHeaderProps {
   onSearch: (content: string) => void;
@@ -40,7 +40,7 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
           <form onSubmit={onSearchSubmit} key="search-form">
             <InputGroup>
               <TextInput
-                name={"search"}
+                name={'search'}
                 id={`search-${title}`}
                 type="search"
                 aria-label="Search fields"
@@ -49,10 +49,10 @@ export const SearchableColumnHeader: FunctionComponent<ISearchableColumnHeaderPr
                 data-testid={`search-${title}-fields-input-field`}
               />
               <Button
-                type={"submit"}
+                type={'submit'}
                 aria-label="Search"
                 data-testid={`run-search-${title}-button`}
-                variant={"control"}
+                variant={'control'}
               >
                 <SearchIcon />
               </Button>

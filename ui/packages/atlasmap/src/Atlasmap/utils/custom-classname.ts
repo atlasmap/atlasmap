@@ -17,19 +17,19 @@ import {
   CollectionType,
   ConfigModel,
   DocumentDefinition,
-} from "@atlasmap/core";
+} from '@atlasmap/core';
 
 export class ClassNameComponent {
   cfg: ConfigModel = ConfigModel.getConfig();
   isSource: boolean = false;
-  userClassName: string = "";
+  userClassName: string = '';
   userCollectionType = CollectionType.NONE;
-  userCollectionClassName = "";
+  userCollectionClassName = '';
   docDef: DocumentDefinition | null = null;
 
   constructor(className: string, collectionType: string, isSource: boolean) {
     this.userClassName = className;
-    let typedCollectionString: keyof typeof CollectionType = "NONE";
+    let typedCollectionString: keyof typeof CollectionType = 'NONE';
     typedCollectionString = collectionType as keyof typeof CollectionType;
     this.userCollectionType = CollectionType[typedCollectionString];
     this.isSource = isSource;
@@ -38,7 +38,7 @@ export class ClassNameComponent {
   isDataValid(): boolean {
     return this.cfg.errorService.isRequiredFieldValid(
       this.userClassName,
-      "Class name",
+      'Class name',
     );
   }
 }

@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IAtlasmapDocument, IAtlasmapMapping } from "../../Views";
+import { IAtlasmapDocument, IAtlasmapMapping } from '../../Views';
 
-import { IAtlasmapField } from "./../../Views/models";
+import { IAtlasmapField } from './../../Views/models';
 
 export interface DataAction {
-  type: "reset" | "loading" | "update" | "error";
+  type: 'reset' | 'loading' | 'update' | 'error';
   payload?: DataActionPayload;
 }
 
@@ -70,20 +70,20 @@ export function initDataState(): IDataState {
 
 export function dataReducer(state: IDataState, action: DataAction): IDataState {
   switch (action.type) {
-    case "reset":
+    case 'reset':
       return initDataState();
-    case "loading":
+    case 'loading':
       return {
         ...state,
         pending: true,
         error: false,
       };
-    case "update":
+    case 'update':
       return {
         ...state,
         ...action.payload,
       };
-    case "error":
+    case 'error':
       return {
         ...initDataState(),
       };

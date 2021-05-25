@@ -24,8 +24,8 @@ import {
   IDragAndDropField,
   NodeRef,
   TruncatedString,
-} from "../../../UI";
-import { IAtlasmapField, IAtlasmapMapping } from "../../models";
+} from '../../../UI';
+import { IAtlasmapField, IAtlasmapMapping } from '../../models';
 import {
   MAPPINGS_DOCUMENT_ID_PREFIX,
   MAPPINGS_DROP_TYPE,
@@ -34,14 +34,14 @@ import {
   MAPPINGS_WIDTH_BOUNDARY_ID,
   SOURCES_DRAGGABLE_TYPE,
   TARGETS_DRAGGABLE_TYPE,
-} from "./constants";
-import React, { FunctionComponent, useCallback } from "react";
-import { Split, SplitItem } from "@patternfly/react-core";
+} from './constants';
+import React, { FunctionComponent, useCallback } from 'react';
+import { Split, SplitItem } from '@patternfly/react-core';
 
-import { EditMappingAction } from "../Actions";
+import { EditMappingAction } from '../Actions';
 
 export interface IMappingsColumnData
-  extends Omit<Omit<IMappingDocumentData, "mapping">, "isSelected"> {
+  extends Omit<Omit<IMappingDocumentData, 'mapping'>, 'isSelected'> {
   mappings: IAtlasmapMapping[];
   selectedMappingId?: string;
 }
@@ -51,7 +51,7 @@ export const MappingsColumn: FunctionComponent<
 > = ({ mappings, selectedMappingId, ...props }) => {
   return (
     <>
-      <ColumnHeader title={"Mappings"} />
+      <ColumnHeader title={'Mappings'} />
       <NodeRef id={MAPPINGS_HEIGHT_BOUNDARY_ID}>
         <ColumnBody>
           <NodeRef id={MAPPINGS_WIDTH_BOUNDARY_ID}>
@@ -68,14 +68,14 @@ export const MappingsColumn: FunctionComponent<
           </NodeRef>
           <DraggedField>
             {({ draggedField, getHoveredTarget }) =>
-              draggedField && getHoveredTarget()?.type !== "mapping" ? (
+              draggedField && getHoveredTarget()?.type !== 'mapping' ? (
                 <NodeRef
-                  id={["dnd-new-mapping"]}
+                  id={['dnd-new-mapping']}
                   boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
                   overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
                 >
                   <Document
-                    title={"Create new mapping"}
+                    title={'Create new mapping'}
                     dropTarget={true}
                     scrollIntoView={true}
                   />
@@ -144,7 +144,7 @@ export const MappingDocument: FunctionComponent<
       {({ isDroppable, isTarget }) => (
         <NodeRef
           key={documentId}
-          id={[documentId, isTarget ? "dnd-target-mapping" : undefined]}
+          id={[documentId, isTarget ? 'dnd-target-mapping' : undefined]}
           boundaryId={MAPPINGS_HEIGHT_BOUNDARY_ID}
           overrideWidth={MAPPINGS_WIDTH_BOUNDARY_ID}
         >
@@ -167,7 +167,7 @@ export const MappingDocument: FunctionComponent<
             onMouseOut={onMouseOut}
           >
             <Split>
-              <SplitItem style={{ maxWidth: "50%", padding: "0 0 0 1rem" }}>
+              <SplitItem style={{ maxWidth: '50%', padding: '0 0 0 1rem' }}>
                 {mapping.sourceFields.map((mf) => {
                   const fieldId = `${documentId}-${MAPPINGS_FIELD_ID_PREFIX}${mf.id}`;
                   return (
@@ -197,9 +197,9 @@ export const MappingDocument: FunctionComponent<
               <SplitItem isFilled />
               <SplitItem
                 style={{
-                  maxWidth: "50%",
-                  padding: "0 1rem 0 0",
-                  textAlign: "right",
+                  maxWidth: '50%',
+                  padding: '0 1rem 0 0',
+                  textAlign: 'right',
                 }}
               >
                 {mapping.targetFields.map((mf) => {

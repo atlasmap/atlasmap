@@ -13,16 +13,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { NodeRect, useNodeRect } from "./NodeRefProvider";
+import { NodeRect, useNodeRect } from './NodeRefProvider';
 import React, {
   HTMLAttributes,
   forwardRef,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
-import { useCanvas } from "./CanvasContext";
+import { useCanvas } from './CanvasContext';
 
 export default forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ id, children, ...props }, ref) => {

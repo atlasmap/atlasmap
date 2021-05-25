@@ -20,13 +20,13 @@ import {
   MappingField,
   MappingFields,
   MappingTransformation,
-} from "../UI";
-import { Alert, AlertActionCloseButton, Badge } from "@patternfly/react-core";
-import { IAtlasmapField, IAtlasmapMappedField, INotification } from "./models";
-import React, { FunctionComponent } from "react";
+} from '../UI';
+import { Alert, AlertActionCloseButton, Badge } from '@patternfly/react-core';
+import { IAtlasmapField, IAtlasmapMappedField, INotification } from './models';
+import React, { FunctionComponent } from 'react';
 
-import { Field } from "@atlasmap/core/dist/models/field.model";
-import { MappingDetailsSidebar } from "../Layout";
+import { Field } from '@atlasmap/core/dist/models/field.model';
+import { MappingDetailsSidebar } from '../Layout';
 
 export interface IMappingDetailsViewProps {
   notifications: INotification[];
@@ -126,12 +126,12 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
     );
 
     const genericPaddingField: IAtlasmapField = {
-      id: "",
-      name: "Padding field",
-      type: "",
-      scope: "current",
-      path: "",
-      previewValue: "",
+      id: '',
+      name: 'Padding field',
+      type: '',
+      scope: 'current',
+      path: '',
+      previewValue: '',
       mappings: [],
       hasTransformations: false,
       isAttribute: false,
@@ -139,7 +139,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
       isConnected: false,
       isInCollection: false,
       isDisabled: false,
-      amField: {} as IAtlasmapField["amField"],
+      amField: {} as IAtlasmapField['amField'],
       enumeration: false,
     };
 
@@ -163,7 +163,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
           hasTransformations={f.transformations.length > 0}
           onDelete={() => onRemoveMappedField(isSource, index)}
           onIndexChange={(value: string | IAtlasmapField) =>
-            typeof value === "string"
+            typeof value === 'string'
               ? onIndexChange(isSource, index, parseInt(value, 10))
               : onIndexChange(isSource, index, value.amField)
           }
@@ -171,7 +171,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
           index={index + 1}
           canShowIndex={canShowIndex}
         >
-          <div className={"pf-c-form"}>
+          <div className={'pf-c-form'}>
             {f.transformations.map((t, transformationIndex) => (
               <MappingTransformation
                 key={transformationIndex}
@@ -207,8 +207,8 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
         <MappingField
           field={genericPaddingField}
           key={index}
-          name={"Padding field"}
-          info={"This padding field has been automatically added"}
+          name={'Padding field'}
+          info={'This padding field has been automatically added'}
           mappingExpressionEnabled={mappingExpressionEnabled}
           hasTransformations={false}
           onDelete={() => onRemoveMappedField(isSource, index)}
@@ -227,10 +227,10 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
       index: number,
     ) => renderMappingField(false, showTargetsIndex, f, index);
 
-    const errors = notifications.filter((n) => n.variant === "danger");
-    const warnings = notifications.filter((n) => n.variant === "warning");
+    const errors = notifications.filter((n) => n.variant === 'danger');
+    const warnings = notifications.filter((n) => n.variant === 'warning');
     const messages = notifications.filter(
-      (n) => n.variant !== "warning" && n.variant !== "danger",
+      (n) => n.variant !== 'warning' && n.variant !== 'danger',
     );
 
     return (
@@ -243,29 +243,29 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
         {errors.length > 0 && (
           <NotificationsGroup
             notifications={errors}
-            title={"Errors"}
+            title={'Errors'}
             onNotificationRead={onNotificationRead}
           />
         )}
         {warnings.length > 0 && (
           <NotificationsGroup
             notifications={warnings}
-            title={"Warnings"}
+            title={'Warnings'}
             onNotificationRead={onNotificationRead}
           />
         )}
         {messages.length > 0 && (
           <NotificationsGroup
             notifications={messages}
-            title={"Messages"}
+            title={'Messages'}
             onNotificationRead={onNotificationRead}
           />
         )}
-        <div className={"pf-c-form"}>
+        <div className={'pf-c-form'}>
           {mappingAction}
           <MappingFields
             isSource={true}
-            title={"Sources"}
+            title={'Sources'}
             onCreateConstant={onCreateConstant}
             onCreateProperty={onCreateProperty}
             canAddToSelectedMapping={canAddToSelectedMapping}
@@ -273,20 +273,20 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
             {sources.map(renderSourceMappingField)}
             {addableSources.length > 0 && (
               <AddFieldTypeahead
-                ariaLabelTypeAhead={"Select source to add to the mapping"}
-                placeholderText={"Select source to add to the mapping"}
+                ariaLabelTypeAhead={'Select source to add to the mapping'}
+                placeholderText={'Select source to add to the mapping'}
                 fields={addableSources.map((s) => ({
                   label: s.amField.isPropertyOrConstant() ? s.name : s.path,
                   group: s.amField!.docDef.name,
                   onAdd: () => onAddFieldToMapping(true, s),
                 }))}
-                data-testid={"add-source-to-mapping"}
+                data-testid={'add-source-to-mapping'}
               />
             )}
           </MappingFields>
           <MappingFields
             isSource={false}
-            title={"Targets"}
+            title={'Targets'}
             onCreateConstant={onCreateConstant}
             onCreateProperty={onCreateProperty}
             canAddToSelectedMapping={canAddToSelectedMapping}
@@ -294,14 +294,14 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
             {targets.map(renderTargetMappingField)}
             {addableTargets.length > 0 && (
               <AddFieldTypeahead
-                ariaLabelTypeAhead={"Select target to add to the mapping"}
-                placeholderText={"Select target to add to the mapping"}
+                ariaLabelTypeAhead={'Select target to add to the mapping'}
+                placeholderText={'Select target to add to the mapping'}
                 fields={addableTargets.map((t) => ({
                   label: t.amField.isProperty() ? t.name : t.path,
                   group: t.amField!.docDef.name,
                   onAdd: () => onAddFieldToMapping(false, t),
                 }))}
-                data-testid={"add-target-to-mapping"}
+                data-testid={'add-target-to-mapping'}
               />
             )}
           </MappingFields>
@@ -328,7 +328,7 @@ const NotificationsGroup: FunctionComponent<INotificationsGroupProps> = ({
       noPadding={true}
       actions={[<Badge key={1}>{notifications.length}</Badge>]}
     >
-      <div style={{ maxHeight: 200, overflow: "auto" }}>
+      <div style={{ maxHeight: 200, overflow: 'auto' }}>
         {notifications.map((n, idx) => (
           <Alert
             key={idx}

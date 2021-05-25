@@ -19,15 +19,15 @@ import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-} from "../../models";
-import { Button, Tooltip } from "@patternfly/react-core";
+} from '../../models';
+import { Button, Tooltip } from '@patternfly/react-core';
 import {
   CaptureDocumentNameAction,
   ChangeDocumentNameAction,
   DeleteDocumentAction,
   EnableJavaClassAction,
   ImportAction,
-} from "../Actions";
+} from '../Actions';
 import {
   ColumnBody,
   Document,
@@ -37,10 +37,10 @@ import {
   NodeRef,
   SearchableColumnHeader,
   Tree,
-} from "../../../UI";
-import { ConstantsTree, IConstantsTreeCallbacks } from "./ConstantsTree";
-import { IPropertiesTreeCallbacks, PropertiesTree } from "./PropertiesTree";
-import React, { FunctionComponent, useCallback } from "react";
+} from '../../../UI';
+import { ConstantsTree, IConstantsTreeCallbacks } from './ConstantsTree';
+import { IPropertiesTreeCallbacks, PropertiesTree } from './PropertiesTree';
+import React, { FunctionComponent, useCallback } from 'react';
 import {
   SOURCES_CONSTANTS_ID,
   SOURCES_DOCUMENT_ID_PREFIX,
@@ -48,11 +48,11 @@ import {
   SOURCES_HEIGHT_BOUNDARY_ID,
   SOURCES_PROPERTIES_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
-} from "./constants";
+} from './constants';
 
-import { PlusIcon } from "@patternfly/react-icons";
-import { TraverseFields } from "./TraverseFields";
-import { commonActions } from "./commonActions";
+import { PlusIcon } from '@patternfly/react-icons';
+import { TraverseFields } from './TraverseFields';
+import { commonActions } from './commonActions';
 
 export interface ISourceColumnCallbacks
   extends IConstantsTreeCallbacks,
@@ -138,21 +138,21 @@ export const SourcesColumn: FunctionComponent<
   return (
     <>
       <SearchableColumnHeader
-        title={"Source"}
+        title={'Source'}
         onSearch={onSearch}
         actions={[
           onImportDocument && (
             <ImportAction
               id="Source"
               onImport={onImportDocument}
-              key={"import"}
+              key={'import'}
             />
           ),
           onCustomClassSearch && (
             <EnableJavaClassAction
               onCustomClassSearch={() => onCustomClassSearch(true)}
-              data-testid={"enable-specific-java-classes-Source-button"}
-              key={"java"}
+              data-testid={'enable-specific-java-classes-Source-button'}
+              key={'java'}
             />
           ),
         ]}
@@ -167,22 +167,22 @@ export const SourcesColumn: FunctionComponent<
                 overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
               >
                 <Document
-                  title={"Properties"}
+                  title={'Properties'}
                   startExpanded={sourceProperties ? true : false}
                   actions={[
                     <Tooltip
-                      position={"top"}
+                      position={'top'}
                       enableFlip={true}
                       content={
                         <div>Create a source property for use in mapping</div>
                       }
-                      key={"create-property"}
+                      key={'create-property'}
                       entryDelay={750}
                       exitDelay={100}
                     >
                       <Button
                         onClick={() => onCreateProperty(isSource)}
-                        variant={"plain"}
+                        variant={'plain'}
                         aria-label="Create a source property for use in mapping"
                         data-testid="create-source-property-button"
                       >
@@ -217,7 +217,7 @@ export const SourcesColumn: FunctionComponent<
                       renderPreview={renderPreview}
                     />
                   ) : (
-                    "No source properties"
+                    'No source properties'
                   )}
                 </Document>
               </NodeRef>
@@ -227,20 +227,20 @@ export const SourcesColumn: FunctionComponent<
                 overrideWidth={SOURCES_WIDTH_BOUNDARY_ID}
               >
                 <Document
-                  title={"Constants"}
+                  title={'Constants'}
                   startExpanded={constants ? true : false}
                   actions={[
                     <Tooltip
-                      position={"top"}
+                      position={'top'}
                       enableFlip={true}
                       content={<div>Create a constant for use in mapping</div>}
-                      key={"create-constant"}
+                      key={'create-constant'}
                       entryDelay={750}
                       exitDelay={100}
                     >
                       <Button
                         onClick={onCreateConstant}
-                        variant={"plain"}
+                        variant={'plain'}
                         aria-label="Create a constant for use in mapping"
                         data-testid="create-constant-button"
                       >
@@ -299,21 +299,21 @@ export const SourcesColumn: FunctionComponent<
                           <CaptureDocumentNameAction
                             id={documentId}
                             onClick={() => onCaptureDocumentName(s.id)}
-                            key={"capture-document-name"}
+                            key={'capture-document-name'}
                           />
                         ),
                         onChangeDocumentName && (
                           <ChangeDocumentNameAction
                             id={documentId}
                             onClick={() => onChangeDocumentName(s.id, s.name)}
-                            key={"change-document-name"}
+                            key={'change-document-name'}
                           />
                         ),
                         onDeleteDocument && (
                           <DeleteDocumentAction
                             id={documentId}
                             onClick={() => onDeleteDocument(s.id)}
-                            key={"delete-document"}
+                            key={'delete-document'}
                           />
                         ),
                       ]}

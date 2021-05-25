@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IAtlasmapField, IAtlasmapGroup, IAtlasmapMapping } from "../Views";
+import { IAtlasmapField, IAtlasmapGroup, IAtlasmapMapping } from '../Views';
 
 interface Modifiers {
   modifier: string[];
@@ -101,20 +101,20 @@ export function javaToFieldGroup(
       name: jf.name,
       type: jf.fieldType,
       path: jf.path,
-      scope: "current",
-      previewValue: "",
+      scope: 'current',
+      previewValue: '',
       mappings,
       hasTransformations:
         mappings.length > 0 &&
-        (jf.name.startsWith("a") ||
-          jf.name.startsWith("b") ||
-          jf.name.startsWith("c")),
-      isCollection: jf.collectionType === "LIST",
+        (jf.name.startsWith('a') ||
+          jf.name.startsWith('b') ||
+          jf.name.startsWith('c')),
+      isCollection: jf.collectionType === 'LIST',
       isAttribute: false,
       isInCollection: false,
       isConnected: false,
-      isDisabled: jf.collectionType === "COMPLEX",
-      amField: {} as IAtlasmapField["amField"],
+      isDisabled: jf.collectionType === 'COMPLEX',
+      amField: {} as IAtlasmapField['amField'],
       enumeration: false,
     };
   };
@@ -127,7 +127,7 @@ export function javaToFieldGroup(
     ),
     isCollection: false,
     isInCollection: false,
-    amField: {} as IAtlasmapField["amField"],
+    amField: {} as IAtlasmapField['amField'],
   });
 
   return java.ClassInspectionResponse.javaClass.javaFields!.javaField.map((f) =>

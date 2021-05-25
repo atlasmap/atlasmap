@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import he from "he";
-import { text } from "@storybook/addon-knobs";
+import he from 'he';
+import { text } from '@storybook/addon-knobs';
 
 export function html(name: string, value: string, groupId?: string) {
   return he.decode(text(name, value, groupId));

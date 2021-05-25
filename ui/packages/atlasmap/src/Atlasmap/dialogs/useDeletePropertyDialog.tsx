@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback } from 'react';
 
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useConfirmationDialog } from "./useConfirmationDialog";
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useConfirmationDialog } from './useConfirmationDialog';
 
 export function useDeletePropertyDialog(): [
   ReactElement,
@@ -25,8 +25,8 @@ export function useDeletePropertyDialog(): [
   const { deleteProperty } = useAtlasmap();
   const [deletePropertyDialog, openDeletePropertyDialog] =
     useConfirmationDialog(
-      "Delete property?",
-      "Are you sure you want to delete the selected property and remove any associated mapping references?",
+      'Delete property?',
+      'Are you sure you want to delete the selected property and remove any associated mapping references?',
     );
   const onDeleteProperty = useCallback(
     (propName: string, propScope: string, isSource: boolean) =>

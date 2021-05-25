@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, ReactElement, ReactNode, memo } from "react";
-import { Stack, StackItem } from "@patternfly/react-core";
+import React, { FunctionComponent, ReactElement, ReactNode, memo } from 'react';
+import { Stack, StackItem } from '@patternfly/react-core';
 
-import { Loading } from "../UI";
-import { Sidebar } from "./Sidebar";
-import styles from "./MainLayout.module.css";
+import { Loading } from '../UI';
+import { Sidebar } from './Sidebar';
+import styles from './MainLayout.module.css';
 
 export interface IMainLayoutProps {
   loading: boolean;
@@ -41,9 +41,9 @@ export const MainLayout: FunctionComponent<IMainLayoutProps> = memo(
   }) => {
     const sideBar = <Sidebar show={showSidebar} children={renderSidebar} />;
     const containerClasses =
-      "pf-topology-container" +
-      `${sideBar ? " pf-topology-container__with-sidebar" : ""}` +
-      `${showSidebar ? " pf-topology-container__with-sidebar--open" : ""}`;
+      'pf-topology-container' +
+      `${sideBar ? ' pf-topology-container__with-sidebar' : ''}` +
+      `${showSidebar ? ' pf-topology-container__with-sidebar--open' : ''}`;
 
     return loading ? (
       <Loading />

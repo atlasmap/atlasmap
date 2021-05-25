@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { CanvasControlBar, ExpressionToolbar, MainLayout } from "../Layout";
+import { CanvasControlBar, ExpressionToolbar, MainLayout } from '../Layout';
 import {
   CanvasProvider,
   ConditionalExpressionInput,
   FieldDragLayer,
   FieldsDndProvider,
   TimedToast,
-} from "../UI";
+} from '../UI';
 import {
   IAtlasmapField,
   IAtlasmapMapping,
@@ -31,15 +31,15 @@ import {
   NamespaceTableView,
   SourceMappingTargetView,
   SourceTargetView,
-} from "../Views";
-import { IUseContextToolbarData, useContextToolbar } from "./useContextToolbar";
-import React, { FunctionComponent, useCallback, useMemo } from "react";
-import { getConstantType, getPropertyType } from "./utils";
+} from '../Views';
+import { IUseContextToolbarData, useContextToolbar } from './useContextToolbar';
+import React, { FunctionComponent, useCallback, useMemo } from 'react';
+import { getConstantType, getPropertyType } from './utils';
 
-import { AlertGroup } from "@patternfly/react-core";
-import { useAtlasmap } from "./AtlasmapProvider";
-import { useAtlasmapDialogs } from "./useAtlasmapDialogs";
-import { useSidebar } from "./useSidebar";
+import { AlertGroup } from '@patternfly/react-core';
+import { useAtlasmap } from './AtlasmapProvider';
+import { useAtlasmapDialogs } from './useAtlasmapDialogs';
+import { useSidebar } from './useSidebar';
 
 export interface IAtlasmapProps {
   allowImport?: boolean;
@@ -57,7 +57,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   allowReset = true,
   allowDelete = true,
   allowCustomJavaClasses = true,
-  modalsContainerId = "modals",
+  modalsContainerId = 'modals',
   toolbarOptions,
 }) => {
   const {
@@ -166,11 +166,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const sourceEvents = useMemo<ISourceColumnCallbacks>(
     () => ({
       isSource: true,
-      acceptDropType: "target",
-      draggableType: "source",
+      acceptDropType: 'target',
+      draggableType: 'source',
       canDrop: (dt, i) => {
         return isFieldAddableToSelection(
-          "target",
+          'target',
           i.payload as IAtlasmapField,
           dt,
         );
@@ -180,14 +180,14 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onAddToSelectedMapping: onAddToMapping,
       canAddToSelectedMapping: canAddToSelectedMapping,
       canAddFieldToSelectedMapping: (f) =>
-        isFieldAddableToSelection("source", f),
+        isFieldAddableToSelection('source', f),
       onAddFieldToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: (f) =>
-        isFieldRemovableFromSelection("source", f),
+        isFieldRemovableFromSelection('source', f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateConstant: () => handlers.onCreateConstant(constants),
       onEditConstant: (constant) => {
-        const [value] = constant.split(" ");
+        const [value] = constant.split(' ');
         const valueType = getConstantType(value);
 
         handlers.onEditConstant({ value, valueType }, constants);
@@ -197,7 +197,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         handlers.onCreateProperty(isSource, sourceProperties);
       },
       onEditProperty: (property, scope, isSource) => {
-        const [leftPart] = property.split(" ");
+        const [leftPart] = property.split(' ');
         const valueType = getPropertyType(leftPart, scope, isSource);
         handlers.onEditProperty(
           {
@@ -255,11 +255,11 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const targetEvents = useMemo<ITargetsColumnCallbacks>(
     () => ({
       isSource: false,
-      acceptDropType: "source",
-      draggableType: "target",
+      acceptDropType: 'source',
+      draggableType: 'target',
       canDrop: (dt, i) => {
         return isFieldAddableToSelection(
-          "source",
+          'source',
           i.payload as IAtlasmapField,
           dt,
         );
@@ -267,17 +267,17 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onDrop: (s, t) => onCreateMapping(t?.payload as IAtlasmapField, s),
       canAddToSelectedMapping: canAddToSelectedMapping,
       canAddFieldToSelectedMapping: (f) =>
-        isFieldAddableToSelection("target", f),
+        isFieldAddableToSelection('target', f),
       onShowMappingDetails: selectMapping,
       onAddToSelectedMapping: onAddToMapping,
       canRemoveFromSelectedMapping: (f) =>
-        isFieldRemovableFromSelection("target", f),
+        isFieldRemovableFromSelection('target', f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateProperty: (isSource: boolean) => {
         handlers.onCreateProperty(isSource, targetProperties);
       },
       onEditProperty: (property, scope, isSource) => {
-        const [leftPart] = property.split(" ");
+        const [leftPart] = property.split(' ');
         const valueType = getPropertyType(leftPart, scope, isSource);
         handlers.onEditProperty(
           {
@@ -348,7 +348,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
 
   const currentView = useMemo(() => {
     switch (activeView) {
-      case "ColumnMapper":
+      case 'ColumnMapper':
         return showMappingColumn ? (
           <SourceMappingTargetView
             sourceProperties={sourceProperties}
@@ -381,7 +381,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             targetEvents={targetEvents}
           />
         );
-      case "MappingTable":
+      case 'MappingTable':
         return (
           <MappingTableView
             mappings={mappings}
@@ -390,7 +390,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
             onFieldPreviewChange={onFieldPreviewChange}
           />
         );
-      case "NamespaceTable":
+      case 'NamespaceTable':
         return (
           <NamespaceTableView
             sources={sources}
@@ -459,9 +459,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           loading={pending}
           contextToolbar={contextToolbar}
           expressionToolbar={
-            activeView !== "NamespaceTable" && expressionToolbar
+            activeView !== 'NamespaceTable' && expressionToolbar
           }
-          controlBar={activeView === "FreeView" && <CanvasControlBar />}
+          controlBar={activeView === 'FreeView' && <CanvasControlBar />}
           showSidebar={!!selectedMapping}
           renderSidebar={renderSidebar}
         >

@@ -16,10 +16,10 @@
 import {
   ExpressionContent,
   IExpressionContentProps,
-} from "./ExpressionContent";
-import React, { FunctionComponent } from "react";
-import { ToolbarGroup, ToolbarItem } from "@patternfly/react-core";
-import styles from "./ConditionalExpressionInput.module.css";
+} from './ExpressionContent';
+import React, { FunctionComponent } from 'react';
+import { ToolbarGroup, ToolbarItem } from '@patternfly/react-core';
+import styles from './ConditionalExpressionInput.module.css';
 
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {}
@@ -45,7 +45,7 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
       <ToolbarGroup
         variant="filter-group"
         className={styles.toolbarItem}
-        role={"form"}
+        role={'form'}
       >
         <ToolbarItem className={styles.toolbarItem}>
           <ExpressionContent

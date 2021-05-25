@@ -13,13 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { MutableRefObject, ReactElement, useState } from "react";
+import { MutableRefObject, ReactElement, useState } from 'react';
 
-import { Coords } from "./models";
-import styles from "./Movable.module.css";
-import { useBoundingCanvasRect } from "./useBoundingCanvasRect";
-import { useDimensions } from "../useDimensions";
-import { useMovable } from "./useMovable";
+import { Coords } from './models';
+import styles from './Movable.module.css';
+import { useBoundingCanvasRect } from './useBoundingCanvasRect';
+import { useDimensions } from '../useDimensions';
+import { useMovable } from './useMovable';
 
 export interface IMovableChildren<T> {
   x?: number;

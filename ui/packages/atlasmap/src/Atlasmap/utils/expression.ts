@@ -18,9 +18,9 @@ import {
   ExpressionModel,
   MappedField,
   MappingModel,
-} from "@atlasmap/core";
+} from '@atlasmap/core';
 
-export const trailerId = "expression-trailer";
+export const trailerId = 'expression-trailer';
 
 function activeMapping(): boolean {
   const cfg = ConfigModel.getConfig();
@@ -41,7 +41,7 @@ export abstract class ExpressionNode {
 }
 
 export class TextNode extends ExpressionNode {
-  static readonly PREFIX = "expression-text-";
+  static readonly PREFIX = 'expression-text-';
   constructor(public str: string) {
     super(TextNode.PREFIX);
   }
@@ -49,13 +49,13 @@ export class TextNode extends ExpressionNode {
     return this.str;
   }
   toHTML(): string {
-    return `<span id="${this.uuid}">${this.str.replace(/ /g, "&nbsp;")}</span>`;
+    return `<span id="${this.uuid}">${this.str.replace(/ /g, '&nbsp;')}</span>`;
   }
 }
 
 export class FieldNode extends ExpressionNode {
   protected field: MappedField | null | undefined;
-  static readonly PREFIX = "expression-field-";
+  static readonly PREFIX = 'expression-field-';
 
   constructor(
     private mapping: MappingModel,
@@ -70,14 +70,14 @@ export class FieldNode extends ExpressionNode {
 
   toText(): string {
     if (!this.mapping || !this.field) {
-      return "";
+      return '';
     }
-    return "${" + (this.mapping.getIndexForMappedField(this.field)! - 1) + "}";
+    return '${' + (this.mapping.getIndexForMappedField(this.field)! - 1) + '}';
   }
 
   toHTML(): string {
     if (!this.field) {
-      return "";
+      return '';
     }
     if (this.field && this.field.field) {
       return `<span contenteditable="false" id="${this.uuid}" title="${this.field.field.docDef.name}:${this.field.field.path}"
@@ -115,15 +115,15 @@ export function getExpression(): ExpressionModel | null | undefined {
 export function getMappingExpression(): string {
   const cfg = ConfigModel.getConfig();
   if (!activeMapping()) {
-    return "";
+    return '';
   }
   if (!cfg.mappings?.activeMapping?.transition?.expression) {
     if (!getExpression()) {
-      return "";
+      return '';
     }
   }
   return cfg.mappings!.activeMapping!.transition.expression &&
     cfg.mappings!.activeMapping!.transition.enableExpression
     ? cfg.mappings!.activeMapping!.transition.expression.toHTML()
-    : "";
+    : '';
 }

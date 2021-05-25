@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect } from 'react';
 
-import { DraggedField } from "./DraggedField";
-import { Label } from "@patternfly/react-core";
-import styles from "./FieldDragLayer.module.css";
-import { useDimensions } from "../useDimensions";
+import { DraggedField } from './DraggedField';
+import { Label } from '@patternfly/react-core';
+import styles from './FieldDragLayer.module.css';
+import { useDimensions } from '../useDimensions';
 
 export const FieldDragLayer: FunctionComponent = () => {
   const [ref, dimensions, measure] = useDimensions();
@@ -30,7 +30,7 @@ export const FieldDragLayer: FunctionComponent = () => {
         isDragging && currentOffset && draggedField ? (
           <div
             style={{
-              position: "absolute",
+              position: 'absolute',
               zIndex: 1000,
               width: dimensions.width,
               height: dimensions.height,

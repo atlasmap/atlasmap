@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import * as constants from "../../atlasmap.json";
+import * as constants from '../../atlasmap.json';
 
 import {
   ConfigModel,
@@ -22,13 +22,13 @@ import {
   ErrorScope,
   ErrorType,
   InspectionType,
-} from "@atlasmap/core";
+} from '@atlasmap/core';
 import {
   getDocDef,
   getDocDefByName,
   importInstanceSchema,
   removeDocumentRef,
-} from "./document";
+} from './document';
 
 /**
  * Return true if the specified file object exists as a source or target
@@ -65,8 +65,8 @@ export function exportAtlasFile(fileName: string) {
   const cfg = ConfigModel.getConfig();
 
   // Tack on a .adm suffix if one wasn't already specified.
-  if (fileName.split(".").pop() !== "adm") {
-    fileName = fileName.concat(".adm");
+  if (fileName.split('.').pop() !== 'adm') {
+    fileName = fileName.concat('.adm');
   }
   return cfg.fileService.exportADMArchive(fileName);
 }
@@ -78,7 +78,7 @@ export function exportAtlasFile(fileName: string) {
  * @param cfg
  */
 async function processMappingsCatalog(selectedFile: any, cfg: ConfigModel) {
-  cfg.initializationService.updateLoadingStatus("Importing AtlasMap Catalog");
+  cfg.initializationService.updateLoadingStatus('Importing AtlasMap Catalog');
   await cfg.fileService.importADMArchive(selectedFile);
 }
 
@@ -94,7 +94,7 @@ function importAtlasGlobalFile(
   userFileSuffix: string,
   cfg: ConfigModel,
 ) {
-  if (userFileSuffix === "ADM") {
+  if (userFileSuffix === 'ADM') {
     cfg.errorService.resetAll();
 
     // Clear out current user documents from the backend service before processing the
@@ -115,7 +115,7 @@ function importAtlasGlobalFile(
           cfg.errorService.addError(
             new ErrorInfo({
               message:
-                "Fatal network error: Could not connect to AtlasMap design runtime service.",
+                'Fatal network error: Could not connect to AtlasMap design runtime service.',
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -125,7 +125,7 @@ function importAtlasGlobalFile(
         } else {
           cfg.errorService.addError(
             new ErrorInfo({
-              message: "Could not reset document definitions before import.",
+              message: 'Could not reset document definitions before import.',
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -134,7 +134,7 @@ function importAtlasGlobalFile(
           );
         }
       });
-  } else if (userFileSuffix === "JAR") {
+  } else if (userFileSuffix === 'JAR') {
     cfg.documentService.processDocument(
       selectedFile,
       InspectionType.JAVA_CLASS,
@@ -160,11 +160,11 @@ export function importAtlasFile(
   parameters?: { [key: string]: string },
 ) {
   const cfg = ConfigModel.getConfig();
-  const userFileComps = selectedFile.name.split(".");
+  const userFileComps = selectedFile.name.split('.');
   const userFileSuffix: string =
     userFileComps[userFileComps.length - 1].toUpperCase();
 
-  if (userFileSuffix === "ADM" || userFileSuffix === "JAR") {
+  if (userFileSuffix === 'ADM' || userFileSuffix === 'JAR') {
     importAtlasGlobalFile(selectedFile, userFileSuffix, cfg);
   } else {
     importInstanceSchema(selectedFile, cfg, isSource, isSchema, parameters);
@@ -196,7 +196,7 @@ export function resetAtlasmap() {
         cfg.errorService.addError(
           new ErrorInfo({
             message:
-              "Fatal network error: Could not connect to AtlasMap design runtime service.",
+              'Fatal network error: Could not connect to AtlasMap design runtime service.',
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -206,7 +206,7 @@ export function resetAtlasmap() {
       } else {
         cfg.errorService.addError(
           new ErrorInfo({
-            message: "Could not reset mapping definitions.",
+            message: 'Could not reset mapping definitions.',
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,

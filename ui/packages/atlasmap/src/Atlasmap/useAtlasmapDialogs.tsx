@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IConstant, IDocumentName, INamespace, IProperty } from "../UI";
-import React, { useCallback, useMemo, useState } from "react";
-import { enableCustomClass, getPropertyScopeOptions } from "./utils";
+import { IConstant, IDocumentName, INamespace, IProperty } from '../UI';
+import React, { useCallback, useMemo, useState } from 'react';
+import { enableCustomClass, getPropertyScopeOptions } from './utils';
 import {
   useAboutDialog,
   useCaptureDocumentNameToast,
@@ -36,11 +36,11 @@ import {
   useResetAtlasmapDialog,
   useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
-} from "./dialogs";
+} from './dialogs';
 
-import { IAtlasmapDocument } from "../Views";
-import { createPortal } from "react-dom";
-import { useAtlasmap } from "./AtlasmapProvider";
+import { IAtlasmapDocument } from '../Views';
+import { createPortal } from 'react-dom';
+import { useAtlasmap } from './AtlasmapProvider';
 
 export interface IUseAtlasmapDialogsProps {
   modalContainer: HTMLElement;
@@ -62,7 +62,7 @@ export function useAtlasmapDialogs({
 
   //#region constant dialogs
   const [createConstantDialog, openCreateConstantDialog] =
-    useConstantDialog("Create Constant");
+    useConstantDialog('Create Constant');
   const onCreateConstant = useCallback(
     (constants: IAtlasmapDocument | null, addToActiveMapping?: boolean) => {
       openCreateConstantDialog(({ value, valueType }) => {
@@ -73,7 +73,7 @@ export function useAtlasmapDialogs({
   );
 
   const [editConstantDialog, openEditConstantDialog] =
-    useConstantDialog("Edit Constant");
+    useConstantDialog('Edit Constant');
   const onEditConstant = useCallback(
     (constant: IConstant, constants: IAtlasmapDocument | null) => {
       openEditConstantDialog(
@@ -94,7 +94,7 @@ export function useAtlasmapDialogs({
     getPropertyScopeOptions(true),
   );
   const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
-    "Create Property",
+    'Create Property',
     scopeOptions,
   );
   const onCreateProperty = useCallback(
@@ -111,7 +111,7 @@ export function useAtlasmapDialogs({
     [createProperty, openCreatePropertyDialog],
   );
   const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
-    "Edit Property",
+    'Edit Property',
     scopeOptions,
   );
   const onEditProperty = useCallback(
@@ -186,7 +186,7 @@ export function useAtlasmapDialogs({
 
   //#region namespace table dialogs
   const [createNamespaceDialog, openCreateNamespaceDialog] =
-    useNamespaceDialog("Create namespace");
+    useNamespaceDialog('Create namespace');
   const onCreateNamespace = useCallback(
     (docName: string) => {
       openCreateNamespaceDialog(
@@ -197,7 +197,7 @@ export function useAtlasmapDialogs({
     [createNamespace, openCreateNamespaceDialog],
   );
   const [editNamespaceDialog, openEditNamespaceDialog] =
-    useNamespaceDialog("Edit namespace");
+    useNamespaceDialog('Edit namespace');
   const onEditNamespace = useCallback(
     (docName: string, namespace: INamespace) => {
       openEditNamespaceDialog(
@@ -218,7 +218,7 @@ export function useAtlasmapDialogs({
   //#endregion
 
   const [createEnableCustomClassDialog, openCreateEnableCustomClassDialog] =
-    useCustomClassDialog("Load Java Document From Custom Class");
+    useCustomClassDialog('Load Java Document From Custom Class');
 
   const onEnableCustomClass = useCallback(
     (isSource: boolean): void => {

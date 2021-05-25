@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { ReactChild, ReactElement, useRef } from "react";
+import React, { ReactChild, ReactElement, useRef } from 'react';
 
-import { ConfirmationDialog } from "../../UI";
-import { TextContent } from "@patternfly/react-core";
-import { useToggle } from "../../Atlasmap/utils";
+import { ConfirmationDialog } from '../../UI';
+import { TextContent } from '@patternfly/react-core';
+import { useToggle } from '../../Atlasmap/utils';
 
 export function useConfirmationDialog(
   title: string,

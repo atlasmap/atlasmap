@@ -13,18 +13,18 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { AtlasmapFields, IAtlasmapField, IAtlasmapGroup } from "../../../Views";
+import { AtlasmapFields, IAtlasmapField, IAtlasmapGroup } from '../../../Views';
 import {
   ITreeGroupAndNodeRefsAndDnDProps,
   TreeGroupAndNodeRefsAndDnD,
-} from "./TreeGroupAndNodeRefsAndDnD";
+} from './TreeGroupAndNodeRefsAndDnD';
 import {
   ITreeItemFieldAndNodeRefsAndDnDProps,
   TreeItemWithFieldAndNodeRefsAndDnD,
-} from "./TreeItemFieldAndNodeRefsAndDnD";
-import React, { FunctionComponent } from "react";
+} from './TreeItemFieldAndNodeRefsAndDnD';
+import React, { FunctionComponent } from 'react';
 
-import { NodeRef } from "../../../UI";
+import { NodeRef } from '../../../UI';
 
 function getChildrenIds(
   fields: AtlasmapFields,
@@ -43,7 +43,7 @@ function getChildrenIds(
 }
 
 export interface ITraverseFieldsProps
-  extends Omit<Omit<IFieldOrGroupProps, "field">, "fieldId"> {
+  extends Omit<Omit<IFieldOrGroupProps, 'field'>, 'fieldId'> {
   fields: AtlasmapFields;
 }
 
@@ -79,10 +79,10 @@ export const TraverseFields: FunctionComponent<ITraverseFieldsProps> = ({
 };
 
 export interface IFieldOrGroupProps
-  extends Omit<Omit<ITreeItemFieldAndNodeRefsAndDnDProps, "field">, "fieldId">,
+  extends Omit<Omit<ITreeItemFieldAndNodeRefsAndDnDProps, 'field'>, 'fieldId'>,
     Omit<
-      Omit<Omit<ITreeGroupAndNodeRefsAndDnDProps, "group">, "fieldId">,
-      "children"
+      Omit<Omit<ITreeGroupAndNodeRefsAndDnDProps, 'group'>, 'fieldId'>,
+      'children'
     > {
   idPrefix: string;
   field: IAtlasmapGroup | IAtlasmapField;

@@ -20,18 +20,18 @@ import {
   Label,
   Modal,
   TextInput,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import React, {
   FormEvent,
   ReactPortal,
   useCallback,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
-import { CancelCallback } from "./useSingleInputDialog";
-import { createPortal } from "react-dom";
-import styles from "./useInputTextSelectDialog.module.css";
+import { CancelCallback } from './useSingleInputDialog';
+import { createPortal } from 'react-dom';
+import styles from './useInputTextSelectDialog.module.css';
 
 export type ConfirmInputTextCallback = (
   value1: string,
@@ -73,7 +73,7 @@ export function useInputTextSelectDialog({
   const [isValid, setIsValid] = useState(true);
   const [value1, setValue1] = useState(textValue1.current);
   const [value2, setValue2] = useState(textValue2.current);
-  const [selectValue, setSelectValue] = useState("");
+  const [selectValue, setSelectValue] = useState('');
   const openModal = (
     onConfirmCb?: ConfirmInputTextCallback,
     onCancelCb?: CancelCallback,
@@ -130,21 +130,21 @@ export function useInputTextSelectDialog({
       onClose={closeModal}
       actions={[
         <Button
-          key={"confirm"}
-          variant={"primary"}
+          key={'confirm'}
+          variant={'primary'}
           onClick={handleConfirm}
           isDisabled={!isValid}
           aria-label="Confirm"
-          data-testid={"text-select-dialog-confirm-button"}
+          data-testid={'text-select-dialog-confirm-button'}
         >
           Confirm
         </Button>,
         <Button
-          key={"cancel"}
-          variant={"link"}
+          key={'cancel'}
+          variant={'link'}
           onClick={handleCancel}
           aria-label="Cancel"
-          data-testid={"text-select-dialog-cancel-button"}
+          data-testid={'text-select-dialog-cancel-button'}
         >
           Cancel
         </Button>,
@@ -159,10 +159,10 @@ export function useInputTextSelectDialog({
             onChange={handleTextInputChange}
             aria-label={title}
             isRequired={true}
-            validated={isValid ? "default" : "error"}
+            validated={isValid ? 'default' : 'error'}
             isDisabled={text1ReadOnly}
             placeholder={textLabel1}
-            data-testid={"itsd-value1-text-input"}
+            data-testid={'itsd-value1-text-input'}
             autoFocus
           />
         </>
@@ -176,9 +176,9 @@ export function useInputTextSelectDialog({
             onChange={handleTextInputChange2}
             aria-label={title}
             isRequired={true}
-            validated={isValid ? "default" : "error"}
+            validated={isValid ? 'default' : 'error'}
             placeholder={textLabel2}
-            data-testid={"itsd-value2-text-input"}
+            data-testid={'itsd-value2-text-input'}
           />
         </>
       )}
@@ -190,7 +190,7 @@ export function useInputTextSelectDialog({
             value={selectValue}
             id={selectValue}
             onChange={handleSelect}
-            data-testid={"itsd-form-select"}
+            data-testid={'itsd-form-select'}
           >
             {selectValues.map(
               (selectValue: string[], idx: number | undefined) => (

@@ -20,21 +20,21 @@ import {
   InputGroup,
   TextInput,
   Tooltip,
-} from "@patternfly/react-core";
-import { EnumValue, useToggle } from "../Atlasmap/utils";
-import { Observable, Subscription } from "rxjs";
+} from '@patternfly/react-core';
+import { EnumValue, useToggle } from '../Atlasmap/utils';
+import { Observable, Subscription } from 'rxjs';
 import React, {
   FunctionComponent,
   KeyboardEvent,
   MouseEvent,
   useCallback,
   useEffect,
-} from "react";
+} from 'react';
 
-import { ExpressionEnumSelect } from "./ExpressionEnumSelect";
-import { ExpressionFieldSearch } from "./ExpressionFieldSearch";
-import { css } from "@patternfly/react-styles";
-import styles from "@patternfly/react-styles/css/components/FormControl/form-control";
+import { ExpressionEnumSelect } from './ExpressionEnumSelect';
+import { ExpressionFieldSearch } from './ExpressionFieldSearch';
+import { css } from '@patternfly/react-styles';
+import styles from '@patternfly/react-styles/css/components/FormControl/form-control';
 
 let atIndex = -1;
 let atContainer: Node | undefined;
@@ -43,11 +43,11 @@ let expressionUpdatedSubscription: Subscription | null;
 let lastUpdatedEvent: IExpressionUpdatedEvent | null = null;
 let mappedFieldCandidates: string[][] = [];
 let markup: HTMLDivElement | null = null;
-let searchFilter = "";
+let searchFilter = '';
 let searchMode = false;
-let selectedNodeId: string = "";
-let trailerHTML = "";
-let trailerID = "";
+let selectedNodeId: string = '';
+let trailerHTML = '';
+let trailerID = '';
 let getMappingExpression: () => string;
 let mappingExprInit: () => void;
 let mappingExprObservable: () => Observable<IExpressionUpdatedEvent> | null;
@@ -116,7 +116,7 @@ function moveCaretToEnd() {
   if (!markup || trailerID.length === 0) {
     return;
   }
-  const trailerNode = markup.querySelector("#" + trailerID);
+  const trailerNode = markup.querySelector('#' + trailerID);
   if (!trailerNode) {
     return;
   }
@@ -242,7 +242,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     if (markup && startContainer === markup) {
       if (startOffset === 0) {
         const initialElement = startContainer.childNodes[0] as Element;
-        mappingExpressionInsertText(key, initialElement.getAttribute("id")!, 0);
+        mappingExpressionInsertText(key, initialElement.getAttribute('id')!, 0);
       } else {
         mappingExpressionInsertText(key);
       }
@@ -333,14 +333,14 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * @param event - expression keyboard event
    */
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
-    if ("Backspace" === event.key) {
+    if ('Backspace' === event.key) {
       // TODO handle cursor position
       event.preventDefault();
       removeTokenAtCaretPosition(true);
       if (searchMode) {
         updateSearchMode();
       }
-    } else if ("Delete" === event.key) {
+    } else if ('Delete' === event.key) {
       event.preventDefault();
       removeTokenAtCaretPosition(false);
       if (searchMode) {
@@ -383,11 +383,11 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         mappedFieldCandidates = fieldSearch(searchFilter, true);
       }
     } else {
-      searchMode = event.key === "@" ? true : false;
+      searchMode = event.key === '@' ? true : false;
       if (searchMode) {
         atContainer = window.getSelection()!.getRangeAt(0).startContainer;
         atIndex = window.getSelection()!.getRangeAt(0).startOffset;
-        searchFilter = "";
+        searchFilter = '';
         mappedFieldCandidates = fieldSearch(searchFilter, true);
       }
     }
@@ -415,7 +415,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       return;
     }
     event.preventDefault();
-    const pasted = event.clipboardData.getData("text/plain");
+    const pasted = event.clipboardData.getData('text/plain');
     // TODO handle cursor position... for now just append to the end
     mappingExpressionInsertText(pasted);
   }
@@ -439,9 +439,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       return;
     }
     const isTrailer = getCaretPositionNodeId(atContainer) === trailerID;
-    const selectedFieldComps = selectedField.split(" ");
+    const selectedFieldComps = selectedField.split(' ');
     selectedField = selectedFieldComps[0];
-    let selectedFieldScope = "";
+    let selectedFieldScope = '';
 
     // Extract the scope if it exists.
     if (selectedFieldComps[1]) {
@@ -497,7 +497,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       }
       startContainer = selection!.getRangeAt(0).startContainer;
     }
-    return startContainer.parentElement!.getAttribute("id")!;
+    return startContainer.parentElement!.getAttribute('id')!;
   }
 
   /**
@@ -510,7 +510,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     atIndex = -1;
     atContainer = undefined;
     searchMode = false;
-    searchFilter = "";
+    searchFilter = '';
     mappedFieldCandidates = [];
   }
 
@@ -525,7 +525,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   }
 
   function clearEnumSelect() {
-    selectedNodeId = "";
+    selectedNodeId = '';
     enumCandidates = [];
     toggleEnumSelOff();
   }
@@ -540,7 +540,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   getEnums = getFieldEnums;
   setSelEnumValue = setSelectedEnumValue;
 
-  getMappingExpression = () => mappingExpression || "";
+  getMappingExpression = () => mappingExpression || '';
   mappingExprInit = mappingExpressionInit;
   mappingExprObservable = mappingExpressionObservable;
   trailerID = trailerId;
@@ -566,25 +566,25 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         <FormGroup fieldId="expressionContent">
           <InputGroup>
             <Tooltip
-              content={"Enable/ Disable conditional mapping expression."}
+              content={'Enable/ Disable conditional mapping expression.'}
               enableFlip={true}
               entryDelay={750}
               exitDelay={100}
-              position={"left"}
+              position={'left'}
             >
               <Button
-                variant={"control"}
+                variant={'control'}
                 aria-label="Enable/ Disable conditional mapping expression"
                 tabIndex={-1}
                 onClick={onToggle}
                 data-testid={
-                  "enable-disable-conditional-mapping-expression-button"
+                  'enable-disable-conditional-mapping-expression-button'
                 }
                 isDisabled={disabled}
               >
                 <i>
                   f
-                  <small style={{ position: "relative", bottom: -3 }}>
+                  <small style={{ position: 'relative', bottom: -3 }}>
                     (x)
                   </small>
                 </i>
@@ -596,14 +596,14 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
                 enableFlip={true}
                 entryDelay={750}
                 exitDelay={100}
-                position={"left"}
+                position={'left'}
               >
                 <div
                   id="expressionMarkup"
                   key="expressionMarkup-div"
                   aria-label="Expression Content"
                   contentEditable
-                  className={css(styles.formControl, "ExpressionFieldSearch")}
+                  className={css(styles.formControl, 'ExpressionFieldSearch')}
                   suppressContentEditableWarning={true}
                   onChange={onChange}
                   onKeyDown={onKeyDown}
@@ -618,7 +618,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
             ) : (
               <TextInput
                 isDisabled={true}
-                aria-label={"Expression content"}
+                aria-label={'Expression content'}
               /> /* this to render a disabled field */
             )}
           </InputGroup>

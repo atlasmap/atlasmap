@@ -17,11 +17,11 @@ import {
   ConfirmationDialog,
   LookupTableData,
   LookupTableDialog,
-} from "../../UI";
-import React, { ReactElement, useCallback, useState } from "react";
-import { getEnumerationValues, updateEnumerationValues } from "../utils";
+} from '../../UI';
+import React, { ReactElement, useCallback, useState } from 'react';
+import { getEnumerationValues, updateEnumerationValues } from '../utils';
 
-import { useToggle } from "../../Atlasmap/utils";
+import { useToggle } from '../../Atlasmap/utils';
 
 type LookupTableCallback = () => void;
 
@@ -49,8 +49,8 @@ export function useEditMappingEnumerationDialog(): [
 
   const dialog = (
     <ConfirmationDialog
-      title={"Map Enumeration Values"}
-      description={"Map enumeration source values to target values."}
+      title={'Map Enumeration Values'}
+      description={'Map enumeration source values to target values.'}
       onCancel={toggleOff}
       onConfirm={onConfirm}
       isOpen={state}

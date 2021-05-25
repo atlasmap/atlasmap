@@ -23,7 +23,7 @@ import {
   LevelItem,
   Title,
   Tooltip,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import {
   ICell,
   IRowData,
@@ -31,14 +31,14 @@ import {
   TableBody,
   TableHeader,
   textCenter,
-} from "@patternfly/react-table";
-import { PlusIcon, TableIcon } from "@patternfly/react-icons";
-import React, { FunctionComponent, ReactElement } from "react";
+} from '@patternfly/react-table';
+import { PlusIcon, TableIcon } from '@patternfly/react-icons';
+import React, { FunctionComponent, ReactElement } from 'react';
 
-import { Actions } from "../UI";
-import { IAtlasmapDocument } from ".";
-import { MainContent } from "../Layout";
-import styles from "./NamespaceTableView.module.css";
+import { Actions } from '../UI';
+import { IAtlasmapDocument } from '.';
+import { MainContent } from '../Layout';
+import styles from './NamespaceTableView.module.css';
 
 export interface INamespaceTableProps {
   sources: IAtlasmapDocument[];
@@ -60,11 +60,11 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
   onDeleteNamespace,
 }) => {
   const columns = [
-    "Alias",
-    "URI",
-    "Location URI",
+    'Alias',
+    'URI',
+    'Location URI',
     {
-      title: "Target Namespace",
+      title: 'Target Namespace',
       transforms: [textCenter],
       cellTransforms: [textCenter],
     },
@@ -72,7 +72,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
 
   const namespaceTables: ReactElement[] = sources.reduce(
     (xmlSources: ReactElement[], source: IAtlasmapDocument) => {
-      if (source.type !== "XML") {
+      if (source.type !== 'XML') {
         return xmlSources;
       }
 
@@ -80,7 +80,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
         !source.namespaces || source.namespaces.length === 0
           ? [
               {
-                cells: ["<None>"],
+                cells: ['<None>'],
               },
             ]
           : source.namespaces.map((namespace) => {
@@ -90,7 +90,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
                   { title: namespace.uri },
                   { title: namespace.locationUri },
                   {
-                    title: namespace.isTarget ? "\u2713" : "",
+                    title: namespace.isTarget ? '\u2713' : '',
                   },
                 ],
               };
@@ -98,7 +98,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
 
       const actions = [
         {
-          title: "Edit",
+          title: 'Edit',
           onClick: (_event: any, _rowId: any, row: IRowData, _extra: any) => {
             onEditNamespace(
               source.name,
@@ -112,7 +112,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
           },
         },
         {
-          title: "Remove",
+          title: 'Remove',
           onClick: (_event: any, _rowId: any, row: any, _extra: any) =>
             onDeleteNamespace(source.name, row.alias.title),
         },
@@ -122,21 +122,21 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
         ...xmlSources,
         <Level>
           <LevelItem key="title">
-            <Title size="lg" headingLevel={"h1"} className={styles.title}>
+            <Title size="lg" headingLevel={'h1'} className={styles.title}>
               Namespaces for {source.name}
             </Title>
           </LevelItem>
           <LevelItem key="actions">
             <Actions>
               <Tooltip
-                position={"top"}
+                position={'top'}
                 enableFlip={true}
                 content={<div>Create a namespace</div>}
-                key={"create-namespace"}
+                key={'create-namespace'}
               >
                 <Button
                   onClick={() => onCreateNamespace(source.name)}
-                  variant={"plain"}
+                  variant={'plain'}
                   aria-label="Create a namespace"
                   data-testid="create-namespace-button"
                 >

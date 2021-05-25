@@ -29,7 +29,7 @@ import {
   PlusIcon,
   TableIcon,
   TrashIcon,
-} from "@patternfly/react-icons";
+} from '@patternfly/react-icons';
 import {
   Button,
   Dropdown,
@@ -38,13 +38,13 @@ import {
   DropdownToggle,
   ToolbarItem,
   Tooltip,
-} from "@patternfly/react-core";
-import React, { FunctionComponent, useEffect, useRef } from "react";
+} from '@patternfly/react-core';
+import React, { FunctionComponent, useEffect, useRef } from 'react';
 
-import { css } from "@patternfly/react-styles";
-import styles from "./toolbarItems.module.css";
-import { useFilePicker } from "react-sage";
-import { useToggle } from "../Atlasmap/utils";
+import { css } from '@patternfly/react-styles';
+import styles from './toolbarItems.module.css';
+import { useFilePicker } from 'react-sage';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IAtlasmapToolbarItemProps {
   showImportAtlasFileToolbarItem: boolean;
@@ -93,7 +93,7 @@ export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> =
       showExportAtlasFileToolbarItem && (
         <ExportAtlasFileToolbarItem
           onClick={runAndClose(onExportAtlasFile)}
-          key={"export-catalog"}
+          key={'export-catalog'}
         />
       ),
       showExportAtlasFileToolbarItem && (
@@ -218,12 +218,12 @@ export const ToggleMappingColumnToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show mapping column</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapping column"
         onClick={onClick}
         isDisabled={disabled}
@@ -243,12 +243,12 @@ export const ToggleColumnMapperViewToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show column mapper</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show column mapper"
         onClick={onClick}
         isDisabled={disabled}
@@ -268,12 +268,12 @@ export const ToggleMappingTableViewToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show mapping table</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapping table"
         onClick={onClick}
         isDisabled={disabled}
@@ -293,12 +293,12 @@ export const ToggleNamespaceTableViewToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show namespace table</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide namespace table"
         onClick={onClick}
         isDisabled={disabled}
@@ -318,12 +318,12 @@ export const ToggleFreeViewToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show free view</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide free view"
         onClick={onClick}
         isDisabled={disabled}
@@ -343,12 +343,12 @@ export const ToggleMappingPreviewToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show/hide mapping preview</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapping preview"
         onClick={onClick}
         isDisabled={disabled}
@@ -368,12 +368,12 @@ export const ToggleTypesToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show/hide types</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide types"
         onClick={onClick}
         isDisabled={disabled}
@@ -393,12 +393,12 @@ export const ToggleMappedFieldsToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show/hide mapped fields</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide mapped fields"
         onClick={onClick}
         isDisabled={disabled}
@@ -418,12 +418,12 @@ export const ToggleUnmappedFieldsToolbarItem: FunctionComponent<{
 }> = ({ toggled, disabled = false, onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Show/hide unmapped fields</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Show/hide unmapped fields"
         onClick={onClick}
         isDisabled={disabled}
@@ -441,12 +441,12 @@ export const AddMappingToolbarItem: FunctionComponent<{
 }> = ({ onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>Add a new mapping</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="Add a new mapping"
         onClick={onClick}
         data-testid="add-new-mapping-button"
@@ -462,12 +462,12 @@ export const AboutToolbarItem: FunctionComponent<{
 }> = ({ onClick }) => (
   <ToolbarItem>
     <Tooltip
-      position={"auto"}
+      position={'auto'}
       enableFlip={true}
       content={<div>About AtlasMap</div>}
     >
       <Button
-        variant={"plain"}
+        variant={'plain'}
         aria-label="About AtlasMap"
         onClick={onClick}
         data-testid="about-button"

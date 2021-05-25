@@ -21,8 +21,8 @@ import React, {
   useContext,
   useEffect,
   useRef,
-} from "react";
-import { useBoundingCanvasRect } from "./useBoundingCanvasRect";
+} from 'react';
+import { useBoundingCanvasRect } from './useBoundingCanvasRect';
 
 export interface NodeRect extends DOMRect {
   clipped?: boolean;
@@ -170,7 +170,7 @@ export function useNodeRect() {
             top: y,
             right: x + width,
             bottom: y + height,
-            toJSON: () => "",
+            toJSON: () => '',
             clipped: isXClipped || isYClipped,
           };
         }

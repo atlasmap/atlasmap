@@ -13,17 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, ReactElement } from "react";
+import React, { FunctionComponent, ReactElement } from 'react';
 
-import { Actions } from "../Actions";
+import { Actions } from '../Actions';
 
-import { Title } from "@patternfly/react-core";
-import { css } from "@patternfly/react-styles";
-import styles from "./ColumnHeader.module.css";
+import { Title } from '@patternfly/react-core';
+import { css } from '@patternfly/react-styles';
+import styles from './ColumnHeader.module.css';
 
 export interface IColumnHeaderProps {
   title: string;
-  variant?: "default" | "plain";
+  variant?: 'default' | 'plain';
   actions?: (ReactElement | null | undefined)[];
 }
 
@@ -35,7 +35,7 @@ export const ColumnHeader: FunctionComponent<IColumnHeaderProps> = ({
 }) => {
   return (
     <div className={styles.header}>
-      <div className={css(styles.toolbar, variant === "plain" && styles.plain)}>
+      <div className={css(styles.toolbar, variant === 'plain' && styles.plain)}>
         <div className={styles.title}>
           <Title headingLevel="h2" size="lg">
             {title}

@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Tooltip } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+import { Button, Tooltip } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
-import { ExchangeAltIcon } from "@patternfly/react-icons";
+import { ExchangeAltIcon } from '@patternfly/react-icons';
 
 export interface IEditMappingActionProps {
   id: string;
@@ -27,7 +27,7 @@ export const EditMappingAction: FunctionComponent<IEditMappingActionProps> = ({
   onClick,
 }) => (
   <Tooltip
-    position={"auto"}
+    position={'auto'}
     enableFlip={true}
     content={<div>Modify the mapping</div>}
   >

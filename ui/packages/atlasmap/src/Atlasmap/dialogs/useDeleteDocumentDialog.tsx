@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback } from 'react';
 
-import { GroupId } from "../../Views";
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useConfirmationDialog } from "./useConfirmationDialog";
+import { GroupId } from '../../Views';
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useConfirmationDialog } from './useConfirmationDialog';
 
 export function useDeleteDocumentDialog(): [
   ReactElement,
@@ -25,8 +25,8 @@ export function useDeleteDocumentDialog(): [
 ] {
   const { deleteAtlasFile } = useAtlasmap();
   const [deleteDialog, openDeleteDialog] = useConfirmationDialog(
-    "Delete selected document?",
-    "Are you sure you want to delete the selected document and remove any associated mappings?",
+    'Delete selected document?',
+    'Are you sure you want to delete the selected document and remove any associated mappings?',
   );
   const onDeleteDocument = useCallback(
     (id: GroupId, isSource: boolean) =>

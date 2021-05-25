@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { CustomClassDialog, ICustomClass } from "../../UI";
-import React, { ReactElement, useCallback, useState } from "react";
+import { CustomClassDialog, ICustomClass } from '../../UI';
+import React, { ReactElement, useCallback, useState } from 'react';
 
-import { collectionTypes } from "@atlasmap/core";
-import { getCustomClassNameOptions } from "../utils/document";
-import { useToggle } from "../../Atlasmap/utils";
+import { collectionTypes } from '@atlasmap/core';
+import { getCustomClassNameOptions } from '../utils/document';
+import { useToggle } from '../../Atlasmap/utils';
 
 type CustomClassCallback = (constant: ICustomClass) => void;
 
@@ -52,7 +52,7 @@ export function useCustomClassDialog(
     <CustomClassDialog
       title={title}
       isOpen={state}
-      customClassName={customClassNames ? customClassNames[0] : ""}
+      customClassName={customClassNames ? customClassNames[0] : ''}
       customClassNames={customClassNames}
       collectionTypeOptions={collectionTypes.map(([value, label]) => ({
         value,
@@ -60,7 +60,7 @@ export function useCustomClassDialog(
       }))}
       onCancel={toggleOff}
       onConfirm={onConfirm}
-      {...(initialCustomClass || { collectionType: "NONE" })}
+      {...(initialCustomClass || { collectionType: 'NONE' })}
     />
   );
   const onOpenCustomClassDialog = useCallback(

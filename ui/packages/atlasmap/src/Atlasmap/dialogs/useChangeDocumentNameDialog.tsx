@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ChangeDocumentNameDialog, IDocumentName } from "../../UI";
-import React, { ReactElement, useCallback, useState } from "react";
+import { ChangeDocumentNameDialog, IDocumentName } from '../../UI';
+import React, { ReactElement, useCallback, useState } from 'react';
 
-import { useToggle } from "../../Atlasmap/utils";
+import { useToggle } from '../../Atlasmap/utils';
 
 type ChangeDocumentNameCallback = (documentNameInfo: IDocumentName) => void;
 
@@ -28,8 +28,8 @@ export function useChangeDocumentNameDialog(): [
     useState<ChangeDocumentNameCallback | null>(null);
   const [initialDocumentName, setInitialDocumentName] =
     useState<IDocumentName | null>({
-      id: "",
-      name: "",
+      id: '',
+      name: '',
       isSource: false,
     });
   const { state, toggleOn, toggleOff } = useToggle(false);

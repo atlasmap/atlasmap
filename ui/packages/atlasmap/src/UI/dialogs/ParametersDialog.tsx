@@ -22,18 +22,18 @@ import {
   InputGroup,
   Switch,
   TextInput,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import {
   ConfirmationDialog,
   IConfirmationDialogProps,
-} from "./ConfirmationDialog";
-import { PlusIcon, TrashIcon } from "@patternfly/react-icons";
+} from './ConfirmationDialog';
+import { PlusIcon, TrashIcon } from '@patternfly/react-icons';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
 export interface IParameter {
   name: string;
@@ -53,8 +53,8 @@ export interface IParameterOption {
 export interface IParametersDialogProps {
   title: string;
   parameters?: IParameter[];
-  isOpen: IConfirmationDialogProps["isOpen"];
-  onCancel: IConfirmationDialogProps["onCancel"];
+  isOpen: IConfirmationDialogProps['isOpen'];
+  onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (parameters: IParameter[]) => void;
 }
 
@@ -123,14 +123,14 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   );
 
   const formLabelColumnWidth = {
-    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "340px 1fr",
+    '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '340px 1fr',
   } as React.CSSProperties;
   const formLabelParamRequired = {
-    "--pf-c-form__label--FontSize": "large",
-    "--pf-c-form--m-horizontal--md__group--GridTemplateColumns": "140px 1fr",
+    '--pf-c-form__label--FontSize': 'large',
+    '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '140px 1fr',
   } as React.CSSProperties;
   const formLabelTopPadding = {
-    "--pf-c-form__label--PaddingTop": "0",
+    '--pf-c-form__label--PaddingTop': '0',
   } as React.CSSProperties;
 
   useEffect(reset, [reset]);
@@ -158,7 +158,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
                   id="selected-paramater"
                   value="0"
                   label={parameter.label}
-                  style={{ display: "flex", marginLeft: "auto" }}
+                  style={{ display: 'flex', marginLeft: 'auto' }}
                   onChange={(availableParameterIndex) =>
                     handleChangeParameter(index, availableParameterIndex)
                   }
@@ -181,15 +181,15 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
                 <span
                   style={{
                     paddingTop: 5,
-                    display: "inline",
-                    marginLeft: "auto",
-                    float: "right",
+                    display: 'inline',
+                    marginLeft: 'auto',
+                    float: 'right',
                   }}
                 >
                   <Switch
                     id={parameter.name}
                     name={parameter.name}
-                    isChecked={parameter.value === "true"}
+                    isChecked={parameter.value === 'true'}
                     onChange={(checked) => {
                       handleChangeParameterValue(index, String(checked));
                     }}
@@ -201,7 +201,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
                   onChange={(value) => handleChangeParameterValue(index, value)}
                   id={parameter.name}
                   name={parameter.name}
-                  data-testid={parameter.name + "-parameter-form-select"}
+                  data-testid={parameter.name + '-parameter-form-select'}
                 >
                   {parameter.options.map(({ label, value }, idx) => (
                     <FormSelectOption key={idx} value={value} label={label} />
@@ -213,7 +213,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
                   onChange={(value) => handleChangeParameterValue(index, value)}
                   id={parameter.name}
                   name={parameter.name}
-                  data-testid={parameter.name + "-parameter-text-input"}
+                  data-testid={parameter.name + '-parameter-text-input'}
                 />
               )}
               {!parameter.required && (
@@ -221,7 +221,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
                   variant="plain"
                   aria-label="Action"
                   onClick={(_event) => handleRemoveParameter(parameter)}
-                  style={{ display: "inline", marginLeft: "0", float: "right" }}
+                  style={{ display: 'inline', marginLeft: '0', float: 'right' }}
                 >
                   <TrashIcon />
                 </Button>
@@ -231,7 +231,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
         ))}
         <span>
           <Button
-            style={{ display: "inline", float: "left", width: "40" }}
+            style={{ display: 'inline', float: 'left', width: '40' }}
             isDisabled={availableParameters.length === 0}
             onClick={handleAddParameter}
             variant="link"

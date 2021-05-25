@@ -13,20 +13,20 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent, SVGAttributes, useMemo } from "react";
-import { linkHorizontal, linkVertical } from "d3-shape";
+import React, { FunctionComponent, SVGAttributes, useMemo } from 'react';
+import { linkHorizontal, linkVertical } from 'd3-shape';
 
-import { Coords } from "./models";
-import { css } from "@patternfly/react-styles";
-import styles from "./Arc.module.css";
-import { useToggle } from "../../Atlasmap/utils";
+import { Coords } from './models';
+import { css } from '@patternfly/react-styles';
+import styles from './Arc.module.css';
+import { useToggle } from '../../Atlasmap/utils';
 
-export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, "end"> {
+export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, 'end'> {
   start: Coords;
   end: Coords;
   startSideSize?: number;
   endSideSize?: number;
-  type?: "horizontal" | "vertical";
+  type?: 'horizontal' | 'vertical';
   strokeWidth?: number;
   color?: string;
   hoveredColor?: string;
@@ -36,8 +36,8 @@ export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, "end"> {
 export const Arc: FunctionComponent<IArcProps> = ({
   start,
   end,
-  type = "horizontal",
-  color = "grey",
+  type = 'horizontal',
+  color = 'grey',
   hoveredColor = color,
   strokeWidth = 2,
   startSideSize = strokeWidth,
@@ -57,7 +57,7 @@ export const Arc: FunctionComponent<IArcProps> = ({
 
   const link = useMemo(
     () =>
-      (type === "horizontal" ? linkHorizontal : linkVertical)<
+      (type === 'horizontal' ? linkHorizontal : linkVertical)<
         any,
         { start: Coords; end: Coords },
         Coords
@@ -78,14 +78,14 @@ export const Arc: FunctionComponent<IArcProps> = ({
     <g
       onMouseEnter={toggleHoverOn}
       onMouseLeave={toggleHoverOff}
-      style={{ pointerEvents: "all" }}
+      style={{ pointerEvents: 'all' }}
     >
-      <path d={d} stroke={appliedColor} strokeWidth={s} fill={"none"} />
+      <path d={d} stroke={appliedColor} strokeWidth={s} fill={'none'} />
       <path
         d={d}
-        stroke={"transparent"}
+        stroke={'transparent'}
         strokeWidth={20}
-        fill={"none"}
+        fill={'none'}
         className={css(props.onClick && styles.clickable)}
         {...props}
       />

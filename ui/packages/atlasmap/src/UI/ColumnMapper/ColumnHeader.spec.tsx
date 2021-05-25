@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { example } from "./ColumnHeader.stories";
-import { render } from "@testing-library/react";
+import { example } from './ColumnHeader.stories';
+import { render } from '@testing-library/react';
 
-describe("ColumnHeader tests", () => {
-  test("should render", async () => {
+describe('ColumnHeader tests', () => {
+  test('should render', async () => {
     const { getByText } = render(example());
-    getByText("Source");
+    getByText('Source');
   });
 });

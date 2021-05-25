@@ -20,19 +20,19 @@ import {
   NodeRef,
   NodeRefProvider,
   NodesArc,
-} from ".";
+} from '.';
 import React, {
   FunctionComponent,
   createElement,
   useCallback,
   useState,
-} from "react";
-import { animated, useSpring } from "react-spring";
+} from 'react';
+import { animated, useSpring } from 'react-spring';
 
-import PrintNodeRef from "./PrintNodeRef";
+import PrintNodeRef from './PrintNodeRef';
 
 export default {
-  title: "Canvas",
+  title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
 
@@ -61,17 +61,17 @@ export const example: FunctionComponent = () =>
                 style={props}
                 width={40}
                 height={40}
-                fill={"purple"}
+                fill={'purple'}
               />
             </NodeRef>
             <NodeRef id="b">
-              <rect x={150} y={90} width={60} height={60} fill={"red"} />
+              <rect x={150} y={90} width={60} height={60} fill={'red'} />
             </NodeRef>
             <NodeRef id="c">
-              <rect x={390} y={160} width={80} height={80} fill={"yellow"} />
+              <rect x={390} y={160} width={80} height={80} fill={'yellow'} />
             </NodeRef>
-            <NodesArc start={"a"} end={"b"} />
-            <NodesArc start={"b"} end={"c"} />
+            <NodesArc start={'a'} end={'b'} />
+            <NodesArc start={'b'} end={'c'} />
           </NodeRefProvider>
         </Canvas>
       </CanvasProvider>
@@ -83,16 +83,16 @@ export const customWidthAndColor = () => (
     <Canvas>
       <NodeRefProvider>
         <NodeRef id="a">
-          <rect x={90} y={50} width={40} height={40} fill={"green"} />
+          <rect x={90} y={50} width={40} height={40} fill={'green'} />
         </NodeRef>
         <NodeRef id="b">
-          <rect x={20} y={240} width={40} height={40} fill={"red"} />
+          <rect x={20} y={240} width={40} height={40} fill={'red'} />
         </NodeRef>
         <NodeRef id="c">
-          <rect x={350} y={150} width={100} height={100} fill={"purple"} />
+          <rect x={350} y={150} width={100} height={100} fill={'purple'} />
         </NodeRef>
-        <NodesArc start={"a"} end={"c"} color={"green"} width={1} />
-        <NodesArc start={"b"} end={"c"} color={"red"} width={4} />
+        <NodesArc start={'a'} end={'c'} color={'green'} width={1} />
+        <NodesArc start={'b'} end={'c'} color={'red'} width={4} />
       </NodeRefProvider>
     </Canvas>
   </CanvasProvider>
@@ -103,9 +103,9 @@ export const svgElementCoordinates = () => (
     <Canvas>
       <NodeRefProvider>
         <NodeRef id="a">
-          <rect x={50} y={100} width={40} height={40} fill={"purple"} />
+          <rect x={50} y={100} width={40} height={40} fill={'purple'} />
         </NodeRef>
-        <HTMLObject id={"id"} width={200} height={200} x={150} y={0}>
+        <HTMLObject id={'id'} width={200} height={200} x={150} y={0}>
           <PrintNodeRef id="a" />
         </HTMLObject>
       </NodeRefProvider>
@@ -121,7 +121,7 @@ export const htmlElementCoordinates = () => (
           <NodeRef id="a">
             <PrintNodeRef
               id="a"
-              style={{ width: 300, height: 200, border: "1px solid red" }}
+              style={{ width: 300, height: 200, border: '1px solid red' }}
             />
           </NodeRef>
         </HTMLObject>
@@ -141,8 +141,8 @@ export const nestedHtmlElementCoordinates = () => (
               style={{
                 width: 300,
                 height: 300,
-                border: "1px solid black",
-                overflow: "scroll",
+                border: '1px solid black',
+                overflow: 'scroll',
               }}
             >
               <NodeRef id="b">
@@ -151,7 +151,7 @@ export const nestedHtmlElementCoordinates = () => (
                   style={{
                     width: 50,
                     height: 20,
-                    border: "1px solid red",
+                    border: '1px solid red',
                     marginTop: 50,
                   }}
                 />
@@ -198,9 +198,9 @@ export const linksBetweenDifferentHtmlElements = () => (
             </ul>
           </NodeRef>
         </HTMLObject>
-        <NodesArc start={"a1"} end={"b3"} />
-        <NodesArc start={"a3"} end={"b2"} />
-        <NodesArc start={"a2"} end={"b1"} />
+        <NodesArc start={'a1'} end={'b3'} />
+        <NodesArc start={'a3'} end={'b2'} />
+        <NodesArc start={'a2'} end={'b1'} />
       </NodeRefProvider>
     </Canvas>
   </CanvasProvider>

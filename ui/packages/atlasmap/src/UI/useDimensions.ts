@@ -19,7 +19,7 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-} from "react";
+} from 'react';
 
 const noSize = {
   width: 0,
@@ -72,13 +72,13 @@ export function useDimensions<T = HTMLDivElement>({
     measure();
 
     if (liveMeasure) {
-      window.addEventListener("resize", measure);
-      window.addEventListener("scroll", measure);
+      window.addEventListener('resize', measure);
+      window.addEventListener('scroll', measure);
     }
     return () => {
       if (liveMeasure) {
-        window.removeEventListener("resize", measure);
-        window.removeEventListener("scroll", measure);
+        window.removeEventListener('resize', measure);
+        window.removeEventListener('scroll', measure);
       }
     };
   }, [liveMeasure, measure]);

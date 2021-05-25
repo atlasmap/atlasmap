@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Coords, RectWithId } from "./models";
+import { Coords, RectWithId } from './models';
 
-import { useCanvas } from "./CanvasContext";
-import { useDrag } from "react-use-gesture";
-import { useEffect } from "react";
+import { useCanvas } from './CanvasContext';
+import { useDrag } from 'react-use-gesture';
+import { useEffect } from 'react';
 
 function intersectRect(r1: RectWithId, r2: RectWithId) {
   return !(
@@ -68,7 +68,7 @@ export function useMovable({
           (colliding, r) =>
             colliding ||
             intersectRect(r, {
-              id: "",
+              id: '',
               x: memo[0] + mX,
               y: memo[1] + mY,
               width,

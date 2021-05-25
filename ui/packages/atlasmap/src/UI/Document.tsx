@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { AngleDownIcon, AngleRightIcon } from "@patternfly/react-icons";
+import { AngleDownIcon, AngleRightIcon } from '@patternfly/react-icons';
 import {
   Button,
   Card,
@@ -22,7 +22,7 @@ import {
   CardHeader,
   CardTitle,
   Title,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import React, {
   HTMLAttributes,
   KeyboardEvent,
@@ -32,15 +32,15 @@ import React, {
   ReactNode,
   forwardRef,
   useCallback,
-} from "react";
+} from 'react';
 
-import { TruncatedString } from "./TruncatedString";
-import { css } from "@patternfly/react-styles";
-import styles from "./Document.module.css";
-import { useToggle } from "../Atlasmap/utils";
+import { TruncatedString } from './TruncatedString';
+import { css } from '@patternfly/react-styles';
+import styles from './Document.module.css';
+import { useToggle } from '../Atlasmap/utils';
 
 export interface IDocumentProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   title?: string;
   actions?: (ReactElement | null | undefined)[];
   footer?: ReactNode;
@@ -99,13 +99,13 @@ export const Document = forwardRef<
       event.stopPropagation();
 
       switch (event.key) {
-        case "Enter":
-        case "Space":
+        case 'Enter':
+        case 'Space':
           if (onSelect) {
             onSelect();
           }
           break;
-        case "Escape":
+        case 'Escape':
           if (onDeselect) {
             onDeselect();
           }
@@ -144,15 +144,15 @@ export const Document = forwardRef<
             {title && (
               <CardTitle className={css(styles.header)}>
                 <Button
-                  variant={"plain"}
+                  variant={'plain'}
                   onClick={toggleExpanded}
-                  aria-label={"Expand/collapse this card"}
+                  aria-label={'Expand/collapse this card'}
                   data-testid={`expand-collapse-${title}-button`}
                   className={css(styles.headerButton)}
                 >
-                  <Title size="lg" headingLevel={"h2"} aria-label={title}>
+                  <Title size="lg" headingLevel={'h2'} aria-label={title}>
                     <TruncatedString title={title}>
-                      {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{" "}
+                      {isExpanded ? <AngleDownIcon /> : <AngleRightIcon />}{' '}
                       {title}
                     </TruncatedString>
                   </Title>

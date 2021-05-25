@@ -13,28 +13,28 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React from "react";
-import { SearchableColumnHeader } from "./SearchableColumnHeader";
-import { example } from "./SearchableColumnHeader.stories";
-import { render } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import React from 'react';
+import { SearchableColumnHeader } from './SearchableColumnHeader';
+import { example } from './SearchableColumnHeader.stories';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-describe("SearchableColumnHeader tests", () => {
-  test("should render", async () => {
+describe('SearchableColumnHeader tests', () => {
+  test('should render', async () => {
     const { getByText } = render(example());
-    getByText("Source");
+    getByText('Source');
   });
 
-  test("change events are propagated when typing", async () => {
-    const searchInputLabel = "Search fields";
+  test('change events are propagated when typing', async () => {
+    const searchInputLabel = 'Search fields';
     const onSearchSpy = jest.fn();
     const { findByLabelText } = render(
-      <SearchableColumnHeader title={"Source"} onSearch={onSearchSpy} />,
+      <SearchableColumnHeader title={'Source'} onSearch={onSearchSpy} />,
     );
 
     const inputField = await findByLabelText(searchInputLabel);
 
-    await userEvent.type(inputField, "ABC");
+    await userEvent.type(inputField, 'ABC');
 
     // the onChange event should be triggered for every keystoke
     expect(onSearchSpy).toHaveBeenCalledTimes(3);

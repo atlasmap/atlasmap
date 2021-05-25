@@ -13,16 +13,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Tooltip } from "@patternfly/react-core";
-import { EditIcon, TrashIcon } from "@patternfly/react-icons";
+import { Button, Tooltip } from '@patternfly/react-core';
+import { EditIcon, TrashIcon } from '@patternfly/react-icons';
 import {
   IAtlasmapDocument,
   IAtlasmapField,
   IAtlasmapMapping,
-} from "../../models";
-import { IDragAndDropField, Tree } from "../../../UI";
-import { ITraverseFieldsProps, TraverseFields } from "./TraverseFields";
-import React, { FunctionComponent } from "react";
+} from '../../models';
+import { IDragAndDropField, Tree } from '../../../UI';
+import { ITraverseFieldsProps, TraverseFields } from './TraverseFields';
+import React, { FunctionComponent } from 'react';
 import {
   SOURCES_CONSTANTS_ID,
   SOURCES_DRAGGABLE_TYPE,
@@ -30,9 +30,9 @@ import {
   SOURCES_HEIGHT_BOUNDARY_ID,
   SOURCES_WIDTH_BOUNDARY_ID,
   TARGETS_DRAGGABLE_TYPE,
-} from "./constants";
+} from './constants';
 
-import { commonActions } from "./commonActions";
+import { commonActions } from './commonActions';
 
 export interface IConstantsTreeCallbacks {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;
@@ -49,8 +49,8 @@ export interface IConstantsTreeCallbacks {
 }
 
 export interface IConstantsTreeProps extends IConstantsTreeCallbacks {
-  fields: IAtlasmapDocument["fields"];
-  renderPreview: ITraverseFieldsProps["renderPreview"];
+  fields: IAtlasmapDocument['fields'];
+  renderPreview: ITraverseFieldsProps['renderPreview'];
 }
 
 export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
@@ -92,8 +92,8 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           onStartMapping: () => onStartMapping(field),
         }),
         <Tooltip
-          key={"edit"}
-          position={"top"}
+          key={'edit'}
+          position={'top'}
           enableFlip={true}
           content={<div>Edit constant</div>}
           entryDelay={750}
@@ -102,7 +102,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           <Button
             variant="plain"
             onClick={() => onEditConstant(field.name)}
-            aria-label={"Edit constant"}
+            aria-label={'Edit constant'}
             tabIndex={0}
             data-testid={`edit-constant-${field.name}-button`}
           >
@@ -110,8 +110,8 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           </Button>
         </Tooltip>,
         <Tooltip
-          key={"delete"}
-          position={"top"}
+          key={'delete'}
+          position={'top'}
           enableFlip={true}
           content={<div>Remove constant</div>}
           entryDelay={750}
@@ -120,7 +120,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
           <Button
             variant="plain"
             onClick={() => onDeleteConstant(field.name)}
-            aria-label={"Remove constant"}
+            aria-label={'Remove constant'}
             tabIndex={0}
             data-testid={`remove-constant-${field.name}-button`}
           >

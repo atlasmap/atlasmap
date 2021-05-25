@@ -72,6 +72,15 @@
       "last 1 safari version"
     ]
   },
+  "prettier": {
+    "printWidth": 80,
+    "tabWidth": 2,
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "endOfLine": "auto"
+  },
   "jest": {
     "moduleNameMapper": {
       "ky": "ky/umd"

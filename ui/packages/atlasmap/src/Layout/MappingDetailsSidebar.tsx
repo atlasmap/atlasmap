@@ -13,12 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Stack, StackItem, Tooltip } from "@patternfly/react-core";
-import { CloseIcon, EditIcon, TrashIcon } from "@patternfly/react-icons";
-import React, { FunctionComponent } from "react";
+import { Button, Stack, StackItem, Tooltip } from '@patternfly/react-core';
+import { CloseIcon, EditIcon, TrashIcon } from '@patternfly/react-icons';
+import React, { FunctionComponent } from 'react';
 
-import { ColumnHeader } from "../UI";
-import styles from "./MappingDetailsSidebar.module.css";
+import { ColumnHeader } from '../UI';
+import styles from './MappingDetailsSidebar.module.css';
 
 export interface IMappingDetailsSidebarProps {
   onDelete: () => void;
@@ -33,49 +33,49 @@ export const MappingDetailsSidebar: FunctionComponent<IMappingDetailsSidebarProp
       <Stack data-testid="column-mapping-details-area">
         <StackItem>
           <ColumnHeader
-            title={"Mapping Details"}
-            variant={"plain"}
+            title={'Mapping Details'}
+            variant={'plain'}
             actions={[
               <Button
                 onClick={onClose}
-                variant={"plain"}
+                variant={'plain'}
                 aria-label="Close the mapping details panel"
-                data-testid={"close-mapping-detail-button"}
-                key={"close"}
+                data-testid={'close-mapping-detail-button'}
+                key={'close'}
               >
                 <CloseIcon />
               </Button>,
               <Tooltip
-                key={"edit-enum"}
-                position={"auto"}
+                key={'edit-enum'}
+                position={'auto'}
                 enableFlip={true}
                 content={<div>Edit the enumeration mappings</div>}
                 entryDelay={750}
                 exitDelay={100}
               >
                 <Button
-                  variant={"plain"}
+                  variant={'plain'}
                   onClick={onEditEnum}
                   aria-label="Edit the enumeration mappings"
-                  data-testid={"edit-enum-mapping-button"}
+                  data-testid={'edit-enum-mapping-button'}
                   isDisabled={!isEnumMapping()}
                 >
                   <EditIcon />
                 </Button>
               </Tooltip>,
               <Tooltip
-                key={"remove"}
-                position={"auto"}
+                key={'remove'}
+                position={'auto'}
                 enableFlip={true}
                 content={<div>Remove the current mapping</div>}
                 entryDelay={750}
                 exitDelay={100}
               >
                 <Button
-                  variant={"plain"}
+                  variant={'plain'}
                   onClick={onDelete}
                   aria-label="Remove the current mapping"
-                  data-testid={"remove-current-mapping-button"}
+                  data-testid={'remove-current-mapping-button'}
                 >
                   <TrashIcon />
                 </Button>

@@ -19,13 +19,13 @@ import {
   DropdownSeparator,
   DropdownToggle,
   DropdownToggleAction,
-} from "@patternfly/react-core";
+} from '@patternfly/react-core';
 import {
   FolderCloseIcon,
   FolderOpenIcon,
   TrashIcon,
-} from "@patternfly/react-icons";
-import React, { FunctionComponent, useState } from "react";
+} from '@patternfly/react-icons';
+import React, { FunctionComponent, useState } from 'react';
 
 export interface IDocumentActions {
   onExpandFields: () => void;
@@ -55,17 +55,17 @@ export const DocumentActions: FunctionComponent<IDocumentActions> = ({
         />
       }
       isOpen={showActions}
-      position={"right"}
+      position={'right'}
       dropdownItems={[
         <DropdownItem
           icon={<FolderCloseIcon />}
-          key={"collapse"}
+          key={'collapse'}
           onClick={onCollapseFields}
         >
           Collapse all
         </DropdownItem>,
-        <DropdownSeparator key={"sep-1"} />,
-        <DropdownItem icon={<TrashIcon />} key={"delete"} onClick={onDelete}>
+        <DropdownSeparator key={'sep-1'} />,
+        <DropdownItem icon={<TrashIcon />} key={'delete'} onClick={onDelete}>
           Remove instance or schema file
         </DropdownItem>,
       ]}

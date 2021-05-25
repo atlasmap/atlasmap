@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ContextToolbar } from "./ContextToolbar";
-import React from "react";
+import { ContextToolbar } from './ContextToolbar';
+import React from 'react';
 
 export default {
-  title: "AtlasMap|Layout/ContextToolbar",
+  title: 'AtlasMap|Layout/ContextToolbar',
 };
 
 export const example = () => {

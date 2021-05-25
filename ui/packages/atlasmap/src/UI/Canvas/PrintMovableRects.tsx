@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { useCallback, useEffect, useState } from "react";
-import { RectWithId } from "./models";
-import { useCanvas } from "./CanvasContext";
+import React, { useCallback, useEffect, useState } from 'react';
+import { RectWithId } from './models';
+import { useCanvas } from './CanvasContext';
 
 export default function () {
   const { addRedrawListener, removeRedrawListener, getRects } = useCanvas();
@@ -40,11 +40,11 @@ export default function () {
           y={r.y}
           width={r.width}
           height={r.height}
-          stroke={"black"}
+          stroke={'black'}
           strokeDasharray={2}
           fillOpacity={0}
           key={idx}
-          style={{ pointerEvents: "none" }}
+          style={{ pointerEvents: 'none' }}
         />
       ))}
     </g>

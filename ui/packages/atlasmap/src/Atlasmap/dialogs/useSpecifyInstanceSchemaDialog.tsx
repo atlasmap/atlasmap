@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Modal, Radio } from "@patternfly/react-core";
-import React, { ReactElement, useRef } from "react";
+import { Button, Modal, Radio } from '@patternfly/react-core';
+import React, { ReactElement, useRef } from 'react';
 
-import { useToggle } from "../../Atlasmap/utils";
+import { useToggle } from '../../Atlasmap/utils';
 
 export function useSpecifyInstanceSchemaDialog(
   defaultSchema: boolean,
@@ -56,21 +56,21 @@ export function useSpecifyInstanceSchemaDialog(
   return [
     <Modal
       variant="small"
-      title={"Specify Instance/ Schema"}
+      title={'Specify Instance/ Schema'}
       description={
-        "Distinguish between instance and schema imported file formats."
+        'Distinguish between instance and schema imported file formats.'
       }
       isOpen={dialogState.state}
       onClose={dialogState.toggleOff}
       actions={[
         <Button
-          key={"confirm"}
-          variant={"primary"}
+          key={'confirm'}
+          variant={'primary'}
           onClick={onConfirm}
           aria-label="Ok"
-          data-testid={"specify-instance-schema-dialog-ok-button-test"}
+          data-testid={'specify-instance-schema-dialog-ok-button-test'}
           isDisabled={!onConfirm}
-          style={{ display: "flex", marginLeft: "auto" }}
+          style={{ display: 'flex', marginLeft: 'auto' }}
         >
           OK
         </Button>,
@@ -84,7 +84,7 @@ export function useSpecifyInstanceSchemaDialog(
             onChange={handleInstanceChange}
             label="Instance"
             id="instance-radio"
-            data-testid={"instance-radio-button-test"}
+            data-testid={'instance-radio-button-test'}
           />
           <Radio
             isChecked={isSchema.state}
@@ -92,7 +92,7 @@ export function useSpecifyInstanceSchemaDialog(
             onChange={handleSchemaChange}
             label="Schema"
             id="schema-radio"
-            data-testid={"schema-radio-button-test"}
+            data-testid={'schema-radio-button-test'}
           />
         </React.Fragment>
       }

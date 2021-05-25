@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { FieldDragLayer, FieldsDndProvider } from "../UI";
-import React, { ReactElement } from "react";
+import { FieldDragLayer, FieldsDndProvider } from '../UI';
+import React, { ReactElement } from 'react';
 
 export default [
   (storyFn: () => ReactElement) => (

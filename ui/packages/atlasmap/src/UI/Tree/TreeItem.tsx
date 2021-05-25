@@ -19,9 +19,9 @@ import React, {
   ReactNode,
   forwardRef,
   useRef,
-} from "react";
+} from 'react';
 
-import { useTreeFocus } from "./TreeFocusProvider";
+import { useTreeFocus } from './TreeFocusProvider';
 
 export interface ITreeItemProps extends HTMLAttributes<HTMLDivElement> {
   level: number;
@@ -42,7 +42,7 @@ export const TreeItem = forwardRef<
   const handleRef = (el: HTMLDivElement | null) => {
     divRef.current = el;
     if (ref) {
-      if (typeof ref === "function") {
+      if (typeof ref === 'function') {
         ref(el);
       } else {
         // @ts-ignore
@@ -53,7 +53,7 @@ export const TreeItem = forwardRef<
   return (
     <div
       ref={handleRef}
-      role={"treeitem"}
+      role={'treeitem'}
       aria-level={level}
       aria-setsize={setSize}
       aria-posinset={position}

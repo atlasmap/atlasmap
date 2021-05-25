@@ -13,10 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback } from 'react';
 
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useConfirmationDialog } from "./useConfirmationDialog";
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useConfirmationDialog } from './useConfirmationDialog';
 
 export function useDeleteConstantDialog(): [
   ReactElement,
@@ -25,8 +25,8 @@ export function useDeleteConstantDialog(): [
   const { deleteConstant } = useAtlasmap();
   const [deleteConstantDialog, openDeleteConstantDialog] =
     useConfirmationDialog(
-      "Delete constant?",
-      "Are you sure you want to delete the selected constant and remove any associated mapping references?",
+      'Delete constant?',
+      'Are you sure you want to delete the selected constant and remove any associated mapping references?',
     );
   const onDeleteConstant = useCallback(
     (constValue: string) =>

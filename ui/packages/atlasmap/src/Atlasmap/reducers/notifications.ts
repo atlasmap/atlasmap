@@ -13,21 +13,21 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { INotification } from "../../Views";
+import { INotification } from '../../Views';
 
 export interface ResetNotificationsAction {
-  type: "reset";
+  type: 'reset';
 }
 
 export interface UpdateNotificationsAction {
-  type: "update";
+  type: 'update';
   payload: {
     notifications: INotification[];
   };
 }
 
 export interface DismissNotificationAction {
-  type: "dismiss";
+  type: 'dismiss';
   payload: {
     id: string;
   };
@@ -51,18 +51,18 @@ export function notificationsReducer(
     | DismissNotificationAction,
 ): INotificationsState {
   switch (action.type) {
-    case "reset":
+    case 'reset':
       return {
         notifications: [],
       };
-    case "update":
+    case 'update':
       return {
         notifications: action.payload.notifications.map((n) => ({
           ...n,
           isRead: state.notifications.find((on) => on.id === n.id)?.isRead,
         })),
       };
-    case "dismiss":
+    case 'dismiss':
       return {
         notifications: state.notifications.map((n) =>
           n.id === action.payload.id ? { ...n, isRead: true } : n,

@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { PropsWithChildren, forwardRef } from "react";
-import styles from "./ColumnBody.module.css";
+import React, { PropsWithChildren, forwardRef } from 'react';
+import styles from './ColumnBody.module.css';
 
 export const ColumnBody = forwardRef<HTMLDivElement, PropsWithChildren<{}>>(
   function ColumnBody({ children }, ref) {

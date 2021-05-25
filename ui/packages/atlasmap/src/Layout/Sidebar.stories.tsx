@@ -13,17 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React from "react";
-import { Sidebar } from "./Sidebar";
-import { boolean } from "@storybook/addon-knobs";
+import React from 'react';
+import { Sidebar } from './Sidebar';
+import { boolean } from '@storybook/addon-knobs';
 
 export default {
-  title: "AtlasMap|Layout/Sidebar",
+  title: 'AtlasMap|Layout/Sidebar',
 };
 
 export const example = () => (
   <div style={{ minHeight: 300 }}>
-    <Sidebar show={boolean("Show sidebar", true)}>
+    <Sidebar show={boolean('Show sidebar', true)}>
       {() => (
         <div>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos

@@ -18,13 +18,13 @@ import React, {
   MouseEvent,
   ReactElement,
   useMemo,
-} from "react";
-import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from "../Columns";
+} from 'react';
+import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from '../Columns';
 
-import { IAtlasmapMapping } from "../../../Views";
-import { NodesArc } from "../../../UI";
-import styles from "./SourceTargetLinks.module.css";
-import { useToggle } from "../../../Atlasmap/utils";
+import { IAtlasmapMapping } from '../../../Views';
+import { NodesArc } from '../../../UI';
+import styles from './SourceTargetLinks.module.css';
+import { useToggle } from '../../../Atlasmap/utils';
 
 export interface ISourceTargetLinksProps {
   mappings: IAtlasmapMapping[];
@@ -45,12 +45,12 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
   return (
     <svg
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
-        pointerEvents: "none",
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'none',
       }}
     >
       {sortedMappings.map((m) => (
@@ -63,9 +63,9 @@ export const SourceTargetLinks: FunctionComponent<ISourceTargetLinksProps> = ({
       ))}
 
       <NodesArc
-        start={"dnd-start"}
-        end={"dnd-target-field"}
-        color={"var(--pf-global--active-color--400)"}
+        start={'dnd-start'}
+        end={'dnd-target-field'}
+        color={'var(--pf-global--active-color--400)'}
       />
     </svg>
   );
@@ -93,9 +93,9 @@ const MappingLines: FunctionComponent<IMappingLinesProps> = ({
     event.stopPropagation();
   };
 
-  const color = isSelected ? "var(--pf-global--active-color--100)" : undefined;
+  const color = isSelected ? 'var(--pf-global--active-color--100)' : undefined;
   const hoverColor = !isSelected
-    ? "var(--pf-global--active-color--400)"
+    ? 'var(--pf-global--active-color--400)'
     : undefined;
   const mappingLines = mapping.sourceFields.reduce<ReactElement[]>(
     (lines, start) => {

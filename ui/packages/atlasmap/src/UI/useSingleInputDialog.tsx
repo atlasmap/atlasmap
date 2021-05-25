@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Button, Modal, TextInput } from "@patternfly/react-core";
+import { Button, Modal, TextInput } from '@patternfly/react-core';
 import React, {
   FormEvent,
   ReactChild,
@@ -21,8 +21,8 @@ import React, {
   useCallback,
   useRef,
   useState,
-} from "react";
-import { createPortal } from "react-dom";
+} from 'react';
+import { createPortal } from 'react-dom';
 
 export type ConfirmCallback = (value: string) => void;
 export type CancelCallback = () => void;
@@ -47,7 +47,7 @@ export function useSingleInputDialog({
   const onCancel = useRef<CancelCallback | undefined>();
   const [isOpen, setIsOpen] = useState(false);
   const [isValid, setIsValid] = useState(true);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const openModal = (
     onConfirmCb?: ConfirmCallback,
     onCancelCb?: CancelCallback,
@@ -85,32 +85,32 @@ export function useSingleInputDialog({
       onClose={closeModal}
       actions={[
         <TextInput
-          key={"text-input"}
+          key={'text-input'}
           value={value}
           placeholder={placeholder}
           type="text"
           onChange={handleTextInputChange}
           aria-label={title}
           isRequired={true}
-          validated={isValid ? "default" : "error"}
-          data-testid={"input-text-field"}
+          validated={isValid ? 'default' : 'error'}
+          data-testid={'input-text-field'}
         />,
         <Button
-          key={"confirm"}
-          variant={"primary"}
+          key={'confirm'}
+          variant={'primary'}
           onClick={handleConfirm}
           isDisabled={!isValid}
           aria-label="Confirm"
-          data-testid={"single-input-dialog-confirm-button"}
+          data-testid={'single-input-dialog-confirm-button'}
         >
           Confirm
         </Button>,
         <Button
-          key={"cancel"}
-          variant={"link"}
+          key={'cancel'}
+          variant={'link'}
           onClick={handleCancel}
           aria-label="Cancel"
-          data-testid={"single-input-dialog-cancel-button"}
+          data-testid={'single-input-dialog-cancel-button'}
         >
           Cancel
         </Button>,

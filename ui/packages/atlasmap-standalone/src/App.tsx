@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Brand, Page, PageHeader, PageSection } from "@patternfly/react-core";
+import { Brand, Page, PageHeader, PageSection } from '@patternfly/react-core';
 
-import { Atlasmap } from "@atlasmap/atlasmap";
-import React from "react";
-import atlasmapLogo from "./logo-horizontal-darkbg.png";
+import { Atlasmap } from '@atlasmap/atlasmap';
+import React from 'react';
+import atlasmapLogo from './logo-horizontal-darkbg.png';
 
 const App: React.FC = () => {
   return (
@@ -38,8 +38,8 @@ const App: React.FC = () => {
       }
     >
       <PageSection
-        variant={"light"}
-        padding={{ default: "noPadding" }}
+        variant={'light'}
+        padding={{ default: 'noPadding' }}
         isFilled={true}
       >
         <Atlasmap />

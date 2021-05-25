@@ -13,14 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactElement, useCallback, useRef } from "react";
+import { ReactElement, useCallback, useRef } from 'react';
 
-import React from "react";
-import { TimedToast } from "../../UI";
-import { copyToClipboard } from "../utils/ui";
-import { useToggle } from "../../Atlasmap/utils";
+import React from 'react';
+import { TimedToast } from '../../UI';
+import { copyToClipboard } from '../utils/ui';
+import { useToggle } from '../../Atlasmap/utils';
 
-let docId = "";
+let docId = '';
 
 function useCreateToast(): [ReactElement, (cb: () => void) => void] {
   const { state, toggleOn, toggleOff } = useToggle(false);
@@ -28,15 +28,15 @@ function useCreateToast(): [ReactElement, (cb: () => void) => void] {
   const onClose = () => {
     toggleOff();
   };
-  const description = "Document ID " + docId + " copied to clipboard.";
+  const description = 'Document ID ' + docId + ' copied to clipboard.';
   const openToast = (executeCb: () => void) => {
     onExecuteCb.current = executeCb;
     toggleOn();
   };
   let toastElement: ReactElement = (
     <TimedToast
-      variant={"info"}
-      title={"Capture Document ID"}
+      variant={'info'}
+      title={'Capture Document ID'}
       key={docId}
       onClose={onClose}
       onTimeout={onClose}

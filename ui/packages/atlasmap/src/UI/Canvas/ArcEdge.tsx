@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 
-import { Coords } from "./models";
+import { Coords } from './models';
 
 export interface IArcEdgeProps {
   start: Coords;

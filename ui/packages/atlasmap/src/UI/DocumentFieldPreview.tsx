@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Form, FormGroup, TextInput } from "@patternfly/react-core";
-import React, { FunctionComponent } from "react";
+import { Form, FormGroup, TextInput } from '@patternfly/react-core';
+import React, { FunctionComponent } from 'react';
 
-import styles from "./DocumentFieldPreview.module.css";
-import { useDebouncedCallback } from "use-debounce";
+import styles from './DocumentFieldPreview.module.css';
+import { useDebouncedCallback } from 'use-debounce';
 
 export interface IDocumentFieldPreviewProps {
   id: string;
@@ -38,7 +38,7 @@ export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps>
             id={id}
             type="text"
             onChange={debouncedOnChange}
-            defaultValue={value || ""}
+            defaultValue={value || ''}
             aria-label="Type sample data here"
             placeholder="Type sample data here"
             data-testid={`input-document-mapping-preview-${id}-field`}

@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { AddCircleOIcon, ImportIcon } from "@patternfly/react-icons";
+import { AddCircleOIcon, ImportIcon } from '@patternfly/react-icons';
 import {
   CanvasProvider,
   Column,
@@ -30,63 +30,63 @@ import {
   SearchableColumnHeader,
   Tree,
   TreeGroup,
-} from "..";
+} from '..';
 
-import { Button } from "@patternfly/react-core";
-import React from "react";
-import { TreeItem } from "../Tree/TreeItem";
-import { action } from "@storybook/addon-actions";
+import { Button } from '@patternfly/react-core';
+import React from 'react';
+import { TreeItem } from '../Tree/TreeItem';
+import { action } from '@storybook/addon-actions';
 
 export default {
-  title: "ColumnMapper",
+  title: 'ColumnMapper',
   component: ColumnMapper,
   includeStories: [], // or don't load this file at all
 };
 
 export const example = () => (
   <CanvasProvider>
-    <ColumnMapper onClick={action("onClick")}>
+    <ColumnMapper onClick={action('onClick')}>
       <NodeRefProvider>
         <Columns>
-          <Column data-testid={"column-source-area"} totalColumns={3}>
+          <Column data-testid={'column-source-area'} totalColumns={3}>
             <SearchableColumnHeader
-              title={"Source"}
-              onSearch={action("onSearch")}
+              title={'Source'}
+              onSearch={action('onSearch')}
               actions={[
-                <Button variant={"plain"} key={1}>
+                <Button variant={'plain'} key={1}>
                   <ImportIcon />
                 </Button>,
-                <Button variant={"plain"} key={2}>
+                <Button variant={'plain'} key={2}>
                   <AddCircleOIcon />
                 </Button>,
               ]}
             />
-            <NodeRef id={"Source"}>
+            <NodeRef id={'Source'}>
               <ColumnBody>
-                <NodeRef id={"Source-width"}>
+                <NodeRef id={'Source-width'}>
                   <div>
                     <NodeRef
-                      id={"Something here"}
-                      boundaryId={"Source"}
-                      overrideWidth={"Source-width"}
+                      id={'Something here'}
+                      boundaryId={'Source'}
+                      overrideWidth={'Source-width'}
                     >
-                      <Document title={"Something here"}>
+                      <Document title={'Something here'}>
                         <Tree>
                           <NodeRef
-                            id={"Group name"}
-                            parentId={"Something here"}
-                            boundaryId={"Source"}
-                            overrideWidth={"Source-width"}
+                            id={'Group name'}
+                            parentId={'Something here'}
+                            boundaryId={'Source'}
+                            overrideWidth={'Source-width'}
                           >
                             <TreeGroup
-                              id={"Groupname"}
+                              id={'Groupname'}
                               level={1}
                               position={1}
                               setSize={1}
                               renderLabel={({ expanded }) => (
                                 <DocumentGroup
-                                  name={"Group name"}
-                                  type={"COMPLEX"}
+                                  name={'Group name'}
+                                  type={'COMPLEX'}
                                   expanded={expanded}
                                 />
                               )}
@@ -94,30 +94,30 @@ export const example = () => (
                               {() => (
                                 <>
                                   <NodeRef
-                                    id={"Nested group"}
-                                    parentId={"Group name"}
-                                    boundaryId={"Source"}
-                                    overrideWidth={"Source-width"}
+                                    id={'Nested group'}
+                                    parentId={'Group name'}
+                                    boundaryId={'Source'}
+                                    overrideWidth={'Source-width'}
                                   >
                                     <TreeGroup
-                                      id={"Nestedgroup"}
+                                      id={'Nestedgroup'}
                                       level={2}
                                       position={1}
                                       setSize={2}
                                       renderLabel={({ expanded }) => (
                                         <DocumentGroup
-                                          name={"Nested group"}
-                                          type={"COMPLEX"}
+                                          name={'Nested group'}
+                                          type={'COMPLEX'}
                                           expanded={expanded}
                                         />
                                       )}
                                     >
                                       {() => (
                                         <NodeRef
-                                          id={"Foo bar"}
-                                          parentId={"Nested group"}
-                                          boundaryId={"Source"}
-                                          overrideWidth={"Source-width"}
+                                          id={'Foo bar'}
+                                          parentId={'Nested group'}
+                                          boundaryId={'Source'}
+                                          overrideWidth={'Source-width'}
                                         >
                                           <TreeItem
                                             level={3}
@@ -126,8 +126,8 @@ export const example = () => (
                                           >
                                             {() => (
                                               <DocumentField
-                                                name={"Foo bar"}
-                                                type={"STRING"}
+                                                name={'Foo bar'}
+                                                type={'STRING'}
                                               />
                                             )}
                                           </TreeItem>
@@ -136,10 +136,10 @@ export const example = () => (
                                     </TreeGroup>
                                   </NodeRef>
                                   <NodeRef
-                                    id={"Fiz"}
-                                    parentId={"Group name"}
-                                    boundaryId={"Source"}
-                                    overrideWidth={"Source-width"}
+                                    id={'Fiz'}
+                                    parentId={'Group name'}
+                                    boundaryId={'Source'}
+                                    overrideWidth={'Source-width'}
                                   >
                                     <TreeItem
                                       level={2}
@@ -148,8 +148,8 @@ export const example = () => (
                                     >
                                       {() => (
                                         <DocumentField
-                                          name={"Fiz"}
-                                          type={"STRING"}
+                                          name={'Fiz'}
+                                          type={'STRING'}
                                         />
                                       )}
                                     </TreeItem>
@@ -161,22 +161,22 @@ export const example = () => (
                         </Tree>
                       </Document>
                     </NodeRef>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
                   </div>
@@ -184,33 +184,33 @@ export const example = () => (
               </ColumnBody>
             </NodeRef>
           </Column>
-          <Column data-testid={"column-mappings-area"} totalColumns={3}>
-            <ColumnHeader title={"Mapping"} />
-            <NodeRef id={"Mapping"}>
+          <Column data-testid={'column-mappings-area'} totalColumns={3}>
+            <ColumnHeader title={'Mapping'} />
+            <NodeRef id={'Mapping'}>
               <ColumnBody>
-                <NodeRef id={"Mapping-width"}>
+                <NodeRef id={'Mapping-width'}>
                   <div>
                     <NodeRef
-                      id={"Mapping 1"}
-                      boundaryId={"Mapping"}
-                      overrideWidth={"Mapping-width"}
+                      id={'Mapping 1'}
+                      boundaryId={'Mapping'}
+                      overrideWidth={'Mapping-width'}
                     >
-                      <Document title={"Mapping 1"}>
+                      <Document title={'Mapping 1'}>
                         <DocumentField
-                          name={"Many To One"}
-                          type={"Concatenate"}
+                          name={'Many To One'}
+                          type={'Concatenate'}
                         />
                       </Document>
                     </NodeRef>
                     <NodeRef
-                      id={"Mapping 2"}
-                      boundaryId={"Mapping"}
-                      overrideWidth={"Mapping-width"}
+                      id={'Mapping 2'}
+                      boundaryId={'Mapping'}
+                      overrideWidth={'Mapping-width'}
                     >
-                      <Document title={"Mapping 2"}>
+                      <Document title={'Mapping 2'}>
                         <DocumentField
-                          name={"Many To One"}
-                          type={"Concatenate"}
+                          name={'Many To One'}
+                          type={'Concatenate'}
                         />
                       </Document>
                     </NodeRef>
@@ -219,57 +219,57 @@ export const example = () => (
               </ColumnBody>
             </NodeRef>
           </Column>
-          <Column data-testid={"column-target-area"} totalColumns={3}>
+          <Column data-testid={'column-target-area'} totalColumns={3}>
             <SearchableColumnHeader
-              title={"Target"}
-              onSearch={action("onSearch")}
+              title={'Target'}
+              onSearch={action('onSearch')}
               actions={[
-                <Button variant={"plain"} key={1}>
+                <Button variant={'plain'} key={1}>
                   <ImportIcon />
                 </Button>,
-                <Button variant={"plain"} key={2}>
+                <Button variant={'plain'} key={2}>
                   <AddCircleOIcon />
                 </Button>,
               ]}
             />
-            <NodeRef id={"Target"}>
+            <NodeRef id={'Target'}>
               <ColumnBody>
-                <NodeRef id={"Target-width"}>
+                <NodeRef id={'Target-width'}>
                   <div>
                     <NodeRef
-                      id={"Lorem dolor"}
-                      boundaryId={"Target"}
-                      overrideWidth={"Target-width"}
+                      id={'Lorem dolor'}
+                      boundaryId={'Target'}
+                      overrideWidth={'Target-width'}
                     >
-                      <Document title={"Lorem dolor"}>
+                      <Document title={'Lorem dolor'}>
                         <Tree>
                           <>
                             <NodeRef
-                              id={"Group foo"}
-                              parentId={"Lorem dolor"}
-                              boundaryId={"Target"}
-                              overrideWidth={"Target-width"}
+                              id={'Group foo'}
+                              parentId={'Lorem dolor'}
+                              boundaryId={'Target'}
+                              overrideWidth={'Target-width'}
                             >
                               <TreeGroup
-                                id={"Groupfoo"}
+                                id={'Groupfoo'}
                                 expanded={true}
                                 level={1}
                                 position={1}
                                 setSize={3}
                                 renderLabel={({ expanded }) => (
                                   <DocumentGroup
-                                    name={"Group foo"}
-                                    type={"COMPLEX"}
+                                    name={'Group foo'}
+                                    type={'COMPLEX'}
                                     expanded={expanded}
                                   />
                                 )}
                               >
                                 {() => (
                                   <NodeRef
-                                    id={"Foo"}
-                                    parentId={"Group foo"}
-                                    boundaryId={"Target"}
-                                    overrideWidth={"Target-width"}
+                                    id={'Foo'}
+                                    parentId={'Group foo'}
+                                    boundaryId={'Target'}
+                                    overrideWidth={'Target-width'}
                                   >
                                     <TreeItem
                                       level={2}
@@ -278,8 +278,8 @@ export const example = () => (
                                     >
                                       {() => (
                                         <DocumentField
-                                          name={"Foo"}
-                                          type={"STRING"}
+                                          name={'Foo'}
+                                          type={'STRING'}
                                         />
                                       )}
                                     </TreeItem>
@@ -288,41 +288,41 @@ export const example = () => (
                               </TreeGroup>
                             </NodeRef>
                             <NodeRef
-                              id={"Bar"}
-                              parentId={"Lorem dolor"}
-                              boundaryId={"Target"}
-                              overrideWidth={"Target-width"}
+                              id={'Bar'}
+                              parentId={'Lorem dolor'}
+                              boundaryId={'Target'}
+                              overrideWidth={'Target-width'}
                             >
-                              <DocumentField name={"Bar"} type={"STRING"} />
+                              <DocumentField name={'Bar'} type={'STRING'} />
                             </NodeRef>
                             <NodeRef
-                              id={"Baz"}
-                              parentId={"Lorem dolor"}
-                              boundaryId={"Target"}
-                              overrideWidth={"Target-width"}
+                              id={'Baz'}
+                              parentId={'Lorem dolor'}
+                              boundaryId={'Target'}
+                              overrideWidth={'Target-width'}
                             >
-                              <DocumentField name={"Baz"} type={"STRING"} />
+                              <DocumentField name={'Baz'} type={'STRING'} />
                             </NodeRef>
                           </>
                         </Tree>
                       </Document>
                     </NodeRef>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
-                    <Document title={"Lorem dolor"}>
+                    <Document title={'Lorem dolor'}>
                       <div>lorem dolor</div>
                     </Document>
                   </div>
@@ -332,24 +332,24 @@ export const example = () => (
           </Column>
         </Columns>
         <NodesArc
-          start={"Fiz"}
-          end={"Mapping 1"}
-          data-testid={"Fiz:Mapping 1"}
+          start={'Fiz'}
+          end={'Mapping 1'}
+          data-testid={'Fiz:Mapping 1'}
         />
         <NodesArc
-          start={"Mapping 1"}
-          end={"Foo"}
-          data-testid={"Mapping 1:Foo"}
+          start={'Mapping 1'}
+          end={'Foo'}
+          data-testid={'Mapping 1:Foo'}
         />
         <NodesArc
-          start={"Foo bar"}
-          end={"Mapping 2"}
-          data-testid={"Foo bar:Mapping 2"}
+          start={'Foo bar'}
+          end={'Mapping 2'}
+          data-testid={'Foo bar:Mapping 2'}
         />
         <NodesArc
-          start={"Mapping 2"}
-          end={"Baz"}
-          data-testid={"Mapping 2:Baz"}
+          start={'Mapping 2'}
+          end={'Baz'}
+          data-testid={'Mapping 2:Baz'}
         />
       </NodeRefProvider>
     </ColumnMapper>

@@ -13,17 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { Arc, IArcProps } from "./Arc";
+import { Arc, IArcProps } from './Arc';
 import React, {
   FunctionComponent,
   useCallback,
   useEffect,
   useState,
-} from "react";
+} from 'react';
 
-import { Coords } from "./models";
-import { useCanvas } from "./CanvasContext";
-import { useNodeRect } from "./NodeRefProvider";
+import { Coords } from './models';
+import { useCanvas } from './CanvasContext';
+import { useNodeRect } from './NodeRefProvider';
 
 function leftCoords(rect: DOMRect) {
   const { left, y } = rect;
@@ -58,7 +58,7 @@ function bottomCoords(rect: DOMRect) {
 }
 
 export interface INodesArcProps
-  extends Omit<Omit<Omit<IArcProps, "start">, "end">, "type"> {
+  extends Omit<Omit<Omit<IArcProps, 'start'>, 'end'>, 'type'> {
   start: string;
   end: string;
 }
@@ -79,7 +79,7 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
       endSideSize: number;
     } | null>(null);
   const [linkType, setLinkType] =
-    useState<"horizontal" | "vertical">("horizontal");
+    useState<'horizontal' | 'vertical'>('horizontal');
 
   const calculateCoords = useCallback(
     function calculateCoordsCb() {
@@ -105,7 +105,7 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
               startSideSize: start.clipped ? 0 : start.width,
               endSideSize: end.clipped ? 0 : end.width,
             });
-            setLinkType("vertical");
+            setLinkType('vertical');
           } else {
             setCoords(null);
           }
@@ -121,7 +121,7 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
               startSideSize: start.clipped ? 0 : start.height,
               endSideSize: end.clipped ? 0 : end.height,
             });
-            setLinkType("horizontal");
+            setLinkType('horizontal');
           } else {
             setCoords(null);
           }
@@ -153,8 +153,8 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
       color={
         color ||
         ((coords.startSideSize && coords.endSideSize) === 0
-          ? "var(--pf-global--Color--light-300)"
-          : "var(--pf-global--Color--dark-200)")
+          ? 'var(--pf-global--Color--light-300)'
+          : 'var(--pf-global--Color--dark-200)')
       }
       {...props}
     />

@@ -13,9 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { HTMLObject, useCanvas } from "../Canvas";
-import React, { FunctionComponent } from "react";
-import styles from "./Columns.module.css";
+import { HTMLObject, useCanvas } from '../Canvas';
+import React, { FunctionComponent } from 'react';
+import styles from './Columns.module.css';
 
 export const Columns: FunctionComponent = ({ children }) => {
   const {

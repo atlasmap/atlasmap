@@ -13,17 +13,17 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ReactElement, useCallback } from "react";
+import { ReactElement, useCallback } from 'react';
 
-import { useAtlasmap } from "../AtlasmapProvider";
-import { useConfirmationDialog } from "./useConfirmationDialog";
+import { useAtlasmap } from '../AtlasmapProvider';
+import { useConfirmationDialog } from './useConfirmationDialog';
 
 export function useToggleExpressionModeDialog(): [ReactElement, () => void] {
   const { mappingHasSourceCollection, toggleExpressionMode } = useAtlasmap();
   const [toggleExpressionModeDialog, openToggleExpressionModeDialog] =
     useConfirmationDialog(
-      "Disable Expression?",
-      "If you disable an expression with a source collection, all source fields will be removed from the mapping.  Proceed with expression disable?",
+      'Disable Expression?',
+      'If you disable an expression with a source collection, all source fields will be removed from the mapping.  Proceed with expression disable?',
     );
   const onToggleExpressionMode = useCallback((): void => {
     if (mappingHasSourceCollection()) {

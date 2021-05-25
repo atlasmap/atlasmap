@@ -13,24 +13,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import "./index.css";
-import * as serviceWorker from "./serviceWorker";
-import App from "./App";
-import { AtlasmapProvider } from "@atlasmap/atlasmap";
-import React from "react";
-import ReactDOM from "react-dom";
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+import App from './App';
+import { AtlasmapProvider } from '@atlasmap/atlasmap';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 ReactDOM.render(
   <AtlasmapProvider
-    baseJavaInspectionServiceUrl={"/v2/atlas/java/"}
-    baseXMLInspectionServiceUrl={"/v2/atlas/xml/"}
-    baseJSONInspectionServiceUrl={"/v2/atlas/json/"}
-    baseCSVInspectionServiceUrl={"/v2/atlas/csv/"}
-    baseMappingServiceUrl={"/v2/atlas/"}
+    baseJavaInspectionServiceUrl={'/v2/atlas/java/'}
+    baseXMLInspectionServiceUrl={'/v2/atlas/xml/'}
+    baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
+    baseCSVInspectionServiceUrl={'/v2/atlas/csv/'}
+    baseMappingServiceUrl={'/v2/atlas/'}
   >
     <App />
   </AtlasmapProvider>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change
