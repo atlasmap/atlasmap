@@ -1,0 +1,72 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetTestClass",
+      "name" : "io.atlasmap.java.test.TargetTestClass",
+      "description" : "Java document class io.atlasmap.java.test.TargetTestClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetTestClass",
+      "name" : "io.atlasmap.java.test.TargetTestClass",
+      "description" : "Java document class io.atlasmap.java.test.TargetTestClass",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "LOOKUP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+          "docId" : "io.atlasmap.java.test.TargetTestClass",
+          "path" : "/statesShort",
+          "fieldType" : "COMPLEX",
+          "name" : "statesShort",
+          "className" : "io.atlasmap.java.test.StateEnumClassShort"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+          "docId" : "io.atlasmap.java.test.TargetTestClass",
+          "path" : "/statesLong",
+          "fieldType" : "COMPLEX",
+          "name" : "statesLong",
+          "className" : "io.atlasmap.java.test.StateEnumClassLong"
+        } ],
+        "id" : "mapping.860136",
+        "lookupTableName" : "1621868893907-832752"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ {
+        "lookupEntry" : [ {
+          "sourceValue" : "AZ",
+          "sourceType" : "STRING",
+          "targetValue" : "Arizona",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "FL",
+          "sourceType" : "STRING",
+          "targetValue" : "Florida",
+          "targetType" : "STRING"
+        }, {
+          "sourceValue" : "TX",
+          "sourceType" : "STRING",
+          "targetValue" : "Texas",
+          "targetType" : "STRING"
+        } ],
+        "name" : "1621868893907-832752"
+      } ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}

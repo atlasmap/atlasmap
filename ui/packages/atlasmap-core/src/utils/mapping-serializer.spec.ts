@@ -13,19 +13,23 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
+import {
+  ConfigModel,
+  DocumentInitializationModel,
+} from '../models/config.model';
 import {
   DocumentDefinition,
   NamespaceModel,
 } from '../models/document-definition.model';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 
-import { ConfigModel } from '../models/config.model';
 import { DocumentType } from '../common/config.types';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { FieldActionService } from '../services/field-action.service';
+import { LookupTable } from '../models/lookup-table.model';
+import { LookupTableUtil } from './lookup-table-util';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
@@ -37,6 +41,7 @@ import { TransitionMode } from '../models/transition.model';
 import atlasMappingCollExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-expr-mapping.json';
 import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-expr-preview.json';
 import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
+import atlasMappingEnumLookupTableMapping from '../../../../test-resources/mapping/atlasmapping-enum-lookup-table.json';
 import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
 import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
@@ -677,7 +682,7 @@ describe('MappingSerializer', () => {
           fail();
         }
         expect(
-          mapping.transition.expression.toText().replace(/\.[0-9]* /g, '.')
+          mapping.transition.expression.toText().replace(/\.[0-9]*/g, '.')
         ).toEqual(expressionStr);
 
         const mfields = mapping.getMappedFields(true);
@@ -793,6 +798,134 @@ describe('MappingSerializer', () => {
           (n) => n.toText() === `\${/city}`
         );
         expect(cityField).toBeUndefined();
+
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('map enumeration values through a lookup table', (done) => {
+    cfg.clearDocs();
+    cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        cfg.mappings = new MappingDefinition();
+        let fieldMapping = null;
+        const mappingJson = atlasMappingEnumLookupTableMapping;
+
+        // Find the enum lookup table mapping from the raw JSON.
+        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+          if (fieldMapping.lookupTableName.length > 0) {
+            break;
+          }
+        }
+        expect(fieldMapping).toBeDefined();
+
+        // Isolate the mock documents usingf the document initialization model.
+        const docInitSource = new DocumentInitializationModel();
+        docInitSource.description =
+          'Java document class io.atlasmap.java.test.TargetTestClass';
+        docInitSource.id = 'io.atlasmap.java.test.TargetTestClass';
+        docInitSource.isSource = true;
+        docInitSource.name = 'io.atlasmap.java.test.TargetTestClass';
+        docInitSource.type = DocumentType.JAVA_ARCHIVE;
+        docInitSource.inspectionSource =
+          'io.atlasmap.java.test.TargetTestClass';
+        const docEnumSrc = cfg.addDocument(docInitSource);
+
+        // Establish the enum fields.
+        const ss = new Field();
+        ss.name = 'statesShort';
+        ss.path = '/statesShort';
+        ss.scope = '';
+        ss.type = 'COMPLEX';
+        ss.serviceObject.status = 'SUPPORTED';
+        docEnumSrc.addField(ss);
+
+        const docInitTarget = new DocumentInitializationModel();
+        docInitTarget.description =
+          'Java document class io.atlasmap.java.test.TargetTestClass';
+        docInitTarget.id = 'io.atlasmap.java.test.TargetTestClass';
+        docInitTarget.isSource = false;
+        docInitTarget.name = 'io.atlasmap.java.test.TargetTestClass';
+        docInitTarget.type = DocumentType.JAVA_ARCHIVE;
+        docInitTarget.inspectionSource =
+          'io.atlasmap.java.test.TargetTestClass';
+        const docEnumtgt = cfg.addDocument(docInitTarget);
+
+        const sl = new Field();
+        sl.name = 'statesLong';
+        sl.path = '/statesLong';
+        sl.scope = '';
+        sl.type = 'COMPLEX';
+        sl.serviceObject.status = 'SUPPORTED';
+        docEnumtgt.addField(sl);
+
+        // Deserialize then serialize.
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingEnumLookupTableMapping,
+            MappingSerializer.serializeMappings(cfg)
+          )
+        ).toBe(true);
+
+        expect(cfg.mappings.mappings[0].transition.mode).toBe(
+          TransitionMode.ENUM
+        );
+
+        // Test the lookup table utilities
+        LookupTableUtil.populateMappingLookupTable(
+          cfg.mappings,
+          cfg.mappings.mappings[0]
+        );
+        LookupTableUtil.updateLookupTables(cfg.mappings);
+        const sourceField: Field = cfg.mappings.mappings[0].getFields(true)[0];
+        sourceField.enumValues = [
+          { name: 'AZ', ordinal: 0 },
+          { name: 'FL', ordinal: 2 },
+          { name: 'TX', ordinal: 4 },
+        ];
+        const targetField: Field = cfg.mappings.mappings[0].getFields(false)[0];
+        targetField.enumValues = [
+          { name: 'Arizona', ordinal: 0 },
+          { name: 'Florida', ordinal: 2 },
+          { name: 'Texas', ordinal: 4 },
+        ];
+        const tables: LookupTable[] = cfg.mappings!.getTables();
+        const lookupTable = tables[0];
+        expect(tables.length).toBeGreaterThan(0);
+        const enumValues = LookupTableUtil.getEnumerationValues(
+          cfg,
+          cfg.mappings.mappings[0]
+        );
+        expect(enumValues).toBeDefined();
+
+        // Inspect the mapping lookup table.
+        expect(lookupTable.entries.length).toBe(3);
+        let i = 0;
+        for (const eVal of enumValues) {
+          expect(eVal.sourceEnumValue).toEqual(sourceField.enumValues[i].name);
+          expect(eVal.selectedTargetEnumValue).toEqual(
+            targetField.enumValues[i].name
+          );
+          i++;
+        }
+        for (const entry of lookupTable.entries) {
+          expect(entry.sourceType).toEqual('STRING');
+          expect(entry.targetType).toEqual('STRING');
+          expect(entry.sourceValue.length).toBe(2);
+        }
+        expect(tables[0].entries[0].targetValue).toEqual('Arizona');
+        expect(tables[0].entries[1].targetValue).toEqual('Florida');
+        expect(tables[0].entries[2].targetValue).toEqual('Texas');
+        const flEntry = lookupTable.getEntryForSource('FL', false);
+        expect(flEntry).toBeDefined();
+        expect(flEntry?.targetValue).toEqual('Florida');
 
         done();
       })
