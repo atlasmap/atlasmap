@@ -91,6 +91,7 @@ export class MappingUtil {
                 type: ErrorType.INTERNAL,
               })
             );
+            return;
           }
         }
         doc = docMap[
