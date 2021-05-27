@@ -141,7 +141,6 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
       if (selectField[1].length === 0) {
         return (
           <SelectOption
-            isDisabled={true}
             label={selectField[0]}
             value={selectField[0]}
             key={idx}
@@ -164,7 +163,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     return (
       <div
         aria-label="Expression Field Search"
-        className="searchMenu"
+        className={styles.searchMenu}
         data-testid={'expression-field-search'}
       >
         <Select
