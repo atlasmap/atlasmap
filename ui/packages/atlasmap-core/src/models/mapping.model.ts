@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from './config.model';
-import { DataMapperUtil } from '../common/data-mapper-util';
 import { Field } from './field.model';
 import { FieldAction } from './field-action.model';
 import { PaddingField } from './document-definition.model';
@@ -72,7 +72,7 @@ export class MappedField {
   }
 
   removeAction(action: FieldAction): void {
-    DataMapperUtil.removeItemFromArray(action, this.actions);
+    CommonUtil.removeItemFromArray(action, this.actions);
   }
 }
 
@@ -140,7 +140,7 @@ export class MappingModel {
    */
   removeField(field: Field) {
     const mappedFields = this.getMappedFields(field.isSource());
-    DataMapperUtil.removeItemFromArray(
+    CommonUtil.removeItemFromArray(
       mappedFields.find((mf) => mf.field === field),
       mappedFields
     );
@@ -188,7 +188,7 @@ export class MappingModel {
     if (mappedField.field.isCollection) {
       this.removeReferenceField(mappedField);
     }
-    DataMapperUtil.removeItemFromArray(
+    CommonUtil.removeItemFromArray(
       mappedField,
       this.getMappedFields(mappedField.field!.isSource())
     );
@@ -314,7 +314,7 @@ export class MappingModel {
     if (!mappedField) {
       return;
     }
-    DataMapperUtil.removeItemFromArray(mappedField, this.referenceFields);
+    CommonUtil.removeItemFromArray(mappedField, this.referenceFields);
   }
 
   /**
@@ -328,8 +328,8 @@ export class MappingModel {
       return false;
     }
     const referenceFields = this.getReferenceMappedFields();
-    for (let i = 0; i < referenceFields.length; i++) {
-      if (referenceFields[i].field?.path === fieldPath) {
+    for (let referenceField of referenceFields) {
+      if (referenceField.field?.path === fieldPath) {
         return true;
       }
     }
@@ -350,9 +350,9 @@ export class MappingModel {
     }
     this.transition.expression.hasComplexField = true;
     const referenceFields = this.getReferenceMappedFields();
-    for (let i = 0; i < referenceFields.length; i++) {
-      if (referenceFields[i].field?.path === fieldPath) {
-        return referenceFields[i];
+    for (let referenceField of referenceFields) {
+      if (referenceField.field?.path === fieldPath) {
+        return referenceField;
       }
     }
     const field = this.getField(fieldPath);

@@ -25,9 +25,9 @@ import {
 import {
   DocumentInitializationModel,
   DocumentType,
+  ExpressionUtil,
   InspectionType,
   MappingSerializer,
-  MappingUtil,
   TransitionMode,
   search,
 } from '@atlasmap/core';
@@ -646,7 +646,8 @@ export function useAtlasmap() {
     mappingHasSourceCollection,
     mappingExpressionEnabled:
       initializationService.cfg.mappingService.conditionalMappingExpressionEnabled(),
-    currentMappingExpression: MappingUtil.getMappingExpressionStr(
+    currentMappingExpression: ExpressionUtil.getMappingExpressionStr(
+      initializationService.cfg,
       true,
       initializationService.cfg.mappings?.activeMapping,
     ),

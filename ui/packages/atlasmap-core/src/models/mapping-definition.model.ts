@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { DataMapperUtil } from '../common/data-mapper-util';
+import { CommonUtil } from '../utils/common-util';
 import { DocumentDefinition } from './document-definition.model';
 import { Field } from './field.model';
 import { LookupTable } from './lookup-table.model';
@@ -114,6 +114,6 @@ export class MappingDefinition {
     if (m.transition.mode === TransitionMode.ENUM) {
       this.removeTableByName(m.transition.lookupTableName!);
     }
-    return DataMapperUtil.removeItemFromArray(m, this.mappings);
+    return CommonUtil.removeItemFromArray(m, this.mappings);
   }
 }

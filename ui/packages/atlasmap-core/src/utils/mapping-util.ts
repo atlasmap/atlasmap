@@ -380,8 +380,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
     return null;
   }
 
-  static activeMapping(): boolean {
-    const cfg = ConfigModel.getConfig();
+  static activeMapping(cfg: ConfigModel): boolean {
     return !!cfg?.mappings?.activeMapping;
   }
 
@@ -392,46 +391,23 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
    * @param fields
    */
   static hasFieldAction(fields: MappedField[]): boolean {
-    for (let i = 0; i < fields.length; i++) {
-      if (fields[i].actions.length > 0) {
+    for (let field of fields) {
+      if (field.actions.length > 0) {
         return true;
       }
     }
     return false;
   }
 
-  /**
-   * Return a string, in either text or HTML form, representing the
-   * expression mapping of either the optionally specified mapping or
-   * the active mapping if it exists, empty string otherwise.
-   *
-   * @param asHTML
-   * @param mapping
-   */
-  static getMappingExpressionStr(asHTML: boolean, mapping?: any): string {
-    const cfg = ConfigModel.getConfig();
-    if (!mapping && !this.activeMapping()) {
-      return '';
-    }
-    if (!mapping) {
-      mapping = cfg.mappings?.activeMapping;
-    }
-    if (!mapping.transition.expression) {
-      if (
-        mapping.transition.enableExpression &&
-        MappingUtil.hasFieldAction(mapping.sourceFields)
-      ) {
-        cfg.mappingService.createMappingExpression(mapping);
-      } else {
-        return '';
-      }
-    }
-
-    if (mapping.transition.expression && mapping.transition.enableExpression) {
-      return asHTML
-        ? mapping.transition.expression.expressionHTML
-        : mapping.transition.expression.toText(true);
-    }
-    return '';
+  static hasMappedCollection(
+    mapping: MappingModel,
+    isSource: boolean
+  ): boolean | null {
+    const mappedFields = mapping.getMappedFields(isSource);
+    return (
+      mapping.isFullyMapped() &&
+      mappedFields[0].field &&
+      mappedFields[0].field.isInCollection()
+    );
   }
 }

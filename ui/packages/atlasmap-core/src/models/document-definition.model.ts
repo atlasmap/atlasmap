@@ -16,7 +16,7 @@
 
 import { DocumentType, InspectionType } from '../common/config.types';
 
-import { DataMapperUtil } from '../common/data-mapper-util';
+import { CommonUtil } from '../utils/common-util';
 import { DocumentInitializationModel } from './config.model';
 import { Field } from './field.model';
 import { MappingDefinition } from './mapping-definition.model';
@@ -286,9 +286,9 @@ export class DocumentDefinition {
       this.fieldsByPath[oldPath] != null
     ) {
       delete this.fieldsByPath[oldPath];
-      DataMapperUtil.removeItemFromArray(oldPath, this.fieldPaths);
+      CommonUtil.removeItemFromArray(oldPath, this.fieldPaths);
     } else {
-      DataMapperUtil.removeItemFromArray(field.path, this.fieldPaths);
+      CommonUtil.removeItemFromArray(field.path, this.fieldPaths);
     }
     this.populateFieldData(field);
     this.fieldPaths.sort();
@@ -402,10 +402,10 @@ export class DocumentDefinition {
     if (field.scope) {
       oldFieldPath = field.path + '-' + field.scope;
     }
-    DataMapperUtil.removeItemFromArray(oldFieldPath, this.fieldPaths);
+    CommonUtil.removeItemFromArray(oldFieldPath, this.fieldPaths);
     delete this.fieldsByPath[oldFieldPath];
     if (field.parentField != null) {
-      DataMapperUtil.removeItemFromArray(field, field.parentField.children);
+      CommonUtil.removeItemFromArray(field, field.parentField.children);
     }
   }
 

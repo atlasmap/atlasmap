@@ -21,7 +21,7 @@ import { DocumentDefinition, MappingDefinition } from '../models';
 import { DocumentType, InspectionType } from '../common/config.types';
 import { TextDecoder, TextEncoder } from 'text-encoding';
 
-import { DataMapperUtil } from '../common/data-mapper-util';
+import { CommonUtil } from '../utils/common-util';
 import { ErrorHandlerService } from './error-handler.service';
 import { ErrorLevel } from '../models/error.model';
 import { FileManagementService } from './file-management.service';
@@ -40,8 +40,8 @@ describe('FileManagementService', () => {
   const service = new FileManagementService(ky);
   jest.mock('file-saver');
   const mockedFileSaver = mocked(FileSaver);
-  jest.mock('../common/data-mapper-util');
-  const mockedDataMapperUtil = mocked(DataMapperUtil, true);
+  jest.mock('../utils/common-util');
+  const mockedDataMapperUtil = mocked(CommonUtil, true);
 
   beforeEach(() => {
     service.cfg = new ConfigModel();
@@ -49,7 +49,7 @@ describe('FileManagementService', () => {
     service.cfg.logger = log.getLogger('config');
   });
 
-  test('findMappingFiles', (done) => {
+  test('findMappingFiles()', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         json(): Promise<any> {
@@ -72,7 +72,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('findMappingFiles server error', (done) => {
+  test('findMappingFiles() server error', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         json(): Promise<any> {
@@ -91,7 +91,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('getCurrentMappingDigest', (done) => {
+  test('getCurrentMappingDigest()', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -105,7 +105,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('getCurrentMappingDigest server error', (done) => {
+  test('getCurrentMappingDigest() server error', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -124,7 +124,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('getCurrentADMArchive', (done) => {
+  test('getCurrentADMArchive()', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -138,7 +138,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('getCurrentADMArchive server error', (done) => {
+  test('getCurrentADMArchive() server error', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -157,7 +157,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('resetMappings', (done) => {
+  test('resetMappings()', (done) => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -171,7 +171,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('resetMappings server error', (done) => {
+  test('resetMappings() server error', (done) => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -192,7 +192,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('resetLibs', (done) => {
+  test('resetLibs()', (done) => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -206,7 +206,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('resetLibs server error', (done) => {
+  test('resetLibs() server error', (done) => {
     mockedKy.delete = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -227,7 +227,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('setMappingToService', (done) => {
+  test('setMappingToService()', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -242,7 +242,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('setMappingToService server error', (done) => {
+  test('setMappingToService() server error', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -262,7 +262,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('setBinaryFileToService', (done) => {
+  test('setBinaryFileToService()', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -278,7 +278,7 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('setBinaryFileToService server error', (done) => {
+  test('setBinaryFileToService() server error', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -299,7 +299,22 @@ describe('FileManagementService', () => {
     });
   });
 
-  test('exportADMArchive', (done) => {
+  test('setLibraryToService()', (done) => {
+    mockedKy.put = jest.fn().mockReturnValue(
+      new (class {
+        blob(): Promise<Blob> {
+          return Promise.resolve(new Blob());
+        }
+      })()
+    );
+    const binary = new TextEncoder().encode('dummy binary');
+    service.setLibraryToService(binary, (success, _res) => {
+      expect(success).toBeTruthy();
+      done();
+    });
+  });
+
+  test('exportADMArchive()', (done) => {
     // put digest file
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
@@ -357,7 +372,7 @@ describe('FileManagementService', () => {
       });
   });
 
-  test('importADMArchive', (done) => {
+  test('importADMArchive()', (done) => {
     mockedDataMapperUtil.readBinaryFile = jest
       .fn()
       .mockResolvedValue(

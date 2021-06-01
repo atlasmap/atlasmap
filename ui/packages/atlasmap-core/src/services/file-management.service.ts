@@ -20,9 +20,10 @@ import {
   ErrorType,
 } from '../models/error.model';
 
+import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
-import { DataMapperUtil } from '../common/data-mapper-util';
-import { DocumentManagementService } from './document-management.service';
+import { HTTP_STATUS_NO_CONTENT } from '../common/constants';
+import { MappingDigestUtil } from '../utils/mapping-digest-util';
 import { Observable } from 'rxjs';
 import { gzip } from 'pako';
 import ky from 'ky';
@@ -71,7 +72,7 @@ export class FileManagementService {
           observer.complete();
         })
         .catch((error: any) => {
-          if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          if (error.status !== HTTP_STATUS_NO_CONTENT) {
             this.handleError(
               'Error occurred while accessing the current mapping files from the runtime service.',
               error
@@ -121,7 +122,7 @@ export class FileManagementService {
           observer.complete();
         })
         .catch((error: any) => {
-          if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          if (error.status !== HTTP_STATUS_NO_CONTENT) {
             this.handleError(
               `Error occurred while accessing the ${fileName} from the runtime service.`,
               error
@@ -254,6 +255,38 @@ export class FileManagementService {
   }
 
   /**
+   * Push a user-defined Java archive file (binary buffer) to the runtime.
+   *
+   * @param binaryBuffer
+   */
+  setLibraryToService(
+    binaryBuffer: any,
+    callback: (success: boolean, res: any) => void
+  ): void {
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
+    this.cfg.logger!.debug('Set Library Service Request');
+    const fileContent: Blob = new Blob([binaryBuffer], {
+      type: 'application/octet-stream',
+    });
+    this.api
+      .put(url, { body: fileContent })
+      .blob()
+      .then((res: any) => {
+        callback(true, res);
+        this.cfg.logger!.debug(
+          `Set Library Service Response: ${JSON.stringify(res)}`
+        );
+      })
+      .catch((error: any) => {
+        callback(false, error);
+        this.handleError(
+          'Error occurred while uploading a JAR file to the server.',
+          error
+        );
+      });
+  }
+
+  /**
    * Update the current mapping files and export the ADM archive file with current mappings.
    *
    * Establish the mapping digest file content in JSON format (mappings + schema + instance-schema),
@@ -278,7 +311,7 @@ export class FileManagementService {
           const jsonBuffer = await this.getJsonBuf();
           if (jsonBuffer) {
             aggregateBuffer +=
-              DocumentManagementService.generateExportMappings(jsonBuffer);
+              MappingDigestUtil.generateExportMappings(jsonBuffer);
           }
         }
 
@@ -295,11 +328,10 @@ export class FileManagementService {
               exportMeta += ',\n';
               exportBlockData += ',\n';
             }
-            exportMeta += DocumentManagementService.generateExportMetaStr(doc);
-            exportBlockData +=
-              DocumentManagementService.generateExportBlockData(
-                doc.inspectionSource
-              );
+            exportMeta += MappingDigestUtil.generateExportMetaStr(doc);
+            exportBlockData += MappingDigestUtil.generateExportBlockData(
+              doc.inspectionSource
+            );
             docCount++;
           }
         }
@@ -310,7 +342,7 @@ export class FileManagementService {
         aggregateBuffer += '   }\n';
 
         // Compress the JSON buffer - write out as binary.
-        const binBuffer = DataMapperUtil.str2bytes(aggregateBuffer);
+        const binBuffer = CommonUtil.str2bytes(aggregateBuffer);
         try {
           const compress = gzip(binBuffer);
           let fileContent: Blob = new Blob([compress], {
@@ -335,7 +367,7 @@ export class FileManagementService {
                         type: 'application/octet-stream',
                       });
                       if (
-                        !(await DataMapperUtil.writeFile(
+                        !(await CommonUtil.writeFile(
                           fileContent,
                           mappingsFileName
                         ))
@@ -425,7 +457,7 @@ export class FileManagementService {
 
       // Turn the imported ADM file into a binary octet stream.
       try {
-        fileBin = await DataMapperUtil.readBinaryFile(mappingsFileName, reader);
+        fileBin = await CommonUtil.readBinaryFile(mappingsFileName, reader);
       } catch (error) {
         this.cfg.errorService.addError(
           new ErrorInfo({
@@ -560,7 +592,7 @@ export class FileManagementService {
           observer.complete();
         })
         .catch((error: any) => {
-          if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          if (error.status !== HTTP_STATUS_NO_CONTENT) {
             this.handleError(
               'Error occurred while accessing the current mappings from the backend service.',
               error

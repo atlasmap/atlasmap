@@ -14,8 +14,8 @@
     limitations under the License.
 */
 import {
+  CommonUtil,
   ConfigModel,
-  DataMapperUtil,
   DocumentDefinition,
   DocumentManagementService,
   ErrorHandlerService,
@@ -207,7 +207,7 @@ export function fromMappedFieldToIMappingField(
       name: a.name,
       options: getMappingActions(mappedField.isSource()).map(
         (a): ITransformationSelectOption => ({
-          name: DataMapperUtil.toDisplayable(a.name),
+          name: CommonUtil.toDisplayable(a.name),
           value: a.name,
         }),
       ),
@@ -216,7 +216,7 @@ export function fromMappedFieldToIMappingField(
           label:
             av.serviceObject?.title?.length > 0
               ? av.serviceObject.title
-              : DataMapperUtil.toDisplayable(av.name),
+              : CommonUtil.toDisplayable(av.name),
           name: av.name,
           value: a.argumentValues[idx].value,
           options: av.values
@@ -695,7 +695,7 @@ export function handleRemoveTransformation(
   }
   const action = field.actions[transformationIndex];
   if (action) {
-    DataMapperUtil.removeItemFromArray(action, field.actions);
+    CommonUtil.removeItemFromArray(action, field.actions);
     cfg.mappingService.notifyMappingUpdated();
   }
 }

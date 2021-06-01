@@ -37,6 +37,7 @@ import { TransitionMode, TransitionModel } from '../models/transition.model';
 
 import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
+import { ExpressionUtil } from './expression-util';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingUtil } from './mapping-util';
@@ -135,7 +136,7 @@ export class MappingSerializer {
     let jsonMapping: { [key: string]: any } = {};
     const mappingExpression = ignoreExpression
       ? ''
-      : MappingUtil.getMappingExpressionStr(false, mapping);
+      : ExpressionUtil.getMappingExpressionStr(cfg, false, mapping);
 
     if (
       mapping.transition.isManyToOneMode() ||
