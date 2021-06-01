@@ -35,7 +35,7 @@ import { MappingManagementService } from '../services/mapping-management.service
 import { MappingModel } from '../models/mapping.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
-import { TestUtils } from './TestUtils';
+import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
 
 import atlasMappingCollExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-expr-mapping.json';

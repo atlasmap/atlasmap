@@ -14,8 +14,8 @@
     limitations under the License.
 */
 import {
+  CommonUtil,
   ConfigModel,
-  DataMapperUtil,
   DocumentDefinition,
   ErrorInfo,
   ErrorLevel,
@@ -152,9 +152,9 @@ export async function removeDocumentRef(
   return new Promise<boolean>(async (resolve) => {
     cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
     if (docDef.isSource) {
-      DataMapperUtil.removeItemFromArray(docDef, cfg.sourceDocs);
+      CommonUtil.removeItemFromArray(docDef, cfg.sourceDocs);
     } else {
-      DataMapperUtil.removeItemFromArray(docDef, cfg.targetDocs);
+      CommonUtil.removeItemFromArray(docDef, cfg.targetDocs);
     }
     await cfg.mappingService.notifyMappingUpdated();
     await cfg.fileService.exportADMArchive('');
@@ -321,9 +321,9 @@ export function enableCustomClass(
               });
 
             if (doc.isSource) {
-              DataMapperUtil.removeItemFromArray(doc, cfg.sourceDocs);
+              CommonUtil.removeItemFromArray(doc, cfg.sourceDocs);
             } else {
-              DataMapperUtil.removeItemFromArray(doc, cfg.targetDocs);
+              CommonUtil.removeItemFromArray(doc, cfg.targetDocs);
             }
             cfg.errorService.addError(
               new ErrorInfo({
@@ -408,10 +408,10 @@ export function getPropertyScopeOptions(isSource: boolean): {
   const propertyDocOptions: DocumentDefinition[] = isSource
     ? cfg.sourceDocs
     : cfg.targetDocs;
-  for (let i = 0; i < propertyDocOptions.length; i++) {
+  for (let propertyDocOption of propertyDocOptions) {
     scopeOptions.push({
-      value: propertyDocOptions[i].id,
-      label: propertyDocOptions[i].name,
+      value: propertyDocOption.id,
+      label: propertyDocOption.name,
     });
   }
   return scopeOptions;

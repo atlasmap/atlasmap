@@ -14,16 +14,18 @@
     limitations under the License.
 */
 
-import { DataMapperUtil } from '../common/data-mapper-util';
+import { ConfigModel } from '../models/config.model';
+import { ExpressionUtil } from './expression-util';
+import { TestUtils } from '../../test/test-util';
 
-describe('DataMapperUtil', () => {
-  test('removeItemFromArray', () => {
-    const items = [{ foo0: 'bar0' }, { foo1: 'bar1' }, { foo2: 'bar2' }];
-    const item = items[1];
-    const itemsRemoved = [{ foo0: 'bar0' }, { foo2: 'bar2' }];
-    const removed = DataMapperUtil.removeItemFromArray(item, items);
-    expect(removed).toBe(true);
-    //console.log(items);
-    expect(items).toEqual(itemsRemoved);
+describe('ExpressionUtil', () => {
+  const cfg = ConfigModel.getConfig();
+
+  test('createMappingExpression', () => {
+    TestUtils.createMockMappings(cfg);
+    const mapping1 = cfg.mappings!.mappings[1];
+    expect(ExpressionUtil.createMappingExpression(cfg, mapping1)).toContain(
+      'Concatenate'
+    );
   });
 });

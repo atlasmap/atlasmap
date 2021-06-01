@@ -30,7 +30,7 @@ import {
 } from '../models/error.model';
 import { Observable, Subject } from 'rxjs';
 
-import { DataMapperUtil } from '../common/data-mapper-util';
+import { CommonUtil } from '../utils/common-util';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from './document-management.service';
 import { ErrorHandlerService } from './error-handler.service';
@@ -135,9 +135,9 @@ export class InitializationService {
       // Clear out the existing document if importing the same name.
       if ((docdef = this.cfg.getDocForIdentifier(docName, isSource)!)) {
         if (isSource) {
-          DataMapperUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
+          CommonUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
         } else {
-          DataMapperUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
+          CommonUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
         }
       }
 
@@ -166,7 +166,7 @@ export class InitializationService {
 
           // Push the user-defined java archive file to the runtime service.
           if (javaArchive) {
-            this.cfg.documentService.setLibraryToService(
+            this.cfg.fileService.setLibraryToService(
               docBody,
               async (success) => {
                 if (success) {
@@ -189,15 +189,9 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
               .then(async (doc: DocumentDefinition) => {
                 if (doc.fields.length === 0) {
                   if (isSource) {
-                    DataMapperUtil.removeItemFromArray(
-                      docdef,
-                      this.cfg.sourceDocs
-                    );
+                    CommonUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
                   } else {
-                    DataMapperUtil.removeItemFromArray(
-                      docdef,
-                      this.cfg.targetDocs
-                    );
+                    CommonUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
                   }
                 }
                 log.debug(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
@@ -420,9 +414,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
     return new Promise<any>(async (resolve, reject) => {
       let mInfo: any = null;
       try {
-        mInfo = DocumentManagementService.getMappingsInfo(
-          mappingsSchemaAggregate
-        );
+        mInfo = CommonUtil.objectize(mappingsSchemaAggregate);
       } catch (error) {
         this.cfg.errorService.addError(
           new ErrorInfo({
@@ -595,9 +587,7 @@ ${error.status} ${error.statusText}`,
         if (mInfo && mInfo.exportMappings) {
           const catalogMappingsName =
             MappingSerializer.deserializeAtlasMappingName(
-              DocumentManagementService.getMappingsInfo(
-                mInfo.exportMappings.value
-              )
+              CommonUtil.objectize(mInfo.exportMappings.value)
             );
 
           // If the live UI mappings name does not match the UI mappings name extracted from the

@@ -24,10 +24,10 @@ import { ConfigModel } from '../models/config.model';
 import { ErrorHandlerService } from './error-handler.service';
 import { Field } from '../models/field.model';
 import { FieldActionService } from './field-action.service';
-import { InspectionType } from '../common/config.types';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
+import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
 import log from 'loglevel';
 import mockMappingJson from '../../../../test-resources/mapping/atlasmapping-mock.json';
@@ -45,6 +45,13 @@ describe('MappingManagementService', () => {
     cfg.logger = log.getLogger('config');
     service.cfg = cfg;
   });
+
+  function setSourceFieldValues(mapping: MappingModel) {
+    let sourceFields = mapping.getFields(true);
+    for (let i in sourceFields) {
+      sourceFields[i].value = 'value-' + i;
+    }
+  }
 
   test('check banned fields', () => {
     const f = new Field();
@@ -179,7 +186,7 @@ describe('MappingManagementService', () => {
         }
       })()
     );
-    createMockDocs(service.cfg);
+    TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     service.fetchMappings([''], service.cfg.mappings).subscribe({
       next(value) {
@@ -201,7 +208,7 @@ describe('MappingManagementService', () => {
 
   test('updateMappingsTransition()', () => {
     spyOn<any>(service, 'validateMappings').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     service.cfg.mappings!.mappings[0].transition.mode =
       TransitionMode.MANY_TO_ONE;
     expect(
@@ -221,7 +228,7 @@ describe('MappingManagementService', () => {
 
   test('removeMapping()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const toRemove = service.cfg.mappings!.mappings[0];
     expect(service.cfg.mappings!.mappings.length).toBe(2);
     service
@@ -239,7 +246,7 @@ describe('MappingManagementService', () => {
 
   test('removeAllMappings()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings[0]);
     service
       .removeAllMappings()
@@ -256,7 +263,7 @@ describe('MappingManagementService', () => {
   test('updateMappedField()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
     const spy = spyOn<any>(service, 'updateTransition').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     service
       .updateMappedField(service.cfg.mappings!.mappings[0])
       .then((value) => {
@@ -281,7 +288,7 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping = service.cfg.mappings!.mappings[1];
     const field2 = mapping.getMappedFieldForIndex('1', true);
     expect(field2?.field?.path).toBe('/sourceField2');
@@ -293,7 +300,7 @@ describe('MappingManagementService', () => {
   });
 
   test('addPlaceHolders()', () => {
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping = service.cfg.mappings!.mappings[1];
     const field = mapping.getMappedFieldForIndex('2', true);
     expect(field?.field!.path).toBe('/sourceField');
@@ -315,7 +322,7 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping = service.cfg.mappings!.mappings[1];
     const field2 = mapping.getMappedFieldForIndex('1', true);
     expect(field2?.field!.path).toBe('/sourceField2');
@@ -326,7 +333,7 @@ describe('MappingManagementService', () => {
 
   test('isFieldSelectable()', () => {
     const spy = spyOn(service, 'getFieldSelectionExclusionReason').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping = service.cfg.mappings!.mappings[1];
     const field2 = mapping.getMappedFieldForIndex('1', true);
     service.isFieldSelectable(mapping, field2?.field!);
@@ -344,7 +351,7 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const doc = service.cfg.sourceDocs[0];
     const field3 = doc.getField('/sourceField3');
     expect(service.cfg.mappings?.mappings.length).toBe(2);
@@ -366,14 +373,14 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings.length).toBe(2);
     service.newMapping();
     expect(service.cfg.mappings?.mappings.length).toBe(3);
   });
 
   test('selectMapping()', () => {
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -391,7 +398,7 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -414,7 +421,7 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     service.cfg.initCfg.baseMappingServiceUrl = 'http://dummy/';
     const mapping1 = service.cfg.mappings!.mappings[1];
     setSourceFieldValues(mapping1);
@@ -454,7 +461,7 @@ describe('MappingManagementService', () => {
         }
       })();
     });
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings.length).toBe(2);
     service.removeDocumentReferenceFromAllMappings('SourceJson');
     expect(service.cfg.mappings!.mappings.length).toBe(0);
@@ -462,7 +469,7 @@ describe('MappingManagementService', () => {
 
   test('removeFieldFromAllMappings()', () => {
     spyOn<any>(service, 'validateMappings').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings.length).toBe(2);
     const doc = service.cfg.sourceDocs[0];
     const field = doc.getField('/sourceField');
@@ -475,7 +482,7 @@ describe('MappingManagementService', () => {
   });
 
   test('willClearOutSourceFieldsOnTogglingExpression()', () => {
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -483,7 +490,7 @@ describe('MappingManagementService', () => {
   });
 
   test('conditionalMappingExpressionEnabled()', () => {
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -492,7 +499,7 @@ describe('MappingManagementService', () => {
 
   test('toggleExpressionMode', () => {
     spyOn<any>(service, 'validateMappings').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -514,7 +521,7 @@ describe('MappingManagementService', () => {
         })();
       }
     );
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const payload: any = MappingSerializer.serializeMappings(service.cfg);
     service.updateMappings(payload);
     expect(spyValidation.calls.count()).toBe(0);
@@ -537,7 +544,7 @@ describe('MappingManagementService', () => {
 
   test('notifyMappingUpdated()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -553,7 +560,7 @@ describe('MappingManagementService', () => {
   });
 
   test('executeFieldSearch()', () => {
-    createMockMappings(service.cfg);
+    TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
     service.selectMapping(mapping1);
@@ -563,14 +570,6 @@ describe('MappingManagementService', () => {
     expect(
       service.executeFieldSearch(service.cfg, 'sourceField2', true).length
     ).toBe(2);
-  });
-
-  test('createMappingExpression', () => {
-    createMockMappings(service.cfg);
-    const mapping1 = service.cfg.mappings!.mappings[1];
-    expect(service.cfg.mappings?.activeMapping).toBeNull();
-    service.selectMapping(mapping1);
-    expect(service.createMappingExpression(mapping1)).toContain('Concatenate');
   });
 
   test('getEnumerationValues()', () => {
@@ -629,79 +628,3 @@ describe('MappingManagementService', () => {
       });
   });
 });
-
-function createMockDocs(cfg: ConfigModel) {
-  const srcDoc = new DocumentDefinition();
-  srcDoc.id = 'SourceJson';
-  srcDoc.name = 'json source document';
-  srcDoc.uri = 'atlas:json:SourceJson';
-  srcDoc.inspectionType = InspectionType.SCHEMA;
-  srcDoc.inspectionSource = 'dummy schema';
-  srcDoc.isSource = true;
-  const srcF = new Field();
-  srcF.docDef = srcDoc;
-  srcF.name = 'sourceField';
-  srcF.path = '/sourceField';
-  srcF.type = 'STRING';
-  srcDoc.addField(srcF);
-  const srcF2 = new Field();
-  srcF2.docDef = srcDoc;
-  srcF2.name = 'sourceField2';
-  srcF2.path = '/sourceField2';
-  srcF2.type = 'STRING';
-  srcDoc.addField(srcF2);
-  const srcF3 = new Field();
-  srcF3.docDef = srcDoc;
-  srcF3.name = 'sourceField3';
-  srcF3.path = '/sourceField3';
-  srcF3.type = 'STRING';
-  srcDoc.addField(srcF3);
-
-  const tgtDoc = new DocumentDefinition();
-  tgtDoc.id = 'TargetJson';
-  tgtDoc.name = 'json target document';
-  tgtDoc.uri = 'atlas:json:TargetJson';
-  tgtDoc.inspectionType = InspectionType.SCHEMA;
-  tgtDoc.inspectionSource = 'dummy schema';
-  tgtDoc.isSource = false;
-  const tgtF = new Field();
-  tgtF.docDef = tgtDoc;
-  tgtF.name = 'targetField';
-  tgtF.path = '/targetField';
-  tgtF.type = 'STRING';
-  tgtDoc.addField(tgtF);
-  const tgtF2 = new Field();
-  tgtF2.docDef = tgtDoc;
-  tgtF2.name = 'targetField2';
-  tgtF2.path = '/targetField2';
-  tgtF2.type = 'STRING';
-  tgtDoc.addField(tgtF2);
-
-  cfg.sourceDocs.push(srcDoc);
-  cfg.targetDocs.push(tgtDoc);
-}
-
-function createMockMappings(cfg: ConfigModel) {
-  createMockDocs(cfg);
-  const srcDoc = cfg.sourceDocs[0];
-  const tgtDoc = cfg.targetDocs[0];
-  cfg.mappings = new MappingDefinition();
-  const mapping = new MappingModel();
-  mapping.cfg = cfg;
-  mapping.addField(srcDoc.getField('/sourceField')!, true);
-  mapping.addField(tgtDoc.getField('/targetField')!, true);
-  cfg.mappings.mappings.push(mapping);
-  const mapping2 = new MappingModel();
-  mapping2.cfg = cfg;
-  mapping2.addField(srcDoc.getField('/sourceField')!, true);
-  mapping2.addField(srcDoc.getField('/sourceField2')!, true);
-  mapping2.addField(tgtDoc.getField('/targetField2')!, true);
-  cfg.mappings.mappings.push(mapping2);
-}
-
-function setSourceFieldValues(mapping: MappingModel) {
-  let sourceFields = mapping.getFields(true);
-  for (let i in sourceFields) {
-    sourceFields[i].value = 'value-' + i;
-  }
-}

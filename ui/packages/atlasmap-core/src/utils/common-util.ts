@@ -15,10 +15,7 @@
 */
 import { saveAs } from 'file-saver';
 
-export class DataMapperUtil {
-  static HTTP_STATUS_OK = 200;
-  static HTTP_STATUS_NO_CONTENT = 204;
-
+export class CommonUtil {
   static removeItemFromArray(item: any, items: any[]): boolean {
     if (item == null || items == null || items.length === 0) {
       return false;
@@ -173,5 +170,32 @@ export class DataMapperUtil {
     }
     const delta = MAX_PATH_WIDTH - leaf.length;
     return path.substr(0, delta) + '...' + leaf;
+  }
+
+  /**
+   * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
+   * non-ascii character encodings with unicode escape sequences.
+   *
+   * @param buffer
+   */
+  static sanitizeJSON(buffer: string): string {
+    let jsonBuffer = JSON.stringify(buffer);
+    jsonBuffer = jsonBuffer.replace(/[\u007F-\uFFFF]/g, function (chr) {
+      return '\\u' + ('0000' + chr.charCodeAt(0).toString(16)).substr(-4);
+    });
+    return jsonBuffer;
+  }
+
+  /**
+   * Restrict JSON parsing to the document management service.
+   *
+   * @param buffer
+   */
+  static objectize(buffer: any): any {
+    if (typeof buffer === 'string') {
+      return JSON.parse(buffer);
+    } else {
+      return buffer;
+    }
   }
 }

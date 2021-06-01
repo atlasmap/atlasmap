@@ -20,7 +20,7 @@ import {
 } from '../Views';
 import React, { useCallback } from 'react';
 
-import { DataMapperUtil } from '@atlasmap/core';
+import { CommonUtil } from '@atlasmap/core';
 import { useAtlasmap } from './AtlasmapProvider';
 
 export interface IUseSidebarProps {
@@ -98,7 +98,7 @@ export function useSidebar({
       if (multiplicityFieldAction) {
         const transformations = getMultiplicityActions(m);
         const transformationsOptions = transformations.map((a) => ({
-          label: DataMapperUtil.toDisplayable(a.name),
+          label: CommonUtil.toDisplayable(a.name),
           name: a.name,
           value: a.name,
         }));
@@ -113,7 +113,7 @@ export function useSidebar({
           transformationsOptions,
           transformationsArguments: multiplicityFieldAction.argumentValues.map(
             (a) => ({
-              label: DataMapperUtil.toDisplayable(a.name),
+              label: CommonUtil.toDisplayable(a.name),
               name: a.name,
               value: a.value,
               options: a.name === 'delimiter' ? delimitersOptions : undefined,

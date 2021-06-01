@@ -31,9 +31,10 @@ import {
 } from '../models/error.model';
 import { Observable, Subscription } from 'rxjs';
 
+import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
-import { DataMapperUtil } from '../common/data-mapper-util';
 import { Guid } from '../utils';
+import { HTTP_STATUS_NO_CONTENT } from '../common/constants';
 import ky from 'ky';
 import { timeout } from 'rxjs/operators';
 
@@ -43,92 +44,6 @@ export class DocumentManagementService {
   private mappingUpdatedSubscription!: Subscription;
 
   private headers = { 'Content-Type': 'application/json' };
-
-  /**
-   * Use the JSON utility to translate the specified buffer into a JSON buffer - then replace any
-   * non-ascii character encodings with unicode escape sequences.
-   *
-   * @param buffer
-   */
-  static sanitizeJSON(buffer: string): string {
-    let jsonBuffer = buffer;
-    jsonBuffer = JSON.stringify(buffer);
-    jsonBuffer = jsonBuffer.replace(/[\u007F-\uFFFF]/g, function (chr) {
-      return '\\u' + ('0000' + chr.charCodeAt(0).toString(16)).substr(-4);
-    });
-    return jsonBuffer;
-  }
-
-  /**
-   * Restrict JSON parsing to the document management service.
-   *
-   * @param buffer
-   */
-  static getMappingsInfo(buffer: any): any {
-    if (typeof buffer === 'string') {
-      return JSON.parse(buffer as string);
-    } else {
-      return buffer;
-    }
-  }
-
-  /**
-   * Capture the specified user mappings into a general catalog JSON buffer (exportMappings).
-   * @param buffer
-   */
-  static generateExportMappings(buffer: string): string {
-    if (!buffer || buffer.length === 0) {
-      return '';
-    }
-    const metaStr =
-      `   "exportMappings":
-    {
-       "value": ` +
-      this.sanitizeJSON(buffer) +
-      `
-    },\n`;
-
-    return metaStr;
-  }
-
-  /**
-   * Capture the specified user JSON or XML document buffer into a general catalog JSON buffer.
-   *
-   * @param buffer
-   */
-  static generateExportBlockData(buffer: string): string {
-    if (buffer === null || buffer.length === 0) {
-      return '';
-    }
-    const metaStr =
-      `
-          {
-             "value": ` +
-      this.sanitizeJSON(buffer) +
-      `
-          }`;
-    return metaStr;
-  }
-
-  /**
-   * Capture the specified user document definition meta data into a general
-   * catalog JSON buffer.
-   *
-   * @param docDef
-   */
-  static generateExportMetaStr(docDef: DocumentDefinition): string {
-    const inspectionParameters = JSON.stringify(docDef.inspectionParameters);
-    const metaStr = `
-       {
-          "name": "${docDef.name}",
-          "dataSourceType": "${docDef.type}",
-          "id": "${docDef.id}",
-          "inspectionType": "${docDef.inspectionType}",
-          "inspectionParameters": ${inspectionParameters},
-          "isSource": "${docDef.isSource}"
-       }`;
-    return metaStr;
-  }
 
   constructor(private api: typeof ky) {}
 
@@ -256,7 +171,7 @@ export class DocumentManagementService {
           observer.complete();
         })
         .catch((error: any) => {
-          if (error.status !== DataMapperUtil.HTTP_STATUS_NO_CONTENT) {
+          if (error.status !== HTTP_STATUS_NO_CONTENT) {
             this.handleError(
               'Error occurred while accessing the user uploaded JARs from the runtime service.',
               error
@@ -266,38 +181,6 @@ export class DocumentManagementService {
           observer.complete();
         });
     }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
-  }
-
-  /**
-   * Push a user-defined Java archive file (binary buffer) to the runtime.
-   *
-   * @param binaryBuffer
-   */
-  setLibraryToService(
-    binaryBuffer: any,
-    callback: (success: boolean, res: any) => void
-  ): void {
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
-    this.cfg.logger!.debug('Set Library Service Request');
-    const fileContent: Blob = new Blob([binaryBuffer], {
-      type: 'application/octet-stream',
-    });
-    this.api
-      .put(url, { body: fileContent })
-      .blob()
-      .then((res: any) => {
-        callback(true, res);
-        this.cfg.logger!.debug(
-          `Set Library Service Response: ${JSON.stringify(res)}`
-        );
-      })
-      .catch((error: any) => {
-        callback(false, error);
-        this.handleError(
-          'Error occurred while uploading a JAR file to the server.',
-          error
-        );
-      });
   }
 
   /**
@@ -334,7 +217,7 @@ export class DocumentManagementService {
       if (userFileSuffix !== DocumentType.JAVA_ARCHIVE) {
         // Wait for the async read of the selected ascii document to be completed.
         try {
-          fileText = await DataMapperUtil.readFile(selectedFile, reader);
+          fileText = await CommonUtil.readFile(selectedFile, reader);
         } catch (error) {
           this.cfg.errorService.addError(
             new ErrorInfo({
@@ -368,7 +251,7 @@ export class DocumentManagementService {
         case DocumentType.JAVA_ARCHIVE:
           // Wait for the async read of the selected binary document to be completed.
           try {
-            fileBin = await DataMapperUtil.readBinaryFile(selectedFile, reader);
+            fileBin = await CommonUtil.readBinaryFile(selectedFile, reader);
           } catch (error) {
             this.cfg.errorService.addError(
               new ErrorInfo({
