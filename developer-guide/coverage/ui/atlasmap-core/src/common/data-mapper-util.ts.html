@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.26% </span>
+                <span class="strong">45.45% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>31/77</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">21.43% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>6/28</span>
+                <span class='fraction'>35/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">35.71% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>5/14</span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>10/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">39.19% </span>
+                <span class="strong">42.86% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>6/14</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">44.59% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>29/74</span>
+                <span class='fraction'>33/74</span>
             </div>
         
             
@@ -255,20 +255,20 @@
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,13 +393,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -569,14 +569,14 @@ export class DataMapperUtil {
    * @param path
    * @param fieldWidth
    */
-<span class="fstat-no" title="function not covered" >  static e</span>xtractDisplayPath(path: string, fieldWidth: number): string {
-    const MAX_PATH_WIDTH = <span class="cstat-no" title="statement not covered" >fieldWidth - 4;</span> // account for length of ellipsis
+  static extractDisplayPath(path: string, fieldWidth: number): string {
+    const MAX_PATH_WIDTH = fieldWidth - 4; // account for length of ellipsis
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if (!path || MAX_PATH_WIDTH &lt;= 0) {</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!path || MAX_PATH_WIDTH &lt;= 0) {
 <span class="cstat-no" title="statement not covered" >      return '';</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (path.length &lt;= MAX_PATH_WIDTH) {</span>
-<span class="cstat-no" title="statement not covered" >      return path;</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (path.length &lt;= MAX_PATH_WIDTH) {
+      return path;
     }
     const segmentedPath = <span class="cstat-no" title="statement not covered" >path.split('/');</span>
     const leaf = <span class="cstat-no" title="statement not covered" >'/' + segmentedPath[segmentedPath.length - 1];</span>
@@ -594,7 +594,7 @@ export class DataMapperUtil {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jun 01 2021 14:31:55 GMT+0000 (Coordinated Universal Time)
+                at Tue Jun 01 2021 15:35:37 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
