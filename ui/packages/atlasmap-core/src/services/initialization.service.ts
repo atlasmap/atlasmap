@@ -158,88 +158,60 @@ export class InitializationService {
         docdef.name = docName;
       }
 
-      this.cfg.documentService
-        .fetchClassPath()
-        .toPromise()
-        .then((classPath: string) => {
-          this.cfg.initCfg.classPath = classPath;
-
-          // Push the user-defined java archive file to the runtime service.
-          if (javaArchive) {
-            this.cfg.fileService.setLibraryToService(
-              docBody,
-              async (success) => {
-                if (success) {
-                  await this.cfg.fieldActionService
-                    .fetchFieldActions()
-                    .catch((error: any) => {
-                      this.handleError(error);
-                      reject();
-                    });
-                }
-              }
-            );
-            this.updateStatus();
-          } else {
-            log.debug(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
-isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
-            this.cfg.documentService
-              .fetchDocument(docdef, this.cfg.initCfg.classPath)
-              .toPromise()
-              .then(async (doc: DocumentDefinition) => {
-                if (doc.fields.length === 0) {
-                  if (isSource) {
-                    CommonUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
-                  } else {
-                    CommonUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
-                  }
-                }
-                log.debug(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
-isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
-                docdef.updateFromMappings(this.cfg.mappings!);
-                this.updateStatus();
-                resolve(true);
-              })
+      if (javaArchive) {
+        this.cfg.fileService.setLibraryToService(docBody, async (success) => {
+          if (success) {
+            await this.cfg.fieldActionService
+              .fetchFieldActions()
               .catch((error: any) => {
-                if (error.status === 0) {
-                  this.handleError(
-                    'Unable to fetch document ' +
-                      docName +
-                      ' from the runtime service.',
-                    error
-                  );
-                } else {
-                  this.handleError(
-                    "Could not load document '" +
-                      docdef.id +
-                      "': " +
-                      error.status +
-                      ' ' +
-                      error.statusText,
-                    error
-                  );
-                }
+                this.handleError(error);
                 reject();
               });
           }
-        })
-        .catch((error: any) => {
-          if (error.status === 0) {
-            this.handleError(
-              'Fatal network error: Could not connect to AtlasMap design runtime service.',
-              error
-            );
-          } else {
-            this.handleError(
-              'Could not load Maven class path: ' +
-                error.status +
-                ' ' +
-                error.statusText,
-              error
-            );
-          }
-          reject();
         });
+        this.updateStatus();
+      } else {
+        log.debug(`Fetching user document: name=${docdef.name}, id=${docdef.id},\
+isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
+        this.cfg.documentService
+          .fetchDocument(docdef)
+          .toPromise()
+          .then(async (doc: DocumentDefinition) => {
+            if (doc.fields.length === 0) {
+              if (isSource) {
+                CommonUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
+              } else {
+                CommonUtil.removeItemFromArray(docdef, this.cfg.targetDocs);
+              }
+            }
+            log.debug(`Fetched user document: name=${docdef.name}, id=${docdef.id},\
+isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionType}`);
+            docdef.updateFromMappings(this.cfg.mappings!);
+            this.updateStatus();
+            resolve(true);
+          })
+          .catch((error: any) => {
+            if (error.status === 0) {
+              this.handleError(
+                'Unable to fetch document ' +
+                  docName +
+                  ' from the runtime service.',
+                error
+              );
+            } else {
+              this.handleError(
+                "Could not load document '" +
+                  docdef.id +
+                  "': " +
+                  error.status +
+                  ' ' +
+                  error.statusText,
+                error
+              );
+            }
+            reject();
+          });
+      }
     });
   }
 
@@ -293,37 +265,7 @@ isSource=${docdef.initModel.isSource}, inspection=${docdef.initModel.inspectionT
       }
 
       // load documents
-      if (!this.cfg.isClassPathResolutionNeeded()) {
-        this.fetchDocuments();
-      } else {
-        this.updateLoadingStatus('Loading Maven class path.');
-        // fetch class path
-        this.cfg.documentService
-          .fetchClassPath()
-          .toPromise()
-          .then((classPath: string) => {
-            this.cfg.initCfg.classPath = classPath;
-            this.fetchDocuments();
-            this.updateStatus();
-          })
-          .catch((error: any) => {
-            if (error.status === 0) {
-              this.handleError(
-                'Fatal network error: Could not connect to AtlasMap design runtime service.',
-                error
-              );
-            } else {
-              this.handleError(
-                'Could not load Maven class path: ' +
-                  error.status +
-                  ' ' +
-                  error.statusText,
-                error
-              );
-            }
-            reject(error);
-          });
-      }
+      this.fetchDocuments();
 
       // Fetch adm-catalog-files.gz if it exists.
       this.cfg.fileService
@@ -773,7 +715,7 @@ ${error.status} ${error.statusText}`,
 
       // TODO: check this non null operator
       this.cfg.documentService
-        .fetchDocument(docDef, this.cfg.initCfg.classPath!)
+        .fetchDocument(docDef)
         .toPromise()
         .then(() => {
           this.updateStatus();

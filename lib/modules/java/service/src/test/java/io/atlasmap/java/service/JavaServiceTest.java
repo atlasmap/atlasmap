@@ -16,19 +16,32 @@
 package io.atlasmap.java.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
+
+import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Response;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.atlasmap.java.v2.JavaClass;
+import io.atlasmap.java.v2.ClassInspectionRequest;
+import io.atlasmap.java.v2.ClassInspectionResponse;
+import io.atlasmap.service.AtlasService;
 import io.atlasmap.v2.Json;
 
+@ExtendWith(MockitoExtension.class)
 public class JavaServiceTest {
 
     private JavaService javaService = null;
+
+    @Mock
+    private ResourceContext mockResourceContext;
 
     @Before
     public void setUp() {
@@ -42,10 +55,14 @@ public class JavaServiceTest {
 
     @Test
     public void testGetClass() throws Exception {
-        Response res = javaService.getClass(JavaService.class.getName());
+        when(mockResourceContext.getResource(AtlasService.class)).thenReturn(new AtlasService());
+        ClassInspectionRequest request = new ClassInspectionRequest();
+        request.setClassName(JavaService.class.getName());
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = javaService.inspectClass(new ByteArrayInputStream(bytes));
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
-        JavaClass javaClass = Json.mapper().readValue((byte[]) entity, JavaClass.class);
-        assertEquals(JavaService.class.getName(), javaClass.getClassName());
+        ClassInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, ClassInspectionResponse.class);
+        assertEquals(JavaService.class.getName(), inspectionResponse.getJavaClass().getClassName());
     }
 }

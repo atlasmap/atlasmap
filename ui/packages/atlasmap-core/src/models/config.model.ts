@@ -278,18 +278,6 @@ export class ConfigModel {
     return false;
   }
 
-  isClassPathResolutionNeeded(): boolean {
-    if (this.initCfg.classPath) {
-      return false;
-    }
-    for (const doc of this.getAllDocs()) {
-      if (doc.type === DocumentType.JAVA && doc.inspectionResult == null) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   getDocForIdentifier(
     documentId: string,
     isSource: boolean

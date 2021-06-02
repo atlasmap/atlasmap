@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.json.inspect.JsonInspectionService;
-import io.atlasmap.json.v2.InspectionType;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
@@ -77,39 +76,6 @@ public class JsonService {
         return "Got it! " + from;
     }
 
-    @GET
-    @Path("/inspect")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary ="Inspect JSON via URI", description = "*NOT IMPLEMENTED* Inspect a JSON schema or instance located at specified URI and return a Document object")
-    @RequestBody(description = "Inspection type, one of `instance` or `Schema`", content = @Content(schema = @Schema(implementation = InspectionType.class)))
-    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JsonDocument.class)), description = "Return a Document object represented by JsonDocument"))
-    public Response getClass(
-            @Parameter(description ="URI for JSON schema or instance") @QueryParam("uri") String uri,
-            @QueryParam("type") String type) {
-        JsonDocument d = null;
-
-        try {
-
-            if (type == null) {
-                throw new Exception("uri and type parameters must be specified");
-            }
-            InspectionType inspectType = InspectionType.valueOf(type);
-
-            switch (inspectType) {
-            case INSTANCE:
-                // d = s.inspectXmlDocument(new File(uri)); break;
-            case SCHEMA:
-                // d = s.inspectSchema(new File(uri)); break;
-            default:
-                throw new Exception("Unknown type specified: " + type);
-            }
-        } catch (Exception e) {
-            LOG.error("Error inspecting xml: " + e.getMessage(), e);
-        }
-
-        return Response.ok().entity(toJson(d)).build();
-    }
-
     @POST
     @Path("/inspect")
     @Consumes({ MediaType.APPLICATION_JSON })
@@ -117,7 +83,7 @@ public class JsonService {
     @Operation(summary ="Inspect JSON", description = "Inspect a JSON schema or instance and return a Document object")
     @RequestBody(description = "JsonInspectionRequest object",  content = @Content(schema = @Schema(implementation = JsonInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = JsonInspectionResponse.class)), description = "Return a Document object represented by JsonDocument"))
-    public Response inspectClass(InputStream requestIn) {
+    public Response inspect(InputStream requestIn) {
         JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);
         long startTime = System.currentTimeMillis();
 

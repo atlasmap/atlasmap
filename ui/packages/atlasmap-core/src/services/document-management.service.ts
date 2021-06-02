@@ -62,43 +62,7 @@ export class DocumentManagementService {
     this.mappingUpdatedSubscription.unsubscribe();
   }
 
-  fetchClassPath(): Observable<string> {
-    return new Observable<string>((observer: any) => {
-      const requestBody = {
-        MavenClasspathRequest: {
-          jsonType:
-            ConfigModel.javaServicesPackagePrefix + '.MavenClasspathRequest',
-          pomXmlData: this.cfg.initCfg.pomPayload,
-          executeTimeout: this.cfg.initCfg.classPathFetchTimeoutInMilliseconds,
-        },
-      };
-      const url: string =
-        this.cfg.initCfg.baseJavaInspectionServiceUrl + 'mavenclasspath';
-      this.cfg.logger!.debug(
-        `Classpath Service Request: ${JSON.stringify(requestBody)}`
-      );
-      this.api
-        .post(url, { json: requestBody, headers: this.headers })
-        .json()
-        .then((body: any) => {
-          this.cfg.logger!.debug(
-            `Classpath Service Response: ${JSON.stringify(body)}`
-          );
-          const classPath: string = body.MavenClasspathResponse.classpath;
-          observer.next(classPath);
-          observer.complete();
-        })
-        .catch((error: any) => {
-          observer.error(error);
-          observer.complete();
-        });
-    });
-  }
-
-  fetchDocument(
-    docDef: DocumentDefinition,
-    classPath: string
-  ): Observable<DocumentDefinition> {
+  fetchDocument(docDef: DocumentDefinition): Observable<DocumentDefinition> {
     return new Observable<DocumentDefinition>((observer: any) => {
       if (docDef.inspectionResult) {
         const responseJson: any = JSON.parse(docDef.inspectionResult);
@@ -108,7 +72,7 @@ export class DocumentManagementService {
         return;
       }
 
-      const payload: any = this.createDocumentFetchRequest(docDef, classPath);
+      const payload: any = this.createDocumentFetchRequest(docDef);
       let options: any = { json: payload, headers: this.headers };
       let url: string = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'class';
       if (
@@ -344,10 +308,7 @@ export class DocumentManagementService {
     });
   }
 
-  private createDocumentFetchRequest(
-    docDef: DocumentDefinition,
-    classPath: string
-  ): any {
+  private createDocumentFetchRequest(docDef: DocumentDefinition): any {
     if (docDef.type === DocumentType.XML || docDef.type === DocumentType.XSD) {
       return {
         XmlInspectionRequest: {
@@ -374,7 +335,6 @@ export class DocumentManagementService {
       ClassInspectionRequest: {
         jsonType:
           ConfigModel.javaServicesPackagePrefix + '.ClassInspectionRequest',
-        classpath: classPath,
         className: className,
         disablePrivateOnlyFields: this.cfg.initCfg.disablePrivateOnlyFields,
         disableProtectedOnlyFields: this.cfg.initCfg.disableProtectedOnlyFields,
