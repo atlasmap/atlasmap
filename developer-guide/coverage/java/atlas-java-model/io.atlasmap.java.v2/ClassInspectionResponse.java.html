@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonRootName(&quot;ClassInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L25">public class ClassInspectionResponse implements Serializable {</span>
+<span class="nc" id="L25">public class ClassInspectionResponse implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -41,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public JavaClass getJavaClass() {
-<span class="fc" id="L44">        return javaClass;</span>
+<span class="nc" id="L44">        return javaClass;</span>
     }
 
     /**
@@ -53,8 +53,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setJavaClass(JavaClass value) {
-<span class="fc" id="L56">        this.javaClass = value;</span>
-<span class="fc" id="L57">    }</span>
+<span class="nc" id="L56">        this.javaClass = value;</span>
+<span class="nc" id="L57">    }</span>
 
     /**
      * Gets the value of the errorMessage property.
@@ -65,7 +65,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getErrorMessage() {
-<span class="fc" id="L68">        return errorMessage;</span>
+<span class="nc" id="L68">        return errorMessage;</span>
     }
 
     /**
@@ -89,7 +89,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Long getExecutionTime() {
-<span class="fc" id="L92">        return executionTime;</span>
+<span class="nc" id="L92">        return executionTime;</span>
     }
 
     /**
@@ -101,8 +101,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setExecutionTime(Long value) {
-<span class="fc" id="L104">        this.executionTime = value;</span>
-<span class="fc" id="L105">    }</span>
+<span class="nc" id="L104">        this.executionTime = value;</span>
+<span class="nc" id="L105">    }</span>
 
     public boolean equals(Object object) {
 <span class="nc bnc" id="L108" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>

@@ -94,8 +94,8 @@ import io.atlasmap.v2.StringList;
     }
 
     public void setDisableProtectedOnlyFields(Boolean disableProtectedOnlyFields) {
-<span class="fc" id="L97">        this.disableProtectedOnlyFields = disableProtectedOnlyFields;</span>
-<span class="fc" id="L98">    }</span>
+<span class="nc" id="L97">        this.disableProtectedOnlyFields = disableProtectedOnlyFields;</span>
+<span class="nc" id="L98">    }</span>
 
     public Boolean getDisablePackagePrivateOnlyFields() {
 <span class="fc" id="L101">        return disablePackagePrivateOnlyFields;</span>
@@ -110,35 +110,35 @@ import io.atlasmap.v2.StringList;
     }
 
     public void setDisablePrivateOnlyFields(Boolean disablePrivateOnlyFields) {
-<span class="fc" id="L113">        this.disablePrivateOnlyFields = disablePrivateOnlyFields;</span>
-<span class="fc" id="L114">    }</span>
+<span class="nc" id="L113">        this.disablePrivateOnlyFields = disablePrivateOnlyFields;</span>
+<span class="nc" id="L114">    }</span>
 
     public Boolean getDisablePublicOnlyFields() {
-<span class="fc" id="L117">        return disablePublicOnlyFields;</span>
+<span class="nc" id="L117">        return disablePublicOnlyFields;</span>
     }
 
     public void setDisablePublicOnlyFields(Boolean disablePublicOnlyFields) {
-<span class="fc" id="L121">        this.disablePublicOnlyFields = disablePublicOnlyFields;</span>
-<span class="fc" id="L122">    }</span>
+<span class="nc" id="L121">        this.disablePublicOnlyFields = disablePublicOnlyFields;</span>
+<span class="nc" id="L122">    }</span>
 
     public Boolean getDisablePublicGetterSetterFields() {
 <span class="fc" id="L125">        return disablePublicGetterSetterFields;</span>
     }
 
     public void setDisablePublicGetterSetterFields(Boolean disablePublicGetterSetterFields) {
-<span class="fc" id="L129">        this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;</span>
-<span class="fc" id="L130">    }</span>
+<span class="nc" id="L129">        this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;</span>
+<span class="nc" id="L130">    }</span>
 
     public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName) throws ClassNotFoundException {
         // Use a loader for this class for now
-<span class="fc" id="L134">        ClassLoader classLoader = getClass().getClassLoader();</span>
-<span class="fc" id="L135">        return inspectClass(classLoader, className, collectionType, collectionClassName);</span>
+<span class="nc" id="L134">        ClassLoader classLoader = getClass().getClassLoader();</span>
+<span class="nc" id="L135">        return inspectClass(classLoader, className, collectionType, collectionClassName);</span>
     }
 
     public JavaClass inspectClass(ClassLoader classLoader, String className, CollectionType collectionType, String collectionClassName)
         throws ClassNotFoundException {
-<span class="fc" id="L140">        Class&lt;?&gt; clazz = classLoader.loadClass(className);</span>
-<span class="fc" id="L141">        return inspectClass(classLoader, clazz, collectionType, collectionClassName);</span>
+<span class="nc" id="L140">        Class&lt;?&gt; clazz = classLoader.loadClass(className);</span>
+<span class="nc" id="L141">        return inspectClass(classLoader, clazz, collectionType, collectionClassName);</span>
     }
 
     public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName, String classpath) throws InspectionException {
@@ -312,9 +312,9 @@ import io.atlasmap.v2.StringList;
 <span class="nc" id="L312">            field.setPath(StringUtil.getFieldNameFromGetter(m.getName()));</span>
         }
 
-<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (m.getParameterCount() != 0) {</span>
-<span class="fc" id="L316">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="fc" id="L317">            return field;</span>
+<span class="pc bpc" id="L315" title="1 of 2 branches missed.">        if (m.getParameterCount() != 0) {</span>
+<span class="nc" id="L316">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="nc" id="L317">            return field;</span>
         }
 
 <span class="pc bpc" id="L320" title="1 of 2 branches missed.">        if (m.getReturnType().equals(Void.TYPE)) {</span>
@@ -523,11 +523,11 @@ import io.atlasmap.v2.StringList;
 
 <span class="fc" id="L524">        Annotation[] annotations = f.getAnnotations();</span>
 <span class="pc bpc" id="L525" title="1 of 2 branches missed.">        if (annotations != null) {</span>
-<span class="fc bfc" id="L526" title="All 2 branches covered.">            for (Annotation a : annotations) {</span>
-<span class="pc bpc" id="L527" title="1 of 2 branches missed.">                if (s.getAnnotations() == null) {</span>
-<span class="fc" id="L528">                    s.setAnnotations(new StringList());</span>
+<span class="pc bpc" id="L526" title="1 of 2 branches missed.">            for (Annotation a : annotations) {</span>
+<span class="nc bnc" id="L527" title="All 2 branches missed.">                if (s.getAnnotations() == null) {</span>
+<span class="nc" id="L528">                    s.setAnnotations(new StringList());</span>
                 }
-<span class="fc" id="L530">                s.getAnnotations().getString().add(a.annotationType().getName());</span>
+<span class="nc" id="L530">                s.getAnnotations().getString().add(a.annotationType().getName());</span>
             }
         }
 
@@ -610,9 +610,9 @@ import io.atlasmap.v2.StringList;
 <span class="pc bpc" id="L610" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PROTECTED)</span>
 <span class="nc bnc" id="L611" title="All 2 branches missed.">                            &amp;&amp; !getDisableProtectedOnlyFields()) {</span>
 <span class="nc" id="L612">                        javaClass.getJavaFields().getJavaField().add(s);</span>
-<span class="fc bfc" id="L613" title="All 2 branches covered.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PUBLIC)</span>
-<span class="pc bpc" id="L614" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePublicOnlyFields()) {</span>
-<span class="fc" id="L615">                        javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="pc bpc" id="L613" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PUBLIC)</span>
+<span class="nc bnc" id="L614" title="All 2 branches missed.">                            &amp;&amp; !getDisablePublicOnlyFields()) {</span>
+<span class="nc" id="L615">                        javaClass.getJavaFields().getJavaField().add(s);</span>
 <span class="pc bpc" id="L616" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE)</span>
 <span class="pc bpc" id="L617" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePackagePrivateOnlyFields()) {</span>
 <span class="fc" id="L618">                        javaClass.getJavaFields().getJavaField().add(s);</span>
@@ -633,7 +633,7 @@ import io.atlasmap.v2.StringList;
 <span class="fc" id="L633">                s.setName(m.getName());</span>
 <span class="fc" id="L634">                s.setSynthetic(m.isSynthetic());</span>
 
-<span class="pc bpc" id="L636" title="2 of 8 branches missed.">                if (m.isVarArgs() || m.isBridge() || m.isSynthetic() || m.isDefault()) {</span>
+<span class="pc bpc" id="L636" title="3 of 8 branches missed.">                if (m.isVarArgs() || m.isBridge() || m.isSynthetic() || m.isDefault()) {</span>
 <span class="fc" id="L637">                    s.setStatus(FieldStatus.UNSUPPORTED);</span>
 <span class="fc" id="L638">                    LOG.warn(&quot;VarArg, Bridge, Synthetic or Default method &quot; + m.getName() + &quot; detected&quot;);</span>
 <span class="fc" id="L639">                    continue;</span>
@@ -656,8 +656,8 @@ import io.atlasmap.v2.StringList;
 
                         // Merge get/set method info for interfaces that don't
                         // have fields
-<span class="pc bpc" id="L659" title="1 of 4 branches missed.">                        if (exists.getGetMethod() == null &amp;&amp; s.getGetMethod() != null) {</span>
-<span class="fc" id="L660">                            exists.setGetMethod(s.getGetMethod());</span>
+<span class="pc bpc" id="L659" title="3 of 4 branches missed.">                        if (exists.getGetMethod() == null &amp;&amp; s.getGetMethod() != null) {</span>
+<span class="nc" id="L660">                            exists.setGetMethod(s.getGetMethod());</span>
                         }
 <span class="fc bfc" id="L662" title="All 4 branches covered.">                        if (exists.getSetMethod() == null &amp;&amp; s.getSetMethod() != null) {</span>
 <span class="fc" id="L663">                            exists.setSetMethod(s.getSetMethod());</span>
