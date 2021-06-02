@@ -657,7 +657,6 @@ export class MappingSerializer {
         name: field.name,
         path: field.path,
         fieldType: field.type,
-        scope: field.scope,
         docId: field.docDef.id,
       };
 

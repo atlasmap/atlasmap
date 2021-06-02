@@ -21,29 +21,22 @@ import { LookupTableData, LookupTableUtil, MappingSerializer } from '../utils';
 import ky, { Input, Options } from 'ky';
 
 import { ConfigModel } from '../models/config.model';
-import { ErrorHandlerService } from './error-handler.service';
 import { Field } from '../models/field.model';
-import { FieldActionService } from './field-action.service';
+import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
 import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
-import log from 'loglevel';
 import mockMappingJson from '../../../../test-resources/mapping/atlasmapping-mock.json';
 
 describe('MappingManagementService', () => {
   let service: MappingManagementService;
 
   beforeEach(() => {
-    service = new MappingManagementService(ky);
-    const cfg = new ConfigModel();
-    cfg.mappingService = service;
-    cfg.errorService = new ErrorHandlerService();
-    cfg.fieldActionService = new FieldActionService(ky);
-    cfg.fieldActionService.cfg = cfg;
-    cfg.logger = log.getLogger('config');
-    service.cfg = cfg;
+    const initService = new InitializationService(ky);
+    const cfg = initService.cfg;
+    service = cfg.mappingService;
   });
 
   function setSourceFieldValues(mapping: MappingModel) {
@@ -159,25 +152,6 @@ describe('MappingManagementService', () => {
     expect(service.cfg.mappings?.activeMapping?.targetFields?.length).toBe(1);
   });
 
-  test('runtimeServiceActive()', (done) => {
-    spyOn(ky, 'get').and.returnValue(
-      new (class {
-        json(): Promise<any> {
-          return Promise.resolve({ string: 'pong' });
-        }
-      })()
-    );
-    service
-      .runtimeServiceActive()
-      .then((value) => {
-        expect(value).toBeTruthy();
-        done();
-      })
-      .catch((error) => {
-        fail(error);
-      });
-  });
-
   test('fetchMappings()', (done) => {
     spyOn(ky, 'get').and.returnValue(
       new (class {
@@ -188,8 +162,9 @@ describe('MappingManagementService', () => {
     );
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
-    service.fetchMappings([''], service.cfg.mappings).subscribe({
-      next(value) {
+    service
+      .fetchMappings([''], service.cfg.mappings)
+      .then((value) => {
         expect(value).toBeTruthy();
         expect(service.cfg.mappings?.mappings.length).toBeGreaterThan(0);
         const m = service.cfg.mappings?.mappings[0];
@@ -199,11 +174,10 @@ describe('MappingManagementService', () => {
         const tf = m?.targetFields[0].field;
         expect(tf?.name).toBe('targetField');
         done();
-      },
-      error(error) {
+      })
+      .catch((error) => {
         fail(error);
-      },
-    });
+      });
   });
 
   test('updateMappingsTransition()', () => {

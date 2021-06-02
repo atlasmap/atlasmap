@@ -14,17 +14,12 @@
     limitations under the License.
 */
 import {
+  CollectionType,
   CommonUtil,
   ConfigModel,
   DocumentDefinition,
-  ErrorInfo,
-  ErrorLevel,
-  ErrorScope,
-  ErrorType,
-  InspectionType,
   NamespaceModel,
 } from '@atlasmap/core';
-import { ClassNameComponent } from './custom-classname';
 
 /**
  * Modify the document name of the document specified by the document ID.
@@ -42,7 +37,7 @@ export async function changeDocumentName(
   const docDef = getDocDef(docId, cfg, isSource);
   docDef.name = newDocName;
   await cfg.mappingService.notifyMappingUpdated();
-  await cfg.fileService.exportADMArchive('');
+  await cfg.fileService.updateDigestFile();
 }
 
 /**
@@ -104,42 +99,6 @@ export function deleteNamespace(docName: string, alias: string) {
 }
 
 /**
- * Import the specified user-defined document.
- *
- * @param selectedFile - user selected file
- * @param cfg
- * @param isSource - true is source panel, false is target
- * @param isSchema - user-specified instance/ schema (true === schema)
- * @param parameters - CSV parameters
- */
-async function importDoc(
-  selectedFile: any,
-  cfg: ConfigModel,
-  isSource: boolean,
-  isSchema: boolean,
-  inspectionParameters?: { [key: string]: string },
-): Promise<boolean> {
-  return new Promise<boolean>(async (resolve) => {
-    cfg.initCfg.initialized = false;
-    cfg.initializationService.updateLoadingStatus(
-      'Importing Document ' + selectedFile.name,
-    );
-    cfg.documentService
-      .processDocument(
-        selectedFile,
-        InspectionType.UNKNOWN,
-        isSource,
-        isSchema,
-        inspectionParameters,
-      )
-      .then(() => {
-        cfg.fileService.exportADMArchive('');
-        resolve(true);
-      });
-  });
-}
-
-/**
  * Remove a document from the UI and backend service.
  *
  * @param docDef
@@ -157,7 +116,7 @@ export async function removeDocumentRef(
       CommonUtil.removeItemFromArray(docDef, cfg.targetDocs);
     }
     await cfg.mappingService.notifyMappingUpdated();
-    await cfg.fileService.exportADMArchive('');
+    await cfg.fileService.updateDigestFile();
     resolve(true);
   });
 }
@@ -213,31 +172,10 @@ export async function getCustomClassNameOptions(): Promise<string[]> {
     const cfg = ConfigModel.getConfig();
     cfg.documentService
       .getLibraryClassNames()
-      .toPromise()
       .then((classNames: string[]) => {
         resolve(classNames);
       })
-      .catch((error: any) => {
-        if (error.status === 0) {
-          cfg.errorService.addError(
-            new ErrorInfo({
-              message:
-                'Fatal network error: Could not connect to AtlasMap design runtime service.',
-              level: ErrorLevel.ERROR,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.INTERNAL,
-            }),
-          );
-        } else {
-          cfg.errorService.addError(
-            new ErrorInfo({
-              message: 'Could not find class names from uploaded JARs.',
-              level: ErrorLevel.WARN,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.INTERNAL,
-            }),
-          );
-        }
+      .catch(() => {
         reject();
       });
   });
@@ -260,7 +198,25 @@ export async function importInstanceSchema(
   isSchema: boolean,
   inspectionParameters?: { [key: string]: string },
 ) {
-  await importDoc(selectedFile, cfg, isSource, isSchema, inspectionParameters);
+  return new Promise<boolean>(async (resolve) => {
+    cfg.initCfg.initialized = false;
+    cfg.initializationService.updateLoadingStatus(
+      'Importing Document ' + selectedFile.name,
+    );
+    cfg.documentService
+      .importNonJavaDocument(
+        selectedFile,
+        isSource,
+        isSchema,
+        inspectionParameters,
+      )
+      .then(() => {
+        cfg.fileService.updateDigestFile().finally(() => {
+          cfg.initializationService.updateStatus();
+          resolve(true);
+        });
+      });
+  });
 }
 
 /**
@@ -273,86 +229,29 @@ export async function importInstanceSchema(
  * @param isSource
  */
 export function enableCustomClass(
+  cfg: ConfigModel,
   selectedClass: string,
   selectedCollection: string,
   isSource: boolean,
-): void {
-  const cfg = ConfigModel.getConfig();
-  const classNameComponent = new ClassNameComponent(
-    selectedClass,
-    selectedCollection,
-    isSource,
-  );
-  const docdef = cfg.initializationService.addJavaDocument(
-    classNameComponent.userClassName,
-    isSource,
-    classNameComponent.userCollectionType,
-    classNameComponent.userCollectionClassName,
-  );
-  docdef.name = classNameComponent.userClassName;
-  docdef.isSource = isSource;
-  docdef.updateFromMappings(cfg.mappings!);
-
-  cfg.documentService
-    .fetchDocument(docdef)
-    .toPromise()
-    .then(async (doc: DocumentDefinition) => {
-      // No fields indicate the user is attempting to enable a custom
-      // field action class.  Remove the document from the panel since
-      // it has no fields and issue a warning.
-      if (doc.fields.length === 0) {
-        // Make any custom field actions active.
-        await cfg.fieldActionService.fetchFieldActions().catch((error: any) => {
-          cfg.errorService.addError(
-            new ErrorInfo({
-              message: error,
-              level: ErrorLevel.ERROR,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.INTERNAL,
-            }),
-          );
+) {
+  return new Promise<boolean>((resolve) => {
+    cfg.initCfg.initialized = false;
+    cfg.initializationService.updateLoadingStatus(
+      'Importing Document ' + selectedClass,
+    );
+    cfg.documentService
+      .importJavaDocument(
+        selectedClass,
+        isSource,
+        selectedCollection as CollectionType,
+      )
+      .then(() => {
+        cfg.fileService.updateDigestFile().finally(() => {
+          cfg.initializationService.updateStatus();
+          resolve(true);
         });
-
-        if (doc.isSource) {
-          CommonUtil.removeItemFromArray(doc, cfg.sourceDocs);
-        } else {
-          CommonUtil.removeItemFromArray(doc, cfg.targetDocs);
-        }
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message: 'The Java class you selected has no mappable fields.',
-            level: ErrorLevel.WARN,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.USER,
-          }),
-        );
-      }
-      await cfg.mappingService.notifyMappingUpdated();
-      await cfg.fileService.exportADMArchive('');
-    })
-    .catch((error: any) => {
-      if (error.status === 0) {
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message: `Unable to fetch the Java class document '${docdef.name}' from the runtime service.`,
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: error,
-          }),
-        );
-      } else {
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message: `Could not load the Java class document '${docdef.id}'`,
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: error,
-          }),
-        );
-      }
-    });
+      });
+  });
 }
 
 export function getPropertyScopeOptions(isSource: boolean): {

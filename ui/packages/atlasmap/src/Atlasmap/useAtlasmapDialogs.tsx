@@ -27,8 +27,8 @@ import {
   useDeleteMappingDialog,
   useDeletePropertyDialog,
   useEditMappingEnumerationDialog,
-  useExportCatalogDialog,
-  useImportCatalogDialog,
+  useExportADMArchiveDialog,
+  useImportADMArchiveDialog,
   useImportDocumentDialog,
   useNamespaceDialog,
   usePropertyDialog,
@@ -49,6 +49,7 @@ export function useAtlasmapDialogs({
   modalContainer,
 }: IUseAtlasmapDialogsProps) {
   const {
+    configModel,
     selectedMapping,
     createConstant,
     editConstant,
@@ -143,8 +144,10 @@ export function useAtlasmapDialogs({
   //#endregion
 
   //#region atlasmap catalog
-  const [importCatalogDialog, onImportAtlasCatalog] = useImportCatalogDialog();
-  const [exportCatalogDialog, onExportAtlasCatalog] = useExportCatalogDialog();
+  const [importADMArchiveDialog, onImportADMArchive] =
+    useImportADMArchiveDialog();
+  const [exportADMArchiveDialog, onExportADMArchive] =
+    useExportADMArchiveDialog();
   const [resetDialog, onResetAtlasmap] = useResetAtlasmapDialog();
   const [aboutDialog, onAbout] = useAboutDialog();
   const [toggleExpressionModeDialog, onToggleExpressionMode] =
@@ -223,18 +226,23 @@ export function useAtlasmapDialogs({
   const onEnableCustomClass = useCallback(
     (isSource: boolean): void => {
       openCreateEnableCustomClassDialog(({ customClassName, collectionType }) =>
-        enableCustomClass(customClassName, collectionType, isSource),
+        enableCustomClass(
+          configModel,
+          customClassName,
+          collectionType,
+          isSource,
+        ),
       );
     },
-    [openCreateEnableCustomClassDialog],
+    [configModel, openCreateEnableCustomClassDialog],
   );
 
   const portal = useMemo(
     () =>
       createPortal(
         <>
-          {importCatalogDialog}
-          {exportCatalogDialog}
+          {importADMArchiveDialog}
+          {exportADMArchiveDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
           {specifyInstanceSchemaDialog}
@@ -272,8 +280,8 @@ export function useAtlasmapDialogs({
       editConstantDialog,
       editNamespaceDialog,
       editPropertyDialog,
-      exportCatalogDialog,
-      importCatalogDialog,
+      exportADMArchiveDialog,
+      importADMArchiveDialog,
       importDocumentDialog,
       specifyInstanceSchemaDialog,
       modalContainer,
@@ -287,8 +295,8 @@ export function useAtlasmapDialogs({
 
   return {
     handlers: {
-      onImportAtlasCatalog,
-      onExportAtlasCatalog,
+      onImportADMArchive: onImportADMArchive,
+      onExportADMArchive: onExportADMArchive,
       onCreateConstant,
       onDeleteConstant,
       onEditConstant,

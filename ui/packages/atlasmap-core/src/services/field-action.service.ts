@@ -28,7 +28,6 @@ import {
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { MappingModel } from '../models/mapping.model';
-import { Observable } from 'rxjs';
 import ky from 'ky';
 
 export class FieldActionService {
@@ -49,13 +48,10 @@ export class FieldActionService {
   constructor(private api: typeof ky) {}
 
   async fetchFieldActions(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       if (this.cfg.preloadedFieldActionMetadata) {
         this.clearActionDefinitions();
-        if (
-          this.cfg.preloadedFieldActionMetadata &&
-          this.cfg.preloadedFieldActionMetadata.ActionDetails
-        ) {
+        if (this.cfg.preloadedFieldActionMetadata.ActionDetails) {
           for (const actionDetail of this.cfg.preloadedFieldActionMetadata
             .ActionDetails.actionDetail) {
             const fieldActionDefinition =
@@ -81,20 +77,10 @@ export class FieldActionService {
         return;
       }
 
-      if (this.cfg.mappingService == null) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message:
-              'Mapping service is not provided. Field Actions will not be used.',
-            level: ErrorLevel.WARN,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-          })
-        );
-        this.isInitialized = true;
-        resolve(true);
-        return;
-      } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      if (
+        this.cfg.mappingService == null ||
+        this.cfg.initCfg.baseMappingServiceUrl == null
+      ) {
         this.cfg.errorService.addError(
           new ErrorInfo({
             message:
@@ -105,13 +91,12 @@ export class FieldActionService {
           })
         );
         this.isInitialized = true;
-        resolve(true);
+        resolve(false);
         return;
       }
 
       // Fetch the field actions from the runtime service.
       this.doFetchFieldActions()
-        .toPromise()
         .then((fetchedActionConfigs: FieldActionDefinition[]) => {
           if (fetchedActionConfigs.length === 1) {
             this.cfg.logger!.info('No field action was returned from backend');
@@ -136,13 +121,11 @@ export class FieldActionService {
           resolve(true);
         })
         .catch((error: any) => {
-          if (error.status === 0) {
-            reject(
-              `Fatal network error: Could not connect to AtlasMap design runtime service. (${error})`
-            );
-          } else {
-            reject(`Could not load field action configs: (${error.message})`);
-          }
+          this.cfg.errorService.addBackendError(
+            `Could not load field action configs: (${error.message})`,
+            error
+          );
+          resolve(false);
         });
     });
   }
@@ -189,8 +172,8 @@ export class FieldActionService {
     );
   }
 
-  private doFetchFieldActions(): Observable<FieldActionDefinition[]> {
-    return new Observable<FieldActionDefinition[]>((observer: any) => {
+  private doFetchFieldActions(): Promise<FieldActionDefinition[]> {
+    return new Promise<FieldActionDefinition[]>((resolve, reject) => {
       const actionConfigs: FieldActionDefinition[] = [];
       const url: string =
         this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
@@ -214,13 +197,10 @@ export class FieldActionService {
               actionConfigs.push(fieldActionConfig);
             }
           }
-          observer.next(actionConfigs);
-          observer.complete();
+          resolve(actionConfigs);
         })
         .catch((error: any) => {
-          observer.error(error);
-          observer.next(actionConfigs);
-          observer.complete();
+          reject(error);
         });
     });
   }
@@ -228,7 +208,7 @@ export class FieldActionService {
   private extractFieldActionDefinition(
     actionDetail: any
   ): FieldActionDefinition {
-    this.cfg.logger!.info(
+    this.cfg.logger!.trace(
       `Deserializing field action definition: ${JSON.stringify(actionDetail)}`
     );
 

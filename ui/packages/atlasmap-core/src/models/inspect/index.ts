@@ -13,13 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const { createProxyMiddleware } = require('http-proxy-middleware');
-module.exports = function (app) {
-  app.use(
-    '/v2',
-    createProxyMiddleware({
-      target: 'http://localhost:8585',
-      changeOrigin: true,
-    }),
-  );
-};
+export * from './csv-inspection.model';
+export * from './document-inspection.model';
+export * from './java-inspection.model';
+export * from './json-inspection.model';
+export * from './xml-inspection.model';

@@ -13,63 +13,37 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from './common-util';
-import { DocumentDefinition } from '../models/document-definition.model';
+import { ConfigModel } from '../models/config.model';
 
 export class MappingDigestUtil {
-  /**
-   * Capture the specified user mappings into a general catalog JSON buffer (exportMappings).
-   * @param buffer
-   */
-  static generateExportMappings(buffer: string): string {
-    if (!buffer || buffer.length === 0) {
-      return '';
-    }
-    return (
-      `   "exportMappings":
-    {
-       "value": ` +
-      CommonUtil.sanitizeJSON(buffer) +
-      `
-    },\n`
-    );
-  }
+  static generateMappingDigest(cfg: ConfigModel, mappingJson: any): ADMDigest {
+    let mappingDigest: ADMDigest = {
+      exportMappings: { value: '' },
+      exportMeta: [],
+      exportBlockData: [],
+    };
 
-  /**
-   * Capture the specified user JSON or XML document buffer into a general catalog JSON buffer.
-   *
-   * @param buffer
-   */
-  static generateExportBlockData(buffer: string): string {
-    if (buffer === null || buffer.length === 0) {
-      return '';
+    // Retrieve the JSON mappings buffer from the server.
+    const jsonBuffer = JSON.stringify(mappingJson);
+    if (jsonBuffer) {
+      mappingDigest.exportMappings.value = CommonUtil.sanitizeJSON(jsonBuffer);
     }
-    return (
-      `
-          {
-             "value": ` +
-      CommonUtil.sanitizeJSON(buffer) +
-      `
-          }`
-    );
-  }
 
-  /**
-   * Capture the specified user document definition meta data into a general
-   * catalog JSON buffer.
-   *
-   * @param docDef
-   */
-  static generateExportMetaStr(docDef: DocumentDefinition): string {
-    const inspectionParameters = JSON.stringify(docDef.inspectionParameters);
-    return `
-       {
-          "name": "${docDef.name}",
-          "dataSourceType": "${docDef.type}",
-          "id": "${docDef.id}",
-          "inspectionType": "${docDef.inspectionType}",
-          "inspectionParameters": ${inspectionParameters},
-          "isSource": "${docDef.isSource}"
-       }`;
+    for (const doc of cfg.getAllDocs()) {
+      if (!doc.isPropertyOrConstant) {
+        mappingDigest.exportMeta.push({
+          name: doc.name,
+          dataSourceType: doc.type,
+          id: doc.id,
+          inspectionType: doc.inspectionType,
+          inspectionParameters: doc.inspectionParameters,
+          isSource: doc.isSource,
+        });
+        mappingDigest.exportBlockData.push({ value: doc.inspectionSource });
+      }
+    }
+    return mappingDigest;
   }
 }

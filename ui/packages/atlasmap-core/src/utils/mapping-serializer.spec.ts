@@ -830,7 +830,7 @@ describe('MappingSerializer', () => {
         docInitSource.id = 'io.atlasmap.java.test.TargetTestClass';
         docInitSource.isSource = true;
         docInitSource.name = 'io.atlasmap.java.test.TargetTestClass';
-        docInitSource.type = DocumentType.JAVA_ARCHIVE;
+        docInitSource.type = DocumentType.JAVA;
         docInitSource.inspectionSource =
           'io.atlasmap.java.test.TargetTestClass';
         const docEnumSrc = cfg.addDocument(docInitSource);
@@ -850,7 +850,7 @@ describe('MappingSerializer', () => {
         docInitTarget.id = 'io.atlasmap.java.test.TargetTestClass';
         docInitTarget.isSource = false;
         docInitTarget.name = 'io.atlasmap.java.test.TargetTestClass';
-        docInitTarget.type = DocumentType.JAVA_ARCHIVE;
+        docInitTarget.type = DocumentType.JAVA;
         docInitTarget.inspectionSource =
           'io.atlasmap.java.test.TargetTestClass';
         const docEnumtgt = cfg.addDocument(docInitTarget);

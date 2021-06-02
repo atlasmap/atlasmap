@@ -1,6 +1,6 @@
 {
   "name": "@atlasmap/core",
-  "description": "",
+  "description": "AtlasMap UI core library",
   "version": "2.3.0-SNAPSHOT",
   "license": "MIT",
   "publishConfig": {
@@ -15,7 +15,7 @@
   "scripts": {
     "start": "tsdx watch",
     "build:module": "tsdx build",
-    "build": "npm-run-all build:module test lint",
+    "build": "npm-run-all build:module lint test",
     "test": "tsdx test --runInBand",
     "test:coverage": "tsdx test --coverage --runInBand",
     "lint": "tsdx lint src test",

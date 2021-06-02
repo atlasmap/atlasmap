@@ -59,7 +59,7 @@ import {
   enableCustomClass,
   errorInfoToNotification,
   executeFieldSearch,
-  exportAtlasFile,
+  exportADMArchiveFile,
   fromDocumentDefinitionToFieldGroup,
   fromFieldToIFieldsNode,
   fromMappedFieldToIMappingField,
@@ -81,7 +81,9 @@ import {
   handleRemoveTransformation,
   handleTransformationArgumentChange,
   handleTransformationChange,
-  importAtlasFile,
+  importADMArchiveFile,
+  importInstanceSchema,
+  importJarFile,
   initializationService,
   isEnumerationMapping,
   mappingExpressionAddField,
@@ -105,6 +107,7 @@ import {
   trailerId,
 } from './utils';
 
+import { LogLevelDesc } from 'loglevel';
 import { debounceTime } from 'rxjs/operators';
 
 // the document payload with get from Syndesis
@@ -132,6 +135,7 @@ export interface IAtlasmapProviderProps {
   baseJSONInspectionServiceUrl: string;
   baseCSVInspectionServiceUrl: string;
   baseMappingServiceUrl: string;
+  logLevel: string;
 
   externalDocument?: {
     documentId: string;
@@ -149,6 +153,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   baseMappingServiceUrl,
   externalDocument,
   onMappingChange,
+  logLevel,
   children,
 }) => {
   const [data, dispatchData] = useReducer(dataReducer, {}, initDataState);
@@ -183,13 +188,14 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     function onInitializationCb() {
       onReset();
       initializationService.resetConfig();
+      const cfg = initializationService.cfg;
+      cfg.logger?.setLevel(logLevel as LogLevelDesc);
 
-      const c = initializationService.cfg;
-      c.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
-      c.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
-      c.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
-      c.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
-      c.initCfg.baseCSVInspectionServiceUrl = baseCSVInspectionServiceUrl;
+      cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
+      cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
+      cfg.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
+      cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
+      cfg.initCfg.baseCSVInspectionServiceUrl = baseCSVInspectionServiceUrl;
 
       if (externalDocument) {
         externalDocument.inputDocuments.forEach((d) => {
@@ -205,7 +211,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           inputDoc.description = d.description;
           inputDoc.isSource = true;
           inputDoc.showFields = d.showFields;
-          c.addDocument(inputDoc);
+          cfg.addDocument(inputDoc);
         });
 
         const outputDoc: DocumentInitializationModel =
@@ -224,10 +230,10 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         outputDoc.description = externalDocument.outputDocument.description;
         outputDoc.isSource = false;
         outputDoc.showFields = externalDocument.outputDocument.showFields;
-        c.addDocument(outputDoc);
+        cfg.addDocument(outputDoc);
 
         if (externalDocument.initialMappings) {
-          c.preloadedMappingJson = externalDocument.initialMappings;
+          cfg.preloadedMappingJson = externalDocument.initialMappings;
         }
       }
 
@@ -242,88 +248,93 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseMappingServiceUrl,
       baseXMLInspectionServiceUrl,
       externalDocument,
+      logLevel,
     ],
   );
 
-  const convertSources = useCallback(function convertSourcesCb() {
-    return initializationService.cfg.sourceDocs
-      .map(fromDocumentDefinitionToFieldGroup)
-      .filter((d) => d) as IAtlasmapDocument[];
-  }, []);
+  const configModel = initializationService.cfg;
 
-  const convertConstants = useCallback(function convertConstantsCb() {
-    return fromDocumentDefinitionToFieldGroup(
-      initializationService.cfg.constantDoc,
-    );
-  }, []);
+  const convertSources = useCallback(
+    function convertSourcesCb() {
+      return configModel.sourceDocs
+        .map(fromDocumentDefinitionToFieldGroup)
+        .filter((d: any) => d) as IAtlasmapDocument[];
+    },
+    [configModel],
+  );
 
-  const convertSourceProperties = useCallback(function convertPropertiesCb() {
-    return fromDocumentDefinitionToFieldGroup(
-      initializationService.cfg.sourcePropertyDoc,
-    );
-  }, []);
+  const convertConstants = useCallback(
+    function convertConstantsCb() {
+      return fromDocumentDefinitionToFieldGroup(configModel.constantDoc);
+    },
+    [configModel],
+  );
 
-  const convertTargetProperties = useCallback(function convertPropertiesCb() {
-    return fromDocumentDefinitionToFieldGroup(
-      initializationService.cfg.targetPropertyDoc,
-    );
-  }, []);
+  const convertSourceProperties = useCallback(
+    function convertPropertiesCb() {
+      return fromDocumentDefinitionToFieldGroup(configModel.sourcePropertyDoc);
+    },
+    [configModel],
+  );
 
-  const convertTargets = useCallback(function convertTargetsCb() {
-    return initializationService.cfg.targetDocs
-      .map(fromDocumentDefinitionToFieldGroup)
-      .filter((d) => d) as IAtlasmapDocument[];
-  }, []);
+  const convertTargetProperties = useCallback(
+    function convertPropertiesCb() {
+      return fromDocumentDefinitionToFieldGroup(configModel.targetPropertyDoc);
+    },
+    [configModel],
+  );
 
-  const convertMappings = useCallback(function convertMappingsCb() {
-    return fromMappingDefinitionToIMappings(initializationService.cfg.mappings);
-  }, []);
+  const convertTargets = useCallback(
+    function convertTargetsCb() {
+      return configModel.targetDocs
+        .map(fromDocumentDefinitionToFieldGroup)
+        .filter((d) => d) as IAtlasmapDocument[];
+    },
+    [configModel],
+  );
+
+  const convertMappings = useCallback(
+    function convertMappingsCb() {
+      return fromMappingDefinitionToIMappings(configModel.mappings);
+    },
+    [configModel],
+  );
 
   const convertSelectedMapping = useCallback(
     function convertSelectedMappingCb() {
-      return fromMappingModelToImapping(
-        initializationService.cfg.mappings?.activeMapping,
-      );
+      return fromMappingModelToImapping(configModel.mappings?.activeMapping);
     },
-    [],
+    [configModel],
   );
 
   const convertSourcesToFlatArray = useCallback(
     function convertSourcesToFlatArrayCb(): IAtlasmapField[] {
-      return initializationService.cfg.sourceDocs.flatMap((s) =>
+      return configModel.sourceDocs.flatMap((s) =>
         s.getAllFields().flatMap((f) => {
           const af = fromFieldToIFieldsNode(f);
           return af ? [af] : [];
         }),
       );
     },
-    [],
+    [configModel],
   );
   const convertTargetsToFlatArray = useCallback(
     function convertTargetsToFlatArrayCb() {
-      return initializationService.cfg.targetDocs.flatMap((t) =>
+      return configModel.targetDocs.flatMap((t) =>
         t.getAllFields().flatMap((f) => {
           const af = fromFieldToIFieldsNode(f);
           return af ? [af] : [];
         }),
       );
     },
-    [],
+    [configModel],
   );
 
   const onSubUpdate = useCallback(
-    function onSubUpdateCb(caller: string) {
-      console.log(
-        'onUpdates',
-        caller,
-        'initialized',
-        initializationService.cfg.initCfg.initialized,
-        'errors',
-        initializationService.cfg.initCfg.initializationErrorOccurred,
-      );
+    function onSubUpdateCb(_caller: string) {
       onUpdates({
-        pending: !initializationService.cfg.initCfg.initialized,
-        error: initializationService.cfg.initCfg.initializationErrorOccurred,
+        pending: !configModel.initCfg.initialized,
+        error: configModel.initCfg.initializationErrorOccurred,
         sources: convertSources(),
         constants: convertConstants(),
         sourceProperties: convertSourceProperties(),
@@ -337,7 +348,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       dispatchNotifications({
         type: 'update',
         payload: {
-          notifications: initializationService.cfg.errorService
+          notifications: configModel.errorService
             .getErrors()
             .reverse()
             .filter((e) => e.level !== 'DEBUG')
@@ -346,6 +357,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       });
     },
     [
+      configModel,
       convertConstants,
       convertMappings,
       convertSelectedMapping,
@@ -366,15 +378,15 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           debounceTime(debounceTimeWindow),
         );
       const lineRefreshObservable =
-        initializationService.cfg.mappingService.lineRefreshSource.pipe(
+        configModel.mappingService.lineRefreshSource.pipe(
           debounceTime(debounceTimeWindow),
         );
       const mappingUpdatedSource =
-        initializationService.cfg.mappingService.mappingUpdatedSource.pipe(
+        configModel.mappingService.mappingUpdatedSource.pipe(
           debounceTime(debounceTimeWindow),
         );
       const mappingPreview =
-        initializationService.cfg.mappingService.mappingPreviewOutput$.pipe(
+        configModel.mappingService.mappingPreviewOutput$.pipe(
           debounceTime(debounceTimeWindow),
         );
 
@@ -389,9 +401,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         lineRefreshObservable.subscribe(() =>
           onSubUpdate('lineRefreshObservable'),
         ),
-        initializationService.cfg.errorService.subscribe(() =>
-          onSubUpdate('errorService'),
-        ),
+        configModel.errorService.subscribe(() => onSubUpdate('errorService')),
       ];
 
       return () => {
@@ -404,6 +414,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseJSONInspectionServiceUrl,
       baseCSVInspectionServiceUrl,
       baseMappingServiceUrl,
+      configModel,
       data.pending,
       data.selectedMapping,
       onSubUpdate,
@@ -413,14 +424,12 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
   useEffect(
     function onMappingChangeListenerCb() {
       if (onMappingChange) {
-        initializationService.cfg.mappingService.mappingUpdatedSource.subscribe(
+        configModel.mappingService.mappingUpdatedSource.subscribe(
           function onMappingChangeListenerSubCb() {
-            if (initializationService.cfg.initCfg.initialized) {
+            if (configModel.initCfg.initialized) {
               onMappingChange(
                 JSON.stringify(
-                  MappingSerializer.serializeMappings(
-                    initializationService.cfg,
-                  ),
+                  MappingSerializer.serializeMappings(configModel),
                 ),
               );
             }
@@ -428,7 +437,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         );
       }
     },
-    [onMappingChange],
+    [configModel, onMappingChange],
   );
 
   return (
@@ -455,24 +464,25 @@ export function useAtlasmap() {
     );
   }
 
+  const configModel = initializationService.cfg;
+
   const { onLoading, onReset, ...state } = context;
 
   const searchSources = useCallback((term: string) => search(term, true), []);
   const searchTargets = useCallback((term: string) => search(term, false), []);
 
-  const handleImportAtlasFile = useCallback(
-    (
-      file: File,
-      isSource: boolean,
-      isSchema: boolean,
-      parameters?: { [key: string]: string },
-    ) => {
-      if (!isSource) {
-        onLoading();
-      }
-      importAtlasFile(file, isSource, isSchema, parameters);
+  const handleImportADMArchiveFile = useCallback(
+    (file: File) => {
+      importADMArchiveFile(file, configModel);
     },
-    [onLoading],
+    [configModel],
+  );
+
+  const handleImportJarFile = useCallback(
+    (file: File) => {
+      importJarFile(file, configModel);
+    },
+    [configModel],
   );
 
   const handleResetAtlasmap = useCallback(() => {
@@ -481,12 +491,12 @@ export function useAtlasmap() {
   }, [onReset]);
 
   const onAddToMapping = useCallback((node: IAtlasmapField) => {
-    const field = (node as IAtlasmapField).amField;
+    const field = node.amField;
     addToCurrentMapping(field);
   }, []);
 
   const onRemoveFromMapping = useCallback((node: IAtlasmapField) => {
-    const field = (node as IAtlasmapField).amField;
+    const field = node.amField;
     removeFromCurrentMapping(field);
   }, []);
 
@@ -495,20 +505,20 @@ export function useAtlasmap() {
       source: IAtlasmapField | undefined,
       target: IAtlasmapField | undefined,
     ) => {
-      const sourceField = (source as IAtlasmapField | undefined)?.amField;
-      const targetField = (target as IAtlasmapField | undefined)?.amField;
+      const sourceField = source?.amField;
+      const targetField = target?.amField;
       createMapping(sourceField, targetField);
     },
     [],
   );
 
   const isMappingExpressionEmpty =
-    initializationService.cfg.mappings?.activeMapping?.transition?.expression
-      ?.nodes.length === 0;
+    configModel.mappings?.activeMapping?.transition?.expression?.nodes
+      .length === 0;
 
   const mappingHasSourceCollection = useCallback(() => {
-    return initializationService.cfg.mappingService.willClearOutSourceFieldsOnTogglingExpression();
-  }, []);
+    return configModel.mappingService.willClearOutSourceFieldsOnTogglingExpression();
+  }, [configModel]);
 
   /**
    * Return true if it's possible to add a source or target field to the current
@@ -628,8 +638,9 @@ export function useAtlasmap() {
     selectMapping,
     deselectMapping,
     deleteAtlasFile,
-    exportAtlasFile,
-    importAtlasFile: handleImportAtlasFile,
+    exportADMArchiveFile: exportADMArchiveFile,
+    importADMArchiveFile: handleImportADMArchiveFile,
+    importJarFile: handleImportJarFile,
     resetAtlasmap: handleResetAtlasmap,
     getUIVersion: getUIVersion,
     getRuntimeVersion: getRuntimeVersion,
@@ -645,11 +656,11 @@ export function useAtlasmap() {
     mappingExpressionRemoveField,
     mappingHasSourceCollection,
     mappingExpressionEnabled:
-      initializationService.cfg.mappingService.conditionalMappingExpressionEnabled(),
+      configModel.mappingService.conditionalMappingExpressionEnabled(),
     currentMappingExpression: ExpressionUtil.getMappingExpressionStr(
-      initializationService.cfg,
+      configModel,
       true,
-      initializationService.cfg.mappings?.activeMapping,
+      configModel.mappings?.activeMapping,
     ),
     getMappingExpression,
     toggleExpressionMode,
@@ -688,6 +699,7 @@ export function useAtlasmap() {
     isFieldRemovableFromSelection,
     searchSources,
     searchTargets,
+    importInstanceSchema,
     enableCustomClass,
     createNamespace,
     editNamespace,
@@ -698,5 +710,6 @@ export function useAtlasmap() {
     changeDocumentName,
     getEnumerationValues,
     isEnumerationMapping,
+    configModel,
   };
 }

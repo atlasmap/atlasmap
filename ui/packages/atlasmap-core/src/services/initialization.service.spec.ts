@@ -16,12 +16,7 @@
 import { DocumentType, InspectionType } from '../common/config.types';
 
 import { DocumentInitializationModel } from '../models/config.model';
-import { DocumentManagementService } from '../services/document-management.service';
-import { ErrorHandlerService } from '../services/error-handler.service';
-import { FieldActionService } from '../services/field-action.service';
-import { FileManagementService } from '../services/file-management.service';
 import { InitializationService } from '../services/initialization.service';
-import { MappingManagementService } from '../services/mapping-management.service';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 import atlasmapInspectionMockJsonInstanceJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-instance.json';
 import atlasmapInspectionMockJsonSchemaJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-schema.json';
@@ -31,24 +26,13 @@ import atlasmapInspectionOldActionSourceJson from '../../../../test-resources/in
 import atlasmapInspectionOldActionTargetJson from '../../../../test-resources/inspected/atlasmap-inspection-old-action-target.json';
 import atlasmappingOldActionJson from '../../../../test-resources/mapping/atlasmapping-old-action.json';
 import ky from 'ky/umd';
-import log from 'loglevel';
-import { of } from 'rxjs';
 
 describe('InitializationService', () => {
-  const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
-  const documentService = new DocumentManagementService(api);
-  const mappingService = new MappingManagementService(api);
-  const errorService = new ErrorHandlerService();
-  const fieldActionService = new FieldActionService(api);
-  const fileService = new FileManagementService(api);
-  const service = new InitializationService(
-    documentService,
-    mappingService,
-    errorService,
-    fieldActionService,
-    fileService
-  );
-  service.cfg.logger = log.getLogger('config');
+  let service: InitializationService;
+
+  beforeEach(() => {
+    service = new InitializationService(ky);
+  });
 
   afterEach(() => {
     service.cfg.clearDocs();
@@ -57,7 +41,26 @@ describe('InitializationService', () => {
     }
   });
 
-  it('load document definitions', (done) => {
+  test('runtimeServiceActive()', (done) => {
+    spyOn(ky, 'get').and.returnValue(
+      new (class {
+        json(): Promise<any> {
+          return Promise.resolve({ string: 'pong' });
+        }
+      })()
+    );
+    service
+      .runtimeServiceActive()
+      .then((value) => {
+        expect(value).toBeTruthy();
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('load document definitions', (done) => {
     const c = service.cfg;
     c.initCfg.baseMappingServiceUrl = 'dummy';
     c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
@@ -95,7 +98,7 @@ describe('InitializationService', () => {
       atlasmapInspectionMockXmlSchema1Json
     );
     c.addDocument(targetXml);
-    spyOn(c.mappingService, 'runtimeServiceActive').and.returnValue(
+    spyOn(service, 'runtimeServiceActive').and.returnValue(
       Promise.resolve(true)
     );
     return service
@@ -112,7 +115,7 @@ describe('InitializationService', () => {
       });
   });
 
-  it('load mapping definition', (done) => {
+  test('load mapping definition', (done) => {
     const cfg = service.cfg;
     cfg.clearDocs();
     cfg.initCfg.baseMappingServiceUrl = 'dummy';
@@ -141,10 +144,12 @@ describe('InitializationService', () => {
     cfg.addDocument(target);
     cfg.preloadedMappingJson = JSON.stringify(atlasmappingOldActionJson);
 
-    spyOn(cfg.mappingService, 'runtimeServiceActive').and.returnValue(
+    spyOn(service, 'runtimeServiceActive').and.returnValue(
       Promise.resolve(true)
     );
-    spyOn(cfg.fileService, 'getCurrentMappingDigest').and.returnValue(of(null));
+    spyOn(cfg.fileService, 'getCurrentMappingDigest').and.returnValue(
+      Promise.resolve(null)
+    );
     service.systemInitialized$.subscribe(() => {
       expect(cfg.sourceDocs[0].fields.length).toEqual(1);
       expect(cfg.sourceDocs[0].fields[0].path).toEqual('/<>');
@@ -160,6 +165,8 @@ describe('InitializationService', () => {
       expect(cfg.errorService.getErrors().length).toEqual(0);
       done();
     });
-    return service.initialize();
+    service.initialize().catch((error) => {
+      fail(error);
+    });
   });
 });

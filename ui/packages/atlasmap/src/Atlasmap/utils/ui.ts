@@ -17,8 +17,6 @@ import {
   CommonUtil,
   ConfigModel,
   DocumentDefinition,
-  DocumentManagementService,
-  ErrorHandlerService,
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
@@ -27,12 +25,9 @@ import {
   Field,
   FieldAction,
   FieldActionDefinition,
-  FieldActionService,
-  FileManagementService,
   InitializationService,
   MappedField,
   MappingDefinition,
-  MappingManagementService,
   MappingModel,
   Multiplicity,
   NamespaceModel,
@@ -73,16 +68,11 @@ export function copyToClipboard(text: string) {
     );
   }
   document.body.removeChild(textArea);
-  return;
 }
 
-export const initializationService = new InitializationService(
-  new DocumentManagementService(api),
-  new MappingManagementService(api),
-  new ErrorHandlerService(),
-  new FieldActionService(api),
-  new FileManagementService(api),
-);
+export const initializationService: InitializationService =
+  new InitializationService(api);
+export const configModel = initializationService.cfg;
 
 export function fromFieldToIFieldsGroup(field: Field): IAtlasmapGroup | null {
   const fields = field.children
@@ -515,7 +505,7 @@ export function handleActionChange(
   // If the field action configuration predefines argument values then populate the fields with
   // default values.  Needed to support pull-down menus in action argument definitions.
   if (
-    action.argumentValues.values &&
+    action.argumentValues.values() &&
     action.argumentValues.length > 0 &&
     definition.arguments[0] &&
     definition.arguments[0].values &&
@@ -636,7 +626,7 @@ export function handleTransformationChange(
     // If the field action configuration predefines argument values then populate the fields with
     // default values.  Needed to support pull-down menus in action argument definitions.
     if (
-      action.argumentValues.values &&
+      action.argumentValues.values() &&
       action.argumentValues.length > 0 &&
       newAction.arguments[0] &&
       newAction.arguments[0].values &&
@@ -718,7 +708,7 @@ export function handleMultiplicityChange(action: FieldAction, name: string) {
     // If the field action configuration predefines argument values then populate the fields with
     // default values.  Needed to support pull-down menus in action argument definitions.
     if (
-      action.argumentValues.values &&
+      action.argumentValues.values() &&
       action.argumentValues.length > 0 &&
       newAction.arguments[0] &&
       newAction.arguments[0].values &&

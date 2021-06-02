@@ -21,6 +21,7 @@ import { DocumentDefinition, MappingDefinition } from '../models';
 import { DocumentType, InspectionType } from '../common/config.types';
 import { TextDecoder, TextEncoder } from 'text-encoding';
 
+import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ErrorHandlerService } from './error-handler.service';
 import { ErrorLevel } from '../models/error.model';
@@ -31,6 +32,7 @@ import fs from 'fs';
 import ky from 'ky/umd';
 import log from 'loglevel';
 import { mocked } from 'ts-jest/utils';
+import pako from 'pako';
 
 describe('FileManagementService', () => {
   jest.mock('./initialization.service');
@@ -41,12 +43,15 @@ describe('FileManagementService', () => {
   jest.mock('file-saver');
   const mockedFileSaver = mocked(FileSaver);
   jest.mock('../utils/common-util');
-  const mockedDataMapperUtil = mocked(CommonUtil, true);
+  const mockedCommonUtil = mocked(CommonUtil, true);
+  jest.mock('pako');
+  const mockedPako = mocked(pako);
 
   beforeEach(() => {
     service.cfg = new ConfigModel();
     service.cfg.errorService = new ErrorHandlerService();
     service.cfg.logger = log.getLogger('config');
+    service.cfg.fileService = service;
   });
 
   test('findMappingFiles()', (done) => {
@@ -64,12 +69,17 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.findMappingFiles('UI').subscribe((value) => {
-      expect(value.length).toBe(2);
-      expect(value[0]).toBe('dummyMappingFile1');
-      expect(value[1]).toBe('dummyMappingFile2');
-      done();
-    });
+    service
+      .findMappingFiles('UI')
+      .then((value) => {
+        expect(value.length).toBe(2);
+        expect(value[0]).toBe('dummyMappingFile1');
+        expect(value[1]).toBe('dummyMappingFile2');
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('findMappingFiles() server error', (done) => {
@@ -80,15 +90,18 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.findMappingFiles('UI').subscribe({
-      error: (error) => {
+    service
+      .findMappingFiles('UI')
+      .then(() => {
+        fail('expected to be rejected');
+      })
+      .catch((error) => {
         expect(error).toMatch('expected error');
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
         expect(err.message.indexOf('current mapping files')).toBeGreaterThan(0);
         done();
-      },
-    });
+      });
   });
 
   test('getCurrentMappingDigest()', (done) => {
@@ -99,10 +112,17 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.getCurrentMappingDigest().subscribe((value) => {
-      expect(new TextDecoder().decode(value)).toMatch('test text');
-      done();
-    });
+    mockedPako.inflate = jest.fn().mockReturnValue('dummy');
+    mockedCommonUtil.objectize = jest.fn().mockReturnValue({} as ADMDigest);
+    service
+      .getCurrentMappingDigest()
+      .then((value) => {
+        expect(value?.exportMappings).toBeUndefined();
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('getCurrentMappingDigest() server error', (done) => {
@@ -113,15 +133,18 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.getCurrentMappingDigest().subscribe({
-      error: (error) => {
+    service
+      .getCurrentMappingDigest()
+      .then(() => {
+        fail('expected to be rejected');
+      })
+      .catch((error) => {
         expect(error).toMatch('expected error');
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
         expect(err.message.indexOf('Mapping digest file')).toBeGreaterThan(0);
         done();
-      },
-    });
+      });
   });
 
   test('getCurrentADMArchive()', (done) => {
@@ -132,10 +155,15 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.getCurrentADMArchive().subscribe((value) => {
-      expect(new TextDecoder().decode(value)).toMatch('test text');
-      done();
-    });
+    service
+      .getCurrentADMArchive()
+      .then((value) => {
+        expect(new TextDecoder().decode(value!)).toMatch('test text');
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('getCurrentADMArchive() server error', (done) => {
@@ -146,15 +174,18 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.getCurrentADMArchive().subscribe({
-      error: (error) => {
+    service
+      .getCurrentADMArchive()
+      .then(() => {
+        fail('expected to be  rejected');
+      })
+      .catch((error) => {
         expect(error).toMatch('expected error');
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
         expect(err.message.indexOf('ADM archive file')).toBeGreaterThan(0);
         done();
-      },
-    });
+      });
   });
 
   test('resetMappings()', (done) => {
@@ -165,7 +196,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.resetMappings().subscribe((value) => {
+    service.resetMappings().then((value) => {
       expect(value).toBeTruthy();
       done();
     });
@@ -179,17 +210,17 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.resetMappings().subscribe({
-      error: (error) => {
-        fail(error);
-      },
-      complete: () => {
+    service
+      .resetMappings()
+      .then(() => {
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
         expect(err.message.indexOf('resetting mappings')).toBeGreaterThan(0);
         done();
-      },
-    });
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('resetLibs()', (done) => {
@@ -200,7 +231,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.resetLibs().subscribe((value) => {
+    service.resetLibs().then((value) => {
       expect(value).toBeTruthy();
       done();
     });
@@ -214,17 +245,17 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    service.resetLibs().subscribe({
-      error: (error) => {
-        fail(error);
-      },
-      complete: () => {
+    service
+      .resetLibs()
+      .then(() => {
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
         expect(err.message.indexOf('JAR libraries')).toBeGreaterThan(0);
         done();
-      },
-    });
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('setMappingToService()', (done) => {
@@ -236,10 +267,15 @@ describe('FileManagementService', () => {
       })()
     );
     const mappingJson = '{"AtlasMapping": {}}';
-    service.setMappingToService(mappingJson).subscribe((value) => {
-      expect(value).toBeTruthy();
-      done();
-    });
+    service
+      .setMappingToService(mappingJson)
+      .then((value) => {
+        expect(value).toBeTruthy();
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('setMappingToService() server error', (done) => {
@@ -251,18 +287,23 @@ describe('FileManagementService', () => {
       })()
     );
     const mappingJson = '{"AtlasMapping": {}}';
-    service.setMappingToService(mappingJson).subscribe({
-      error: (error) => {
-        expect(error).toMatch('expected error');
+    service
+      .setMappingToService(mappingJson)
+      .then((value) => {
+        expect(value).toBeFalsy();
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('establishing mappings')).toBeGreaterThan(0);
+        expect(
+          err.message.indexOf('Unable to update the mappings file')
+        ).toBeGreaterThanOrEqual(0);
         done();
-      },
-    });
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
-  test('setBinaryFileToService()', (done) => {
+  test('importADMArchive()', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -271,14 +312,35 @@ describe('FileManagementService', () => {
       })()
     );
     const binary = new TextEncoder().encode('dummy binary');
-    const url = service.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
-    service.setBinaryFileToService(binary, url).subscribe((value) => {
-      expect(value).toBeTruthy();
-      done();
-    });
+    service
+      .importADMArchive(new File([new Blob([binary])], 'dummy.adm'))
+      .then((value) => {
+        expect(value).toBeTruthy();
+        done();
+      });
   });
 
-  test('setBinaryFileToService() server error', (done) => {
+  test('setDigestFileToService()', (done) => {
+    mockedKy.put = jest.fn().mockReturnValue(
+      new (class {
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })()
+    );
+    const digest = {} as ADMDigest;
+    service
+      .setMappingDigestToService(digest)
+      .then((value) => {
+        expect(value).toBeTruthy();
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('setDigestFileToService() server error', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
         arrayBuffer(): Promise<ArrayBuffer> {
@@ -286,30 +348,29 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    const binary = new TextEncoder().encode('dummy binary');
-    const url = service.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/';
-    service.setBinaryFileToService(binary, url).subscribe({
-      error: (error) => {
-        expect(error).toMatch('expected error');
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('saving mapping')).toBeGreaterThan(0);
-        done();
-      },
+    const digest = {} as ADMDigest;
+    service.setMappingDigestToService(digest).then((value) => {
+      expect(value).toBeFalsy();
+      const err = service.cfg.errorService.getErrors()[0];
+      expect(err.level).toBe(ErrorLevel.ERROR);
+      expect(
+        err.message.indexOf('Unable to update the Mapping digest file')
+      ).toBeGreaterThanOrEqual(0);
+      done();
     });
   });
 
-  test('setLibraryToService()', (done) => {
+  test('importJarFile()', (done) => {
     mockedKy.put = jest.fn().mockReturnValue(
       new (class {
-        blob(): Promise<Blob> {
-          return Promise.resolve(new Blob());
+        arrayBuffer(): Promise<Buffer> {
+          return Promise.resolve(Buffer.from(''));
         }
       })()
     );
     const binary = new TextEncoder().encode('dummy binary');
-    service.setLibraryToService(binary, (success, _res) => {
-      expect(success).toBeTruthy();
+    service.importJarFile(binary).then((value) => {
+      expect(value).toBeTruthy();
       done();
     });
   });
@@ -373,7 +434,7 @@ describe('FileManagementService', () => {
   });
 
   test('importADMArchive()', (done) => {
-    mockedDataMapperUtil.readBinaryFile = jest
+    mockedCommonUtil.readBinaryFile = jest
       .fn()
       .mockResolvedValue(
         fs.readFileSync(
@@ -391,8 +452,11 @@ describe('FileManagementService', () => {
     mockedInitService.prototype.initialize = jest
       .fn()
       .mockImplementation(() => {});
+    const buf = fs.readFileSync(
+      `${__dirname}/../../../../test-resources/json/schema/mock-json-schema.json`
+    );
     service
-      .importADMArchive('atlasmap-mapping.adm')
+      .importADMArchive(new File([new Blob([buf])], 'atlasmap-mapping.adm'))
       .then((value) => {
         expect(value).toBeTruthy();
         done();

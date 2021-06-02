@@ -14,6 +14,7 @@
     limitations under the License.
 */
 export * from './common';
+export * from './contracts';
 export * from './models';
 export * from './services';
 export * from './utils';

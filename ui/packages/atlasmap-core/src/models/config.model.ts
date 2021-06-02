@@ -86,6 +86,10 @@ export class DocumentInitializationModel {
   collectionClassName?: string;
 }
 
+/**
+ * The central store of the AtlasMap UI core library. It is expected to be initialized through
+ * {@link InitializationService}.
+ */
 export class ConfigModel {
   static mappingServicesPackagePrefix = 'io.atlasmap.v2';
   static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
@@ -183,17 +187,8 @@ export class ConfigModel {
 
     if (docDef.type === DocumentType.XSD) {
       docDef.uri = 'atlas:xml:' + docDef.id;
-    } else if (docDef.type === DocumentType.JAVA_ARCHIVE) {
-      docDef.uri = 'atlas:java:' + docDef.id;
-    } else {
-      docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
-    }
-
-    if (
-      docDef.type === DocumentType.JAVA ||
-      docDef.type === DocumentType.JAVA_ARCHIVE
-    ) {
-      docDef.uri += '?className=' + docDef.inspectionSource;
+    } else if (docDef.type === DocumentType.JAVA) {
+      docDef.uri = `atlas:java:${docDef.id}?className=${docDef.inspectionSource}`;
       if (
         docInitModel.collectionType &&
         docInitModel.collectionType !== CollectionType.NONE
@@ -204,6 +199,8 @@ export class ConfigModel {
             '&collectionClassName=' + docInitModel.collectionClassName;
         }
       }
+    } else {
+      docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
     }
 
     if (docInitModel.isSource) {

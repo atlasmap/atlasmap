@@ -84,6 +84,37 @@ export class ErrorHandlerService {
   }
 
   /**
+   * An utility method to add backend error. It's a network error if {@link error.status} is 0.
+   *
+   * @param message error message to put if it's not a network error
+   * @param error raw error object
+   */
+  addBackendError(message: string, error?: any): void {
+    if (error?.status === 0) {
+      this.addError(
+        new ErrorInfo({
+          message:
+            'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+          object: error,
+        })
+      );
+    } else {
+      this.addError(
+        new ErrorInfo({
+          message: message,
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+          object: error,
+        })
+      );
+    }
+  }
+
+  /**
    * Return all errors in the store.
    * @return An array of {@link ErrorInfo}
    */

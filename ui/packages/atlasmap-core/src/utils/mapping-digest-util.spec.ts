@@ -14,31 +14,13 @@
     limitations under the License.
 */
 
-import { DocumentDefinition } from '../models';
+import { ConfigModel } from '../models';
 import { MappingDigestUtil } from './mapping-digest-util';
 
 describe('MappingDigestUtil', () => {
-  test('generateExportMappings()', () => {
-    expect(MappingDigestUtil.generateExportMappings('')).toBe('');
-    const answer = MappingDigestUtil.generateExportMappings(
-      '{"dummyMapping": {}}'
-    );
-    expect(answer).toContain('exportMappings');
-    expect(answer).toContain('"value": "{\\"dummyMapping\\": {}}"');
-  });
-
   test('generateExportBlockData()', () => {
-    expect(MappingDigestUtil.generateExportBlockData('')).toBe('');
-    const answer = MappingDigestUtil.generateExportBlockData('{"dummy": {}}');
-    expect(answer).toContain('"value": "{\\"dummy\\": {}}"');
-  });
-
-  test('generateExportMetaStr()', () => {
-    const doc = new DocumentDefinition();
-    doc.name = 'dummyDoc';
-    doc.id = 'dommyDocId';
-    const answer = MappingDigestUtil.generateExportMetaStr(doc);
-    expect(answer).toContain(doc.name);
-    expect(answer).toContain(doc.id);
+    expect(
+      MappingDigestUtil.generateMappingDigest(ConfigModel.getConfig(), {})
+    ).toBeTruthy();
   });
 });
