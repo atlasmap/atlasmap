@@ -17,9 +17,10 @@ import { MainLayout } from './MainLayout';
 import React from 'react';
 import { boolean } from '@storybook/addon-knobs';
 
-export default {
+const obj = {
   title: 'AtlasMap|Layout/MainLayout',
 };
+export default obj;
 
 export const example = () => (
   <MainLayout

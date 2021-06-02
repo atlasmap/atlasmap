@@ -120,7 +120,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
 
       return [
         ...xmlSources,
-        <Level>
+        <Level key="level">
           <LevelItem key="title">
             <Title size="lg" headingLevel={'h1'} className={styles.title}>
               Namespaces for {source.name}
@@ -147,6 +147,7 @@ export const NamespaceTableView: FunctionComponent<INamespaceTableProps> = ({
           </LevelItem>
         </Level>,
         <Table
+          key="table"
           aria-label="Namespaces"
           cells={columns}
           rows={rows}

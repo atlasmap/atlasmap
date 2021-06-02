@@ -17,7 +17,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { RectWithId } from './models';
 import { useCanvas } from './CanvasContext';
 
-export default function () {
+export default function PrintMovableRects() {
   const { addRedrawListener, removeRedrawListener, getRects } = useCanvas();
   const [rects, setRects] = useState<RectWithId[]>([]);
 

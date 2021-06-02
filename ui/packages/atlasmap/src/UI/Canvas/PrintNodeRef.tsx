@@ -24,8 +24,8 @@ import React, {
 
 import { useCanvas } from './CanvasContext';
 
-export default forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ id, children, ...props }, ref) => {
+const printNodeRef = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+  function PrintNodeRef({ id, children, ...props }, ref) {
     const { addRedrawListener, removeRedrawListener } = useCanvas();
     const getRect = useNodeRect();
     const [rect, setRect] = useState<NodeRect | null>(null);
@@ -52,3 +52,4 @@ export default forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
     );
   },
 );
+export default printNodeRef;

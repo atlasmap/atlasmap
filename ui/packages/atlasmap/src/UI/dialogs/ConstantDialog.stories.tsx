@@ -19,10 +19,11 @@ import { ConstantDialog } from './ConstantDialog';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'UI|Dialogs',
   component: ConstantDialog,
 };
+export default obj;
 
 const options = [
   { label: 'Foo', value: 'foo' },

@@ -19,10 +19,11 @@ import { NamespaceDialog } from './NamespaceDialog';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'UI|Dialogs',
   component: NamespaceDialog,
 };
+export default obj;
 
 export const namespaceDialog = () => (
   <NamespaceDialog

@@ -20,10 +20,11 @@ import { Movable } from './Movable';
 import PrintMovableRects from './PrintMovableRects';
 import React from 'react';
 
-export default {
+const obj = {
   title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <CanvasProvider initialHeight={150}>

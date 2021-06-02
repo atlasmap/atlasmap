@@ -55,6 +55,7 @@ export function useSpecifyInstanceSchemaDialog(
   };
   return [
     <Modal
+      key="specify-instance-schema-dialog"
       variant="small"
       title={'Specify Instance/ Schema'}
       description={

@@ -21,9 +21,10 @@ import {
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'UI|Mapping Details/Add field typeahead',
 };
+export default obj;
 
 const onAddAction = action('onAdd');
 

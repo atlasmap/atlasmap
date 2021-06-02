@@ -31,10 +31,11 @@ import { animated, useSpring } from 'react-spring';
 
 import PrintNodeRef from './PrintNodeRef';
 
-export default {
+const obj = {
   title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example: FunctionComponent = () =>
   createElement(() => {

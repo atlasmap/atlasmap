@@ -37,11 +37,12 @@ import React from 'react';
 import { TreeItem } from '../Tree/TreeItem';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'ColumnMapper',
   component: ColumnMapper,
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <CanvasProvider>

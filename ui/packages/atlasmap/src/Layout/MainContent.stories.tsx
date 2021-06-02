@@ -17,9 +17,10 @@ import { MainContent } from './MainContent';
 import React from 'react';
 import { TextContent } from '@patternfly/react-core';
 
-export default {
+const obj = {
   title: 'AtlasMap|Layout/MainContent',
 };
+export default obj;
 
 export const example = () => (
   <MainContent>

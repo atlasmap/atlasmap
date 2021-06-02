@@ -21,9 +21,10 @@ import { RedhatIcon } from '@patternfly/react-icons';
 import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 
-export default {
+const obj = {
   title: 'AtlasMap|Layout/CanvasControlBar',
 };
+export default obj;
 
 export const example = () => {
   const freeView = boolean('Enable canvas panning', true);

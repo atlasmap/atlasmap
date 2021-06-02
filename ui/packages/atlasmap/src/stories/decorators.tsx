@@ -16,7 +16,7 @@
 import { FieldDragLayer, FieldsDndProvider } from '../UI';
 import React, { ReactElement } from 'react';
 
-export default [
+const stories = [
   (storyFn: () => ReactElement) => (
     <FieldsDndProvider>
       {storyFn()}
@@ -24,3 +24,4 @@ export default [
     </FieldsDndProvider>
   ),
 ];
+export default stories;
