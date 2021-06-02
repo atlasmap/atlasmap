@@ -111,7 +111,7 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
         placeholderText={placeholderText}
         onFilter={filterFields}
         onSelect={onSelect}
-        maxHeight={300}
+        maxHeight={400}
         className={styles.select}
       >
         {renderOptions(fields)}
