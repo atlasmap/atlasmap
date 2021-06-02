@@ -15,7 +15,6 @@
  */
 package io.atlasmap.xml.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -36,7 +35,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import io.atlasmap.v2.Json;
 import io.atlasmap.xml.inspect.XmlInspectionService;
-import io.atlasmap.xml.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
@@ -78,40 +76,6 @@ public class XmlService {
     }
 
 
-    @GET
-    @Path("/inspect")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Inspect XML via URI", description = "Inspect a XML schema or instance located at specified URI and return a Document object")
-    @RequestBody(description = "Inspection type, one of `instance` or `Schema`", content = @Content(schema = @Schema(implementation = InspectionType.class)))
-    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = XmlDocument.class)), description = "Return a Document object represented by XmlDocument"))
-    public Response getClass(@QueryParam("uri") String uri, @QueryParam("type") String type) {
-        XmlDocument d = null;
-
-        try {
-
-            if (type == null) {
-                throw new Exception("uri and type parameters must be specified");
-            }
-            InspectionType inspectType = InspectionType.valueOf(type);
-            XmlInspectionService s = new XmlInspectionService();
-
-            switch (inspectType) {
-            case INSTANCE:
-                d = s.inspectXmlDocument(new File(uri));
-                break;
-            case SCHEMA:
-                d = s.inspectSchema(new File(uri));
-                break;
-            default:
-                throw new Exception("Unknown type specified: " + type);
-            }
-        } catch (Exception e) {
-            LOG.error("Error inspecting xml: " + e.getMessage(), e);
-        }
-
-        return Response.ok().entity(toJson(d)).build();
-    }
-
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -119,11 +83,11 @@ public class XmlService {
     @Operation(summary = "Inspect XML", description = "Inspect a XML schema or instance and return a Document object")
     @RequestBody(description = "XmlInspectionRequest object", content = @Content(schema = @Schema(implementation = XmlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = "200",  content = @Content(schema = @Schema(implementation = XmlInspectionResponse.class)), description = "Return a Document object represented by XmlDocument"))
-    public Response inspectClass(InputStream request) {
-        return inspectClass(fromJson(request, XmlInspectionRequest.class));
+    public Response inspect(InputStream request) {
+        return inspect(fromJson(request, XmlInspectionRequest.class));
     }
 
-    public Response inspectClass(XmlInspectionRequest request) {
+    public Response inspect(XmlInspectionRequest request) {
         long startTime = System.currentTimeMillis();
 
         XmlInspectionResponse response = new XmlInspectionResponse();

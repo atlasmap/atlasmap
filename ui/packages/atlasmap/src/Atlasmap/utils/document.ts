@@ -294,79 +294,47 @@ export function enableCustomClass(
   docdef.updateFromMappings(cfg.mappings!);
 
   cfg.documentService
-    .fetchClassPath()
+    .fetchDocument(docdef)
     .toPromise()
-    .then((classPath: string) => {
-      cfg.initCfg.classPath = classPath;
-      cfg.documentService
-        .fetchDocument(docdef, cfg.initCfg.classPath)
-        .toPromise()
-        .then(async (doc: DocumentDefinition) => {
-          // No fields indicate the user is attempting to enable a custom
-          // field action class.  Remove the document from the panel since
-          // it has no fields and issue a warning.
-          if (doc.fields.length === 0) {
-            // Make any custom field actions active.
-            await cfg.fieldActionService
-              .fetchFieldActions()
-              .catch((error: any) => {
-                cfg.errorService.addError(
-                  new ErrorInfo({
-                    message: error,
-                    level: ErrorLevel.ERROR,
-                    scope: ErrorScope.APPLICATION,
-                    type: ErrorType.INTERNAL,
-                  }),
-                );
-              });
-
-            if (doc.isSource) {
-              CommonUtil.removeItemFromArray(doc, cfg.sourceDocs);
-            } else {
-              CommonUtil.removeItemFromArray(doc, cfg.targetDocs);
-            }
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: 'The Java class you selected has no mappable fields.',
-                level: ErrorLevel.WARN,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.USER,
-              }),
-            );
-          }
-          await cfg.mappingService.notifyMappingUpdated();
-          await cfg.fileService.exportADMArchive('');
-        })
-        .catch((error: any) => {
-          if (error.status === 0) {
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Unable to fetch the Java class document '${docdef.name}' from the runtime service.`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-                object: error,
-              }),
-            );
-          } else {
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Could not load the Java class document '${docdef.id}'`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-                object: error,
-              }),
-            );
-          }
+    .then(async (doc: DocumentDefinition) => {
+      // No fields indicate the user is attempting to enable a custom
+      // field action class.  Remove the document from the panel since
+      // it has no fields and issue a warning.
+      if (doc.fields.length === 0) {
+        // Make any custom field actions active.
+        await cfg.fieldActionService.fetchFieldActions().catch((error: any) => {
+          cfg.errorService.addError(
+            new ErrorInfo({
+              message: error,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.APPLICATION,
+              type: ErrorType.INTERNAL,
+            }),
+          );
         });
+
+        if (doc.isSource) {
+          CommonUtil.removeItemFromArray(doc, cfg.sourceDocs);
+        } else {
+          CommonUtil.removeItemFromArray(doc, cfg.targetDocs);
+        }
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: 'The Java class you selected has no mappable fields.',
+            level: ErrorLevel.WARN,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.USER,
+          }),
+        );
+      }
+      await cfg.mappingService.notifyMappingUpdated();
+      await cfg.fileService.exportADMArchive('');
     })
     .catch((error: any) => {
       if (error.status === 0) {
         cfg.errorService.addError(
           new ErrorInfo({
-            message:
-              'Fatal network error: Could not connect to AtlasMap design runtime service.',
+            message: `Unable to fetch the Java class document '${docdef.name}' from the runtime service.`,
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,
@@ -376,7 +344,7 @@ export function enableCustomClass(
       } else {
         cfg.errorService.addError(
           new ErrorInfo({
-            message: 'Could not load the Java class path.',
+            message: `Could not load the Java class document '${docdef.id}'`,
             level: ErrorLevel.ERROR,
             scope: ErrorScope.APPLICATION,
             type: ErrorType.INTERNAL,

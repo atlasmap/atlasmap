@@ -62,7 +62,7 @@ public class XmlServiceTest {
         XmlInspectionRequest request = new XmlInspectionRequest();
         request.setType(InspectionType.SCHEMA);
         request.setXmlData(source);
-        Response res = xmlService.inspectClass(request);
+        Response res = xmlService.inspect(request);
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[])entity, XmlInspectionResponse.class);
