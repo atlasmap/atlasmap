@@ -1,8 +1,10 @@
 .select .pf-c-select__menu {
+  font-size: small;
   max-width: "100%",
 }
 
 .field {
+  font-size: small;
   margin-left: 20,
 }
 
