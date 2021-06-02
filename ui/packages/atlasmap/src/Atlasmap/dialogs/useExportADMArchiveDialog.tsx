@@ -17,23 +17,23 @@ import React, { ReactElement, useCallback } from 'react';
 
 import { ExportCatalogDialog } from '../../UI';
 import { useAtlasmap } from '../AtlasmapProvider';
-import { useToggle } from '../../Atlasmap/utils';
+import { useToggle } from '../utils';
 
-export function useExportCatalogDialog(): [ReactElement, () => void] {
+export function useExportADMArchiveDialog(): [ReactElement, () => void] {
   const { state, toggleOn, toggleOff } = useToggle(false);
-  const { exportAtlasFile } = useAtlasmap();
-  const onExportAtlasFile = useCallback(
+  const { exportADMArchiveFile } = useAtlasmap();
+  const onExportADMArchiveFile = useCallback(
     (filename: string) => {
-      exportAtlasFile(filename);
+      exportADMArchiveFile(filename);
       toggleOff();
     },
-    [exportAtlasFile, toggleOff],
+    [exportADMArchiveFile, toggleOff],
   );
   const dialog = (
     <ExportCatalogDialog
       isOpen={state}
       onCancel={toggleOff}
-      onConfirm={onExportAtlasFile}
+      onConfirm={onExportADMArchiveFile}
     />
   );
   return [dialog, toggleOn];

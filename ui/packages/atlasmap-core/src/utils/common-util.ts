@@ -83,13 +83,13 @@ export class CommonUtil {
    * @param fileName
    * @param reader
    */
-  static async readFile(fileName: any, reader: any): Promise<string> {
+  static async readFile(file: File, reader: FileReader): Promise<string> {
     return new Promise<string>((resolve) => {
       reader.onload = () => {
         const fileBody = reader.result;
-        resolve(fileBody);
+        resolve(fileBody as string);
       };
-      reader.readAsText(fileName);
+      reader.readAsText(file);
     });
   }
 
@@ -99,13 +99,16 @@ export class CommonUtil {
    * @param fileName - file to read
    * @param reader - reader object
    */
-  static async readBinaryFile(fileName: any, reader: any): Promise<Int8Array> {
+  static async readBinaryFile(
+    file: File,
+    reader: FileReader
+  ): Promise<Int8Array> {
     return new Promise<Int8Array>((resolve) => {
       reader.onload = () => {
-        const fileBody = new Int8Array(reader.result);
+        const fileBody = new Int8Array(reader.result as ArrayBuffer);
         resolve(fileBody);
       };
-      reader.readAsArrayBuffer(fileName);
+      reader.readAsArrayBuffer(file);
     });
   }
 
@@ -116,7 +119,7 @@ export class CommonUtil {
    * @param fileContent
    * @param fName
    */
-  static async writeFile(fileContent: Blob, fName: any): Promise<boolean> {
+  static async writeFile(fileContent: Blob, fName: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       saveAs(fileContent, fName);
       resolve(true);

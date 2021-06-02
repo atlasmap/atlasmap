@@ -1,6 +1,6 @@
 {
   "name": "@atlasmap/atlasmap",
-  "description": "",
+  "description": "AtlasMap UI presentation layer consists of React components",
   "version": "2.3.0-SNAPSHOT",
   "license": "MIT",
   "publishConfig": {
@@ -18,7 +18,7 @@
     "build:tsdx": "tsdx build",
     "build:module": "npm-run-all prebuild build:tsdx",
     "build:storybook": "build-storybook --quiet",
-    "build": "npm-run-all lint test build:module",
+    "build": "npm-run-all build:module lint test",
     "test": "tsdx test --runInBand",
     "test:coverage": "tsdx test --coverage --runInBand",
     "lint": "tsdx lint src test",

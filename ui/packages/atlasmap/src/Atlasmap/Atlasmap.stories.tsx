@@ -97,6 +97,7 @@ export const wiredToTheBackend = () => (
       'baseMappingServiceUrl',
       'http://localhost:8585/v2/atlas/',
     )}
+    logLevel={text('logLevel', 'info')}
     onMappingChange={action('onMappingChange')}
   >
     <Atlasmap
@@ -173,6 +174,7 @@ export const embeddedInSyndesis = () => {
         'baseMappingServiceUrl',
         'http://localhost:8585/v2/atlas/',
       )}
+      logLevel={text('logLevel', 'info')}
       externalDocument={externalDocument}
       onMappingChange={action('onMappingChange')}
     >

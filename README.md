@@ -78,20 +78,26 @@ $ ./mvnw clean install -DskipTests -Pitests
 $ cd ${ATLASMAP}/standalone
 $ ../mvnw -Pitests spring-boot:run
 ```
-
 3. Again in a separate terminal window, run yarn build to make the REACT UI:
 ```
 $ cd ${ATLASMAP}/ui/packages/atlasmap/ui
 $ yarn build
 ```
-
-4a.  Run AtlasMap standalone:
+4.  Run AtlasMap standalone:
+Run `yarn start` for each sub packages from 3 different terminal
+```
+$ cd ${ATLASMAP}/ui/packages/atlasmap-core
+$ yarn start
+```
+```
+$ cd ${ATLASMAP}/ui/packages/atlasmap
+$ yarn start
+```
 ```
 $ cd ${ATLASMAP}/ui/packages/atlasmap-standalone
 $ yarn start
 ```
-
-4b. Run AtlasMap from your browser with storybook
+#### Run AtlasMap from your browser with storybook
 ```
 $ cd ${ATLASMAP}/ui/packages/atlasmap
 $ yarn build

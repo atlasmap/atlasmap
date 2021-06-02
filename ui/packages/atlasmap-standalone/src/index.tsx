@@ -27,6 +27,7 @@ ReactDOM.render(
     baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
     baseCSVInspectionServiceUrl={'/v2/atlas/csv/'}
     baseMappingServiceUrl={'/v2/atlas/'}
+    logLevel={'info'}
   >
     <App />
   </AtlasmapProvider>,

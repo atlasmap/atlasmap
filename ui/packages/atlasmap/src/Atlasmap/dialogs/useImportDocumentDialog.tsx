@@ -13,8 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { useState } from 'react';
-import { ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 
 import { useAtlasmap } from '../AtlasmapProvider';
 import { useConfirmationDialog } from './useConfirmationDialog';
@@ -25,7 +24,7 @@ export function useImportDocumentDialog(): [
   ReactElement,
   (selectedFile: File, isSource: boolean) => void,
 ] {
-  const { documentExists, importAtlasFile } = useAtlasmap();
+  const { configModel, documentExists, importInstanceSchema } = useAtlasmap();
   const [importDialog, openImportDialog] = useConfirmationDialog(
     'Confirm document import',
     'A document with the selected name has already been imported into the specified panel. It will appear in addition to the pre-existing document.',
@@ -50,12 +49,7 @@ export function useImportDocumentDialog(): [
               for (let parameter of parameters) {
                 inspectionParameters[parameter.name] = parameter.value;
               }
-              importAtlasFile(
-                selectedFile,
-                isSource,
-                false,
-                inspectionParameters,
-              );
+              importInstanceSchema(selectedFile, configModel, isSource, false);
             },
             [
               {
@@ -154,11 +148,16 @@ export function useImportDocumentDialog(): [
 
         setDefaultSchema(userFileSuffix === 'XSD' ? true : false);
         openSpecifyInstanceSchema((isSchema: boolean) => {
-          importAtlasFile(selectedFile, isSource, isSchema);
+          importInstanceSchema(selectedFile, configModel, isSource, isSchema);
         });
       }
     },
-    [importAtlasFile, openParametersDialog, openSpecifyInstanceSchema],
+    [
+      configModel,
+      importInstanceSchema,
+      openParametersDialog,
+      openSpecifyInstanceSchema,
+    ],
   );
 
   const onImportDocument = useCallback(

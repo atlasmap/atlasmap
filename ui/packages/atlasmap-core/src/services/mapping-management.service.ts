@@ -23,7 +23,7 @@ import {
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 import { LookupTableData, LookupTableUtil } from '../utils/lookup-table-util';
 import { MappedField, MappingModel } from '../models/mapping.model';
-import { Observable, Subject, Subscription, forkJoin, from } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
@@ -36,7 +36,6 @@ import { PaddingField } from '../models/document-definition.model';
 import { TransitionMode } from '../models/transition.model';
 import ky from 'ky';
 import log from 'loglevel';
-import { timeout } from 'rxjs/operators';
 
 /**
  * Handles mapping updates. It restores mapping status from backend and reflect in UI,
@@ -93,77 +92,36 @@ export class MappingManagementService {
   }
 
   /**
-   * Return true if the runtime service is available, false otherwise.
+   * Retrieve current mapping definition JSON file from backend, deserialize it and
+   * load it into AtlasMap UI.
+   *
+   * @param mappingDefinition {@link MappingDefinition}
+   * @returns
    */
-  async runtimeServiceActive(): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
-      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'ping';
-      this.cfg.logger!.debug('Runtime Service Ping Request');
-      this.api
-        .get(url)
-        .json()
-        .then((body: any) => {
-          this.cfg.logger!.debug(
-            `Runtime Service Ping Response: ${JSON.stringify(body)}`
-          );
-          if (body) {
-            if (JSON.stringify(body).match('pong')) {
-              resolve(true);
-              return;
-            }
-          }
-          resolve(false);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-  }
-
   fetchMappings(
-    mappingFileNames: string[],
+    _mappingFiles: string[],
     mappingDefinition: MappingDefinition
-  ): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
-      if (mappingFileNames.length === 0) {
-        observer.complete();
-        return;
-      }
-      const baseURL: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
-      const operations: Observable<any>[] = [];
-      // Ref https://github.com/atlasmap/atlasmap/issues/1577
-      // for (const mappingName of mappingFileNames) {
-      const url: string = baseURL;
-      this.cfg.logger!.debug('Mapping Service Request: ' + url);
-      const operation = from(this.api.get(url).json());
-      operations.push(operation);
-      // }
-
-      forkJoin(operations)
-        .toPromise()
-        .then(async (data: any[]) => {
-          if (!data) {
-            observer.next(false);
-            observer.complete();
+  ): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.cfg.fileService
+        .getCurrentMappingJson()
+        .then(async (mappingJson: any) => {
+          if (!mappingJson) {
+            resolve(false);
             return;
           }
-          for (const d of data) {
-            this.cfg.logger!.debug(
-              `Mapping Service Response: ${JSON.stringify(d)}`
-            );
-            this.cfg.mappings = mappingDefinition;
-            MappingSerializer.deserializeMappingServiceJSON(d, this.cfg);
-          }
+          this.cfg.mappings = mappingDefinition;
+          MappingSerializer.deserializeMappingServiceJSON(
+            mappingJson,
+            this.cfg
+          );
           this.updateMappingsTransition();
-          observer.next(true);
-          observer.complete();
+          resolve(true);
         })
-        .catch((error: any) => {
-          observer.error(error);
-          observer.complete();
+        .catch(() => {
+          reject(false);
         });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+    });
   }
 
   updateMappingsTransition() {

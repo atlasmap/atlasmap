@@ -77,7 +77,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     onFieldPreviewChange,
     searchSources,
     searchTargets,
-    importAtlasFile,
+    importJarFile,
     // expression
     currentMappingExpression,
     executeFieldSearch,
@@ -116,9 +116,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     showExportAtlasFileToolbarItem: allowExport,
     showResetToolbarItem: allowReset,
     ...toolbarOptions,
-    onImportAtlasFile: handlers.onImportAtlasCatalog,
-    onImportJarFile: (file) => importAtlasFile(file, false, false),
-    onExportAtlasFile: handlers.onExportAtlasCatalog,
+    onImportADMArchiveFile: handlers.onImportADMArchive,
+    onImportJarFile: (file) => importJarFile(file),
+    onExportAtlasFile: handlers.onExportADMArchive,
     onResetAtlasmap: handlers.onResetAtlasmap,
     onAbout: handlers.onAbout,
   });

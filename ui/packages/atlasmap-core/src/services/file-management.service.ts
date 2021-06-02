@@ -19,16 +19,27 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import { gzip, inflate } from 'pako';
 
+import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { HTTP_STATUS_NO_CONTENT } from '../common/constants';
 import { MappingDigestUtil } from '../utils/mapping-digest-util';
-import { Observable } from 'rxjs';
-import { gzip } from 'pako';
 import ky from 'ky';
 import log from 'loglevel';
-import { timeout } from 'rxjs/operators';
+
+export enum FileName {
+  DIGEST = 'Mapping digest file',
+  ADM = 'ADM archive file',
+  JAR = 'Jar file',
+}
+
+export enum FileType {
+  DIGEST = 'GZ',
+  ADM = 'ZIP',
+  JAR = 'JAR',
+}
 
 /**
  * Handles file manipulation stored in the backend, including import/export via UI.
@@ -49,8 +60,8 @@ export class FileManagementService {
     }
   }
 
-  findMappingFiles(filter: string): Observable<string[]> {
-    return new Observable<string[]>((observer: any) => {
+  findMappingFiles(filter: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
       const url =
         this.cfg.initCfg.baseMappingServiceUrl +
         'mappings' +
@@ -68,40 +79,56 @@ export class FileManagementService {
           for (const entry of entries) {
             mappingFileNames.push(entry.name);
           }
-          observer.next(mappingFileNames);
-          observer.complete();
+          resolve(mappingFileNames);
         })
         .catch((error: any) => {
           if (error.status !== HTTP_STATUS_NO_CONTENT) {
-            this.handleError(
+            this.cfg.errorService.addBackendError(
               'Error occurred while accessing the current mapping files from the runtime service.',
               error
             );
-            observer.error(error);
+            reject(error);
           }
-          observer.complete();
         });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+    });
   }
 
   /**
    * Retrieve the current user data mappings digest file from the server as a GZIP compressed byte array buffer.
    */
-  getCurrentMappingDigest(): Observable<Uint8Array> {
-    return this.getCurrentFile('Mapping digest file', 'GZ');
+  getCurrentMappingDigest(): Promise<ADMDigest | null> {
+    return new Promise<ADMDigest | null>((resolve, reject) => {
+      this.getCurrentFile(FileName.DIGEST, FileType.DIGEST)
+        .then((gzipped) => {
+          if (!gzipped) {
+            resolve(null);
+            return;
+          }
+          const gunzipped = inflate(gzipped);
+          const stringified = new Uint8Array(gunzipped).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            ''
+          );
+          const admDigest = CommonUtil.objectize(stringified);
+          resolve(admDigest);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 
-  getCurrentADMArchive(): Observable<Uint8Array> {
-    return this.getCurrentFile('ADM archive file', 'ZIP');
+  getCurrentADMArchive(): Promise<Uint8Array | null> {
+    return this.getCurrentFile(FileName.ADM, FileType.ADM);
   }
 
   private getCurrentFile(
     fileName: string,
     fileType: string
-  ): Observable<Uint8Array> {
-    return new Observable<Uint8Array>((observer) => {
+  ): Promise<Uint8Array | null> {
+    return new Promise<Uint8Array | null>((resolve, reject) => {
       const url = `${this.cfg.initCfg.baseMappingServiceUrl}mapping/${fileType}/`;
-      this.cfg.logger!.debug(`${fileName} Request: ${url}`);
+      this.cfg.logger!.debug(`Get Current ${fileName} Request: ${url}`);
       const headers = {
         'Content-Type': 'application/octet-stream',
         Accept: 'application/octet-stream',
@@ -112,144 +139,218 @@ export class FileManagementService {
         .arrayBuffer()
         .then((body: ArrayBuffer) => {
           this.cfg.logger!.debug(
-            `${fileName} Response: ${JSON.stringify(body)}`
+            `Get Current ${fileName} Response: ${JSON.stringify(body)}`
           );
           if (body.byteLength) {
-            observer.next(new Uint8Array(body));
+            resolve(new Uint8Array(body));
           } else {
-            observer.next();
+            resolve(null);
           }
-          observer.complete();
         })
         .catch((error: any) => {
           if (error.status !== HTTP_STATUS_NO_CONTENT) {
-            this.handleError(
+            this.cfg.errorService.addBackendError(
               `Error occurred while accessing the ${fileName} from the runtime service.`,
               error
             );
-            observer.error(error);
+            reject(error);
           }
-          observer.complete();
         });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+    });
   }
 
   /**
-   * Establish an observable function to delete mapping files on the runtime.
+   * Delete mapping files on the runtime.
    */
-  resetMappings(): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
+  resetMappings(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
-      this.cfg.logger!.debug('Mapping Service Request - Reset');
+      this.cfg.logger!.debug('Reset Mappings Request');
       this.api
         .delete(url)
         .arrayBuffer()
         .then((res: any) => {
           this.cfg.logger!.debug(
-            `Mapping Service Response - Reset: ${JSON.stringify(res)}`
+            `Reset Mappings Response: ${JSON.stringify(res)}`
           );
-          observer.next(true);
-          observer.complete();
+          resolve(true);
           return res;
         })
         .catch((error: any) => {
-          this.handleError('Error occurred while resetting mappings.', error);
-          observer.complete();
+          this.cfg.errorService.addBackendError(
+            'Error occurred while resetting mappings.',
+            error
+          );
+          resolve(false);
         });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+    });
   }
 
   /**
-   * Establish an observable function to delete user-defined JAR library files on the runtime.
+   * Delete user-defined JAR library files on the runtime.
    */
-  resetLibs(): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
+  resetLibs(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/resetLibs';
-      this.cfg.logger!.debug(
-        'Mapping Service Request - Reset User-Defined Libraries'
-      );
+      this.cfg.logger!.debug('Reset Libs Request');
       this.api
         .delete(url)
         .arrayBuffer()
         .then((res: any) => {
-          this.cfg.logger!.debug(
-            `Mapping Service Response - Reset Libs: ${JSON.stringify(res)}`
-          );
-          observer.next(true);
-          observer.complete();
+          this.cfg.logger!.debug(`Reset Libs Response: ${JSON.stringify(res)}`);
+          resolve(true);
           return res;
         })
         .catch((error: any) => {
-          this.handleError(
+          this.cfg.errorService.addBackendError(
             'Error occurred while resetting user-defined JAR libraries.',
             error
           );
-          observer.complete();
+          resolve(false);
         });
-    }).pipe(timeout(this.cfg.initCfg.admHttpTimeout));
+    });
   }
 
+  /**
+   * Clear error service and delete jar libraries, documents and mappings.
+   */
+  resetAll(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.cfg.errorService.resetAll();
+      this.cfg.fileService
+        .resetMappings()
+        .then(async () => {
+          this.cfg.mappings = null;
+          this.cfg.clearDocs();
+          this.cfg.fileService
+            .resetLibs()
+            .then((value) => {
+              resolve(value);
+            })
+            .catch((error) => {
+              this.cfg.errorService.addBackendError(
+                `Failed to remove jar files: ${error.message}`,
+                error
+              );
+              resolve(false);
+            });
+        })
+        .catch((error) => {
+          this.cfg.errorService.addBackendError(
+            `Failed to remove mappings: ${error.message}`,
+            error
+          );
+          resolve(false);
+        });
+    });
+  }
   /**
    * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
    * are kept separate so they can be updated with minimal overhead.
    *
    * @param buffer - JSON content
    */
-  setMappingToService(jsonBuffer: string): Observable<boolean> {
-    return new Observable<boolean>((observer) => {
+  setMappingToService(jsonBuffer: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
       const headers = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         'Response-Type': 'application/json',
       };
-      this.cfg.logger!.debug('Mapping Service Request (set mapping): ' + url);
+      this.cfg.logger!.debug('Set Mapping Request (set mapping): ' + url);
       this.api
         .put(url, { headers, body: jsonBuffer })
         .arrayBuffer()
         .then((res) => {
           this.cfg.logger!.debug(
-            `Mapping Service Response: ${JSON.stringify(res)}`
+            `Set Mapping Response: ${JSON.stringify(res)}`
           );
-          observer.next(true);
-          observer.complete();
+          resolve(true);
         })
         .catch((error: any) => {
-          this.handleError(
-            'Error occurred while establishing mappings from an imported JSON.',
+          this.cfg.errorService.addBackendError(
+            `Unable to update the mappings file to the AtlasMap design runtime service. ${error.status} ${error.statusText}`,
             error
           );
-          observer.error(error);
-          observer.complete();
+          resolve(false);
         });
     });
   }
 
+  setMappingDigestToService(mappingDigest: ADMDigest): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      // Compress the JSON buffer - write out as binary.
+      const strBuffer = JSON.stringify(mappingDigest);
+      const binBuffer = CommonUtil.str2bytes(strBuffer);
+      let compressedBuffer: Uint8Array;
+      try {
+        compressedBuffer = gzip(binBuffer);
+      } catch (error1) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: 'Unable to compress the current data mappings.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error1,
+          })
+        );
+        resolve(false);
+        return;
+      }
+      // Update .../target/mappings/adm-catalog-files.gz
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0';
+      const fileContent: Blob = new Blob([compressedBuffer], {
+        type: 'application/octet-stream',
+      });
+      this.setBinaryFileToService(fileContent, url, FileName.DIGEST).then(
+        (value) => {
+          resolve(value);
+        }
+      );
+    });
+  }
+
+  private setADMArchiveFileToService(
+    compressedBuffer: BlobPart
+  ): Promise<boolean> {
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
+    const fileContent: Blob = new Blob([compressedBuffer], {
+      type: 'application/octet-stream',
+    });
+    return this.setBinaryFileToService(fileContent, url, FileName.ADM);
+  }
+
   /**
-   * The user has either exported their mappings or imported new mappings.  Either way we're saving them on the server.
+   * The user has either exported their mappings or imported new mappings.
+   * Either way we're saving them on the server.
    *
    * @param compressedBuffer
    */
-  setBinaryFileToService(
-    compressedBuffer: any,
-    url: string
-  ): Observable<boolean> {
-    return new Observable<boolean>((observer: any) => {
-      this.cfg.logger!.debug('Set Compressed Mapping Service Request');
+  private setBinaryFileToService(
+    compressedBuffer: BlobPart,
+    url: string,
+    fileName: FileName
+  ): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.cfg.logger!.debug(`Set ${fileName} Request`);
       this.api
         .put(url, { body: compressedBuffer })
         .arrayBuffer()
         .then((res) => {
           this.cfg.logger!.debug(
-            `Set Compressed Mapping Service Response: ${JSON.stringify(res)}`
+            `Set ${fileName} Response: ${JSON.stringify(res)}`
           );
-          observer.next(true);
-          observer.complete();
+          resolve(true);
         })
         .catch((error: any) => {
-          this.handleError('Error occurred while saving mapping.', error);
-          observer.error(error);
-          observer.complete();
+          this.cfg.errorService.addBackendError(
+            `Unable to update the ${fileName} to the AtlasMap design runtime service.
+              ${error.status} ${error.statusText}`,
+            error
+          );
+          resolve(false);
         });
     });
   }
@@ -259,31 +360,50 @@ export class FileManagementService {
    *
    * @param binaryBuffer
    */
-  setLibraryToService(
-    binaryBuffer: any,
-    callback: (success: boolean, res: any) => void
-  ): void {
+  importJarFile(binaryBuffer: BlobPart): Promise<boolean> {
     const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
-    this.cfg.logger!.debug('Set Library Service Request');
     const fileContent: Blob = new Blob([binaryBuffer], {
       type: 'application/octet-stream',
     });
-    this.api
-      .put(url, { body: fileContent })
-      .blob()
-      .then((res: any) => {
-        callback(true, res);
-        this.cfg.logger!.debug(
-          `Set Library Service Response: ${JSON.stringify(res)}`
+    return this.setBinaryFileToService(fileContent, url, FileName.JAR);
+  }
+
+  /**
+   * Generate mapping digest file from current state and push it to the runtime.
+   *
+   * @returns {@link Promise}
+   */
+  updateDigestFile(): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      try {
+        let mappingJson = undefined;
+        // Retrieve the JSON mappings buffer from the server.
+        if (this.cfg.mappings) {
+          mappingJson = await this.getCurrentMappingJson();
+        }
+        const mappingDigest = MappingDigestUtil.generateMappingDigest(
+          this.cfg,
+          mappingJson
         );
-      })
-      .catch((error: any) => {
-        callback(false, error);
-        this.handleError(
-          'Error occurred while uploading a JAR file to the server.',
-          error
+
+        // Save mapping digest file to the runtime.
+        this.setMappingDigestToService(mappingDigest).then((value) => {
+          resolve(value);
+        });
+      } catch (error) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: 'Unable to update mapping digest file.',
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+            object: error,
+          })
         );
-      });
+        resolve(false);
+        return;
+      }
+    });
   }
 
   /**
@@ -295,325 +415,117 @@ export class FileManagementService {
    *
    * @param event
    */
-  async exportADMArchive(mappingsFileName: string): Promise<true> {
-    return new Promise<true>(async (resolve) => {
-      let aggregateBuffer = '   {\n';
-      let userExport = true;
-
-      try {
-        if (mappingsFileName === null || mappingsFileName.length === 0) {
-          mappingsFileName = 'atlasmap-mapping.adm';
-          userExport = false;
-        }
-
-        // Retrieve the JSON mappings buffer from the server.
-        if (this.cfg.mappings) {
-          const jsonBuffer = await this.getJsonBuf();
-          if (jsonBuffer) {
-            aggregateBuffer +=
-              MappingDigestUtil.generateExportMappings(jsonBuffer);
+  exportADMArchive(mappingsFileName: string): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.updateDigestFile().then(() => {
+        // Fetch the full ADM archive file from the runtime (ZIP) and export it to to the local
+        // downloads area.
+        this.getCurrentADMArchive().then(async (value: Uint8Array | null) => {
+          // If value is null then no compressed mappings digest file is available on the server.
+          if (value === null) {
+            resolve(false);
+            return;
           }
-        }
-
-        let exportMeta = '   "exportMeta": [\n';
-        let exportBlockData = '      "exportBlockData": [\n';
-        let docCount = 0;
-
-        // Establish two string arrays:
-        //   exportMeta - meta-data describing the instance or schema documents.
-        //   exportBlockData - the actual source of the instance/schema/mappings documents or the Java class name.
-        for (const doc of this.cfg.getAllDocs()) {
-          if (!doc.isPropertyOrConstant) {
-            if (docCount > 0) {
-              exportMeta += ',\n';
-              exportBlockData += ',\n';
-            }
-            exportMeta += MappingDigestUtil.generateExportMetaStr(doc);
-            exportBlockData += MappingDigestUtil.generateExportBlockData(
-              doc.inspectionSource
-            );
-            docCount++;
+          // Tack on a .adm suffix if one wasn't already specified.
+          if (mappingsFileName.split('.').pop() !== 'adm') {
+            mappingsFileName = mappingsFileName.concat('.adm');
           }
-        }
-        exportMeta += '   ],\n';
-        exportBlockData += '   ]\n';
-        aggregateBuffer += exportMeta;
-        aggregateBuffer += exportBlockData;
-        aggregateBuffer += '   }\n';
-
-        // Compress the JSON buffer - write out as binary.
-        const binBuffer = CommonUtil.str2bytes(aggregateBuffer);
-        try {
-          const compress = gzip(binBuffer);
-          let fileContent: Blob = new Blob([compress], {
+          const fileContent = new Blob([value], {
             type: 'application/octet-stream',
           });
-
-          // Save the model mappings to the runtime.
-          this.setBinaryFileToService(
-            fileContent,
-            this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/'
-          )
-            .toPromise()
-            .then(async () => {
-              // Fetch the full ADM catalog file from the runtime (ZIP) and export it to to the local
-              // downloads area.
-              if (userExport) {
-                this.getCurrentADMArchive().subscribe(
-                  async (value: Uint8Array) => {
-                    // If value is null then no compressed mappings catalog is available on the server.
-                    if (value !== null) {
-                      fileContent = new Blob([value], {
-                        type: 'application/octet-stream',
-                      });
-                      if (
-                        !(await CommonUtil.writeFile(
-                          fileContent,
-                          mappingsFileName
-                        ))
-                      ) {
-                        this.cfg.errorService.addError(
-                          new ErrorInfo({
-                            message:
-                              'Unable to save the current data mappings.',
-                            level: ErrorLevel.ERROR,
-                            scope: ErrorScope.APPLICATION,
-                            type: ErrorType.INTERNAL,
-                          })
-                        );
-                      }
-                    }
-                    resolve(true);
-                  }
-                );
-              }
-              resolve(true);
+          CommonUtil.writeFile(fileContent, mappingsFileName)
+            .then((value2) => {
+              resolve(value2);
             })
-            .catch((error: any) => {
-              if (error.status === 0) {
-                this.cfg.errorService.addError(
-                  new ErrorInfo({
-                    message:
-                      'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
-                    level: ErrorLevel.ERROR,
-                    scope: ErrorScope.APPLICATION,
-                    type: ErrorType.INTERNAL,
-                    object: error,
-                  })
-                );
-              } else {
-                this.cfg.errorService.addError(
-                  new ErrorInfo({
-                    message: `Unable to update the catalog mappings file to the AtlasMap design runtime service.
-                  ${error.status} ${error.statusText}`,
-                    level: ErrorLevel.ERROR,
-                    scope: ErrorScope.APPLICATION,
-                    type: ErrorType.INTERNAL,
-                    object: error,
-                  })
-                );
-              }
+            .catch((error) => {
+              this.cfg.errorService.addError(
+                new ErrorInfo({
+                  message: 'Unable to save the current data mappings.',
+                  level: ErrorLevel.ERROR,
+                  scope: ErrorScope.APPLICATION,
+                  type: ErrorType.INTERNAL,
+                  object: error,
+                })
+              );
+              resolve(false);
             });
-        } catch (error1) {
-          this.cfg.errorService.addError(
-            new ErrorInfo({
-              message: 'Unable to compress the current data mappings.',
-              level: ErrorLevel.ERROR,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.INTERNAL,
-              object: error1,
-            })
-          );
-          return;
-        }
-      } catch (error) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: 'Unable to export the current data mappings.',
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: error,
-          })
-        );
-        return;
-      }
+        });
+      });
     });
   }
 
   /**
-   * Perform a binary read of the specified ADM archive file and push it to the runtime.  The ADM file is
-   * in (ZIP) file format.  Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
+   * Clean up all existing mappings, documents, libraries and import specified ADM archive file,
+   * push it to the runtime and reflect back in UI. The ADM file is in (ZIP) file format.
+   * Once pushed, we can retrieve from runtime the extracted compressed (GZIP) mappings
    * digest file as well as the mappings JSON file.  These files exist separately for performance reasons.
    *
    * Once the runtime has its ADM archive file, digest file and mappings file set then restart the DM.
    *
    * @param mappingsFileName - ADM archive file
    */
-  async importADMArchive(mappingsFileName: string): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
-      let fileBin = null;
-      const reader = new FileReader();
+  importADMArchive(admFile: File): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.resetAll().then(() => {
+        const reader = new FileReader();
 
-      // Turn the imported ADM file into a binary octet stream.
-      try {
-        fileBin = await CommonUtil.readBinaryFile(mappingsFileName, reader);
-      } catch (error) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: `Unable to import the specified ADM file '${mappingsFileName}'`,
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: error,
+        // Turn the imported ADM file into a binary octet stream.
+        CommonUtil.readBinaryFile(admFile, reader)
+          .then((fileBin) => {
+            // Push the binary stream to the runtime.
+            this.setADMArchiveFileToService(fileBin).then((value) => {
+              resolve(value);
+            });
           })
-        );
-        return;
-      }
-      const fileContent: Blob = new Blob([fileBin], {
-        type: 'application/octet-stream',
-      });
-
-      // Push the binary stream to the runtime.
-      this.setBinaryFileToService(
-        fileContent,
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/'
-      )
-        .toPromise()
-        .then(async () => {
-          try {
-            this.cfg.mappings = null;
-            this.cfg.clearDocs();
-            await this.cfg.initializationService.initialize();
-            resolve(true);
-          } catch (error) {
+          .catch((error) => {
             this.cfg.errorService.addError(
               new ErrorInfo({
-                message: `Unable to import the ADM file: ${mappingsFileName} ${error.message}`,
+                message: `Unable to import the specified ADM file '${admFile.name}'`,
                 level: ErrorLevel.ERROR,
                 scope: ErrorScope.APPLICATION,
                 type: ErrorType.INTERNAL,
                 object: error,
               })
             );
-            return;
-          }
-        })
-        .catch((error: any) => {
-          if (error.status === 0) {
-            this.cfg.errorService.addError(
-              new ErrorInfo({
-                message:
-                  'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-                object: error,
-              })
-            );
-          } else {
-            this.cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Unable to send the ADM file to the runtime service.  ${error.status} ${error.statusText}`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-                object: error,
-              })
-            );
-          }
-        });
-      resolve(true);
-    });
-  }
-
-  /**
-   * Asynchronously retrieve the current user-defined AtlasMap mappings from the runtime server as an JSON buffer.
-   */
-  private async getJsonBuf(): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-      if (this.cfg.mappings === null) {
-        reject();
-      } else {
-        this.cfg.mappingFiles[0] = this.cfg.mappings.name!;
-        this.getCurrentMappingJson()
-          .toPromise()
-          .then((result: any) => {
-            resolve(JSON.stringify(result));
-          })
-          .catch((error: any) => {
-            if (error.status === 0) {
-              this.cfg.errorService.addError(
-                new ErrorInfo({
-                  message:
-                    'Fatal network error: Unable to connect to the AtlasMap design runtime service.',
-                  level: ErrorLevel.ERROR,
-                  scope: ErrorScope.APPLICATION,
-                  type: ErrorType.INTERNAL,
-                  object: error,
-                })
-              );
-            } else {
-              this.cfg.errorService.addError(
-                new ErrorInfo({
-                  message: `Unable to access current mapping definitions: ${error.status} ${error.statusText}`,
-                  level: ErrorLevel.ERROR,
-                  scope: ErrorScope.APPLICATION,
-                  type: ErrorType.INTERNAL,
-                  object: error,
-                })
-              );
-            }
-            reject();
+            resolve(false);
           });
-      }
+      });
     });
   }
 
   /**
    * Retrieve the current user AtlasMap data mappings from the server as a JSON object.
    */
-  private getCurrentMappingJson(): Observable<any> {
-    return new Observable<any>((observer) => {
+  getCurrentMappingJson(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      if (this.cfg.mappings === null) {
+        reject();
+        return;
+      }
+      this.cfg.mappingFiles[0] = this.cfg.mappings.name!;
       const baseURL: string =
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
+      this.cfg.logger!.debug('Get Current Mapping Request');
       this.api
         .get(baseURL)
         .json()
         .then((body) => {
           this.cfg.logger!.debug(
-            `Mapping Service Response: ${JSON.stringify(body)}`
+            `Get Current Mapping Response: ${JSON.stringify(body)}`
           );
-          if (body) {
-            observer.next(body);
-          } else {
-            observer.next();
-          }
-          observer.complete();
+          resolve(body);
         })
         .catch((error: any) => {
           if (error.status !== HTTP_STATUS_NO_CONTENT) {
-            this.handleError(
+            this.cfg.errorService.addBackendError(
               'Error occurred while accessing the current mappings from the backend service.',
               error
             );
-            observer.error(error);
+            reject(error);
+          } else {
+            resolve(undefined);
           }
-          observer.complete();
         });
     });
-  }
-
-  private handleError(message: string, error: any): void {
-    this.cfg.errorService.addError(
-      new ErrorInfo({
-        message: message,
-        level: ErrorLevel.ERROR,
-        scope: ErrorScope.APPLICATION,
-        type: ErrorType.INTERNAL,
-        object: error,
-      })
-    );
-    this.cfg.initCfg.initialized = true;
   }
 }

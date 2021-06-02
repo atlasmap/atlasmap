@@ -13,13 +13,26 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-const { createProxyMiddleware } = require('http-proxy-middleware');
-module.exports = function (app) {
-  app.use(
-    '/v2',
-    createProxyMiddleware({
-      target: 'http://localhost:8585',
-      changeOrigin: true,
-    }),
-  );
-};
+
+import { InspectionType } from '../common';
+
+export interface ADMDigest {
+  exportMappings: ValueContainer;
+  exportMeta: DataSourceMetadata[];
+  exportBlockData: ValueContainer[];
+}
+
+export interface DataSourceMetadata {
+  id: string;
+  name: string;
+  documentType?: string;
+  inspectionType: InspectionType;
+  isSource: boolean;
+  specification?: any;
+  dataSourceType: string;
+  inspectionParameters?: { [key: string]: string };
+}
+
+export interface ValueContainer {
+  value: string;
+}

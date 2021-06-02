@@ -22,9 +22,9 @@ import { MappingDefinition } from '../src/models/mapping-definition.model';
 import { MappingModel } from '../src/models/mapping.model';
 
 export class TestUtils {
-  /*
-      Deep diff of JSON objects.  Return true if they match, false otherwise.
-  */
+  /**
+   * Deep diff of JSON objects.  Return true if they match, false otherwise.
+   */
   static isEqualJSON = function (eObj: any, gObj: any): boolean {
     const expected = Object.keys(eObj);
     const generated = Object.keys(gObj);
@@ -46,6 +46,7 @@ export class TestUtils {
           typeof gObj[objKey] === 'object'
         ) {
           if (!TestUtils.isEqualJSON(eObj[objKey], gObj[objKey])) {
+            console.error(`${objKey} is different`);
             console.info('Expected: ', eObj[objKey]);
             console.error('Generated: ', gObj[objKey]);
             return false;

@@ -95,7 +95,6 @@
             "path" : "/js0",
             "fieldType" : "STRING",
             "name" : "js0",
-            "scope": "",
             "value" : ""
           } ],
           "outputField" : [ {
@@ -105,7 +104,6 @@
             "path" : "/jt0",
             "fieldType" : "STRING",
             "name" : "jt0",
-            "scope": "",
             "value" : ""
           }, {
             "jsonType" : "io.atlasmap.json.v2.JsonField",
@@ -114,7 +112,6 @@
             "path" : "/jt1",
             "fieldType" : "STRING",
             "name" : "jt1",
-            "scope": "",
             "value" : ""
           }, {
             "jsonType" : "io.atlasmap.java.v2.XmlField",
@@ -123,7 +120,6 @@
             "path" : "/xt0",
             "fieldType" : "STRING",
             "name" : "xt0",
-            "scope": "",
             "userCreated": "false",
             "value" : ""
           } ],
@@ -149,7 +145,6 @@
               "path" : "/xs0",
               "fieldType" : "STRING",
               "name" : "xs0",
-              "scope" : "",
               "userCreated" : "false",
               "value" : ""
             }, {
@@ -163,7 +158,6 @@
               "path" : "/js0",
               "fieldType" : "STRING",
               "name" : "js0",
-              "scope" : "",
               "value" : ""
             } ]
           },
@@ -173,7 +167,6 @@
             "path" : "/jt0",
             "fieldType" : "STRING",
             "name" : "jt0",
-            "scope" : "",
             "value" : ""
           } ]
         },
@@ -201,8 +194,7 @@
               "docId" : "DOC.Constants.",
               "index" : 1,
               "path" : "/Boston",
-              "fieldType" : "STRING",
-              "scope" : ""
+              "fieldType" : "STRING"
             }, {
               "jsonType" : "io.atlasmap.json.v2.JsonField",
               "actions" : [ {
@@ -216,7 +208,6 @@
               "path" : "/js0",
               "fieldType" : "STRING",
               "name" : "js0",
-              "scope" : "",
               "value" : ""
             }, {
               "jsonType" : "io.atlasmap.json.v2.JsonField",
@@ -225,7 +216,6 @@
               "path" : "/js1",
               "fieldType" : "STRING",
               "name" : "js1",
-              "scope" : "",
               "value" : ""
             } ]
           },
@@ -239,7 +229,6 @@
             "path" : "/jt0",
             "fieldType" : "STRING",
             "name" : "jt0",
-            "scope" : "",
             "value" : ""
           } ],
           "id" : "mapping.290795"
@@ -264,7 +253,6 @@
                 "path" : "/addressList<0>/street",
                 "fieldType" : "STRING",
                 "name" : "city",
-                "scope" : "",
                 "index" : 0
               } ]
             },
@@ -274,8 +262,7 @@
                 "fieldType":"STRING",
                 "docId":"DOC.Constants.",
                 "value":"const-str",
-                "index" : 1,
-                "scope" : ""
+                "index" : 1
               }
             ]
           },
@@ -286,7 +273,6 @@
               "path" : "/xt2",
               "fieldType" : "STRING",
               "name" : "xt2",
-              "scope" : "",
               "value" : "",
               "userCreated" : "false"
             }
@@ -318,7 +304,6 @@
                   "path" : "/addressList<0>/city",
                   "fieldType" : "STRING",
                   "name" : "city",
-                  "scope" : "",
                   "index" : 0
                 }, {
                   "jsonType" : "io.atlasmap.json.v2.JsonField",
@@ -327,7 +312,6 @@
                   "path" : "/addressList<0>/state",
                   "fieldType" : "STRING",
                   "name" : "state",
-                  "scope" : "",
                   "index" : 0
                 } ]
               } ]
@@ -340,7 +324,6 @@
               "path":"/addressList<>/city",
               "fieldType":"STRING",
               "docId":"JSONSchemaSource",
-              "scope" : "",
               "value" : ""
             }
           ]
@@ -369,7 +352,6 @@
                     "name": "zip",
                     "path": "/addressList<0>/zip",
                     "fieldType": "STRING",
-                    "scope": "",
                     "docId": "JSONSchemaSource",
                     "value": "",
                     "index": 0
@@ -388,7 +370,6 @@
                     "name": "street",
                     "path": "/addressList<0>/street",
                     "fieldType": "STRING",
-                    "scope": "",
                     "docId": "JSONSchemaSource",
                     "value": "",
                     "index": 1
@@ -405,7 +386,6 @@
               "path" : "/primitives/stringPrimitive",
               "fieldType" : "STRING",
               "name" : "stringPrimitive",
-              "scope" : "",
               "value" : "MA"
             }
           ]
