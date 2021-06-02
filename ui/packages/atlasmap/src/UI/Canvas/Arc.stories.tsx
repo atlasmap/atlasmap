@@ -18,10 +18,11 @@ import { Canvas } from './Canvas';
 import { CanvasProvider } from './CanvasContext';
 import React from 'react';
 
-export default {
+const obj = {
   title: 'Canvas',
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <CanvasProvider initialHeight={200} allowPanning={false}>

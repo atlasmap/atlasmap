@@ -37,6 +37,7 @@ export function useConfirmationDialog(
   };
   return [
     <ConfirmationDialog
+      key={'confirmation-dialog-' + title}
       title={title}
       onCancel={toggleOff}
       onConfirm={onConfirm}

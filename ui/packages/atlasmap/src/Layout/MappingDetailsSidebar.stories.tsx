@@ -17,9 +17,10 @@ import { MappingDetailsSidebar } from './MappingDetailsSidebar';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'AtlasMap|Layout/MappingDetailsSidebar',
 };
+export default obj;
 
 export const example = () => (
   <MappingDetailsSidebar

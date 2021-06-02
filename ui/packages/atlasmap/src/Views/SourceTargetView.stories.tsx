@@ -28,10 +28,11 @@ import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 import decorators from '../stories/decorators';
 
-export default {
+const obj = {
   title: 'AtlasMap|Views',
   decorators,
 };
+export default obj;
 
 export const sourceTargetView = () =>
   createElement(() => {

@@ -19,10 +19,11 @@ import { CustomClassDialog } from './CustomClassDialog';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'UI|Dialogs',
   component: CustomClassDialog,
 };
+export default obj;
 
 const options = [
   { label: 'Foo', value: 'foo' },

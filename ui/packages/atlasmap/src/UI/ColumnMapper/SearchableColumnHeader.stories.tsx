@@ -18,11 +18,12 @@ import React from 'react';
 import { SearchableColumnHeader } from '.';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'ColumnMapper',
   component: SearchableColumnHeader,
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <div style={{ width: 400, minHeight: 300 }}>

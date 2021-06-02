@@ -19,10 +19,11 @@ import { ParametersDialog } from './ParametersDialog';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'UI|Dialogs',
   component: ParametersDialog,
 };
+export default obj;
 
 const parameters = [
   {

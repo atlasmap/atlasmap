@@ -67,6 +67,7 @@
     "@types/hoist-non-react-statics": "^3.3.1",
     "@types/jest": "24.9.1",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.5",
     "babel-loader": "8.1.0",
     "css-loader": "^5.2.4",
@@ -134,7 +135,8 @@
     "parserOptions": {
       "ecmaVersion": 6,
       "ecmaFeatures": {
-        "modules": true
+        "modules": true,
+        "jsx": true
       },
       "jsx": true,
       "useJSXTextNode": true,
@@ -142,12 +144,15 @@
     },
     "extends": [
       "prettier",
-      "prettier/@typescript-eslint"
+      "prettier/react",
+      "prettier/@typescript-eslint",
+      "plugin:react/recommended"
     ],
     "plugins": [
       "@typescript-eslint",
       "header",
       "import",
+      "react",
       "react-hooks"
     ],
     "ignorePatterns": "**/*.css.d.ts",
@@ -157,8 +162,23 @@
         2,
         "../../atlasmap-license-header-ui.js"
       ],
+      "no-unused-vars": 0,
+      "no-use-before-define": 0,
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
+      "react/jsx-filename-extension": [
+        2,
+        {
+          "extensions": [
+            ".js",
+            ".jsx",
+            ".ts",
+            ".tsx"
+          ]
+        }
+      ],
+      "react/jsx-uses-vars": 2,
+      "react/prop-types": 0,
       "sort-imports": "error"
     }
   }

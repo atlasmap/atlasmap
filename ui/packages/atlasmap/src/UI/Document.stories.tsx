@@ -18,10 +18,11 @@ import { Document } from './Document';
 import React from 'react';
 import { text } from '@storybook/addon-knobs';
 
-export default {
+const obj = {
   title: 'Document',
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const document = () => (
   <div style={{ width: 300 }}>

@@ -29,11 +29,12 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import decorators from '../../stories/decorators';
 
-export default {
+const obj = {
   title: 'Drag & Drop',
   includeStories: [], // or don't load this file at all
   decorators,
 };
+export default obj;
 
 export const example = () => (
   <CanvasProvider allowPanning={false} initialHeight={300}>

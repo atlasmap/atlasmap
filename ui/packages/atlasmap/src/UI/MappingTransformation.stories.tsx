@@ -19,9 +19,10 @@ import React from 'react';
 import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 
-export default {
+const obj = {
   title: 'UI|Mapping Details/Transformation',
 };
+export default obj;
 
 const transformationsOptions = [
   { name: 'Transformation foo', value: 'foo' },

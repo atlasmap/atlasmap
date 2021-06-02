@@ -17,9 +17,10 @@ import React from 'react';
 import { Sidebar } from './Sidebar';
 import { boolean } from '@storybook/addon-knobs';
 
-export default {
+const obj = {
   title: 'AtlasMap|Layout/Sidebar',
 };
+export default obj;
 
 export const example = () => (
   <div style={{ minHeight: 300 }}>

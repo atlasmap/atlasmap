@@ -16,9 +16,10 @@
 import { ContextToolbar } from './ContextToolbar';
 import React from 'react';
 
-export default {
+const obj = {
   title: 'AtlasMap|Layout/ContextToolbar',
 };
+export default obj;
 
 export const example = () => {
   return <ContextToolbar>icons go here</ContextToolbar>;

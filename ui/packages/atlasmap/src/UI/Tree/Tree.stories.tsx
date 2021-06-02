@@ -16,11 +16,12 @@
 import { Tree, TreeGroup, TreeItem } from '.';
 import React from 'react';
 
-export default {
+const obj = {
   title: 'Tree',
   component: Tree,
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <Tree>

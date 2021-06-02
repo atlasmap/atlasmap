@@ -19,11 +19,12 @@ import { boolean, number } from '@storybook/addon-knobs';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'ColumnMapper',
   component: Column,
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <Column

@@ -20,9 +20,10 @@ import { ExpressionContent } from './ExpressionContent';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
 
-export default {
+const obj = {
   title: 'UI|Mapping expression',
 };
+export default obj;
 
 const executeFieldSearch = (): string[][] => {
   return [

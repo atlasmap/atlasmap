@@ -70,9 +70,10 @@ const sampleExternalDocument = JSON.stringify(
   2,
 );
 
-export default {
+const obj = {
   title: 'AtlasMap|Demo',
 };
+export default obj;
 
 export const wiredToTheBackend = () => (
   <AtlasmapProvider

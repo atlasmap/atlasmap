@@ -20,10 +20,11 @@ import { boolean } from '@storybook/addon-knobs';
 import decorators from '../stories/decorators';
 import { mappings } from '../stories/sampleData';
 
-export default {
+const obj = {
   title: 'AtlasMap|Views',
   decorators,
 };
+export default obj;
 
 export const mappingTableView = () => (
   <MappingTableView

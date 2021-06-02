@@ -30,7 +30,7 @@ export interface IMainLayoutProps {
 }
 
 export const MainLayout: FunctionComponent<IMainLayoutProps> = memo(
-  ({
+  function MainLayout({
     loading,
     showSidebar,
     renderSidebar,
@@ -38,8 +38,8 @@ export const MainLayout: FunctionComponent<IMainLayoutProps> = memo(
     expressionToolbar,
     controlBar,
     children,
-  }) => {
-    const sideBar = <Sidebar show={showSidebar} children={renderSidebar} />;
+  }) {
+    const sideBar = <Sidebar show={showSidebar}>{renderSidebar}</Sidebar>;
     const containerClasses =
       'pf-topology-container' +
       `${sideBar ? ' pf-topology-container__with-sidebar' : ''}` +

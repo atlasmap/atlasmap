@@ -16,11 +16,12 @@
 import { ColumnHeader } from '.';
 import React from 'react';
 
-export default {
+const obj = {
   title: 'ColumnMapper',
   component: ColumnHeader,
   includeStories: [], // or don't load this file at all
 };
+export default obj;
 
 export const example = () => (
   <div style={{ width: 300, minHeight: 300 }}>
