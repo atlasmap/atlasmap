@@ -58,7 +58,7 @@
   },
   "resolutions": {
     "jest": "24.9.0",
-    "prettier": "^2.3.0",
+    "prettier": "^2.3.1",
     "webpack": "4.42.0"
   },
   "husky": {

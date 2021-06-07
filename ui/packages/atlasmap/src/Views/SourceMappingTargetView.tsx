@@ -59,8 +59,9 @@ export const SourceMappingTargetView: FunctionComponent<ISourceMappingTargetView
     mappingEvents,
     targetEvents,
   }) => {
-    const [highlightedMappingId, setHighlightedMappingId] =
-      useState<string | undefined>();
+    const [highlightedMappingId, setHighlightedMappingId] = useState<
+      string | undefined
+    >();
     const handleMouseOver = (m: IAtlasmapMapping) =>
       setHighlightedMappingId(m.id);
     const handleMouseOut = () => setHighlightedMappingId(undefined);
