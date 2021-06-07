@@ -36,8 +36,9 @@ export default obj;
 
 export const sourceTargetView = () =>
   createElement(() => {
-    const [selectedMappingId, setSelectedMappingId] =
-      useState<string | undefined>(undefined);
+    const [selectedMappingId, setSelectedMappingId] = useState<
+      string | undefined
+    >(undefined);
     const onSelectMapping = (m: IAtlasmapMapping) => setSelectedMappingId(m.id);
     return (
       <CanvasProvider>

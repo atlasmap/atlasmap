@@ -71,15 +71,15 @@ export const NodesArc: FunctionComponent<INodesArcProps> = ({
 }) => {
   const { addRedrawListener, removeRedrawListener } = useCanvas();
   const getRect = useNodeRect();
-  const [coords, setCoords] =
-    useState<{
-      start: Coords;
-      end: Coords;
-      startSideSize: number;
-      endSideSize: number;
-    } | null>(null);
-  const [linkType, setLinkType] =
-    useState<'horizontal' | 'vertical'>('horizontal');
+  const [coords, setCoords] = useState<{
+    start: Coords;
+    end: Coords;
+    startSideSize: number;
+    endSideSize: number;
+  } | null>(null);
+  const [linkType, setLinkType] = useState<'horizontal' | 'vertical'>(
+    'horizontal',
+  );
 
   const calculateCoords = useCallback(
     function calculateCoordsCb() {

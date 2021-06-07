@@ -36,8 +36,9 @@ export function usePropertyDialog(
     property?: IProperty,
   ) => void,
 ] {
-  const [onPropertyCb, setOnPropertyCb] =
-    useState<PropertyCallback | null>(null);
+  const [onPropertyCb, setOnPropertyCb] = useState<PropertyCallback | null>(
+    null,
+  );
   const [initialProperty, setInitialProperty] = useState<IProperty | null>({
     name: '',
     valueType: propertyTypes[0][0],

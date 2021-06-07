@@ -32,8 +32,9 @@ export function useConstantDialog(
     constant?: IConstant,
   ) => void,
 ] {
-  const [onConstantCb, setOnConstantCb] =
-    useState<ConstantCallback | null>(null);
+  const [onConstantCb, setOnConstantCb] = useState<ConstantCallback | null>(
+    null,
+  );
   const [initialConstant, setInitialConstant] = useState<IConstant | null>({
     value: '',
     valueType: constantTypes[0][0],
