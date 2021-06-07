@@ -16,11 +16,11 @@ netlify-clean:
 	
 netlify-build-modules:
 	@echo Build all modules
-	(cd ${UI}; yarn build:module)
+	(cd ${UI_PACKAGES}/atlasmap-core; yarn build:module)
 	
 netlify-build-storybooks:
 	@echo Build all storybooks
-	(cd ${UI}; yarn build:storybook)
+	(cd ${UI_PACKAGES}/atlasmap; yarn prebuild; yarn build:storybook)
 
 netlify-collect-storybooks:
 	@echo Collect built storybooks
