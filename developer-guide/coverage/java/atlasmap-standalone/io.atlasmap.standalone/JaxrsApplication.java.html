@@ -31,34 +31,34 @@ import io.atlasmap.xml.service.XmlService;
 
 @Component
 @ApplicationPath(&quot;/v2/atlas/&quot;)
-<span class="nc" id="L34">public class JaxrsApplication extends Application {</span>
+<span class="fc" id="L34">public class JaxrsApplication extends Application {</span>
 
     @Bean
     public JavaService javaService() {
-<span class="nc" id="L38">        return new JavaService();</span>
+<span class="fc" id="L38">        return new JavaService();</span>
     }
 
     @Bean
     public JsonService jsonService() {
-<span class="nc" id="L43">        return new JsonService();</span>
+<span class="fc" id="L43">        return new JsonService();</span>
     }
 
     @Bean
     public XmlService xmlService() {
-<span class="nc" id="L48">        return new XmlService();</span>
+<span class="fc" id="L48">        return new XmlService();</span>
     }
 
     @Bean
     public DfdlService dfdlService() {
-<span class="nc" id="L53">        return new DfdlService();</span>
+<span class="fc" id="L53">        return new DfdlService();</span>
     }
 
     @Bean
-<span class="nc" id="L57">    public CsvService csvService() { return new CsvService(); }</span>
+<span class="fc" id="L57">    public CsvService csvService() { return new CsvService(); }</span>
 
     @Bean
     public AtlasService atlasService() throws AtlasException {
-<span class="nc" id="L61">        return new AtlasService();</span>
+<span class="fc" id="L61">        return new AtlasService();</span>
     }
 
 }

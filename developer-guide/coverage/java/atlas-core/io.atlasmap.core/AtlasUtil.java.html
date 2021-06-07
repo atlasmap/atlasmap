@@ -479,8 +479,8 @@ import io.atlasmap.v2.ValidationStatus;
 
     public static void deleteDirectory(File targetDir) {
 <span class="fc" id="L481">        File[] allContents = targetDir.listFiles();</span>
-<span class="pc bpc" id="L482" title="1 of 2 branches missed.">        if (allContents != null) {</span>
-<span class="nc bnc" id="L483" title="All 2 branches missed.">            for (File file : allContents) {</span>
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        if (allContents != null) {</span>
+<span class="pc bpc" id="L483" title="1 of 2 branches missed.">            for (File file : allContents) {</span>
 <span class="nc bnc" id="L484" title="All 2 branches missed.">                if (!file.isDirectory()) {</span>
 <span class="nc" id="L485">                    file.delete();</span>
                 } else {

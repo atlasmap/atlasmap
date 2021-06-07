@@ -91,8 +91,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
     @Override
     public JavaType typeFromId(DatabindContext databindContext, String id) throws IOException {
 <span class="fc" id="L93">        JavaType rc = idToType.get(id);</span>
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (rc == null) {</span>
-<span class="nc" id="L95">            throw new IllegalArgumentException(&quot;Invalid type id: &quot; + id);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (rc == null) {</span>
+<span class="fc" id="L95">            throw new IllegalArgumentException(&quot;Invalid type id: &quot; + id);</span>
         }
 <span class="fc" id="L97">        return rc;</span>
     }
