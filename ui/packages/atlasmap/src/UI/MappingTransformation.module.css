@@ -1,0 +1,6 @@
+.transArgs {
+  margin-left: 1.0rem;
+  margin-top: 0.5rem;
+  background: var(--pf-global--BackgroundColor--150);
+  font-size: small;  
+}

@@ -45,6 +45,10 @@ export interface IMappingFieldProps {
   onNewTransformation?: () => void;
 }
 
+const formTransInputGroup = {
+  '--pf-c-form-control--FontSize': 'small',
+} as React.CSSProperties;
+
 function onKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
   event.preventDefault();
 }
@@ -108,7 +112,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                 <Split>
                   <SplitItem isFilled>
                     <Title
-                      headingLevel="h2"
+                      headingLevel="h6"
                       size="md"
                       id={id}
                       className={styles.title}
@@ -139,6 +143,7 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                               onChange={onIndexChange}
                               data-testid={`change-${name}-input-index`}
                               isDisabled={!onIndexChange}
+                              style={formTransInputGroup}
                             />
                           </InputGroup>
                         </Tooltip>
@@ -203,13 +208,8 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                   hasTransformations &&
                   children &&
                   Children.count(children) > 0 && (
-                    <div
-                      className={css(
-                        'pf-c-form',
-                        styles.transformationsWrapper,
-                      )}
-                    >
-                      <Title headingLevel="h2" size="md">
+                    <div className={css(styles.transformationsWrapper)}>
+                      <Title headingLevel="h6" size="md">
                         Transformations
                       </Title>
                       <div className={styles.transformations}>{children}</div>

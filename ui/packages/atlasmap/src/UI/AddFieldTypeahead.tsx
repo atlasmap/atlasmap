@@ -13,21 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, {
-  ChangeEvent,
-  FunctionComponent,
-  ReactElement,
-  useCallback,
-} from 'react';
 import {
-  Select,
-  SelectGroup,
-  SelectOption,
-  SelectProps,
+  FormSelect,
+  FormSelectOption,
+  FormSelectOptionGroup,
 } from '@patternfly/react-core';
+import React, { FunctionComponent, ReactElement, useCallback } from 'react';
 
 import styles from './AddFieldTypeahead.module.css';
-import { useToggle } from '../Atlasmap/utils';
 
 export interface IAddFieldTypeaheadField {
   label: string;
@@ -39,35 +32,38 @@ export interface IAddFieldTypeaheadProps {
   fields: IAddFieldTypeaheadField[];
   ariaLabelTypeAhead: string;
   placeholderText: string;
+  isSource: boolean;
 }
 
 export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
   fields,
   ariaLabelTypeAhead,
   placeholderText,
-  ...props
+  isSource,
 }) => {
-  const { state, toggle, toggleOff } = useToggle(false);
-
-  const renderOptions = (fields: IAddFieldTypeaheadField[]) => {
+  const renderOptions = (
+    fields: IAddFieldTypeaheadField[],
+    placeholderField: IAddFieldTypeaheadField,
+  ) => {
+    fields.unshift(placeholderField);
     const groups = fields.reduce<{ [group: string]: ReactElement[] }>(
       (groups, f) => {
+        const optValue = f.group + '\\' + f.label;
         groups[f.group] = [
           ...(groups[f.group] || []),
-          <SelectOption
-            key={f.label}
-            value={{
-              ...f,
-              toString: () => f.label,
-              compareTo: (c) =>
-                f.label.localeCompare((c as IAddFieldTypeaheadField).label) ===
-                0,
-            }}
-            data-testid={`add-field-option-${f.label}`}
+          <FormSelectOption
+            isPlaceholder={f.group.length === 0}
+            isDisabled={false}
+            label={f.label}
+            key={
+              optValue + (isSource ? '-source' : '-target') + fields.indexOf(f)
+            }
+            value={optValue}
+            data-testid={`add-field-option-${optValue}`}
             className={styles.field}
           >
             {f.label}
-          </SelectOption>,
+          </FormSelectOption>,
         ];
         return groups;
       },
@@ -75,47 +71,44 @@ export const AddFieldTypeahead: FunctionComponent<IAddFieldTypeaheadProps> = ({
     );
     return Object.entries<ReactElement[]>(groups).map(
       ([groupName, elements]) => (
-        <SelectGroup label={groupName} key={groupName}>
+        <FormSelectOptionGroup label={groupName} key={groupName}>
           {elements}
-        </SelectGroup>
+        </FormSelectOptionGroup>
       ),
     );
   };
 
-  const filterFields = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      try {
-        const searchValueRX = new RegExp(e.target.value, 'i');
-        return renderOptions(fields.filter((f) => searchValueRX.test(f.label)));
-      } catch (err) {}
-      return renderOptions(fields);
+  const onChange = useCallback(
+    (value: string, _e: React.FormEvent<HTMLSelectElement>) => {
+      const valueComps = value.split('\\');
+      const selField = fields.find(
+        (f) => f.label === valueComps[1] && f.group === valueComps[0],
+      );
+      if (selField) {
+        (selField as IAddFieldTypeaheadField).onAdd();
+      }
     },
     [fields],
   );
 
-  const onSelect: SelectProps['onSelect'] = useCallback(
-    (_e, f) => {
-      (f as IAddFieldTypeaheadField).onAdd();
-      toggleOff();
-    },
-    [toggleOff],
-  );
+  const placeholderField: IAddFieldTypeaheadField = {
+    label: placeholderText,
+    group: '',
+    onAdd: () => void {},
+  };
 
   return (
-    <div {...props}>
-      <Select
-        variant={'typeahead'}
-        typeAheadAriaLabel={ariaLabelTypeAhead}
-        onToggle={toggle}
-        isOpen={state}
-        placeholderText={placeholderText}
-        onFilter={filterFields}
-        onSelect={onSelect}
-        maxHeight={400}
+    <div>
+      <FormSelect
+        aria-label={ariaLabelTypeAhead}
         className={styles.select}
+        data-testid={'mapping-details-add-field'}
+        id={ariaLabelTypeAhead}
+        onChange={onChange}
+        placeholder={placeholderText}
       >
-        {renderOptions(fields)}
-      </Select>
+        {renderOptions(fields, placeholderField)}
+      </FormSelect>
     </div>
   );
 };

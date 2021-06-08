@@ -27,6 +27,8 @@ import {
 import React, { FunctionComponent } from 'react';
 
 import { TrashIcon } from '@patternfly/react-icons';
+import { css } from '@patternfly/react-styles';
+import styles from './MappingTransformation.module.css';
 
 export interface ITransformationSelectOption {
   name: string;
@@ -51,6 +53,22 @@ export interface IMappingTransformationProps {
   noPaddings?: boolean;
 }
 
+const formTransStyle = {
+  '--pf-c-form-control--FontSize': 'small',
+  '--pf-c-form--GridGap': '0',
+  marginTop: '0.4rem',
+} as React.CSSProperties;
+
+const formTransGroupStyle = {
+  '--pf-c-form-control--FontSize': 'small',
+  marginTop: '1.0rem',
+} as React.CSSProperties;
+
+const formTransTextInputStyle = {
+  '--pf-c-form-control--FontSize': 'small',
+  marginTop: '0rem',
+} as React.CSSProperties;
+
 export const MappingTransformation: FunctionComponent<IMappingTransformationProps> =
   ({
     name,
@@ -72,6 +90,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
               isDisabled={disableTransformation}
               onChange={onTransformationChange}
               data-testid={id}
+              style={formTransStyle}
             >
               {transformationsOptions.map((a, idx) => (
                 <FormSelectOption label={a.name} value={a.value} key={idx} />
@@ -105,7 +124,13 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
             udOption.value = a.value;
           }
           return a.name !== 'delimitingEmptyValues' ? (
-            <FormGroup fieldId={argId} label={a.label} key={idx}>
+            <FormGroup
+              className={css(styles.transArgs)}
+              fieldId={argId}
+              label={a.label}
+              key={idx}
+              style={formTransGroupStyle}
+            >
               {a.options ? (
                 <Split>
                   <SplitItem>
@@ -118,6 +143,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                         onTransformationArgumentChange(a.name, value)
                       }
                       data-testid={a.name}
+                      style={formTransStyle}
                     >
                       {a.options.map((option, optIndx) => {
                         return (
@@ -136,11 +162,11 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                         id="userDefined"
                         type="text"
                         name="userDefined"
-                        defaultValue={a.value}
                         value={a.value}
                         onChange={(value) =>
                           onTransformationArgumentChange(a.name, value)
                         }
+                        style={formTransTextInputStyle}
                         data-testid={`userDefined`}
                         autoFocus
                       />
@@ -153,19 +179,18 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
                   type="text"
                   name={a.name}
                   isDisabled={disableTransformation}
-                  defaultValue={
-                    a.value
-                  } /* uncontrolled component because the state will be updated slowly after some API call */
                   value={a.value}
                   onChange={(value) =>
                     onTransformationArgumentChange(a.name, value)
                   }
                   data-testid={`insert-transformation-parameter-${a.name}-input-field`}
+                  style={formTransTextInputStyle}
                 />
               )}
             </FormGroup>
           ) : (
             <Checkbox
+              className={css(styles.transArgs)}
               id={argId}
               key={argId}
               label="Delimit empty values"

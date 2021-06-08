@@ -1,29 +1,35 @@
 .field {
   padding: 1rem;
   background: var(--pf-global--BackgroundColor--100);
+  font-size: small;
 }
 
 .field + .field {
   border-top:
         var(--pf-global--BorderWidth--md) solid var(--pf-global--BorderColor--300);
+  font-size: small;
 }
 
 .field:last-child {
   border-bottom:
         var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor--200);
+  font-size: small;
 }
 
 .title {
   display: flex;
   align-items: center;
+  font-size: medium;
 }
 
 .fieldIndex {
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 }
   
 .fieldName {
   flex: 2 0 calc(100% - 6rem);
+  font-size: small;
+  margin-right: 0.3rem;
 }
 
 .link {
@@ -32,11 +38,12 @@
 }
 
 .transformationsWrapper {
+  margin-left: 0.5rem;
   margin-top: 0.5rem;
-  padding: 0.5rem;
   background: var(--pf-global--BackgroundColor--150);
 }
 
 .transformations {
-  padding: 0.5rem;
+  margin-left: 0.8rem;
+  margin-top:  0rem;
 }
