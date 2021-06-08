@@ -114,6 +114,11 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
     canAddToSelectedMapping,
     multiplicity,
   }) => {
+    const formInputGroupStyle = {
+      '--pf-c-form--GridGap': '0',
+      marginTop: '1.0rem',
+    } as React.CSSProperties;
+
     const mappingAction = multiplicity && (
       <MappingTransformation
         name={multiplicity.name}
@@ -171,7 +176,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
           index={index + 1}
           canShowIndex={canShowIndex}
         >
-          <div className={'pf-c-form'}>
+          <div className={'pf-c-form'} style={formInputGroupStyle}>
             {f.transformations.map((t, transformationIndex) => (
               <MappingTransformation
                 key={transformationIndex}
@@ -261,7 +266,7 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
             onNotificationRead={onNotificationRead}
           />
         )}
-        <div className={'pf-c-form'}>
+        <div className={'pf-c-form'} style={formInputGroupStyle}>
           {mappingAction}
           <MappingFields
             isSource={true}
@@ -271,10 +276,11 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
             canAddToSelectedMapping={canAddToSelectedMapping}
           >
             {sources.map(renderSourceMappingField)}
-            {addableSources.length > 0 && (
+            {targets.length <= 1 && (
               <AddFieldTypeahead
                 ariaLabelTypeAhead={'Select source to add to the mapping'}
                 placeholderText={'Select source to add to the mapping'}
+                isSource={true}
                 fields={addableSources.map((s) => ({
                   label: s.amField.isPropertyOrConstant() ? s.name : s.path,
                   group: s.amField!.docDef.name,
@@ -292,10 +298,11 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
             canAddToSelectedMapping={canAddToSelectedMapping}
           >
             {targets.map(renderTargetMappingField)}
-            {addableTargets.length > 0 && (
+            {sources.length <= 1 && (
               <AddFieldTypeahead
                 ariaLabelTypeAhead={'Select target to add to the mapping'}
                 placeholderText={'Select target to add to the mapping'}
+                isSource={false}
                 fields={addableTargets.map((t) => ({
                   label: t.amField.isProperty() ? t.name : t.path,
                   group: t.amField!.docDef.name,

@@ -1,6 +1,6 @@
 .wrapper {
   background: var(--pf-global--BackgroundColor--light-300);
-  padding: 1rem;
+  padding: 0.5rem;
   margin: 1rem 0;
   font-size: medium;
 }
