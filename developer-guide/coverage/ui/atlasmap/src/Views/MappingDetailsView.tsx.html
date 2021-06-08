@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/63</span>
+                <span class='fraction'>0/64</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/61</span>
+                <span class='fraction'>0/62</span>
             </div>
         
             
@@ -407,7 +407,14 @@
 <a name='L349'></a><a href='#L349'>349</a>
 <a name='L350'></a><a href='#L350'>350</a>
 <a name='L351'></a><a href='#L351'>351</a>
-<a name='L352'></a><a href='#L352'>352</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -528,6 +535,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -684,10 +696,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -874,6 +888,11 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
     canAddToSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
     multiplicity<span class="cstat-no" title="statement not covered" >,</span>
   }) =&gt; {
+    const formInputGroupStyle = <span class="cstat-no" title="statement not covered" >{</span>
+      '--pf-c-form--GridGap': '0',
+      marginTop: '1.0rem',
+    } as React.CSSProperties;
+&nbsp;
     const mappingAction = <span class="cstat-no" title="statement not covered" >multiplicity &amp;&amp; (</span>
       &lt;MappingTransformation
         name={multiplicity.name}
@@ -931,7 +950,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
           index={index + 1}
           canShowIndex={canShowIndex}
         &gt;
-          &lt;div className={'pf-c-form'}&gt;
+          &lt;div className={'pf-c-form'} style={formInputGroupStyle}&gt;
             {f.transformations.map(<span class="fstat-no" title="function not covered" >(t</span>, transformationIndex) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
               &lt;MappingTransformation
                 key={transformationIndex}
@@ -1021,7 +1040,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
             onNotificationRead={onNotificationRead}
           /&gt;
         )}
-        &lt;div className={'pf-c-form'}&gt;
+        &lt;div className={'pf-c-form'} style={formInputGroupStyle}&gt;
           {mappingAction}
           &lt;MappingFields
             isSource={true}
@@ -1031,10 +1050,11 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
             canAddToSelectedMapping={canAddToSelectedMapping}
           &gt;
             {sources.map(renderSourceMappingField)}
-            {addableSources.length &gt; 0 &amp;&amp; (
+            {targets.length &lt;= 1 &amp;&amp; (
               &lt;AddFieldTypeahead
                 ariaLabelTypeAhead={'Select source to add to the mapping'}
                 placeholderText={'Select source to add to the mapping'}
+                isSource={true}
                 fields={addableSources.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
                   label: s.amField.isPropertyOrConstant() ? s.name : s.path,
                   group: s.amField!.docDef.name,
@@ -1052,10 +1072,11 @@ export const <span class="cstat-no" title="statement not covered" >MappingDetail
             canAddToSelectedMapping={canAddToSelectedMapping}
           &gt;
             {targets.map(renderTargetMappingField)}
-            {addableTargets.length &gt; 0 &amp;&amp; (
+            {sources.length &lt;= 1 &amp;&amp; (
               &lt;AddFieldTypeahead
                 ariaLabelTypeAhead={'Select target to add to the mapping'}
                 placeholderText={'Select target to add to the mapping'}
+                isSource={false}
                 fields={addableTargets.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
                   label: t.amField.isProperty() ? t.name : t.path,
                   group: t.amField!.docDef.name,
@@ -1116,7 +1137,7 @@ const NotificationsGroup: FunctionComponent&lt;INotificationsGroupProps&gt; = <s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Jun 07 2021 13:10:48 GMT+0000 (Coordinated Universal Time)
+                at Tue Jun 08 2021 19:50:03 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
