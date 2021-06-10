@@ -25,10 +25,10 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: 'adopt'
     - name: Build from root with Maven
-      run: mvn clean install
+      run: mvn --batch-mode -Pcoverage -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install
     - name: Build lib with Maven
       working-directory: lib
-      run: mvn clean install
+      run: mvn --batch-mode clean install
     - name: Build docs
       working-directory: docs
       run: mvn -Phtml,pdf package
