@@ -124,13 +124,16 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
 
   const formLabelColumnWidth = {
     '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '340px 1fr',
+    '--pf-c-form--GridGap': '0.5rem',
   } as React.CSSProperties;
   const formLabelParamRequired = {
     '--pf-c-form__label--FontSize': 'large',
     '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '140px 1fr',
+    'margin-bottom': '1.0rem',
   } as React.CSSProperties;
   const formLabelTopPadding = {
-    '--pf-c-form__label--PaddingTop': '0',
+    '--pf-c-form--m-horizontal__group-label--md--GridColumnWidth': '380px',
+    '--pf-c-form--m-horizontal__group-label--md--PaddingTop': '0rem',
   } as React.CSSProperties;
 
   useEffect(reset, [reset]);
@@ -231,7 +234,12 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
         ))}
         <span>
           <Button
-            style={{ display: 'inline', float: 'left', width: '40' }}
+            style={{
+              display: 'inline',
+              float: 'left',
+              marginTop: '1.0rem',
+              width: '40',
+            }}
             isDisabled={availableParameters.length === 0}
             onClick={handleAddParameter}
             variant="link"
