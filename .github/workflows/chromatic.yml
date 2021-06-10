@@ -1,0 +1,41 @@
+name: 'Chromatic'
+
+on:
+  push:
+    branches: [ master ]
+# Unfortunately CHROMATIC_PROJECT_TOKEN has to be exposed to run against the PR from fork
+#  pull_request:
+#    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ui/node_modules
+            ui/packages/*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ui
+      - name: build @atlasmap/core
+        run: yarn build:module
+        working-directory: ui/packages/atlasmap-core
+      - name: prebuild
+        run: yarn prebuild
+        working-directory: ui/packages/atlasmap
+      - name: build storybook
+        run: yarn build:storybook
+        working-directory: ui/packages/atlasmap
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          workingDir: ui/packages/atlasmap/storybook-static
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
