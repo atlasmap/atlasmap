@@ -130,7 +130,7 @@ public class E2ETest {
             "user-field-action-io.atlasmap.service.my.MyFieldActionsModel-transformation-0"));
         assertEquals("testparam", customActionParamInput.getAttribute("value"));
         // Check custom source class mapping
-        WebElement customClassDoc = driver.findElement(By.xpath("//article[@aria-label='io.atlasmap.service.my.MyFieldActionsModel']"));
+        WebElement customClassDoc = driver.findElement(By.xpath("//article[@aria-label='MyFieldActionsModel']"));
         WebElement paramDiv = customClassDoc.findElement(By.xpath(".//button[@data-testid='grip-param-button']/../../../.."));
         action = new Actions(driver);
         action.moveToElement(paramDiv).perform();

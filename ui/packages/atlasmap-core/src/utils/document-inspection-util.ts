@@ -88,6 +88,8 @@ export class DocumentInspectionUtil {
     const model: DocumentInitializationModel =
       new DocumentInitializationModel();
     model.id = className;
+    const simpleName = className.split('.').pop();
+    model.name = simpleName ? simpleName : '';
     model.type = DocumentType.JAVA;
     model.inspectionType = InspectionType.JAVA_CLASS;
     model.inspectionSource = className;

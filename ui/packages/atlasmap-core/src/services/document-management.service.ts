@@ -372,7 +372,7 @@ export class DocumentManagementService {
     parameters?: { [key: string]: string }
   ): Promise<boolean> {
     if (docType === DocumentType.JAVA) {
-      return this.addJavaDocument(docName, isSource);
+      return this.addJavaDocument(docId, isSource);
     }
     return this.addNonJavaDocument(
       docBody,
