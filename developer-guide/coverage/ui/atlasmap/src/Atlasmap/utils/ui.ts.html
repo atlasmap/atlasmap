@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.75% </span>
+                <span class="strong">16.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/254</span>
+                <span class='fraction'>41/254</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.33% </span>
+                <span class="strong">16.73% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/245</span>
+                <span class='fraction'>41/245</span>
             </div>
         
             
@@ -797,17 +797,7 @@
 <a name='L739'></a><a href='#L739'>739</a>
 <a name='L740'></a><a href='#L740'>740</a>
 <a name='L741'></a><a href='#L741'>741</a>
-<a name='L742'></a><a href='#L742'>742</a>
-<a name='L743'></a><a href='#L743'>743</a>
-<a name='L744'></a><a href='#L744'>744</a>
-<a name='L745'></a><a href='#L745'>745</a>
-<a name='L746'></a><a href='#L746'>746</a>
-<a name='L747'></a><a href='#L747'>747</a>
-<a name='L748'></a><a href='#L748'>748</a>
-<a name='L749'></a><a href='#L749'>749</a>
-<a name='L750'></a><a href='#L750'>750</a>
-<a name='L751'></a><a href='#L751'>751</a>
-<a name='L752'></a><a href='#L752'>752</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L742'></a><a href='#L742'>742</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -823,11 +813,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -882,16 +867,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1577,8 +1557,6 @@ import {
   CommonUtil,
   ConfigModel,
   DocumentDefinition,
-  DocumentManagementService,
-  ErrorHandlerService,
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
@@ -1587,12 +1565,9 @@ import {
   Field,
   FieldAction,
   FieldActionDefinition,
-  FieldActionService,
-  FileManagementService,
   InitializationService,
   MappedField,
   MappingDefinition,
-  MappingManagementService,
   MappingModel,
   Multiplicity,
   NamespaceModel,
@@ -1633,16 +1608,11 @@ export function <span class="fstat-no" title="function not covered" >copyToClipb
     );
   }
 <span class="cstat-no" title="statement not covered" >  document.body.removeChild(textArea);</span>
-<span class="cstat-no" title="statement not covered" >  return;</span>
 }
 &nbsp;
-export const initializationService = new InitializationService(
-  new DocumentManagementService(api),
-  new MappingManagementService(api),
-  new ErrorHandlerService(),
-  new FieldActionService(api),
-  new FileManagementService(api),
-);
+export const initializationService: InitializationService =
+  new InitializationService(api);
+export const configModel = initializationService.cfg;
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >fromFieldToIFieldsGroup(</span>field: Field): IAtlasmapGroup | null {
   const fields = <span class="cstat-no" title="statement not covered" >field.children</span>
@@ -2075,7 +2045,7 @@ export function <span class="fstat-no" title="function not covered" >handleActio
   // If the field action configuration predefines argument values then populate the fields with
   // default values.  Needed to support pull-down menus in action argument definitions.
 <span class="cstat-no" title="statement not covered" >  if (</span>
-    action.argumentValues.values &amp;&amp;
+    action.argumentValues.values() &amp;&amp;
     action.argumentValues.length &gt; 0 &amp;&amp;
     definition.arguments[0] &amp;&amp;
     definition.arguments[0].values &amp;&amp;
@@ -2196,7 +2166,7 @@ export function <span class="fstat-no" title="function not covered" >handleTrans
     // If the field action configuration predefines argument values then populate the fields with
     // default values.  Needed to support pull-down menus in action argument definitions.
 <span class="cstat-no" title="statement not covered" >    if (</span>
-      action.argumentValues.values &amp;&amp;
+      action.argumentValues.values() &amp;&amp;
       action.argumentValues.length &gt; 0 &amp;&amp;
       newAction.arguments[0] &amp;&amp;
       newAction.arguments[0].values &amp;&amp;
@@ -2278,7 +2248,7 @@ export function <span class="fstat-no" title="function not covered" >handleMulti
     // If the field action configuration predefines argument values then populate the fields with
     // default values.  Needed to support pull-down menus in action argument definitions.
 <span class="cstat-no" title="statement not covered" >    if (</span>
-      action.argumentValues.values &amp;&amp;
+      action.argumentValues.values() &amp;&amp;
       action.argumentValues.length &gt; 0 &amp;&amp;
       newAction.arguments[0] &amp;&amp;
       newAction.arguments[0].values &amp;&amp;
@@ -2316,7 +2286,7 @@ export function <span class="fstat-no" title="function not covered" >deselectMap
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jun 08 2021 19:50:03 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 10 2021 14:38:23 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

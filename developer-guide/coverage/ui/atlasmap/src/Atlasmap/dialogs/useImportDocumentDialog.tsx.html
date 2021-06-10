@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/32</span>
+                <span class='fraction'>0/31</span>
             </div>
         
             
@@ -237,8 +237,7 @@
 <a name='L179'></a><a href='#L179'>179</a>
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L182'></a><a href='#L182'>182</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,7 +252,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -384,17 +382,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -435,8 +433,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import React, { useState } from 'react';</span>
-<span class="cstat-no" title="statement not covered" >import { ReactElement, useCallback } from 'react';</span>
+<span class="cstat-no" title="statement not covered" >import React, { ReactElement, useCallback, useState } from 'react';</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >import { useAtlasmap } from '../AtlasmapProvider';</span>
 <span class="cstat-no" title="statement not covered" >import { useConfirmationDialog } from './useConfirmationDialog';</span>
@@ -447,7 +444,7 @@
   ReactElement,
   (selectedFile: File, isSource: boolean) =&gt; void,
 ] {
-  const { documentExists<span class="cstat-no" title="statement not covered" >, i</span>mportAtlasFile<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seAtlasmap();</span>
+  const { configModel<span class="cstat-no" title="statement not covered" >, d</span>ocumentExists<span class="cstat-no" title="statement not covered" >, i</span>mportInstanceSchema<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seAtlasmap();</span>
   const [importDialog<span class="cstat-no" title="statement not covered" >, o</span>penImportDialog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seConfirmationDialog(</span>
     'Confirm document import',
     'A document with the selected name has already been imported into the specified panel. It will appear in addition to the pre-existing document.',
@@ -472,12 +469,7 @@
 <span class="cstat-no" title="statement not covered" >              for (let parameter<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" >p</span>arameters)</span> {</span>
 <span class="cstat-no" title="statement not covered" >                inspectionParameters[parameter.name] = parameter.value;</span>
               }
-<span class="cstat-no" title="statement not covered" >              importAtlasFile(</span>
-                selectedFile,
-                isSource,
-                false,
-                inspectionParameters,
-              );
+<span class="cstat-no" title="statement not covered" >              importInstanceSchema(selectedFile, configModel, isSource, false);</span>
             },
             [
               {
@@ -576,11 +568,16 @@
 &nbsp;
 <span class="cstat-no" title="statement not covered" >        setDefaultSchema(userFileSuffix === 'XSD' ? true : false);</span>
 <span class="cstat-no" title="statement not covered" >        openSpecifyInstanceSchema(<span class="fstat-no" title="function not covered" >(i</span>sSchema: boolean) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >          importAtlasFile(selectedFile, isSource, isSchema);</span>
+<span class="cstat-no" title="statement not covered" >          importInstanceSchema(selectedFile, configModel, isSource, isSchema);</span>
         });
       }
     },
-    [importAtlasFile, openParametersDialog, openSpecifyInstanceSchema],
+    [
+      configModel,
+      importInstanceSchema,
+      openParametersDialog,
+      openSpecifyInstanceSchema,
+    ],
   );
 &nbsp;
   const onImportDocument = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -609,7 +606,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jun 08 2021 19:50:03 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 10 2021 14:38:23 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

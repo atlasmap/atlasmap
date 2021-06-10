@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/141</span>
+                <span class='fraction'>0/142</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/87</span>
+                <span class='fraction'>0/90</span>
             </div>
         
             
@@ -373,7 +373,15 @@
 <a name='L315'></a><a href='#L315'>315</a>
 <a name='L316'></a><a href='#L316'>316</a>
 <a name='L317'></a><a href='#L317'>317</a>
-<a name='L318'></a><a href='#L318'>318</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a>
+<a name='L322'></a><a href='#L322'>322</a>
+<a name='L323'></a><a href='#L323'>323</a>
+<a name='L324'></a><a href='#L324'>324</a>
+<a name='L325'></a><a href='#L325'>325</a>
+<a name='L326'></a><a href='#L326'>326</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -434,6 +442,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -518,12 +527,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -599,6 +610,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -719,8 +735,8 @@ import { IConstant, IDocumentName, INamespace, IProperty } from '../UI';
   useDeleteMappingDialog,
   useDeletePropertyDialog,
   useEditMappingEnumerationDialog,
-  useExportCatalogDialog,
-  useImportCatalogDialog,
+  useExportADMArchiveDialog,
+  useImportADMArchiveDialog,
   useImportDocumentDialog,
   useNamespaceDialog,
   usePropertyDialog,
@@ -741,6 +757,7 @@ export interface IUseAtlasmapDialogsProps {
   modalContainer<span class="cstat-no" title="statement not covered" >,</span>
 }: IUseAtlasmapDialogsProps) {
   const {
+    configModel<span class="cstat-no" title="statement not covered" >,</span>
     selectedMapping<span class="cstat-no" title="statement not covered" >,</span>
     createConstant<span class="cstat-no" title="statement not covered" >,</span>
     editConstant<span class="cstat-no" title="statement not covered" >,</span>
@@ -835,8 +852,10 @@ export interface IUseAtlasmapDialogsProps {
   //#endregion
 &nbsp;
   //#region atlasmap catalog
-  const [importCatalogDialog<span class="cstat-no" title="statement not covered" >, o</span>nImportAtlasCatalog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seImportCatalogDialog();</span>
-  const [exportCatalogDialog<span class="cstat-no" title="statement not covered" >, o</span>nExportAtlasCatalog<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seExportCatalogDialog();</span>
+  const [importADMArchiveDialog<span class="cstat-no" title="statement not covered" >, o</span>nImportADMArchive<span class="cstat-no" title="statement not covered" >] =</span>
+<span class="cstat-no" title="statement not covered" >    useImportADMArchiveDialog();</span>
+  const [exportADMArchiveDialog<span class="cstat-no" title="statement not covered" >, o</span>nExportADMArchive<span class="cstat-no" title="statement not covered" >] =</span>
+<span class="cstat-no" title="statement not covered" >    useExportADMArchiveDialog();</span>
   const [resetDialog<span class="cstat-no" title="statement not covered" >, o</span>nResetAtlasmap<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seResetAtlasmapDialog();</span>
   const [aboutDialog<span class="cstat-no" title="statement not covered" >, o</span>nAbout<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seAboutDialog();</span>
   const [toggleExpressionModeDialog<span class="cstat-no" title="statement not covered" >, o</span>nToggleExpressionMode<span class="cstat-no" title="statement not covered" >] =</span>
@@ -915,18 +934,23 @@ export interface IUseAtlasmapDialogsProps {
   const onEnableCustomClass = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (i</span>sSource: boolean): void =&gt; {
 <span class="cstat-no" title="statement not covered" >      openCreateEnableCustomClassDialog(<span class="fstat-no" title="function not covered" >({</span> customClassName<span class="cstat-no" title="statement not covered" >, c</span>ollectionType<span class="cstat-no" title="statement not covered" > })</span> =&gt;</span>
-<span class="cstat-no" title="statement not covered" >        enableCustomClass(customClassName, collectionType, isSource),</span>
+<span class="cstat-no" title="statement not covered" >        enableCustomClass(</span>
+          configModel,
+          customClassName,
+          collectionType,
+          isSource,
+        ),
       );
     },
-    [openCreateEnableCustomClassDialog],
+    [configModel, openCreateEnableCustomClassDialog],
   );
 &nbsp;
   const portal = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    () =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      createPortal(</span>
         &lt;&gt;
-          {importCatalogDialog}
-          {exportCatalogDialog}
+          {importADMArchiveDialog}
+          {exportADMArchiveDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
           {specifyInstanceSchemaDialog}
@@ -964,8 +988,8 @@ export interface IUseAtlasmapDialogsProps {
       editConstantDialog,
       editNamespaceDialog,
       editPropertyDialog,
-      exportCatalogDialog,
-      importCatalogDialog,
+      exportADMArchiveDialog,
+      importADMArchiveDialog,
       importDocumentDialog,
       specifyInstanceSchemaDialog,
       modalContainer,
@@ -979,8 +1003,8 @@ export interface IUseAtlasmapDialogsProps {
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     handlers: {
-      onImportAtlasCatalog,
-      onExportAtlasCatalog,
+      onImportADMArchive: onImportADMArchive,
+      onExportADMArchive: onExportADMArchive,
       onCreateConstant,
       onDeleteConstant,
       onEditConstant,
@@ -1014,7 +1038,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Jun 08 2021 19:50:03 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 10 2021 14:38:23 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
