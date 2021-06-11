@@ -18,7 +18,6 @@ import {
   CanvasProvider,
   Column,
   ColumnBody,
-  ColumnHeader,
   ColumnMapper,
   Columns,
   Document,
@@ -49,7 +48,7 @@ export const example = () => (
     <ColumnMapper onClick={action('onClick')}>
       <NodeRefProvider>
         <Columns>
-          <Column data-testid={'column-source-area'} totalColumns={3}>
+          <Column data-testid={'column-source-area'} totalColumns={2}>
             <SearchableColumnHeader
               title={'Source'}
               onSearch={action('onSearch')}
@@ -71,7 +70,7 @@ export const example = () => (
                       boundaryId={'Source'}
                       overrideWidth={'Source-width'}
                     >
-                      <Document title={'Something here'}>
+                      <Document title={'Something here'} startExpanded={true}>
                         <Tree>
                           <NodeRef
                             id={'Group name'}
@@ -84,6 +83,7 @@ export const example = () => (
                               level={1}
                               position={1}
                               setSize={1}
+                              expanded={true}
                               renderLabel={({ expanded }) => (
                                 <DocumentGroup
                                   name={'Group name'}
@@ -105,6 +105,7 @@ export const example = () => (
                                       level={2}
                                       position={1}
                                       setSize={2}
+                                      expanded={true}
                                       renderLabel={({ expanded }) => (
                                         <DocumentGroup
                                           name={'Nested group'}
@@ -185,42 +186,7 @@ export const example = () => (
               </ColumnBody>
             </NodeRef>
           </Column>
-          <Column data-testid={'column-mappings-area'} totalColumns={3}>
-            <ColumnHeader title={'Mapping'} />
-            <NodeRef id={'Mapping'}>
-              <ColumnBody>
-                <NodeRef id={'Mapping-width'}>
-                  <div>
-                    <NodeRef
-                      id={'Mapping 1'}
-                      boundaryId={'Mapping'}
-                      overrideWidth={'Mapping-width'}
-                    >
-                      <Document title={'Mapping 1'}>
-                        <DocumentField
-                          name={'Many To One'}
-                          type={'Concatenate'}
-                        />
-                      </Document>
-                    </NodeRef>
-                    <NodeRef
-                      id={'Mapping 2'}
-                      boundaryId={'Mapping'}
-                      overrideWidth={'Mapping-width'}
-                    >
-                      <Document title={'Mapping 2'}>
-                        <DocumentField
-                          name={'Many To One'}
-                          type={'Concatenate'}
-                        />
-                      </Document>
-                    </NodeRef>
-                  </div>
-                </NodeRef>
-              </ColumnBody>
-            </NodeRef>
-          </Column>
-          <Column data-testid={'column-target-area'} totalColumns={3}>
+          <Column data-testid={'column-target-area'} totalColumns={2}>
             <SearchableColumnHeader
               title={'Target'}
               onSearch={action('onSearch')}
@@ -242,7 +208,7 @@ export const example = () => (
                       boundaryId={'Target'}
                       overrideWidth={'Target-width'}
                     >
-                      <Document title={'Lorem dolor'}>
+                      <Document title={'Lorem dolor'} startExpanded={true}>
                         <Tree>
                           <>
                             <NodeRef
@@ -332,26 +298,8 @@ export const example = () => (
             </NodeRef>
           </Column>
         </Columns>
-        <NodesArc
-          start={'Fiz'}
-          end={'Mapping 1'}
-          data-testid={'Fiz:Mapping 1'}
-        />
-        <NodesArc
-          start={'Mapping 1'}
-          end={'Foo'}
-          data-testid={'Mapping 1:Foo'}
-        />
-        <NodesArc
-          start={'Foo bar'}
-          end={'Mapping 2'}
-          data-testid={'Foo bar:Mapping 2'}
-        />
-        <NodesArc
-          start={'Mapping 2'}
-          end={'Baz'}
-          data-testid={'Mapping 2:Baz'}
-        />
+        <NodesArc start={'Fiz'} end={'Foo'} data-testid={'Fiz:Foo'} />
+        <NodesArc start={'Foo bar'} end={'Baz'} data-testid={'Foo bar:Baz'} />
       </NodeRefProvider>
     </ColumnMapper>
   </CanvasProvider>

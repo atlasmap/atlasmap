@@ -14,7 +14,8 @@
     limitations under the License.
 */
 import { CanvasProvider, Column } from '../../UI';
-import { MappingsColumn, SourcesColumn, TargetsColumn } from '../../Views';
+import { SourceTargetLinks, SourcesColumn, TargetsColumn } from '../../Views';
+import { boolean, text } from '@storybook/addon-knobs';
 import {
   constants,
   mappings,
@@ -25,7 +26,6 @@ import {
 
 import React from 'react';
 import { action } from '@storybook/addon-actions';
-import { boolean } from '@storybook/addon-knobs';
 import decorators from '../../stories/decorators';
 
 const obj = {
@@ -107,20 +107,12 @@ export const targetsColumn = () => (
   </CanvasProvider>
 );
 
-export const mappingsColumn = () => (
+export const sourceTargetLinks = () => (
   <CanvasProvider>
-    <Column data-testid={'column-mappings-area'} totalColumns={1}>
-      <MappingsColumn
-        showMappingPreview={boolean('Show mapping preview', true)}
-        onFieldPreviewChange={action('onFieldPreviewChange')}
-        onSelectMapping={action('onSelectMapping')}
-        onDeselectMapping={action('onDeselectMapping')}
-        onEditMapping={action('onEditMapping')}
-        onMouseOver={action('onMouseOver')}
-        onMouseOut={action('onMouseOut')}
-        canDrop={() => true}
-        mappings={mappings}
-      />
-    </Column>
+    <SourceTargetLinks
+      mappings={mappings}
+      selectedMappingId={text('Mapping ID', 'a')}
+      onSelectMapping={action('onSelectMapping')}
+    />
   </CanvasProvider>
 );

@@ -111,10 +111,6 @@ export const wiredToTheBackend = () => (
           'showToggleMappingPreviewToolbarItem',
           true,
         ),
-        showToggleMappingColumnToolbarItem: boolean(
-          'showToggleMappingColumnToolbarItem',
-          false,
-        ),
         showMappingTableViewToolbarItem: boolean(
           'showToggleMappingTableToolbarItem',
           true,
@@ -131,10 +127,6 @@ export const wiredToTheBackend = () => (
         showToggleUnmappedFieldsToolbarItem: boolean(
           'showToggleUnmappedFieldsToolbarItem',
           true,
-        ),
-        showFreeViewToolbarItem: boolean(
-          'showToggleFreeViewToolbarItem',
-          false,
         ),
       }}
     />

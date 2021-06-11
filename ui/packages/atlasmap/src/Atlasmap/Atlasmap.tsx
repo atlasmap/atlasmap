@@ -13,7 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { CanvasControlBar, ExpressionToolbar, MainLayout } from '../Layout';
 import {
   CanvasProvider,
   ConditionalExpressionInput,
@@ -21,15 +20,14 @@ import {
   FieldsDndProvider,
   TimedToast,
 } from '../UI';
+import { ExpressionToolbar, MainLayout } from '../Layout';
 import {
   IAtlasmapField,
   IAtlasmapMapping,
-  IMappingDocumentEvents,
   ISourceColumnCallbacks,
   ITargetsColumnCallbacks,
   MappingTableView,
   NamespaceTableView,
-  SourceMappingTargetView,
   SourceTargetView,
 } from '../Views';
 import { IUseContextToolbarData, useContextToolbar } from './useContextToolbar';
@@ -73,7 +71,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     mappings,
     selectedMapping,
     selectMapping,
-    deselectMapping,
     onFieldPreviewChange,
     searchSources,
     searchTargets,
@@ -104,24 +101,19 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   const { handlers, dialogs } = useAtlasmapDialogs({
     modalContainer: document.getElementById(modalsContainerId)!,
   });
-  const {
-    activeView,
-    showMappingColumn,
-    showMappingPreview,
-    showTypes,
-    contextToolbar,
-  } = useContextToolbar({
-    showImportAtlasFileToolbarItem: allowImport,
-    showImportJarFileToolbarItem: allowImport,
-    showExportAtlasFileToolbarItem: allowExport,
-    showResetToolbarItem: allowReset,
-    ...toolbarOptions,
-    onImportADMArchiveFile: handlers.onImportADMArchive,
-    onImportJarFile: (file) => importJarFile(file),
-    onExportAtlasFile: handlers.onExportADMArchive,
-    onResetAtlasmap: handlers.onResetAtlasmap,
-    onAbout: handlers.onAbout,
-  });
+  const { activeView, showMappingPreview, showTypes, contextToolbar } =
+    useContextToolbar({
+      showImportAtlasFileToolbarItem: allowImport,
+      showImportJarFileToolbarItem: allowImport,
+      showExportAtlasFileToolbarItem: allowExport,
+      showResetToolbarItem: allowReset,
+      ...toolbarOptions,
+      onImportADMArchiveFile: handlers.onImportADMArchive,
+      onImportJarFile: (file) => importJarFile(file),
+      onExportAtlasFile: handlers.onExportADMArchive,
+      onResetAtlasmap: handlers.onResetAtlasmap,
+      onAbout: handlers.onAbout,
+    });
 
   const shouldShowMappingPreviewForField = useCallback(
     (field: IAtlasmapField) =>
@@ -331,41 +323,10 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     ],
   );
 
-  const mappingEvents: IMappingDocumentEvents = useMemo(
-    () => ({
-      onSelectMapping: selectMapping,
-      onDeselectMapping: deselectMapping,
-      onEditMapping: () => void 0,
-      onFieldPreviewChange: () => void 0,
-      onMouseOver: () => void 0,
-      onMouseOut: () => void 0,
-      canDrop: (f, m) =>
-        !m.sourceFields.find((s) => s.id === f.id) &&
-        !m.targetFields.find((t) => t.id === f.id),
-    }),
-    [deselectMapping, selectMapping],
-  );
-
   const currentView = useMemo(() => {
     switch (activeView) {
       case 'ColumnMapper':
-        return showMappingColumn ? (
-          <SourceMappingTargetView
-            sourceProperties={sourceProperties}
-            targetProperties={targetProperties}
-            constants={constants}
-            sources={sources}
-            mappings={mappings}
-            targets={targets}
-            selectedMappingId={selectedMapping?.id}
-            onSelectMapping={selectMapping}
-            showMappingPreview={showMappingPreview}
-            showTypes={showTypes}
-            sourceEvents={sourceEvents}
-            mappingEvents={mappingEvents}
-            targetEvents={targetEvents}
-          />
-        ) : (
+        return (
           <SourceTargetView
             sourceProperties={sourceProperties}
             targetProperties={targetProperties}
@@ -419,7 +380,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     activeView,
     constants,
     handlers,
-    mappingEvents,
     mappings,
     onFieldPreviewChange,
     sourceProperties,
@@ -427,7 +387,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     selectMapping,
     selectedMapping,
     shouldShowMappingPreview,
-    showMappingColumn,
     showMappingPreview,
     showTypes,
     sourceEvents,
@@ -461,7 +420,6 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           expressionToolbar={
             activeView !== 'NamespaceTable' && expressionToolbar
           }
-          controlBar={activeView === 'FreeView' && <CanvasControlBar />}
           showSidebar={!!selectedMapping}
           renderSidebar={renderSidebar}
         >
