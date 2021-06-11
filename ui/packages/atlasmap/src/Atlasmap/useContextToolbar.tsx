@@ -18,9 +18,7 @@ import {
   AddMappingToolbarItem,
   AtlasmapToolbarItem,
   ToggleColumnMapperViewToolbarItem,
-  ToggleFreeViewToolbarItem,
   ToggleMappedFieldsToolbarItem,
-  ToggleMappingColumnToolbarItem,
   ToggleMappingPreviewToolbarItem,
   ToggleMappingTableViewToolbarItem,
   ToggleNamespaceTableViewToolbarItem,
@@ -57,9 +55,7 @@ export interface IUseContextToolbarData {
   showColumnMapperViewToolbarItem?: boolean;
   showMappingTableViewToolbarItem?: boolean;
   showNamespaceTableViewToolbarItem?: boolean;
-  showFreeViewToolbarItem?: boolean;
 
-  showToggleMappingColumnToolbarItem?: boolean;
   showToggleMappingPreviewToolbarItem?: boolean;
   showToggleTypesToolbarItem?: boolean;
   showToggleMappedFieldsToolbarItem?: boolean;
@@ -76,9 +72,7 @@ export function useContextToolbar({
   showColumnMapperViewToolbarItem = true,
   showMappingTableViewToolbarItem = true,
   showNamespaceTableViewToolbarItem = true,
-  showFreeViewToolbarItem = false,
 
-  showToggleMappingColumnToolbarItem = false,
   showToggleMappingPreviewToolbarItem = true,
   showToggleTypesToolbarItem = true,
   showToggleMappedFieldsToolbarItem = true,
@@ -99,8 +93,6 @@ export function useContextToolbar({
   } = useAtlasmap();
 
   const [activeView, setActiveView] = useState<Views>('ColumnMapper');
-  const { state: showMappingColumn, toggle: toggleShowMappingColumn } =
-    useToggle(false);
   const { state: showMappingPreview, toggle: toggleShowMappingPreview } =
     useToggle(false, amToggleMappingPreview);
   const { state: showTypes, toggle: toggleShowTypes } = useToggle(true);
@@ -133,7 +125,6 @@ export function useContextToolbar({
         )}
         {(showColumnMapperViewToolbarItem ||
           showMappingTableViewToolbarItem ||
-          showFreeViewToolbarItem ||
           showNamespaceTableViewToolbarItem) && (
           <ToolbarGroup
             variant="icon-button-group"
@@ -151,12 +142,6 @@ export function useContextToolbar({
                 onClick={() => setActiveView('MappingTable')}
               />
             )}
-            {showFreeViewToolbarItem && (
-              <ToggleFreeViewToolbarItem
-                toggled={activeView === 'FreeView'}
-                onClick={() => setActiveView('FreeView')}
-              />
-            )}
             {showNamespaceTableViewToolbarItem && (
               <ToggleNamespaceTableViewToolbarItem
                 toggled={activeView === 'NamespaceTable'}
@@ -166,13 +151,6 @@ export function useContextToolbar({
           </ToolbarGroup>
         )}
         <ToolbarGroup variant="icon-button-group">
-          {showToggleMappingColumnToolbarItem &&
-            activeView === 'ColumnMapper' && (
-              <ToggleMappingColumnToolbarItem
-                toggled={showMappingColumn}
-                onClick={toggleShowMappingColumn}
-              />
-            )}
           {showToggleMappingPreviewToolbarItem &&
             (activeView === 'ColumnMapper' ||
               activeView === 'MappingTable') && (
@@ -228,12 +206,8 @@ export function useContextToolbar({
       onAbout,
       showColumnMapperViewToolbarItem,
       showMappingTableViewToolbarItem,
-      showFreeViewToolbarItem,
       showNamespaceTableViewToolbarItem,
       activeView,
-      showToggleMappingColumnToolbarItem,
-      showMappingColumn,
-      toggleShowMappingColumn,
       showToggleMappingPreviewToolbarItem,
       showMappingPreview,
       toggleShowMappingPreview,
@@ -253,7 +227,6 @@ export function useContextToolbar({
 
   return {
     activeView,
-    showMappingColumn,
     showMappingPreview,
     showTypes,
     showMappedFields,

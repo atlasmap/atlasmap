@@ -16,8 +16,7 @@
 import { Column, ColumnMapper, Columns, NodeRefProvider } from '../UI';
 import {
   ISourceColumnCallbacks,
-  ISourceMappingTargetLinksData,
-  ISourceMappingTargetLinksEvents,
+  ISourceTargetLinksProps,
   ISourcesColumnData,
   ITargetsColumnCallbacks,
   ITargetsColumnData,
@@ -30,8 +29,8 @@ import React, { FunctionComponent } from 'react';
 export interface ISourceTargetViewProps
   extends ISourcesColumnData,
     ITargetsColumnData,
-    ISourceMappingTargetLinksData {
-  onSelectMapping: ISourceMappingTargetLinksEvents['onSelectMapping'];
+    ISourceTargetLinksProps {
+  onSelectMapping: ISourceTargetLinksProps['onSelectMapping'];
   sourceEvents: ISourceColumnCallbacks;
   targetEvents: ITargetsColumnCallbacks;
 }
