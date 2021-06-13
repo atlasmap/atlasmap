@@ -16315,9 +16315,9 @@ react-refresh@^0.8.3:
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
 react-sage@^0.3.1:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/react-sage/-/react-sage-0.3.1.tgz#47fc53489621dcc315ef9e75dbe15e361181cad5"
-  integrity sha512-rhFQyjd5MwRW2UyguZz79fvhWlPAYR7u/pS2C9UyDIHfNVSrX8Yi+rGCJqYRbKbkZ2B6C3zkZZMBuHaotRDn7A==
+  version "0.3.13"
+  resolved "https://registry.yarnpkg.com/react-sage/-/react-sage-0.3.13.tgz#18817b289032cd356be818f513e3bdd25fcd4ff0"
+  integrity sha512-oVq3ebMaJMDJWwxulq6HRt1b6j/+xiSBroqjTY0KmT74cCSS/fnvZDHYMrFs5JAwjDPP0jDH2Z/tTD/JJthNBw==
 
 react-scripts@^3.4.4:
   version "3.4.4"
