@@ -15,10 +15,14 @@ import {
 } from ".";
 import PrintNodeRef from "./PrintNodeRef";
 
-export default {
-  title: "Canvas",
+const obj = {
+  title: 'UI|Canvas/NodesArc',
   includeStories: [], // or don't load this file at all
+  parameters: {
+    chromatic: { disableSnapshot: true },
+  },
 };
+export default obj;
 
 export const example: FunctionComponent = () =>
   createElement(() => {
