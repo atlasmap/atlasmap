@@ -2618,9 +2618,9 @@
     tslib "1.13.0"
 
 "@patternfly/react-icons@^4.10.2", "@patternfly/react-icons@^4.10.7":
-  version "4.10.7"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.10.7.tgz#fe2eabf88512afe7dab0c0e7c71142ec6e594664"
-  integrity sha512-CiHYDOS8jrxNiy/KIxv9vPqg3cie4SzsbQKh+eW8lj41x68IrgILiw3VvjcJeVXXJDRW36T7u3IPKjMI6zuoyA==
+  version "4.10.11"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.10.11.tgz#9bed483fc37c8b795b3fb98c17ede00eef775857"
+  integrity sha512-Qyxwvghb9HZB2do3UVw4EzJSvqWaw/AEw6mFzqshZiIm2oPrL4NkvavwDt5WRicz5sbyWTZluB4grOj33PEpww==
 
 "@patternfly/react-styles@^4.10.2", "@patternfly/react-styles@^4.10.7":
   version "4.10.7"
