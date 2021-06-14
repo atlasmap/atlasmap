@@ -45,7 +45,9 @@
     <jackson.databind.version>2.12.3</jackson.databind.version>
     <jackson.version.range>[2.6,3)</jackson.version.range>
     <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+    <jandex.skip>true</jandex.skip>
     <java.version>1.8</java.version>
+    <jandex-maven-plugin.version>1.1.0</jandex-maven-plugin.version>
     <javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
     <javax.activation.version>1.1.1</javax.activation.version>
     <javax.ws.rs.version>2.1.1</javax.ws.rs.version>
@@ -72,6 +74,7 @@
     <mockito.version>3.11.1</mockito.version>
     <okhttp.version>4.9.1</okhttp.version>
     <openapi-generator-maven-plugin.version>5.1.1</openapi-generator-maven-plugin.version>
+    <osgi.include.resource.atlasmap>${osgi.include.resource}</osgi.include.resource.atlasmap>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
     <resteasy-spring-boot-starter.version>4.8.0.Final</resteasy-spring-boot-starter.version>
@@ -797,7 +800,7 @@
             <Implementation-Version>${project.version}</Implementation-Version>
             <Embed-Dependency>${osgi.embed.dependency}</Embed-Dependency>
             <Embed-Transitive>${osgi.embed.transitive}</Embed-Transitive>
-            <Include-Resource>${osgi.include.resource}</Include-Resource>
+            <Include-Resource>${osgi.include.resource.atlasmap}</Include-Resource>
           </instructions>
         </configuration>
       </plugin>
@@ -809,6 +812,22 @@
           <!-- https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=911925 -->
           <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jboss.jandex</groupId>
+        <artifactId>jandex-maven-plugin</artifactId>
+        <version>${jandex-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>make-index</id>
+            <goals>
+              <goal>jandex</goal>
+            </goals>
+            <configuration>
+              <skip>${jandex.skip}</skip>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
