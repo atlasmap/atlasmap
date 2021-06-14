@@ -15,11 +15,11 @@
   },
   "dependencies": {
     "@atlasmap/atlasmap": "^2.3.0-SNAPSHOT",
-    "@patternfly/react-core": "^4.115.2",
-    "@patternfly/react-icons": "^4.10.2",
-    "@patternfly/react-styles": "^4.10.2",
-    "@patternfly/react-table": "^4.26.7",
-    "@patternfly/react-topology": "^4.8.37",
+    "@patternfly/react-core": "^4.128.2",
+    "@patternfly/react-icons": "^4.10.11",
+    "@patternfly/react-styles": "^4.10.11",
+    "@patternfly/react-table": "^4.27.24",
+    "@patternfly/react-topology": "^4.8.72",
     "@types/d3-scale": "^3.2.2",
     "@types/d3-shape": "^2.0.0",
     "@types/react": "^17.0.5",
@@ -52,7 +52,9 @@
   },
   "eslintConfig": {
     "extends": "react-app",
-    "plugins": [ "header" ],
+    "plugins": [
+      "header"
+    ],
     "rules": {
       "header/header": [
         2,

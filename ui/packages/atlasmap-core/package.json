@@ -22,10 +22,10 @@
     "format": "yarn lint --fix"
   },
   "dependencies": {
-    "@patternfly/react-core": "^4.115.2",
-    "@patternfly/react-icons": "^4.10.2",
-    "@patternfly/react-styles": "^4.10.2",
-    "@patternfly/react-topology": "^4.8.37",
+    "@patternfly/react-core": "^4.128.2",
+    "@patternfly/react-icons": "^4.10.11",
+    "@patternfly/react-styles": "^4.10.11",
+    "@patternfly/react-topology": "^4.8.72",
     "@types/file-saver": "^2.0.2",
     "@types/pako": "^1.0.1",
     "@types/react": "^17.0.5",

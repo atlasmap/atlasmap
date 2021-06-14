@@ -1,6 +1,7 @@
 .toolbar {
   --pf-c-toolbar--PaddingTop: 0px !important;
   --pf-c-toolbar--PaddingBottom: 0px !important;
+  --pf-c-toolbar--RowGap: 0px !important;
   border-bottom: 1px solid #ccc;
 }
 
