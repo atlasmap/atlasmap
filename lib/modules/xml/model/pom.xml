@@ -32,6 +32,10 @@
 
   <properties>
     <osgi.export.pkg>io.atlasmap.xml.v2</osgi.export.pkg>
+    <!-- override include resource to include the jandex resource -->
+    <osgi.include.resource.atlasmap>${osgi.include.resource},META-INF/jandex.idx=target/classes/META-INF/jandex.idx</osgi.include.resource.atlasmap>
+    <!-- override skipping jandex maven plugin -->
+    <jandex.skip>false</jandex.skip>
   </properties>
 
   <dependencies>
