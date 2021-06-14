@@ -11,6 +11,7 @@ on:
 
 jobs:
   build_maven:
+    if: ${{ github.repository == 'atlasmap/atlasmap' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -50,6 +51,7 @@ jobs:
       working-directory: docs
       run: mvn -f pom-javadoc.xml -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
   build_yarn:
+    if: ${{ github.repository == 'atlasmap/atlasmap' }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
