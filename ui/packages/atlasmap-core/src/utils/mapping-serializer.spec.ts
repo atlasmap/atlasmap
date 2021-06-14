@@ -21,9 +21,11 @@ import {
   DocumentDefinition,
   NamespaceModel,
 } from '../models/document-definition.model';
+import { DocumentType, InspectionType } from '../common/config.types';
 import { FieldAction, Multiplicity } from '../models/field-action.model';
 
-import { DocumentType } from '../common/config.types';
+import { CsvInspectionModel } from '../models/inspect/csv-inspection.model';
+import { DocumentInspectionUtil } from './document-inspection-util';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
@@ -38,6 +40,7 @@ import { MappingUtil } from '../utils/mapping-util';
 import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
 
+import atlasMappingCSV from '../../../../test-resources/mapping/atlasmapping-csv.json';
 import atlasMappingCollExprMapping from '../../../../test-resources/mapping/atlasmapping-coll-expr-mapping.json';
 import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-expr-preview.json';
 import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
@@ -823,7 +826,7 @@ describe('MappingSerializer', () => {
         }
         expect(fieldMapping).toBeDefined();
 
-        // Isolate the mock documents usingf the document initialization model.
+        // Isolate the mock documents using the document initialization model.
         const docInitSource = new DocumentInitializationModel();
         docInitSource.description =
           'Java document class io.atlasmap.java.test.TargetTestClass';
@@ -925,6 +928,106 @@ describe('MappingSerializer', () => {
         const flEntry = lookupTable.getEntryForSource('FL', false);
         expect(flEntry).toBeDefined();
         expect(flEntry?.targetValue).toEqual('Florida');
+
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('process a CSV mapping', (done) => {
+    cfg.clearDocs();
+    cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        cfg.mappings = new MappingDefinition();
+        let fieldMapping = null;
+        const mappingJson = atlasMappingCSV;
+
+        // Isolate the mock documents using the document initialization model.
+        const docModelSource = DocumentInspectionUtil.fromNonJavaProperties(
+          cfg,
+          'source',
+          'CsvDataSource',
+          DocumentType.CSV,
+          InspectionType.SCHEMA,
+          'io.atlasmap.csv.v2.CsvDataSource',
+          true
+        );
+        cfg.initCfg.baseCSVInspectionServiceUrl = 'dummy';
+
+        // Establish the CSV source fields.
+        const sf1 = new Field();
+        sf1.name = '<>';
+        sf1.path = '/<>';
+        sf1.type = 'COMPLEX';
+        docModelSource.doc.addField(sf1);
+        const sf2 = new Field();
+        sf2.name = 'last_name';
+        sf2.path = '/<>/last_name';
+        sf2.scope = '';
+        sf2.type = 'STRING';
+        sf2.serviceObject.status = 'SUPPORTED';
+        sf2.parentField = sf1;
+        docModelSource.doc.addField(sf2);
+
+        const docModelTarget = DocumentInspectionUtil.fromNonJavaProperties(
+          cfg,
+          'target-csv',
+          'CsvDataSource',
+          DocumentType.CSV,
+          InspectionType.SCHEMA,
+          'io.atlasmap.csv.v2.CsvDataSource',
+          false
+        );
+        expect(docModelTarget).toBeDefined();
+
+        // Establish the CSV target fields.
+        const st1 = new Field();
+        st1.name = '<>';
+        st1.path = '/<>';
+        st1.type = 'COMPLEX';
+        docModelSource.doc.addField(st1);
+        const st2 = new Field();
+        st2.name = 'last';
+        st2.path = '/<>/last';
+        st2.scope = '';
+        st2.type = 'STRING';
+        st2.serviceObject.status = 'SUPPORTED';
+        st2.parentField = st1;
+        docModelTarget.doc.addField(st2);
+
+        const docInspModel = DocumentInspectionUtil.fromDocumentDefinition(
+          cfg,
+          docModelTarget.doc
+        );
+        expect(docInspModel).toBeDefined();
+
+        const csvInspModel = new CsvInspectionModel(cfg, docModelTarget.doc);
+        expect(csvInspModel.isOnlineInspectionCapable()).toBe(true);
+
+        // Find a CSV field mapping.
+        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+          if (fieldMapping.inputField) {
+            for (const field of fieldMapping.inputField) {
+              if (field.name === 'last_name') {
+                break;
+              }
+            }
+          }
+        }
+        expect(fieldMapping).toBeDefined();
+
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingCSV,
+            MappingSerializer.serializeMappings(cfg)
+          )
+        ).toBe(true);
 
         done();
       })
