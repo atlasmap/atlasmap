@@ -1,0 +1,61 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "source",
+        "name": "CsvDataSource",
+        "description": "Source document CsvDataSource type: CSV",
+        "uri": "atlas:csv:source",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "target-csv",
+        "name": "CsvDataSource",
+        "description": "Target document CsvDataSource type: CSV",
+        "uri": "atlas:csv:target-csv",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "3",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.csv.v2.CsvField",
+              "name": "last_name",
+              "path": "/<>/last_name",
+              "fieldType": "STRING",
+              "docId": "source",
+              "column": ""
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.csv.v2.CsvField",
+              "name": "last",
+              "path": "/<>/last",
+              "fieldType": "STRING",
+              "docId": "target-csv",
+              "column": ""
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.659774",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}
