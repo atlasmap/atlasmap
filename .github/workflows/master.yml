@@ -44,3 +44,12 @@ jobs:
             -Djkube.docker.password=${{ secrets.DOCKER_PASSWORD }} \
             k8s:build k8s:push
         working-directory: standalone
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@v1
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: |
+            coverage-report/target/site/jacoco-aggregate/jacoco.xml,\
+            ui/packages/atlasmap-core/coverage/lcov.info,\
+            ui/packages/atlasmap/coverage/lcov.info,\
+            ui/packages/atlasmap-standalone/coverage/lcov.info
