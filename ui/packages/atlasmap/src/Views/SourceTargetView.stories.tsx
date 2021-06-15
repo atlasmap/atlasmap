@@ -13,7 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IAtlasmapMapping, SourceTargetView } from '../Views';
+import { CanvasProvider, FieldsDndProvider } from '../UI';
+import { IAtlasmapField, IAtlasmapMapping, SourceTargetView } from '../Views';
 import React, { createElement, useState } from 'react';
 import {
   constants,
@@ -23,7 +24,6 @@ import {
   targets,
 } from '../stories/sampleData';
 
-import { CanvasProvider } from '../UI';
 import { action } from '@storybook/addon-actions';
 import { boolean } from '@storybook/addon-knobs';
 import decorators from '../stories/decorators';
@@ -40,79 +40,91 @@ export const sourceTargetView = () =>
       string | undefined
     >(undefined);
     const onSelectMapping = (m: IAtlasmapMapping) => setSelectedMappingId(m.id);
+    const shouldShowMappingPreviewForField = (f: IAtlasmapField) =>
+      boolean('Show mapping preview', false) &&
+      !!selectedMappingId &&
+      !!f.mappings.find((m) => m.id === selectedMappingId);
     return (
-      <CanvasProvider>
-        <SourceTargetView
-          sourceEvents={{
-            onCreateConstant: action('onCreateConstant'),
-            onEditConstant: action('onEditConstant'),
-            onDeleteConstant: action('onDeleteConstant'),
-            onCreateProperty: action('onCreateProperty'),
-            onEditProperty: action('onEditProperty'),
-            onDeleteProperty: action('onDeleteProperty'),
-            onDeleteDocument: action('onDeleteDocument'),
-            onImportDocument: action('onImportDocument'),
-            onCustomClassSearch: action('onCustomClassSearch'),
-            onSearch: action('onSearch'),
-            onDrop: action('onDrop'),
-            canDrop: () => true,
-            onAddToSelectedMapping: action('onAddToSelectedMapping'),
-            onShowMappingDetails: action('onShowMappingDetails'),
-            canAddToSelectedMapping: () => true,
-            canAddFieldToSelectedMapping: (item) =>
-              !!selectedMappingId &&
-              !item.mappings.find((m) => m.id === selectedMappingId),
-            onRemoveFromSelectedMapping: action('onRemoveFromSelectedMapping'),
-            canRemoveFromSelectedMapping: (item) =>
-              !!selectedMappingId &&
-              !!item.mappings.find((m) => m.id === selectedMappingId),
-            canStartMapping: () => true,
-            onStartMapping: action('onStartMapping'),
-            shouldShowMappingPreviewForField: () => true,
-            onFieldPreviewChange: action('onFieldPreviewChange'),
-            isSource: true,
-            acceptDropType: 'target',
-            draggableType: 'source',
-          }}
-          targetEvents={{
-            onCreateProperty: action('onCreateProperty'),
-            onEditProperty: action('onEditProperty'),
-            onDeleteProperty: action('onDeleteProperty'),
-            onFieldPreviewChange: action('onFieldPreviewChange'),
-            onDeleteDocument: action('onDeleteDocument'),
-            onImportDocument: action('onImportDocument'),
-            onCustomClassSearch: action('onCustomClassSearch'),
-            onSearch: action('onSearch'),
-            onDrop: action('onDrop'),
-            canDrop: () => true,
-            onAddToSelectedMapping: action('onAddToSelectedMapping'),
-            onShowMappingDetails: action('onShowMappingDetails'),
-            canAddToSelectedMapping: () => true,
-            canAddFieldToSelectedMapping: (item) =>
-              !!selectedMappingId &&
-              !item.mappings.find((m) => m.id === selectedMappingId),
-            onRemoveFromSelectedMapping: action('onRemoveFromSelectedMapping'),
-            canRemoveFromSelectedMapping: (item) =>
-              !!selectedMappingId &&
-              !!item.mappings.find((m) => m.id === selectedMappingId),
-            canStartMapping: () => true,
-            onStartMapping: action('onStartMapping'),
-            shouldShowMappingPreviewForField: () => true,
-            isSource: false,
-            acceptDropType: 'source',
-            draggableType: 'target',
-          }}
-          showTypes={boolean('Show types', false)}
-          showMappingPreview={boolean('Show mapping preview', false)}
-          sourceProperties={properties}
-          targetProperties={properties}
-          constants={constants}
-          sources={sources}
-          mappings={mappings}
-          targets={targets}
-          selectedMappingId={selectedMappingId}
-          onSelectMapping={onSelectMapping}
-        />
-      </CanvasProvider>
+      <FieldsDndProvider>
+        <CanvasProvider>
+          <SourceTargetView
+            sourceEvents={{
+              onCreateConstant: action('onCreateConstant'),
+              onEditConstant: action('onEditConstant'),
+              onDeleteConstant: action('onDeleteConstant'),
+              onCreateProperty: action('onCreateProperty'),
+              onEditProperty: action('onEditProperty'),
+              onDeleteProperty: action('onDeleteProperty'),
+              onDeleteDocument: action('onDeleteDocument'),
+              onImportDocument: action('onImportDocument'),
+              onCustomClassSearch: action('onCustomClassSearch'),
+              onSearch: action('onSearch'),
+              onDrop: action('onDrop'),
+              canDrop: () => true,
+              onAddToSelectedMapping: action('onAddToSelectedMapping'),
+              onShowMappingDetails: action('onShowMappingDetails'),
+              canAddToSelectedMapping: () => true,
+              canAddFieldToSelectedMapping: (item) =>
+                !!selectedMappingId &&
+                !item.mappings.find((m) => m.id === selectedMappingId),
+              onRemoveFromSelectedMapping: action(
+                'onRemoveFromSelectedMapping',
+              ),
+              canRemoveFromSelectedMapping: (item) =>
+                !!selectedMappingId &&
+                !!item.mappings.find((m) => m.id === selectedMappingId),
+              canStartMapping: () => true,
+              onStartMapping: action('onStartMapping'),
+              shouldShowMappingPreviewForField:
+                shouldShowMappingPreviewForField,
+              onFieldPreviewChange: action('onFieldPreviewChange'),
+              isSource: true,
+              acceptDropType: 'target',
+              draggableType: 'source',
+            }}
+            targetEvents={{
+              onCreateProperty: action('onCreateProperty'),
+              onEditProperty: action('onEditProperty'),
+              onDeleteProperty: action('onDeleteProperty'),
+              onFieldPreviewChange: action('onFieldPreviewChange'),
+              onDeleteDocument: action('onDeleteDocument'),
+              onImportDocument: action('onImportDocument'),
+              onCustomClassSearch: action('onCustomClassSearch'),
+              onSearch: action('onSearch'),
+              onDrop: action('onDrop'),
+              canDrop: () => true,
+              onAddToSelectedMapping: action('onAddToSelectedMapping'),
+              onShowMappingDetails: action('onShowMappingDetails'),
+              canAddToSelectedMapping: () => true,
+              canAddFieldToSelectedMapping: (item) =>
+                !!selectedMappingId &&
+                !item.mappings.find((m) => m.id === selectedMappingId),
+              onRemoveFromSelectedMapping: action(
+                'onRemoveFromSelectedMapping',
+              ),
+              canRemoveFromSelectedMapping: (item) =>
+                !!selectedMappingId &&
+                !!item.mappings.find((m) => m.id === selectedMappingId),
+              canStartMapping: () => true,
+              onStartMapping: action('onStartMapping'),
+              shouldShowMappingPreviewForField:
+                shouldShowMappingPreviewForField,
+              isSource: false,
+              acceptDropType: 'source',
+              draggableType: 'target',
+            }}
+            showTypes={boolean('Show types', false)}
+            showMappingPreview={boolean('Show mapping preview', false)}
+            sourceProperties={properties}
+            targetProperties={properties}
+            constants={constants}
+            sources={sources}
+            mappings={mappings}
+            targets={targets}
+            selectedMappingId={selectedMappingId}
+            onSelectMapping={onSelectMapping}
+          />
+        </CanvasProvider>
+      </FieldsDndProvider>
     );
   });
