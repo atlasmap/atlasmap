@@ -1,5 +1,4 @@
 name: 'Master'
-description: 'Build master branch, publish docs and docker image'
 
 on:
   push:
