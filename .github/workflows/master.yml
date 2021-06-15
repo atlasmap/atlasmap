@@ -48,8 +48,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: \
-            coverage-report/target/site/jacoco-aggregate/jacoco.xml,\
-            ui/packages/atlasmap-core/coverage/lcov.info,\
-            ui/packages/atlasmap/coverage/lcov.info,\
-            ui/packages/atlasmap-standalone/coverage/lcov.info
+          coverage-reports: coverage-report/target/site/jacoco-aggregate/jacoco.xml,ui/packages/atlasmap-core/coverage/lcov.info,ui/packages/atlasmap/coverage/lcov.info,ui/packages/atlasmap-standalone/coverage/lcov.info
