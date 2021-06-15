@@ -1,0 +1,47 @@
+name: 'Master'
+description: 'Build master branch, publish docs and docker image'
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-master:
+    if: ${{ github.repository == 'atlasmap/atlasmap' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache Maven repo
+      - name: Set up Java versions
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ui/node_modules
+            ui/packages/*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}
+      - name: Build
+        run: mvn --batch-mode -Pcoverage -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install
+      - name: Publish docs
+        run: sh publish-docs.sh
+        working-directory: docs
+      - name: Publish Docker Image
+        run: |
+          mvn --batch-mode -Pdocker \
+            -Dimage.tag.primary=latest \
+            -Djkube.docker.username=${{ secrets.DOCKER_USERNAME }} \
+            -Djkube.docker.password=${{ secrets.DOCKER_PASSWORD }} \
+            k8s:build k8s:push
+        working-directory: standalone
