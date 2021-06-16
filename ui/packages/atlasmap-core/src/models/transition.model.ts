@@ -22,6 +22,7 @@ export enum TransitionMode {
   ENUM = 'ENUM',
   MANY_TO_ONE = 'MANY_TO_ONE',
   FOR_EACH = 'FOR_EACH',
+  EXPRESSION = 'EXPRESSION',
 }
 
 export enum TransitionDelimiter {
@@ -255,6 +256,10 @@ export class TransitionModel {
         actionName = 'For Each';
         break;
       }
+      case TransitionMode.EXPRESSION: {
+        actionName = 'Expression';
+        break;
+      }
       default: {
         actionName = '';
         break;
@@ -268,18 +273,18 @@ export class TransitionModel {
     if (this.transitionFieldAction) {
       transitionFieldActionName = ' (' + this.transitionFieldAction.name + ')';
     }
-    if (this.mode === TransitionMode.ONE_TO_MANY) {
-      return (
-        TransitionModel.getMappingModeName(this.mode) +
-        transitionFieldActionName
-      );
-    } else if (this.mode === TransitionMode.MANY_TO_ONE) {
+    if (
+      this.mode === TransitionMode.ONE_TO_MANY ||
+      this.mode === TransitionMode.MANY_TO_ONE
+    ) {
       return (
         TransitionModel.getMappingModeName(this.mode) +
         transitionFieldActionName
       );
     } else if (this.mode === TransitionMode.ENUM) {
       return 'Enum (table: ' + this.lookupTableName + ')';
+    } else if (this.mode === TransitionMode.EXPRESSION) {
+      return 'Expression (' + this.expression.toText() + ')';
     }
     return TransitionModel.getMappingModeName(this.mode);
   }
@@ -302,5 +307,9 @@ export class TransitionModel {
 
   isEnumerationMode(): boolean {
     return this.mode === TransitionMode.ENUM;
+  }
+
+  isExpressionMode(): boolean {
+    return this.mode === TransitionMode.EXPRESSION;
   }
 }
