@@ -8,6 +8,8 @@ jobs:
   build-master:
     if: ${{ github.repository == 'atlasmap/atlasmap' }}
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
