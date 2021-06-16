@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 #
 # Copyright (C) 2017 Red Hat, Inc.
 #
@@ -43,5 +43,6 @@ cp -v target/generated-docs/pdf/developer-guide/index.pdf gh-pages/developer-gui
 cd gh-pages
 git add --ignore-errors *
 git commit -m "generated documentation"
-git push https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/atlasmap/atlasmap.git gh-pages
+echo ${GITHUB_ACTOR}:${GITHUB_TOKEN}
+git push https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/atlasmap/atlasmap.git gh-pages
 cd ..
