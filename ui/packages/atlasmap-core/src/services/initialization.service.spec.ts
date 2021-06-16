@@ -17,6 +17,7 @@ import { DocumentType, InspectionType } from '../common/config.types';
 
 import { DocumentInitializationModel } from '../models/config.model';
 import { InitializationService } from '../services/initialization.service';
+import { TextEncoder } from 'text-encoding';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 import atlasmapInspectionMockJsonInstanceJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-instance.json';
 import atlasmapInspectionMockJsonSchemaJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-schema.json';
@@ -167,6 +168,41 @@ describe('InitializationService', () => {
     });
     service.initialize().catch((error) => {
       fail(error);
+    });
+  });
+
+  test('initializeWithADMArchiveFile()', (done) => {
+    const spyImportAdm = spyOn(
+      service.cfg.fileService,
+      'importADMArchive'
+    ).and.returnValue(Promise.resolve(true));
+    const spyInitialize = spyOn(service, 'initialize').and.returnValue(
+      Promise.resolve(true)
+    );
+    const binary = new TextEncoder().encode('dummy binary');
+    service
+      .initializeWithADMArchiveFile(new File([new Blob([binary])], 'dummy.adm'))
+      .then((value) => {
+        expect(value).toBeTruthy();
+        expect(spyImportAdm.calls.count()).toBe(1);
+        expect(spyInitialize.calls.count()).toBe(1);
+        done();
+      });
+  });
+
+  test('resetAtlasMap()', (done) => {
+    const spyResetAll = spyOn(
+      service.cfg.fileService,
+      'resetAll'
+    ).and.returnValue(Promise.resolve(true));
+    const spyInitialize = spyOn(service, 'initialize').and.returnValue(
+      Promise.resolve(true)
+    );
+    service.resetAtlasMap().then((value) => {
+      expect(value).toBeTruthy();
+      expect(spyResetAll.calls.count()).toBe(1);
+      expect(spyInitialize.calls.count()).toBe(1);
+      done();
     });
   });
 });
