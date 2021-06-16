@@ -887,6 +887,19 @@ export class MappingManagementService {
     position?: string,
     offset?: number
   ): void {
+    if (mapping.transition.enableExpression) {
+      mapping.transition.mode = TransitionMode.EXPRESSION;
+      mapping.transition.transitionFieldAction = null;
+
+      // Update conditional expression field references.
+      mapping.transition.expression?.updateFieldReference(
+        mapping,
+        position,
+        offset
+      );
+      return;
+    }
+
     for (const field of mapping.getAllFields()) {
       if (field.enumeration) {
         mapping.transition.mode = TransitionMode.ENUM;
@@ -908,18 +921,15 @@ export class MappingManagementService {
 
     if (sourceMappedCollection && targetMappedCollection) {
       mapping.transition.mode = TransitionMode.FOR_EACH;
-    } else if (
-      sourceMappedFields.length > 1 ||
-      sourceMappedCollection ||
-      (mapping.transition.enableExpression && sourceMappedFields.length > 1)
-    ) {
+      return;
+    }
+    if (sourceMappedFields.length > 1 || sourceMappedCollection) {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       if (
-        !mapping.transition.enableExpression &&
-        (!mapping.transition.transitionFieldAction ||
-          !mapping.transition.transitionFieldAction.definition ||
-          mapping.transition.transitionFieldAction.definition.multiplicity !==
-            Multiplicity.MANY_TO_ONE)
+        !mapping.transition.transitionFieldAction ||
+        !mapping.transition.transitionFieldAction.definition ||
+        mapping.transition.transitionFieldAction.definition.multiplicity !==
+          Multiplicity.MANY_TO_ONE
       ) {
         mapping.transition.transitionFieldAction = FieldAction.create(
           this.cfg.fieldActionService.getActionDefinitionForName(
@@ -936,7 +946,9 @@ export class MappingManagementService {
           'true'
         );
       }
-    } else if (targetMappedFields.length > 1 || targetMappedCollection) {
+      return;
+    }
+    if (targetMappedFields.length > 1 || targetMappedCollection) {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       if (
         !mapping.transition.transitionFieldAction ||
@@ -954,22 +966,10 @@ export class MappingManagementService {
           ' '
         );
       }
-    } else {
-      mapping.transition.mode = TransitionMode.ONE_TO_ONE;
-      mapping.transition.transitionFieldAction = null;
+      return;
     }
-
-    // Disable multiplicity field actions if expression box is enabled.
-    if (mapping.transition.enableExpression) {
-      mapping.transition.transitionFieldAction = null;
-
-      // Update conditional expression field references.
-      mapping.transition.expression?.updateFieldReference(
-        mapping,
-        position,
-        offset
-      );
-    }
+    mapping.transition.mode = TransitionMode.ONE_TO_ONE;
+    mapping.transition.transitionFieldAction = null;
   }
 
   /**

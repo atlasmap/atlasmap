@@ -55,8 +55,7 @@ export class MappingSerializer {
           cfg,
           mapping,
           mapping.uuid,
-          ignoreValue,
-          false
+          ignoreValue
         );
         if (serializedFieldMapping) {
           jsonMappings = jsonMappings.concat(serializedFieldMapping);
@@ -116,8 +115,7 @@ export class MappingSerializer {
     cfg: ConfigModel,
     mapping: MappingModel,
     id: string,
-    ignoreValue: boolean = true,
-    ignoreExpression: boolean = false
+    ignoreValue: boolean = true
   ): any {
     const jsonMappingType =
       ConfigModel.mappingServicesPackagePrefix + '.Mapping';
@@ -134,13 +132,16 @@ export class MappingSerializer {
       ignoreValue
     );
     let jsonMapping: { [key: string]: any } = {};
-    const mappingExpression = ignoreExpression
-      ? ''
-      : ExpressionUtil.getMappingExpressionStr(cfg, false, mapping);
+    const mappingExpression = ExpressionUtil.getMappingExpressionStr(
+      cfg,
+      false,
+      mapping
+    );
 
     if (
       mapping.transition.isManyToOneMode() ||
-      mapping.transition.isForEachMode()
+      mapping.transition.isForEachMode() ||
+      mapping.transition.isExpressionMode()
     ) {
       const actions = [];
       if (mapping.transition.transitionFieldAction) {
@@ -1076,7 +1077,7 @@ export class MappingSerializer {
       parsedAction.definition =
         cfg.fieldActionService.getActionDefinitionForName(parsedAction.name)!; // TODO: check this non null operator
 
-      // @deprecated Support old-style transformation-action-based expressions.
+      /** @deprecated Support old-style transformation-action-based expressions. */
       if (isSource && (action.Expression || action['@type'] === 'Expression')) {
         mapping.transition.enableExpression = true;
         mapping.transition.expression = new ExpressionModel(mapping, cfg);
