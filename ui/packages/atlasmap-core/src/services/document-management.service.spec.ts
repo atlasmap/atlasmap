@@ -41,7 +41,7 @@ describe('DocumentManagementService', () => {
     service = cfg.documentService;
   });
 
-  test('initialize()', () => {
+  test('initialize()/uninitialize()', () => {
     TestUtils.createMockMappings(cfg);
     const spyUfm = spyOn<any>(
       DocumentDefinition.prototype,
@@ -53,6 +53,9 @@ describe('DocumentManagementService', () => {
     cfg.mappingService.mappingUpdatedSource.next();
     expect(spyUfm.calls.count()).toBe(count);
     service.initialize();
+    cfg.mappingService.mappingUpdatedSource.next();
+    expect(spyUfm.calls.count()).toBe(count + 1);
+    service.uninitialize();
     cfg.mappingService.mappingUpdatedSource.next();
     expect(spyUfm.calls.count()).toBe(count + 1);
   });
@@ -200,7 +203,7 @@ describe('DocumentManagementService', () => {
   });
 
   test('importNonJavaDocument()', (done) => {
-    cfg.initCfg.baseJSONInspectionServiceUrl = 'java';
+    cfg.initCfg.baseJSONInspectionServiceUrl = 'json';
     spyOn(ky, 'post').and.callFake((_url: Input) => {
       return new (class {
         json(): Promise<any> {
@@ -231,6 +234,43 @@ describe('DocumentManagementService', () => {
       .then((value) => {
         expect(value).toBeTruthy();
         expect(cfg.sourceDocs.length).toBe(1);
+        expect(cfg.sourceDocs[0].type).toBe(DocumentType.JSON);
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('importJavaDocument()', (done) => {
+    cfg.initCfg.baseJavaInspectionServiceUrl = 'java';
+    spyOn(ky, 'post').and.callFake((_url: Input) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve({
+            ClassInspectionResponse: {
+              javaClass: {
+                javaFields: {
+                  javaField: [
+                    {
+                      name: 'dummyField',
+                      path: 'dummyField',
+                    },
+                  ],
+                },
+              },
+            },
+          });
+        }
+      })();
+    });
+    expect(cfg.sourceDocs.length).toBe(0);
+    service
+      .importJavaDocument('io.atlasmap.test.TestDocumentClass', true)
+      .then((value) => {
+        expect(value).toBeTruthy();
+        expect(cfg.sourceDocs.length).toBe(1);
+        expect(cfg.sourceDocs[0].type).toBe(DocumentType.JAVA);
         done();
       })
       .catch((error) => {
