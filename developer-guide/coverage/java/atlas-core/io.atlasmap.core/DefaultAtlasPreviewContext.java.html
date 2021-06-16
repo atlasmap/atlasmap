@@ -126,7 +126,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 <span class="nc" id="L126">                            return session.getAudits();</span>
                         }
 <span class="pc bpc" id="L128" title="1 of 2 branches missed.">                        FieldGroup targetFieldGroup = targetField instanceof FieldGroup</span>
-                                ? (FieldGroup)targetField
+<span class="nc" id="L129">                                ? (FieldGroup)targetField</span>
 <span class="fc" id="L130">                                : AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
 <span class="fc" id="L131">                        targetFields.set(i, targetFieldGroup);</span>
 <span class="fc" id="L132">                        Field previousTargetField = null;</span>

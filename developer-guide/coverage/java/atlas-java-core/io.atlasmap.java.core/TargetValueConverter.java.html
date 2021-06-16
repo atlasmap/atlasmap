@@ -71,7 +71,7 @@ public class TargetValueConverter {
 
 <span class="fc bfc" id="L72" title="All 2 branches covered.">        String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;</span>
 <span class="fc bfc" id="L73" title="All 2 branches covered.">        targetClassName = (targetField instanceof JavaEnumField) ? ((JavaEnumField) targetField).getClassName()</span>
-                : targetClassName;
+<span class="fc" id="L74">                : targetClassName;</span>
 <span class="fc bfc" id="L75" title="All 4 branches covered.">        if (targetClassName == null &amp;&amp; parentObject != null) {</span>
 <span class="fc" id="L76">            SegmentContext segment = new AtlasPath(targetField.getPath()).getLastSegment();</span>
 <span class="fc bfc" id="L77" title="All 2 branches covered.">            Class&lt;?&gt; clazz = segment.getCollectionType() == CollectionType.NONE</span>
@@ -92,10 +92,10 @@ public class TargetValueConverter {
 
 <span class="pc bpc" id="L93" title="1 of 4 branches missed.">        if (sourceField instanceof JavaEnumField || targetField instanceof JavaEnumField) {</span>
 <span class="pc bpc" id="L94" title="2 of 4 branches missed.">            if (!(sourceField instanceof JavaEnumField) || !(targetField instanceof JavaEnumField)) {</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">                AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="nc" id="L95">                AtlasUtil.addAudit(session, targetField, String.format(</span>
                         &quot;Value conversion between enum fields and non-enum fields is not yet supported: sourceType=%s targetType=%s targetPath=%s msg=%s&quot;,
 <span class="nc" id="L97">                        sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath()),</span>
-<span class="nc" id="L98">                        AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                        AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);</span>
             }
 <span class="fc" id="L100">            populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);</span>
 <span class="fc" id="L101">            return;</span>
@@ -104,9 +104,9 @@ public class TargetValueConverter {
 <span class="fc" id="L104">        JavaField javaTargetField = (JavaField) targetField;</span>
 <span class="fc bfc" id="L105" title="All 2 branches covered.">        if (sourceValue == null) {</span>
 <span class="fc bfc" id="L106" title="All 2 branches covered.">            if (targetField.getFieldType() != FieldType.COMPLEX) {</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="fc" id="L107">                AtlasUtil.addAudit(session, targetField, String.format(</span>
 <span class="fc" id="L108">                        &quot;Null sourceValue for targetDocId=%s, targetPath=%s&quot;, targetField.getDocId(), targetField.getPath()),</span>
-<span class="pc" id="L109">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
 <span class="fc" id="L110">                targetField.setValue(null);</span>
 <span class="fc" id="L111">                return;</span>
             }
@@ -125,7 +125,7 @@ public class TargetValueConverter {
             Object parentObject, Field targetField) throws AtlasException {
 <span class="fc bfc" id="L126" title="All 2 branches covered.">        String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;</span>
 <span class="fc bfc" id="L127" title="All 2 branches covered.">        targetClassName = (targetField instanceof JavaEnumField) ? ((JavaEnumField) targetField).getClassName()</span>
-                : targetClassName;
+<span class="fc" id="L128">                : targetClassName;</span>
 <span class="fc" id="L129">        Object targetValue = doConvertTargetValue(session, targetField.getValue(), targetClassName, targetField);</span>
 <span class="fc" id="L130">        targetField.setValue(targetValue);</span>
 <span class="fc" id="L131">    }</span>
@@ -147,10 +147,10 @@ public class TargetValueConverter {
 <span class="pc bpc" id="L147" title="1 of 2 branches missed.">            if (targetType != null) {</span>
 <span class="fc" id="L148">                targetClazz = conversionService.classFromFieldType(targetType);</span>
             } else {
-<span class="nc bnc" id="L150" title="All 2 branches missed.">                AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="nc" id="L150">                AtlasUtil.addAudit(session, targetField, String.format(</span>
                                 &quot;Target field doesn't have fieldType nor className: automatic conversion won't work: targetPath=%s&quot;,
 <span class="nc" id="L152">                                targetField.getPath()),</span>
-<span class="nc" id="L153">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
             }
 <span class="pc bpc" id="L155" title="1 of 2 branches missed.">        } else if (conversionService.isPrimitive(targetClassName)) {</span>
 <span class="nc" id="L156">            targetClazz = conversionService.boxOrUnboxPrimitive(targetClassName);</span>

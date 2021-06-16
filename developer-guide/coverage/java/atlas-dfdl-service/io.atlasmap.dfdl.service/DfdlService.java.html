@@ -104,7 +104,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="nc" id="L104">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
             } else {
 <span class="pc bpc" id="L106" title="1 of 2 branches missed.">                ClassLoader loader = resourceContext != null</span>
-<span class="pc" id="L107">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
+<span class="nc" id="L107">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
 <span class="fc" id="L108">                    : DfdlService.class.getClassLoader();</span>
 <span class="fc" id="L109">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
 

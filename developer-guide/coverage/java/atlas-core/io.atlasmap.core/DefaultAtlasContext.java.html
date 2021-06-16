@@ -183,7 +183,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L183">            String docId = ds.getId();</span>
 <span class="pc bpc" id="L184" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
 <span class="fc bfc" id="L185" title="All 2 branches covered.">                docId = ds.getDataSourceType() == DataSourceType.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID</span>
-                        : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
+<span class="fc" id="L186">                        : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
             }
 <span class="pc bpc" id="L188" title="1 of 4 branches missed.">            if (ds.getDataSourceType() == DataSourceType.SOURCE &amp;&amp; sourceModules.containsKey(docId)) {</span>
 <span class="nc" id="L189">                LOG.error(&quot;Duplicated {} DataSource ID '{}' was detected, ignoring...&quot;, ds.getDataSourceType(),</span>
@@ -476,10 +476,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L476">        String docId = field.getDocId();</span>
 <span class="pc bpc" id="L477" title="1 of 4 branches missed.">        if (docId == null || docId.isEmpty()) {</span>
 <span class="fc bfc" id="L478" title="All 2 branches covered.">            docId = direction == FieldDirection.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID</span>
-                    : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
+<span class="fc" id="L479">                    : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
         }
-<span class="fc bfc" id="L481" title="All 2 branches covered.">        Map&lt;String, AtlasModule&gt; modules =</span>
-                direction == FieldDirection.SOURCE ? sourceModules : targetModules;
+        Map&lt;String, AtlasModule&gt; modules =
+<span class="fc bfc" id="L482" title="All 2 branches covered.">                direction == FieldDirection.SOURCE ? sourceModules : targetModules;</span>
 <span class="fc bfc" id="L483" title="All 4 branches covered.">        if (direction == FieldDirection.SOURCE &amp;&amp; field instanceof ConstantField) {</span>
 <span class="fc" id="L484">            AtlasModule answer = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
 <span class="fc bfc" id="L485" title="All 2 branches covered.">            if (!modules.containsKey(docId)) {</span>
@@ -488,8 +488,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L488">            return answer;</span>
         }
 <span class="fc bfc" id="L490" title="All 2 branches covered.">        if (field instanceof PropertyField) {</span>
-<span class="fc bfc" id="L491" title="All 2 branches covered.">            AtlasModule answer = modules.get(</span>
-                    direction == FieldDirection.SOURCE ? AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID : AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);
+<span class="fc" id="L491">            AtlasModule answer = modules.get(</span>
+<span class="fc bfc" id="L492" title="All 2 branches covered.">                    direction == FieldDirection.SOURCE ? AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID : AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);</span>
 <span class="fc bfc" id="L493" title="All 2 branches covered.">            if (!modules.containsKey(docId)) {</span>
 <span class="fc" id="L494">                modules.put(docId, answer);</span>
             }

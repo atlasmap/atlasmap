@@ -136,7 +136,7 @@ import io.atlasmap.v2.FieldType;
     public Date toDate(CharSequence date, String sourceFormat, String targetFormat) {
 
 <span class="pc bpc" id="L138" title="1 of 2 branches missed.">        DateTimeFormatter formater = sourceFormat != null ? DateTimeFormatter.ofPattern(sourceFormat)</span>
-                : DateTimeFormatter.ISO_ZONED_DATE_TIME;
+<span class="fc" id="L139">                : DateTimeFormatter.ISO_ZONED_DATE_TIME;</span>
 <span class="fc" id="L140">        return Date.from(ZonedDateTime.parse(date, formater).toInstant());</span>
     }
 

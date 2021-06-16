@@ -378,8 +378,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
             }
 <span class="fc" id="L379">            XSElementDecl rootDecl = schemaSet.getElementDecl(namespaceUri, localName);</span>
 <span class="pc bpc" id="L380" title="1 of 2 branches missed.">            if (rootDecl == null) {</span>
-<span class="nc bnc" id="L381" title="All 2 branches missed.">                LOG.warn(&quot;Declaration of the root element '{}' was not found in the schema&quot;,</span>
-                        namespaceUri != null ? namespaceUri + &quot;:&quot; + localName : localName);
+<span class="nc" id="L381">                LOG.warn(&quot;Declaration of the root element '{}' was not found in the schema&quot;,</span>
+<span class="nc bnc" id="L382" title="All 2 branches missed.">                        namespaceUri != null ? namespaceUri + &quot;:&quot; + localName : localName);</span>
 <span class="nc" id="L383">                return doc;</span>
             }
 <span class="fc" id="L385">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
