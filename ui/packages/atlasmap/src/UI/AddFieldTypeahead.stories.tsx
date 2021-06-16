@@ -63,5 +63,6 @@ export const example = () => (
     ariaLabelTypeAhead={'example'}
     fields={fields}
     placeholderText={'Placeholder'}
+    isSource={true}
   />
 );
