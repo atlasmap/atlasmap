@@ -311,7 +311,7 @@ export function executeFieldSearch(
   searchFilter: string,
   isSource: boolean,
 ): string[][] {
-  return initializationService.cfg.mappingService.executeFieldSearch(
+  return initializationService.cfg.expressionService.executeFieldSearch(
     initializationService.cfg,
     searchFilter,
     isSource,
@@ -340,49 +340,14 @@ export function mappingExpressionAddField(
   if (!mapping || !selectedField) {
     return;
   }
-  let mappedField = mapping.getMappedFieldByName(selectedField, true, {
-    fieldScope: selectedFieldScope,
-  });
-
-  if (!mappedField) {
-    // If the selected field was not part of the original mapping
-    // and is complex then add it as a reference node.
-    mappedField = mapping.getReferenceField(selectedField);
-
-    if (mappedField) {
-      mapping.transition!.expression!.addConditionalExpressionNode(
-        mappedField,
-        newTextNode.getUuid(),
-        isTrailer ? newTextNode.str.length : atIndex,
-      );
-    }
-    // Try adding the selected field to the active mapping.
-    let field: Field | null = null;
-    for (const doc of initializationService.cfg.getDocs(true)) {
-      field = Field.getField(
-        selectedField,
-        doc.getAllFields(),
-        selectedFieldScope,
-      );
-      if (field) {
-        break;
-      }
-    }
-    if (field) {
-      initializationService.cfg.mappingService.fieldSelected(
-        field,
-        true,
-        newTextNode.getUuid(),
-        isTrailer ? newTextNode.toText().length : atIndex,
-      );
-    }
-  } else {
-    mapping.transition!.expression!.addConditionalExpressionNode(
-      mappedField,
-      newTextNode.getUuid(),
-      isTrailer ? newTextNode.str.length : atIndex,
-    );
-  }
+  configModel.expressionService.addField(
+    mapping,
+    selectedField,
+    selectedFieldScope,
+    newTextNode,
+    atIndex,
+    isTrailer,
+  );
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 
@@ -463,7 +428,7 @@ export function onFieldPreviewChange(field: IAtlasmapField, value: string) {
 }
 
 export function toggleExpressionMode() {
-  initializationService.cfg.mappingService.toggleExpressionMode();
+  initializationService.cfg.expressionService.toggleExpressionMode();
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 

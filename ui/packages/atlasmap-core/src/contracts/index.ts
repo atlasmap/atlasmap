@@ -14,3 +14,4 @@
     limitations under the License.
 */
 export * from './adm-digest';
+export * from './expression';

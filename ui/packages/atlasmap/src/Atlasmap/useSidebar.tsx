@@ -140,6 +140,12 @@ export function useSidebar({
         }
       };
 
+      /**
+       * @todo Field search has to be consolidated when server side field search is implemented,
+       * see {@link MappingExpressionService.executeFieldSearch()} and
+       * {@link DocumentManagementService.filterDocumentFields()}
+       * https://github.com/atlasmap/atlasmap/issues/603
+       */
       const addableSources = [
         constants?.fields,
         sourceProperties?.fields,

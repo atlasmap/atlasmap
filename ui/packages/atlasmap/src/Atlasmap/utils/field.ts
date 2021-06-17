@@ -428,32 +428,6 @@ export function removeMappedFieldFromCurrentMapping(field: MappedField): void {
 }
 
 /**
- * Return the Field object associated with the specified UUID in the specified document.
- *
- * @param docName
- * @param cfg
- * @param isSource
- * @param uuid
- */
-export function getFieldByUUID(
-  docName: string,
-  cfg: ConfigModel,
-  isSource: boolean,
-  uuid: string,
-): Field | undefined {
-  const docDef = cfg.getDocForIdentifier(docName, isSource);
-  if (docDef === null) {
-    return;
-  }
-  for (const field of docDef.getAllFields()) {
-    if (field.uuid === uuid) {
-      return field;
-    }
-  }
-  return undefined;
-}
-
-/**
  * Return the enumeration mapping lookup table associated with the active mapping.
  *
  */

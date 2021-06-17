@@ -18,15 +18,17 @@ import { MappedField, MappingModel } from './mapping.model';
 
 import { ConfigModel } from './config.model';
 import { DocumentDefaultName } from '../common/config.types';
+import { IExpressionNode } from 'src/contracts/expression';
 import { Subject } from 'rxjs';
 
 export class ExpressionUpdatedEvent {
   constructor(public node?: ExpressionNode, public offset?: number) {}
 }
 
-export abstract class ExpressionNode {
+export abstract class ExpressionNode implements IExpressionNode {
   protected static sequence = 0;
-  protected uuid: string;
+  public readonly uuid: string;
+  public readonly str: string;
 
   constructor(prefix: string) {
     this.uuid = prefix + ExpressionNode.sequence++;
@@ -273,7 +275,7 @@ export class ExpressionModel {
     nodeId?: string,
     startOffset?: number,
     endOffset?: number
-  ): any | null {
+  ): TextNode | null {
     let targetNode: TextNode | null = null;
     if (!nodeId) {
       const lastNode = this.getLastNode();

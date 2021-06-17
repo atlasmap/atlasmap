@@ -25,11 +25,9 @@ import {
 import {
   DocumentInitializationModel,
   DocumentType,
-  ExpressionUtil,
   InspectionType,
   MappingSerializer,
   TransitionMode,
-  search,
 } from '@atlasmap/core';
 import { IAtlasmapDocument, IAtlasmapField } from '../Views';
 import React, {
@@ -101,7 +99,6 @@ import {
   selectMapping,
   setSelectedEnumValue,
   toggleExpressionMode,
-  toggleMappingPreview,
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
@@ -386,7 +383,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
           debounceTime(debounceTimeWindow),
         );
       const mappingPreview =
-        configModel.mappingService.mappingPreviewOutput$.pipe(
+        configModel.previewService.mappingPreviewOutput$.pipe(
           debounceTime(debounceTimeWindow),
         );
 
@@ -468,8 +465,16 @@ export function useAtlasmap() {
 
   const { onLoading, onReset, ...state } = context;
 
-  const searchSources = useCallback((term: string) => search(term, true), []);
-  const searchTargets = useCallback((term: string) => search(term, false), []);
+  const searchSources = useCallback(
+    (term: string) =>
+      configModel.documentService.filterDocumentFields(term, true),
+    [configModel],
+  );
+  const searchTargets = useCallback(
+    (term: string) =>
+      configModel.documentService.filterDocumentFields(term, false),
+    [configModel],
+  );
 
   const handleImportADMArchiveFile = useCallback(
     (file: File) => {
@@ -517,7 +522,7 @@ export function useAtlasmap() {
       .length === 0;
 
   const mappingHasSourceCollection = useCallback(() => {
-    return configModel.mappingService.willClearOutSourceFieldsOnTogglingExpression();
+    return configModel.expressionService.willClearOutSourceFieldsOnTogglingExpression();
   }, [configModel]);
 
   /**
@@ -656,15 +661,15 @@ export function useAtlasmap() {
     mappingExpressionRemoveField,
     mappingHasSourceCollection,
     mappingExpressionEnabled:
-      configModel.mappingService.conditionalMappingExpressionEnabled(),
-    currentMappingExpression: ExpressionUtil.getMappingExpressionStr(
-      configModel,
-      true,
-      configModel.mappings?.activeMapping,
-    ),
+      configModel.expressionService.isExpressionEnabledForActiveMapping(),
+    currentMappingExpression:
+      configModel.expressionService.getMappingExpressionStr(
+        true,
+        configModel.mappings?.activeMapping,
+      ),
     getMappingExpression,
     toggleExpressionMode,
-    toggleMappingPreview,
+    toggleMappingPreview: configModel.previewService.toggleMappingPreview,
     toggleShowMappedFields,
     toggleShowUnmappedFields,
     onFieldPreviewChange,

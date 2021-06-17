@@ -27,7 +27,6 @@ import { Subject, Subscription } from 'rxjs';
 
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
-import { DocumentType } from '../common/config.types';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
@@ -54,16 +53,6 @@ export class MappingManagementService {
   mappingSelectionRequiredSource = new Subject<Field>();
   mappingSelectionRequired$ =
     this.mappingSelectionRequiredSource.asObservable();
-
-  mappingPreviewInputSource = new Subject<MappingModel>();
-  mappingPreviewInput$ = this.mappingPreviewInputSource.asObservable();
-  mappingPreviewOutputSource = new Subject<MappingModel>();
-  mappingPreviewOutput$ = this.mappingPreviewOutputSource.asObservable();
-  mappingPreviewErrorSource = new Subject<ErrorInfo[]>();
-  mappingPreviewError$ = this.mappingPreviewErrorSource.asObservable();
-
-  private mappingPreviewInputSubscription?: Subscription;
-  private mappingUpdatedSubscription?: Subscription;
 
   constructor(private api: typeof ky) {}
 
@@ -128,6 +117,12 @@ export class MappingManagementService {
     this.cfg
       .mappings!.getAllMappings(true)
       .forEach((m) => this.updateTransition(m)); // TODO: check this non null operator
+  }
+
+  updateActiveMappingTransition() {
+    if (this.cfg.mappings?.activeMapping) {
+      this.updateTransition(this.cfg.mappings?.activeMapping);
+    }
   }
 
   /**
@@ -232,12 +227,7 @@ export class MappingManagementService {
     }
   }
 
-  fieldSelected(
-    field: Field,
-    compoundSelection?: boolean,
-    position?: string,
-    offset?: number
-  ): void {
+  fieldSelected(field: Field, compoundSelection?: boolean): void {
     // Keep around for now
     compoundSelection = true;
 
@@ -329,7 +319,7 @@ export class MappingManagementService {
       }
       mapping.addField(field, false);
 
-      this.updateTransition(mapping, position, offset);
+      this.updateTransition(mapping);
       if (mapping.sourceFields.length > 0 || mapping.targetFields.length > 0) {
         this.notifyMappingUpdated();
       }
@@ -349,7 +339,7 @@ export class MappingManagementService {
         this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
         this.deselectMapping();
       } else {
-        this.updateTransition(mapping, position, offset);
+        this.updateTransition(mapping);
       }
       this.notifyMappingUpdated();
     }
@@ -458,167 +448,6 @@ export class MappingManagementService {
     this.notifyMappingUpdated();
   }
 
-  enableMappingPreview(): void {
-    if (this.cfg.initCfg.baseMappingServiceUrl == null) {
-      // process mapping service not configured.
-      return;
-    }
-    this.cfg.showMappingPreview = true;
-    this.mappingPreviewInputSubscription = this.mappingPreviewInput$.subscribe(
-      (inputFieldMapping) => {
-        if (!inputFieldMapping || !inputFieldMapping.isFullyMapped()) {
-          return;
-        }
-        let hasValue = false;
-        for (const sourceField of inputFieldMapping.getFields(true)) {
-          if (sourceField.value) {
-            hasValue = true;
-            break;
-          }
-        }
-        if (!hasValue) {
-          for (const targetField of inputFieldMapping.getFields(false)) {
-            if (targetField.value) {
-              hasValue = true;
-              break;
-            }
-          }
-        }
-        if (!hasValue) {
-          return;
-        }
-
-        const payload: any = {
-          ProcessMappingRequest: {
-            jsonType:
-              ConfigModel.mappingServicesPackagePrefix +
-              '.ProcessMappingRequest',
-            mapping: MappingSerializer.serializeFieldMapping(
-              this.cfg,
-              inputFieldMapping,
-              'preview',
-              false
-            ),
-          },
-        };
-        const docRefs: any = {};
-        for (const docRef of this.cfg.getAllDocs()) {
-          docRefs[docRef.id] = docRef.uri;
-        }
-
-        const url: string =
-          this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
-        this.cfg.logger!.debug(
-          `Process Mapping Preview Request: ${JSON.stringify(payload)}`
-        );
-        this.api
-          .put(url, { json: payload })
-          .json()
-          .then((body: any) => {
-            this.cfg.logger!.debug(
-              `Process Mapping Preview  Response: ${JSON.stringify(body)}`
-            );
-            const answer = MappingSerializer.deserializeFieldMapping(
-              body.ProcessMappingResponse.mapping,
-              docRefs,
-              this.cfg,
-              false
-            );
-            for (const toWrite of inputFieldMapping.targetFields) {
-              for (const toRead of answer.targetFields) {
-                // TODO: check these non null operator
-                if (
-                  toWrite.field?.docDef?.id === toRead.parsedData.parsedDocID &&
-                  toWrite.field?.path === toRead.parsedData.parsedPath
-                ) {
-                  // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
-                  // TODO: check this non null operator
-                  toWrite.field.value = toRead.parsedData.parsedValue!;
-                  const index = answer.targetFields.indexOf(toRead);
-                  if (index !== -1) {
-                    answer.targetFields.splice(index, 1);
-                    break;
-                  }
-                }
-              }
-            }
-            this.mappingPreviewOutputSource.next(answer);
-            const audits = MappingSerializer.deserializeAudits(
-              body.ProcessMappingResponse.audits,
-              ErrorType.PREVIEW
-            );
-            // TODO: check this non null operator
-            if (this.cfg.mappings!.activeMapping === inputFieldMapping) {
-              audits.forEach((a) => (a.mapping = inputFieldMapping));
-              this.cfg.errorService.addError(...audits);
-            }
-            this.mappingPreviewErrorSource.next(audits);
-          })
-          .catch((error: any) => {
-            if (
-              this.cfg.mappings &&
-              this.cfg.mappings.activeMapping &&
-              this.cfg.mappings.activeMapping === inputFieldMapping
-            ) {
-              this.cfg.errorService.addError(
-                new ErrorInfo({
-                  message: error,
-                  level: ErrorLevel.ERROR,
-                  mapping: inputFieldMapping,
-                  scope: ErrorScope.MAPPING,
-                  type: ErrorType.PREVIEW,
-                })
-              );
-            }
-            this.mappingPreviewErrorSource.next([
-              new ErrorInfo({ message: error, level: ErrorLevel.ERROR }),
-            ]);
-          });
-      }
-    );
-
-    this.mappingUpdatedSubscription = this.mappingUpdated$.subscribe(() => {
-      if (!this.cfg || !this.cfg.mappings || !this.cfg.mappings.activeMapping) {
-        return;
-      }
-      if (this.cfg.mappings.activeMapping.isFullyMapped()) {
-        this.mappingPreviewInputSource.next(this.cfg.mappings.activeMapping);
-      }
-    });
-  }
-
-  /**
-   * On mapping preview disable, clear any preview values and unsubscribe from
-   * both the mapping-updated and mapping-preview subscriptions.
-   */
-  disableMappingPreview(): void {
-    let mappedValueCleared = false;
-    this.cfg.showMappingPreview = false;
-
-    // Clear any preview values on mapping preview disable.
-    if (this.cfg.mappings?.activeMapping?.isFullyMapped()) {
-      for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-        for (const mappedField of mapping.getAllFields()) {
-          if (mappedField.value?.length > 0 && !mappedField.isConstant()) {
-            mappedField.value = '';
-            mappedValueCleared = true;
-          }
-        }
-      }
-    }
-    if (mappedValueCleared) {
-      this.notifyMappingUpdated();
-    }
-    if (this.mappingUpdatedSubscription) {
-      this.mappingUpdatedSubscription.unsubscribe();
-      this.mappingUpdatedSubscription = undefined;
-    }
-    if (this.mappingPreviewInputSubscription) {
-      this.mappingPreviewInputSubscription.unsubscribe();
-      this.mappingPreviewInputSubscription = undefined;
-    }
-  }
-
   /**
    * Remove any mappings referencing the specified document ID.
    *
@@ -629,19 +458,20 @@ export class MappingManagementService {
     for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
       for (const mappedField of mapping.getAllFields()) {
         if (
-          !(mappedField instanceof PaddingField) &&
-          mappedField.docDef.id === docId
+          mappedField instanceof PaddingField ||
+          mappedField.docDef.id !== docId
         ) {
-          this.removeFieldFromAllMappings(mappedField);
-          if (
-            mapping.sourceFields.length === 0 ||
-            mapping.targetFields.length === 0
-          ) {
-            this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
-            if (mapping === this.cfg.mappings!.activeMapping) {
-              // TODO: check this non null operator
-              this.cfg.mappingService.deselectMapping();
-            }
+          continue;
+        }
+        this.removeFieldFromAllMappings(mappedField);
+        if (
+          mapping.sourceFields.length === 0 ||
+          mapping.targetFields.length === 0
+        ) {
+          this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
+          if (mapping === this.cfg.mappings!.activeMapping) {
+            // TODO: check this non null operator
+            this.cfg.mappingService.deselectMapping();
           }
         }
       }
@@ -659,112 +489,6 @@ export class MappingManagementService {
         }
       }
     }
-  }
-
-  willClearOutSourceFieldsOnTogglingExpression() {
-    if (this.cfg.mappings?.activeMapping?.transition.enableExpression) {
-      return (
-        this.cfg.mappings.activeMapping.getFirstCollectionField(true) != null
-      );
-    } else {
-      return false;
-    }
-  }
-
-  conditionalMappingExpressionEnabled(): boolean {
-    return !!this.cfg.mappings?.activeMapping?.transition?.enableExpression;
-  }
-
-  toggleExpressionMode() {
-    if (
-      !this.cfg.mappings ||
-      !this.cfg.mappings.activeMapping ||
-      !this.cfg.mappings.activeMapping.transition
-    ) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: 'Please select a mapping first.',
-          level: ErrorLevel.INFO,
-          scope: ErrorScope.MAPPING,
-          type: ErrorType.USER,
-        })
-      );
-      return;
-    }
-    if (
-      this.cfg.mappings.activeMapping.transition.mode ===
-      TransitionMode.ONE_TO_MANY
-    ) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: `Cannot establish a conditional mapping expression when multiple target fields are selected.
-        Please select only one target field and try again.`,
-          level: ErrorLevel.WARN,
-          scope: ErrorScope.MAPPING,
-          type: ErrorType.USER,
-          mapping: this.cfg.mappings.activeMapping,
-        })
-      );
-      return;
-    }
-
-    if (this.willClearOutSourceFieldsOnTogglingExpression()) {
-      // Clear out source fields, if the mapping contains a source collection
-      const activeMapping = this.cfg.mappings.activeMapping;
-      activeMapping.sourceFields.splice(0, activeMapping.sourceFields.length);
-    }
-
-    this.cfg.mappings.activeMapping.transition.enableExpression =
-      !this.cfg.mappings.activeMapping.transition.enableExpression;
-    this.updateTransition(this.cfg.mappings.activeMapping);
-    if (this.cfg.mappings.activeMapping.transition.expression) {
-      this.cfg.mappings.activeMapping.transition.expression.expressionUpdatedSource.next();
-    }
-  }
-
-  /**
-   * Invoke the runtime service to save the current active mapping.
-   * No validation will occur.
-   */
-  async updateMappings(payload: any): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      if (
-        this.cfg.initCfg.baseMappingServiceUrl === null ||
-        this.cfg.mappings === null
-      ) {
-        resolve(false);
-        return;
-      }
-
-      const url: string =
-        this.cfg.initCfg.baseMappingServiceUrl +
-        'mapping/' +
-        DocumentType.JSON +
-        '/' +
-        this.cfg.mappingDefinitionId;
-      this.cfg.logger!.debug(
-        `Mapping Update Service Request: ${JSON.stringify(payload)}\n`
-      );
-      this.api
-        .put(url, { json: payload })
-        .then((body: any) => {
-          this.cfg.logger!.debug(
-            `Mapping Update Service Response: ${JSON.stringify(body)}\n`
-          );
-          resolve(true);
-        })
-        .catch((error: any) => {
-          this.cfg.errorService.addError(
-            new ErrorInfo({
-              message: 'Unable to update mappings file. ' + error,
-              level: ErrorLevel.ERROR,
-              scope: ErrorScope.MAPPING,
-              type: ErrorType.INTERNAL,
-            })
-          );
-          resolve(false);
-        });
-    });
   }
 
   /**
@@ -796,48 +520,55 @@ export class MappingManagementService {
           this.cfg.logger!.debug(
             `Validation Service Response: ${JSON.stringify(body)}\n`
           );
-          if (this.cfg.mappings === null) {
-            resolve(false);
-            return;
-          }
-          const errors: ErrorInfo[] = [];
-
-          // This should be eventually turned into mapping entry level validation.
-          // https://github.com/atlasmap/atlasmap-ui/issues/116
-          if (body && body.Validations && body.Validations.validation) {
-            for (const validation of body.Validations.validation) {
-              const level: ErrorLevel = validation.status;
-              let scope: ErrorScope = validation.scope;
-              let validatedMapping: MappingModel | undefined = undefined;
-              if (!scope || scope !== ErrorScope.MAPPING || !validation.id) {
-                scope = ErrorScope.APPLICATION;
-              } else {
-                scope = ErrorScope.MAPPING;
-                if (this.cfg.mappings && this.cfg.mappings.mappings) {
-                  validatedMapping = this.cfg.mappings.mappings.find(
-                    (m) => m.uuid === validation.id
-                  )!; // TODO: check this non null operator
-                }
-              }
-              errors.push(
-                new ErrorInfo({
-                  message: validation.message,
-                  level: level,
-                  scope: scope,
-                  mapping: validatedMapping,
-                  type: ErrorType.VALIDATION,
-                })
-              );
-            }
-          }
-          this.cfg.errorService.addError(...errors);
-          resolve(true);
+          this.processValidationResponse(body, resolve);
         })
         .catch(() => {
           this.cfg.logger!.warn('Unable to fetch validation data.');
           resolve(false);
         });
     });
+  }
+
+  private processValidationResponse(
+    body: any,
+    resolve: (value: boolean) => void
+  ) {
+    if (this.cfg.mappings === null) {
+      resolve(false);
+      return;
+    }
+    const errors: ErrorInfo[] = [];
+
+    // This should be eventually turned into mapping entry level validation.
+    // https://github.com/atlasmap/atlasmap-ui/issues/116
+    if (body && body.Validations && body.Validations.validation) {
+      for (const validation of body.Validations.validation) {
+        const level: ErrorLevel = validation.status;
+        let scope: ErrorScope = validation.scope;
+        let validatedMapping: MappingModel | undefined = undefined;
+        if (!scope || scope !== ErrorScope.MAPPING || !validation.id) {
+          scope = ErrorScope.APPLICATION;
+        } else {
+          scope = ErrorScope.MAPPING;
+          if (this.cfg.mappings && this.cfg.mappings.mappings) {
+            validatedMapping = this.cfg.mappings.mappings.find(
+              (m) => m.uuid === validation.id
+            )!; // TODO: check this non null operator
+          }
+        }
+        errors.push(
+          new ErrorInfo({
+            message: validation.message,
+            level: level,
+            scope: scope,
+            mapping: validatedMapping,
+            type: ErrorType.VALIDATION,
+          })
+        );
+      }
+    }
+    this.cfg.errorService.addError(...errors);
+    resolve(true);
   }
 
   /**
@@ -854,7 +585,7 @@ export class MappingManagementService {
    * Validate and save complete mappings.  Triggered either as an observable
    * or directly.
    */
-  async notifyMappingUpdated(): Promise<boolean> {
+  notifyMappingUpdated(): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       if (this.cfg.mappings) {
         const activeMapping: MappingModel = this.cfg.mappings.activeMapping!; // TODO: check this non null operator
@@ -866,7 +597,9 @@ export class MappingManagementService {
         }
         const payload: any = MappingSerializer.serializeMappings(this.cfg);
         if (await this.validateMappings(payload)) {
-          await this.updateMappings(payload);
+          await this.cfg.fileService.setMappingToService(
+            JSON.stringify(payload)
+          );
         }
       }
       this.mappingUpdatedSource.next();
@@ -882,21 +615,8 @@ export class MappingManagementService {
    * @param position
    * @param offset
    */
-  private updateTransition(
-    mapping: MappingModel,
-    position?: string,
-    offset?: number
-  ): void {
+  private updateTransition(mapping: MappingModel): void {
     if (mapping.transition.enableExpression) {
-      mapping.transition.mode = TransitionMode.EXPRESSION;
-      mapping.transition.transitionFieldAction = null;
-
-      // Update conditional expression field references.
-      mapping.transition.expression?.updateFieldReference(
-        mapping,
-        position,
-        offset
-      );
       return;
     }
 
@@ -999,74 +719,6 @@ export class MappingManagementService {
   }
 
   /**
-   * Return an array of strings representing display names of mapping fields based on the
-   * specified filter.
-   *
-   * @param filter
-   */
-  executeFieldSearch(
-    configModel: ConfigModel,
-    filter: string,
-    isSource: boolean
-  ): string[][] {
-    const activeMapping = configModel.mappings!.activeMapping!; // TODO: check this non null operator
-    const formattedFields: string[][] = [];
-    let fields: Field[] = [];
-    for (const docDef of configModel.getDocs(isSource)) {
-      fields = fields.concat(docDef.getTerminalFields());
-      fields = fields.concat(docDef.getComplexFields());
-    }
-    Field.alphabetizeFields(fields);
-    let documentName = '';
-    let fieldCount = -1;
-
-    for (const field of fields) {
-      const formattedField: string[] = [''];
-      let displayName =
-        field == null ? '' : field.getFieldLabel(configModel.showTypes, true);
-
-      if (
-        filter == null ||
-        filter === '' ||
-        displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
-      ) {
-        if (
-          !configModel.mappingService.isFieldSelectable(activeMapping, field) &&
-          field.type !== 'COMPLEX'
-        ) {
-          continue;
-        }
-        if (documentName !== field.docDef.name) {
-          if (fieldCount === 0) {
-            formattedFields.pop();
-            continue;
-          } else {
-            const documentField = [''];
-            documentName = field.docDef.name;
-            documentField[0] = documentName;
-            documentField[1] = '';
-            fieldCount = 0;
-            formattedFields.push(documentField);
-          }
-        }
-        displayName = CommonUtil.extractDisplayPath(field.path, 100);
-        formattedField[0] = displayName;
-        if (field.isProperty() && field.scope) {
-          formattedField[1] = field.path + ' <' + field.scope + '>';
-        } else {
-          formattedField[1] = field.path;
-        }
-        fieldCount++;
-        formattedFields.push(formattedField);
-      }
-      if (formattedFields.length > 19) {
-        break;
-      }
-    }
-    return formattedFields;
-  }
-
-  /**
    * Get the enumeration values for the specified mapping and return it in
    * the form of a lookup table.
    *
@@ -1114,23 +766,5 @@ export class MappingManagementService {
    */
   isEnumerationMapping(mapping: MappingModel): boolean {
     return mapping.transition.mode === TransitionMode.ENUM;
-  }
-
-  getRuntimeVersion(): Promise<string> {
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'version';
-    return new Promise<string>((resolve, reject) => {
-      this.api
-        .get(url)
-        .json()
-        .then((body: any) => {
-          this.cfg.logger!.debug(
-            `Runtime Service Version Response: ${JSON.stringify(body)}`
-          );
-          resolve(body.string);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
   }
 }

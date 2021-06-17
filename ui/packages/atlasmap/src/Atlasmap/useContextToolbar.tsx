@@ -79,7 +79,7 @@ export function useContextToolbar({
   showToggleUnmappedFieldsToolbarItem = true,
   showAddNewMappingToolbarItem = true,
 
-  onImportADMArchiveFile: onImportAtlasFile,
+  onImportADMArchiveFile,
   onImportJarFile,
   onExportAtlasFile,
   onResetAtlasmap,
@@ -116,7 +116,7 @@ export function useContextToolbar({
               showImportJarFileToolbarItem={showImportJarFileToolbarItem}
               showExportAtlasFileToolbarItem={showExportAtlasFileToolbarItem}
               showResetToolbarItem={showResetToolbarItem}
-              onImportAtlasFile={onImportAtlasFile}
+              onImportAtlasFile={onImportADMArchiveFile}
               onImportJarFile={onImportJarFile}
               onExportAtlasFile={onExportAtlasFile}
               onResetAtlasmap={onResetAtlasmap}
@@ -199,7 +199,7 @@ export function useContextToolbar({
       showImportJarFileToolbarItem,
       showExportAtlasFileToolbarItem,
       showResetToolbarItem,
-      onImportAtlasFile,
+      onImportADMArchiveFile,
       onImportJarFile,
       onExportAtlasFile,
       onResetAtlasmap,

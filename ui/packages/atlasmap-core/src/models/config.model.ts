@@ -28,7 +28,9 @@ import { FileManagementService } from '../services/file-management.service';
 import { InitializationService } from '../services/initialization.service';
 import { Logger } from 'loglevel';
 import { MappingDefinition } from './mapping-definition.model';
+import { MappingExpressionService } from '../services/mapping-expression.service';
 import { MappingManagementService } from '../services/mapping-management.service';
+import { MappingPreviewService } from '../services/mapping-preview.service';
 
 export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';
@@ -116,6 +118,8 @@ export class ConfigModel {
   initializationService: InitializationService;
   fieldActionService: FieldActionService;
   fileService: FileManagementService;
+  previewService: MappingPreviewService;
+  expressionService: MappingExpressionService;
 
   sourceDocs: DocumentDefinition[] = [];
   targetDocs: DocumentDefinition[] = [];
@@ -146,6 +150,11 @@ export class ConfigModel {
     propertyDoc.clearFields();
     propertyDoc.type = DocumentType.PROPERTY;
     propertyDoc.name = DocumentDefaultName.PROPERTIES;
+    propertyDoc.id =
+      'DOC.' +
+      propertyDoc.name +
+      '.' +
+      Math.floor(Math.random() * 1000000 + 1).toString();
     propertyDoc.isSource = isSource;
     propertyDoc.showFields = false;
     propertyDoc.isPropertyOrConstant = true;
@@ -157,6 +166,11 @@ export class ConfigModel {
     this.constantDoc.clearFields();
     this.constantDoc.type = DocumentType.CONSTANT;
     this.constantDoc.name = DocumentDefaultName.CONSTANTS;
+    this.constantDoc.id =
+      'DOC.' +
+      this.constantDoc.name +
+      '.' +
+      Math.floor(Math.random() * 1000000 + 1).toString();
     this.constantDoc.isSource = true;
     this.constantDoc.showFields = false;
     this.constantDoc.isPropertyOrConstant = true;
@@ -292,7 +306,7 @@ export class ConfigModel {
   getAllDocs(): DocumentDefinition[] {
     return [this.sourcePropertyDoc, this.constantDoc]
       .concat(this.sourceDocs)
-      .concat([this.targetPropertyDoc, this.constantDoc])
+      .concat(this.targetPropertyDoc)
       .concat(this.targetDocs);
   }
 

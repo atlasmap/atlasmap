@@ -31,7 +31,9 @@ import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
 import { LookupTableUtil } from '../utils/lookup-table-util';
 import { MappingDefinition } from '../models/mapping-definition.model';
+import { MappingExpressionService } from './mapping-expression.service';
 import { MappingManagementService } from './mapping-management.service';
+import { MappingPreviewService } from './mapping-preview.service';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
 import ky from 'ky/umd';
@@ -58,6 +60,8 @@ export class InitializationService {
   private errorService: ErrorHandlerService;
   private fieldActionService: FieldActionService;
   private fileService: FileManagementService;
+  private previewService: MappingPreviewService;
+  private expressionService: MappingExpressionService;
 
   constructor(private api: typeof ky) {
     this.documentService = new DocumentManagementService(this.api);
@@ -65,6 +69,8 @@ export class InitializationService {
     this.errorService = new ErrorHandlerService();
     this.fieldActionService = new FieldActionService(this.api);
     this.fileService = new FileManagementService(this.api);
+    this.previewService = new MappingPreviewService(this.api);
+    this.expressionService = new MappingExpressionService();
     this.resetConfig();
     this.documentService.initialize();
   }
@@ -80,6 +86,10 @@ export class InitializationService {
     this.cfg.fieldActionService.cfg = this.cfg;
     this.cfg.fileService = this.fileService;
     this.cfg.fileService.cfg = this.cfg;
+    this.cfg.previewService = this.previewService;
+    this.cfg.previewService.cfg = this.cfg;
+    this.cfg.expressionService = this.expressionService;
+    this.cfg.expressionService.cfg = this.cfg;
     this.cfg.initializationService = this;
     this.cfg.logger = log.getLogger('config');
     ConfigModel.setConfig(this.cfg);
@@ -172,6 +182,28 @@ export class InitializationService {
           resolve(false);
         })
         .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * Retrieve AtlasMap design time backend runtime version.
+   * @returns
+   */
+  getRuntimeVersion(): Promise<string> {
+    const url = this.cfg.initCfg.baseMappingServiceUrl + 'version';
+    return new Promise<string>((resolve, reject) => {
+      this.api
+        .get(url)
+        .json()
+        .then((body: any) => {
+          this.cfg.logger!.debug(
+            `Runtime Service Version Response: ${JSON.stringify(body)}`
+          );
+          resolve(body.string);
+        })
+        .catch((error) => {
           reject(error);
         });
     });

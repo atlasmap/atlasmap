@@ -13,11 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import {
-  DocumentDefinition,
-  PaddingField,
-} from '../models/document-definition.model';
-import { LookupTableData, LookupTableUtil, MappingSerializer } from '../utils';
+import { LookupTableData, LookupTableUtil } from '../utils';
 import ky, { Input, Options } from 'ky';
 
 import { ConfigModel } from '../models/config.model';
@@ -26,25 +22,20 @@ import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
+import { PaddingField } from '../models/document-definition.model';
 import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
 import mockMappingJson from '../../../../test-resources/mapping/atlasmapping-mock.json';
 
 describe('MappingManagementService', () => {
+  let cfg: ConfigModel;
   let service: MappingManagementService;
 
   beforeEach(() => {
     const initService = new InitializationService(ky);
-    const cfg = initService.cfg;
+    cfg = initService.cfg;
     service = cfg.mappingService;
   });
-
-  function setSourceFieldValues(mapping: MappingModel) {
-    let sourceFields = mapping.getFields(true);
-    for (let i in sourceFields) {
-      sourceFields[i].value = 'value-' + i;
-    }
-  }
 
   test('check banned fields', () => {
     const f = new Field();
@@ -58,98 +49,6 @@ describe('MappingManagementService', () => {
         f.parentField
       )
     ).toContain('parent');
-  });
-
-  test('should clear out source fields when toggling expression with a source collection', () => {
-    const source = new Field();
-    source.isPrimitive = true;
-    source.docDef = new DocumentDefinition();
-    source.docDef.isSource = true;
-
-    source.parentField = new Field();
-    source.parentField.isCollection = true;
-
-    source.parentField.parentField = new Field();
-    source.parentField.parentField.isCollection = true;
-
-    const target = new Field();
-    target.isPrimitive = true;
-    target.docDef = new DocumentDefinition();
-    target.docDef.isSource = false;
-
-    target.parentField = new Field();
-    target.parentField.isCollection = true;
-
-    target.parentField.parentField = new Field();
-    target.parentField.parentField.isCollection = true;
-
-    const mappingModel = new MappingModel();
-    mappingModel.addField(source, false);
-    mappingModel.addField(target, false);
-
-    const mappingDefinition = new MappingDefinition();
-    mappingDefinition.mappings.push(mappingModel);
-    mappingModel.cfg.mappings = mappingDefinition;
-    mappingDefinition.activeMapping = mappingModel;
-
-    service.cfg = new ConfigModel();
-    service.cfg.mappings = mappingDefinition;
-
-    service.toggleExpressionMode();
-
-    expect(service.willClearOutSourceFieldsOnTogglingExpression()).toBeTruthy();
-
-    service.toggleExpressionMode();
-
-    expect(service.cfg.mappings?.activeMapping?.sourceFields?.length).toBe(0);
-    expect(service.cfg.mappings?.activeMapping?.targetFields?.length).toBe(1);
-  });
-
-  test('should not clear out source fields when toggling expression without a source collection', () => {
-    const source = new Field();
-    source.isPrimitive = true;
-    source.docDef = new DocumentDefinition();
-    source.docDef.isSource = true;
-
-    source.parentField = new Field();
-    source.parentField.isCollection = false;
-
-    source.parentField.parentField = new Field();
-    source.parentField.parentField.isCollection = false;
-
-    const target = new Field();
-    target.isPrimitive = true;
-    target.docDef = new DocumentDefinition();
-    target.docDef.isSource = false;
-
-    target.parentField = new Field();
-    target.parentField.isCollection = true;
-
-    target.parentField.parentField = new Field();
-    target.parentField.parentField.isCollection = true;
-
-    const mappingModel = new MappingModel();
-    mappingModel.addField(source, false);
-    mappingModel.addField(target, false);
-
-    const mappingDefinition = new MappingDefinition();
-    mappingDefinition.mappings.push(mappingModel);
-    mappingModel.cfg.mappings = mappingDefinition;
-    mappingDefinition.activeMapping = mappingModel;
-
-    service.cfg = new ConfigModel();
-    service.cfg.mappings = mappingDefinition;
-
-    spyOn<any>(service, 'updateTransition').and.stub();
-
-    service.toggleExpressionMode();
-
-    expect(service.willClearOutSourceFieldsOnTogglingExpression()).toBeFalsy();
-
-    service.toggleExpressionMode();
-
-    expect(service.cfg.mappings?.activeMapping?.sourceFields?.length).toBe(1);
-    expect(service.cfg.mappings?.activeMapping?.targetFields?.length).toBe(1);
   });
 
   test('fetchMappings()', (done) => {
@@ -252,13 +151,14 @@ describe('MappingManagementService', () => {
   });
 
   test('moveMappedFieldTo', () => {
+    spyOn(service, 'notifyLineRefresh').and.stub();
     spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
       return new (class {
         json(): Promise<any> {
           return Promise.resolve(options.json);
         }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
         }
       })();
     });
@@ -291,8 +191,8 @@ describe('MappingManagementService', () => {
         json(): Promise<any> {
           return Promise.resolve(options.json);
         }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
         }
       })();
     });
@@ -320,8 +220,8 @@ describe('MappingManagementService', () => {
         json(): Promise<any> {
           return Promise.resolve(options.json);
         }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
         }
       })();
     });
@@ -342,8 +242,8 @@ describe('MappingManagementService', () => {
         json(): Promise<any> {
           return Promise.resolve(options.json);
         }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
         }
       })();
     });
@@ -367,8 +267,8 @@ describe('MappingManagementService', () => {
         json(): Promise<any> {
           return Promise.resolve(options.json);
         }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
         }
       })();
     });
@@ -381,57 +281,14 @@ describe('MappingManagementService', () => {
     expect(service.cfg.mappings?.activeMapping).toBeNull();
   });
 
-  test('{enable,disable}MappingPreview()', (done) => {
-    spyOn<any>(service, 'validateMappings').and.stub();
-    const requests = [];
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      requests.push(options.json);
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-      })();
-    });
-    TestUtils.createMockMappings(service.cfg);
-    service.cfg.initCfg.baseMappingServiceUrl = 'http://dummy/';
-    const mapping1 = service.cfg.mappings!.mappings[1];
-    setSourceFieldValues(mapping1);
-    service.selectMapping(mapping1);
-    service.enableMappingPreview();
-    expect(requests.length).toBe(0);
-    service
-      .notifyMappingUpdated()
-      .then((value) => {
-        expect(value).toBeTruthy();
-        expect(requests.length).toBe(1);
-        service.disableMappingPreview();
-        service
-          .notifyMappingUpdated()
-          .then((value2) => {
-            expect(value2).toBeTruthy();
-            expect(requests.length).toBe(1);
-            done();
-          })
-          .catch((error) => {
-            fail(error);
-          });
-      })
-      .catch((error) => {
-        fail(error);
-      });
-  });
-
   test('removeDocumentReferenceFromAllMappings()', () => {
     spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
       return new (class {
         json(): Promise<any> {
           return Promise.resolve(options.json);
         }
-        then(): Promise<any> {
-          return Promise.resolve(options.json);
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
         }
       })();
     });
@@ -453,53 +310,6 @@ describe('MappingManagementService', () => {
     expect(service.cfg.mappings?.mappings.length).toBe(2);
     const mapping = service.cfg.mappings?.mappings[0];
     expect(mapping?.isFullyMapped()).toBeFalsy();
-  });
-
-  test('willClearOutSourceFieldsOnTogglingExpression()', () => {
-    TestUtils.createMockMappings(service.cfg);
-    const mapping1 = service.cfg.mappings!.mappings[1];
-    expect(service.cfg.mappings?.activeMapping).toBeNull();
-    service.selectMapping(mapping1);
-    expect(service.willClearOutSourceFieldsOnTogglingExpression()).toBeFalsy();
-  });
-
-  test('conditionalMappingExpressionEnabled()', () => {
-    TestUtils.createMockMappings(service.cfg);
-    const mapping1 = service.cfg.mappings!.mappings[1];
-    expect(service.cfg.mappings?.activeMapping).toBeNull();
-    service.selectMapping(mapping1);
-    expect(service.conditionalMappingExpressionEnabled()).toBeFalsy();
-  });
-
-  test('toggleExpressionMode', () => {
-    spyOn<any>(service, 'validateMappings').and.stub();
-    TestUtils.createMockMappings(service.cfg);
-    const mapping1 = service.cfg.mappings!.mappings[1];
-    expect(service.cfg.mappings?.activeMapping).toBeNull();
-    service.selectMapping(mapping1);
-    service.toggleExpressionMode();
-    expect(service.conditionalMappingExpressionEnabled()).toBeTruthy();
-  });
-
-  test('updateMappings()', () => {
-    const spyValidation = spyOn<any>(service, 'validateMappings').and.stub();
-    const spyPut = spyOn(ky, 'put').and.callFake(
-      (_url: Input, options: Options) => {
-        return new (class {
-          json(): Promise<any> {
-            return Promise.resolve(options.json);
-          }
-          then(): Promise<any> {
-            return Promise.resolve(options.json);
-          }
-        })();
-      }
-    );
-    TestUtils.createMockMappings(service.cfg);
-    const payload: any = MappingSerializer.serializeMappings(service.cfg);
-    service.updateMappings(payload);
-    expect(spyValidation.calls.count()).toBe(0);
-    expect(spyPut.calls.count()).toBe(1);
   });
 
   test('notifyLineRefresh()', (done) => {
@@ -531,19 +341,6 @@ describe('MappingManagementService', () => {
       .catch((error) => {
         fail(error);
       });
-  });
-
-  test('executeFieldSearch()', () => {
-    TestUtils.createMockMappings(service.cfg);
-    const mapping1 = service.cfg.mappings!.mappings[1];
-    expect(service.cfg.mappings?.activeMapping).toBeNull();
-    service.selectMapping(mapping1);
-    expect(
-      service.executeFieldSearch(service.cfg, 'sourceField', true).length
-    ).toBe(4);
-    expect(
-      service.executeFieldSearch(service.cfg, 'sourceField2', true).length
-    ).toBe(2);
   });
 
   test('getEnumerationValues()', () => {
@@ -581,24 +378,5 @@ describe('MappingManagementService', () => {
     const mapping = new MappingModel();
     mapping.transition.mode = TransitionMode.ENUM;
     expect(service.isEnumerationMapping(mapping)).toBeTruthy();
-  });
-
-  test('getRuntimeVersion()', (done) => {
-    spyOn(ky, 'get').and.returnValue(
-      new (class {
-        json(): Promise<any> {
-          return Promise.resolve({ string: '10.9.8' });
-        }
-      })()
-    );
-    service
-      .getRuntimeVersion()
-      .then((value) => {
-        expect(value).toBe('10.9.8');
-        done();
-      })
-      .catch((error) => {
-        fail(error);
-      });
   });
 });
