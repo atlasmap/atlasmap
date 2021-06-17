@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">88.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>36/60</span>
+                <span class='fraction'>53/60</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/24</span>
+                <span class='fraction'>14/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/5</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.32% </span>
+                <span class="strong">88.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>35/59</span>
+                <span class='fraction'>52/59</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -322,35 +322,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,8 +410,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -500,39 +500,39 @@ export class DocumentInspectionUtil {
    * @param collectionClassName
    * @returns
    */
-<span class="fstat-no" title="function not covered" >  static f</span>romJavaProperties(
+  static fromJavaProperties(
     cfg: ConfigModel,
     className: string,
     isSource: boolean,
-<span class="cstat-no" title="statement not covered" >    collectionType = CollectionType.NONE,</span>
+    <span class="missing-if-branch" title="if path not taken" >I</span>collectionType = CollectionType.NONE,
     collectionClassName?: string
   ): JavaInspectionModel {
     const model: DocumentInitializationModel =
-<span class="cstat-no" title="statement not covered" >      new DocumentInitializationModel();</span>
-<span class="cstat-no" title="statement not covered" >    model.id = className;</span>
-    const simpleName = <span class="cstat-no" title="statement not covered" >className.split('.').pop();</span>
-<span class="cstat-no" title="statement not covered" >    model.name = simpleName ? simpleName : '';</span>
-<span class="cstat-no" title="statement not covered" >    model.type = DocumentType.JAVA;</span>
-<span class="cstat-no" title="statement not covered" >    model.inspectionType = InspectionType.JAVA_CLASS;</span>
-<span class="cstat-no" title="statement not covered" >    model.inspectionSource = className;</span>
-<span class="cstat-no" title="statement not covered" >    model.inspectionParameters = { '': '' };</span>
-<span class="cstat-no" title="statement not covered" >    model.isSource = isSource;</span>
-<span class="cstat-no" title="statement not covered" >    model.collectionType = collectionType;</span>
-<span class="cstat-no" title="statement not covered" >    model.collectionClassName = collectionClassName;</span>
-<span class="cstat-no" title="statement not covered" >    model.description = 'Java document class ' + className;</span>
-<span class="cstat-no" title="statement not covered" >    if (collectionType &amp;&amp; collectionType !== CollectionType.NONE) {</span>
+      new DocumentInitializationModel();
+    model.id = className;
+    const simpleName = className.split('.').pop();
+    model.name = simpleName ? simpleName : <span class="branch-1 cbranch-no" title="branch not covered" >'';</span>
+    model.type = DocumentType.JAVA;
+    model.inspectionType = InspectionType.JAVA_CLASS;
+    model.inspectionSource = className;
+    model.inspectionParameters = { '': '' };
+    model.isSource = isSource;
+    model.collectionType = collectionType;
+    model.collectionClassName = collectionClassName;
+    model.description = 'Java document class ' + className;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (collectionType &amp;&amp; collectionType !== CollectionType.NONE) {
 <span class="cstat-no" title="statement not covered" >      model.description += ' collection type: ' + collectionType;</span>
 <span class="cstat-no" title="statement not covered" >      if (collectionClassName) {</span>
 <span class="cstat-no" title="statement not covered" >        model.description += ' collection class name: ' + collectionClassName;</span>
       }
     }
-<span class="cstat-no" title="statement not covered" >    DocumentInspectionUtil.removeDocumentIfAlreadyExists(</span>
+    DocumentInspectionUtil.removeDocumentIfAlreadyExists(
       cfg,
       model.id,
       isSource
     );
-    const doc = <span class="cstat-no" title="statement not covered" >cfg.addDocument(model);</span>
-<span class="cstat-no" title="statement not covered" >    return new JavaInspectionModel(cfg, doc);</span>
+    const doc = cfg.addDocument(model);
+    return new JavaInspectionModel(cfg, doc);
   }
 &nbsp;
   /**
@@ -609,7 +609,7 @@ export class DocumentInspectionUtil {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:26:36 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:32:44 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
