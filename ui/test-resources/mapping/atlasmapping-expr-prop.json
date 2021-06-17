@@ -163,7 +163,7 @@
               "@type" : "Capitalize"
             } ],
             "value" : "boston",
-            "docId" : "DOC.Properties.185063",
+            "docId" : "DOC.Properties",
             "index" : 0,
             "path" : "/prop-city",
             "fieldType" : "STRING",
@@ -173,7 +173,7 @@
             "jsonType" : "io.atlasmap.v2.ConstantField",
             "name" : "Boston",
             "value" : "Boston",
-            "docId" : "DOC.Constants.509124",
+            "docId" : "DOC.Constants",
             "index" : 1,
             "path" : "/Boston",
             "fieldType" : "STRING"

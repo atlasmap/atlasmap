@@ -86,23 +86,11 @@ export function resetAtlasmap() {
 
 export function getRuntimeVersion(): Promise<string> {
   const cfg = ConfigModel.getConfig();
-  return cfg.mappingService.getRuntimeVersion();
+  return cfg.initializationService.getRuntimeVersion();
 }
 
 export function getUIVersion(): string {
   return constants.version;
-}
-
-export function toggleMappingPreview(enabled: boolean) {
-  const cfg = ConfigModel.getConfig();
-
-  if (enabled) {
-    cfg.mappingService.enableMappingPreview();
-  } else {
-    cfg.mappingService.disableMappingPreview();
-  }
-
-  return enabled;
 }
 
 export function toggleShowMappedFields(enabled: boolean) {

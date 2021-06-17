@@ -61,7 +61,26 @@ describe('InitializationService', () => {
       });
   });
 
-  test('load document definitions', (done) => {
+  test('getRuntimeVersion()', (done) => {
+    spyOn(ky, 'get').and.returnValue(
+      new (class {
+        json(): Promise<any> {
+          return Promise.resolve({ string: '10.9.8' });
+        }
+      })()
+    );
+    service
+      .getRuntimeVersion()
+      .then((value) => {
+        expect(value).toBe('10.9.8');
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('initialize() load document definitions', (done) => {
     const c = service.cfg;
     c.initCfg.baseMappingServiceUrl = 'dummy';
     c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
@@ -116,7 +135,7 @@ describe('InitializationService', () => {
       });
   });
 
-  test('load mapping definition', (done) => {
+  test('initialize() load mapping definition', (done) => {
     const cfg = service.cfg;
     cfg.clearDocs();
     cfg.initCfg.baseMappingServiceUrl = 'dummy';

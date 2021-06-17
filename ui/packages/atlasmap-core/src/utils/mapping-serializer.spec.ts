@@ -26,14 +26,12 @@ import { FieldAction, Multiplicity } from '../models/field-action.model';
 
 import { CsvInspectionModel } from '../models/inspect/csv-inspection.model';
 import { DocumentInspectionUtil } from './document-inspection-util';
-import { ErrorHandlerService } from '../services/error-handler.service';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
-import { FieldActionService } from '../services/field-action.service';
+import { InitializationService } from '../services';
 import { LookupTable } from '../models/lookup-table.model';
 import { LookupTableUtil } from './lookup-table-util';
 import { MappingDefinition } from '../models/mapping-definition.model';
-import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
@@ -50,21 +48,14 @@ import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmappin
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 
 import ky from 'ky';
-import log from 'loglevel';
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
   beforeEach(() => {
-    cfg = ConfigModel.getConfig();
-    cfg.clearDocs();
+    const init = new InitializationService(ky);
+    init.initialize();
+    cfg = init.cfg;
     cfg.mappings = new MappingDefinition();
-    cfg.errorService = new ErrorHandlerService();
-    const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
-    cfg.fieldActionService = new FieldActionService(api);
-    cfg.fieldActionService.cfg = cfg;
-    cfg.mappingService = new MappingManagementService(api);
-    cfg.mappingService.cfg = cfg;
-    cfg.logger = log.getLogger('config');
 
     // Source Java doc
     const twitter = new DocumentDefinition();
@@ -581,10 +572,7 @@ describe('MappingSerializer', () => {
         // Find the expression mapping repeat( count(city), const-str)
         for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
           if (fieldMapping.expression?.includes('repeat( count(')) {
-            expressionStr = fieldMapping.expression.replace(
-              /DOC.Constants/g,
-              'DOC.Constants.'
-            );
+            expressionStr = fieldMapping.expression;
             break;
           }
           expressionIndex++;
@@ -600,9 +588,7 @@ describe('MappingSerializer', () => {
         if (!mapping || !mapping.transition.enableExpression) {
           fail();
         }
-        expect(
-          mapping.transition.expression.toText().replace(/\.[0-9]*/g, '.')
-        ).toEqual(expressionStr);
+        expect(mapping.transition.expression.toText()).toEqual(expressionStr);
 
         const mfields = mapping.getMappedFields(true);
         let i = 0;
@@ -683,9 +669,7 @@ describe('MappingSerializer', () => {
         if (!mapping || !mapping.transition.enableExpression) {
           fail();
         }
-        expect(
-          mapping.transition.expression.toText().replace(/\.[0-9]*/g, '.')
-        ).toEqual(expressionStr);
+        expect(mapping.transition.expression.toText()).toEqual(expressionStr);
 
         const mfields = mapping.getMappedFields(true);
         let i = 0;

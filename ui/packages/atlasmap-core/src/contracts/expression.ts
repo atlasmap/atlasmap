@@ -14,18 +14,9 @@
     limitations under the License.
 */
 
-import { ConfigModel } from '../models/config.model';
-import { ExpressionUtil } from './expression-util';
-import { TestUtils } from '../../test/test-util';
-
-describe('ExpressionUtil', () => {
-  const cfg = ConfigModel.getConfig();
-
-  test('createMappingExpression', () => {
-    TestUtils.createMockMappings(cfg);
-    const mapping1 = cfg.mappings!.mappings[1];
-    expect(ExpressionUtil.createMappingExpression(cfg, mapping1)).toContain(
-      'Concatenate'
-    );
-  });
-});
+export interface IExpressionNode {
+  uuid: string;
+  str: string;
+  getUuid(): string;
+  toText(): string;
+}

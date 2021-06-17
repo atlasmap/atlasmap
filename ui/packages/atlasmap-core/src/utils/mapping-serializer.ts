@@ -37,7 +37,6 @@ import { TransitionMode, TransitionModel } from '../models/transition.model';
 
 import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
-import { ExpressionUtil } from './expression-util';
 import { Field } from '../models/field.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingUtil } from './mapping-util';
@@ -132,8 +131,7 @@ export class MappingSerializer {
       ignoreValue
     );
     let jsonMapping: { [key: string]: any } = {};
-    const mappingExpression = ExpressionUtil.getMappingExpressionStr(
-      cfg,
+    const mappingExpression = cfg.expressionService.getMappingExpressionStr(
       false,
       mapping
     );
@@ -357,6 +355,7 @@ export class MappingSerializer {
         // @deprecated Support legacy ADM files that have transformation-action-based expressions.
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           mapping.transition.enableExpression = true;
+          mapping.transition.mode = TransitionMode.EXPRESSION;
           mapping.transition.expression = new ExpressionModel(mapping, cfg);
           const expr = firstAction.Expression
             ? firstAction.Expression.expression
@@ -397,6 +396,7 @@ export class MappingSerializer {
 
     if (mappingJson.expression && mappingJson.expression.length > 0) {
       mapping.transition.enableExpression = true;
+      mapping.transition.mode = TransitionMode.EXPRESSION;
       mapping.transition.expression = new ExpressionModel(mapping, cfg);
       mapping.transition.expression.insertText(mappingJson.expression);
     }
@@ -717,6 +717,8 @@ export class MappingSerializer {
         mapping.transition.isOneToManyMode() && !isSource;
       includeIndexes =
         includeIndexes || (mapping.transition.isManyToOneMode() && isSource);
+      includeIndexes =
+        includeIndexes || (mapping.transition.isExpressionMode() && isSource);
       if (includeIndexes) {
         // TODO: check this non null operator
         serializedField['index'] =

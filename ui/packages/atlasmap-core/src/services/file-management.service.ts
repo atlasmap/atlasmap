@@ -258,7 +258,9 @@ export class FileManagementService {
         Accept: 'application/json',
         'Response-Type': 'application/json',
       };
-      this.cfg.logger!.debug('Set Mapping Request (set mapping): ' + url);
+      this.cfg.logger!.debug(
+        `Set Mapping Request (set mapping): ${jsonBuffer}`
+      );
       this.api
         .put(url, { headers, body: jsonBuffer })
         .arrayBuffer()

@@ -33,6 +33,7 @@ import React, {
 
 import { ExpressionEnumSelect } from './ExpressionEnumSelect';
 import { ExpressionFieldSearch } from './ExpressionFieldSearch';
+import { IExpressionNode } from '@atlasmap/core';
 import { css } from '@patternfly/react-styles';
 import styles from '@patternfly/react-styles/css/components/FormControl/form-control';
 
@@ -52,13 +53,8 @@ let getMappingExpression: () => string;
 let mappingExprInit: () => void;
 let mappingExprObservable: () => Observable<IExpressionUpdatedEvent> | null;
 
-interface ITextNode {
-  uuid: string;
-  str: string;
-}
-
 interface IExpressionUpdatedEvent {
-  node: ITextNode;
+  node: IExpressionNode;
   offset: number;
 }
 
@@ -68,7 +64,7 @@ export interface IExpressionContentProps {
   mappingExpressionAddField: (
     selectedField: string,
     selectFieldScope: string,
-    newTextNode: ITextNode,
+    newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean,
   ) => void;
@@ -76,7 +72,7 @@ export interface IExpressionContentProps {
     nodeId?: string,
     startOffset?: number,
     endOffset?: number,
-  ) => ITextNode;
+  ) => IExpressionNode | null;
   isMappingExpressionEmpty: boolean;
   mappingExpressionInit: () => void;
   mappingExpressionInsertText: (
@@ -196,7 +192,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   let addFieldToExpression: (
     selectedField: string,
     selectedScope: string,
-    newTextNode: ITextNode,
+    newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean,
   ) => void;
@@ -204,7 +200,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     nodeId?: string,
     startOffset?: number,
     endOffset?: number,
-  ) => ITextNode;
+  ) => IExpressionNode | null;
   let fieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   let getEnums: (enumFieldName: string) => EnumValue[];
   let setSelEnumValue: (
@@ -466,7 +462,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * the specified node ID.  The input will become a FieldNode so we don't
    * need the text.  Return the new UUID position indicator.
    */
-  function clearAtText(nodeId: string): ITextNode | null {
+  function clearAtText(nodeId: string): IExpressionNode | null {
     if (atIndex === -1) {
       return null;
     }

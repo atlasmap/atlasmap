@@ -77,8 +77,16 @@ export class MappingUtil {
 
       if (mappedField.parsedData.fieldIsProperty) {
         doc = isSource ? cfg.sourcePropertyDoc : cfg.targetPropertyDoc;
+        // Preserve property Document ID from parsed data
+        if (mappedField.parsedData.parsedDocID) {
+          doc.id = mappedField.parsedData.parsedDocID;
+        }
       } else if (mappedField.parsedData.fieldIsConstant) {
         doc = cfg.constantDoc;
+        // Preserve constant Document ID from parsed data
+        if (mappedField.parsedData.parsedDocID) {
+          doc.id = mappedField.parsedData.parsedDocID;
+        }
       } else {
         if (docMap === null) {
           docMap = cfg.getDocUriMap(cfg, isSource);
