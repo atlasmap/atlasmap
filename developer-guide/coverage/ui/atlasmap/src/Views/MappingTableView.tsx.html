@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">29.03% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>9/31</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">29.03% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/31</span>
+                <span class='fraction'>9/31</span>
             </div>
         
             
@@ -216,36 +216,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,7 +259,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -361,29 +361,29 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import {</span>
+import {
   Bullseye,
   EmptyState,
   EmptyStateIcon,
   EmptyStateVariant,
   Title,
 } from '@patternfly/react-core';
-<span class="cstat-no" title="statement not covered" >import { DocumentFieldPreview, DocumentFieldPreviewResults } from '../UI';</span>
+import { DocumentFieldPreview, DocumentFieldPreviewResults } from '../UI';
 import { IAtlasmapField, IAtlasmapMapping } from '../Views';
-<span class="cstat-no" title="statement not covered" >import {</span>
+import {
   ICell,
   IRow,
   Table,
   TableBody,
   TableHeader,
 } from '@patternfly/react-table';
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent, MouseEvent } from 'react';</span>
+import React, { FunctionComponent, MouseEvent } from 'react';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { MainContent } from '../Layout';</span>
-<span class="cstat-no" title="statement not covered" >import { TableIcon } from '@patternfly/react-icons';</span>
-<span class="cstat-no" title="statement not covered" >import styles from './MappingTableView.module.css';</span>
+import { MainContent } from '../Layout';
+import { TableIcon } from '@patternfly/react-icons';
+import styles from './MappingTableView.module.css';
 &nbsp;
-const emptyContent = <span class="cstat-no" title="statement not covered" >[</span>
+const emptyContent = [
   {
     heightAuto: true,
     cells: [
@@ -411,7 +411,7 @@ export interface IMappingTableProps {
   onFieldPreviewChange: (field: IAtlasmapField, value: string) =&gt; void;
 }
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >MappingTableView: FunctionComponent&lt;IMappingTableProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
+export const MappingTableView: FunctionComponent&lt;IMappingTableProps&gt; = <span class="fstat-no" title="function not covered" >({</span>
   mappings<span class="cstat-no" title="statement not covered" >,</span>
   onSelectMapping<span class="cstat-no" title="statement not covered" >,</span>
   shouldShowMappingPreview<span class="cstat-no" title="statement not covered" >,</span>
@@ -498,7 +498,7 @@ export const <span class="cstat-no" title="statement not covered" >MappingTableV
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:33:19 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

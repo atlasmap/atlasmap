@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/21</span>
+                <span class='fraction'>14/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">14.29% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>1/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>14/20</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -242,7 +242,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -251,18 +251,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,17 +271,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -413,7 +413,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import {</span>
+import {
   Button,
   DropdownItem,
   DropdownToggle,
@@ -422,16 +422,16 @@
   Title,
   Tooltip,
 } from '@patternfly/react-core';
-<span class="cstat-no" title="statement not covered" >import {</span>
+import {
   ExchangeAltIcon,
   LinkIcon,
   ProjectDiagramIcon,
   UnlinkIcon,
 } from '@patternfly/react-icons';
 &nbsp;
-<span class="cstat-no" title="statement not covered" >import { AutoDropdown } from '../../../UI';</span>
+import { AutoDropdown } from '../../../UI';
 import { IAtlasmapMapping } from '../../../Views';
-<span class="cstat-no" title="statement not covered" >import React from 'react';</span>
+import React from 'react';
 &nbsp;
 export interface ICommonActionsProps {
   connectedMappings: IAtlasmapMapping[];
@@ -444,17 +444,17 @@ export interface ICommonActionsProps {
   onStartMapping: () =&gt; void;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >c</span>ommonActions(</span>{
-  connectedMappings<span class="cstat-no" title="statement not covered" >,</span>
-  onShowMappingDetails<span class="cstat-no" title="statement not covered" >,</span>
-  canAddFieldToSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
-  onAddToSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
-  canRemoveFromSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
-  onRemoveFromSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
-  canStartMapping<span class="cstat-no" title="statement not covered" >,</span>
-  onStartMapping<span class="cstat-no" title="statement not covered" >,</span>
+export function commonActions({
+  connectedMappings,
+  onShowMappingDetails,
+  canAddFieldToSelectedMapping,
+  onAddToSelectedMapping,
+  canRemoveFromSelectedMapping,
+  onRemoveFromSelectedMapping,
+  canStartMapping,
+  onStartMapping,
 }: ICommonActionsProps) {
-<span class="cstat-no" title="statement not covered" >  return [</span>
+  return [
     &lt;Tooltip
       key={'select-mapping'}
       position={'top'}
@@ -462,7 +462,7 @@ export interface ICommonActionsProps {
       content={&lt;div&gt;Show mapping details&lt;/div&gt;}
     &gt;
       {connectedMappings.length &gt; 1 ? (
-        &lt;AutoDropdown
+<span class="branch-0 cbranch-no" title="branch not covered" >        &lt;AutoDropdown</span>
           toggle={<span class="fstat-no" title="function not covered" >({</span> toggleOpen<span class="cstat-no" title="statement not covered" > })</span> =&gt; <span class="cstat-no" title="statement not covered" >(</span>
             &lt;DropdownToggle
               toggleIndicator={null}
@@ -515,7 +515,7 @@ export interface ICommonActionsProps {
       )}
     &lt;/Tooltip&gt;,
     canRemoveFromSelectedMapping ? (
-      &lt;Tooltip
+<span class="branch-0 cbranch-no" title="branch not covered" >      &lt;Tooltip</span>
         key={'quick-remove'}
         position={'top'}
         enableFlip={true}
@@ -576,7 +576,7 @@ export interface ICommonActionsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:33:19 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

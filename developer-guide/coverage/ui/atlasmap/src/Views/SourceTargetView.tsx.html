@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -157,8 +157,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -168,7 +168,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,21 +179,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,8 +243,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-<span class="cstat-no" title="statement not covered" >import { Column, ColumnMapper, Columns, NodeRefProvider } from '../UI';</span>
-<span class="cstat-no" title="statement not covered" >import {</span>
+import { Column, ColumnMapper, Columns, NodeRefProvider } from '../UI';
+import {
   ISourceColumnCallbacks,
   ISourceTargetLinksProps,
   ISourcesColumnData,
@@ -254,7 +254,7 @@
   SourcesColumn,
   TargetsColumn,
 } from './ColumnMapperView';
-<span class="cstat-no" title="statement not covered" >import React, { FunctionComponent } from 'react';</span>
+import React, { FunctionComponent } from 'react';
 &nbsp;
 export interface ISourceTargetViewProps
   extends ISourcesColumnData,
@@ -265,21 +265,21 @@ export interface ISourceTargetViewProps
   targetEvents: ITargetsColumnCallbacks;
 }
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >SourceTargetView: FunctionComponent&lt;ISourceTargetViewProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
-  sourceProperties<span class="cstat-no" title="statement not covered" >,</span>
-  targetProperties<span class="cstat-no" title="statement not covered" >,</span>
-  constants<span class="cstat-no" title="statement not covered" >,</span>
-  sources<span class="cstat-no" title="statement not covered" >,</span>
-  mappings<span class="cstat-no" title="statement not covered" >,</span>
-  targets<span class="cstat-no" title="statement not covered" >,</span>
-  showMappingPreview<span class="cstat-no" title="statement not covered" >,</span>
-  showTypes<span class="cstat-no" title="statement not covered" >,</span>
-  selectedMappingId<span class="cstat-no" title="statement not covered" >,</span>
-  onSelectMapping<span class="cstat-no" title="statement not covered" >,</span>
-  sourceEvents<span class="cstat-no" title="statement not covered" >,</span>
-  targetEvents<span class="cstat-no" title="statement not covered" >,</span>
+export const SourceTargetView: FunctionComponent&lt;ISourceTargetViewProps&gt; = ({
+  sourceProperties,
+  targetProperties,
+  constants,
+  sources,
+  mappings,
+  targets,
+  showMappingPreview,
+  showTypes,
+  selectedMappingId,
+  onSelectMapping,
+  sourceEvents,
+  targetEvents,
 }) =&gt; {
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;&gt;
       &lt;NodeRefProvider&gt;
         &lt;ColumnMapper role={'main'}&gt;
@@ -321,7 +321,7 @@ export const <span class="cstat-no" title="statement not covered" >SourceTargetV
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:33:19 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

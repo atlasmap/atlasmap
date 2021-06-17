@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -262,24 +262,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">200x</span>
+<span class="cline-any cline-yes">163x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -296,19 +291,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">38x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,19 +407,19 @@ export interface JsonObject {
   JsonInspectionResponse: JsonInspectionResponse;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >j</span>sonToFieldGroup(</span>
+export function jsonToFieldGroup(
   json: JsonObject,
   idPrefix: string,
   allMappings: IAtlasmapMapping[],
 ) {
-  const fromElement = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(j</span>f: JsonField): IAtlasmapField =&gt; {</span>
-    const id = `${<span class="cstat-no" title="statement not covered" >idPrefix}-${jf.path}`;</span>
-    const mappings = <span class="cstat-no" title="statement not covered" >allMappings.filter(</span>
-<span class="fstat-no" title="function not covered" >      (m</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >        m.sourceFields.find(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.id === id) </span>||</span>
-        m.targetFields.find(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id === id),</span>
+  const fromElement = (jf: JsonField): IAtlasmapField =&gt; {
+    const id = `${idPrefix}-${jf.path}`;
+    const mappings = allMappings.filter(
+      (m) =&gt;
+        m.sourceFields.find((s) =&gt; s.id === id) ||
+        m.targetFields.find((t) =&gt; t.id === id),
     );
-<span class="cstat-no" title="statement not covered" >    return {</span>
+    return {
       id,
       name: jf.name,
       type: jf.fieldType,
@@ -441,19 +441,19 @@ export interface JsonObject {
       enumeration: false,
     };
   };
-  const fromGroup = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>: Field): IAtlasmapGroup =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+  const fromGroup = (f: Field): IAtlasmapGroup =&gt; ({
     name: f.name,
     type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
-    fields: f.jsonFields.jsonField.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >      f.jsonFields ? fromGroup(f as Field) : fromElement(f),</span>
+    fields: f.jsonFields.jsonField.map((f) =&gt;
+      f.jsonFields ? fromGroup(f as Field) : fromElement(f),
     ),
     isCollection: false,
     isInCollection: false,
     amField: {} as IAtlasmapField['amField'],
   });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);</span>
+  return json.JsonInspectionResponse.jsonDocument.fields.field.map(fromGroup);
 }
 // export function jsonToFieldGroup(json, idPrefix, allMappings) {
 //   const fromElement = (jf) =&gt; {
@@ -498,7 +498,7 @@ export interface JsonObject {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:33:19 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

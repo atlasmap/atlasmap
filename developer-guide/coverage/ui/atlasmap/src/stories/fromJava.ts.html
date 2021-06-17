@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -314,25 +314,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">37x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -349,20 +344,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -487,20 +487,20 @@ export interface JavaObject {
   ClassInspectionResponse: ClassInspectionResponse;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >j</span>avaToFieldGroup(</span>
+export function javaToFieldGroup(
   java: JavaObject,
   idPrefix: string,
   allMappings: IAtlasmapMapping[],
 ) {
-  const fromElement = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(j</span>f: JavaField): IAtlasmapField =&gt; {</span>
-    const id = `${<span class="cstat-no" title="statement not covered" >idPrefix}-${jf.path}`;</span>
-    const mappings = <span class="cstat-no" title="statement not covered" >allMappings.filter(</span>
-<span class="fstat-no" title="function not covered" >      (m</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >        m.sourceFields.find(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >s.id === id) </span>||</span>
-        m.targetFields.find(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >t.id === id),</span>
+  const fromElement = (jf: JavaField): IAtlasmapField =&gt; {
+    const id = `${idPrefix}-${jf.path}`;
+    const mappings = allMappings.filter(
+      (m) =&gt;
+        m.sourceFields.find((s) =&gt; s.id === id) ||
+        m.targetFields.find((t) =&gt; t.id === id),
     );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return {</span>
+    return {
       id: `${idPrefix}-${jf.path}`,
       name: jf.name,
       type: jf.fieldType,
@@ -522,20 +522,20 @@ export interface JavaObject {
       enumeration: false,
     };
   };
-  const fromGroup = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(f</span>: JavaField): IAtlasmapGroup =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+  const fromGroup = (f: JavaField): IAtlasmapGroup =&gt; ({
     name: f.name,
     type: f.fieldType,
     id: `${idPrefix}-${f.path}`,
-    fields: f.javaFields!.javaField.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt;
-<span class="cstat-no" title="statement not covered" >      f.javaFields ? fromGroup(f as JavaField) : fromElement(f),</span>
+    fields: f.javaFields!.javaField.map((f) =&gt;
+      f.javaFields ? <span class="branch-0 cbranch-no" title="branch not covered" >fromGroup(f as JavaField) </span>: fromElement(f),
     ),
     isCollection: false,
     isInCollection: false,
     amField: {} as IAtlasmapField['amField'],
   });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return java.ClassInspectionResponse.javaClass.javaFields!.javaField.map(<span class="fstat-no" title="function not covered" >(f</span>) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    f.javaFields ? fromGroup(f as JavaField) : fromElement(f),</span>
+  return java.ClassInspectionResponse.javaClass.javaFields!.javaField.map((f) =&gt;
+    f.javaFields ? fromGroup(f as JavaField) : fromElement(f),
   );
 }
 // export function javaToFieldGroup(java, idPrefix, allMappings) {
@@ -582,7 +582,7 @@ export interface JavaObject {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:33:19 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
