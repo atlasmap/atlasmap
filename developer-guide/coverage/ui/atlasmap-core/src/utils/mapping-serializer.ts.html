@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.03% </span>
+                <span class="strong">86.01% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>505/587</span>
+                <span class='fraction'>504/586</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.73% </span>
+                <span class="strong">72.79% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>224/308</span>
+                <span class='fraction'>222/305</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.04% </span>
+                <span class="strong">85.01% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>415/488</span>
+                <span class='fraction'>414/487</span>
             </div>
         
             
@@ -1308,7 +1308,8 @@
 <a name='L1250'></a><a href='#L1250'>1250</a>
 <a name='L1251'></a><a href='#L1251'>1251</a>
 <a name='L1252'></a><a href='#L1252'>1252</a>
-<a name='L1253'></a><a href='#L1253'>1253</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1253'></a><a href='#L1253'>1253</a>
+<a name='L1254'></a><a href='#L1254'>1254</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1367,7 +1368,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">90x</span>
 <span class="cline-any cline-yes">90x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1427,7 +1427,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">96x</span>
-<span class="cline-any cline-yes">102x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">96x</span>
@@ -1448,7 +1447,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2617,8 +2619,7 @@ export class MappingSerializer {
           cfg,
           mapping,
           mapping.uuid,
-          ignoreValue,
-          false
+          ignoreValue
         );
         <span class="missing-if-branch" title="else path not taken" >E</span>if (serializedFieldMapping) {
           jsonMappings = jsonMappings.concat(serializedFieldMapping);
@@ -2678,8 +2679,7 @@ export class MappingSerializer {
     cfg: ConfigModel,
     mapping: MappingModel,
     id: string,
-    <span class="missing-if-branch" title="if path not taken" >I</span>ignoreValue: boolean = true,
-    ignoreExpression: boolean = false
+    <span class="missing-if-branch" title="if path not taken" >I</span>ignoreValue: boolean = true
   ): any {
     const jsonMappingType =
       ConfigModel.mappingServicesPackagePrefix + '.Mapping';
@@ -2696,13 +2696,16 @@ export class MappingSerializer {
       ignoreValue
     );
     let jsonMapping: { [key: string]: any } = {};
-    const mappingExpression = ignoreExpression
-      ? <span class="branch-0 cbranch-no" title="branch not covered" >''</span>
-      : ExpressionUtil.getMappingExpressionStr(cfg, false, mapping);
+    const mappingExpression = ExpressionUtil.getMappingExpressionStr(
+      cfg,
+      false,
+      mapping
+    );
 &nbsp;
     if (
       mapping.transition.isManyToOneMode() ||
-      mapping.transition.isForEachMode()
+      mapping.transition.isForEachMode() ||
+      mapping.transition.isExpressionMode()
     ) {
       const actions = [];
       if (mapping.transition.transitionFieldAction) {
@@ -3638,7 +3641,7 @@ export class MappingSerializer {
       parsedAction.definition =
         cfg.fieldActionService.getActionDefinitionForName(parsedAction.name)!; // TODO: check this non null operator
 &nbsp;
-      // @deprecated Support old-style transformation-action-based expressions.
+      /** @deprecated Support old-style transformation-action-based expressions. */
       <span class="missing-if-branch" title="if path not taken" >I</span>if (isSource &amp;&amp; (action.Expression || action['@type'] === 'Expression')) {
 <span class="cstat-no" title="statement not covered" >        mapping.transition.enableExpression = true;</span>
 <span class="cstat-no" title="statement not covered" >        mapping.transition.expression = new ExpressionModel(mapping, cfg);</span>
@@ -3819,7 +3822,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 16 2021 18:27:12 GMT+0000 (Coordinated Universal Time)
+                at Thu Jun 17 2021 12:26:36 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
