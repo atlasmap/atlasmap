@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.94% </span>
+                <span class="strong">11.54% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/201</span>
+                <span class='fraction'>24/208</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/187</span>
+                <span class='fraction'>0/197</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.24% </span>
+                <span class="strong">11.82% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>24/196</span>
+                <span class='fraction'>24/203</span>
             </div>
         
             
@@ -587,7 +587,22 @@
 <a name='L529'></a><a href='#L529'>529</a>
 <a name='L530'></a><a href='#L530'>530</a>
 <a name='L531'></a><a href='#L531'>531</a>
-<a name='L532'></a><a href='#L532'>532</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L532'></a><a href='#L532'>532</a>
+<a name='L533'></a><a href='#L533'>533</a>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -628,6 +643,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -668,6 +684,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -676,6 +694,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1155,16 +1185,17 @@ export type EnumValue = {
 };
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >createConstant(</span>
+  constName: string,
   constValue: string,
   constType: string,
   addToActiveMapping?: boolean,
 ): void {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-  let field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(constValue);</span>
+  let field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(constName);</span>
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >    field = new Field();</span>
   }
-<span class="cstat-no" title="statement not covered" >  field.name = constValue;</span>
+<span class="cstat-no" title="statement not covered" >  field.name = constName;</span>
 <span class="cstat-no" title="statement not covered" >  field.value = constValue;</span>
 <span class="cstat-no" title="statement not covered" >  field.type = constType;</span>
 <span class="cstat-no" title="statement not covered" >  field.docDef = cfg.constantDoc;</span>
@@ -1176,10 +1207,10 @@ export function <span class="fstat-no" title="function not covered" >createConst
 <span class="cstat-no" title="statement not covered" >  cfg.mappingService.notifyMappingUpdated();</span>
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >deleteConstant(</span>constValue: string): void {
+export function <span class="fstat-no" title="function not covered" >deleteConstant(</span>constName: string): void {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
   const field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(</span>
-    cfg.constantDoc.pathSeparator + constValue,
+    cfg.sourcePropertyDoc.pathSeparator + constName,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
@@ -1195,25 +1226,39 @@ export function <span class="fstat-no" title="function not covered" >deleteConst
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >editConstant(</span>
-  origValue: string,
+  constName: string,
   constValue: string,
   constType: string,
+  origName?: string,
 ): void {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
+  let constFieldName = <span class="cstat-no" title="statement not covered" >origName ? origName : constName;</span>
   let field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(</span>
-    cfg.constantDoc.pathSeparator + origValue,
+    cfg.constantDoc.pathSeparator + constFieldName,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
-<span class="cstat-no" title="statement not covered" >  deleteConstant(origValue);</span>
-<span class="cstat-no" title="statement not covered" >  createConstant(constValue, constType);</span>
+<span class="cstat-no" title="statement not covered" >  if (constType.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    field.type = constType;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  if (constValue.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >    field.value = constValue;</span>
+  }
+<span class="cstat-no" title="statement not covered" >  if (origName &amp;&amp; origName !== constName) {</span>
+<span class="cstat-no" title="statement not covered" >    field.name = constName;</span>
+<span class="cstat-no" title="statement not covered" >    cfg.constantDoc.updateField(</span>
+      field,
+      cfg.constantDoc.pathSeparator + constName,
+    );
+  }
+<span class="cstat-no" title="statement not covered" >  cfg.mappingService.notifyMappingUpdated();</span>
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >getConstantType(</span>constVal: string): string {
+export function <span class="fstat-no" title="function not covered" >getConstantType(</span>constName: string): string {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
   const field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(</span>
-    cfg.constantDoc.pathSeparator + constVal,
+    cfg.sourcePropertyDoc.pathSeparator + constName,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >    return '';</span>
@@ -1221,10 +1266,10 @@ export function <span class="fstat-no" title="function not covered" >getConstant
 <span class="cstat-no" title="statement not covered" >  return field.type;</span>
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >getConstantTypeIndex(</span>constVal: string): number {
+export function <span class="fstat-no" title="function not covered" >getConstantTypeIndex(</span>constName: string): number {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
   const field = <span class="cstat-no" title="statement not covered" >cfg.constantDoc.getField(</span>
-    cfg.constantDoc.pathSeparator + constVal,
+    cfg.sourcePropertyDoc.pathSeparator + constName,
   );
 <span class="cstat-no" title="statement not covered" >  if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >    return 0;</span>
@@ -1656,7 +1701,7 @@ export function <span class="fstat-no" title="function not covered" >isEnumerati
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
+                at Fri Jun 18 2021 13:53:54 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

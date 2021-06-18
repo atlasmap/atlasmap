@@ -24,14 +24,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/28</span>
+                <span class='fraction'>0/30</span>
             </div>
         
             
@@ -153,7 +153,12 @@
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,12 +199,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,7 +282,7 @@ import { IAtlasmapDocument } from '../../Views';
 <span class="cstat-no" title="statement not covered" >import { constantTypes } from '@atlasmap/core';</span>
 <span class="cstat-no" title="statement not covered" >import { useToggle } from '../../Atlasmap/utils';</span>
 &nbsp;
-type ConstantCallback = (constant: IConstant) =&gt; void;
+type ConstantCallback = (constant: IConstant, origName?: string) =&gt; void;
 &nbsp;
 <span class="cstat-no" title="statement not covered" >export function <span class="fstat-no" title="function not covered" >u</span>seConstantDialog(</span>
   title: string,
@@ -288,27 +298,32 @@ type ConstantCallback = (constant: IConstant) =&gt; void;
     null,
   );
   const [initialConstant<span class="cstat-no" title="statement not covered" >, s</span>etInitialConstant<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState&lt;IConstant | null&gt;({</span>
+    name: '',
     value: '',
     valueType: constantTypes[0][0],
   });
-  const [constants<span class="cstat-no" title="statement not covered" >, s</span>etConstants<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState&lt;IAtlasmapDocument | null&gt;(null);</span>
+  const [constantsDoc<span class="cstat-no" title="statement not covered" >, s</span>etConstants<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState&lt;IAtlasmapDocument | null&gt;(null);</span>
   const { state<span class="cstat-no" title="statement not covered" >, t</span>oggleOn<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(false);</span>
   const onConfirm = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (c</span>onstant: IConstant) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (onConstantCb) {</span>
-<span class="cstat-no" title="statement not covered" >        onConstantCb(constant);</span>
+<span class="cstat-no" title="statement not covered" >        if (initialConstant?.name !== constant.name) {</span>
+<span class="cstat-no" title="statement not covered" >          onConstantCb(constant, initialConstant?.name);</span>
+        } else {
+<span class="cstat-no" title="statement not covered" >          onConstantCb(constant);</span>
+        }
 <span class="cstat-no" title="statement not covered" >        toggleOff();</span>
       }
     },
-    [onConstantCb, toggleOff],
+    [initialConstant, onConstantCb, toggleOff],
   );
-  function <span class="fstat-no" title="function not covered" >onValidation(</span>value: string): boolean {
-<span class="cstat-no" title="statement not covered" >    if (constants) {</span>
-      // Ensure constant value is unique
-      const fields = <span class="cstat-no" title="statement not covered" >constants.fields.filter(</span>
-<span class="fstat-no" title="function not covered" >        (f</span>ieldOrGroup) =&gt; <span class="cstat-no" title="statement not covered" >fieldOrGroup.name === value,</span>
+  function <span class="fstat-no" title="function not covered" >onValidation(</span>name: string): boolean {
+<span class="cstat-no" title="statement not covered" >    if (constantsDoc) {</span>
+      // Ensure constant name is unique
+      const fields = <span class="cstat-no" title="statement not covered" >constantsDoc.fields.filter(</span>
+<span class="fstat-no" title="function not covered" >        (f</span>ieldOrGroup) =&gt; <span class="cstat-no" title="statement not covered" >fieldOrGroup.name === name,</span>
       );
-<span class="cstat-no" title="statement not covered" >      return value === initialConstant?.value || fields.length === 0;</span>
+<span class="cstat-no" title="statement not covered" >      return name === initialConstant?.name || fields.length === 0;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return true;</span>
   }
@@ -329,7 +344,7 @@ type ConstantCallback = (constant: IConstant) =&gt; void;
   const onOpenConstantDialog = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (</span>
       callback: ConstantCallback,
-      constants: IAtlasmapDocument | null,
+      constantsDoc: IAtlasmapDocument | null,
       constant?: IConstant,
     ) =&gt; {
       // we use a closure to set the state here else React will think that callback
@@ -338,8 +353,8 @@ type ConstantCallback = (constant: IConstant) =&gt; void;
 <span class="cstat-no" title="statement not covered" >      if (constant) {</span>
 <span class="cstat-no" title="statement not covered" >        setInitialConstant(constant);</span>
       }
-<span class="cstat-no" title="statement not covered" >      if (constants) {</span>
-<span class="cstat-no" title="statement not covered" >        setConstants(constants);</span>
+<span class="cstat-no" title="statement not covered" >      if (constantsDoc) {</span>
+<span class="cstat-no" title="statement not covered" >        setConstants(constantsDoc);</span>
       }
 <span class="cstat-no" title="statement not covered" >      toggleOn();</span>
     },
@@ -354,7 +369,7 @@ type ConstantCallback = (constant: IConstant) =&gt; void;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Jun 17 2021 12:56:32 GMT+0000 (Coordinated Universal Time)
+                at Fri Jun 18 2021 13:53:54 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
