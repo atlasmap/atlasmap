@@ -89,9 +89,9 @@ export function xmlToFieldGroup(
       id,
       name: jf.name,
       type: jf.fieldType,
-      previewValue: '',
       path: jf.path,
       scope: 'current',
+      value: '',
       mappings,
       hasTransformations:
         mappings.length > 0 &&
@@ -136,7 +136,7 @@ export function xmlToFieldGroup(
 //       id,
 //       name: jf.name,
 //       type: jf.fieldType,
-//       previewValue: "",
+//       value: "",
 //       mappings,
 //       hasTransformations:
 //         mappings.length > 0 &&

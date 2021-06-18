@@ -120,7 +120,7 @@ export const TargetsColumn: FunctionComponent<
       shouldShowMappingPreviewForField(field) && (
         <DocumentFieldPreview
           id={field.id}
-          value={field.previewValue}
+          value={field.value}
           onChange={(value) => onFieldPreviewChange(field, value)}
         />
       ),
@@ -288,7 +288,7 @@ export const TargetsColumn: FunctionComponent<
                             shouldShowMappingPreviewForField(field) && (
                               <DocumentFieldPreviewResults
                                 id={field.id}
-                                value={field.previewValue}
+                                value={field.value}
                               />
                             )
                           }

@@ -42,8 +42,8 @@ export interface IConstantsTreeCallbacks {
   onAddToSelectedMapping: (source: IAtlasmapField) => void;
   canRemoveFromSelectedMapping: (source: IAtlasmapField) => boolean;
   onRemoveFromSelectedMapping: (source: IAtlasmapField) => void;
-  onEditConstant: (value: string) => void;
-  onDeleteConstant: (value: string) => void;
+  onEditConstant: (name: string, value: string) => void;
+  onDeleteConstant: (name: string) => void;
   canStartMapping: (field: IAtlasmapField) => boolean;
   onStartMapping: (field: IAtlasmapField) => void;
 }
@@ -101,7 +101,7 @@ export const ConstantsTree: FunctionComponent<IConstantsTreeProps> = ({
         >
           <Button
             variant="plain"
-            onClick={() => onEditConstant(field.name)}
+            onClick={() => onEditConstant(field.name, field.value)}
             aria-label={'Edit constant'}
             tabIndex={0}
             data-testid={`edit-constant-${field.name}-button`}

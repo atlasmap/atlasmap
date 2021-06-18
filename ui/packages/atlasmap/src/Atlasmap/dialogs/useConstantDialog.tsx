@@ -20,7 +20,7 @@ import { IAtlasmapDocument } from '../../Views';
 import { constantTypes } from '@atlasmap/core';
 import { useToggle } from '../../Atlasmap/utils';
 
-type ConstantCallback = (constant: IConstant) => void;
+type ConstantCallback = (constant: IConstant, origName?: string) => void;
 
 export function useConstantDialog(
   title: string,
@@ -36,27 +36,32 @@ export function useConstantDialog(
     null,
   );
   const [initialConstant, setInitialConstant] = useState<IConstant | null>({
+    name: '',
     value: '',
     valueType: constantTypes[0][0],
   });
-  const [constants, setConstants] = useState<IAtlasmapDocument | null>(null);
+  const [constantsDoc, setConstants] = useState<IAtlasmapDocument | null>(null);
   const { state, toggleOn, toggleOff } = useToggle(false);
   const onConfirm = useCallback(
     (constant: IConstant) => {
       if (onConstantCb) {
-        onConstantCb(constant);
+        if (initialConstant?.name !== constant.name) {
+          onConstantCb(constant, initialConstant?.name);
+        } else {
+          onConstantCb(constant);
+        }
         toggleOff();
       }
     },
-    [onConstantCb, toggleOff],
+    [initialConstant, onConstantCb, toggleOff],
   );
-  function onValidation(value: string): boolean {
-    if (constants) {
-      // Ensure constant value is unique
-      const fields = constants.fields.filter(
-        (fieldOrGroup) => fieldOrGroup.name === value,
+  function onValidation(name: string): boolean {
+    if (constantsDoc) {
+      // Ensure constant name is unique
+      const fields = constantsDoc.fields.filter(
+        (fieldOrGroup) => fieldOrGroup.name === name,
       );
-      return value === initialConstant?.value || fields.length === 0;
+      return name === initialConstant?.name || fields.length === 0;
     }
     return true;
   }
@@ -77,7 +82,7 @@ export function useConstantDialog(
   const onOpenConstantDialog = useCallback(
     (
       callback: ConstantCallback,
-      constants: IAtlasmapDocument | null,
+      constantsDoc: IAtlasmapDocument | null,
       constant?: IConstant,
     ) => {
       // we use a closure to set the state here else React will think that callback
@@ -86,8 +91,8 @@ export function useConstantDialog(
       if (constant) {
         setInitialConstant(constant);
       }
-      if (constants) {
-        setConstants(constants);
+      if (constantsDoc) {
+        setConstants(constantsDoc);
       }
       toggleOn();
     },

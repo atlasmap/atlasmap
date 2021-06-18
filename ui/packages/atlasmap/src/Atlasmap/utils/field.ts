@@ -35,16 +35,17 @@ export type EnumValue = {
 };
 
 export function createConstant(
+  constName: string,
   constValue: string,
   constType: string,
   addToActiveMapping?: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let field = cfg.constantDoc.getField(constValue);
+  let field = cfg.constantDoc.getField(constName);
   if (!field) {
     field = new Field();
   }
-  field.name = constValue;
+  field.name = constName;
   field.value = constValue;
   field.type = constType;
   field.docDef = cfg.constantDoc;
@@ -56,10 +57,10 @@ export function createConstant(
   cfg.mappingService.notifyMappingUpdated();
 }
 
-export function deleteConstant(constValue: string): void {
+export function deleteConstant(constName: string): void {
   const cfg = ConfigModel.getConfig();
   const field = cfg.constantDoc.getField(
-    cfg.constantDoc.pathSeparator + constValue,
+    cfg.sourcePropertyDoc.pathSeparator + constName,
   );
   if (!field) {
     return;
@@ -75,25 +76,39 @@ export function deleteConstant(constValue: string): void {
 }
 
 export function editConstant(
-  origValue: string,
+  constName: string,
   constValue: string,
   constType: string,
+  origName?: string,
 ): void {
   const cfg = ConfigModel.getConfig();
+  let constFieldName = origName ? origName : constName;
   let field = cfg.constantDoc.getField(
-    cfg.constantDoc.pathSeparator + origValue,
+    cfg.constantDoc.pathSeparator + constFieldName,
   );
   if (!field) {
     return;
   }
-  deleteConstant(origValue);
-  createConstant(constValue, constType);
+  if (constType.length > 0) {
+    field.type = constType;
+  }
+  if (constValue.length > 0) {
+    field.value = constValue;
+  }
+  if (origName && origName !== constName) {
+    field.name = constName;
+    cfg.constantDoc.updateField(
+      field,
+      cfg.constantDoc.pathSeparator + constName,
+    );
+  }
+  cfg.mappingService.notifyMappingUpdated();
 }
 
-export function getConstantType(constVal: string): string {
+export function getConstantType(constName: string): string {
   const cfg = ConfigModel.getConfig();
   const field = cfg.constantDoc.getField(
-    cfg.constantDoc.pathSeparator + constVal,
+    cfg.sourcePropertyDoc.pathSeparator + constName,
   );
   if (!field) {
     return '';
@@ -101,10 +116,10 @@ export function getConstantType(constVal: string): string {
   return field.type;
 }
 
-export function getConstantTypeIndex(constVal: string): number {
+export function getConstantTypeIndex(constName: string): number {
   const cfg = ConfigModel.getConfig();
   const field = cfg.constantDoc.getField(
-    cfg.constantDoc.pathSeparator + constVal,
+    cfg.sourcePropertyDoc.pathSeparator + constName,
   );
   if (!field) {
     return 0;
