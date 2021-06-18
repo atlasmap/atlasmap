@@ -178,11 +178,12 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         isFieldRemovableFromSelection('source', f),
       onRemoveFromSelectedMapping: onRemoveFromMapping,
       onCreateConstant: () => handlers.onCreateConstant(constants),
-      onEditConstant: (constant) => {
-        const [value] = constant.split(' ');
-        const valueType = getConstantType(value);
+      onEditConstant: (constName, constValue) => {
+        const name = constName;
+        const value = constValue;
+        const valueType = getConstantType(name);
 
-        handlers.onEditConstant({ value, valueType }, constants);
+        handlers.onEditConstant({ name, value, valueType }, constants);
       },
       onDeleteConstant: handlers.onDeleteConstant,
       onCreateProperty: (isSource: boolean) => {

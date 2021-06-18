@@ -24,6 +24,7 @@ import {
   FormSelectOption,
   TextInput,
   Tooltip,
+  ValidatedOptions,
 } from '@patternfly/react-core';
 
 import React, {
@@ -39,22 +40,25 @@ interface ValueTypeOption {
 }
 
 export interface IConstant {
+  name: string;
   value: string;
   valueType: string;
 }
 
 export interface IConstantDialogProps {
   title: string;
+  name?: string;
   value?: string;
   valueType?: string;
   valueTypeOptions: ValueTypeOption[];
   isOpen: IConfirmationDialogProps['isOpen'];
   onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (constant: IConstant) => void;
-  onValidation: (value: string) => boolean;
+  onValidation: (name: string, value: string) => boolean;
 }
 export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   title,
+  name: initialName = '',
   value: initialValue = '',
   valueType: initialValueType = '',
   valueTypeOptions,
@@ -63,37 +67,59 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   onConfirm,
   onValidation,
 }) => {
+  const [name, setName] = useState(initialName);
   const [value, setValue] = useState(initialValue);
   const [valueType, setValueType] = useState(initialValueType);
+  const [isConstantNameUnique, setConstantNameUnique] = useState(true);
   const [isConstantValid, setConstantValid] = useState(true);
-  const [isValueUnique, setValueUnique] = useState(true);
+  const [isConstantNameValid, setConstantNameValid] = useState(
+    ValidatedOptions.default,
+  );
 
   const reset = useCallback(() => {
+    setName(initialName);
     setValue(initialValue);
     setValueType(initialValueType);
     setConstantValid(true);
-    setValueUnique(true);
-  }, [initialValue, initialValueType]);
+    setConstantNameValid(ValidatedOptions.default);
+    setConstantNameUnique(true);
+  }, [initialName, initialValue, initialValueType]);
 
   const handleOnConfirm = useCallback(() => {
-    onConfirm({ value: value, valueType });
+    onConfirm({ name, value: value, valueType });
     reset();
-  }, [onConfirm, reset, value, valueType]);
+  }, [onConfirm, reset, name, value, valueType]);
 
   const handleOnCancel = useCallback(() => {
     onCancel();
     reset();
   }, [onCancel, reset]);
 
+  function handleOnNameChange(name: string) {
+    validateConstant(name, value);
+    setName(name);
+  }
+
   function handleOnValueChange(value: string) {
-    validateConstant(value);
+    validateConstant(name, value);
     setValue(value);
   }
 
-  function validateConstant(value: string) {
-    const isValid = onValidation(value);
-    setValueUnique(isValid);
+  function validateConstant(name: string, value: string): boolean {
+    if (!name || name.length === 0) {
+      setConstantNameValid(ValidatedOptions.default);
+      return false;
+    }
+    const nameRegex = /^[a-zA-Z0-9_@-]+$/;
+    if (!nameRegex.test(name)) {
+      setConstantNameValid(ValidatedOptions.error);
+      return false;
+    }
+    setConstantNameValid(ValidatedOptions.success);
+    const isValid = onValidation(name, value);
     setConstantValid(value.length > 0 && isValid);
+    setConstantNameUnique(isValid);
+    return isValid;
   }
 
   // make sure to resync the internal state to the values passed in as props
@@ -107,33 +133,44 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
       isOpen={isOpen}
     >
       <Form>
-        <FormGroup label={'Value'} fieldId={'constvalue'} isRequired={true}>
-          {!isValueUnique ? (
+        <FormGroup label={'Name'} fieldId={'name'} isRequired={true}>
+          {!isConstantNameUnique ? (
             <Tooltip
-              content={<div>A constant with this value already exists</div>}
+              content={<div>A constant with this name already exists</div>}
               entryDelay={750}
               exitDelay={100}
             >
               <TextInput
-                value={value}
-                onChange={handleOnValueChange}
-                id={'constvalue'}
+                value={name}
+                onChange={handleOnNameChange}
+                id={'name'}
                 autoFocus={true}
                 isRequired={true}
-                data-testid={'constant-value-text-input'}
+                data-testid={'constant-name-text-input-tooltip'}
                 style={{ color: 'red' }}
               />
             </Tooltip>
           ) : (
             <TextInput
-              value={value}
-              onChange={handleOnValueChange}
-              id={'constvalue'}
+              value={name}
+              onChange={handleOnNameChange}
+              id={'name'}
               autoFocus={true}
               isRequired={true}
-              data-testid={'constant-value-text-input'}
+              data-testid={'constant-name-text-input'}
+              validated={isConstantNameValid}
             />
           )}
+        </FormGroup>
+        <FormGroup label={'Value'} fieldId={'constvalue'} isRequired={true}>
+          <TextInput
+            value={value}
+            onChange={handleOnValueChange}
+            id={'constvalue'}
+            autoFocus={true}
+            isRequired={true}
+            data-testid={'constant-value-text-input'}
+          />
         </FormGroup>
         <FormGroup label={'Value type'} fieldId={'valueType'}>
           <FormSelect

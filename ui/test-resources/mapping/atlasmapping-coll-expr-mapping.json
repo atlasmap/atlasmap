@@ -182,6 +182,7 @@
               "scope" : "current"
             }, {
               "jsonType" : "io.atlasmap.v2.ConstantField",
+              "name" : "Boston",
               "value" : "Boston",
               "docId" : "DOC.Constants.",
               "index" : 1,
@@ -240,6 +241,7 @@
               },
               {
                 "jsonType":"io.atlasmap.v2.ConstantField",
+                "name":"const-str",
                 "path":"/const-str",
                 "fieldType":"STRING",
                 "docId":"DOC.Constants.",

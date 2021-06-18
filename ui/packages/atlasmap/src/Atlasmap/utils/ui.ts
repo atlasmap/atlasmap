@@ -108,8 +108,8 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
         type: field.type,
         path: field.path,
         scope: field.scope,
+        value: field.value,
         amField: field,
-        previewValue: field.value,
         mappings:
           (cfg.mappings
             ?.findMappingsForField(field)
@@ -183,7 +183,7 @@ export function fromMappedFieldToIMappingField(
     type: mappedField.field!.type,
     path: mappedField.field!.path,
     scope: mappedField.field!.scope,
-    previewValue: mappedField.field!.value,
+    value: mappedField.field!.value,
     hasTransformations: false,
     mappings: [],
     isAttribute: false,

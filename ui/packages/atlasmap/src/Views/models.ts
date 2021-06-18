@@ -29,8 +29,8 @@ export interface IAtlasmapField {
   name: string;
   type: string;
   scope: string;
+  value: string;
   path: string;
-  previewValue: string;
   mappings: IAtlasmapMapping[];
   hasTransformations: boolean;
   isAttribute: boolean;

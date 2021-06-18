@@ -20,7 +20,7 @@ import { useConfirmationDialog } from './useConfirmationDialog';
 
 export function useDeleteConstantDialog(): [
   ReactElement,
-  (constValue: string) => void,
+  (constName: string) => void,
 ] {
   const { deleteConstant } = useAtlasmap();
   const [deleteConstantDialog, openDeleteConstantDialog] =
@@ -29,8 +29,8 @@ export function useDeleteConstantDialog(): [
       'Are you sure you want to delete the selected constant and remove any associated mapping references?',
     );
   const onDeleteConstant = useCallback(
-    (constValue: string) =>
-      openDeleteConstantDialog(() => deleteConstant(constValue)),
+    (constName: string) =>
+      openDeleteConstantDialog(() => deleteConstant(constName)),
     [deleteConstant, openDeleteConstantDialog],
   );
   return [deleteConstantDialog, onDeleteConstant];

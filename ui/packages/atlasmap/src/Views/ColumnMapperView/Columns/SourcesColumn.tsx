@@ -128,7 +128,7 @@ export const SourcesColumn: FunctionComponent<
       shouldShowMappingPreviewForField(field) && (
         <DocumentFieldPreview
           id={field.id}
-          value={field.previewValue}
+          value={field.value}
           onChange={(value) => onFieldPreviewChange(field, value)}
         />
       ),

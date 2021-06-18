@@ -102,7 +102,7 @@ export function javaToFieldGroup(
       type: jf.fieldType,
       path: jf.path,
       scope: 'current',
-      previewValue: '',
+      value: '',
       mappings,
       hasTransformations:
         mappings.length > 0 &&
@@ -147,7 +147,7 @@ export function javaToFieldGroup(
 //       id: `${idPrefix}-${jf.path}`,
 //       name: jf.name,
 //       type: jf.fieldType,
-//       previewValue: "",
+//       value: "",
 //       mappings,
 //       hasTransformations:
 //         mappings.length > 0 &&

@@ -82,7 +82,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
                 {shouldShowMappingPreview(mapping) && (
                   <DocumentFieldPreview
                     id={field.id}
-                    value={field.previewValue}
+                    value={field.value}
                     onChange={(value) => onFieldPreviewChange(field, value)}
                   />
                 )}
@@ -98,7 +98,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
                 {shouldShowMappingPreview(mapping) && (
                   <DocumentFieldPreviewResults
                     id={field.id}
-                    value={field.previewValue}
+                    value={field.value}
                   />
                 )}
               </div>

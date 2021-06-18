@@ -66,8 +66,8 @@ export function useAtlasmapDialogs({
     useConstantDialog('Create Constant');
   const onCreateConstant = useCallback(
     (constants: IAtlasmapDocument | null, addToActiveMapping?: boolean) => {
-      openCreateConstantDialog(({ value, valueType }) => {
-        createConstant(value, valueType, addToActiveMapping);
+      openCreateConstantDialog(({ name, value, valueType }) => {
+        createConstant(name, value, valueType, addToActiveMapping);
       }, constants);
     },
     [createConstant, openCreateConstantDialog],
@@ -78,8 +78,8 @@ export function useAtlasmapDialogs({
   const onEditConstant = useCallback(
     (constant: IConstant, constants: IAtlasmapDocument | null) => {
       openEditConstantDialog(
-        ({ value, valueType }) => {
-          editConstant(constant.value, value, valueType);
+        ({ name, value, valueType }, origName) => {
+          editConstant(name, value, valueType, origName);
         },
         constants,
         constant,

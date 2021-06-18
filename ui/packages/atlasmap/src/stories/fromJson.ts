@@ -77,7 +77,7 @@ export function jsonToFieldGroup(
       type: jf.fieldType,
       path: jf.path,
       scope: 'current',
-      previewValue: '',
+      value: '',
       mappings,
       hasTransformations:
         mappings.length > 0 &&
@@ -119,7 +119,7 @@ export function jsonToFieldGroup(
 //       id,
 //       name: jf.name,
 //       type: jf.fieldType,
-//       previewValue: "",
+//       value: "",
 //       mappings,
 //       hasTransformations:
 //         mappings.length > 0 &&

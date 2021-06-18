@@ -514,7 +514,7 @@ export class MappingSerializer {
     for (const field of docDef.fields) {
       // Use the constant value for the name.
       constantDescriptions.push({
-        name: field.value,
+        name: field.name,
         value: field.value,
         fieldType: field.type,
       });
@@ -699,7 +699,7 @@ export class MappingSerializer {
       } else if (field.isConstant()) {
         serializedField['jsonType'] =
           ConfigModel.mappingServicesPackagePrefix + '.ConstantField';
-        delete serializedField['name'];
+        serializedField['name'] = field.name;
       } else if (field.enumeration) {
         if (field.docDef.type === DocumentType.JSON) {
           serializedField['jsonType'] = 'io.atlasmap.json.v2.JsonEnumField';
@@ -1135,6 +1135,7 @@ export class MappingSerializer {
       ConfigModel.mappingServicesPackagePrefix + '.ConstantField'
     ) {
       mappedField.parsedData.fieldIsConstant = true;
+      mappedField.parsedData.parsedName = field.name;
       mappedField.parsedData.parsedValue = field.value;
       mappedField.parsedData.parsedPath = field.path;
       mappedField.parsedData.parsedDocID = field.docId;

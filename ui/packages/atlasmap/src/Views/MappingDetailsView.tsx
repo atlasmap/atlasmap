@@ -133,10 +133,10 @@ export const MappingDetailsView: FunctionComponent<IMappingDetailsViewProps> =
     const genericPaddingField: IAtlasmapField = {
       id: '',
       name: 'Padding field',
+      value: '',
       type: '',
       scope: 'current',
       path: '',
-      previewValue: '',
       mappings: [],
       hasTransformations: false,
       isAttribute: false,
