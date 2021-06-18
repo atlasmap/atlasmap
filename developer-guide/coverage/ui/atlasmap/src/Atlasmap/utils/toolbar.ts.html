@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">36.11% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/42</span>
+                <span class='fraction'>13/36</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">36.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/42</span>
+                <span class='fraction'>13/36</span>
             </div>
         
             
@@ -168,19 +168,7 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -272,18 +260,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -392,23 +368,11 @@ export function <span class="fstat-no" title="function not covered" >resetAtlasm
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >getRuntimeVersion(</span>): Promise&lt;string&gt; {
   const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-<span class="cstat-no" title="statement not covered" >  return cfg.mappingService.getRuntimeVersion();</span>
+<span class="cstat-no" title="statement not covered" >  return cfg.initializationService.getRuntimeVersion();</span>
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >getUIVersion(</span>): string {
 <span class="cstat-no" title="statement not covered" >  return constants.version;</span>
-}
-&nbsp;
-export function <span class="fstat-no" title="function not covered" >toggleMappingPreview(</span>enabled: boolean) {
-  const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  if (enabled) {</span>
-<span class="cstat-no" title="statement not covered" >    cfg.mappingService.enableMappingPreview();</span>
-  } else {
-<span class="cstat-no" title="statement not covered" >    cfg.mappingService.disableMappingPreview();</span>
-  }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return enabled;</span>
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >toggleShowMappedFields(</span>enabled: boolean) {
@@ -435,7 +399,7 @@ export function <span class="fstat-no" title="function not covered" >toggleShowU
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jun 18 2021 13:53:54 GMT+0000 (Coordinated Universal Time)
+                at Fri Jun 18 2021 23:33:57 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

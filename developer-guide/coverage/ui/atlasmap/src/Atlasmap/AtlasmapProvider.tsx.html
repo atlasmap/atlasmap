@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/182</span>
+                <span class='fraction'>0/184</span>
             </div>
         
             
@@ -771,7 +771,12 @@
 <a name='L713'></a><a href='#L713'>713</a>
 <a name='L714'></a><a href='#L714'>714</a>
 <a name='L715'></a><a href='#L715'>715</a>
-<a name='L716'></a><a href='#L716'>716</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a>
+<a name='L718'></a><a href='#L718'>718</a>
+<a name='L719'></a><a href='#L719'>719</a>
+<a name='L720'></a><a href='#L720'>720</a>
+<a name='L721'></a><a href='#L721'>721</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -803,8 +808,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -880,7 +883,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1233,16 +1235,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1513,11 +1523,9 @@
 <span class="cstat-no" title="statement not covered" >import {</span>
   DocumentInitializationModel,
   DocumentType,
-  ExpressionUtil,
   InspectionType,
   MappingSerializer,
   TransitionMode,
-  search,
 } from '@atlasmap/core';
 import { IAtlasmapDocument, IAtlasmapField } from '../Views';
 <span class="cstat-no" title="statement not covered" >import React, {</span>
@@ -1589,7 +1597,6 @@ import { IAtlasmapDocument, IAtlasmapField } from '../Views';
   selectMapping,
   setSelectedEnumValue,
   toggleExpressionMode,
-  toggleMappingPreview,
   toggleShowMappedFields,
   toggleShowUnmappedFields,
   trailerId,
@@ -1874,7 +1881,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
           debounceTime(debounceTimeWindow),
         );
       const mappingPreview =
-<span class="cstat-no" title="statement not covered" >        configModel.mappingService.mappingPreviewOutput$.pipe(</span>
+<span class="cstat-no" title="statement not covered" >        configModel.previewService.mappingPreviewOutput$.pipe(</span>
           debounceTime(debounceTimeWindow),
         );
 &nbsp;
@@ -1956,8 +1963,16 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 &nbsp;
   const { onLoading, onReset, ...state<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >c</span>ontext;</span>
 &nbsp;
-  const searchSources = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(t</span>erm: string) =&gt; <span class="cstat-no" title="statement not covered" >search(term, true), [</span>]);</span>
-  const searchTargets = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(t</span>erm: string) =&gt; <span class="cstat-no" title="statement not covered" >search(term, false), [</span>]);</span>
+  const searchSources = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (t</span>erm: string) =&gt;
+<span class="cstat-no" title="statement not covered" >      configModel.documentService.filterDocumentFields(term, true),</span>
+    [configModel],
+  );
+  const searchTargets = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (t</span>erm: string) =&gt;
+<span class="cstat-no" title="statement not covered" >      configModel.documentService.filterDocumentFields(term, false),</span>
+    [configModel],
+  );
 &nbsp;
   const handleImportADMArchiveFile = <span class="cstat-no" title="statement not covered" >useCallback(</span>
 <span class="fstat-no" title="function not covered" >    (f</span>ile: File) =&gt; {
@@ -2005,7 +2020,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
       .length === 0;
 &nbsp;
   const mappingHasSourceCollection = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    return configModel.mappingService.willClearOutSourceFieldsOnTogglingExpression();</span>
+<span class="cstat-no" title="statement not covered" >    return configModel.expressionService.willClearOutSourceFieldsOnTogglingExpression();</span>
   }, [configModel]);
 &nbsp;
   /**
@@ -2144,15 +2159,15 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     mappingExpressionRemoveField,
     mappingHasSourceCollection,
     mappingExpressionEnabled:
-      configModel.mappingService.conditionalMappingExpressionEnabled(),
-    currentMappingExpression: ExpressionUtil.getMappingExpressionStr(
-      configModel,
-      true,
-      configModel.mappings?.activeMapping,
-    ),
+      configModel.expressionService.isExpressionEnabledForActiveMapping(),
+    currentMappingExpression:
+      configModel.expressionService.getMappingExpressionStr(
+        true,
+        configModel.mappings?.activeMapping,
+      ),
     getMappingExpression,
     toggleExpressionMode,
-    toggleMappingPreview,
+    toggleMappingPreview: configModel.previewService.toggleMappingPreview,
     toggleShowMappedFields,
     toggleShowUnmappedFields,
     onFieldPreviewChange,
@@ -2208,7 +2223,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jun 18 2021 13:53:54 GMT+0000 (Coordinated Universal Time)
+                at Fri Jun 18 2021 23:33:57 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
