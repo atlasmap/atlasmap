@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.15% </span>
+                <span class="strong">71.6% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>127/169</span>
+                <span class='fraction'>121/169</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">48.72% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>38/78</span>
+                <span class='fraction'>36/78</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76% </span>
+                <span class="strong">68% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>19/25</span>
+                <span class='fraction'>17/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">70.95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>111/148</span>
+                <span class='fraction'>105/148</span>
             </div>
         
             
@@ -491,15 +491,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -564,17 +564,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">223x</span>
-<span class="cline-any cline-yes">223x</span>
-<span class="cline-any cline-yes">312x</span>
+<span class="cline-any cline-yes">226x</span>
+<span class="cline-any cline-yes">226x</span>
+<span class="cline-any cline-yes">315x</span>
 <span class="cline-any cline-yes">82x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">230x</span>
+<span class="cline-any cline-yes">233x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">184x</span>
+<span class="cline-any cline-yes">187x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
@@ -590,7 +590,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">308x</span>
+<span class="cline-any cline-yes">311x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
@@ -629,17 +629,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">285x</span>
+<span class="cline-any cline-yes">286x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">520x</span>
+<span class="cline-any cline-yes">522x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -784,16 +784,16 @@ export class Field {
   /**
    * Expand all fields above the current field.
    */
-  expandToRoot() {
-    let parent: Field = this;
-    while (parent != null) {
-      parent.collapsed = false;
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (parent.isPropertyOrConstant()) {
+<span class="fstat-no" title="function not covered" >  expandToRoot(</span>) {
+    let parent: Field = <span class="cstat-no" title="statement not covered" >this;</span>
+<span class="cstat-no" title="statement not covered" >    while (parent != null) {</span>
+<span class="cstat-no" title="statement not covered" >      parent.collapsed = false;</span>
+<span class="cstat-no" title="statement not covered" >      if (parent.isPropertyOrConstant()) {</span>
 <span class="cstat-no" title="statement not covered" >        if (parent.docDef) {</span>
 <span class="cstat-no" title="statement not covered" >          parent.docDef.showFields = true;</span>
         }
       }
-      parent = parent.parentField;
+<span class="cstat-no" title="statement not covered" >      parent = parent.parentField;</span>
     }
   }
 &nbsp;
@@ -922,8 +922,8 @@ export class Field {
     return fieldPath;
   }
 &nbsp;
-  isPropertyOrConstant(): boolean {
-    return this.docDef == null ? <span class="branch-0 cbranch-no" title="branch not covered" >false </span>: this.docDef.isPropertyOrConstant;
+<span class="fstat-no" title="function not covered" >  isPropertyOrConstant(</span>): boolean {
+<span class="cstat-no" title="statement not covered" >    return this.docDef == null ? false : this.docDef.isPropertyOrConstant;</span>
   }
 &nbsp;
   isProperty(): boolean {
@@ -945,7 +945,7 @@ export class Field {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Jun 21 2021 15:51:48 GMT+0000 (Coordinated Universal Time)
+                at Mon Jun 21 2021 19:41:37 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
