@@ -227,122 +227,43 @@ export class MappingManagementService {
     }
   }
 
-  fieldSelected(field: Field, compoundSelection?: boolean): void {
-    // Keep around for now
-    compoundSelection = true;
-
-    if (!field.isTerminal()) {
-      field.docDef.populateChildren(field);
-      field.docDef.updateFromMappings(this.cfg.mappings!); // TODO: check this non null operator
-      field.collapsed = !field.collapsed;
-      return;
-    }
-    let addField = false;
-    let removeField = false;
-    let mapping: MappingModel | null = this.cfg.mappings!.activeMapping; // TODO: check this non null operator
-
-    // Check compound selection and active mapping status to determine the action
-    if (mapping !== null) {
-      if (mapping.hasMappedField(field.isSource())) {
-        // If the user has performed a compound selection (ctrl/cmd-m1) of a previously unselected field
-        // then add it to the active mapping; otherwise remove it.
-        if (compoundSelection) {
-          if (mapping.isFieldMapped(field)) {
-            removeField = true;
-          } else {
-            addField = true;
-          }
-        } else {
-          if (!mapping.isFieldMapped(field)) {
-            if (!mapping.isFullyMapped()) {
-              this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
-              this.deselectMapping();
-            }
-            mapping = null;
-          }
-        }
-      } else {
-        addField = true;
-      }
-    }
-
-    // Select other existing mapping if selected field participates, or create a new one
-    if (mapping == null) {
-      const mappingsForField: MappingModel[] =
-        this.cfg.mappings!.findMappingsForField(field); // TODO: check this non null operator
-
-      if (mappingsForField && mappingsForField.length === 1) {
-        mapping = mappingsForField[0];
-        this.selectMapping(mapping);
-
-        // Source fields may be part of multiple mappings - trigger mapping required source observable thread.
-      } else if (mappingsForField && mappingsForField.length > 1) {
-        this.mappingSelectionRequiredSource.next(field);
-        return;
-      } else {
-        mapping = new MappingModel();
-        this.selectMapping(mapping);
-        addField = true;
-      }
-    }
-
-    if (!addField && !removeField) {
-      this.selectMapping(mapping);
-
-      const mappedFields =
-        this.cfg.mappings!.activeMapping!.getAllMappedFields(); // TODO: check this non null operator
-      for (const mappedField of mappedFields) {
-        // TODO: check this non null operator
-        mappedField.field!.expandToRoot();
-      }
-
-      this.notifyMappingUpdated();
-      return;
-    }
-
-    if (addField) {
-      const exclusionReason = this.getFieldSelectionExclusionReason(
-        mapping,
-        field
+  addFieldToActiveMapping(field: Field): void {
+    let mapping: MappingModel | null = this.cfg.mappings!.activeMapping;
+    if (!mapping) {
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message: `No mapping is selected to add a field '${field.name}'`,
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.MAPPING,
+          type: ErrorType.USER,
+        })
       );
-      if (exclusionReason != null) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: `The field '${field.name}' cannot be selected, ${exclusionReason}.`,
-            level: ErrorLevel.ERROR,
-            mapping: mapping,
-            scope: ErrorScope.MAPPING,
-            type: ErrorType.USER,
-          })
-        );
-        return;
-      }
-      mapping.addField(field, false);
-
-      this.updateTransition(mapping);
-      if (mapping.sourceFields.length > 0 || mapping.targetFields.length > 0) {
-        this.notifyMappingUpdated();
-      }
       return;
     }
 
-    if (removeField) {
-      mapping.getMappedFieldForField(field);
-      mapping.removeField(field);
-      if (mapping.getUserFieldCount(field) === 1) {
-        this.clearExtraPaddingFields(
-          mapping.getMappedFields(field.isSource()),
-          false
-        );
-      }
-      if (mapping.isEmpty()) {
-        this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
-        this.deselectMapping();
-      } else {
-        this.updateTransition(mapping);
-      }
+    const exclusionReason = this.getFieldSelectionExclusionReason(
+      mapping,
+      field
+    );
+    if (exclusionReason != null) {
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message: `The field '${field.name}' cannot be selected, ${exclusionReason}.`,
+          level: ErrorLevel.ERROR,
+          mapping: mapping,
+          scope: ErrorScope.MAPPING,
+          type: ErrorType.USER,
+        })
+      );
+      return;
+    }
+    mapping.addField(field, false);
+
+    this.updateTransition(mapping);
+    if (mapping.sourceFields.length > 0 || mapping.targetFields.length > 0) {
       this.notifyMappingUpdated();
     }
+    return;
   }
 
   getFieldSelectionExclusionReason(

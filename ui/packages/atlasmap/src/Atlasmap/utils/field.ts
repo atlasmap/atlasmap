@@ -408,7 +408,7 @@ export function removeMapping(mappingModel: MappingModel): void {
  */
 export function addToCurrentMapping(field: Field): void {
   const cfg = ConfigModel.getConfig();
-  cfg.mappingService.fieldSelected(field);
+  cfg.mappingService.addFieldToActiveMapping(field);
 }
 
 /**

@@ -185,7 +185,7 @@ describe('MappingManagementService', () => {
     expect(pad?.field!).toBeInstanceOf(PaddingField);
   });
 
-  test('fieldSelected()', () => {
+  test('addFieldToActiveMapping()', () => {
     spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
       return new (class {
         json(): Promise<any> {
@@ -200,9 +200,12 @@ describe('MappingManagementService', () => {
     const mapping = service.cfg.mappings!.mappings[1];
     const field2 = mapping.getMappedFieldForIndex('1', true);
     expect(field2?.field!.path).toBe('/sourceField2');
-    expect(service.cfg.mappings?.activeMapping).toBeFalsy();
-    service.fieldSelected(field2?.field!);
-    expect(service.cfg.mappings?.activeMapping).toBe(mapping);
+    service.selectMapping(mapping);
+    expect(mapping.sourceFields.length).toBe(2);
+    const field3 = field2?.field?.docDef.getField('/sourceField3');
+    expect(field3).toBeTruthy();
+    service.addFieldToActiveMapping(field3!);
+    expect(mapping.sourceFields.length).toBe(3);
   });
 
   test('isFieldSelectable()', () => {
