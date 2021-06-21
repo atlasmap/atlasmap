@@ -49,7 +49,16 @@ export const disabled = () => (
     executeFieldSearch={executeFieldSearch}
     getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action('mappingExpressionAddField')}
-    mappingExpressionClearText={() => ({ str: '', uuid: '123' })}
+    mappingExpressionClearText={() => ({
+      str: '',
+      uuid: '123',
+      getUuid() {
+        return this.uuid;
+      },
+      toText() {
+        return this.str;
+      },
+    })}
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
@@ -68,7 +77,16 @@ export const enabledWithExpression = () => (
     executeFieldSearch={executeFieldSearch}
     getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action('mappingExpressionAddField')}
-    mappingExpressionClearText={() => ({ str: '', uuid: '123' })}
+    mappingExpressionClearText={() => ({
+      str: '',
+      uuid: '123',
+      getUuid() {
+        return this.uuid;
+      },
+      toText() {
+        return this.str;
+      },
+    })}
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
@@ -90,7 +108,16 @@ export const enabledWithoutExpression = () => (
     executeFieldSearch={executeFieldSearch}
     getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action('mappingExpressionAddField')}
-    mappingExpressionClearText={() => ({ str: '', uuid: '123' })}
+    mappingExpressionClearText={() => ({
+      str: '',
+      uuid: '123',
+      getUuid() {
+        return this.uuid;
+      },
+      toText() {
+        return this.str;
+      },
+    })}
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
