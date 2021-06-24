@@ -13,8 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DocumentType, FieldType, IField } from '../contracts/common';
 import { DocumentDefinition } from './document-definition.model';
-import { DocumentType } from '../common/config.types';
 
 export class EnumValue {
   name: string;
@@ -28,11 +28,12 @@ export class Field {
   classIdentifier: string;
   displayName: string;
   path: string;
-  type: string;
-  scope: string;
+  type: FieldType;
+  scope: string | undefined;
   value: string;
   column: number;
-  serviceObject: any = {};
+  // The field properties read from document inspection result.
+  documentField: IField = { jsonType: '' };
   parentField: Field;
   partOfMapping = false;
   partOfTransformation = false;
@@ -184,7 +185,7 @@ export class Field {
     Object.assign(copy, this);
 
     // make these pointers to the same object, not copies
-    copy.serviceObject = this.serviceObject;
+    copy.documentField = this.documentField;
     copy.parentField = this.parentField;
     copy.docDef = this.docDef;
 
@@ -200,7 +201,7 @@ export class Field {
     Object.assign(this, that);
 
     // make these pointers to the same object, not copies
-    this.serviceObject = that.serviceObject;
+    this.documentField = that.documentField;
     this.parentField = that.parentField;
     this.docDef = that.docDef;
 

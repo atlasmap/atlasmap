@@ -51,8 +51,7 @@
         "name":"SomeJsonTarget",
         "description":"random desc",
         "uri":"atlas:json:SomeJsonTarget",
-        "dataSourceType":"TARGET",
-        "template":null
+        "dataSourceType":"TARGET"
       },
       {
         "jsonType":"io.atlasmap.json.v2.JsonDataSource",
@@ -60,8 +59,7 @@
         "name":"JSONSchemaSource",
         "description":"random desc",
         "uri":"atlas:json:JSONSchemaSource",
-        "dataSourceType":"TARGET",
-        "template":null
+        "dataSourceType":"TARGET"
       },
       {
         "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
@@ -70,7 +68,6 @@
         "description" : "random desc",
         "uri" : "atlas:xml:XMLInstanceSource",
         "dataSourceType" : "TARGET",
-        "template":null,
         "xmlNamespaces" : [ {
           "xmlNamespace" : [ {
             "alias" : "xsi",

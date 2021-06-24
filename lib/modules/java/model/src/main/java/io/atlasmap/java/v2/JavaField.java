@@ -33,8 +33,6 @@ public class JavaField extends Field implements Serializable {
 
     protected StringList parameterizedTypes;
 
-    protected String name;
-
     protected String className;
 
     protected String canonicalClassName;
@@ -119,30 +117,6 @@ public class JavaField extends Field implements Serializable {
      */
     public void setParameterizedTypes(StringList value) {
         this.parameterizedTypes = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
     }
 
     /**

@@ -25,9 +25,13 @@ export enum ErrorLevel {
 
 export enum ErrorScope {
   APPLICATION = 'APPLICATION',
+  DATA_SOURCE = 'DATA_SOURCE',
+  LOOKUP_TABLE = 'LOOKUP_TABLE',
   MAPPING = 'MAPPING',
   FIELD = 'FIELD',
   FORM = 'FORM',
+  CONSTANT = 'CONSTANT',
+  PROPERTY = 'PROPERTY',
 }
 
 export enum ErrorType {

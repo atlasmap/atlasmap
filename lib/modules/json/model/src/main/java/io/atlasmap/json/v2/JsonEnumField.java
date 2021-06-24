@@ -26,6 +26,82 @@ public class JsonEnumField extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    protected Integer ordinal;
+    protected String typeName;
+    protected Boolean userCreated;
+
+    /**
+     * Gets the value of the ordinal property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Integer }
+     *     
+     */
+    public Integer getOrdinal() {
+        return ordinal;
+    }
+
+    /**
+     * Sets the value of the ordinal property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Integer }
+     *     
+     */
+    public void setOrdinal(Integer value) {
+        this.ordinal = value;
+    }
+
+    /**
+     * Gets the value of the typeName property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTypeName() {
+        return typeName;
+    }
+
+    /**
+     * Sets the value of the typeName property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTypeName(String value) {
+        this.typeName = value;
+    }
+
+    /**
+     * Gets the value of the userCreated property.
+     *
+     * @return
+     *     possible object is
+     *     {@link Boolean }
+     *
+     */
+    public Boolean isUserCreated() {
+        return userCreated;
+    }
+
+    /**
+     * Sets the value of the userCreated property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link Boolean }
+     *
+     */
+    public void setUserCreated(Boolean value) {
+        this.userCreated = value;
+    }
+
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;

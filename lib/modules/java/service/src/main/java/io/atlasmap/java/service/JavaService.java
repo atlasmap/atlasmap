@@ -40,7 +40,6 @@ import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.v2.ClassInspectionRequest;
 import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.java.v2.JavaClass;
-import io.atlasmap.java.v2.MavenClasspathRequest;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.v2.Json;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,9 +88,9 @@ public class JavaService {
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
     @Operation(summary = "Inspect Class", description ="Inspect a Java Class with specified fully qualified class name and return a Document object")
-    @RequestBody(description = "MavenClasspathRequest object", content = @Content(schema = @Schema(implementation = MavenClasspathRequest.class)))
+    @RequestBody(description = "ClassInspectionRequest object", content = @Content(schema = @Schema(implementation = ClassInspectionRequest.class)))
     @ApiResponses(@ApiResponse(
-            responseCode = "200", content = @Content(schema = @Schema(implementation = JavaClass.class)), description = "Return a Document object represented by JavaClass"))
+            responseCode = "200", content = @Content(schema = @Schema(implementation = ClassInspectionResponse.class)), description = "Return a Document object represented by JavaClass"))
     public Response inspectClass(InputStream requestIn) {
         ClassInspectionRequest request = fromJson(requestIn, ClassInspectionRequest.class);
         ClassInspectionResponse response = new ClassInspectionResponse();

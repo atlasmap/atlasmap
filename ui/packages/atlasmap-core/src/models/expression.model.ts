@@ -126,13 +126,6 @@ export class FieldNode extends ExpressionNode {
       }
       mappedField = this.mappedField;
     }
-    if (
-      mappedField &&
-      !mappedField.parsedData.parsedPath &&
-      mappedField.field
-    ) {
-      mappedField.parsedData.parsedPath = mappedField.field.path;
-    }
   }
 
   toText(): string {
@@ -145,7 +138,7 @@ export class FieldNode extends ExpressionNode {
         this.mappedField.field.docDef.id +
         ':/' +
         this.mappedField.field.scope +
-        this.mappedField.parsedData.parsedPath +
+        this.mappedField.field.path +
         '}'
       );
     } else if (this.mappedField.field.enumeration) {
@@ -168,7 +161,7 @@ export class FieldNode extends ExpressionNode {
         textStr +=
           this.mappedField.field.docDef.id +
           ':' +
-          this.mappedField.parsedData.parsedPath +
+          this.mappedField.field.path +
           '}';
       }
       return textStr;
@@ -206,9 +199,9 @@ export class FieldNode extends ExpressionNode {
 
   hasComplexField(): boolean {
     return (
-      this.mappedField?.field?.serviceObject.fieldType === 'COMPLEX' &&
-      (this.mappedField?.field?.serviceObject.status === 'SUPPORTED' ||
-        this.mappedField?.field?.serviceObject.status === 'CACHED')
+      this.mappedField?.field?.documentField.fieldType === 'COMPLEX' &&
+      (this.mappedField?.field?.documentField.status === 'SUPPORTED' ||
+        this.mappedField?.field?.documentField.status === 'CACHED')
     );
   }
 }
@@ -747,7 +740,7 @@ export class ExpressionModel {
               undefined,
               nodeMetaVal,
               undefined,
-              collectionContextFieldNode.mappedField?.parsedData.parsedPath!
+              collectionContextFieldNode.mappedField?.field?.path!
             )
           : new FieldNode(this.mapping, undefined, nodeMetaVal);
       } else {

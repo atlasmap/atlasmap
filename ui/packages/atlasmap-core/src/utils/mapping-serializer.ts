@@ -14,7 +14,15 @@
     limitations under the License.
 */
 
-import { DataSourceType, DocumentType } from '../common/config.types';
+import {
+  DataSourceType,
+  DocumentType,
+  FieldType,
+  IDataSource,
+  IField,
+  IFieldAction,
+  dataSourceJsonType,
+} from '../contracts/common';
 import {
   DocumentDefinition,
   NamespaceModel,
@@ -29,23 +37,61 @@ import {
   FieldAction,
   FieldActionArgument,
   FieldActionArgumentValue,
-  Multiplicity,
 } from '../models/field-action.model';
+import {
+  IAtlasMappingContainer,
+  ICollection,
+  IConstant,
+  IFieldGroup,
+  IJsonDataSource,
+  ILookupEntry,
+  ILookupTable,
+  IMapping,
+  IProperty,
+  IPropertyField,
+  MappingType,
+  atlasMappingJsonType,
+  collectionJsonType,
+  constantFieldJsonType,
+  fieldGroupJsonType,
+  mappingJsonType,
+  propertyFieldJsonType,
+} from '../contracts/mapping';
+import {
+  IXmlDataSource,
+  IXmlField,
+  IXmlNamespace,
+  xmlDataSourceJsonType,
+  xmlEnumFieldJsonType,
+  xmlModelPackagePrefix,
+} from '../contracts/documents/xml';
 import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
+import {
+  jsonDataSourceJsonType,
+  jsonEnumFieldJsonType,
+} from '../contracts/documents/json';
 
 import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
+import { IAudits } from '../contracts/mapping-preview';
+import { ICsvField } from '../contracts/documents/csv';
+import { IJavaField } from '../contracts/documents/java';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingUtil } from './mapping-util';
+import { Multiplicity } from '../contracts/field-action';
+import { javaEnumFieldJsonType } from '../contracts/documents/java';
 
 export class MappingSerializer {
-  static serializeMappings(cfg: ConfigModel, ignoreValue: boolean = true): any {
+  static serializeMappings(
+    cfg: ConfigModel,
+    ignoreValue: boolean = true
+  ): IAtlasMappingContainer {
     // TODO: check this non null operator
     const mappingDefinition: MappingDefinition = cfg.mappings!;
-    let jsonMappings: any[] = [];
+    let jsonMappings: IMapping[] = [];
     for (const mapping of mappingDefinition.mappings.filter((m) =>
       m.isFullyMapped()
     )) {
@@ -77,27 +123,27 @@ export class MappingSerializer {
       }
     }
 
-    // TODO: check this non null operator
-    const serializedLookupTables: any[] =
-      MappingSerializer.serializeLookupTables(cfg.mappings!);
-    const constantDescriptions: any[] = MappingSerializer.serializeConstants(
-      cfg.constantDoc
+    const serializedLookupTables = MappingSerializer.serializeLookupTables(
+      cfg.mappings!
     );
-    const sourcePropertyDescriptions: any[] =
+    const constantDescriptions: IConstant[] =
+      MappingSerializer.serializeConstants(cfg.constantDoc);
+    const sourcePropertyDescriptions: IProperty[] =
       MappingSerializer.serializeProperties(cfg.sourcePropertyDoc);
-    const targetPropertyDescriptions: any[] =
+    const targetPropertyDescriptions: IProperty[] =
       MappingSerializer.serializeProperties(cfg.targetPropertyDoc);
-    const serializedDataSources: any = MappingSerializer.serializeDocuments(
-      cfg.sourceDocs.concat(cfg.targetDocs),
-      mappingDefinition
-    );
+    const serializedDataSources: IDataSource[] =
+      MappingSerializer.serializeDocuments(
+        cfg.sourceDocs.concat(cfg.targetDocs),
+        mappingDefinition
+      );
 
-    const payload: any = {
+    const payload: IAtlasMappingContainer = {
       AtlasMapping: {
-        jsonType: ConfigModel.mappingServicesPackagePrefix + '.AtlasMapping',
+        jsonType: atlasMappingJsonType,
         dataSource: serializedDataSources,
         mappings: { mapping: jsonMappings },
-        name: cfg.mappings!.name, // TODO: check this non null operator
+        name: cfg.mappings!.name ? cfg.mappings!.name : undefined,
         lookupTables: { lookupTable: serializedLookupTables },
         constants: { constant: constantDescriptions },
         properties: {
@@ -115,22 +161,20 @@ export class MappingSerializer {
     mapping: MappingModel,
     id: string,
     ignoreValue: boolean = true
-  ): any {
-    const jsonMappingType =
-      ConfigModel.mappingServicesPackagePrefix + '.Mapping';
-    const serializedInputFields: any[] = MappingSerializer.serializeFields(
+  ): IMapping {
+    const serializedInputFields = MappingSerializer.serializeFields(
       mapping,
       true,
       cfg,
       ignoreValue
     );
-    const serializedOutputFields: any[] = MappingSerializer.serializeFields(
+    const serializedOutputFields = MappingSerializer.serializeFields(
       mapping,
       false,
       cfg,
       ignoreValue
     );
-    let jsonMapping: { [key: string]: any } = {};
+    let jsonMapping: IMapping;
     const mappingExpression = cfg.expressionService.getMappingExpressionStr(
       false,
       mapping
@@ -149,14 +193,14 @@ export class MappingSerializer {
         );
       }
       const field = serializedInputFields;
-      const inputFieldGroup: any = {
-        jsonType: ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
+      const inputFieldGroup: IFieldGroup = {
+        jsonType: fieldGroupJsonType,
         actions,
         field,
       };
       if (mappingExpression.length > 0) {
         jsonMapping = {
-          jsonType: jsonMappingType,
+          jsonType: mappingJsonType,
           id: id,
           expression: mappingExpression,
           inputFieldGroup,
@@ -164,7 +208,7 @@ export class MappingSerializer {
         };
       } else {
         jsonMapping = {
-          jsonType: jsonMappingType,
+          jsonType: mappingJsonType,
           id: id,
           inputFieldGroup,
           outputField: serializedOutputFields,
@@ -188,23 +232,32 @@ export class MappingSerializer {
       }
       if (mappingExpression.length > 0) {
         if (serializedInputFields[0].jsonType?.includes('FieldGroup')) {
-          let serializedInputFieldGroup = serializedInputFields[0];
+          let serializedInputFieldGroup =
+            serializedInputFields[0] as IFieldGroup;
           for (let i = 1; i < serializedInputFields.length; i++) {
-            if (
-              serializedInputFields[i].jsonType?.includes('FieldGroup') &&
-              serializedInputFields[i].field.path ===
-                serializedInputFields[0].field.path
-            ) {
-              serializedInputFieldGroup.field.push(
-                serializedInputFields[i].field[0]
-              );
+            if (serializedInputFields[i].jsonType?.includes('FieldGroup')) {
+              const serializedFieldGroup0 =
+                serializedInputFields[0] as IFieldGroup;
+              const serializedFieldGroupi = serializedInputFields[
+                i
+              ] as IFieldGroup;
+              if (
+                serializedFieldGroupi.field &&
+                serializedFieldGroup0.field &&
+                serializedFieldGroupi.field[0].path ===
+                  serializedFieldGroup0.field[0].path
+              ) {
+                serializedInputFieldGroup.field?.push(
+                  serializedFieldGroupi.field[0]
+                );
+              }
             }
             // TODO - Support input fields from different complex parent fields
             // in the same complex conditional expression.
           }
 
           jsonMapping = {
-            jsonType: jsonMappingType,
+            jsonType: mappingJsonType,
             id: id,
             expression: mappingExpression,
             inputFieldGroup: serializedInputFieldGroup,
@@ -212,7 +265,7 @@ export class MappingSerializer {
           };
         } else {
           jsonMapping = {
-            jsonType: jsonMappingType,
+            jsonType: mappingJsonType,
             id: id,
             expression: mappingExpression,
             inputField: serializedInputFields,
@@ -221,7 +274,7 @@ export class MappingSerializer {
         }
       } else {
         jsonMapping = {
-          jsonType: jsonMappingType,
+          jsonType: mappingJsonType,
           id: id,
           inputField: serializedInputFields,
           outputField: serializedOutputFields,
@@ -230,13 +283,18 @@ export class MappingSerializer {
     }
 
     if (mapping.transition.isEnumerationMode()) {
-      jsonMapping['mappingType'] = 'LOOKUP'; /* @deprecated */
-      jsonMapping['lookupTableName'] = mapping.transition.lookupTableName;
+      jsonMapping.mappingType = MappingType.LOOKUP; /* @deprecated */
+      if (mapping.transition.lookupTableName) {
+        jsonMapping.lookupTableName = mapping.transition.lookupTableName;
+      }
     }
     return jsonMapping;
   }
 
-  static deserializeMappingServiceJSON(json: any, cfg: ConfigModel): void {
+  static deserializeMappingServiceJSON(
+    json: IAtlasMappingContainer,
+    cfg: ConfigModel
+  ): void {
     // Process constants and properties before mappings.
     for (const field of MappingSerializer.deserializeConstants(json)) {
       cfg.constantDoc.addField(field);
@@ -267,8 +325,8 @@ export class MappingSerializer {
    *
    * @param json
    */
-  static deserializeAtlasMappingName(json: any): string {
-    if (json && json.AtlasMapping && json.AtlasMapping.name) {
+  static deserializeAtlasMappingName(json: IAtlasMappingContainer): string {
+    if (json?.AtlasMapping?.name) {
       return json.AtlasMapping.name;
     } else {
       return '';
@@ -276,37 +334,26 @@ export class MappingSerializer {
   }
 
   static addInputFieldGroupFields(
-    inputField: any,
+    inputField: IField[],
     mapping: MappingModel,
-    docRefs: string[],
     cfg: ConfigModel
   ) {
     for (const field of inputField) {
       if (field.fieldType === 'COMPLEX') {
         MappingSerializer.addInputFieldGroupFields(
-          field.field,
+          (field as IFieldGroup).field!,
           mapping,
-          docRefs,
           cfg
         );
       } else {
-        MappingSerializer.addFieldIfDoesntExist(
-          mapping,
-          field,
-          true,
-          docRefs,
-          cfg,
-          true
-        );
+        MappingSerializer.deserializeMappedField(mapping, field, true, cfg);
       }
     }
   }
 
   static deserializeFieldMapping(
-    mappingJson: any,
-    docRefs: string[],
-    cfg: ConfigModel,
-    ignoreValue: boolean = true
+    mappingJson: IMapping,
+    cfg: ConfigModel
   ): MappingModel {
     const mapping = new MappingModel();
     mapping.uuid = mappingJson.id;
@@ -318,37 +365,86 @@ export class MappingSerializer {
       mappingJson.mappingType === 'LOOKUP' ||
       mappingJson.lookupTableName != null;
 
-    if (mappingJson.mappingType && mappingJson.mappingType !== '') {
-      this.deserializeFieldMappingFromType(
-        mapping,
-        mappingJson,
-        docRefs,
-        cfg,
-        ignoreValue
-      );
+    if (
+      mappingJson.mappingType &&
+      mappingJson.mappingType !== MappingType.NONE
+    ) {
+      this.deserializeFieldMappingFromType(mapping, mappingJson, cfg);
       return mapping;
     }
 
     if (mappingJson.inputFieldGroup) {
-      if (
-        mappingJson.transition?.expression &&
-        mappingJson.inputFieldGroup.fieldType === 'COMPLEX'
-      ) {
-        mapping.transition.expression.hasComplexField = true;
+      MappingSerializer.deserializeInputFieldGroup(mappingJson, mapping, cfg);
+    } else {
+      const inputField = mappingJson.inputField;
+
+      if (inputField) {
+        for (const field of inputField) {
+          MappingSerializer.deserializeMappedField(mapping, field, true, cfg);
+        }
       }
-      mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+      if (
+        mappingJson.outputField?.length &&
+        mappingJson.outputField.length > 1
+      ) {
+        mapping.transition.mode = TransitionMode.ONE_TO_MANY;
+      }
+      if (cfg.mappings) {
+        MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+      }
+    }
+
+    if (mappingJson.expression && mappingJson.expression.length > 0) {
+      mapping.transition.enableExpression = true;
+      mapping.transition.mode = TransitionMode.EXPRESSION;
+      mapping.transition.expression = new ExpressionModel(mapping, cfg);
+      mapping.transition.expression.insertText(mappingJson.expression);
+    }
+
+    for (const field of mappingJson.outputField) {
+      MappingSerializer.deserializeMappedField(mapping, field, false, cfg);
+    }
+    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, false);
+
+    if (isLookupMapping) {
+      mapping.transition.lookupTableName = mappingJson.lookupTableName!;
+      mapping.transition.mode = TransitionMode.ENUM;
+    }
+
+    return mapping;
+  }
+
+  private static deserializeInputFieldGroup(
+    mappingJson: IMapping,
+    mapping: MappingModel,
+    cfg: ConfigModel
+  ) {
+    if (!mappingJson.inputFieldGroup) {
+      return;
+    }
+
+    if (
+      mappingJson.expression &&
+      mappingJson.inputFieldGroup!.fieldType === FieldType.COMPLEX
+    ) {
+      mapping.transition.expression.hasComplexField = true;
+    }
+    mapping.transition.mode = TransitionMode.MANY_TO_ONE;
+
+    MappingSerializer.addInputFieldGroupFields(
+      mappingJson.inputFieldGroup.field!,
+      mapping,
+      cfg
+    );
+    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+
+    if (
+      mappingJson.inputFieldGroup.actions &&
+      mappingJson.inputFieldGroup.actions[0]?.delimiter
+    ) {
       mapping.transition.delimiter = TransitionModel.delimiterToModel(
         mappingJson.inputFieldGroup.actions[0]?.delimiter
       )?.delimiter;
-      MappingSerializer.addInputFieldGroupFields(
-        mappingJson.inputFieldGroup.field,
-        mapping,
-        docRefs,
-        cfg
-      );
-
-      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
-
       // Check for an InputFieldGroup containing a many-to-one action
       const firstAction = mappingJson.inputFieldGroup.actions[0];
       if (firstAction) {
@@ -373,57 +469,12 @@ export class MappingSerializer {
           mapping.transition.transitionFieldAction = parsedAction;
         }
       }
-    } else {
-      const inputField = mappingJson.inputField;
-
-      for (const field of inputField) {
-        MappingSerializer.addFieldIfDoesntExist(
-          mapping,
-          field,
-          true,
-          docRefs,
-          cfg,
-          ignoreValue
-        );
-      }
-      if (mappingJson.outputField.length > 1) {
-        mapping.transition.mode = TransitionMode.ONE_TO_MANY;
-      }
-      if (cfg.mappings) {
-        MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
-      }
     }
-
-    if (mappingJson.expression && mappingJson.expression.length > 0) {
-      mapping.transition.enableExpression = true;
-      mapping.transition.mode = TransitionMode.EXPRESSION;
-      mapping.transition.expression = new ExpressionModel(mapping, cfg);
-      mapping.transition.expression.insertText(mappingJson.expression);
-    }
-
-    for (const field of mappingJson.outputField) {
-      MappingSerializer.addFieldIfDoesntExist(
-        mapping,
-        field,
-        false,
-        docRefs,
-        cfg,
-        ignoreValue
-      );
-    }
-    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, false);
-
-    if (isLookupMapping) {
-      mapping.transition.lookupTableName = mappingJson.lookupTableName;
-      mapping.transition.mode = TransitionMode.ENUM;
-    }
-
-    return mapping;
   }
 
-  static deserializeAudits(audits: any, errorType: ErrorType): ErrorInfo[] {
+  static deserializeAudits(audits: IAudits, errorType: ErrorType): ErrorInfo[] {
     const errors: ErrorInfo[] = [];
-    if (!audits && !audits.audit) {
+    if (!audits?.audit) {
       return errors;
     }
     for (const audit of audits.audit) {
@@ -431,10 +482,10 @@ export class MappingSerializer {
       errors.push(
         new ErrorInfo({
           message: msg,
-          level: audit.status,
+          level: ErrorLevel[audit.status],
           scope: ErrorScope.MAPPING,
           type: errorType,
-          object: audit.audit?.value,
+          object: audit.value,
         })
       );
     }
@@ -442,20 +493,20 @@ export class MappingSerializer {
   }
 
   private static createInputFieldGroup(
-    field: any[],
+    field: IField[],
     isComplex: boolean,
     docId?: string,
     path?: string
-  ): any {
-    const inputFieldGroup: any = {
-      jsonType: ConfigModel.mappingServicesPackagePrefix + '.FieldGroup',
+  ): IFieldGroup {
+    const inputFieldGroup: IFieldGroup = {
+      jsonType: fieldGroupJsonType,
       actions: [],
       docId: docId,
       path: path,
       field,
     };
     if (isComplex) {
-      inputFieldGroup['fieldType'] = 'COMPLEX';
+      inputFieldGroup.fieldType = FieldType.COMPLEX;
     }
     return inputFieldGroup;
   }
@@ -463,11 +514,11 @@ export class MappingSerializer {
   private static serializeDocuments(
     docs: DocumentDefinition[],
     mappingDefinition: MappingDefinition
-  ): any[] {
-    const serializedDocs: any[] = [];
+  ): IDataSource[] {
+    const serializedDocs: IDataSource[] = [];
     for (const doc of docs) {
-      const serializedDoc: any = {
-        jsonType: 'io.atlasmap.v2.DataSource',
+      let serializedDoc: IDataSource = {
+        jsonType: dataSourceJsonType,
         id: doc.id,
         name: doc.name,
         description: doc.description,
@@ -477,14 +528,15 @@ export class MappingSerializer {
           : DataSourceType.TARGET,
       };
       if (doc.characterEncoding != null) {
-        serializedDoc['characterEncoding'] = doc.characterEncoding;
+        serializedDoc.characterEncoding = doc.characterEncoding;
       }
       if (doc.locale != null) {
-        serializedDoc['locale'] = doc.locale;
+        serializedDoc.locale = doc.locale;
       }
       if (doc.type === DocumentType.XML || doc.type === DocumentType.XSD) {
-        serializedDoc['jsonType'] = 'io.atlasmap.xml.v2.XmlDataSource';
-        const namespaces: any[] = [];
+        const xmlDoc = serializedDoc as IXmlDataSource;
+        xmlDoc.jsonType = xmlDataSourceJsonType;
+        const namespaces: IXmlNamespace[] = [];
         for (const ns of doc.namespaces) {
           namespaces.push({
             alias: ns.alias,
@@ -493,15 +545,16 @@ export class MappingSerializer {
             targetNamespace: ns.isTarget,
           });
         }
-        if (!doc.isSource) {
-          serializedDoc['template'] = mappingDefinition.templateText;
+        if (!doc.isSource && mappingDefinition.templateText) {
+          xmlDoc.template = mappingDefinition.templateText;
         }
-        serializedDoc['xmlNamespaces'] = { xmlNamespace: namespaces };
+        xmlDoc.xmlNamespaces = { xmlNamespace: namespaces };
       } else if (doc.type === DocumentType.JSON) {
-        if (!doc.isSource) {
-          serializedDoc['template'] = mappingDefinition.templateText;
+        const jsonDoc = serializedDoc as IJsonDataSource;
+        if (!doc.isSource && mappingDefinition.templateText) {
+          jsonDoc.template = mappingDefinition.templateText;
         }
-        serializedDoc['jsonType'] = 'io.atlasmap.json.v2.JsonDataSource';
+        jsonDoc.jsonType = jsonDataSourceJsonType;
       }
 
       serializedDocs.push(serializedDoc);
@@ -509,8 +562,8 @@ export class MappingSerializer {
     return serializedDocs;
   }
 
-  private static serializeConstants(docDef: DocumentDefinition): any[] {
-    const constantDescriptions: any[] = [];
+  private static serializeConstants(docDef: DocumentDefinition): IConstant[] {
+    const constantDescriptions: IConstant[] = [];
     for (const field of docDef.fields) {
       // Use the constant value for the name.
       constantDescriptions.push({
@@ -522,8 +575,8 @@ export class MappingSerializer {
     return constantDescriptions;
   }
 
-  private static serializeProperties(docDef: DocumentDefinition): any[] {
-    const propertyDescriptions: any[] = [];
+  private static serializeProperties(docDef: DocumentDefinition): IProperty[] {
+    const propertyDescriptions: IProperty[] = [];
     for (const field of docDef.fields) {
       propertyDescriptions.push({
         name: field.name,
@@ -539,18 +592,17 @@ export class MappingSerializer {
 
   private static serializeLookupTables(
     mappingDefinition: MappingDefinition
-  ): any[] {
-    const tables: LookupTable[] = mappingDefinition.getTables();
-
+  ): ILookupTable[] {
+    const serializedTables: ILookupTable[] = [];
+    const tables = mappingDefinition.getTables();
     if (!tables || !tables.length) {
-      return [];
+      return serializedTables;
     }
 
-    const serializedTables: any[] = [];
     for (const table of tables) {
-      const lookupEntries: any[] = [];
-      for (const entry of table.entries) {
-        const serializedEntry: any = {
+      const lookupEntries: ILookupEntry[] = [];
+      for (const entry of table.lookupEntry) {
+        const serializedEntry: ILookupEntry = {
           sourceValue: entry.sourceValue,
           sourceType: entry.sourceType,
           targetValue: entry.targetValue,
@@ -559,7 +611,7 @@ export class MappingSerializer {
         lookupEntries.push(serializedEntry);
       }
 
-      const serializedTable: any = {
+      const serializedTable: ILookupTable = {
         lookupEntry: lookupEntries,
         name: table.name,
       };
@@ -579,10 +631,10 @@ export class MappingSerializer {
    */
   private static processCollectionPreview(
     field: Field,
-    serializedField: any,
-    fieldsJson: any[]
+    serializedField: IField,
+    fieldsJson: IField[]
   ) {
-    serializedField['path'] = field.path.replace('<>', '<0>');
+    serializedField.path = field.path.replace('<>', '<0>');
     const collectionInstanceInputFieldGroup =
       MappingSerializer.createInputFieldGroup(
         [serializedField],
@@ -602,21 +654,21 @@ export class MappingSerializer {
   private static processActionArguments(
     action: FieldAction,
     cfg: ConfigModel
-  ): any {
+  ): { [key: string]: string } {
+    const actionArguments: { [key: string]: any } = {};
     if (action === null) {
-      return;
+      return actionArguments;
     }
-    const actionArguments: any = {};
     for (const argValue of action.argumentValues) {
       if (
-        action.definition.isCustom &&
+        action.definition?.isCustom &&
         ['methodName', 'className', 'name'].includes(argValue.name)
       ) {
         continue;
       }
       actionArguments[argValue.name] = argValue.value;
       const argumentConfig: FieldActionArgument =
-        action.definition.getArgumentForName(argValue.name);
+        action.definition!.getArgumentForName(argValue.name);
       if (argumentConfig == null) {
         cfg.errorService.addError(
           new ErrorInfo({
@@ -641,11 +693,11 @@ export class MappingSerializer {
     isSource: boolean,
     cfg: ConfigModel,
     ignoreValue: boolean = false
-  ): any[] {
+  ): IField[] {
     let collectionInputFieldGroup = null;
     let collectionInstanceInputFieldGroup = null;
     const fields: MappedField[] = mapping.getMappedFields(isSource);
-    const fieldsJson: any[] = [];
+    const fieldsJson: IField[] = [];
 
     for (const mappedField of fields) {
       if (!mappedField.field || mappedField.isPadField()) {
@@ -653,8 +705,8 @@ export class MappingSerializer {
       }
 
       const field: Field = mappedField.field;
-      const serializedField: any = {
-        jsonType: field.serviceObject.jsonType,
+      const serializedField: IField = {
+        jsonType: field.documentField.jsonType,
         name: field.name,
         path: field.path,
         fieldType: field.type,
@@ -662,20 +714,16 @@ export class MappingSerializer {
       };
 
       // The 'attribute' field only applies to XML.
-      if (
-        field.serviceObject.jsonType?.includes(
-          ConfigModel.xmlServicesPackagePrefix
-        )
-      ) {
-        serializedField.attribute = field.isAttribute;
+      if (field.documentField.jsonType?.includes(xmlModelPackagePrefix)) {
+        (serializedField as IXmlField).attribute = field.isAttribute;
       }
 
       // Only capture a value for preview mode and constants.
       if (!ignoreValue || field.isConstant()) {
         if (field.value) {
-          serializedField['value'] = field.value;
+          serializedField.value = field.value;
         } else {
-          serializedField['value'] = '';
+          serializedField.value = '';
         }
       }
 
@@ -683,33 +731,31 @@ export class MappingSerializer {
         field.docDef.type === DocumentType.XML ||
         field.docDef.type === DocumentType.XSD
       ) {
-        serializedField['userCreated'] = field.userCreated;
+        (serializedField as IXmlField).userCreated = field.userCreated;
       } else if (
         field.docDef.type === DocumentType.JAVA &&
         !field.isPrimitive
       ) {
-        serializedField['className'] = field.classIdentifier;
+        (serializedField as IJavaField).className = field.classIdentifier;
       }
 
       if (field.isProperty()) {
-        serializedField['jsonType'] =
-          ConfigModel.mappingServicesPackagePrefix + '.PropertyField';
-        serializedField['name'] = field.name;
-        serializedField['scope'] = field.scope;
+        serializedField.jsonType = propertyFieldJsonType;
+        serializedField.name = field.name;
+        (serializedField as IPropertyField).scope = field.scope;
       } else if (field.isConstant()) {
-        serializedField['jsonType'] =
-          ConfigModel.mappingServicesPackagePrefix + '.ConstantField';
-        serializedField['name'] = field.name;
+        serializedField.jsonType = constantFieldJsonType;
+        serializedField.name = field.name;
       } else if (field.enumeration) {
         if (field.docDef.type === DocumentType.JSON) {
-          serializedField['jsonType'] = 'io.atlasmap.json.v2.JsonEnumField';
+          serializedField.jsonType = jsonEnumFieldJsonType;
         } else if (
           field.docDef.type === DocumentType.XML ||
           field.docDef.type === DocumentType.XSD
         ) {
-          serializedField['jsonType'] = 'io.atlasmap.xml.v2.XmlEnumField';
+          serializedField.jsonType = xmlEnumFieldJsonType;
         } else {
-          serializedField['jsonType'] = 'io.atlasmap.java.v2.JavaEnumField';
+          serializedField.jsonType = javaEnumFieldJsonType;
         }
       }
 
@@ -721,11 +767,11 @@ export class MappingSerializer {
         includeIndexes || (mapping.transition.isExpressionMode() && isSource);
       if (includeIndexes) {
         // TODO: check this non null operator
-        serializedField['index'] =
+        serializedField.index =
           mapping.getIndexForMappedField(mappedField)! - 1;
       }
       if (field.docDef.type === DocumentType.CSV) {
-        serializedField['column'] = field.column;
+        (serializedField as ICsvField).column = field.column;
       }
 
       this.serializeActions(cfg, mappedField, serializedField);
@@ -756,15 +802,17 @@ export class MappingSerializer {
                 collectionParentField.path
               );
           } else {
-            collectionInstanceInputFieldGroup!.field.push(serializedField);
+            (collectionInstanceInputFieldGroup as IFieldGroup)!.field!.push(
+              serializedField
+            );
             continue;
           }
-          collectionInstanceInputFieldGroup['fieldType'] =
-            collectionParentField.serviceObject.fieldType;
+          collectionInstanceInputFieldGroup.fieldType =
+            collectionParentField.documentField.fieldType;
 
           // Preview-mode uses element/ item instance <0>.
           if (!ignoreValue) {
-            collectionInstanceInputFieldGroup['path'] =
+            collectionInstanceInputFieldGroup.path =
               collectionParentField.path.replace('<>', '<0>');
 
             // Establish one outer input field group for the preview collection.
@@ -776,8 +824,8 @@ export class MappingSerializer {
                   collectionParentField.docDef.id,
                   collectionParentField.path
                 );
-              collectionInstanceInputFieldGroup['fieldType'] =
-                collectionParentField.serviceObject.fieldType;
+              collectionInstanceInputFieldGroup.fieldType =
+                collectionParentField.documentField.fieldType;
               fieldsJson.push(collectionInputFieldGroup);
             }
           } else {
@@ -804,10 +852,10 @@ export class MappingSerializer {
   private static serializeActions(
     cfg: ConfigModel,
     mappedField: MappedField,
-    serializedField: any
+    serializedField: IField
   ): void {
     if (mappedField.actions.length) {
-      const actions: any[] = [];
+      const actions: IFieldAction[] = [];
 
       for (const action of mappedField.actions) {
         const actionJson = this.serializeAction(action, cfg);
@@ -816,23 +864,26 @@ export class MappingSerializer {
         }
       }
       if (actions.length > 0) {
-        serializedField['actions'] = actions;
+        serializedField.actions = actions;
       }
     }
   }
 
-  private static serializeAction(action: FieldAction, cfg: ConfigModel): any {
-    let actionJson: any = MappingSerializer.processActionArguments(action, cfg);
-    actionJson['@type'] = action.definition.name;
+  private static serializeAction(
+    action: FieldAction,
+    cfg: ConfigModel
+  ): { [key: string]: any } {
+    let actionJson = MappingSerializer.processActionArguments(action, cfg);
+    actionJson['@type'] = action.definition!.name;
     return actionJson;
   }
 
   private static deserializeDocs(
-    json: any,
+    json: IAtlasMappingContainer,
     mappingDefinition: MappingDefinition
   ): DocumentDefinition[] | null {
     const docs: DocumentDefinition[] = [];
-    if (!json || !json.AtlasMapping) {
+    if (!json || !json.AtlasMapping || !json.AtlasMapping.dataSource) {
       return null;
     }
     for (const docRef of json.AtlasMapping.dataSource) {
@@ -840,21 +891,22 @@ export class MappingSerializer {
       doc.isSource = docRef.dataSourceType === 'SOURCE';
       doc.uri = docRef.uri;
       doc.id = docRef.id;
-      doc.name = docRef.name;
+      doc.name = docRef.name ? docRef.name : '';
       doc.description = docRef.description;
-      if (docRef.xmlNamespaces && docRef.xmlNamespaces.xmlNamespace) {
-        for (const svcNS of docRef.xmlNamespaces.xmlNamespace) {
+      const xmlDocRef = docRef as IXmlDataSource;
+      if (xmlDocRef.xmlNamespaces && xmlDocRef.xmlNamespaces.xmlNamespace) {
+        for (const svcNS of xmlDocRef.xmlNamespaces.xmlNamespace) {
           const ns: NamespaceModel = new NamespaceModel();
           ns.alias = svcNS.alias;
           ns.uri = svcNS.uri;
           ns.locationUri = svcNS.locationUri;
-          ns.isTarget = svcNS.targetNamespace;
+          ns.isTarget = svcNS.targetNamespace ? svcNS.targetNamespace : false;
           ns.createdByUser = true;
           doc.namespaces.push(ns);
         }
       }
-      if (docRef.template) {
-        mappingDefinition.templateText = docRef.template;
+      if (xmlDocRef.template) {
+        mappingDefinition.templateText = xmlDocRef.template;
       }
       docs.push(doc);
     }
@@ -862,36 +914,33 @@ export class MappingSerializer {
   }
 
   private static deserializeMappings(
-    json: any,
+    json: IAtlasMappingContainer,
     cfg: ConfigModel
   ): MappingModel[] {
     const mappings: MappingModel[] = [];
-    const docRefs: any = {};
 
-    if (!json || !json.AtlasMapping) {
+    if (!json.AtlasMapping.mappings?.mapping) {
       return mappings;
-    }
-    for (const docRef of json.AtlasMapping.dataSource) {
-      docRefs[docRef.id] = docRef.uri;
     }
     for (const fieldMapping of json.AtlasMapping.mappings.mapping) {
       // for backward compatibility
-      const isCollectionMapping =
-        fieldMapping.jsonType ===
-        ConfigModel.mappingServicesPackagePrefix + '.Collection';
+      const isCollectionMapping = fieldMapping.jsonType === collectionJsonType;
       if (isCollectionMapping) {
-        for (const innerFieldMapping of fieldMapping.mappings.mapping) {
+        const collection = fieldMapping as ICollection;
+        for (const innerFieldMapping of collection.mappings.mapping) {
           mappings.push(
             MappingSerializer.deserializeFieldMapping(
-              innerFieldMapping,
-              docRefs,
+              innerFieldMapping as IMapping,
               cfg
             )
           );
         }
       } else {
         mappings.push(
-          MappingSerializer.deserializeFieldMapping(fieldMapping, docRefs, cfg)
+          MappingSerializer.deserializeFieldMapping(
+            fieldMapping as IMapping,
+            cfg
+          )
         );
       }
     }
@@ -910,10 +959,8 @@ export class MappingSerializer {
    */
   private static deserializeFieldMappingFromType(
     mapping: MappingModel,
-    fieldMapping: any,
-    docRefs: string[],
-    cfg: ConfigModel,
-    ignoreValue: boolean
+    fieldMapping: IMapping,
+    cfg: ConfigModel
   ): void {
     if (fieldMapping.mappingType === 'SEPARATE') {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
@@ -925,11 +972,11 @@ export class MappingSerializer {
       ); // TODO: check this non null operator
       mapping.transition.transitionFieldAction.setArgumentValue(
         'delimiter',
-        fieldMapping.delimiter
+        fieldMapping.delimiter!
       );
     } else if (fieldMapping.mappingType === 'LOOKUP') {
       mapping.transition.mode = TransitionMode.ENUM;
-      mapping.transition.lookupTableName = fieldMapping.lookupTableName;
+      mapping.transition.lookupTableName = fieldMapping.lookupTableName!;
     } else if (fieldMapping.mappingType === 'COMBINE') {
       mapping.transition.mode = TransitionMode.MANY_TO_ONE;
       mapping.transition.transitionFieldAction = FieldAction.create(
@@ -940,47 +987,26 @@ export class MappingSerializer {
       ); // TODO: check this non null operator
       mapping.transition.transitionFieldAction.setArgumentValue(
         'delimiter',
-        fieldMapping.delimiter
-      );
-      mapping.transition.transitionFieldAction.setArgumentValue(
-        'delimitingEmptyValues',
-        fieldMapping.delimitingEmptyValues
+        fieldMapping.delimiter!
       );
     } else {
       mapping.transition.mode = TransitionMode.ONE_TO_ONE;
     }
 
-    for (const field of fieldMapping.inputField) {
-      MappingSerializer.addFieldIfDoesntExist(
-        mapping,
-        field,
-        true,
-        docRefs,
-        cfg,
-        ignoreValue
-      );
+    for (const field of fieldMapping.inputField!) {
+      MappingSerializer.deserializeMappedField(mapping, field, true, cfg);
     }
     for (const field of fieldMapping.outputField) {
-      MappingSerializer.addFieldIfDoesntExist(
-        mapping,
-        field,
-        false,
-        docRefs,
-        cfg,
-        ignoreValue
-      );
+      MappingSerializer.deserializeMappedField(mapping, field, false, cfg);
     }
-    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, null, true);
+    MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
   }
 
-  private static deserializeConstants(jsonMapping: any): Field[] {
+  private static deserializeConstants(
+    jsonMapping: IAtlasMappingContainer
+  ): Field[] {
     const fields: Field[] = [];
-    if (
-      !jsonMapping ||
-      !jsonMapping.AtlasMapping ||
-      !jsonMapping.AtlasMapping.constants ||
-      !jsonMapping.AtlasMapping.constants.constant
-    ) {
+    if (!jsonMapping?.AtlasMapping?.constants?.constant) {
       return fields;
     }
     for (const constant of jsonMapping.AtlasMapping.constants.constant) {
@@ -996,16 +1022,11 @@ export class MappingSerializer {
   }
 
   private static deserializeProperties(
-    jsonMapping: any,
+    jsonMapping: IAtlasMappingContainer,
     isSource: boolean
   ): Field[] {
     const fields: Field[] = [];
-    if (
-      !jsonMapping ||
-      !jsonMapping.AtlasMapping ||
-      !jsonMapping.AtlasMapping.properties ||
-      !jsonMapping.AtlasMapping.properties.property
-    ) {
+    if (!jsonMapping?.AtlasMapping?.properties?.property) {
       return fields;
     }
 
@@ -1028,7 +1049,9 @@ export class MappingSerializer {
     return fields;
   }
 
-  private static deserializeLookupTables(jsonMapping: any): LookupTable[] {
+  private static deserializeLookupTables(
+    jsonMapping: IAtlasMappingContainer
+  ): LookupTable[] {
     const tables: LookupTable[] = [];
     if (
       !jsonMapping ||
@@ -1047,7 +1070,7 @@ export class MappingSerializer {
         parsedEntry.sourceType = entry.sourceType;
         parsedEntry.targetValue = entry.targetValue;
         parsedEntry.targetType = entry.targetType;
-        parsedTable.entries.push(parsedEntry);
+        parsedTable.lookupEntry.push(parsedEntry);
       }
       tables.push(parsedTable);
     }
@@ -1064,20 +1087,40 @@ export class MappingSerializer {
    * @param isSource
    */
   private static deserializeFieldActions(
-    field: any,
+    field: IField,
     mappedField: MappedField,
     mapping: MappingModel,
     cfg: ConfigModel,
     isSource: boolean
   ): void {
-    if (field.Expression) {
-      const expr = field.Expression.expression;
-      mapping.transition.expression.insertText(expr);
+    if (!field.actions) {
+      return;
     }
+
     for (const action of field.actions) {
       const parsedAction = this.parseAction(action);
-      parsedAction.definition =
-        cfg.fieldActionService.getActionDefinitionForName(parsedAction.name)!; // TODO: check this non null operator
+      if (action.name === 'CustomAction') {
+        parsedAction.definition =
+          cfg.fieldActionService.getActionDefinitionForName(
+            action.argumentValues[0].value,
+            Multiplicity.ONE_TO_ONE
+          );
+      } else {
+        parsedAction.definition =
+          cfg.fieldActionService.getActionDefinitionForName(parsedAction.name)!;
+      }
+      if (parsedAction.definition == null) {
+        cfg.errorService.addError(
+          new ErrorInfo({
+            message: `Could not find field action definition for action '${action.name}'`,
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.APPLICATION,
+            type: ErrorType.INTERNAL,
+          })
+        );
+        continue;
+      }
+      parsedAction.definition.populateFieldAction(parsedAction);
 
       /** @deprecated Support old-style transformation-action-based expressions. */
       if (isSource && (action.Expression || action['@type'] === 'Expression')) {
@@ -1101,96 +1144,37 @@ export class MappingSerializer {
         }
         mapping.transition.transitionFieldAction = parsedAction;
       } else {
-        mappedField.parsedData.parsedActions.push(parsedAction);
+        mappedField.actions.push(parsedAction);
       }
     }
   }
 
-  private static addFieldIfDoesntExist(
+  private static deserializeMappedField(
     mapping: MappingModel,
-    field: any,
+    field: IField,
     isSource: boolean,
-    docRefs: string[],
-    cfg: ConfigModel,
-    ignoreValue: boolean = true
+    cfg: ConfigModel
   ): MappedField | null {
+    if (MappingUtil.isConstantField(field) && !field.docId) {
+      field.docId = cfg.constantDoc.id;
+    } else if (MappingUtil.isPropertyField(field) && !field.docId) {
+      field.docId = isSource
+        ? cfg.sourcePropertyDoc.id
+        : cfg.targetPropertyDoc.id;
+    } else if (!field.docId) {
+      cfg.errorService.addError(
+        new ErrorInfo({
+          message: 'Parsed mapping field does not have document id, dropping.',
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+          object: field,
+        })
+      );
+      return null;
+    }
     const mappedField: MappedField = new MappedField();
-
-    mappedField.parsedData.parsedValueType = field.fieldType;
-    mappedField.parsedData.parsedIndex = '0';
-    if (field.index != null) {
-      mappedField.parsedData.parsedIndex = field.index.toString();
-    }
-    if (
-      field.jsonType ===
-      ConfigModel.mappingServicesPackagePrefix + '.PropertyField'
-    ) {
-      mappedField.parsedData.parsedName = field.name;
-      mappedField.parsedData.parsedPath = field.path;
-      mappedField.parsedData.parsedDocID = field.docId;
-      if (field.scope) {
-        mappedField.parsedData.parsedScope = field.scope;
-      }
-      mappedField.parsedData.fieldIsProperty = true;
-    } else if (
-      field.jsonType ===
-      ConfigModel.mappingServicesPackagePrefix + '.ConstantField'
-    ) {
-      mappedField.parsedData.fieldIsConstant = true;
-      mappedField.parsedData.parsedName = field.name;
-      mappedField.parsedData.parsedValue = field.value;
-      mappedField.parsedData.parsedPath = field.path;
-      mappedField.parsedData.parsedDocID = field.docId;
-    } else {
-      if (field.docId == null) {
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message:
-              'Parsed mapping field does not have document id, dropping.',
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: field,
-          })
-        );
-        return null;
-      }
-      if (!ignoreValue) {
-        if (field.value) {
-          mappedField.parsedData.parsedValue = field.value;
-        } else {
-          // TODO: Refactor when we support more complex output elements.
-          if (
-            field.jsonType === 'io.atlasmap.v2.FieldGroup' &&
-            field.field.length > 0
-          ) {
-            mappedField.parsedData.parsedValue = field.field[0].value;
-          } else {
-            mappedField.parsedData.parsedValue = '';
-          }
-        }
-      }
-      mappedField.parsedData.parsedName = field.name;
-      mappedField.parsedData.parsedPath = field.path;
-      mappedField.parsedData.parsedIsAttribute = field.attribute;
-      mappedField.parsedData.parsedDocID = field.docId;
-      mappedField.parsedData.parsedDocURI = docRefs[field.docId];
-      if (field.userCreated) {
-        mappedField.parsedData.userCreated = true;
-      }
-      if (mappedField.parsedData.parsedDocURI == null) {
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message: 'Could not find document URI for parsed mapped field.',
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: { fieldJSON: field, knownDocs: docRefs },
-          })
-        );
-        return null;
-      }
-    }
+    mappedField.mappingField = field;
     mapping.addMappedField(mappedField, isSource);
     if (field.actions) {
       this.deserializeFieldActions(field, mappedField, mapping, cfg, isSource);
@@ -1198,7 +1182,7 @@ export class MappingSerializer {
     return mappedField;
   }
 
-  private static parseAction(action: any): FieldAction {
+  private static parseAction(action: IFieldAction): FieldAction {
     if (action['@type']) {
       return MappingSerializer.parseNewAction(action);
     } else {
@@ -1210,7 +1194,7 @@ export class MappingSerializer {
   /**
    * @deprecated actionName: {param:...} style has been deprecated. Use {`@type`: actionName} style action description.
    */
-  private static parseOldAction(action: any): FieldAction | null {
+  private static parseOldAction(action: IFieldAction): FieldAction | null {
     for (const actionName of Object.keys(action)) {
       if (!action.hasOwnProperty(actionName)) {
         return null;
@@ -1237,9 +1221,9 @@ export class MappingSerializer {
     return null;
   }
 
-  private static parseNewAction(action: any): FieldAction {
+  private static parseNewAction(action: IFieldAction): FieldAction {
     const parsedAction: FieldAction = new FieldAction();
-    parsedAction.name = action['@type'];
+    parsedAction.name = action['@type']!;
     for (const [key, value] of Object.entries(action)) {
       if ('@type' === key) {
         continue;

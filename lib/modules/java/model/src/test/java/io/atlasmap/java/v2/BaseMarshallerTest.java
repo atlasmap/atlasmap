@@ -428,13 +428,6 @@ public abstract class BaseMarshallerTest {
         return actions;
     }
 
-    public MavenClasspathRequest generateMavenClasspathRequest() {
-        MavenClasspathRequest mavenClasspathRequest = new MavenClasspathRequest();
-        mavenClasspathRequest.setExecuteTimeout(30000L);
-        mavenClasspathRequest.setPomXmlData(generatePomXmlAsString());
-        return mavenClasspathRequest;
-    }
-
     public ClassInspectionRequest generateClassInspectionRequest() {
         ClassInspectionRequest classInspectionRequest = new ClassInspectionRequest();
         classInspectionRequest.setClasspath(

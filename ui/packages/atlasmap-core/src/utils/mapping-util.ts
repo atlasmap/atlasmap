@@ -23,33 +23,25 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  IPropertyField,
+  constantFieldJsonType,
+  propertyFieldJsonType,
+} from '../contracts/mapping';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
-import { Multiplicity } from '../models/field-action.model';
+import { IField } from '../contracts/common';
 
 /**
  * Static routines for handling mappings.
  */
 export class MappingUtil {
   static updateMappingsFromDocuments(cfg: ConfigModel): void {
-    const sourceDocMap = cfg.getDocUriMap(cfg, true);
-    const targetDocMap = cfg.getDocUriMap(cfg, false);
-
     // TODO: check this non null operator
     for (const mapping of cfg.mappings!.mappings) {
-      MappingUtil.updateMappedFieldsFromDocuments(
-        mapping,
-        cfg,
-        sourceDocMap,
-        true
-      );
-      MappingUtil.updateMappedFieldsFromDocuments(
-        mapping,
-        cfg,
-        targetDocMap,
-        false
-      );
+      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
+      MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, false);
     }
     for (const doc of cfg.getAllDocs()) {
       if (doc.id == null) {
@@ -65,7 +57,6 @@ export class MappingUtil {
   static updateMappedFieldsFromDocuments(
     mapping: MappingModel,
     cfg: ConfigModel,
-    docMap: any,
     isSource: boolean
   ): void {
     let mappedFields: MappedField[] = mapping.getMappedFields(isSource);
@@ -75,66 +66,26 @@ export class MappingUtil {
       let doc: DocumentDefinition | null = null;
       mappedFieldIndex += 1;
 
-      if (mappedField.parsedData.fieldIsProperty) {
+      if (mappedField.field instanceof PaddingField) {
+        continue;
+      }
+      if (MappingUtil.isPropertyField(mappedField.mappingField)) {
         doc = isSource ? cfg.sourcePropertyDoc : cfg.targetPropertyDoc;
         // Preserve property Document ID from parsed data
-        if (mappedField.parsedData.parsedDocID) {
-          doc.id = mappedField.parsedData.parsedDocID;
+        if (mappedField.mappingField.docId) {
+          doc.id = mappedField.mappingField.docId;
         }
-      } else if (mappedField.parsedData.fieldIsConstant) {
+      } else if (MappingUtil.isConstantField(mappedField.mappingField)) {
         doc = cfg.constantDoc;
         // Preserve constant Document ID from parsed data
-        if (mappedField.parsedData.parsedDocID) {
-          doc.id = mappedField.parsedData.parsedDocID;
+        if (mappedField.mappingField.docId) {
+          doc.id = mappedField.mappingField.docId;
         }
       } else {
-        if (docMap === null) {
-          docMap = cfg.getDocUriMap(cfg, isSource);
-          if (docMap === null) {
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Could not find document map for URI '${mappedField.parsedData.parsedDocURI}'`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-              })
-            );
-            return;
-          }
-        }
-        doc = docMap[
-          mappedField.parsedData.parsedDocURI!
-        ] as DocumentDefinition;
-
-        // Handle legacy mapped fields document URIs.
-        if (doc == null && mappedField.parsedData.parsedDocURI) {
-          const docIndex = mappedField.parsedData.parsedDocURI?.replace(
-            'java?',
-            'java:' + mappedField.parsedData.parsedDocID + '?'
-          );
-          if (docIndex) {
-            doc = docMap[docIndex] as DocumentDefinition;
-          }
-        }
-        if (doc == null) {
-          if (mappedField.parsedData.parsedName != null) {
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Could not find document for mapped field '${mappedField.parsedData.parsedName}' \
-at URI ${mappedField.parsedData.parsedDocURI}`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-              })
-            );
-          }
-          continue;
-        }
-
-        if (mappedField.parsedData.parsedDocID == null) {
+        if (mappedField.mappingField.docId == null) {
           cfg.errorService.addError(
             new ErrorInfo({
-              message: `Could not find doc ID for mapped field ${mappedField.parsedData.parsedName}`,
+              message: `Could not find doc ID for mapped field ${mappedField.mappingField.name}`,
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -142,33 +93,52 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           );
           continue;
         }
-        doc.id = mappedField.parsedData.parsedDocID;
+        doc = cfg.getDocForIdentifier(
+          mappedField.mappingField.docId!,
+          isSource
+        );
+        if (doc == null) {
+          if (mappedField.mappingField.name != null) {
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `Could not find document for mapped field '${mappedField.mappingField.name}' \
+with ID ${mappedField.mappingField.docId}`,
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+              })
+            );
+          }
+          continue;
+        }
+
+        doc.id = mappedField.mappingField.docId;
       }
 
-      if (!mappedField.parsedData.parsedPath) {
+      if (!mappedField.mappingField.path) {
         continue;
       }
-      mappedField.field = doc.getField(mappedField.parsedData.parsedPath);
+      mappedField.field = doc.getField(mappedField.mappingField.path);
 
       if (mappedField.field == null) {
         // Check for collection instance.
-        if (mappedField.parsedData.parsedPath.indexOf('<0>') >= 0) {
+        if (mappedField.mappingField.path.indexOf('<0>') >= 0) {
           mappedField.field = doc.getField(
-            mappedField.parsedData.parsedPath!.replace('<0>', '<>')
+            mappedField.mappingField.path!.replace('<0>', '<>')
           );
         } else if (
-          mappedField.parsedData.fieldIsConstant &&
-          mappedField.parsedData.parsedValue &&
-          mappedField.parsedData.parsedValueType
+          MappingUtil.isConstantField(mappedField.mappingField) &&
+          mappedField.mappingField.value &&
+          mappedField.mappingField.fieldType
         ) {
           let constantField = cfg.constantDoc.getField(
-            mappedField.parsedData.parsedValue
+            mappedField.mappingField.value
           );
           if (!constantField) {
             constantField = new Field();
           }
-          constantField.value = mappedField.parsedData.parsedValue;
-          constantField.type = mappedField.parsedData.parsedValueType;
+          constantField.value = mappedField.mappingField.value;
+          constantField.type = mappedField.mappingField.fieldType;
           constantField.displayName = constantField.value;
           constantField.name = constantField.value;
           constantField.path = constantField.value;
@@ -176,47 +146,39 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
           mappedField.field = constantField;
           doc.addField(constantField);
         } else if (
-          mappedField.parsedData.fieldIsProperty &&
-          mappedField.parsedData.parsedValueType &&
-          mappedField.parsedData.parsedName &&
-          mappedField.parsedData.parsedPath
+          MappingUtil.isPropertyField(mappedField.mappingField) &&
+          mappedField.mappingField.fieldType &&
+          mappedField.mappingField.name &&
+          mappedField.mappingField.path
         ) {
-          const parsedScope = mappedField.parsedData.parsedScope
-            ? mappedField.parsedData.parsedScope
+          const propMappingField = mappedField.mappingField as IPropertyField;
+          const parsedScope = propMappingField.scope
+            ? propMappingField.scope
             : undefined;
-          let propertyField = isSource
-            ? cfg.sourcePropertyDoc.getField(
-                mappedField.parsedData.parsedPath,
-                parsedScope
-              )
-            : cfg.targetPropertyDoc.getField(
-                mappedField.parsedData.parsedPath,
-                parsedScope
-              );
+          let propertyField = doc.getField(propMappingField.path!, parsedScope);
 
           if (!propertyField) {
             propertyField = new Field();
           }
-          const lastSeparator: number =
-            mappedField.parsedData.parsedName.lastIndexOf('/');
+          const lastSeparator: number = propMappingField.name!.lastIndexOf('/');
           let fieldName =
             lastSeparator === -1
-              ? mappedField.parsedData.parsedName
-              : mappedField.parsedData.parsedName.substring(lastSeparator + 1);
-          propertyField.type = mappedField.parsedData.parsedValueType;
-          if (mappedField.parsedData.parsedScope) {
-            propertyField.scope = mappedField.parsedData.parsedScope;
+              ? propMappingField.name
+              : propMappingField.name!.substring(lastSeparator + 1);
+          propertyField.type = propMappingField.fieldType!;
+          if (propMappingField.scope) {
+            propertyField.scope = propMappingField.scope;
           }
-          propertyField.displayName = fieldName;
-          propertyField.name = fieldName;
-          propertyField.path = mappedField.parsedData.parsedPath;
+          propertyField.displayName = fieldName!;
+          propertyField.name = fieldName!;
+          propertyField.path = propMappingField.path!;
           propertyField.userCreated = true;
           mappedField.field = propertyField;
           doc.addField(propertyField);
         } else {
           cfg.errorService.addError(
             new ErrorInfo({
-              message: `Could not find field from document '${doc.name}' for mapped field '${mappedField.parsedData.parsedName}'`,
+              message: `Could not find field from document '${doc.name}' for mapped field '${mappedField.mappingField.name}'`,
               level: ErrorLevel.ERROR,
               scope: ErrorScope.APPLICATION,
               type: ErrorType.INTERNAL,
@@ -227,41 +189,7 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
         }
       }
 
-      // Process field actions.
-      mappedField.actions = [];
-      if (mappedField.parsedData.parsedActions.length > 0) {
-        for (const action of mappedField.parsedData.parsedActions) {
-          let actionDefinition = null;
-          if (action.name === 'CustomAction') {
-            actionDefinition =
-              cfg.fieldActionService.getActionDefinitionForName(
-                action.argumentValues[0].value,
-                Multiplicity.ONE_TO_ONE
-              );
-          } else {
-            actionDefinition =
-              cfg.fieldActionService.getActionDefinitionForName(
-                action.name,
-                Multiplicity.ONE_TO_ONE
-              );
-          }
-          if (actionDefinition == null) {
-            cfg.errorService.addError(
-              new ErrorInfo({
-                message: `Could not find field action definition for action '${action.name}'`,
-                level: ErrorLevel.ERROR,
-                scope: ErrorScope.APPLICATION,
-                type: ErrorType.INTERNAL,
-              })
-            );
-            continue;
-          }
-          actionDefinition.populateFieldAction(action);
-          mappedField.actions.push(action);
-        }
-      }
-
-      const zeroBasedIndex = +mappedField.parsedData.parsedIndex!; // TODO: check this non null operator
+      const zeroBasedIndex = +mappedField.mappingField.index!; // TODO: check this non null operator
       mappedFields = mapping.getMappedFields(isSource);
       if (zeroBasedIndex <= mappedFieldIndex) {
         mappedFields[mappedFieldIndex] = mappedField;
@@ -417,5 +345,13 @@ at URI ${mappedField.parsedData.parsedDocURI}`,
       mappedFields[0].field &&
       mappedFields[0].field.isInCollection()
     );
+  }
+
+  static isPropertyField(field: IField) {
+    return field?.jsonType === propertyFieldJsonType;
+  }
+
+  static isConstantField(field: IField) {
+    return field?.jsonType === constantFieldJsonType;
   }
 }

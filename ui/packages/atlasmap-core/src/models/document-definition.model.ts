@@ -13,8 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, FieldType, InspectionType } from '../contracts/common';
 
 import { CommonUtil } from '../utils/common-util';
 import { DocumentInitializationModel } from './config.model';
@@ -26,7 +25,7 @@ export class NamespaceModel {
 
   alias: string;
   uri: string;
-  locationUri: string;
+  locationUri: string | undefined;
   createdByUser = false;
   isTarget = false;
 
@@ -67,7 +66,7 @@ export class PaddingField extends Field {
     super();
     this.name = '<padding field>';
     this.classIdentifier = '<padding field>';
-    this.type = '';
+    this.type = FieldType.NONE;
     this.displayName = '<padding field>';
     this.path = '';
   }
@@ -87,7 +86,7 @@ export class DocumentDefinition {
   id: string;
   _type: DocumentType;
   name: string;
-  description: string;
+  description: string | undefined;
   uri: string;
   inspectionType: InspectionType;
   inspectionParameters: { [key: string]: string };
@@ -458,8 +457,8 @@ export class DocumentDefinition {
     if (field.isAttribute && !field.path.includes('@')) {
       field.path = parentPath += '@' + nsFieldName;
     }
-    if (field.serviceObject) {
-      field.serviceObject.path = field.path;
+    if (field.documentField) {
+      field.documentField.path = field.path;
     }
     field.fieldDepth = depth;
     const pathSeparator: string = this.pathSeparator;
@@ -520,8 +519,8 @@ export class DocumentDefinition {
     for (const field of fields) {
       if (
         field.type === 'COMPLEX' &&
-        (field.serviceObject.status === 'SUPPORTED' ||
-          field.serviceObject.status === 'CACHED')
+        (field.documentField.status === 'SUPPORTED' ||
+          field.documentField.status === 'CACHED')
       ) {
         complexFields.push(field.copy());
       }
@@ -539,7 +538,7 @@ export class DocumentDefinition {
       if (field.type !== 'COMPLEX') {
         continue;
       }
-      if (field.serviceObject.status === 'SUPPORTED') {
+      if (field.documentField.status === 'SUPPORTED') {
         this.complexFieldsByClassIdentifier[field.classIdentifier] =
           field.copy();
       }

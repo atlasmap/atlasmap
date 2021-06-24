@@ -19,6 +19,11 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  IProcessMappingRequestContainer,
+  IProcessMappingResponseContainer,
+  processMappingRequestJsonType,
+} from '../contracts/mapping-preview';
 import { Subject, Subscription } from 'rxjs';
 import { ConfigModel } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
@@ -88,8 +93,8 @@ export class MappingPreviewService {
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
       this.api
         .put(url, { json: payload })
-        .json()
-        .then((body: any) => {
+        .json<IProcessMappingResponseContainer>()
+        .then((body) => {
           this.cfg.logger!.debug(
             `Process Mapping Preview Response: ${JSON.stringify(body)}`
           );
@@ -118,11 +123,12 @@ export class MappingPreviewService {
     });
   }
 
-  private createPreviewRequestBody(inputFieldMapping: MappingModel) {
+  private createPreviewRequestBody(
+    inputFieldMapping: MappingModel
+  ): IProcessMappingRequestContainer {
     return {
       ProcessMappingRequest: {
-        jsonType:
-          ConfigModel.mappingServicesPackagePrefix + '.ProcessMappingRequest',
+        jsonType: processMappingRequestJsonType,
         mapping: MappingSerializer.serializeFieldMapping(
           this.cfg,
           inputFieldMapping,
@@ -133,27 +139,24 @@ export class MappingPreviewService {
     };
   }
 
-  private processPreviewResponse(inputFieldMapping: MappingModel, body: any) {
-    const docRefs: any = {};
-    for (const docRef of this.cfg.getAllDocs()) {
-      docRefs[docRef.id] = docRef.uri;
-    }
+  private processPreviewResponse(
+    inputFieldMapping: MappingModel,
+    body: IProcessMappingResponseContainer
+  ) {
     const answer = MappingSerializer.deserializeFieldMapping(
       body.ProcessMappingResponse.mapping,
-      docRefs,
-      this.cfg,
-      false
+      this.cfg
     );
     for (const toWrite of inputFieldMapping.targetFields) {
       for (const toRead of answer.targetFields) {
         // TODO: check these non null operator
         if (
-          toWrite.field?.docDef?.id === toRead.parsedData.parsedDocID &&
-          toWrite.field?.path === toRead.parsedData.parsedPath
+          toWrite.field?.docDef?.id === toRead.field?.docDef.id &&
+          toWrite.field?.path === toRead.field?.path
         ) {
           // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
           // TODO: check this non null operator
-          toWrite.field.value = toRead.parsedData.parsedValue!;
+          toWrite.field!.value = toRead.field?.value!;
           const index = answer.targetFields.indexOf(toRead);
           if (index !== -1) {
             answer.targetFields.splice(index, 1);

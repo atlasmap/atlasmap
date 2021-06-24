@@ -18,7 +18,7 @@ import {
   DocumentInitializationModel,
 } from '../models/config.model';
 import { DocumentDefinition, MappingDefinition } from '../models';
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType } from '../contracts/common';
 import { TextDecoder, TextEncoder } from 'text-encoding';
 
 import { ADMDigest } from '../contracts/adm-digest';
@@ -31,6 +31,7 @@ import { InitializationService } from './initialization.service';
 import fs from 'fs';
 import ky from 'ky/umd';
 import log from 'loglevel';
+import { mappingJsonType } from '../contracts/mapping';
 import { mocked } from 'ts-jest/utils';
 import pako from 'pako';
 
@@ -266,7 +267,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    const mappingJson = '{"AtlasMapping": {}}';
+    const mappingJson = { AtlasMapping: { jsonType: mappingJsonType } };
     service
       .setMappingToService(mappingJson)
       .then((value) => {
@@ -286,7 +287,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    const mappingJson = '{"AtlasMapping": {}}';
+    const mappingJson = { AtlasMapping: { jsonType: mappingJsonType } };
     service
       .setMappingToService(mappingJson)
       .then((value) => {

@@ -107,7 +107,7 @@ export function fromFieldToIFieldsNode(field: Field): IAtlasmapField | null {
         name: field.getFieldLabel(false, false),
         type: field.type,
         path: field.path,
-        scope: field.scope,
+        scope: field.scope ? field.scope : '',
         value: field.value,
         amField: field,
         mappings:
@@ -182,7 +182,7 @@ export function fromMappedFieldToIMappingField(
     name: mappedField.field!.getFieldLabel(false, false),
     type: mappedField.field!.type,
     path: mappedField.field!.path,
-    scope: mappedField.field!.scope,
+    scope: mappedField.field?.scope ? mappedField.field.scope : '',
     value: mappedField.field!.value,
     hasTransformations: false,
     mappings: [],
@@ -201,7 +201,7 @@ export function fromMappedFieldToIMappingField(
           value: a.name,
         }),
       ),
-      arguments: a.definition.arguments.map(
+      arguments: a.definition!.arguments.map(
         (av, idx): ITransformationArgument => ({
           label:
             av.serviceObject?.title?.length > 0

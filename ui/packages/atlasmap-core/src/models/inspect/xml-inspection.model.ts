@@ -14,16 +14,23 @@
     limitations under the License.
 */
 import {
-  DocumentDefinition,
-  NamespaceModel,
-} from '../document-definition.model';
-import {
   DocumentInspectionModel,
   DocumentInspectionRequestModel,
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
 import { EnumValue, Field } from '../field.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
+import { FieldType, IField } from '../../contracts/common';
+import {
+  IXmlComplexType,
+  IXmlDocument,
+  IXmlDocumentContainer,
+  IXmlField,
+  IXmlInspectionResponse,
+  IXmlInspectionResponseContainer,
+  xmlInspectionRequestJsonType,
+} from '../../contracts/documents/xml';
+import { NamespaceModel } from '../document-definition.model';
 
 export class XmlInspectionModel extends DocumentInspectionModel {
   request = new XmlInspectionRequestModel(this.cfg, this.doc);
@@ -47,125 +54,100 @@ export class XmlInspectionModel extends DocumentInspectionModel {
   parseResponse(responseJson: any): void {
     if (typeof responseJson.XmlInspectionResponse !== 'undefined') {
       this.extractXMLDocumentDefinitionFromInspectionResponse(
-        responseJson,
-        this.doc
+        (responseJson as IXmlInspectionResponseContainer).XmlInspectionResponse
       );
     } else if (typeof responseJson.XmlDocument !== 'undefined') {
-      this.extractXMLDocumentDefinition(responseJson, this.doc);
+      this.extractXMLDocumentDefinition(
+        (responseJson as IXmlDocumentContainer).XmlDocument
+      );
     } else {
       throw new Error(`Unknown XML inspection result format: ${responseJson}`);
     }
   }
 
   private extractXMLDocumentDefinitionFromInspectionResponse(
-    responseJson: any,
-    docDef: DocumentDefinition
+    body: IXmlInspectionResponse
   ): void {
-    const body: any = responseJson.XmlInspectionResponse;
     if (body.errorMessage) {
-      docDef.errorOccurred = true;
+      this.doc.errorOccurred = true;
       throw new Error(
         `Could not load XML document, error: ${body.errorMessage}`
       );
     }
 
-    this.extractXMLDocumentDefinition(body, docDef);
+    this.extractXMLDocumentDefinition(body.xmlDocument);
   }
 
-  private extractXMLDocumentDefinition(
-    body: any,
-    docDef: DocumentDefinition
-  ): void {
-    let xmlDocument: any;
-    if (typeof body.xmlDocument !== 'undefined') {
-      xmlDocument = body.xmlDocument;
-    } else {
-      xmlDocument = body.XmlDocument;
+  private extractXMLDocumentDefinition(xmlDocument: IXmlDocument): void {
+    if (!this.doc.description) {
+      this.doc.description = this.doc.id;
+    }
+    if (!this.doc.name) {
+      this.doc.name = this.doc.id;
     }
 
-    if (!docDef.description) {
-      docDef.description = docDef.id;
-    }
-    if (!docDef.name) {
-      docDef.name = docDef.id;
-    }
-
-    docDef.characterEncoding = xmlDocument.characterEncoding;
-    docDef.locale = xmlDocument.locale;
-
-    if (
-      xmlDocument.xmlNamespaces &&
-      xmlDocument.xmlNamespaces.xmlNamespace &&
-      xmlDocument.xmlNamespaces.xmlNamespace.length
-    ) {
+    if (xmlDocument?.xmlNamespaces?.xmlNamespace?.length) {
       for (const serviceNS of xmlDocument.xmlNamespaces.xmlNamespace) {
         const ns: NamespaceModel = new NamespaceModel();
         ns.alias = serviceNS.alias;
         ns.uri = serviceNS.uri;
         ns.locationUri = serviceNS.locationUri;
         ns.isTarget = serviceNS.targetNamespace;
-        docDef.namespaces.push(ns);
+        this.doc.namespaces.push(ns);
       }
     }
 
     for (const field of xmlDocument.fields.field) {
-      if (!docDef.selectedRoot || this.isSelectedRootElement(field, docDef)) {
-        this.parseXMLFieldFromDocument(field, null, docDef);
+      if (!this.doc.selectedRoot || this.isSelectedRootElement(field)) {
+        this.parseXMLFieldFromDocument(field, null);
         break;
       }
     }
   }
 
-  private isSelectedRootElement(
-    field: any,
-    docDef: DocumentDefinition
-  ): boolean {
+  private isSelectedRootElement(field: IField): boolean {
+    if (!this.doc.selectedRoot && !field?.name) {
+      return false;
+    }
     return (
-      docDef.selectedRoot &&
-      field &&
-      field.name &&
-      docDef.selectedRoot ===
-        (field.name.indexOf(':') !== -1 ? field.name.split(':')[1] : field.name)
+      this.doc.selectedRoot ===
+      (field.name!.indexOf(':') !== -1 ? field.name!.split(':')[1] : field.name)
     );
   }
 
   private parseXMLFieldFromDocument(
-    field: any,
-    parentField: Field | null,
-    docDef: DocumentDefinition
+    field: IXmlField,
+    parentField: Field | null
   ): void {
-    const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+    const parsedField = this.parseFieldFromDocument(field, parentField);
     if (parsedField == null) {
       return;
     }
 
-    if (field.name.indexOf(':') !== -1) {
-      parsedField.namespaceAlias = field.name.split(':')[0];
-      parsedField.name = field.name.split(':')[1];
+    if (field.name!.indexOf(':') !== -1) {
+      parsedField.namespaceAlias = field.name!.split(':')[0];
+      parsedField.name = field.name!.split(':')[1];
     }
 
     parsedField.isAttribute = parsedField.path.indexOf('@') !== -1;
-    parsedField.enumeration = field.enumeration;
+    if (field.fieldType !== FieldType.COMPLEX) {
+      return;
+    }
+    const complex = field as IXmlComplexType;
 
-    if (
-      parsedField.enumeration &&
-      field.xmlEnumFields &&
-      field.xmlEnumFields.xmlEnumField
-    ) {
-      for (const enumValue of field.xmlEnumFields.xmlEnumField) {
+    parsedField.enumeration = complex.enumeration;
+
+    if (parsedField.enumeration && complex.xmlEnumFields?.xmlEnumField) {
+      for (const enumValue of complex.xmlEnumFields.xmlEnumField) {
         const parsedEnumValue: EnumValue = new EnumValue();
-        parsedEnumValue.name = enumValue.name;
+        parsedEnumValue.name = enumValue.name!;
         parsedEnumValue.ordinal = enumValue.ordinal;
         parsedField.enumValues.push(parsedEnumValue);
       }
     }
-    if (
-      field.xmlFields &&
-      field.xmlFields.xmlField &&
-      field.xmlFields.xmlField.length
-    ) {
-      for (const childField of field.xmlFields.xmlField) {
-        this.parseXMLFieldFromDocument(childField, parsedField, docDef);
+    if (complex.xmlFields?.xmlField.length) {
+      for (const childField of complex.xmlFields.xmlField) {
+        this.parseXMLFieldFromDocument(childField, parsedField);
       }
     }
   }
@@ -179,7 +161,7 @@ export class XmlInspectionRequestModel extends DocumentInspectionRequestModel {
 export class XmlInspectionRequestOptions extends DocumentInspectionRequestOptions {
   json = {
     XmlInspectionRequest: {
-      jsonType: 'io.atlasmap.xml.v2.XmlInspectionRequest',
+      jsonType: xmlInspectionRequestJsonType,
       type: this.doc.inspectionType,
       xmlData: this.doc.inspectionSource,
     },

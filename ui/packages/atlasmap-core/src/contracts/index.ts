@@ -14,4 +14,9 @@
     limitations under the License.
 */
 export * from './adm-digest';
+export * from './common';
+export * from './documents';
 export * from './expression';
+export * from './field-action';
+export * from './mapping';
+export * from './mapping-preview';

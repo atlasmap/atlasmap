@@ -13,11 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { FieldType, InspectionType } from '../src/contracts/common';
 
 import { ConfigModel } from '../src/models/config.model';
 import { DocumentDefinition } from '../src/models/document-definition.model';
 import { Field } from '../src/models/field.model';
-import { InspectionType } from '../src/common/config.types';
 import { MappingDefinition } from '../src/models/mapping-definition.model';
 import { MappingModel } from '../src/models/mapping.model';
 
@@ -69,19 +69,19 @@ export class TestUtils {
     srcF.docDef = srcDoc;
     srcF.name = 'sourceField';
     srcF.path = '/sourceField';
-    srcF.type = 'STRING';
+    srcF.type = FieldType.STRING;
     srcDoc.addField(srcF);
     const srcF2 = new Field();
     srcF2.docDef = srcDoc;
     srcF2.name = 'sourceField2';
     srcF2.path = '/sourceField2';
-    srcF2.type = 'STRING';
+    srcF2.type = FieldType.STRING;
     srcDoc.addField(srcF2);
     const srcF3 = new Field();
     srcF3.docDef = srcDoc;
     srcF3.name = 'sourceField3';
     srcF3.path = '/sourceField3';
-    srcF3.type = 'STRING';
+    srcF3.type = FieldType.STRING;
     srcDoc.addField(srcF3);
 
     const tgtDoc = new DocumentDefinition();
@@ -95,13 +95,13 @@ export class TestUtils {
     tgtF.docDef = tgtDoc;
     tgtF.name = 'targetField';
     tgtF.path = '/targetField';
-    tgtF.type = 'STRING';
+    tgtF.type = FieldType.STRING;
     tgtDoc.addField(tgtF);
     const tgtF2 = new Field();
     tgtF2.docDef = tgtDoc;
     tgtF2.name = 'targetField2';
     tgtF2.path = '/targetField2';
-    tgtF2.type = 'STRING';
+    tgtF2.type = FieldType.STRING;
     tgtDoc.addField(tgtF2);
 
     cfg.sourceDocs.push(srcDoc);

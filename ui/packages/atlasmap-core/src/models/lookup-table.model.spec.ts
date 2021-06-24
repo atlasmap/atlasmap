@@ -15,17 +15,18 @@
 */
 
 import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
+import { FieldType } from '../contracts/common';
 
 describe('LookupTable', () => {
   test('initialize', () => {
     const entry = new LookupTableEntry();
-    entry.sourceType = 'sType';
+    entry.sourceType = FieldType.STRING;
     entry.sourceValue = 'sValue';
-    entry.targetType = 'tType';
+    entry.targetType = FieldType.STRING;
     entry.targetValue = 'tValue';
     const table = new LookupTable();
     expect(table.name);
-    table.entries.push(entry);
+    table.lookupEntry.push(entry);
     expect(table.toString()).toContain('Entry #0: sValue => tValue');
   });
 });

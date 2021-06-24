@@ -19,9 +19,10 @@ import { Input, Options } from 'ky';
 import { ConfigModel } from '../config.model';
 import { DocumentDefinition } from '../document-definition.model';
 import { Field } from '../field.model';
+import { IField } from '../../contracts/common';
 
 /**
- * {@link DocumentInspectionModel} encapsulates Document inspection context.
+ * Encapsulates Document inspection context.
  */
 export abstract class DocumentInspectionModel {
   request: DocumentInspectionRequestModel;
@@ -41,14 +42,13 @@ export abstract class DocumentInspectionModel {
   abstract parseResponse(responseJson: any): void;
 
   protected parseFieldFromDocument(
-    field: any,
-    parentField: Field | null,
-    docDef: DocumentDefinition
+    field: IField,
+    parentField: Field | null
   ): Field | null {
     if (field != null && field.status === 'NOT_FOUND') {
       this.cfg.errorService.addError(
         new ErrorInfo({
-          message: `Ignoring unknown field: ${field.name} (${field.className}), parent class: ${docDef.name}`,
+          message: `Ignoring unknown field: ${field.name} (${field.path}), document: ${this.doc.name}`,
           level: ErrorLevel.WARN,
           scope: ErrorScope.APPLICATION,
           type: ErrorType.USER,
@@ -60,12 +60,11 @@ export abstract class DocumentInspectionModel {
     }
 
     const parsedField: Field = new Field();
-    parsedField.name = field.name;
-    parsedField.type = field.fieldType;
-    parsedField.path = field.path;
+    parsedField.name = field.name!;
+    parsedField.type = field.fieldType!;
+    parsedField.path = field.path!;
     parsedField.isPrimitive = field.fieldType !== 'COMPLEX';
-    parsedField.serviceObject = field;
-    parsedField.column = field.column;
+    parsedField.documentField = field;
 
     if ('LIST' === field.collectionType || 'ARRAY' === field.collectionType) {
       parsedField.isCollection = true;
@@ -77,7 +76,7 @@ export abstract class DocumentInspectionModel {
     if (parentField != null) {
       parentField.children.push(parsedField);
     } else {
-      docDef.fields.push(parsedField);
+      this.doc.fields.push(parsedField);
     }
 
     return parsedField;

@@ -20,6 +20,7 @@ import {
   ErrorScope,
   ErrorType,
   Field,
+  FieldType,
   MappedField,
   MappingModel,
   constantTypes,
@@ -47,7 +48,7 @@ export function createConstant(
   }
   field.name = constName;
   field.value = constValue;
-  field.type = constType;
+  field.type = FieldType[constType as keyof typeof FieldType];
   field.docDef = cfg.constantDoc;
   field.userCreated = true;
   cfg.constantDoc.addField(field);
@@ -90,7 +91,7 @@ export function editConstant(
     return;
   }
   if (constType.length > 0) {
-    field.type = constType;
+    field.type = FieldType[constType as keyof typeof FieldType];
   }
   if (constValue.length > 0) {
     field.value = constValue;
@@ -153,7 +154,7 @@ export function createProperty(
     field = new Field();
   }
   field.name = propName;
-  field.type = propType;
+  field.type = FieldType[propType as keyof typeof FieldType];
   field.scope = propScope;
   field.userCreated = true;
 
@@ -240,7 +241,7 @@ export function editProperty(
   if (newScope) {
     field.scope = newScope;
   }
-  field.type = propType;
+  field.type = FieldType[propType as keyof typeof FieldType];
   let originalKey = '';
   if (propScope.length > 0) {
     originalKey =

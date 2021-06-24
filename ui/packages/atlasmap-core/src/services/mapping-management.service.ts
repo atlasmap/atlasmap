@@ -20,7 +20,10 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
-import { FieldAction, Multiplicity } from '../models/field-action.model';
+import {
+  IAtlasMappingContainer,
+  IValidationsContainer,
+} from '../contracts/mapping';
 import { LookupTableData, LookupTableUtil } from '../utils/lookup-table-util';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { Subject, Subscription } from 'rxjs';
@@ -28,9 +31,11 @@ import { Subject, Subscription } from 'rxjs';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
+import { FieldAction } from '../models/field-action.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
+import { Multiplicity } from '../contracts/field-action';
 import { PaddingField } from '../models/document-definition.model';
 import { TransitionMode } from '../models/transition.model';
 import ky from 'ky';
@@ -91,7 +96,7 @@ export class MappingManagementService {
     _mappingFiles: string[],
     mappingDefinition: MappingDefinition
   ): Promise<boolean> {
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       this.cfg.fileService
         .getCurrentMappingJson()
         .then(async (mappingJson: any) => {
@@ -107,8 +112,12 @@ export class MappingManagementService {
           this.updateMappingsTransition();
           resolve(true);
         })
-        .catch(() => {
-          reject(false);
+        .catch((error) => {
+          this.cfg.errorService.addBackendError(
+            'Failed to load mapping definition from backend:',
+            error
+          );
+          resolve(false);
         });
     });
   }
@@ -187,7 +196,6 @@ export class MappingManagementService {
     if (!mapping || !insertedMappedField) {
       return;
     }
-    insertedMappedField.parsedData.parsedIndex = targetIndex.toString();
     const mappedFields = mapping.getMappedFields(
       insertedMappedField.isSource()
     );
@@ -218,7 +226,6 @@ export class MappingManagementService {
     for (let i = 0; i < count; i++) {
       padField = new MappedField();
       padField.field = new PaddingField(isSource);
-      padField.parsedData.parsedIndex = String(basePadIndex + i);
       if (isSource) {
         mapping.sourceFields.splice(basePadIndex + i, 0, padField);
       } else {
@@ -415,7 +422,9 @@ export class MappingManagementService {
   /**
    * Invoke the runtime service to validate the current active mapping.
    */
-  private async validateMappings(payload: any): Promise<boolean> {
+  private async validateMappings(
+    payload: IAtlasMappingContainer
+  ): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
         this.cfg.initCfg.baseMappingServiceUrl === null ||
@@ -436,8 +445,8 @@ export class MappingManagementService {
       );
       this.api
         .put(url, { json: payload })
-        .json()
-        .then((body: any) => {
+        .json<IValidationsContainer>()
+        .then((body) => {
           this.cfg.logger!.debug(
             `Validation Service Response: ${JSON.stringify(body)}\n`
           );
@@ -451,7 +460,7 @@ export class MappingManagementService {
   }
 
   private processValidationResponse(
-    body: any,
+    body: IValidationsContainer,
     resolve: (value: boolean) => void
   ) {
     if (this.cfg.mappings === null) {
@@ -464,8 +473,10 @@ export class MappingManagementService {
     // https://github.com/atlasmap/atlasmap-ui/issues/116
     if (body && body.Validations && body.Validations.validation) {
       for (const validation of body.Validations.validation) {
-        const level: ErrorLevel = validation.status;
-        let scope: ErrorScope = validation.scope;
+        const level: ErrorLevel =
+          ErrorLevel[validation.status ? validation.status : 'ERROR'];
+        let scope: ErrorScope =
+          ErrorScope[validation.scope ? validation.scope : 'MAPPING'];
         let validatedMapping: MappingModel | undefined = undefined;
         if (!scope || scope !== ErrorScope.MAPPING || !validation.id) {
           scope = ErrorScope.APPLICATION;
@@ -516,11 +527,9 @@ export class MappingManagementService {
         ) {
           this.cfg.mappings.mappings.push(activeMapping);
         }
-        const payload: any = MappingSerializer.serializeMappings(this.cfg);
+        const payload = MappingSerializer.serializeMappings(this.cfg);
         if (await this.validateMappings(payload)) {
-          await this.cfg.fileService.setMappingToService(
-            JSON.stringify(payload)
-          );
+          await this.cfg.fileService.setMappingToService(payload);
         }
       }
       this.mappingUpdatedSource.next();
@@ -593,7 +602,7 @@ export class MappingManagementService {
       mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       if (
         !mapping.transition.transitionFieldAction ||
-        mapping.transition.transitionFieldAction.definition.multiplicity !==
+        mapping.transition.transitionFieldAction.definition?.multiplicity !==
           Multiplicity.ONE_TO_MANY
       ) {
         mapping.transition.transitionFieldAction = FieldAction.create(

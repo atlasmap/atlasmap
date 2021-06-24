@@ -53,8 +53,8 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 |===         
 |Name| Description| Required| Default| Pattern
 
-| MavenClasspathRequest 
-| MavenClasspathRequest object <<MavenClasspathRequest>> 
+| ClassInspectionRequest 
+| ClassInspectionRequest object <<ClassInspectionRequest>> 
 | - 
 |  
 |  
@@ -67,7 +67,7 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 
 ===== Return Type
 
-<<JavaClass>>
+<<ClassInspectionResponse>>
 
 
 ===== Content Type
@@ -84,7 +84,7 @@ Inspect a Java Class with specified fully qualified class name and return a Docu
 
 | 200
 | Return a Document object represented by JavaClass
-|  <<JavaClass>>
+|  <<ClassInspectionResponse>>
 
 |===         
 
@@ -209,6 +209,122 @@ endif::internal-generation[]
 
 | @type 
 |  
+| String  
+| 
+|  
+
+|===
+
+
+[#ClassInspectionRequest]
+=== _ClassInspectionRequest_ 
+
+
+
+[.fields-ClassInspectionRequest]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| fieldNameExclusions 
+|  
+| StringList  
+| 
+|  
+
+| classNameExclusions 
+|  
+| StringList  
+| 
+|  
+
+| classpath 
+|  
+| String  
+| 
+|  
+
+| className 
+|  
+| String  
+| 
+|  
+
+| collectionType 
+|  
+| String  
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| collectionClassName 
+|  
+| String  
+| 
+|  
+
+| disablePrivateOnlyFields 
+|  
+| Boolean  
+| 
+|  
+
+| disableProtectedOnlyFields 
+|  
+| Boolean  
+| 
+|  
+
+| disablePublicOnlyFields 
+|  
+| Boolean  
+| 
+|  
+
+| disablePublicGetterSetterFields 
+|  
+| Boolean  
+| 
+|  
+
+| jsonType 
+| X 
+| String  
+| 
+|  
+
+|===
+
+
+[#ClassInspectionResponse]
+=== _ClassInspectionResponse_ 
+
+
+
+[.fields-ClassInspectionResponse]
+[cols="2,1,2,4,1"]
+|===         
+| Field Name| Required| Type| Description| Format
+
+| javaClass 
+|  
+| JavaClass  
+| 
+|  
+
+| errorMessage 
+|  
+| String  
+| 
+|  
+
+| executionTime 
+|  
+| Long  
+| 
+| int64 
+
+| jsonType 
+| X 
 | String  
 | 
 |  
@@ -731,43 +847,6 @@ endif::internal-generation[]
 | javaField 
 |  
 | List  of <<JavaField>> 
-| 
-|  
-
-|===
-
-
-[#MavenClasspathRequest]
-=== _MavenClasspathRequest_ 
-
-
-
-[.fields-MavenClasspathRequest]
-[cols="2,1,2,4,1"]
-|===         
-| Field Name| Required| Type| Description| Format
-
-| pomXmlData 
-|  
-| String  
-| 
-|  
-
-| executeTimeout 
-|  
-| Long  
-| 
-| int64 
-
-| workingDirectory 
-|  
-| String  
-| 
-|  
-
-| jsonType 
-| X 
-| String  
 | 
 |  
 
