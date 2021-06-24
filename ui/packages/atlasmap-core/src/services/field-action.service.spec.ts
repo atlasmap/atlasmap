@@ -13,14 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import {
-  FieldActionDefinition,
-  Multiplicity,
-} from '../models/field-action.model';
 
 import { Field } from '../models/field.model';
+import { FieldActionDefinition } from '../models/field-action.model';
 import { FieldActionService } from '../services/field-action.service';
+import { FieldType } from '../contracts/common';
 import { MappingModel } from '../models/mapping.model';
+import { Multiplicity } from '../contracts/field-action';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 import ky from 'ky/umd';
 import log from 'loglevel';
@@ -112,46 +111,46 @@ describe('FieldActionService.appliesToField()', () => {
   });
 
   test('should return if action target type is NUMBER and target field type is numeric', () => {
-    action.sourceType = 'NUMBER';
-    action.targetType = 'NUMBER';
-    target.type = 'SHORT';
+    action.sourceType = FieldType.NUMBER;
+    action.targetType = FieldType.NUMBER;
+    target.type = FieldType.SHORT;
     expect(service.appliesToField(action, mapping, false)).toBe(true);
-    target.type = 'NUMBER';
+    target.type = FieldType.NUMBER;
     expect(service.appliesToField(action, mapping, false)).toBe(true);
-    target.type = 'STRING';
+    target.type = FieldType.STRING;
     expect(service.appliesToField(action, mapping, false)).toBe(false);
   });
 
   test('should return if action target type is ANY_DATE and target field type is a date/time', () => {
-    action.sourceType = 'ANY_DATE';
-    action.targetType = 'ANY_DATE';
-    target.type = 'DATE';
+    action.sourceType = FieldType.ANY_DATE;
+    action.targetType = FieldType.ANY_DATE;
+    target.type = FieldType.DATE;
     expect(service.appliesToField(action, mapping, false)).toBe(true);
-    target.type = 'DATE_TIME_TZ';
+    target.type = FieldType.DATE_TIME_TZ;
     expect(service.appliesToField(action, mapping, false)).toBe(true);
-    target.type = 'STRING';
+    target.type = FieldType.STRING;
     expect(service.appliesToField(action, mapping, false)).toBe(false);
   });
 
   test('should return true if action source type STRING matches target field type STRING, and action target type matches target type', () => {
-    source.type = 'STRING';
-    target.type = 'STRING';
-    action.targetType = 'STRING';
-    action.sourceType = 'STRING';
+    source.type = FieldType.STRING;
+    target.type = FieldType.STRING;
+    action.targetType = FieldType.STRING;
+    action.sourceType = FieldType.STRING;
     expect(service.appliesToField(action, mapping, false)).toBe(true);
   });
 
   test('should return false if action source type CHAR matches target field type STRING, and action target type matches target type', () => {
-    target.type = 'STRING';
-    action.targetType = 'STRING';
-    action.sourceType = 'CHAR';
+    target.type = FieldType.STRING;
+    action.targetType = FieldType.STRING;
+    action.sourceType = FieldType.CHAR;
     expect(service.appliesToField(action, mapping, false)).toBe(false);
   });
 
   test('should return false if action source type STRING matches target field type CHAR, and action target type does not match target type', () => {
-    target.type = 'CHAR';
-    action.targetType = 'STRING';
-    action.sourceType = 'STRING';
+    target.type = FieldType.CHAR;
+    action.targetType = FieldType.STRING;
+    action.sourceType = FieldType.STRING;
     expect(service.appliesToField(action, mapping, false)).toBe(false);
   });
 });

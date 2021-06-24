@@ -17,7 +17,7 @@ import {
   ConfigModel,
   DocumentInitializationModel,
 } from '../models/config.model';
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType } from '../contracts/common';
 
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';

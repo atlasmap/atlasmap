@@ -14,9 +14,12 @@
     limitations under the License.
 */
 
+import { FieldType } from '../contracts';
+import { Multiplicity } from '../contracts/field-action';
+
 export class FieldActionArgument {
   name: string;
-  type = 'STRING';
+  type = FieldType.STRING;
   values: string[] | null = null;
   serviceObject: any = {};
 }
@@ -27,20 +30,13 @@ export class FieldActionArgumentValue {
   value: string;
 }
 
-export enum Multiplicity {
-  ONE_TO_ONE = 'ONE_TO_ONE',
-  ONE_TO_MANY = 'ONE_TO_MANY',
-  MANY_TO_ONE = 'MANY_TO_ONE',
-  ZERO_TO_ONE = 'ZERO_TO_ONE',
-}
-
 export class FieldActionDefinition {
   name: string;
   isCustom: boolean;
   arguments: FieldActionArgument[] = [];
   method: string;
-  sourceType = 'undefined';
-  targetType = 'undefined';
+  sourceType = FieldType.NONE;
+  targetType = FieldType.NONE;
   multiplicity = Multiplicity.ONE_TO_ONE;
   serviceObject: any = {};
 
@@ -81,7 +77,7 @@ export class FieldActionDefinition {
 
 export class FieldAction {
   name: string;
-  definition: FieldActionDefinition;
+  definition: FieldActionDefinition | null;
   argumentValues: FieldActionArgumentValue[] = [];
 
   static create(definition: FieldActionDefinition): FieldAction {

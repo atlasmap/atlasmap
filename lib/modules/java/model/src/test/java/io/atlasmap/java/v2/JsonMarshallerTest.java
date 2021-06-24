@@ -83,20 +83,6 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
      }
 
     @Test
-    public void testJsonMavenClasspathRequest() throws Exception {
-        MavenClasspathRequest request = generateMavenClasspathRequest();
-        // Object to JSON in file
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping-mavenclasspath-request.json"), request);
-        MavenClasspathRequest uRequest = mapper
-                .readValue(
-                        new File("target" + File.separator + "junit" + File.separator + testName.getMethodName()
-                                + File.separator + "atlasmapping-mavenclasspath-request.json"),
-                        MavenClasspathRequest.class);
-        assertNotNull(uRequest);
-    }
-
-    @Test
     public void testJsonClassInspectionRequest() throws Exception {
         ClassInspectionRequest request = generateClassInspectionRequest();
         // Object to JSON in file

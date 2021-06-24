@@ -17,7 +17,7 @@ import {
   CollectionType,
   DocumentType,
   InspectionType,
-} from '../common/config.types';
+} from '../contracts/common';
 import {
   ErrorInfo,
   ErrorLevel,
@@ -33,7 +33,7 @@ import { DocumentInspectionModel } from '../models/inspect/document-inspection.m
 import { DocumentInspectionUtil } from '../utils/document-inspection-util';
 import { Field } from '../models/field.model';
 import { Guid } from '../utils';
-import { HTTP_STATUS_NO_CONTENT } from '../common/constants';
+import { HTTP_STATUS_NO_CONTENT } from '../common/config.types';
 import ky from 'ky';
 
 /**

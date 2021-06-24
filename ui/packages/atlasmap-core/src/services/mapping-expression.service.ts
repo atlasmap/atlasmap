@@ -19,10 +19,6 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
-import {
-  FieldActionArgumentValue,
-  Multiplicity,
-} from '../models/field-action.model';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
 
@@ -30,8 +26,10 @@ import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
+import { FieldActionArgumentValue } from '../models/field-action.model';
 import { IExpressionNode } from '../contracts/expression';
 import { MappingUtil } from '../utils/mapping-util';
+import { Multiplicity } from '../contracts/field-action';
 import { Subscription } from 'rxjs';
 
 /**
@@ -304,8 +302,7 @@ export class MappingExpressionService {
     if (
       sourceMappedFields.length > 1 ||
       (sourceMappedCollection &&
-        mapping.transition.transitionFieldAction &&
-        mapping.transition.transitionFieldAction.definition.multiplicity ===
+        mapping.transition.transitionFieldAction?.definition?.multiplicity ===
           Multiplicity.MANY_TO_ONE)
     ) {
       expr = 'Concatenate (';
@@ -317,8 +314,7 @@ export class MappingExpressionService {
         "')";
     } else if (
       (targetMappedFields.length > 1 || targetMappedCollection) &&
-      mapping.transition.transitionFieldAction &&
-      mapping.transition.transitionFieldAction.definition.multiplicity ===
+      mapping.transition.transitionFieldAction?.definition?.multiplicity ===
         Multiplicity.ONE_TO_MANY
     ) {
       expr = 'Split (';
@@ -333,12 +329,12 @@ export class MappingExpressionService {
   }
 
   private qualifiedExpressionRef(mappedField: MappedField): string {
-    if (mappedField.parsedData.parsedPath !== null) {
+    if (mappedField.field?.path !== null) {
       return (
         '${' +
-        mappedField.parsedData.parsedDocID +
+        mappedField.field?.docDef.id +
         ':' +
-        mappedField.parsedData.parsedPath +
+        mappedField.field?.path +
         '}'
       );
     } else {
@@ -393,7 +389,7 @@ export class MappingExpressionService {
           ', ' +
           this.fieldActionArgumentToExpression(
             action.argumentValues[actionArgIndex],
-            action.definition.arguments[actionArgIndex].type
+            action.definition!.arguments[actionArgIndex].type
           );
       }
     }

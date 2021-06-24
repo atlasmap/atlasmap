@@ -19,8 +19,15 @@ import {
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
+import { FieldType, IDocument } from '../../contracts/common';
+import {
+  ICsvComplexType,
+  ICsvDocumentContainer,
+  ICsvField,
+  ICsvInspectionResponse,
+  ICsvInspectionResponseContainer,
+} from '../../contracts/documents/csv';
 
-import { DocumentDefinition } from '../document-definition.model';
 import { Field } from '../field.model';
 
 export class CsvInspectionModel extends DocumentInspectionModel {
@@ -45,74 +52,59 @@ export class CsvInspectionModel extends DocumentInspectionModel {
   parseResponse(responseJson: any): void {
     if (typeof responseJson.CsvInspectionResponse !== 'undefined') {
       this.extractCSVDocumentDefinitionFromInspectionResponse(
-        responseJson,
-        this.doc
+        (responseJson as ICsvInspectionResponseContainer).CsvInspectionResponse
       );
-    } else if (typeof responseJson.csvDocument !== 'undefined') {
-      this.extractCSVDocumentDefinition(responseJson, this.doc);
+    } else if (typeof responseJson.CsvDocument !== 'undefined') {
+      this.extractCSVDocumentDefinition(
+        (responseJson as ICsvDocumentContainer).CsvDocument
+      );
     } else {
       throw new Error(`Unknown CSV inspection result format: ${responseJson}`);
     }
   }
 
   private extractCSVDocumentDefinitionFromInspectionResponse(
-    responseJson: any,
-    docDef: DocumentDefinition
+    body: ICsvInspectionResponse
   ): void {
-    const body: any = responseJson.CsvInspectionResponse;
     if (body.errorMessage) {
-      docDef.errorOccurred = true;
+      this.doc.errorOccurred = true;
       throw new Error(
         `Could not load JSON document, error: ${body.errorMessage}`
       );
     }
 
-    this.extractCSVDocumentDefinition(body, docDef);
+    this.extractCSVDocumentDefinition(body.csvDocument);
   }
 
-  private extractCSVDocumentDefinition(
-    body: any,
-    docDef: DocumentDefinition
-  ): void {
-    let csvDocument: any;
-    if (typeof body.csvDocument !== 'undefined') {
-      csvDocument = body.csvDocument;
-    } else {
-      csvDocument = body.CsvDocument;
+  private extractCSVDocumentDefinition(csvDocument: IDocument): void {
+    if (!this.doc.description) {
+      this.doc.description = this.doc.id;
     }
-
-    if (!docDef.description) {
-      docDef.description = docDef.id;
+    if (!this.doc.name) {
+      this.doc.name = this.doc.id;
     }
-    if (!docDef.name) {
-      docDef.name = docDef.id;
-    }
-
-    docDef.characterEncoding = csvDocument.characterEncoding;
-    docDef.locale = csvDocument.locale;
 
     for (const field of csvDocument.fields.field) {
-      this.parseCSVFieldFromDocument(field, null, docDef);
+      this.parseCSVFieldFromDocument(field as ICsvField, null);
     }
   }
 
   private parseCSVFieldFromDocument(
-    field: any,
-    parentField: Field | null,
-    docDef: DocumentDefinition
+    field: ICsvField,
+    parentField: Field | null
   ): void {
-    const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+    const parsedField = this.parseFieldFromDocument(field, parentField);
     if (parsedField == null) {
       return;
     }
-
-    if (
-      field.csvFields &&
-      field.csvFields.csvField &&
-      field.csvFields.csvField.length
-    ) {
-      for (const childField of field.csvFields.csvField) {
-        this.parseCSVFieldFromDocument(childField, parsedField, docDef);
+    parsedField.column = field.column;
+    if (field.fieldType !== FieldType.COMPLEX) {
+      return;
+    }
+    const csvComplexType = field as ICsvComplexType;
+    if (csvComplexType.csvFields?.csvField?.length) {
+      for (const childField of csvComplexType.csvFields.csvField) {
+        this.parseCSVFieldFromDocument(childField, parsedField);
       }
     }
   }

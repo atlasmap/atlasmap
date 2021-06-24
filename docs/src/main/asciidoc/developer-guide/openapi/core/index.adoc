@@ -2371,6 +2371,18 @@ endif::internal-generation[]
 | 
 |  _Enum:_ SOURCE, TARGET, 
 
+| characterEncoding 
+|  
+| String  
+| 
+|  
+
+| locale 
+|  
+| String  
+| 
+|  
+
 | jsonType 
 | X 
 | String  

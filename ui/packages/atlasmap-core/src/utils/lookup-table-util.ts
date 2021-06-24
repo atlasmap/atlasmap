@@ -186,7 +186,7 @@ export class LookupTableUtil {
       LookupTableUtil.errorNoTable(cfg, mapping);
       return;
     }
-    table.entries = [];
+    table.lookupEntry = [];
     for (const enumValue of enumerationValues) {
       if (enumValue.selectedTargetEnumValue === EnumerationUnspecified) {
         continue;
@@ -194,7 +194,7 @@ export class LookupTableUtil {
       const lte: LookupTableEntry = new LookupTableEntry();
       lte.sourceValue = enumValue.sourceEnumValue;
       lte.targetValue = enumValue.selectedTargetEnumValue;
-      table.entries.push(lte);
+      table.lookupEntry.push(lte);
     }
   }
 }

@@ -17,7 +17,7 @@ import {
   CollectionType,
   DocumentType,
   InspectionType,
-} from '../common/config.types';
+} from '../contracts/common';
 import {
   ConfigModel,
   DocumentInitializationModel,

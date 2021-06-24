@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType, InspectionType } from '../common/config.types';
+import { DocumentType, InspectionType } from '../contracts/common';
 
 import { DocumentInitializationModel } from '../models/config.model';
 import { InitializationService } from '../services/initialization.service';

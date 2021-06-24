@@ -14,32 +14,18 @@
     limitations under the License.
 */
 
+import { FieldType } from '../contracts';
+
 export class LookupTableEntry {
   sourceValue: string;
-  sourceType = 'STRING';
+  sourceType = FieldType.STRING;
   targetValue: string;
-  targetType = 'STRING';
-
-  toJSON(): any {
-    return {
-      sourceValue: this.sourceValue,
-      sourceType: this.sourceType,
-      targetValue: this.targetValue,
-      targetType: this.targetType,
-    };
-  }
-
-  fromJSON(json: any): void {
-    this.sourceValue = json.sourceValue;
-    this.sourceType = json.sourceType;
-    this.targetValue = json.targetValue;
-    this.targetType = json.targetType;
-  }
+  targetType = FieldType.STRING;
 }
 
 export class LookupTable {
   name: string;
-  entries: LookupTableEntry[] = [];
+  lookupEntry: LookupTableEntry[] = [];
   sourceIdentifier: string;
   targetIdentifier: string;
 
@@ -58,7 +44,7 @@ export class LookupTable {
     sourceValue: string,
     autocreate: boolean
   ): LookupTableEntry | null {
-    for (const entry of this.entries) {
+    for (const entry of this.lookupEntry) {
       if (entry.sourceValue === sourceValue) {
         return entry;
       }
@@ -66,7 +52,7 @@ export class LookupTable {
     if (autocreate) {
       const entry: LookupTableEntry = new LookupTableEntry();
       entry.sourceValue = sourceValue;
-      this.entries.push(entry);
+      this.lookupEntry.push(entry);
       return entry;
     }
     return null;
@@ -74,11 +60,14 @@ export class LookupTable {
 
   toString() {
     let result: string =
-      'Lookup Table, name: ' + this.name + ', entries: ' + this.entries.length;
+      'Lookup Table, name: ' +
+      this.name +
+      ', entries: ' +
+      this.lookupEntry.length;
     result += '\nsourceIdentifier: ' + this.sourceIdentifier;
     result += '\n\targetIdentifier: ' + this.targetIdentifier;
     let counter = 0;
-    for (const entry of this.entries) {
+    for (const entry of this.lookupEntry) {
       result +=
         '\n\tEntry #' +
         counter +

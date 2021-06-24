@@ -21,13 +21,19 @@ import {
   DocumentDefinition,
   NamespaceModel,
 } from '../models/document-definition.model';
-import { DocumentType, InspectionType } from '../common/config.types';
-import { FieldAction, Multiplicity } from '../models/field-action.model';
+import {
+  DocumentType,
+  FieldStatus,
+  FieldType,
+  InspectionType,
+} from '../contracts/common';
+import { IAtlasMappingContainer, IMapping } from '../contracts/mapping';
 
 import { CsvInspectionModel } from '../models/inspect/csv-inspection.model';
 import { DocumentInspectionUtil } from './document-inspection-util';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
+import { FieldAction } from '../models/field-action.model';
 import { InitializationService } from '../services';
 import { LookupTable } from '../models/lookup-table.model';
 import { LookupTableUtil } from './lookup-table-util';
@@ -35,6 +41,7 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingModel } from '../models/mapping.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
+import { Multiplicity } from '../contracts/field-action';
 import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
 
@@ -68,24 +75,24 @@ describe('MappingSerializer', () => {
     const user = new Field();
     user.name = 'User';
     user.path = '/User';
-    user.type = 'COMPLEX';
+    user.type = FieldType.COMPLEX;
     twitter.addField(user);
     const userName = new Field();
     userName.name = 'Name';
     userName.path = '/User/Name';
-    userName.type = 'STRING';
+    userName.type = FieldType.STRING;
     userName.parentField = user;
     twitter.addField(userName);
     const userScreenName = new Field();
     userScreenName.name = 'ScreenName';
     userScreenName.path = '/User/ScreenName';
-    userScreenName.type = 'STRING';
+    userScreenName.type = FieldType.STRING;
     userScreenName.parentField = user;
     twitter.addField(userScreenName);
     const text = new Field();
     text.name = 'Text';
     text.path = '/Text';
-    text.type = 'STRING';
+    text.type = FieldType.STRING;
     twitter.addField(text);
     twitter.initializeFromFields();
     cfg.sourceDocs.push(twitter);
@@ -101,12 +108,12 @@ describe('MappingSerializer', () => {
     const js0 = new Field();
     js0.name = 'js0';
     js0.path = '/js0';
-    js0.type = 'STRING';
+    js0.type = FieldType.STRING;
     jsonSource.addField(js0);
     const js1 = new Field();
     js1.name = 'js1';
     js1.path = '/js1';
-    js1.type = 'STRING';
+    js1.type = FieldType.STRING;
     jsonSource.addField(js1);
     jsonSource.initializeFromFields();
     cfg.sourceDocs.push(jsonSource);
@@ -122,14 +129,14 @@ describe('MappingSerializer', () => {
     const jc0 = new Field();
     jc0.name = 'addressList';
     jc0.path = '/addressList<>';
-    jc0.type = 'COMPLEX';
+    jc0.type = FieldType.COMPLEX;
     jc0.isCollection = true;
-    jc0.serviceObject.status = 'SUPPORTED';
+    jc0.documentField.status = FieldStatus.SUPPORTED;
     jsonSchemaSource.addField(jc0);
     const jcc0 = new Field();
     jcc0.name = 'city';
     jcc0.path = '/addressList<>/city';
-    jcc0.type = 'STRING';
+    jcc0.type = FieldType.STRING;
     jcc0.isPrimitive = true;
     jcc0.parentField = jc0;
     jc0.children.push(jcc0);
@@ -137,7 +144,7 @@ describe('MappingSerializer', () => {
     const jcc1 = new Field();
     jcc1.name = 'state';
     jcc1.path = '/addressList<>/state';
-    jcc1.type = 'STRING';
+    jcc1.type = FieldType.STRING;
     jcc1.isPrimitive = true;
     jcc1.parentField = jc0;
     jc0.children.push(jcc1);
@@ -145,7 +152,7 @@ describe('MappingSerializer', () => {
     const jcc2 = new Field();
     jcc2.name = 'street';
     jcc2.path = '/addressList<>/street';
-    jcc2.type = 'STRING';
+    jcc2.type = FieldType.STRING;
     jcc2.isPrimitive = true;
     jcc2.parentField = jc0;
     jc0.children.push(jcc2);
@@ -153,7 +160,7 @@ describe('MappingSerializer', () => {
     const jcc3 = new Field();
     jcc3.name = 'zip';
     jcc3.path = '/addressList<>/zip';
-    jcc3.type = 'STRING';
+    jcc3.type = FieldType.STRING;
     jcc3.isPrimitive = true;
     jcc3.parentField = jc0;
     jc0.children.push(jcc3);
@@ -161,13 +168,13 @@ describe('MappingSerializer', () => {
     const primitives = new Field();
     primitives.name = 'primitives';
     primitives.path = '/primitives';
-    primitives.type = 'COMPLEX';
-    primitives.serviceObject.status = 'SUPPORTED';
+    primitives.type = FieldType.COMPLEX;
+    primitives.documentField.status = FieldStatus.SUPPORTED;
     jsonSchemaSource.addField(primitives);
     const stringPrimitive = new Field();
     stringPrimitive.name = 'stringPrimitive';
     stringPrimitive.path = '/primitives/stringPrimitive';
-    stringPrimitive.type = 'STRING';
+    stringPrimitive.type = FieldType.STRING;
     stringPrimitive.isPrimitive = true;
     stringPrimitive.parentField = primitives;
     primitives.children.push(stringPrimitive);
@@ -186,12 +193,12 @@ describe('MappingSerializer', () => {
     const xs0 = new Field();
     xs0.name = 'xs0';
     xs0.path = '/xs0';
-    xs0.type = 'STRING';
+    xs0.type = FieldType.STRING;
     xmlSource.addField(xs0);
     const xs1 = new Field();
     xs1.name = 'xs1';
     xs1.path = '/xs1';
-    xs1.type = 'STRING';
+    xs1.type = FieldType.STRING;
     xmlSource.addField(xs1);
     xmlSource.initializeFromFields();
     cfg.sourceDocs.push(xmlSource);
@@ -208,22 +215,22 @@ describe('MappingSerializer', () => {
     const desc = new Field();
     desc.name = 'Description';
     desc.path = '/Description';
-    desc.type = 'STRING';
+    desc.type = FieldType.STRING;
     contact.addField(desc);
     const title = new Field();
     title.name = 'Title';
     title.path = '/Title';
-    title.type = 'STRING';
+    title.type = FieldType.STRING;
     contact.addField(title);
     const firstName = new Field();
     firstName.name = 'FirstName';
     firstName.path = '/FirstName';
-    firstName.type = 'STRING';
+    firstName.type = FieldType.STRING;
     contact.addField(firstName);
     const lastName = new Field();
     lastName.name = 'LastName';
     lastName.path = '/LastName';
-    lastName.type = 'STRING';
+    lastName.type = FieldType.STRING;
     contact.addField(lastName);
     contact.initializeFromFields();
     cfg.targetDocs.push(contact);
@@ -239,12 +246,12 @@ describe('MappingSerializer', () => {
     const jt0 = new Field();
     jt0.name = 'jt0';
     jt0.path = '/jt0';
-    jt0.type = 'STRING';
+    jt0.type = FieldType.STRING;
     jsonTarget.addField(jt0);
     const jt1 = new Field();
     jt1.name = 'jt1';
     jt1.path = '/jt1';
-    jt1.type = 'STRING';
+    jt1.type = FieldType.STRING;
     jsonTarget.addField(jt1);
     jsonTarget.initializeFromFields();
     cfg.targetDocs.push(jsonTarget);
@@ -260,14 +267,14 @@ describe('MappingSerializer', () => {
     const jtc0 = new Field();
     jtc0.name = 'addressList';
     jtc0.path = '/addressList<>';
-    jtc0.type = 'COMPLEX';
+    jtc0.type = FieldType.COMPLEX;
     jtc0.isCollection = true;
-    jtc0.serviceObject.status = 'SUPPORTED';
+    jtc0.documentField.status = FieldStatus.SUPPORTED;
     jsonSchemaSource2.addField(jtc0);
     const jtcc0 = new Field();
     jtcc0.name = 'city';
     jtcc0.path = '/addressList<>/city';
-    jtcc0.type = 'STRING';
+    jtcc0.type = FieldType.STRING;
     jtcc0.isPrimitive = true;
     jtcc0.parentField = jtc0;
     jtc0.children.push(jtcc0);
@@ -275,7 +282,7 @@ describe('MappingSerializer', () => {
     const jtcc1 = new Field();
     jtcc1.name = 'zip';
     jtcc1.path = '/addressList<>/zip';
-    jtcc1.type = 'STRING';
+    jtcc1.type = FieldType.STRING;
     jtcc1.isPrimitive = true;
     jtcc1.parentField = jtc0;
     jtc0.children.push(jtcc1);
@@ -283,13 +290,13 @@ describe('MappingSerializer', () => {
     const tprimitives = new Field();
     tprimitives.name = 'primitives';
     tprimitives.path = '/primitives';
-    tprimitives.type = 'COMPLEX';
-    tprimitives.serviceObject.status = 'SUPPORTED';
+    tprimitives.type = FieldType.COMPLEX;
+    tprimitives.documentField.status = FieldStatus.SUPPORTED;
     jsonSchemaSource2.addField(tprimitives);
     const tstringPrimitive = new Field();
     tstringPrimitive.name = 'stringPrimitive';
     tstringPrimitive.path = '/primitives/stringPrimitive';
-    tstringPrimitive.type = 'STRING';
+    tstringPrimitive.type = FieldType.STRING;
     tstringPrimitive.isPrimitive = true;
     tstringPrimitive.parentField = primitives;
     tprimitives.children.push(tstringPrimitive);
@@ -314,17 +321,17 @@ describe('MappingSerializer', () => {
     const xt0 = new Field();
     xt0.name = 'xt0';
     xt0.path = '/xt0';
-    xt0.type = 'STRING';
+    xt0.type = FieldType.STRING;
     xmlTarget.addField(xt0);
     const xt1 = new Field();
     xt1.name = 'xt1';
     xt1.path = '/xt1';
-    xt1.type = 'STRING';
+    xt1.type = FieldType.STRING;
     xmlTarget.addField(xt1);
     const xt2 = new Field();
     xt2.name = 'xt2';
     xt2.path = '/xt2';
-    xt2.type = 'STRING';
+    xt2.type = FieldType.STRING;
     xmlTarget.addField(xt2);
     xmlTarget.initializeFromFields();
     cfg.targetDocs.push(xmlTarget);
@@ -335,17 +342,20 @@ describe('MappingSerializer', () => {
     return cfg.fieldActionService
       .fetchFieldActions()
       .then(() => {
-        const mappingJson = atlasMappingTestJson;
+        const mappingJson = atlasMappingTestJson as IAtlasMappingContainer;
         MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
         MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg?.mappings?.mappings?.length).toEqual(
-          Object.keys(mappingJson?.AtlasMapping?.mappings?.mapping).length
+          Object.keys(
+            mappingJson?.AtlasMapping?.mappings?.mapping as IMapping[]
+          ).length
         );
 
         const serialized = MappingSerializer.serializeMappings(cfg);
         //console.log(JSON.stringify(serialized, null, 2));
         expect(
-          Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
+          Object.keys(serialized.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         ).toEqual(cfg?.mappings?.mappings?.length);
         done();
       })
@@ -361,11 +371,12 @@ describe('MappingSerializer', () => {
       .then(() => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
-        const mappingJson = atlasMappingExprPropJson;
+        const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         let expressionIndex = 0;
 
         // Find the expression input field group from the raw JSON.
-        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+        for (fieldMapping of mappingJson?.AtlasMapping?.mappings
+          ?.mapping as IMapping[]) {
           if (
             fieldMapping.expression &&
             fieldMapping.expression.startsWith('if (')
@@ -378,7 +389,8 @@ describe('MappingSerializer', () => {
         MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
         MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg.mappings.mappings.length).toEqual(
-          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping).length
+          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         );
 
         const mapping = cfg.mappings?.mappings[expressionIndex];
@@ -389,7 +401,7 @@ describe('MappingSerializer', () => {
           fail();
         }
         for (const field of fieldMapping.inputFieldGroup.field) {
-          expect(mfields[i]?.parsedData?.parsedPath).toEqual(field.path);
+          expect(mfields[i]?.mappingField?.path).toEqual(field.path);
           i++;
         }
         expect(fieldMapping.inputFieldGroup.field[0].docId).toContain(
@@ -399,7 +411,8 @@ describe('MappingSerializer', () => {
         const serialized = MappingSerializer.serializeMappings(cfg);
         //console.log(JSON.stringify(serialized, null, 2));
         expect(
-          Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
+          Object.keys(serialized.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         ).toEqual(cfg.mappings?.mappings?.length);
         done();
       })
@@ -439,10 +452,12 @@ describe('MappingSerializer', () => {
           true
         );
         expect(json.inputField).toBeFalsy();
-        expect(json.inputFieldGroup.field.length).toEqual(1);
-        expect(json.inputFieldGroup.field[0].actions).toBeFalsy();
-        expect(json.inputFieldGroup.actions.length).toEqual(1);
-        expect(json.inputFieldGroup.actions[0]['@type']).toEqual('Concatenate');
+        expect(json.inputFieldGroup!.field!.length).toEqual(1);
+        expect(json.inputFieldGroup!.field![0].actions).toBeFalsy();
+        expect(json.inputFieldGroup!.actions!.length).toEqual(1);
+        expect(json.inputFieldGroup!.actions![0]['@type']).toEqual(
+          'Concatenate'
+        );
         const f2 = new Field();
         f2.path = '/User/Name';
         f2.docDef = f.docDef;
@@ -454,10 +469,10 @@ describe('MappingSerializer', () => {
           true
         );
         expect(json2.inputField).toBeFalsy();
-        expect(json2.inputFieldGroup.field.length).toEqual(2);
-        expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
-        expect(json2.inputFieldGroup.actions.length).toEqual(1);
-        expect(json2.inputFieldGroup.actions[0]['@type']).toEqual(
+        expect(json2.inputFieldGroup!.field!.length).toEqual(2);
+        expect(json2.inputFieldGroup!.field![0].actions).toBeFalsy();
+        expect(json2.inputFieldGroup!.actions!.length).toEqual(1);
+        expect(json2.inputFieldGroup!.actions![0]['@type']).toEqual(
           'Concatenate'
         );
         done();
@@ -498,8 +513,8 @@ describe('MappingSerializer', () => {
           'm1',
           true
         );
-        expect(json.inputField[0].actions.length).toEqual(1);
-        expect(json.inputField[0].actions[0]['@type']).toEqual('Repeat');
+        expect(json.inputField![0].actions!.length).toEqual(1);
+        expect(json.inputField![0].actions![0]['@type']).toEqual('Repeat');
         done();
       })
       .catch((error) => {
@@ -531,7 +546,7 @@ describe('MappingSerializer', () => {
           'm1',
           true
         );
-        expect(json.inputField[0].actions).toBeUndefined();
+        expect(json.inputField![0].actions).toBeUndefined();
         expect(json.expression).toBeDefined();
         expect(json.expression).toEqual('{0}');
         const f2 = new Field();
@@ -548,8 +563,8 @@ describe('MappingSerializer', () => {
           true
         );
         expect(json2.inputField).toBeFalsy();
-        expect(json2.inputFieldGroup.field.length).toEqual(2);
-        expect(json2.inputFieldGroup.field[0].actions).toBeFalsy();
+        expect(json2.inputFieldGroup!.field!.length).toEqual(2);
+        expect(json2.inputFieldGroup!.field![0].actions).toBeFalsy();
         expect(json2.expression).toBeDefined();
         expect(json2.expression).toEqual('{0} + {1}');
         done();
@@ -565,13 +580,14 @@ describe('MappingSerializer', () => {
       .fetchFieldActions()
       .then(() => {
         let fieldMapping = null;
-        const mappingJson = atlasMappingExprPropJson;
+        const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         let expressionIndex = 0;
         let expressionStr = '';
 
         // Find the expression mapping repeat( count(city), const-str)
-        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
-          if (fieldMapping.expression?.includes('repeat( count(')) {
+        for (fieldMapping of mappingJson!.AtlasMapping!.mappings!
+          .mapping as IMapping[]) {
+          if (fieldMapping?.expression?.includes('repeat( count(')) {
             expressionStr = fieldMapping.expression;
             break;
           }
@@ -580,7 +596,8 @@ describe('MappingSerializer', () => {
         MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
         MappingUtil.updateMappingsFromDocuments(cfg);
         expect(cfg.mappings?.mappings.length).toEqual(
-          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping).length
+          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         );
 
         const mapping = cfg.mappings?.mappings[expressionIndex];
@@ -598,9 +615,9 @@ describe('MappingSerializer', () => {
         let testField: Field | null = null;
         for (const field of fieldMapping?.inputFieldGroup?.field) {
           if (field.path) {
-            expect(mfields[i].parsedData?.parsedPath).toEqual(field.path);
+            expect(mfields[i].mappingField?.path).toEqual(field.path);
           }
-          if (field.path.indexOf('street') !== -1) {
+          if (field.path?.indexOf('street') !== -1) {
             testField = mfields[i].field;
           }
           i++;
@@ -610,7 +627,8 @@ describe('MappingSerializer', () => {
         }
         const serialized = MappingSerializer.serializeMappings(cfg);
         expect(
-          Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
+          Object.keys(serialized.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         ).toEqual(cfg.mappings?.mappings?.length);
 
         // Verify mapping.
@@ -646,12 +664,13 @@ describe('MappingSerializer', () => {
       .fetchFieldActions()
       .then(() => {
         let fieldMapping = null;
-        const mappingJson = atlasMappingExprPropJson;
+        const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         let expressionIndex = 0;
         let expressionStr = '';
 
         // Find the select/ filter expression mapping.
-        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+        for (fieldMapping of mappingJson?.AtlasMapping?.mappings
+          ?.mapping as IMapping[]) {
           if (fieldMapping.expression?.includes('select( filter(')) {
             expressionStr = fieldMapping.expression;
             break;
@@ -662,7 +681,8 @@ describe('MappingSerializer', () => {
         MappingUtil.updateMappingsFromDocuments(cfg);
 
         expect(cfg.mappings?.mappings.length).toEqual(
-          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping).length
+          Object.keys(mappingJson.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         );
         const mapping = cfg.mappings?.mappings[expressionIndex];
         expect(mapping).toBeDefined();
@@ -684,8 +704,8 @@ describe('MappingSerializer', () => {
             field.path === '/addressList<>'
           ) {
             testField = Field.getField(
-              mfields[i].parsedData?.parsedPath!,
-              cfg.getDocForIdentifier(mfields[i].parsedData!.parsedDocID!, true)
+              mfields[i].mappingField?.path!,
+              cfg.getDocForIdentifier(mfields[i].mappingField!.docId!, true)
                 ?.allFields!
             );
           }
@@ -695,7 +715,8 @@ describe('MappingSerializer', () => {
 
         const serialized = MappingSerializer.serializeMappings(cfg);
         expect(
-          Object.keys(serialized.AtlasMapping?.mappings?.mapping).length
+          Object.keys(serialized.AtlasMapping?.mappings?.mapping as IMapping[])
+            .length
         ).toEqual(cfg.mappings?.mappings?.length);
 
         // Verify preview mode.
@@ -720,7 +741,7 @@ describe('MappingSerializer', () => {
       .fetchFieldActions()
       .then(() => {
         let mapping = null;
-        const mappingJson = atlasMappingExprPropJson;
+        const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
         MappingUtil.updateMappingsFromDocuments(cfg);
 
@@ -755,11 +776,12 @@ describe('MappingSerializer', () => {
       .then(() => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
-        const mappingJson = atlasMappingExprPropJson;
+        const mappingJson = atlasMappingExprPropJson as IAtlasMappingContainer;
         let expressionIndex = 0;
 
         // Find the expression input field group from the raw JSON.
-        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+        for (fieldMapping of mappingJson?.AtlasMapping?.mappings
+          ?.mapping as IMapping[]) {
           if (
             fieldMapping.expression &&
             fieldMapping.expression.startsWith('select( filter(')
@@ -800,11 +822,16 @@ describe('MappingSerializer', () => {
       .then(() => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
-        const mappingJson = atlasMappingEnumLookupTableMapping;
+        const mappingJson =
+          atlasMappingEnumLookupTableMapping as IAtlasMappingContainer;
 
         // Find the enum lookup table mapping from the raw JSON.
-        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
-          if (fieldMapping.lookupTableName.length > 0) {
+        for (fieldMapping of mappingJson?.AtlasMapping?.mappings
+          ?.mapping as IMapping[]) {
+          if (
+            fieldMapping?.lookupTableName &&
+            fieldMapping.lookupTableName.length > 0
+          ) {
             break;
           }
         }
@@ -827,8 +854,8 @@ describe('MappingSerializer', () => {
         ss.name = 'statesShort';
         ss.path = '/statesShort';
         ss.scope = '';
-        ss.type = 'COMPLEX';
-        ss.serviceObject.status = 'SUPPORTED';
+        ss.type = FieldType.COMPLEX;
+        ss.documentField.status = FieldStatus.SUPPORTED;
         docEnumSrc.addField(ss);
 
         const docInitTarget = new DocumentInitializationModel();
@@ -846,8 +873,8 @@ describe('MappingSerializer', () => {
         sl.name = 'statesLong';
         sl.path = '/statesLong';
         sl.scope = '';
-        sl.type = 'COMPLEX';
-        sl.serviceObject.status = 'SUPPORTED';
+        sl.type = FieldType.COMPLEX;
+        sl.documentField.status = FieldStatus.SUPPORTED;
         docEnumtgt.addField(sl);
 
         // Deserialize then serialize.
@@ -892,7 +919,7 @@ describe('MappingSerializer', () => {
         expect(enumValues).toBeDefined();
 
         // Inspect the mapping lookup table.
-        expect(lookupTable.entries.length).toBe(3);
+        expect(lookupTable.lookupEntry.length).toBe(3);
         let i = 0;
         for (const eVal of enumValues) {
           expect(eVal.sourceEnumValue).toEqual(sourceField.enumValues[i].name);
@@ -901,14 +928,14 @@ describe('MappingSerializer', () => {
           );
           i++;
         }
-        for (const entry of lookupTable.entries) {
+        for (const entry of lookupTable.lookupEntry) {
           expect(entry.sourceType).toEqual('STRING');
           expect(entry.targetType).toEqual('STRING');
           expect(entry.sourceValue.length).toBe(2);
         }
-        expect(tables[0].entries[0].targetValue).toEqual('Arizona');
-        expect(tables[0].entries[1].targetValue).toEqual('Florida');
-        expect(tables[0].entries[2].targetValue).toEqual('Texas');
+        expect(tables[0].lookupEntry[0].targetValue).toEqual('Arizona');
+        expect(tables[0].lookupEntry[1].targetValue).toEqual('Florida');
+        expect(tables[0].lookupEntry[2].targetValue).toEqual('Texas');
         const flEntry = lookupTable.getEntryForSource('FL', false);
         expect(flEntry).toBeDefined();
         expect(flEntry?.targetValue).toEqual('Florida');
@@ -928,7 +955,7 @@ describe('MappingSerializer', () => {
       .then(() => {
         cfg.mappings = new MappingDefinition();
         let fieldMapping = null;
-        const mappingJson = atlasMappingCSV;
+        const mappingJson = atlasMappingCSV as IAtlasMappingContainer;
 
         // Isolate the mock documents using the document initialization model.
         const docModelSource = DocumentInspectionUtil.fromNonJavaProperties(
@@ -946,14 +973,14 @@ describe('MappingSerializer', () => {
         const sf1 = new Field();
         sf1.name = '<>';
         sf1.path = '/<>';
-        sf1.type = 'COMPLEX';
+        sf1.type = FieldType.COMPLEX;
         docModelSource.doc.addField(sf1);
         const sf2 = new Field();
         sf2.name = 'last_name';
         sf2.path = '/<>/last_name';
         sf2.scope = '';
-        sf2.type = 'STRING';
-        sf2.serviceObject.status = 'SUPPORTED';
+        sf2.type = FieldType.STRING;
+        sf2.documentField.status = FieldStatus.SUPPORTED;
         sf2.parentField = sf1;
         docModelSource.doc.addField(sf2);
 
@@ -972,14 +999,14 @@ describe('MappingSerializer', () => {
         const st1 = new Field();
         st1.name = '<>';
         st1.path = '/<>';
-        st1.type = 'COMPLEX';
+        st1.type = FieldType.COMPLEX;
         docModelSource.doc.addField(st1);
         const st2 = new Field();
         st2.name = 'last';
         st2.path = '/<>/last';
         st2.scope = '';
-        st2.type = 'STRING';
-        st2.serviceObject.status = 'SUPPORTED';
+        st2.type = FieldType.STRING;
+        st2.documentField.status = FieldStatus.SUPPORTED;
         st2.parentField = st1;
         docModelTarget.doc.addField(st2);
 
@@ -993,7 +1020,8 @@ describe('MappingSerializer', () => {
         expect(csvInspModel.isOnlineInspectionCapable()).toBe(true);
 
         // Find a CSV field mapping.
-        for (fieldMapping of mappingJson.AtlasMapping.mappings.mapping) {
+        for (fieldMapping of mappingJson?.AtlasMapping?.mappings
+          ?.mapping as IMapping[]) {
           if (fieldMapping.inputField) {
             for (const field of fieldMapping.inputField) {
               if (field.name === 'last_name') {

@@ -25,7 +25,7 @@ import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { DocumentManagementService } from './document-management.service';
-import { DocumentType } from '../common';
+import { DocumentType } from '../contracts/common';
 import { ErrorHandlerService } from './error-handler.service';
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
@@ -246,7 +246,7 @@ export class InitializationService {
             );
 
           // If the live UI mappings name does not match the UI mappings name extracted from the
-          // catalog file then use the mappings from the catalog file.  Otherwise use the live
+          // catalog file then use the mappings from the catalog file. Otherwise use the live
           // UI file.
           this.cfg.fileService
             .findMappingFiles('UI')
@@ -256,7 +256,7 @@ export class InitializationService {
               );
               await this.cfg.fieldActionService.fetchFieldActions();
               if (digestMappingsName !== files[0]) {
-                await this.cfg.fileService.setMappingToService(
+                await this.cfg.fileService.setMappingStringToService(
                   mappingDigest.exportMappings.value
                 );
               }

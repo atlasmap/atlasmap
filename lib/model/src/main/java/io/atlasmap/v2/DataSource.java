@@ -34,6 +34,10 @@ public class DataSource implements Serializable {
 
     protected DataSourceType dataSourceType;
 
+    protected String characterEncoding;
+
+    protected String locale;
+
     /**
      * Gets the value of the id property.
      * 
@@ -152,6 +156,42 @@ public class DataSource implements Serializable {
      */
     public void setDataSourceType(DataSourceType value) {
         this.dataSourceType = value;
+    }
+
+    /**
+     * Gets the value of the characterEncoding property.
+     * 
+     * @return character encoding
+     */
+    public String getCharacterEncoding() {
+        return characterEncoding;
+    }
+
+    /**
+     * Sets the value of the characterEncoding property.
+     * 
+     * @param characterEncoding character encoding
+     */
+    public void setCharacterEncoding(String characterEncoding) {
+        this.characterEncoding = characterEncoding;
+    }
+
+    /**
+     * Gets the value of the locale property.
+     * 
+     * @return locale
+     */
+    public String getLocale() {
+        return locale;
+    }
+
+    /**
+     * Sets the value of the locale property.
+     * 
+     * @param locale locale
+     */
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
 }

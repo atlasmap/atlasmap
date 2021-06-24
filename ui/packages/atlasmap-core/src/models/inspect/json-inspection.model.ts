@@ -20,9 +20,20 @@ import {
 } from './document-inspection.model';
 import { EnumValue, Field } from '../field.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
+import {
+  IJsonComplexType,
+  IJsonDocument,
+  IJsonDocumentContainer,
+  IJsonField,
+  IJsonInspectionResponse,
+  IJsonInspectionResponseContainer,
+  jsonInspectionRequestJsonType,
+} from '../../contracts/documents/json';
+import { FieldType } from '../../contracts/common';
 
-import { DocumentDefinition } from '../document-definition.model';
-
+/**
+ * Encapsulates JSON inspection context.
+ */
 export class JsonInspectionModel extends DocumentInspectionModel {
   request = new JsonInspectionRequestModel(this.cfg, this.doc);
 
@@ -45,90 +56,73 @@ export class JsonInspectionModel extends DocumentInspectionModel {
   parseResponse(responseJson: any): void {
     if (typeof responseJson.JsonInspectionResponse !== 'undefined') {
       this.extractJSONDocumentDefinitionFromInspectionResponse(
-        responseJson,
-        this.doc
+        (responseJson as IJsonInspectionResponseContainer)
+          .JsonInspectionResponse
       );
     } else if (typeof responseJson.JsonDocument !== 'undefined') {
-      this.extractJSONDocumentDefinition(responseJson, this.doc);
+      this.extractJSONDocumentDefinition(
+        (responseJson as IJsonDocumentContainer).JsonDocument
+      );
     } else {
       throw new Error(`Unknown JSON inspection result format: ${responseJson}`);
     }
   }
 
   private extractJSONDocumentDefinitionFromInspectionResponse(
-    responseJson: any,
-    docDef: DocumentDefinition
+    body: IJsonInspectionResponse
   ): void {
-    const body: any = responseJson.JsonInspectionResponse;
     if (body.errorMessage) {
-      docDef.errorOccurred = true;
+      this.doc.errorOccurred = true;
       throw new Error(
         `Could not load JSON document, error: ${body.errorMessage}`
       );
     }
 
-    this.extractJSONDocumentDefinition(body, docDef);
+    this.extractJSONDocumentDefinition(body.jsonDocument);
   }
 
-  private extractJSONDocumentDefinition(
-    body: any,
-    docDef: DocumentDefinition
-  ): void {
-    let jsonDocument: any;
-    if (typeof body.jsonDocument !== 'undefined') {
-      jsonDocument = body.jsonDocument;
-    } else {
-      jsonDocument = body.JsonDocument;
+  private extractJSONDocumentDefinition(jsonDocument: IJsonDocument): void {
+    if (!this.doc.description) {
+      this.doc.description = this.doc.id;
     }
-
-    if (!docDef.description) {
-      docDef.description = docDef.id;
+    if (!this.doc.name) {
+      this.doc.name = this.doc.id;
     }
-    if (!docDef.name) {
-      docDef.name = docDef.id;
-    }
-
-    docDef.characterEncoding = jsonDocument.characterEncoding;
-    docDef.locale = jsonDocument.locale;
 
     for (const field of jsonDocument.fields.field) {
-      this.parseJSONFieldFromDocument(field, null, docDef);
+      this.parseJSONFieldFromDocument(field as IJsonField, null);
     }
   }
 
   private parseJSONFieldFromDocument(
-    field: any,
-    parentField: Field | null,
-    docDef: DocumentDefinition
+    field: IJsonField,
+    parentField: Field | null
   ): void {
-    const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+    const parsedField = this.parseFieldFromDocument(field, parentField);
     if (parsedField == null) {
       return;
     }
-    parsedField.enumeration = field.enumeration;
-    parsedField.enumIndexValue = field.enumIndexValue
-      ? field.enumIndexValue
+    if (field.fieldType !== FieldType.COMPLEX) {
+      return;
+    }
+    const complex = field as IJsonComplexType;
+    parsedField.enumeration = complex.enumeration;
+    /** FIXME enumIndexValue doesn't exist on JsonField/JsonComplexType
+    parsedField.enumIndexValue = complex.enumIndexValue
+      ? complex.enumIndexValue
       : 0;
-
-    if (
-      parsedField.enumeration &&
-      field.jsonEnumFields &&
-      field.jsonEnumFields.jsonEnumField
-    ) {
-      for (const enumValue of field.jsonEnumFields.jsonEnumField) {
+    */
+    if (parsedField.enumeration && complex.jsonEnumFields?.jsonEnumField) {
+      for (const enumValue of complex.jsonEnumFields.jsonEnumField) {
         const parsedEnumValue: EnumValue = new EnumValue();
-        parsedEnumValue.name = enumValue.name;
+        parsedEnumValue.name = enumValue.name!;
         parsedEnumValue.ordinal = enumValue.ordinal;
         parsedField.enumValues.push(parsedEnumValue);
       }
     }
-    if (
-      field.jsonFields &&
-      field.jsonFields.jsonField &&
-      field.jsonFields.jsonField.length
-    ) {
-      for (const childField of field.jsonFields.jsonField) {
-        this.parseJSONFieldFromDocument(childField, parsedField, docDef);
+    if (complex.jsonFields?.jsonField.length) {
+      for (const childField of complex.jsonFields.jsonField) {
+        this.parseJSONFieldFromDocument(childField, parsedField);
       }
     }
   }
@@ -142,7 +136,7 @@ export class JsonInspectionRequestModel extends DocumentInspectionRequestModel {
 export class JsonInspectionRequestOptions extends DocumentInspectionRequestOptions {
   json = {
     JsonInspectionRequest: {
-      jsonType: 'io.atlasmap.json.v2.JsonInspectionRequest',
+      jsonType: jsonInspectionRequestJsonType,
       type: this.doc.inspectionType,
       jsonData: this.doc.inspectionSource,
     },

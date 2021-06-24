@@ -14,44 +14,16 @@
     limitations under the License.
 */
 
+import { CollectionType } from '../contracts/common';
+
 export enum DocumentDefaultName {
   CONSTANTS = 'Constants',
   PROPERTIES = 'Properties',
 }
 
-export enum DocumentType {
-  JAVA = 'JAVA',
-  XML = 'XML',
-  XSD = 'XSD',
-  JSON = 'JSON',
-  CORE = 'Core',
-  CSV = 'CSV',
-  CONSTANT = 'Constants',
-  PROPERTY = 'Property',
-}
-
-export enum InspectionType {
-  JAVA_CLASS = 'JAVA_CLASS',
-  SCHEMA = 'SCHEMA',
-  INSTANCE = 'INSTANCE',
-  UNKNOWN = 'UNKNOWN',
-}
-
-export enum DataSourceType {
-  SOURCE = 'SOURCE',
-  TARGET = 'TARGET',
-}
-
 export const enum FieldMode {
   CREATE,
   EDIT,
-}
-
-export enum CollectionType {
-  ARRAY = 'ARRAY',
-  LIST = 'LIST',
-  MAP = 'MAP',
-  NONE = 'NONE',
 }
 
 export const collectionTypes = [
@@ -113,3 +85,6 @@ export const propertyTypes = [
   ['UNSIGNED_LONG', 'Unsigned Long'],
   ['UNSIGNED_SHORT', 'Unsigned Short'],
 ];
+
+export const HTTP_STATUS_OK = 200;
+export const HTTP_STATUS_NO_CONTENT = 204;

@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { InspectionType } from '../common';
+import { InspectionType } from './common';
 
 export interface ADMDigest {
   exportMappings: ValueContainer;

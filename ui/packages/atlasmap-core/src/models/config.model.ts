@@ -15,11 +15,10 @@
 */
 import {
   CollectionType,
-  DocumentDefaultName,
   DocumentType,
   InspectionType,
-} from '../common/config.types';
-
+} from '../contracts/common';
+import { DocumentDefaultName } from '../common/config.types';
 import { DocumentDefinition } from './document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { ErrorHandlerService } from '../services/error-handler.service';
@@ -93,10 +92,6 @@ export class DocumentInitializationModel {
  * {@link InitializationService}.
  */
 export class ConfigModel {
-  static mappingServicesPackagePrefix = 'io.atlasmap.v2';
-  static javaServicesPackagePrefix = 'io.atlasmap.java.v2';
-  static jsonServicesPackagePrefix = 'io.atlasmap.json.v2';
-  static xmlServicesPackagePrefix = 'io.atlasmap.xml.v2';
   private static cfg: ConfigModel = new ConfigModel();
 
   initCfg: DataMapperInitializationModel = new DataMapperInitializationModel();

@@ -22,8 +22,11 @@ import {
 import {
   FieldActionArgument,
   FieldActionDefinition,
-  Multiplicity,
 } from '../models/field-action.model';
+import {
+  IActionDetailsContainer,
+  Multiplicity,
+} from '../contracts/field-action';
 
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
@@ -37,6 +40,7 @@ export class FieldActionService {
     [Multiplicity.ONE_TO_MANY]: [],
     [Multiplicity.MANY_TO_ONE]: [],
     [Multiplicity.ZERO_TO_ONE]: [],
+    [Multiplicity.MANY_TO_MANY]: [],
   };
 
   isInitialized = false;
@@ -180,17 +184,12 @@ export class FieldActionService {
       this.cfg.logger!.debug('Field Action Config Request');
       this.api
         .get(url, { headers: this.headers })
-        .json()
-        .then((body: any) => {
+        .json<IActionDetailsContainer>()
+        .then((body) => {
           this.cfg.logger!.debug(
             `Field Action Config Response: ${JSON.stringify(body)}`
           );
-          if (
-            body &&
-            body.ActionDetails &&
-            body.ActionDetails.actionDetail &&
-            body.ActionDetails.actionDetail.length
-          ) {
+          if (body?.ActionDetails?.actionDetail?.length) {
             for (const actionDetail of body.ActionDetails.actionDetail) {
               const fieldActionConfig =
                 this.extractFieldActionDefinition(actionDetail);

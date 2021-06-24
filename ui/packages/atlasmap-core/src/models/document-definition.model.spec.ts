@@ -18,7 +18,7 @@ import {
   DocumentDefinition,
   NamespaceModel,
 } from '../models/document-definition.model';
-import { DocumentType } from '../common/config.types';
+import { DocumentType } from '../contracts/common';
 
 describe('DocumentDefinitionModel', () => {
   test('initialize NamespaceModel', () => {

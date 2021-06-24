@@ -19,12 +19,16 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  IAtlasMappingContainer,
+  IStringMapContainer,
+} from '../contracts/mapping';
 import { gzip, inflate } from 'pako';
 
 import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
-import { HTTP_STATUS_NO_CONTENT } from '../common/constants';
+import { HTTP_STATUS_NO_CONTENT } from '../common/config.types';
 import { MappingDigestUtil } from '../utils/mapping-digest-util';
 import ky from 'ky';
 import log from 'loglevel';
@@ -69,17 +73,13 @@ export class FileManagementService {
       this.cfg.logger!.debug('Mapping List Request');
       this.api
         .get(url)
-        .json()
-        .then((body: any) => {
+        .json<IStringMapContainer>()
+        .then((body) => {
           this.cfg.logger!.debug(
             `Mapping List Response: ${JSON.stringify(body)}`
           );
-          const entries: any[] = body.StringMap.stringMapEntry;
-          const mappingFileNames: string[] = [];
-          for (const entry of entries) {
-            mappingFileNames.push(entry.name);
-          }
-          resolve(mappingFileNames);
+          const entries = body.StringMap.stringMapEntry;
+          resolve(entries.map((item) => item.name));
         })
         .catch((error: any) => {
           if (error.status !== HTTP_STATUS_NO_CONTENT) {
@@ -244,13 +244,27 @@ export class FileManagementService {
         });
     });
   }
+
+  /**
+   * Commit the specified AtlasMapping object to the runtime service.  The mappings
+   * are kept separate so they can be updated with minimal overhead.
+   *
+   * @param buffer - The stringified AtlasMapping JSON
+   */
+  setMappingToService(
+    atlasMappingContainer: IAtlasMappingContainer
+  ): Promise<boolean> {
+    const jsonBuffer = JSON.stringify(atlasMappingContainer);
+    return this.setMappingStringToService(jsonBuffer);
+  }
+
   /**
    * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
    * are kept separate so they can be updated with minimal overhead.
    *
-   * @param buffer - JSON content
+   * @param buffer - The stringified AtlasMapping JSON
    */
-  setMappingToService(jsonBuffer: string): Promise<boolean> {
+  setMappingStringToService(jsonBuffer: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
       const headers = {
@@ -498,7 +512,7 @@ export class FileManagementService {
   /**
    * Retrieve the current user AtlasMap data mappings from the server as a JSON object.
    */
-  getCurrentMappingJson(): Promise<any> {
+  getCurrentMappingJson(): Promise<IAtlasMappingContainer> {
     return new Promise<any>((resolve, reject) => {
       if (this.cfg.mappings === null) {
         reject();
@@ -510,7 +524,7 @@ export class FileManagementService {
       this.cfg.logger!.debug('Get Current Mapping Request');
       this.api
         .get(baseURL)
-        .json()
+        .json<IAtlasMappingContainer>()
         .then((body) => {
           this.cfg.logger!.debug(
             `Get Current Mapping Response: ${JSON.stringify(body)}`

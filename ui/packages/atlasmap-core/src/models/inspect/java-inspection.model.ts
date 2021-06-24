@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { CollectionType, FieldType } from '../../contracts/common';
 import {
   DocumentInspectionModel,
   DocumentInspectionRequestModel,
@@ -20,11 +21,21 @@ import {
 } from './document-inspection.model';
 import { EnumValue, Field } from '../field.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
+import {
+  IClassInspectionRequestContainer,
+  IClassInspectionResponseContainer,
+  IJavaClass,
+  IJavaClassContainer,
+  IJavaField,
+  javaInspectionRequestJsonType,
+} from '../../contracts/documents/java';
 
-import { CollectionType } from '../../common/config.types';
 import { ConfigModel } from '../config.model';
 import { DocumentDefinition } from '../document-definition.model';
 
+/**
+ * Encapsulates Java class inspection context.
+ */
 export class JavaInspectionModel extends DocumentInspectionModel {
   request = new JavaInspectionRequestModel(this.cfg, this.doc);
 
@@ -45,97 +56,77 @@ export class JavaInspectionModel extends DocumentInspectionModel {
   }
 
   parseResponse(responseJson: any): void {
-    if (typeof responseJson.ClassInspectionResponse !== 'undefined') {
-      this.extractJavaDocumentDefinitionFromInspectionResponse(
-        responseJson,
-        this.doc
-      );
-    } else if (typeof responseJson.JavaClass !== 'undefined') {
-      this.extractJavaDocumentDefinition(responseJson, this.doc);
+    let javaClass: IJavaClass;
+    if (responseJson.ClassInspectionResponse) {
+      if (responseJson.errorMessage) {
+        this.doc.errorOccurred = true;
+        throw new Error(
+          `Could not load JSON document, error: ${responseJson.errorMessage}`
+        );
+      }
+      javaClass = (responseJson as IClassInspectionResponseContainer)
+        .ClassInspectionResponse.javaClass;
     } else {
-      throw new Error(`Unknown Java inspection result format: ${responseJson}`);
+      javaClass = (responseJson as IJavaClassContainer).JavaClass;
     }
-  }
-
-  private extractJavaDocumentDefinitionFromInspectionResponse(
-    responseJson: any,
-    docDef: DocumentDefinition
-  ): void {
-    const body: any = responseJson.ClassInspectionResponse;
-
-    if (body.errorMessage) {
-      docDef.errorOccurred = true;
-      throw new Error(
-        `Could not load Java document, error: ${body.errorMessage}`
-      );
-    }
-    this.extractJavaDocumentDefinition(body, docDef);
-  }
-
-  private extractJavaDocumentDefinition(
-    body: any,
-    docDef: DocumentDefinition
-  ): void {
-    const docIdentifier: string = docDef.id;
-    const javaClass = body.JavaClass ? body.JavaClass : body.javaClass;
+    const docIdentifier: string = this.doc.id;
     if (!javaClass || javaClass.status === 'NOT_FOUND') {
-      docDef.errorOccurred = true;
+      this.doc.errorOccurred = true;
       throw new Error(
         `Could not load JAVA document. Document is not found: ${docIdentifier}`
       );
     }
 
-    if (!docDef.description) {
-      docDef.description = javaClass.className;
+    if (!this.doc.description) {
+      this.doc.description = javaClass.className;
     }
-    if (!docDef.name) {
-      docDef.name = javaClass.className;
+    if (!this.doc.name) {
+      this.doc.name = javaClass.className!;
       // Make doc name the class name rather than fully qualified name
-      if (docDef.name && docDef.name.indexOf('.') !== -1) {
-        docDef.name = docDef.name.substr(docDef.name.lastIndexOf('.') + 1);
+      if (this.doc.name && this.doc.name.indexOf('.') !== -1) {
+        this.doc.name = this.doc.name.substr(
+          this.doc.name.lastIndexOf('.') + 1
+        );
       }
     }
-    if (javaClass.uri && (!docDef.uri || docDef.uri.length === 0)) {
-      docDef.uri = javaClass.uri;
+    if (javaClass.uri && (!this.doc.uri || this.doc.uri.length === 0)) {
+      this.doc.uri = javaClass.uri;
     }
-
-    docDef.characterEncoding = javaClass.characterEncoding;
-    docDef.locale = javaClass.locale;
 
     let rootField = null;
     if (
       javaClass.collectionType &&
       javaClass.collectionType !== CollectionType.NONE.valueOf()
     ) {
-      this.parseJavaFieldFromDocument(javaClass, null, docDef);
-      rootField = docDef.fields[0];
+      this.parseJavaFieldFromDocument(javaClass, null);
+      rootField = this.doc.fields[0];
     }
     for (const field of javaClass.javaFields.javaField) {
-      this.parseJavaFieldFromDocument(field, rootField, docDef);
+      this.parseJavaFieldFromDocument(field, rootField);
     }
   }
 
   private parseJavaFieldFromDocument(
-    field: any,
-    parentField: Field | null,
-    docDef: DocumentDefinition
+    field: IJavaField,
+    parentField: Field | null
   ): void {
-    const parsedField = this.parseFieldFromDocument(field, parentField, docDef);
+    const parsedField = this.parseFieldFromDocument(field, parentField);
     if (parsedField == null) {
       return;
     }
 
-    // java fields have a special primitive property, so override the "!= COMPLEX" math from parseFieldFromDocument()
-    parsedField.isPrimitive = field.primitive;
-    parsedField.classIdentifier = field.className;
-    parsedField.enumeration = field.enumeration;
+    if (field.className) {
+      parsedField.classIdentifier = field.className;
+    }
 
-    if (
-      parsedField.enumeration &&
-      field.javaEnumFields &&
-      field.javaEnumFields.javaEnumField
-    ) {
-      for (const enumValue of field.javaEnumFields.javaEnumField) {
+    if (field.fieldType !== FieldType.COMPLEX) {
+      return;
+    }
+
+    const javaClass = field as IJavaClass;
+    parsedField.enumeration = javaClass.enumeration;
+    if (javaClass.enumeration && javaClass.javaEnumFields?.javaEnumField) {
+      for (const enumValue of javaClass.javaEnumFields.javaEnumField) {
         const parsedEnumValue: EnumValue = new EnumValue();
         parsedEnumValue.name = enumValue.name;
         parsedEnumValue.ordinal = enumValue.ordinal;
@@ -143,13 +134,9 @@ export class JavaInspectionModel extends DocumentInspectionModel {
       }
     }
 
-    if (
-      field.javaFields &&
-      field.javaFields.javaField &&
-      field.javaFields.javaField.length
-    ) {
-      for (const childField of field.javaFields.javaField) {
-        this.parseJavaFieldFromDocument(childField, parsedField, docDef);
+    if (javaClass.javaFields?.javaField?.length) {
+      for (const childField of javaClass.javaFields.javaField) {
+        this.parseJavaFieldFromDocument(childField, parsedField);
       }
     }
   }
@@ -163,10 +150,9 @@ export class JavaInspectionRequestModel extends DocumentInspectionRequestModel {
 export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptions {
   constructor(protected cfg: ConfigModel, protected doc: DocumentDefinition) {
     super(cfg, doc);
-    this.json = {
+    const request: IClassInspectionRequestContainer = {
       ClassInspectionRequest: {
-        jsonType:
-          ConfigModel.javaServicesPackagePrefix + '.ClassInspectionRequest',
+        jsonType: javaInspectionRequestJsonType,
         className: this.doc.inspectionSource,
         disablePrivateOnlyFields: this.cfg.initCfg.disablePrivateOnlyFields,
         disableProtectedOnlyFields: this.cfg.initCfg.disableProtectedOnlyFields,
@@ -175,15 +161,16 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
           this.cfg.initCfg.disablePublicGetterSetterFields,
       },
     };
+    this.json = request;
     if (
       this.doc.initModel.collectionType &&
       (this.doc.initModel.collectionType as CollectionType) !==
         CollectionType.NONE
     ) {
-      this.json['ClassInspectionRequest']['collectionType'] =
+      request.ClassInspectionRequest.collectionType =
         this.doc.initModel.collectionType;
       if (this.doc.initModel.collectionClassName) {
-        this.json['ClassInspectionRequest']['collectionClassName'] =
+        request.ClassInspectionRequest.collectionClassName =
           this.doc.initModel.collectionClassName;
       }
     }
@@ -191,7 +178,7 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
       this.cfg.initCfg.fieldNameExclusions &&
       this.cfg.initCfg.fieldNameExclusions.length
     ) {
-      this.json['ClassInspectionRequest']['fieldNameExclusions'] = {
+      request.ClassInspectionRequest.fieldNameExclusions = {
         string: this.cfg.initCfg.fieldNameExclusions,
       };
     }
@@ -199,7 +186,7 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
       this.cfg.initCfg.classNameExclusions &&
       this.cfg.initCfg.classNameExclusions.length
     ) {
-      this.json['ClassInspectionRequest']['classNameExclusions'] = {
+      request.ClassInspectionRequest.classNameExclusions = {
         string: this.cfg.initCfg.classNameExclusions,
       };
     }

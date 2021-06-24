@@ -14,4 +14,3 @@
     limitations under the License.
 */
 export * from './config.types';
-export * from './constants';

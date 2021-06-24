@@ -17,28 +17,22 @@ import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from './config.model';
 import { Field } from './field.model';
 import { FieldAction } from './field-action.model';
+import { IField } from 'src/contracts/common';
 import { PaddingField } from './document-definition.model';
 import { TransitionModel } from './transition.model';
 
-export class MappedFieldParsingData {
-  parsedName: string | null = null;
-  parsedPath: string | null = null;
-  parsedValue: string | null = null;
-  parsedDocID: string | null = null;
-  parsedDocURI: string | null = null;
-  parsedIndex: string | null = null;
-  parsedScope: string | null = null;
-  parsedIsAttribute: boolean | null = false;
-  fieldIsProperty = false;
-  fieldIsConstant = false;
-  parsedValueType: string | null = null;
-  parsedActions: FieldAction[] = [];
-  userCreated = false;
-}
-
 export class MappedField {
-  parsedData: MappedFieldParsingData = new MappedFieldParsingData();
+  /**
+   * The field properties read from mapping definition. This is a temporary object
+   * when it's deserialized from mapping definition and once {@link field} is populated
+   * this should not be used.
+   * @todo Identify document field at once when it deserializes and remove this temporary
+   * object.
+   */
+  mappingField: IField;
+  /** The field object created from document field */
   field: Field | null;
+  /** The field actions read from mapping and enriched through {@link FieldActionService} */
   actions: FieldAction[] = [];
 
   static sortMappedFieldsByPath(mappedFields: MappedField[]): MappedField[] {
@@ -230,13 +224,13 @@ export class MappingModel {
     }
     const mappedFields = this.getMappedFields(isSource);
     for (let i = 0; i < mappedFields.length; i++) {
-      if (mappedFields[i].parsedData.parsedPath === fieldPath) {
+      if (mappedFields[i].field?.path === fieldPath) {
         if (!identifier.docId && !identifier.fieldScope) {
           return mappedFields[i];
         }
         if (
           identifier.docId &&
-          mappedFields[i].parsedData.parsedDocID === identifier.docId
+          mappedFields[i].field?.docDef.id === identifier.docId
         ) {
           return mappedFields[i];
         }
@@ -295,8 +289,8 @@ export class MappingModel {
       return null;
     }
     if (
-      field.serviceObject?.status === 'SUPPORTED' ||
-      field.serviceObject?.status === 'CACHED'
+      field.documentField?.status === 'SUPPORTED' ||
+      field.documentField?.status === 'CACHED'
     ) {
       mappedField = new MappedField();
       mappedField.field = field;
