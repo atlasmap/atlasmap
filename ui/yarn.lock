@@ -15684,9 +15684,9 @@ prettier-linter-helpers@^1.0.0:
     fast-diff "^1.1.2"
 
 prettier@^1.19.1, prettier@^2.0.0, prettier@~2.2.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.1.tgz#76903c3f8c4449bc9ac597acefa24dc5ad4cbea6"
-  integrity sha512-p+vNbgpLjif/+D+DwAZAbndtRrR0md0MwfmOVN9N+2RgyACMT+7tfaRnT+WDPkqnuVwleyuBIG2XBxKDme3hPA==
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.2.tgz#ef280a05ec253712e486233db5c6f23441e7342d"
+  integrity sha512-lnJzDfJ66zkMy58OL5/NY5zp70S7Nz6KqcKkXYzn2tMVrNxvbqaBpg7H3qHaLxCJ5lNMsGuM8+ohS7cZrthdLQ==
 
 pretty-bytes@^5.1.0:
   version "5.6.0"
@@ -16316,9 +16316,9 @@ react-refresh@^0.8.3:
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
 react-sage@^0.3.1:
-  version "0.3.15"
-  resolved "https://registry.yarnpkg.com/react-sage/-/react-sage-0.3.15.tgz#2ec6dfc5557d98e7a04d572d50d735ef701aca63"
-  integrity sha512-RAxXkRglUw5CMnFXuPTe/6sBxctVPP7VRaMj+ab3FNcWTrghl5J1chLtKHtYLF8l+1pCGEvSKfVM5ERjkLyUww==
+  version "0.3.16"
+  resolved "https://registry.yarnpkg.com/react-sage/-/react-sage-0.3.16.tgz#bd8ba2735ed2bceb0b1e2226ad8588c2acd58dac"
+  integrity sha512-oVVmwiEH+iS0+ZWnfwWEnx1TKVcHDlleqo1fluQKlG7JAtZpgU+a0RPLdT2wGcNcPecrOaELuSz5VL9GKbtiXw==
 
 react-scripts@^3.4.4:
   version "3.4.4"
