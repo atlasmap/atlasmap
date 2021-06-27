@@ -21,7 +21,7 @@
     "@patternfly/react-table": "^4.27.24",
     "@patternfly/react-topology": "^4.8.72",
     "@types/d3-scale": "^3.2.2",
-    "@types/d3-shape": "^2.0.0",
+    "@types/d3-shape": "^3.0.0",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.5",
     "d3-scale": "^3.3.0",
