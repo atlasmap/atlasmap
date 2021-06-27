@@ -50,7 +50,7 @@
     "react-spring": "^9.1.2",
     "react-use-gesture": "^9.1.3",
     "rxjs": "^6.6.7",
-    "use-debounce": "^6.0.1"
+    "use-debounce": "^7.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
