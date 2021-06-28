@@ -47,7 +47,7 @@
     "@types/jest": "^24.9.1",
     "babel-jest": "^24.9.0",
     "eslint-plugin-header": "^3.1.1",
-    "husky": "^6.0.0",
+    "husky": "^4.2.3",
     "ts-jest": "^24.3.0",
     "tsdx": "^0.13.1",
     "typescript": "~3.9.9"
