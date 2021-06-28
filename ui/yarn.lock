@@ -4005,10 +4005,10 @@
   dependencies:
     "@types/d3-time" "^1"
 
-"@types/d3-scale@^3.2.2":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-scale/-/d3-scale-3.3.0.tgz#7ab91db0186bac0f24834ceb33f970e829f2fba1"
-  integrity sha512-rJj4nh/71Rw5bZgTF5cA5rW60WT3x8RbivEsScgQ66sqFnYZRmuyKSayyo7JiP+c9KJJiQhY9JXBmY16FZa3+g==
+"@types/d3-scale@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-scale/-/d3-scale-4.0.0.tgz#c0cb119f97648f7ed1c33590b48b8cceb82db8f1"
+  integrity sha512-uX3oIzwNu2z85qE2G7fDSS5swWpx8HwMBG8HjEZeevRNX2zwCTPlMqglBr1/zOhDlV4cpw5sjgpBBbnnewB8mw==
   dependencies:
     "@types/d3-time" "*"
 
