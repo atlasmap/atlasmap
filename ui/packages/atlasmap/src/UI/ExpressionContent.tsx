@@ -272,10 +272,10 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     // at the boundary between the text node and a field node.  In that
     // case remove the next node.
     removeNext =
+      !before &&
       selection.focusNode &&
       selection.focusNode.nodeType === selection.focusNode.TEXT_NODE &&
-      selection.focusNode.textContent &&
-      selection.focusOffset === selection.focusNode.textContent.length
+      selection.focusOffset === selection.focusNode.textContent?.length
         ? true
         : false;
     const range = selection.getRangeAt(0);
@@ -486,14 +486,18 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * @param startContainer
    */
   function getCaretPositionNodeId(startContainer?: Node): string {
+    const selection = window.getSelection();
     if (!startContainer) {
-      const selection = window.getSelection();
       if (!selection || selection.rangeCount === 0) {
         return trailerID;
       }
       startContainer = selection!.getRangeAt(0).startContainer;
     }
-    return startContainer.parentElement!.getAttribute('id')!;
+    if (startContainer.nodeType === selection?.focusNode?.TEXT_NODE) {
+      return startContainer.parentElement!.getAttribute('id')!;
+    } else {
+      return (startContainer.firstChild! as HTMLElement)?.getAttribute('id')!;
+    }
   }
 
   /**

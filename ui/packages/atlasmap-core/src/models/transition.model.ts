@@ -284,7 +284,7 @@ export class TransitionModel {
     } else if (this.mode === TransitionMode.ENUM) {
       return 'Enum (table: ' + this.lookupTableName + ')';
     } else if (this.mode === TransitionMode.EXPRESSION) {
-      return 'Expression (' + this.expression.toText() + ')';
+      return 'Expression (' + this.expression?.toText() + ')';
     }
     return TransitionModel.getMappingModeName(this.mode);
   }
