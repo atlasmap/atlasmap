@@ -415,10 +415,12 @@ export function mappingExpressionObservable(): Observable<any> | null {
 export function mappingExpressionRemoveField(
   tokenPosition?: string,
   offset?: number,
+  removeNext?: boolean,
 ) {
   initializationService.cfg.mappings!.activeMapping!.transition.expression!.removeToken(
     tokenPosition,
     offset,
+    removeNext,
   );
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }

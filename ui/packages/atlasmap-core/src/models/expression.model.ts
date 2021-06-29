@@ -580,26 +580,19 @@ export class ExpressionModel {
       }
     } else {
       const targetString = (targetNode as TextNode).str;
-      // TODO: check this non null operator
-      (targetNode as TextNode).str =
-        offset === 0
-          ? targetString.substr(1)
-          : targetString.substring(0, offset) +
-            targetString.substring(offset! + 1);
-      if ((targetNode as TextNode).str.length === 0) {
-        (targetNode as TextNode).str = ' ';
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: 'At least one space is required between field references.',
-            level: ErrorLevel.WARN,
-            scope: ErrorScope.MAPPING,
-            type: ErrorType.USER,
-            mapping: this.mapping,
-          })
-        );
+
+      // Remove empty string text node.
+      if (targetString.length === 1) {
+        this._nodes.splice(targetNodeIndex, 1);
+      } else {
+        (targetNode as TextNode).str =
+          offset === 0
+            ? targetString.substr(1)
+            : targetString.substring(0, offset) +
+              targetString.substring(offset! + 1);
+        updatedEvent.node = targetNode;
+        updatedEvent.offset = offset;
       }
-      updatedEvent.node = targetNode;
-      updatedEvent.offset = offset;
     }
     this.updateCache();
     this.expressionUpdatedSource.next(updatedEvent);
