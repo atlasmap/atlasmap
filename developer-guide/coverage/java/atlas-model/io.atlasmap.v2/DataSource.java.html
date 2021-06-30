@@ -34,6 +34,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     protected DataSourceType dataSourceType;
 
+    protected String characterEncoding;
+
+    protected String locale;
+
     /**
      * Gets the value of the id property.
      * 
@@ -43,7 +47,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getId() {
-<span class="fc" id="L46">        return id;</span>
+<span class="fc" id="L50">        return id;</span>
     }
 
     /**
@@ -55,8 +59,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setId(String value) {
-<span class="fc" id="L58">        this.id = value;</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L62">        this.id = value;</span>
+<span class="fc" id="L63">    }</span>
 
     /**
      * Gets the value of the name property.
@@ -67,7 +71,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getName() {
-<span class="fc" id="L70">        return name;</span>
+<span class="fc" id="L74">        return name;</span>
     }
 
     /**
@@ -79,8 +83,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L82">        this.name = value;</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L86">        this.name = value;</span>
+<span class="fc" id="L87">    }</span>
 
     /**
      * Gets the value of the description property.
@@ -91,7 +95,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getDescription() {
-<span class="fc" id="L94">        return description;</span>
+<span class="fc" id="L98">        return description;</span>
     }
 
     /**
@@ -103,8 +107,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setDescription(String value) {
-<span class="fc" id="L106">        this.description = value;</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L110">        this.description = value;</span>
+<span class="fc" id="L111">    }</span>
 
     /**
      * Gets the value of the uri property.
@@ -115,7 +119,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getUri() {
-<span class="fc" id="L118">        return uri;</span>
+<span class="fc" id="L122">        return uri;</span>
     }
 
     /**
@@ -127,8 +131,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setUri(String value) {
-<span class="fc" id="L130">        this.uri = value;</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L134">        this.uri = value;</span>
+<span class="fc" id="L135">    }</span>
 
     /**
      * Gets the value of the dataSourceType property.
@@ -139,7 +143,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public DataSourceType getDataSourceType() {
-<span class="fc" id="L142">        return dataSourceType;</span>
+<span class="fc" id="L146">        return dataSourceType;</span>
     }
 
     /**
@@ -151,8 +155,44 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setDataSourceType(DataSourceType value) {
-<span class="fc" id="L154">        this.dataSourceType = value;</span>
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L158">        this.dataSourceType = value;</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * Gets the value of the characterEncoding property.
+     * 
+     * @return character encoding
+     */
+    public String getCharacterEncoding() {
+<span class="fc" id="L167">        return characterEncoding;</span>
+    }
+
+    /**
+     * Sets the value of the characterEncoding property.
+     * 
+     * @param characterEncoding character encoding
+     */
+    public void setCharacterEncoding(String characterEncoding) {
+<span class="nc" id="L176">        this.characterEncoding = characterEncoding;</span>
+<span class="nc" id="L177">    }</span>
+
+    /**
+     * Gets the value of the locale property.
+     * 
+     * @return locale
+     */
+    public String getLocale() {
+<span class="fc" id="L185">        return locale;</span>
+    }
+
+    /**
+     * Sets the value of the locale property.
+     * 
+     * @param locale locale
+     */
+    public void setLocale(String locale) {
+<span class="nc" id="L194">        this.locale = locale;</span>
+<span class="nc" id="L195">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

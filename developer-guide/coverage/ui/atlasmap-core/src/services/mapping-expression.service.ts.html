@@ -29,9 +29,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.56% </span>
+                <span class="strong">44.59% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>61/131</span>
+                <span class='fraction'>70/157</span>
             </div>
         
             
@@ -484,11 +484,7 @@
 <a name='L426'></a><a href='#L426'>426</a>
 <a name='L427'></a><a href='#L427'>427</a>
 <a name='L428'></a><a href='#L428'>428</a>
-<a name='L429'></a><a href='#L429'>429</a>
-<a name='L430'></a><a href='#L430'>430</a>
-<a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a>
-<a name='L433'></a><a href='#L433'>433</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L429'></a><a href='#L429'>429</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -509,10 +505,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -521,6 +513,8 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -797,7 +791,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -806,7 +799,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -824,15 +816,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -941,10 +933,6 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
-import {
-  FieldActionArgumentValue,
-  Multiplicity,
-} from '../models/field-action.model';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
 &nbsp;
@@ -952,8 +940,10 @@ import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
+import { FieldActionArgumentValue } from '../models/field-action.model';
 import { IExpressionNode } from '../contracts/expression';
 import { MappingUtil } from '../utils/mapping-util';
+import { Multiplicity } from '../contracts/field-action';
 import { Subscription } from 'rxjs';
 &nbsp;
 /**
@@ -1226,8 +1216,7 @@ export class MappingExpressionService {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (
       sourceMappedFields.length &gt; 1 ||
       (<span class="branch-1 cbranch-no" title="branch not covered" >sourceMappedCollection </span>&amp;&amp;
-<span class="branch-2 cbranch-no" title="branch not covered" >        mapping.transition.transitionFieldAction </span>&amp;&amp;
-<span class="branch-3 cbranch-no" title="branch not covered" >        mapping.transition.transitionFieldAction.definition.multiplicity ===</span>
+<span class="branch-2 cbranch-no" title="branch not covered" >        mapping.transition.transitionFieldAction?.definition?.multiplicity ===</span>
           Multiplicity.MANY_TO_ONE)
     ) {
       expr = 'Concatenate (';
@@ -1239,8 +1228,7 @@ export class MappingExpressionService {
         "')";
     } else <span class="cstat-no" title="statement not covered" >if (</span>
       (targetMappedFields.length &gt; 1 || targetMappedCollection) &amp;&amp;
-      mapping.transition.transitionFieldAction &amp;&amp;
-      mapping.transition.transitionFieldAction.definition.multiplicity ===
+      mapping.transition.transitionFieldAction?.definition?.multiplicity ===
         Multiplicity.ONE_TO_MANY
     ) {
 <span class="cstat-no" title="statement not covered" >      expr = 'Split (';</span>
@@ -1255,16 +1243,16 @@ export class MappingExpressionService {
   }
 &nbsp;
   private qualifiedExpressionRef(mappedField: MappedField): string {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (mappedField.parsedData.parsedPath !== null) {
-<span class="cstat-no" title="statement not covered" >      return (</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (mappedField.field<span class="branch-0 cbranch-no" title="branch not covered" >?.p</span>ath !== null) {
+      return (
         '${' +
-        mappedField.parsedData.parsedDocID +
+        mappedField.field<span class="branch-0 cbranch-no" title="branch not covered" >?.d</span>ocDef.id +
         ':' +
-        mappedField.parsedData.parsedPath +
+        mappedField.field<span class="branch-0 cbranch-no" title="branch not covered" >?.p</span>ath +
         '}'
       );
     } else {
-      return 'null';
+<span class="cstat-no" title="statement not covered" >      return 'null';</span>
     }
   }
 &nbsp;
@@ -1315,7 +1303,7 @@ export class MappingExpressionService {
           ', ' +
           this.fieldActionArgumentToExpression(
             action.argumentValues[actionArgIndex],
-            action.definition.arguments[actionArgIndex].type
+            action.definition!.arguments[actionArgIndex].type
           );
       }
     }
@@ -1359,7 +1347,7 @@ export class MappingExpressionService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 30 2021 11:12:01 GMT+0000 (Coordinated Universal Time)
+                at Wed Jun 30 2021 12:54:38 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

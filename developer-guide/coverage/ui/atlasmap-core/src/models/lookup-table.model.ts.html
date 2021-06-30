@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">84.21% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/44</span>
+                <span class='fraction'>32/38</span>
             </div>
         
             
@@ -36,16 +36,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/8</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.44% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/36</span>
+                <span class='fraction'>24/30</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -138,18 +138,7 @@
 <a name='L80'></a><a href='#L80'>80</a>
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a>
-<a name='L93'></a><a href='#L93'>93</a>
-<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L83'></a><a href='#L83'>83</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -164,28 +153,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
@@ -226,6 +201,9 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -258,32 +236,18 @@
     limitations under the License.
 */
 &nbsp;
+import { FieldType } from '../contracts';
+&nbsp;
 export class LookupTableEntry {
   sourceValue: string;
-  sourceType = 'STRING';
+  sourceType = FieldType.STRING;
   targetValue: string;
-  targetType = 'STRING';
-&nbsp;
-<span class="fstat-no" title="function not covered" >  toJSON(</span>): any {
-<span class="cstat-no" title="statement not covered" >    return {</span>
-      sourceValue: this.sourceValue,
-      sourceType: this.sourceType,
-      targetValue: this.targetValue,
-      targetType: this.targetType,
-    };
-  }
-&nbsp;
-<span class="fstat-no" title="function not covered" >  fromJSON(</span>json: any): void {
-<span class="cstat-no" title="statement not covered" >    this.sourceValue = json.sourceValue;</span>
-<span class="cstat-no" title="statement not covered" >    this.sourceType = json.sourceType;</span>
-<span class="cstat-no" title="statement not covered" >    this.targetValue = json.targetValue;</span>
-<span class="cstat-no" title="statement not covered" >    this.targetType = json.targetType;</span>
-  }
+  targetType = FieldType.STRING;
 }
 &nbsp;
 export class LookupTable {
   name: string;
-  entries: LookupTableEntry[] = [];
+  lookupEntry: LookupTableEntry[] = [];
   sourceIdentifier: string;
   targetIdentifier: string;
 &nbsp;
@@ -302,7 +266,7 @@ export class LookupTable {
     sourceValue: string,
     autocreate: boolean
   ): LookupTableEntry | null {
-    for (const entry of this.entries) {
+    for (const entry of this.lookupEntry) {
       if (entry.sourceValue === sourceValue) {
         return entry;
       }
@@ -310,7 +274,7 @@ export class LookupTable {
 <span class="cstat-no" title="statement not covered" >    if (autocreate) {</span>
       const entry: LookupTableEntry = <span class="cstat-no" title="statement not covered" >new LookupTableEntry();</span>
 <span class="cstat-no" title="statement not covered" >      entry.sourceValue = sourceValue;</span>
-<span class="cstat-no" title="statement not covered" >      this.entries.push(entry);</span>
+<span class="cstat-no" title="statement not covered" >      this.lookupEntry.push(entry);</span>
 <span class="cstat-no" title="statement not covered" >      return entry;</span>
     }
 <span class="cstat-no" title="statement not covered" >    return null;</span>
@@ -318,11 +282,14 @@ export class LookupTable {
 &nbsp;
   toString() {
     let result: string =
-      'Lookup Table, name: ' + this.name + ', entries: ' + this.entries.length;
+      'Lookup Table, name: ' +
+      this.name +
+      ', entries: ' +
+      this.lookupEntry.length;
     result += '\nsourceIdentifier: ' + this.sourceIdentifier;
     result += '\n\targetIdentifier: ' + this.targetIdentifier;
     let counter = 0;
-    for (const entry of this.entries) {
+    for (const entry of this.lookupEntry) {
       result +=
         '\n\tEntry #' +
         counter +
@@ -342,7 +309,7 @@ export class LookupTable {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 30 2021 11:12:01 GMT+0000 (Coordinated Universal Time)
+                at Wed Jun 30 2021 12:54:38 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

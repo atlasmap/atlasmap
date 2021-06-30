@@ -463,14 +463,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#models">2. Models</a>
 <ul class="sectlevel2">
 <li><a href="#Action">2.1. <em>Action</em></a></li>
-<li><a href="#JavaClass">2.2. <em>JavaClass</em></a></li>
-<li><a href="#JavaEnumField">2.3. <em>JavaEnumField</em></a></li>
-<li><a href="#JavaEnumFields">2.4. <em>JavaEnumFields</em></a></li>
-<li><a href="#JavaField">2.5. <em>JavaField</em></a></li>
-<li><a href="#JavaFields">2.6. <em>JavaFields</em></a></li>
-<li><a href="#MavenClasspathRequest">2.7. <em>MavenClasspathRequest</em></a></li>
-<li><a href="#ModifierList">2.8. <em>ModifierList</em></a></li>
-<li><a href="#StringList">2.9. <em>StringList</em></a></li>
+<li><a href="#ClassInspectionRequest">2.2. <em>ClassInspectionRequest</em></a></li>
+<li><a href="#ClassInspectionResponse">2.3. <em>ClassInspectionResponse</em></a></li>
+<li><a href="#JavaClass">2.4. <em>JavaClass</em></a></li>
+<li><a href="#JavaEnumField">2.5. <em>JavaEnumField</em></a></li>
+<li><a href="#JavaEnumFields">2.6. <em>JavaEnumFields</em></a></li>
+<li><a href="#JavaField">2.7. <em>JavaField</em></a></li>
+<li><a href="#JavaFields">2.8. <em>JavaFields</em></a></li>
+<li><a href="#ModifierList">2.9. <em>ModifierList</em></a></li>
+<li><a href="#StringList">2.10. <em>StringList</em></a></li>
 </ul>
 </li>
 </ul>
@@ -529,8 +530,8 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MavenClasspathRequest</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">MavenClasspathRequest object <a href="#MavenClasspathRequest"><em>MavenClasspathRequest</em></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ClassInspectionRequest</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ClassInspectionRequest object <a href="#ClassInspectionRequest"><em>ClassInspectionRequest</em></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -542,7 +543,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 <div class="sect4">
 <h5 id="return-type">Return Type</h5>
 <div class="paragraph">
-<p><a href="#JavaClass"><em>JavaClass</em></a></p>
+<p><a href="#ClassInspectionResponse"><em>ClassInspectionResponse</em></a></p>
 </div>
 </div>
 <div class="sect4">
@@ -575,7 +576,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Return a Document object represented by JavaClass</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#JavaClass"><em>JavaClass</em></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ClassInspectionResponse"><em>ClassInspectionResponse</em></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -715,7 +716,158 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="JavaClass">2.2. <em>JavaClass</em></h3>
+<h3 id="ClassInspectionRequest">2.2. <em>ClassInspectionRequest</em></h3>
+<table class="tableblock frame-all grid-all stretch fields-ClassInspectionRequest">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field Name</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fieldNameExclusions</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">StringList</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classNameExclusions</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">StringList</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classpath</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">className</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">collectionType</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Enum:</em> ALL, ARRAY, LIST, MAP, NONE,</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">collectionClassName</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">disablePrivateOnlyFields</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">disableProtectedOnlyFields</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">disablePublicOnlyFields</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">disablePublicGetterSetterFields</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jsonType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="ClassInspectionResponse">2.3. <em>ClassInspectionResponse</em></h3>
+<table class="tableblock frame-all grid-all stretch fields-ClassInspectionResponse">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 10%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field Name</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Format</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">javaClass</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JavaClass</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">errorMessage</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">executionTime</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int64</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">jsonType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="JavaClass">2.4. <em>JavaClass</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-JavaClass">
 <colgroup>
 <col style="width: 20%;">
@@ -976,7 +1128,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="JavaEnumField">2.3. <em>JavaEnumField</em></h3>
+<h3 id="JavaEnumField">2.5. <em>JavaEnumField</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-JavaEnumField">
 <colgroup>
 <col style="width: 20%;">
@@ -1111,7 +1263,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="JavaEnumFields">2.4. <em>JavaEnumFields</em></h3>
+<h3 id="JavaEnumFields">2.6. <em>JavaEnumFields</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-JavaEnumFields">
 <colgroup>
 <col style="width: 20%;">
@@ -1141,7 +1293,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="JavaField">2.5. <em>JavaField</em></h3>
+<h3 id="JavaField">2.7. <em>JavaField</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-JavaField">
 <colgroup>
 <col style="width: 20%;">
@@ -1332,7 +1484,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="JavaFields">2.6. <em>JavaFields</em></h3>
+<h3 id="JavaFields">2.8. <em>JavaFields</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-JavaFields">
 <colgroup>
 <col style="width: 20%;">
@@ -1362,58 +1514,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="MavenClasspathRequest">2.7. <em>MavenClasspathRequest</em></h3>
-<table class="tableblock frame-all grid-all stretch fields-MavenClasspathRequest">
-<colgroup>
-<col style="width: 20%;">
-<col style="width: 10%;">
-<col style="width: 20%;">
-<col style="width: 40%;">
-<col style="width: 10%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Field Name</th>
-<th class="tableblock halign-left valign-top">Required</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Format</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">pomXmlData</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">executeTimeout</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Long</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int64</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">workingDirectory</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">jsonType</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="ModifierList">2.8. <em>ModifierList</em></h3>
+<h3 id="ModifierList">2.9. <em>ModifierList</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-ModifierList">
 <colgroup>
 <col style="width: 20%;">
@@ -1443,7 +1544,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </table>
 </div>
 <div class="sect2">
-<h3 id="StringList">2.9. <em>StringList</em></h3>
+<h3 id="StringList">2.10. <em>StringList</em></h3>
 <table class="tableblock frame-all grid-all stretch fields-StringList">
 <colgroup>
 <col style="width: 20%;">
@@ -1477,7 +1578,7 @@ Java Service provides Java inspection service which generate an AtlasMap Documen
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-06-30 11:14:37 UTC
+Last updated 2021-06-30 12:57:23 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

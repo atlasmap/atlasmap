@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.49% </span>
+                <span class="strong">67.86% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>82/118</span>
+                <span class='fraction'>76/112</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.22% </span>
+                <span class="strong">40.48% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>34/72</span>
+                <span class='fraction'>34/84</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.04% </span>
+                <span class="strong">71.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>67/93</span>
+                <span class='fraction'>64/90</span>
             </div>
         
             
@@ -289,7 +289,10 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -311,7 +314,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,8 +418,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -425,13 +434,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -543,6 +549,11 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  IProcessMappingRequestContainer,
+  IProcessMappingResponseContainer,
+  processMappingRequestJsonType,
+} from '../contracts/mapping-preview';
 import { Subject, Subscription } from 'rxjs';
 import { ConfigModel } from '../models/config.model';
 import { MappingModel } from '../models/mapping.model';
@@ -612,8 +623,8 @@ export class MappingPreviewService {
         this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
       this.api
         .put(url, { json: payload })
-        .json()
-        .then((body: any) =&gt; {
+        .json&lt;IProcessMappingResponseContainer&gt;()
+        .then((body) =&gt; {
           this.cfg.logger!.debug(
             `Process Mapping Preview Response: ${JSON.stringify(body)}`
           );
@@ -642,11 +653,12 @@ export class MappingPreviewService {
     });
   }
 &nbsp;
-  private createPreviewRequestBody(inputFieldMapping: MappingModel) {
+  private createPreviewRequestBody(
+    inputFieldMapping: MappingModel
+  ): IProcessMappingRequestContainer {
     return {
       ProcessMappingRequest: {
-        jsonType:
-          ConfigModel.mappingServicesPackagePrefix + '.ProcessMappingRequest',
+        jsonType: processMappingRequestJsonType,
         mapping: MappingSerializer.serializeFieldMapping(
           this.cfg,
           inputFieldMapping,
@@ -657,27 +669,24 @@ export class MappingPreviewService {
     };
   }
 &nbsp;
-  private processPreviewResponse(inputFieldMapping: MappingModel, body: any) {
-    const docRefs: any = {};
-    for (const docRef of this.cfg.getAllDocs()) {
-      docRefs[docRef.id] = docRef.uri;
-    }
+  private processPreviewResponse(
+    inputFieldMapping: MappingModel,
+    body: IProcessMappingResponseContainer
+  ) {
     const answer = MappingSerializer.deserializeFieldMapping(
       body.ProcessMappingResponse.mapping,
-      docRefs,
-      this.cfg,
-      false
+      this.cfg
     );
 <span class="cstat-no" title="statement not covered" >    for (const toWrite<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >i</span>nputFieldMapping.</span>targetFields)</span> {</span>
 <span class="cstat-no" title="statement not covered" >      for (const toRead<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >a</span>nswer.</span>targetFields)</span> {</span>
         // TODO: check these non null operator
 <span class="cstat-no" title="statement not covered" >        if (</span>
-          toWrite.field?.docDef?.id === toRead.parsedData.parsedDocID &amp;&amp;
-          toWrite.field?.path === toRead.parsedData.parsedPath
+          toWrite.field?.docDef?.id === toRead.field?.docDef.id &amp;&amp;
+          toWrite.field?.path === toRead.field?.path
         ) {
           // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
           // TODO: check this non null operator
-<span class="cstat-no" title="statement not covered" >          toWrite.field.value = toRead.parsedData.parsedValue!;</span>
+<span class="cstat-no" title="statement not covered" >          toWrite.field!.value = toRead.field?.value!;</span>
           const index = <span class="cstat-no" title="statement not covered" >answer.targetFields.indexOf(toRead);</span>
 <span class="cstat-no" title="statement not covered" >          if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >            answer.targetFields.splice(index, 1);</span>
@@ -762,7 +771,7 @@ export class MappingPreviewService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 30 2021 11:12:01 GMT+0000 (Coordinated Universal Time)
+                at Wed Jun 30 2021 12:54:38 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

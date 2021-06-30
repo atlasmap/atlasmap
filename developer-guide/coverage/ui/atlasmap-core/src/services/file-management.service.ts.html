@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.7% </span>
+                <span class="strong">86.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>176/203</span>
+                <span class='fraction'>175/202</span>
             </div>
         
             
@@ -36,9 +36,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.18% </span>
+                <span class="strong">91.43% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>62/68</span>
+                <span class='fraction'>64/70</span>
             </div>
         
             
@@ -589,7 +589,21 @@
 <a name='L531'></a><a href='#L531'>531</a>
 <a name='L532'></a><a href='#L532'>532</a>
 <a name='L533'></a><a href='#L533'>533</a>
-<a name='L534'></a><a href='#L534'>534</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L534'></a><a href='#L534'>534</a>
+<a name='L535'></a><a href='#L535'>535</a>
+<a name='L536'></a><a href='#L536'>536</a>
+<a name='L537'></a><a href='#L537'>537</a>
+<a name='L538'></a><a href='#L538'>538</a>
+<a name='L539'></a><a href='#L539'>539</a>
+<a name='L540'></a><a href='#L540'>540</a>
+<a name='L541'></a><a href='#L541'>541</a>
+<a name='L542'></a><a href='#L542'>542</a>
+<a name='L543'></a><a href='#L543'>543</a>
+<a name='L544'></a><a href='#L544'>544</a>
+<a name='L545'></a><a href='#L545'>545</a>
+<a name='L546'></a><a href='#L546'>546</a>
+<a name='L547'></a><a href='#L547'>547</a>
+<a name='L548'></a><a href='#L548'>548</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -605,6 +619,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -666,11 +684,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -833,6 +847,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1143,12 +1171,16 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  IAtlasMappingContainer,
+  IStringMapContainer,
+} from '../contracts/mapping';
 import { gzip, inflate } from 'pako';
 &nbsp;
 import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
-import { HTTP_STATUS_NO_CONTENT } from '../common/constants';
+import { HTTP_STATUS_NO_CONTENT } from '../common/config.types';
 import { MappingDigestUtil } from '../utils/mapping-digest-util';
 import ky from 'ky';
 import log from 'loglevel';
@@ -1193,17 +1225,13 @@ export class FileManagementService {
       this.cfg.logger!.debug('Mapping List Request');
       this.api
         .get(url)
-        .json()
-        .then((body: any) =&gt; {
+        .json&lt;IStringMapContainer&gt;()
+        .then((body) =&gt; {
           this.cfg.logger!.debug(
             `Mapping List Response: ${JSON.stringify(body)}`
           );
-          const entries: any[] = body.StringMap.stringMapEntry;
-          const mappingFileNames: string[] = [];
-          for (const entry of entries) {
-            mappingFileNames.push(entry.name);
-          }
-          resolve(mappingFileNames);
+          const entries = body.StringMap.stringMapEntry;
+          resolve(entries.map((item) =&gt; item.name));
         })
         .catch((error: any) =&gt; {
           <span class="missing-if-branch" title="else path not taken" >E</span>if (error.status !== HTTP_STATUS_NO_CONTENT) {
@@ -1368,13 +1396,27 @@ export class FileManagementService {
         });
     });
   }
+&nbsp;
+  /**
+   * Commit the specified AtlasMapping object to the runtime service.  The mappings
+   * are kept separate so they can be updated with minimal overhead.
+   *
+   * @param buffer - The stringified AtlasMapping JSON
+   */
+  setMappingToService(
+    atlasMappingContainer: IAtlasMappingContainer
+  ): Promise&lt;boolean&gt; {
+    const jsonBuffer = JSON.stringify(atlasMappingContainer);
+    return this.setMappingStringToService(jsonBuffer);
+  }
+&nbsp;
   /**
    * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
    * are kept separate so they can be updated with minimal overhead.
    *
-   * @param buffer - JSON content
+   * @param buffer - The stringified AtlasMapping JSON
    */
-  setMappingToService(jsonBuffer: string): Promise&lt;boolean&gt; {
+  setMappingStringToService(jsonBuffer: string): Promise&lt;boolean&gt; {
     return new Promise&lt;boolean&gt;((resolve) =&gt; {
       const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
       const headers = {
@@ -1622,7 +1664,7 @@ export class FileManagementService {
   /**
    * Retrieve the current user AtlasMap data mappings from the server as a JSON object.
    */
-  getCurrentMappingJson(): Promise&lt;any&gt; {
+  getCurrentMappingJson(): Promise&lt;IAtlasMappingContainer&gt; {
     return new Promise&lt;any&gt;((resolve, reject) =&gt; {
       <span class="missing-if-branch" title="if path not taken" >I</span>if (this.cfg.mappings === null) {
 <span class="cstat-no" title="statement not covered" >        reject();</span>
@@ -1634,7 +1676,7 @@ export class FileManagementService {
       this.cfg.logger!.debug('Get Current Mapping Request');
       this.api
         .get(baseURL)
-        .json()
+        .json&lt;IAtlasMappingContainer&gt;()
         .then((body) =&gt; {
           this.cfg.logger!.debug(
             `Get Current Mapping Response: ${JSON.stringify(body)}`
@@ -1662,7 +1704,7 @@ export class FileManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 30 2021 11:12:01 GMT+0000 (Coordinated Universal Time)
+                at Wed Jun 30 2021 12:54:38 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
