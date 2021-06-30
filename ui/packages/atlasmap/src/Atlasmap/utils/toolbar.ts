@@ -93,6 +93,11 @@ export function getUIVersion(): string {
   return constants.version;
 }
 
+export function toggleMappingPreview(enabled: boolean) {
+  const cfg = ConfigModel.getConfig();
+  return cfg.previewService.toggleMappingPreview(enabled);
+}
+
 export function toggleShowMappedFields(enabled: boolean) {
   const cfg = ConfigModel.getConfig();
 
