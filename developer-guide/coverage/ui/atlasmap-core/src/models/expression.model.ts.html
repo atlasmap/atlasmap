@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.92% </span>
+                <span class="strong">45.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>168/374</span>
+                <span class='fraction'>168/373</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.19% </span>
+                <span class="strong">44.32% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>156/353</span>
+                <span class='fraction'>156/352</span>
             </div>
         
             
@@ -851,14 +851,7 @@
 <a name='L793'></a><a href='#L793'>793</a>
 <a name='L794'></a><a href='#L794'>794</a>
 <a name='L795'></a><a href='#L795'>795</a>
-<a name='L796'></a><a href='#L796'>796</a>
-<a name='L797'></a><a href='#L797'>797</a>
-<a name='L798'></a><a href='#L798'>798</a>
-<a name='L799'></a><a href='#L799'>799</a>
-<a name='L800'></a><a href='#L800'>800</a>
-<a name='L801'></a><a href='#L801'>801</a>
-<a name='L802'></a><a href='#L802'>802</a>
-<a name='L803'></a><a href='#L803'>803</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L796'></a><a href='#L796'>796</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1441,6 +1434,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1448,18 +1445,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -2242,26 +2228,19 @@ export class ExpressionModel {
       }
     } else {
       const targetString = (<span class="cstat-no" title="statement not covered" >targetNode as TextNode).str;</span>
-      // TODO: check this non null operator
-      (<span class="cstat-no" title="statement not covered" >targetNode as TextNode).str =</span>
-        offset === 0
-          ? targetString.substr(1)
-          : targetString.substring(0, offset) +
-            targetString.substring(offset! + 1);
-<span class="cstat-no" title="statement not covered" >      if ((targetNode as TextNode).str.length === 0) {</span>
-        (<span class="cstat-no" title="statement not covered" >targetNode as TextNode).str = ' ';</span>
-<span class="cstat-no" title="statement not covered" >        this.cfg.errorService.addError(</span>
-          new ErrorInfo({
-            message: 'At least one space is required between field references.',
-            level: ErrorLevel.WARN,
-            scope: ErrorScope.MAPPING,
-            type: ErrorType.USER,
-            mapping: this.mapping,
-          })
-        );
+&nbsp;
+      // Remove empty string text node.
+<span class="cstat-no" title="statement not covered" >      if (targetString.length === 1) {</span>
+<span class="cstat-no" title="statement not covered" >        this._nodes.splice(targetNodeIndex, 1);</span>
+      } else {
+        (<span class="cstat-no" title="statement not covered" >targetNode as TextNode).str =</span>
+          offset === 0
+            ? targetString.substr(1)
+            : targetString.substring(0, offset) +
+              targetString.substring(offset! + 1);
+<span class="cstat-no" title="statement not covered" >        updatedEvent.node = targetNode;</span>
+<span class="cstat-no" title="statement not covered" >        updatedEvent.offset = offset;</span>
       }
-<span class="cstat-no" title="statement not covered" >      updatedEvent.node = targetNode;</span>
-<span class="cstat-no" title="statement not covered" >      updatedEvent.offset = offset;</span>
     }
     this.updateCache();
     this.expressionUpdatedSource.next(updatedEvent);
@@ -2469,7 +2448,7 @@ export class ExpressionModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 30 2021 11:08:08 GMT+0000 (Coordinated Universal Time)
+                at Wed Jun 30 2021 11:12:01 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
