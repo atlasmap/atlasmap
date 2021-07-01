@@ -14,14 +14,14 @@
     limitations under the License.
 */
 import { IMapping } from './mapping';
-import { modelPackagePrefix } from './common';
+import { MODEL_PACKAGE_PREFIX } from './common';
 
 /**
  * The mapping Data model contracts between frontend and backend.
  */
 
-export const processMappingRequestJsonType =
-  modelPackagePrefix + '.ProcessMappingRequest';
+export const PROCESS_MAPPING_REQUEST_JSON_TYPE =
+  MODEL_PACKAGE_PREFIX + '.ProcessMappingRequest';
 
 /**
  * The root object that carries {@link IProcessMappingRequest}

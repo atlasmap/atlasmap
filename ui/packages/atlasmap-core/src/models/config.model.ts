@@ -236,31 +236,7 @@ export class ConfigModel {
     const docs: DocumentDefinition[] = this.getDocsWithoutPropertyDoc(isSource);
     return isSource
       ? [this.sourcePropertyDoc, this.constantDoc].concat(docs)
-      : [this.targetPropertyDoc, this.constantDoc].concat(docs);
-  }
-
-  /**
-   * Return a uri:DocumentDefinition document map for either the sources or targets panel contents.
-   *
-   * @param cfg
-   * @param isSource
-   */
-  getDocUriMap(
-    cfg: ConfigModel,
-    isSource: boolean
-  ): { [key: string]: DocumentDefinition } | null {
-    const docMap: { [key: string]: DocumentDefinition } = {};
-    let docFound = false;
-    for (const doc of cfg.getDocs(isSource)) {
-      if (doc.uri) {
-        docMap[doc.uri] = doc;
-        docFound = true;
-      }
-    }
-    if (docFound) {
-      return docMap;
-    }
-    return null;
+      : [this.targetPropertyDoc].concat(docs);
   }
 
   /**

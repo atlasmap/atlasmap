@@ -28,10 +28,10 @@ import { ErrorLevel } from '../models/error.model';
 import { FileManagementService } from './file-management.service';
 import FileSaver from 'file-saver';
 import { InitializationService } from './initialization.service';
+import { MAPPING_JSON_TYPE } from '../contracts/mapping';
 import fs from 'fs';
 import ky from 'ky/umd';
 import log from 'loglevel';
-import { mappingJsonType } from '../contracts/mapping';
 import { mocked } from 'ts-jest/utils';
 import pako from 'pako';
 
@@ -267,7 +267,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    const mappingJson = { AtlasMapping: { jsonType: mappingJsonType } };
+    const mappingJson = { AtlasMapping: { jsonType: MAPPING_JSON_TYPE } };
     service
       .setMappingToService(mappingJson)
       .then((value) => {
@@ -287,7 +287,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    const mappingJson = { AtlasMapping: { jsonType: mappingJsonType } };
+    const mappingJson = { AtlasMapping: { jsonType: MAPPING_JSON_TYPE } };
     service
       .setMappingToService(mappingJson)
       .then((value) => {

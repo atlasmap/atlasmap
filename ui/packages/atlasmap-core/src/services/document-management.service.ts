@@ -16,6 +16,7 @@
 import {
   CollectionType,
   DocumentType,
+  FIELD_PATH_SEPARATOR,
   InspectionType,
 } from '../contracts/common';
 import {
@@ -512,6 +513,15 @@ export class DocumentManagementService {
       }
     }
     cfg.mappingService.notifyLineRefresh();
+  }
+
+  getPropertyPath(scope: string | undefined | null, name: string) {
+    let answer = FIELD_PATH_SEPARATOR;
+    if (scope && scope.length > 0) {
+      answer += scope + FIELD_PATH_SEPARATOR;
+    }
+    answer += name;
+    return answer;
   }
 
   private markChildrenVisible(field: Field): void {

@@ -19,19 +19,19 @@ import {
   FieldType,
   IDataSource,
   IField,
-  modelPackagePrefix,
+  MODEL_PACKAGE_PREFIX,
 } from './common';
 
 /**
  * The mapping Data model contracts between frontend and backend.
  */
 
-export const atlasMappingJsonType = modelPackagePrefix + '.AtlasMapping';
-export const mappingJsonType = modelPackagePrefix + '.Mapping';
-export const collectionJsonType = modelPackagePrefix + '.Collection';
-export const fieldGroupJsonType = modelPackagePrefix + '.FieldGroup';
-export const propertyFieldJsonType = modelPackagePrefix + '.PropertyField';
-export const constantFieldJsonType = modelPackagePrefix + '.ConstantField';
+export const ATLAS_MAPPING_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.AtlasMapping';
+export const MAPPING_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.Mapping';
+export const COLLECTION_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.Collection';
+export const FIELD_GROUP_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.FieldGroup';
+export const PROPERTY_FIELD_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.PropertyField';
+export const CONSTANT_FIELD_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.ConstantField';
 
 /**
  * The root object that carries {@link IAtlasMapping}

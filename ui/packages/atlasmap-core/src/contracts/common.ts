@@ -14,8 +14,10 @@
     limitations under the License.
 */
 
-export const modelPackagePrefix = 'io.atlasmap.v2';
-export const dataSourceJsonType = modelPackagePrefix + '.DataSource';
+export const FIELD_PATH_SEPARATOR = '/';
+
+export const MODEL_PACKAGE_PREFIX = 'io.atlasmap.v2';
+export const DATA_SOURCE_JSON_TYPE = MODEL_PACKAGE_PREFIX + '.DataSource';
 
 /** SOURCE or TARGET. */
 export enum DataSourceType {

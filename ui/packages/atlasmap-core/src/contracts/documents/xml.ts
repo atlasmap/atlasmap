@@ -20,11 +20,13 @@ import { IDataSource, IDocument, IField } from '../common';
  * The XML inspection data model contracts between frontend and backend.
  */
 
-export const xmlModelPackagePrefix = 'io.atlasmap.xml.v2';
-export const xmlDataSourceJsonType = xmlModelPackagePrefix + '.XmlDataSource';
-export const xmlEnumFieldJsonType = xmlModelPackagePrefix + '.XmlEnumField';
-export const xmlInspectionRequestJsonType =
-  xmlModelPackagePrefix + '.XmlInspectionRequest';
+export const XML_MODEL_PACKAGE_PREFIX = 'io.atlasmap.xml.v2';
+export const XML_DATA_SOURCE_JSON_TYPE =
+  XML_MODEL_PACKAGE_PREFIX + '.XmlDataSource';
+export const XML_ENUM_FIELD_JSON_TYPE =
+  XML_MODEL_PACKAGE_PREFIX + '.XmlEnumField';
+export const XML_INSPECTION_REQUEST_JSON_TYPE =
+  XML_MODEL_PACKAGE_PREFIX + '.XmlInspectionRequest';
 
 /**
  * The root object that carries {@link IXmlInspectionResponse}

@@ -15,13 +15,33 @@
 */
 
 import {
+  ATLAS_MAPPING_JSON_TYPE,
+  COLLECTION_JSON_TYPE,
+  CONSTANT_FIELD_JSON_TYPE,
+  FIELD_GROUP_JSON_TYPE,
+  IAtlasMappingContainer,
+  ICollection,
+  IConstant,
+  IFieldGroup,
+  IJsonDataSource,
+  ILookupEntry,
+  ILookupTable,
+  IMapping,
+  IProperty,
+  IPropertyField,
+  MAPPING_JSON_TYPE,
+  MappingType,
+  PROPERTY_FIELD_JSON_TYPE,
+} from '../contracts/mapping';
+import {
+  DATA_SOURCE_JSON_TYPE,
   DataSourceType,
   DocumentType,
+  FIELD_PATH_SEPARATOR,
   FieldType,
   IDataSource,
   IField,
   IFieldAction,
-  dataSourceJsonType,
 } from '../contracts/common';
 import {
   DocumentDefinition,
@@ -39,39 +59,20 @@ import {
   FieldActionArgumentValue,
 } from '../models/field-action.model';
 import {
-  IAtlasMappingContainer,
-  ICollection,
-  IConstant,
-  IFieldGroup,
-  IJsonDataSource,
-  ILookupEntry,
-  ILookupTable,
-  IMapping,
-  IProperty,
-  IPropertyField,
-  MappingType,
-  atlasMappingJsonType,
-  collectionJsonType,
-  constantFieldJsonType,
-  fieldGroupJsonType,
-  mappingJsonType,
-  propertyFieldJsonType,
-} from '../contracts/mapping';
-import {
   IXmlDataSource,
   IXmlField,
   IXmlNamespace,
-  xmlDataSourceJsonType,
-  xmlEnumFieldJsonType,
-  xmlModelPackagePrefix,
+  XML_DATA_SOURCE_JSON_TYPE,
+  XML_ENUM_FIELD_JSON_TYPE,
+  XML_MODEL_PACKAGE_PREFIX,
 } from '../contracts/documents/xml';
+import {
+  JSON_DATA_SOURCE_JSON_TYPE,
+  JSON_ENUM_FIELD_JSON_TYPE,
+} from '../contracts/documents/json';
 import { LookupTable, LookupTableEntry } from '../models/lookup-table.model';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
-import {
-  jsonDataSourceJsonType,
-  jsonEnumFieldJsonType,
-} from '../contracts/documents/json';
 
 import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
@@ -79,10 +80,10 @@ import { Field } from '../models/field.model';
 import { IAudits } from '../contracts/mapping-preview';
 import { ICsvField } from '../contracts/documents/csv';
 import { IJavaField } from '../contracts/documents/java';
+import { JAVA_ENUM_FIELD_JSON_TYPE } from '../contracts/documents/java';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingUtil } from './mapping-util';
 import { Multiplicity } from '../contracts/field-action';
-import { javaEnumFieldJsonType } from '../contracts/documents/java';
 
 export class MappingSerializer {
   static serializeMappings(
@@ -140,7 +141,7 @@ export class MappingSerializer {
 
     const payload: IAtlasMappingContainer = {
       AtlasMapping: {
-        jsonType: atlasMappingJsonType,
+        jsonType: ATLAS_MAPPING_JSON_TYPE,
         dataSource: serializedDataSources,
         mappings: { mapping: jsonMappings },
         name: cfg.mappings!.name ? cfg.mappings!.name : undefined,
@@ -194,13 +195,13 @@ export class MappingSerializer {
       }
       const field = serializedInputFields;
       const inputFieldGroup: IFieldGroup = {
-        jsonType: fieldGroupJsonType,
+        jsonType: FIELD_GROUP_JSON_TYPE,
         actions,
         field,
       };
       if (mappingExpression.length > 0) {
         jsonMapping = {
-          jsonType: mappingJsonType,
+          jsonType: MAPPING_JSON_TYPE,
           id: id,
           expression: mappingExpression,
           inputFieldGroup,
@@ -208,7 +209,7 @@ export class MappingSerializer {
         };
       } else {
         jsonMapping = {
-          jsonType: mappingJsonType,
+          jsonType: MAPPING_JSON_TYPE,
           id: id,
           inputFieldGroup,
           outputField: serializedOutputFields,
@@ -257,7 +258,7 @@ export class MappingSerializer {
           }
 
           jsonMapping = {
-            jsonType: mappingJsonType,
+            jsonType: MAPPING_JSON_TYPE,
             id: id,
             expression: mappingExpression,
             inputFieldGroup: serializedInputFieldGroup,
@@ -265,7 +266,7 @@ export class MappingSerializer {
           };
         } else {
           jsonMapping = {
-            jsonType: mappingJsonType,
+            jsonType: MAPPING_JSON_TYPE,
             id: id,
             expression: mappingExpression,
             inputField: serializedInputFields,
@@ -274,7 +275,7 @@ export class MappingSerializer {
         }
       } else {
         jsonMapping = {
-          jsonType: mappingJsonType,
+          jsonType: MAPPING_JSON_TYPE,
           id: id,
           inputField: serializedInputFields,
           outputField: serializedOutputFields,
@@ -299,10 +300,18 @@ export class MappingSerializer {
     for (const field of MappingSerializer.deserializeConstants(json)) {
       cfg.constantDoc.addField(field);
     }
-    for (const field of MappingSerializer.deserializeProperties(json, true)) {
+    for (const field of MappingSerializer.deserializeProperties(
+      cfg,
+      json,
+      true
+    )) {
       cfg.sourcePropertyDoc.addField(field);
     }
-    for (const field of MappingSerializer.deserializeProperties(json, false)) {
+    for (const field of MappingSerializer.deserializeProperties(
+      cfg,
+      json,
+      false
+    )) {
       cfg.targetPropertyDoc.addField(field);
     }
     if (!cfg.mappings) {
@@ -499,7 +508,7 @@ export class MappingSerializer {
     path?: string
   ): IFieldGroup {
     const inputFieldGroup: IFieldGroup = {
-      jsonType: fieldGroupJsonType,
+      jsonType: FIELD_GROUP_JSON_TYPE,
       actions: [],
       docId: docId,
       path: path,
@@ -518,7 +527,7 @@ export class MappingSerializer {
     const serializedDocs: IDataSource[] = [];
     for (const doc of docs) {
       let serializedDoc: IDataSource = {
-        jsonType: dataSourceJsonType,
+        jsonType: DATA_SOURCE_JSON_TYPE,
         id: doc.id,
         name: doc.name,
         description: doc.description,
@@ -535,7 +544,7 @@ export class MappingSerializer {
       }
       if (doc.type === DocumentType.XML || doc.type === DocumentType.XSD) {
         const xmlDoc = serializedDoc as IXmlDataSource;
-        xmlDoc.jsonType = xmlDataSourceJsonType;
+        xmlDoc.jsonType = XML_DATA_SOURCE_JSON_TYPE;
         const namespaces: IXmlNamespace[] = [];
         for (const ns of doc.namespaces) {
           namespaces.push({
@@ -554,7 +563,7 @@ export class MappingSerializer {
         if (!doc.isSource && mappingDefinition.templateText) {
           jsonDoc.template = mappingDefinition.templateText;
         }
-        jsonDoc.jsonType = jsonDataSourceJsonType;
+        jsonDoc.jsonType = JSON_DATA_SOURCE_JSON_TYPE;
       }
 
       serializedDocs.push(serializedDoc);
@@ -714,7 +723,7 @@ export class MappingSerializer {
       };
 
       // The 'attribute' field only applies to XML.
-      if (field.documentField.jsonType?.includes(xmlModelPackagePrefix)) {
+      if (field.documentField.jsonType?.includes(XML_MODEL_PACKAGE_PREFIX)) {
         (serializedField as IXmlField).attribute = field.isAttribute;
       }
 
@@ -740,22 +749,26 @@ export class MappingSerializer {
       }
 
       if (field.isProperty()) {
-        serializedField.jsonType = propertyFieldJsonType;
+        serializedField.jsonType = PROPERTY_FIELD_JSON_TYPE;
         serializedField.name = field.name;
         (serializedField as IPropertyField).scope = field.scope;
+        serializedField.path = cfg.documentService.getPropertyPath(
+          field.scope,
+          field.name
+        );
       } else if (field.isConstant()) {
-        serializedField.jsonType = constantFieldJsonType;
+        serializedField.jsonType = CONSTANT_FIELD_JSON_TYPE;
         serializedField.name = field.name;
       } else if (field.enumeration) {
         if (field.docDef.type === DocumentType.JSON) {
-          serializedField.jsonType = jsonEnumFieldJsonType;
+          serializedField.jsonType = JSON_ENUM_FIELD_JSON_TYPE;
         } else if (
           field.docDef.type === DocumentType.XML ||
           field.docDef.type === DocumentType.XSD
         ) {
-          serializedField.jsonType = xmlEnumFieldJsonType;
+          serializedField.jsonType = XML_ENUM_FIELD_JSON_TYPE;
         } else {
-          serializedField.jsonType = javaEnumFieldJsonType;
+          serializedField.jsonType = JAVA_ENUM_FIELD_JSON_TYPE;
         }
       }
 
@@ -924,7 +937,8 @@ export class MappingSerializer {
     }
     for (const fieldMapping of json.AtlasMapping.mappings.mapping) {
       // for backward compatibility
-      const isCollectionMapping = fieldMapping.jsonType === collectionJsonType;
+      const isCollectionMapping =
+        fieldMapping.jsonType === COLLECTION_JSON_TYPE;
       if (isCollectionMapping) {
         const collection = fieldMapping as ICollection;
         for (const innerFieldMapping of collection.mappings.mapping) {
@@ -1012,6 +1026,7 @@ export class MappingSerializer {
     for (const constant of jsonMapping.AtlasMapping.constants.constant) {
       const field: Field = new Field();
       field.name = constant.name;
+      field.path = FIELD_PATH_SEPARATOR + field.name;
       field.value = constant.value;
       field.type = constant.fieldType;
       field.userCreated = true;
@@ -1022,6 +1037,7 @@ export class MappingSerializer {
   }
 
   private static deserializeProperties(
+    cfg: ConfigModel,
     jsonMapping: IAtlasMappingContainer,
     isSource: boolean
   ): Field[] {
@@ -1033,7 +1049,7 @@ export class MappingSerializer {
     // Source and target properties are mixed in the 'property' JSON array.
     for (const property of jsonMapping.AtlasMapping.properties.property) {
       if (
-        (isSource && property.dataSourceType !== DataSourceType.SOURCE) ||
+        (isSource && property.dataSourceType === DataSourceType.TARGET) ||
         (!isSource && property.dataSourceType !== DataSourceType.TARGET)
       ) {
         continue;
@@ -1042,6 +1058,7 @@ export class MappingSerializer {
       field.name = property.name;
       field.type = property.fieldType;
       field.scope = property.scope;
+      field.path = cfg.documentService.getPropertyPath(field.scope, field.name);
       field.userCreated = true;
       field.isAttribute = false;
       fields.push(field);
@@ -1155,12 +1172,23 @@ export class MappingSerializer {
     isSource: boolean,
     cfg: ConfigModel
   ): MappedField | null {
-    if (MappingUtil.isConstantField(field) && !field.docId) {
-      field.docId = cfg.constantDoc.id;
-    } else if (MappingUtil.isPropertyField(field) && !field.docId) {
-      field.docId = isSource
-        ? cfg.sourcePropertyDoc.id
-        : cfg.targetPropertyDoc.id;
+    if (MappingUtil.isConstantField(field)) {
+      if (field.docId) {
+        cfg.constantDoc.id = field.docId;
+      } else {
+        field.docId = cfg.constantDoc.id;
+      }
+    } else if (MappingUtil.isPropertyField(field)) {
+      const doc = isSource ? cfg.sourcePropertyDoc : cfg.targetPropertyDoc;
+      if (field.docId) {
+        doc.id = field.docId;
+      } else {
+        field.docId = doc.id;
+      }
+      field.path = cfg.documentService.getPropertyPath(
+        (field as IPropertyField).scope,
+        field.name!
+      );
     } else if (!field.docId) {
       cfg.errorService.addError(
         new ErrorInfo({

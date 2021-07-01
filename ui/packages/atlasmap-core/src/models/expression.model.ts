@@ -17,7 +17,6 @@ import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from './error.model';
 import { MappedField, MappingModel } from './mapping.model';
 
 import { ConfigModel } from './config.model';
-import { DocumentDefaultName } from '../common/config.types';
 import { IExpressionNode } from 'src/contracts/expression';
 import { Subject } from 'rxjs';
 
@@ -73,47 +72,25 @@ export class FieldNode extends ExpressionNode {
       if (metaStr) {
         const fieldParts = metaStr.split(':');
 
-        // Factor scope from property meta data.
-        if (fieldParts[0].startsWith('DOC.' + DocumentDefaultName.PROPERTIES)) {
-          const pathSeparator =
-            ConfigModel.getConfig().sourcePropertyDoc.pathSeparator;
-          const propParts = fieldParts[1].split(pathSeparator);
-          if (propParts.length === 3) {
-            this.mappedField = mapping.getMappedFieldByName(
-              pathSeparator + propParts[2], // field path
-              true,
-              { fieldScope: propParts[1] } // scope
+        // Relative paths will not have the full field path in the meta data.
+        if (fieldParts.length === 1) {
+          if (collectionContextPath) {
+            this.mappedField = mapping.getMappedFieldByPath(
+              collectionContextPath + fieldParts[0],
+              true
             )!;
           } else {
-            this.mappedField = mapping.getMappedFieldByName(
-              fieldParts[1],
-              true,
-              {}
+            this.mappedField = mapping.getMappedFieldByPath(
+              fieldParts[0],
+              true
             )!;
           }
         } else {
-          // Relative paths will not have the full field path in the meta data.
-          if (fieldParts.length === 1) {
-            if (collectionContextPath) {
-              this.mappedField = mapping.getMappedFieldByName(
-                collectionContextPath + fieldParts[0],
-                true,
-                {}
-              )!;
-            } else {
-              this.mappedField = mapping.getMappedFieldByName(
-                fieldParts[0],
-                true,
-                {}
-              )!;
-            }
-          } else {
-            this.mappedField = mapping.getMappedFieldByName(
-              fieldParts[1],
-              true,
-              { docId: fieldParts[0] }
-            )!;
-          }
+          this.mappedField = mapping.getMappedFieldByPath(
+            fieldParts[1],
+            true,
+            fieldParts[0]
+          )!;
         }
         if (!this.mappedField) {
           this.mappedField = mapping.getReferenceField(fieldParts[1]);
@@ -132,16 +109,7 @@ export class FieldNode extends ExpressionNode {
     if (!this.mappedField || !this.mappedField.field) {
       return '';
     }
-    if (this.mappedField.field.scope) {
-      return (
-        '${' +
-        this.mappedField.field.docDef.id +
-        ':/' +
-        this.mappedField.field.scope +
-        this.mappedField.field.path +
-        '}'
-      );
-    } else if (this.mappedField.field.enumeration) {
+    if (this.mappedField.field.enumeration) {
       // Convert enumeration field/index pairs into a string literal.
       const enumIdxVal = this.mappedField.field.enumIndexValue
         ? this.mappedField.field.enumIndexValue
@@ -180,13 +148,8 @@ export class FieldNode extends ExpressionNode {
           '.' + this.mappedField.field.enumValues[enumIdxVal].name;
         titleAddendum = ':  Click to select an enumeration value.';
       }
-      if (this.mappedField.field.scope) {
-        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path} <${this.mappedField.field.scope}> <${this.mappedField.field.scope}>${titleAddendum}"
-          class="expressionFieldLabel label label-default">${mappedFieldName}</span>`;
-      } else {
-        return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}${titleAddendum}"
-          class="expressionFieldLabel label label-default">${mappedFieldName}</span>`;
-      }
+      return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}${titleAddendum}"
+        class="expressionFieldLabel label label-default">${mappedFieldName}</span>`;
     } else {
       // TODO: check this non null operator
       return `<span contenteditable="false" id="${this.uuid}"

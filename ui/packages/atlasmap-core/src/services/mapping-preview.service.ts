@@ -22,7 +22,7 @@ import {
 import {
   IProcessMappingRequestContainer,
   IProcessMappingResponseContainer,
-  processMappingRequestJsonType,
+  PROCESS_MAPPING_REQUEST_JSON_TYPE,
 } from '../contracts/mapping-preview';
 import { Subject, Subscription } from 'rxjs';
 import { ConfigModel } from '../models/config.model';
@@ -128,7 +128,7 @@ export class MappingPreviewService {
   ): IProcessMappingRequestContainer {
     return {
       ProcessMappingRequest: {
-        jsonType: processMappingRequestJsonType,
+        jsonType: PROCESS_MAPPING_REQUEST_JSON_TYPE,
         mapping: MappingSerializer.serializeFieldMapping(
           this.cfg,
           inputFieldMapping,
@@ -156,7 +156,7 @@ export class MappingPreviewService {
         ) {
           // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
           // TODO: check this non null operator
-          toWrite.field!.value = toRead.field?.value!;
+          toWrite.field!.value = toRead.mappingField?.value!;
           const index = answer.targetFields.indexOf(toRead);
           if (index !== -1) {
             answer.targetFields.splice(index, 1);

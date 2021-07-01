@@ -165,7 +165,7 @@
             "value" : "boston",
             "docId" : "DOC.Properties",
             "index" : 0,
-            "path" : "/prop-city",
+            "path" : "/current/prop-city",
             "fieldType" : "STRING",
             "name" : "prop-city",
             "scope" : "current"
@@ -331,11 +331,7 @@
     },
     "properties" : {
       "property" : [ {
-        "name" : "boston",
-        "value" : "boston",
-        "fieldType" : "STRING",
-        "scope" : "current"
-      }, {
+        "dataSourceType": "SOURCE",
         "name" : "prop-city",
         "value" : "boston",
         "fieldType" : "STRING",

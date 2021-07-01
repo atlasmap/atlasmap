@@ -635,7 +635,7 @@ describe('MappingSerializer', () => {
         expect(
           TestUtils.isEqualJSON(
             atlasMappingCollExprMapping,
-            MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
+            serialized // ignoreValue defaults to true
           )
         ).toBe(true);
 

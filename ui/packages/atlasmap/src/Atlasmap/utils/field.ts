@@ -19,6 +19,7 @@ import {
   ErrorLevel,
   ErrorScope,
   ErrorType,
+  FIELD_PATH_SEPARATOR,
   Field,
   FieldType,
   MappedField,
@@ -60,9 +61,7 @@ export function createConstant(
 
 export function deleteConstant(constName: string): void {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.constantDoc.getField(
-    cfg.sourcePropertyDoc.pathSeparator + constName,
-  );
+  const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
   if (!field) {
     return;
   }
@@ -84,9 +83,7 @@ export function editConstant(
 ): void {
   const cfg = ConfigModel.getConfig();
   let constFieldName = origName ? origName : constName;
-  let field = cfg.constantDoc.getField(
-    cfg.constantDoc.pathSeparator + constFieldName,
-  );
+  let field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constFieldName);
   if (!field) {
     return;
   }
@@ -98,19 +95,14 @@ export function editConstant(
   }
   if (origName && origName !== constName) {
     field.name = constName;
-    cfg.constantDoc.updateField(
-      field,
-      cfg.constantDoc.pathSeparator + constName,
-    );
+    cfg.constantDoc.updateField(field, FIELD_PATH_SEPARATOR + constName);
   }
   cfg.mappingService.notifyMappingUpdated();
 }
 
 export function getConstantType(constName: string): string {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.constantDoc.getField(
-    cfg.sourcePropertyDoc.pathSeparator + constName,
-  );
+  const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
   if (!field) {
     return '';
   }
@@ -119,9 +111,7 @@ export function getConstantType(constName: string): string {
 
 export function getConstantTypeIndex(constName: string): number {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.constantDoc.getField(
-    cfg.sourcePropertyDoc.pathSeparator + constName,
-  );
+  const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
   if (!field) {
     return 0;
   }
@@ -141,21 +131,17 @@ export function createProperty(
   addToActiveMapping?: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
+  const path = cfg.documentService.getPropertyPath(propScope, propName);
   let field = isSource
-    ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
-      )
-    : cfg.targetPropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
-      );
+    ? cfg.sourcePropertyDoc.getField(path)
+    : cfg.targetPropertyDoc.getField(path);
   if (!field) {
     field = new Field();
   }
   field.name = propName;
   field.type = FieldType[propType as keyof typeof FieldType];
   field.scope = propScope;
+  field.path = path;
   field.userCreated = true;
 
   if (isSource) {
@@ -177,15 +163,10 @@ export function deleteProperty(
   isSource: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
+  const path = cfg.documentService.getPropertyPath(propScope, propName);
   const field = isSource
-    ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
-      )
-    : cfg.targetPropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
-      );
+    ? cfg.sourcePropertyDoc.getField(path)
+    : cfg.targetPropertyDoc.getField(path);
   if (!field) {
     return;
   }
@@ -223,15 +204,10 @@ export function editProperty(
   newScope?: string,
 ): void {
   const cfg = ConfigModel.getConfig();
+  let oldPath = cfg.documentService.getPropertyPath(propScope, propName);
   let field = isSource
-    ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
-      )
-    : cfg.targetPropertyDoc.getField(
-        cfg.targetPropertyDoc.pathSeparator + propName,
-        propScope,
-      );
+    ? cfg.sourcePropertyDoc.getField(oldPath)
+    : cfg.targetPropertyDoc.getField(oldPath);
   if (!field) {
     return;
   }
@@ -242,16 +218,12 @@ export function editProperty(
     field.scope = newScope;
   }
   field.type = FieldType[propType as keyof typeof FieldType];
-  let originalKey = '';
-  if (propScope.length > 0) {
-    originalKey =
-      cfg.targetPropertyDoc.pathSeparator + propName + '-' + propScope;
-  }
+  field.path = cfg.documentService.getPropertyPath(field.scope, field.name!);
 
   if (isSource) {
-    cfg.sourcePropertyDoc.updateField(field, originalKey);
+    cfg.sourcePropertyDoc.updateField(field, oldPath);
   } else {
-    cfg.targetPropertyDoc.updateField(field, originalKey);
+    cfg.targetPropertyDoc.updateField(field, oldPath);
   }
   cfg.mappingService.notifyMappingUpdated();
 }
@@ -264,12 +236,10 @@ export function getPropertyType(
   const cfg = ConfigModel.getConfig();
   const field = isSource
     ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
+        cfg.documentService.getPropertyPath(propScope, propName),
       )
     : cfg.targetPropertyDoc.getField(
-        cfg.targetPropertyDoc.pathSeparator + propName,
-        propScope,
+        cfg.documentService.getPropertyPath(propScope, propName),
       );
   if (!field) {
     return '';
@@ -285,12 +255,10 @@ export function getPropertyTypeIndex(
   const cfg = ConfigModel.getConfig();
   const field = isSource
     ? cfg.sourcePropertyDoc.getField(
-        cfg.sourcePropertyDoc.pathSeparator + propName,
-        propScope,
+        cfg.documentService.getPropertyPath(propScope, propName),
       )
     : cfg.targetPropertyDoc.getField(
-        cfg.targetPropertyDoc.pathSeparator + propName,
-        propScope,
+        cfg.documentService.getPropertyPath(propScope, propName),
       );
   if (!field) {
     return 0;

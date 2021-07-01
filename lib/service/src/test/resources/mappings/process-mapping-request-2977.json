@@ -1,0 +1,76 @@
+{
+  "ProcessMappingRequest": {
+    "jsonType": "io.atlasmap.v2.ProcessMappingRequest",
+    "mapping": {
+      "jsonType": "io.atlasmap.v2.Mapping",
+      "expression": "if ( ${DOC.Properties.578580:/JSONSchemaSource/prop-city} == ${DOC.Constants.10788:/Boston}, ${JSONInstanceSource:/order/address/city}, ${JSONInstanceSource:/order/address/state})",
+      "inputFieldGroup": {
+        "jsonType": "io.atlasmap.v2.FieldGroup",
+        "actions": [],
+        "field": [
+          {
+            "jsonType": "io.atlasmap.v2.PropertyField",
+            "value": "Boston",
+            "docId": "DOC.Properties.578580",
+            "index": 0,
+            "path": "/JSONSchemaSource/prop-city",
+            "fieldType": "STRING",
+            "name": "prop-city",
+            "scope": "JSONSchemaSource"
+          },
+          {
+            "jsonType": "io.atlasmap.v2.ConstantField",
+            "value": "Boston",
+            "docId": "DOC.Constants.10788",
+            "index": 1,
+            "path": "/Boston",
+            "fieldType": "STRING",
+            "name": "Boston"
+          },
+          {
+            "jsonType": "io.atlasmap.json.v2.JsonField",
+            "value": "Boston",
+            "docId": "JSONInstanceSource",
+            "index": 2,
+            "path": "/order/address/city",
+            "fieldType": "STRING",
+            "name": "city"
+          },
+          {
+            "jsonType": "io.atlasmap.json.v2.JsonField",
+            "value": "Massachusetts",
+            "docId": "JSONInstanceSource",
+            "index": 3,
+            "path": "/order/address/state",
+            "fieldType": "STRING",
+            "name": "state"
+          }
+        ]
+      },
+      "inputField": [],
+      "outputField": [
+        {
+          "jsonType": "io.atlasmap.xml.v2.XmlField",
+          "actions": [
+            {
+              "string": "RESULT",
+              "@type": "Append"
+            },
+            {
+              "string": "",
+              "@type": "Append"
+            }
+          ],
+          "value": "",
+          "docId": "XMLInstanceSource",
+          "path": "/ns:XmlOE/ns:Address/ns:addressLine1",
+          "fieldType": "STRING",
+          "name": "addressLine1",
+          "userCreated": false,
+          "attribute": false
+        }
+      ],
+      "id": "preview"
+    }
+  }
+}
