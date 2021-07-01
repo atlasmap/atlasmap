@@ -331,7 +331,6 @@ export function getField(fieldPath: string, isSource: boolean): Field | null {
 
 export function mappingExpressionAddField(
   selectedField: string,
-  selectedFieldScope: string,
   newTextNode: any,
   atIndex: number,
   isTrailer: boolean,
@@ -343,7 +342,6 @@ export function mappingExpressionAddField(
   configModel.expressionService.addField(
     mapping,
     selectedField,
-    selectedFieldScope,
     newTextNode,
     atIndex,
     isTrailer,

@@ -203,21 +203,19 @@ export class MappingModel {
   }
 
   /**
-   * Return the MappedField associated with the specified field path and panel.  The
-   * document ID and field scope are optional identifier parameters used to distinguish
-   * duplicate field paths.
+   * Return the MappedField associated with the specified field path and panel. The
+   * document ID is optional identifier parameters used to distinguish the fields
+   * with the same path in a different document. The first match will be returned
+   * if not specified.
    *
    * @param fieldPath
    * @param isSource
    * @param identifier
    */
-  getMappedFieldByName(
+  getMappedFieldByPath(
     fieldPath: string,
     isSource: boolean,
-    identifier: {
-      docId?: string;
-      fieldScope?: string;
-    }
+    docId?: string
   ): MappedField | null {
     if (!fieldPath) {
       return null;
@@ -225,19 +223,10 @@ export class MappingModel {
     const mappedFields = this.getMappedFields(isSource);
     for (let i = 0; i < mappedFields.length; i++) {
       if (mappedFields[i].field?.path === fieldPath) {
-        if (!identifier.docId && !identifier.fieldScope) {
+        if (!docId) {
           return mappedFields[i];
         }
-        if (
-          identifier.docId &&
-          mappedFields[i].field?.docDef.id === identifier.docId
-        ) {
-          return mappedFields[i];
-        }
-        if (
-          identifier.fieldScope &&
-          mappedFields[i].field?.scope === identifier.fieldScope
-        ) {
+        if (docId && mappedFields[i].field?.docDef.id === docId) {
           return mappedFields[i];
         }
       }
@@ -289,6 +278,7 @@ export class MappingModel {
       return null;
     }
     if (
+      !field.documentField?.status ||
       field.documentField?.status === 'SUPPORTED' ||
       field.documentField?.status === 'CACHED'
     ) {

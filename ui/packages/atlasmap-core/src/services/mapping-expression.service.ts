@@ -129,20 +129,17 @@ export class MappingExpressionService {
 
   addField(
     mapping: MappingModel,
-    fieldName: string,
-    fieldScope: string,
+    fieldPath: string,
     newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean
   ) {
-    let mappedField = mapping.getMappedFieldByName(fieldName, true, {
-      fieldScope: fieldScope,
-    });
+    let mappedField = mapping.getMappedFieldByPath(fieldPath, true);
 
     if (!mappedField) {
       // If the selected field was not part of the original mapping
       // and is complex then add it as a reference node.
-      mappedField = mapping.getReferenceField(fieldName);
+      mappedField = mapping.getReferenceField(fieldPath);
 
       if (mappedField) {
         mapping.transition!.expression!.addConditionalExpressionNode(
@@ -154,7 +151,7 @@ export class MappingExpressionService {
       // Try adding the selected field to the active mapping.
       let field: Field | null = null;
       for (const doc of this.cfg.getDocs(true)) {
-        field = Field.getField(fieldName, doc.getAllFields(), fieldScope);
+        field = Field.getField(fieldPath, doc.getAllFields());
         if (field) {
           break;
         }
@@ -231,11 +228,7 @@ export class MappingExpressionService {
         }
         displayName = CommonUtil.extractDisplayPath(field.path, 100);
         formattedField[0] = displayName;
-        if (field.isProperty() && field.scope) {
-          formattedField[1] = field.path + ' <' + field.scope + '>';
-        } else {
-          formattedField[1] = field.path;
-        }
+        formattedField[1] = field.path;
         fieldCount++;
         formattedFields.push(formattedField);
       }

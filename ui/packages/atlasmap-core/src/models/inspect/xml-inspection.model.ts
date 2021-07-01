@@ -28,7 +28,7 @@ import {
   IXmlField,
   IXmlInspectionResponse,
   IXmlInspectionResponseContainer,
-  xmlInspectionRequestJsonType,
+  XML_INSPECTION_REQUEST_JSON_TYPE,
 } from '../../contracts/documents/xml';
 import { NamespaceModel } from '../document-definition.model';
 
@@ -161,7 +161,7 @@ export class XmlInspectionRequestModel extends DocumentInspectionRequestModel {
 export class XmlInspectionRequestOptions extends DocumentInspectionRequestOptions {
   json = {
     XmlInspectionRequest: {
-      jsonType: xmlInspectionRequestJsonType,
+      jsonType: XML_INSPECTION_REQUEST_JSON_TYPE,
       type: this.doc.inspectionType,
       xmlData: this.doc.inspectionSource,
     },

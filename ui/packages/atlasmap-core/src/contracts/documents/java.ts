@@ -18,11 +18,12 @@ import { CollectionType, IField, IStringList } from '../common';
 /**
  * The Java class inspection data model contracts between frontend and backend.
  */
-export const javaModelPackagePrefix = 'io.atlasmap.java.v2';
-export const javaInspectionRequestJsonType =
-  javaModelPackagePrefix + '.ClassInspectionRequest';
-export const javaClassJsonType = javaModelPackagePrefix + '.JavaClass';
-export const javaEnumFieldJsonType = javaModelPackagePrefix + '.JavaEnumField';
+export const JAVA_MODEL_PACKAGE_PREFIX = 'io.atlasmap.java.v2';
+export const JAVA_INSPECTION_REQUEST_JSON_TYPE =
+  JAVA_MODEL_PACKAGE_PREFIX + '.ClassInspectionRequest';
+export const JAVA_CLASS_JSON_TYPE = JAVA_MODEL_PACKAGE_PREFIX + '.JavaClass';
+export const JAVA_ENUM_FIELD_JSON_TYPE =
+  JAVA_MODEL_PACKAGE_PREFIX + '.JavaEnumField';
 
 /**
  * The root object that carries {@link IClassInspectionRequest}

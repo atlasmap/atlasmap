@@ -173,7 +173,7 @@
                 } ],
                 "docId" : "DOC.Properties",
                 "index" : 0,
-                "path" : "/prop-city",
+                "path" : "/current/prop-city",
                 "fieldType" : "STRING",
                 "name" : "prop-city",
                 "scope" : "current"

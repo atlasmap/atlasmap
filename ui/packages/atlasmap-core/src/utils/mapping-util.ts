@@ -14,6 +14,11 @@
     limitations under the License.
 */
 import {
+  CONSTANT_FIELD_JSON_TYPE,
+  IPropertyField,
+  PROPERTY_FIELD_JSON_TYPE,
+} from '../contracts/mapping';
+import {
   DocumentDefinition,
   PaddingField,
 } from '../models/document-definition.model';
@@ -23,11 +28,6 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
-import {
-  IPropertyField,
-  constantFieldJsonType,
-  propertyFieldJsonType,
-} from '../contracts/mapping';
 import { MappedField, MappingModel } from '../models/mapping.model';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
@@ -152,19 +152,12 @@ with ID ${mappedField.mappingField.docId}`,
           mappedField.mappingField.path
         ) {
           const propMappingField = mappedField.mappingField as IPropertyField;
-          const parsedScope = propMappingField.scope
-            ? propMappingField.scope
-            : undefined;
-          let propertyField = doc.getField(propMappingField.path!, parsedScope);
+          let propertyField = doc.getField(propMappingField.path!);
 
           if (!propertyField) {
             propertyField = new Field();
           }
-          const lastSeparator: number = propMappingField.name!.lastIndexOf('/');
-          let fieldName =
-            lastSeparator === -1
-              ? propMappingField.name
-              : propMappingField.name!.substring(lastSeparator + 1);
+          let fieldName = propMappingField.name;
           propertyField.type = propMappingField.fieldType!;
           if (propMappingField.scope) {
             propertyField.scope = propMappingField.scope;
@@ -348,10 +341,10 @@ with ID ${mappedField.mappingField.docId}`,
   }
 
   static isPropertyField(field: IField) {
-    return field?.jsonType === propertyFieldJsonType;
+    return field?.jsonType === PROPERTY_FIELD_JSON_TYPE;
   }
 
   static isConstantField(field: IField) {
-    return field?.jsonType === constantFieldJsonType;
+    return field?.jsonType === CONSTANT_FIELD_JSON_TYPE;
   }
 }

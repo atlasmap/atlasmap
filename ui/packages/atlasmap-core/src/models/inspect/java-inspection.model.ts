@@ -27,7 +27,7 @@ import {
   IJavaClass,
   IJavaClassContainer,
   IJavaField,
-  javaInspectionRequestJsonType,
+  JAVA_INSPECTION_REQUEST_JSON_TYPE,
 } from '../../contracts/documents/java';
 
 import { ConfigModel } from '../config.model';
@@ -152,7 +152,7 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
     super(cfg, doc);
     const request: IClassInspectionRequestContainer = {
       ClassInspectionRequest: {
-        jsonType: javaInspectionRequestJsonType,
+        jsonType: JAVA_INSPECTION_REQUEST_JSON_TYPE,
         className: this.doc.inspectionSource,
         disablePrivateOnlyFields: this.cfg.initCfg.disablePrivateOnlyFields,
         disableProtectedOnlyFields: this.cfg.initCfg.disableProtectedOnlyFields,

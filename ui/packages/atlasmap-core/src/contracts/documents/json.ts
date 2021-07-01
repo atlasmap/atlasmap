@@ -19,12 +19,13 @@ import { IDocument, IField, IStringList, InspectionType } from '../common';
 /**
  * The JSON inspection data model contracts between frontend and backend.
  */
-export const jsonModelPackagePrefix = 'io.atlasmap.json.v2';
-export const jsonDataSourceJsonType =
-  jsonModelPackagePrefix + '.JsonDataSource';
-export const jsonEnumFieldJsonType = jsonModelPackagePrefix + '.JsonEnumField';
-export const jsonInspectionRequestJsonType =
-  jsonModelPackagePrefix + '.JsonInspectionRequest';
+export const JSON_MODEL_PACKAGE_PREFIX = 'io.atlasmap.json.v2';
+export const JSON_DATA_SOURCE_JSON_TYPE =
+  JSON_MODEL_PACKAGE_PREFIX + '.JsonDataSource';
+export const JSON_ENUM_FIELD_JSON_TYPE =
+  JSON_MODEL_PACKAGE_PREFIX + '.JsonEnumField';
+export const JSON_INSPECTION_REQUEST_JSON_TYPE =
+  JSON_MODEL_PACKAGE_PREFIX + '.JsonInspectionRequest';
 
 /**
  * The root object that carries {@link IJsonInspectionRequest}

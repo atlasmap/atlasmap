@@ -27,7 +27,7 @@ import {
   IJsonField,
   IJsonInspectionResponse,
   IJsonInspectionResponseContainer,
-  jsonInspectionRequestJsonType,
+  JSON_INSPECTION_REQUEST_JSON_TYPE,
 } from '../../contracts/documents/json';
 import { FieldType } from '../../contracts/common';
 
@@ -136,7 +136,7 @@ export class JsonInspectionRequestModel extends DocumentInspectionRequestModel {
 export class JsonInspectionRequestOptions extends DocumentInspectionRequestOptions {
   json = {
     JsonInspectionRequest: {
-      jsonType: jsonInspectionRequestJsonType,
+      jsonType: JSON_INSPECTION_REQUEST_JSON_TYPE,
       type: this.doc.inspectionType,
       jsonData: this.doc.inspectionSource,
     },

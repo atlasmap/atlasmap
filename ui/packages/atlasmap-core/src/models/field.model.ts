@@ -13,7 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType, FieldType, IField } from '../contracts/common';
+import {
+  DocumentType,
+  FIELD_PATH_SEPARATOR,
+  FieldType,
+  IField,
+} from '../contracts/common';
 import { DocumentDefinition } from './document-definition.model';
 
 export class EnumValue {
@@ -88,19 +93,9 @@ export class Field {
     return paths;
   }
 
-  static getField(
-    fieldPath: string,
-    fields: Field[],
-    fieldScope?: string
-  ): Field {
+  static getField(fieldPath: string, fields: Field[]): Field {
     // TODO: check this non null operator
-    return fields.find(
-      (field) =>
-        fieldPath === field.path &&
-        (fieldScope
-          ? fieldScope.length > 0 && fieldScope === field.scope
-          : true)
-    )!;
+    return fields.find((field) => fieldPath === field.path)!;
   }
 
   static alphabetizeFields(fields: Field[]): void {
@@ -108,9 +103,6 @@ export class Field {
     const fieldPaths: string[] = [];
     for (const field of fields) {
       let fieldKey = field.path;
-      if (field.scope) {
-        fieldKey += '-' + field.scope;
-      }
       // Discard duplicate field keys, field names are repeatable.
       if (fieldsByPath[fieldKey] != null) {
         continue;
@@ -251,7 +243,7 @@ export class Field {
     if (includePath) {
       fieldPath = this.path;
     } else {
-      const pathComps = this.path.split(this.docDef.pathSeparator);
+      const pathComps = this.path.split(FIELD_PATH_SEPARATOR);
       // Check for a leaf path attribute field starting with '@'
       if (
         this.isAttribute &&

@@ -63,7 +63,6 @@ export interface IExpressionContentProps {
   getFieldEnums: (nodeId: string) => EnumValue[];
   mappingExpressionAddField: (
     selectedField: string,
-    selectFieldScope: string,
     newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean,
@@ -191,7 +190,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
 
   let addFieldToExpression: (
     selectedField: string,
-    selectedScope: string,
     newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean,
@@ -435,24 +433,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       return;
     }
     const isTrailer = getCaretPositionNodeId(atContainer) === trailerID;
-    const selectedFieldComps = selectedField.split(' ');
-    selectedField = selectedFieldComps[0];
-    let selectedFieldScope = '';
-
-    // Extract the scope if it exists.
-    if (selectedFieldComps[1]) {
-      selectedFieldScope = selectedFieldComps[1].substring(
-        1,
-        selectedFieldComps[1].length - 1,
-      );
-    }
-    addFieldToExpression(
-      selectedField,
-      selectedFieldScope,
-      newTextNode,
-      atIndex,
-      isTrailer,
-    );
+    addFieldToExpression(selectedField, newTextNode, atIndex, isTrailer);
     clearSearchMode(false);
     markup!.focus();
   }

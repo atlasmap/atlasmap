@@ -13,7 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType, FieldType, InspectionType } from '../contracts/common';
+import {
+  DocumentType,
+  FIELD_PATH_SEPARATOR,
+  FieldType,
+  InspectionType,
+} from '../contracts/common';
 
 import { CommonUtil } from '../utils/common-util';
 import { DocumentInitializationModel } from './config.model';
@@ -98,7 +103,6 @@ export class DocumentDefinition {
   classPath: string;
   initialized = false;
   errorOccurred = false;
-  pathSeparator = '/';
   fields: Field[] = [];
   allFields: Field[] = [];
   terminalFields: Field[] = [];
@@ -191,17 +195,13 @@ export class DocumentDefinition {
     return this.namespaces.find((ns) => alias === ns.alias)!;
   }
 
-  getField(fieldPath: string, scope?: string): Field | null {
+  getField(fieldPath: string): Field | null {
     if (!fieldPath) {
       return null;
     }
-    let fieldKey = fieldPath;
-    if (scope) {
-      fieldKey += '-' + scope;
-    }
-    let field: Field = this.fieldsByPath[fieldKey];
+    let field: Field = this.fieldsByPath[fieldPath];
     // if we can't find the field we're looking for, find parent fields and populate their children
-    const pathSeparator: string = this.pathSeparator;
+    const pathSeparator: string = FIELD_PATH_SEPARATOR;
     let originalPath: string = fieldPath;
     // strip beginning path separator from path
     if (originalPath != null && originalPath.indexOf(pathSeparator) === 0) {
@@ -269,10 +269,10 @@ export class DocumentDefinition {
 
   updateField(field: Field, oldPath: string | null): void {
     Field.alphabetizeFields(this.fields);
-    if (!field.parentField || this.isPropertyOrConstant) {
+    if (!field.parentField && !this.isPropertyOrConstant) {
       this.populateFieldParentPaths(field, null, 0);
-    } else {
-      const pathSeparator: string = this.pathSeparator;
+    } else if (!this.isPropertyOrConstant) {
+      const pathSeparator: string = FIELD_PATH_SEPARATOR;
       this.populateFieldParentPaths(
         field,
         field.parentField.path + pathSeparator,
@@ -297,12 +297,14 @@ export class DocumentDefinition {
     if (!field.parentField || this.isPropertyOrConstant) {
       this.fields.push(field);
       Field.alphabetizeFields(this.fields);
-      this.populateFieldParentPaths(field, null, 0);
+      if (!this.isPropertyOrConstant) {
+        this.populateFieldParentPaths(field, null, 0);
+      }
     } else {
       this.populateChildren(field.parentField);
       field.parentField.children.push(field);
       Field.alphabetizeFields(field.parentField.children);
-      const pathSeparator: string = this.pathSeparator;
+      const pathSeparator: string = FIELD_PATH_SEPARATOR;
       this.populateFieldParentPaths(
         field,
         field.parentField.path + pathSeparator,
@@ -331,7 +333,7 @@ export class DocumentDefinition {
 
     // copy cached field children
     cachedField = cachedField.copy();
-    const pathSeparator: string = this.pathSeparator;
+    const pathSeparator: string = FIELD_PATH_SEPARATOR;
     for (let childField of cachedField.children) {
       childField = childField.copy();
       childField.parentField = field;
@@ -369,7 +371,7 @@ export class DocumentDefinition {
 
   getFieldIndex(field: Field, fields: Field[]): number {
     for (let i = 0; i < fields.length; i++) {
-      if (fields[i].name === field.name && fields[i].scope === field.scope) {
+      if (fields[i].path === field.path) {
         return i;
       }
     }
@@ -398,9 +400,6 @@ export class DocumentDefinition {
       this.terminalFields.splice(targetIndex, 1);
     }
     let oldFieldPath = field.path;
-    if (field.scope) {
-      oldFieldPath = field.path + '-' + field.scope;
-    }
     CommonUtil.removeItemFromArray(oldFieldPath, this.fieldPaths);
     delete this.fieldsByPath[oldFieldPath];
     if (field.parentField != null) {
@@ -445,7 +444,7 @@ export class DocumentDefinition {
     depth: number
   ): void {
     if (parentPath == null) {
-      parentPath = this.pathSeparator;
+      parentPath = FIELD_PATH_SEPARATOR;
     }
     const nsFieldName = field.getNameWithNamespace();
     field.path = parentPath + nsFieldName;
@@ -461,7 +460,7 @@ export class DocumentDefinition {
       field.documentField.path = field.path;
     }
     field.fieldDepth = depth;
-    const pathSeparator: string = this.pathSeparator;
+    const pathSeparator: string = FIELD_PATH_SEPARATOR;
     for (const childField of field.children) {
       childField.parentField = field;
       this.populateFieldParentPaths(
@@ -475,9 +474,6 @@ export class DocumentDefinition {
   private populateFieldData(field: Field): void {
     field.docDef = this;
     let newFieldKey = field.path;
-    if (field.scope) {
-      newFieldKey += '-' + field.scope;
-    }
     this.fieldPaths.push(newFieldKey);
     this.fieldsByPath[newFieldKey] = field;
 
