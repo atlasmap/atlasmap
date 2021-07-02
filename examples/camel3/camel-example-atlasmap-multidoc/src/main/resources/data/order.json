@@ -1,0 +1,15 @@
+{
+  "Order": {
+    "orderItems": [
+      {
+        "itemId": "BUTTER",
+        "quantity": 3
+      },
+      {
+        "itemId": "APPLE",
+        "quantity": 10
+      }
+    ],
+    "orderId": "O001"
+  }
+}
