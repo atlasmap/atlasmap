@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.63% </span>
+                <span class="strong">64.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>106/164</span>
+                <span class='fraction'>105/162</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.59% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>70/157</span>
+                <span class='fraction'>68/153</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.29% </span>
+                <span class="strong">64.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>99/154</span>
+                <span class='fraction'>98/152</span>
             </div>
         
             
@@ -477,14 +477,7 @@
 <a name='L419'></a><a href='#L419'>419</a>
 <a name='L420'></a><a href='#L420'>420</a>
 <a name='L421'></a><a href='#L421'>421</a>
-<a name='L422'></a><a href='#L422'>422</a>
-<a name='L423'></a><a href='#L423'>423</a>
-<a name='L424'></a><a href='#L424'>424</a>
-<a name='L425'></a><a href='#L425'>425</a>
-<a name='L426'></a><a href='#L426'>426</a>
-<a name='L427'></a><a href='#L427'>427</a>
-<a name='L428'></a><a href='#L428'>428</a>
-<a name='L429'></a><a href='#L429'>429</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L422'></a><a href='#L422'>422</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -620,10 +613,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -718,10 +708,6 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -741,25 +727,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">94x</span>
+<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">94x</span>
+<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">94x</span>
-<span class="cline-any cline-yes">68x</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">68x</span>
+<span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">26x</span>
-<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-yes">23x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1043,20 +1029,17 @@ export class MappingExpressionService {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  addField(</span>
     mapping: MappingModel,
-    fieldName: string,
-    fieldScope: string,
+    fieldPath: string,
     newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean
   ) {
-    let mappedField = <span class="cstat-no" title="statement not covered" >mapping.getMappedFieldByName(fieldName, true, {</span>
-      fieldScope: fieldScope,
-    });
+    let mappedField = <span class="cstat-no" title="statement not covered" >mapping.getMappedFieldByPath(fieldPath, true);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if (!mappedField) {</span>
       // If the selected field was not part of the original mapping
       // and is complex then add it as a reference node.
-<span class="cstat-no" title="statement not covered" >      mappedField = mapping.getReferenceField(fieldName);</span>
+<span class="cstat-no" title="statement not covered" >      mappedField = mapping.getReferenceField(fieldPath);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (mappedField) {</span>
 <span class="cstat-no" title="statement not covered" >        mapping.transition!.expression!.addConditionalExpressionNode(</span>
@@ -1068,7 +1051,7 @@ export class MappingExpressionService {
       // Try adding the selected field to the active mapping.
       let field: Field | null = <span class="cstat-no" title="statement not covered" >null;</span>
 <span class="cstat-no" title="statement not covered" >      for (const doc<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >t</span>his.</span>cfg.getDocs(true))</span> {</span>
-<span class="cstat-no" title="statement not covered" >        field = Field.getField(fieldName, doc.getAllFields(), fieldScope);</span>
+<span class="cstat-no" title="statement not covered" >        field = Field.getField(fieldPath, doc.getAllFields());</span>
 <span class="cstat-no" title="statement not covered" >        if (field) {</span>
 <span class="cstat-no" title="statement not covered" >          break;</span>
         }
@@ -1145,11 +1128,7 @@ export class MappingExpressionService {
         }
         displayName = CommonUtil.extractDisplayPath(field.path, 100);
         formattedField[0] = displayName;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (field.isProperty() &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >field.scope)</span> {
-<span class="cstat-no" title="statement not covered" >          formattedField[1] = field.path + ' &lt;' + field.scope + '&gt;';</span>
-        } else {
-          formattedField[1] = field.path;
-        }
+        formattedField[1] = field.path;
         fieldCount++;
         formattedFields.push(formattedField);
       }
@@ -1347,7 +1326,7 @@ export class MappingExpressionService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jun 30 2021 20:26:12 GMT+0000 (Coordinated Universal Time)
+                at Fri Jul 02 2021 00:18:08 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
