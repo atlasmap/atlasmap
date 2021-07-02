@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    
+    "title": "Order",
+    "type": "object",
+    "properties": {
+    
+        "orderId": {
+            "type": "string"
+        },
+
+        "orderItems": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "itemId": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    }
+                }
+            }
+        }
+
+    }
+}
