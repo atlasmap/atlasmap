@@ -257,7 +257,6 @@ export class DocumentDefinition {
     Field.alphabetizeFields(this.fields);
 
     for (const field of this.fields) {
-      this.populateFieldParentPaths(field, null, 0);
       this.populateFieldData(field);
       this.allFields.push(field);
       this.populateChildren(field);
@@ -269,16 +268,6 @@ export class DocumentDefinition {
 
   updateField(field: Field, oldPath: string | null): void {
     Field.alphabetizeFields(this.fields);
-    if (!field.parentField && !this.isPropertyOrConstant) {
-      this.populateFieldParentPaths(field, null, 0);
-    } else if (!this.isPropertyOrConstant) {
-      const pathSeparator: string = FIELD_PATH_SEPARATOR;
-      this.populateFieldParentPaths(
-        field,
-        field.parentField.path + pathSeparator,
-        field.parentField.fieldDepth + 1
-      );
-    }
     if (
       oldPath != null &&
       oldPath.length > 0 &&
@@ -297,19 +286,10 @@ export class DocumentDefinition {
     if (!field.parentField || this.isPropertyOrConstant) {
       this.fields.push(field);
       Field.alphabetizeFields(this.fields);
-      if (!this.isPropertyOrConstant) {
-        this.populateFieldParentPaths(field, null, 0);
-      }
     } else {
       this.populateChildren(field.parentField);
       field.parentField.children.push(field);
       Field.alphabetizeFields(field.parentField.children);
-      const pathSeparator: string = FIELD_PATH_SEPARATOR;
-      this.populateFieldParentPaths(
-        field,
-        field.parentField.path + pathSeparator,
-        field.parentField.fieldDepth + 1
-      );
     }
     this.populateFieldData(field);
     this.allFields.push(field);
@@ -333,15 +313,9 @@ export class DocumentDefinition {
 
     // copy cached field children
     cachedField = cachedField.copy();
-    const pathSeparator: string = FIELD_PATH_SEPARATOR;
     for (let childField of cachedField.children) {
       childField = childField.copy();
       childField.parentField = field;
-      this.populateFieldParentPaths(
-        childField,
-        field.path + pathSeparator,
-        field.fieldDepth + 1
-      );
       this.populateFieldData(childField);
       field.children.push(childField);
     }
@@ -438,39 +412,6 @@ export class DocumentDefinition {
     }
   }
 
-  private populateFieldParentPaths(
-    field: Field,
-    parentPath: string | null,
-    depth: number
-  ): void {
-    if (parentPath == null) {
-      parentPath = FIELD_PATH_SEPARATOR;
-    }
-    const nsFieldName = field.getNameWithNamespace();
-    field.path = parentPath + nsFieldName;
-    if (field.isCollection) {
-      field.path += field.isArray
-        ? this.LEFT_BRACKET + this.RIGHT_BRACKET
-        : '<>';
-    }
-    if (field.isAttribute && !field.path.includes('@')) {
-      field.path = parentPath += '@' + nsFieldName;
-    }
-    if (field.documentField) {
-      field.documentField.path = field.path;
-    }
-    field.fieldDepth = depth;
-    const pathSeparator: string = FIELD_PATH_SEPARATOR;
-    for (const childField of field.children) {
-      childField.parentField = field;
-      this.populateFieldParentPaths(
-        childField,
-        field.path + pathSeparator,
-        depth + 1
-      );
-    }
-  }
-
   private populateFieldData(field: Field): void {
     field.docDef = this;
     let newFieldKey = field.path;
@@ -489,6 +430,7 @@ export class DocumentDefinition {
       }
     }
   }
+
   private prepareComplexFields(): void {
     const fields: Field[] = this.fields;
 
