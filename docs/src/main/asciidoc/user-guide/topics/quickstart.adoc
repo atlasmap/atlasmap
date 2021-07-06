@@ -1,7 +1,7 @@
 [[quickstart]]
-= Quickly get started using AtlasMap standalone
+= Quickly get started using AtlasMap UI standalone
 
-To run AtlasMap standalone:
+To run AtlasMap UI standalone:
 
 . Obtain the most recent AtlasMap version number:
 .. Go to link:https://github.com/atlasmap/atlasmap/[]

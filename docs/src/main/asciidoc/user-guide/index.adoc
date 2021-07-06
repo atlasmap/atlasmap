@@ -52,6 +52,7 @@ This user guide is organized as follows:
 * <<exporting-mappings-to-an-atlasmap-catalog-file>>
 * <<resetting-data-files-in-atlasmap>>
 * <<running-atlasmap-with-apache-camel>>
+* <<atlasmap-runtime-examples>>
 
 include::topics/quickstart.adoc[leveloffset=+1]
 
@@ -66,3 +67,5 @@ include::topics/exporting-mappings-to-an-atlasmap-catalog-file.adoc[leveloffset=
 include::topics/resetting-data-files-in-atlasmap.adoc[leveloffset=+1]
 
 include::topics/running-atlasmap-with-apache-camel.adoc[leveloffset=+1]
+
+include::../../../../../examples/index.adoc[leveloffset=+1]

@@ -1,0 +1,26 @@
+== AtlasMap running with Apache Camel3 :: Multiple source Documents
+https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-multidoc
+
+=== Introduction
+
+This example shows how to perform data mapping from multiple source
+Documents with using AtlasMap Data Mapper running as a part of Camel
+route.
+
+=== Build
+
+You will need to compile this example first:
+
+....
+mvn compile
+....
+
+=== Run
+
+To run the example, type
+
+....
+mvn camel:run
+....
+
+To stop the example hit ctrl+c.

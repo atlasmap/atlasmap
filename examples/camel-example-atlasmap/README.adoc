@@ -1,0 +1,25 @@
+== AtlasMap running with Apache Camel2
+https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap
+
+=== Introduction
+
+This example shows how to work with AtlasMap Data Mapper running as a
+part of Camel route.
+
+=== Build
+
+You will need to compile this example first:
+
+....
+mvn compile
+....
+
+=== Run
+
+To run the example, type
+
+....
+mvn camel:run
+....
+
+To stop the example hit ctrl+c.
