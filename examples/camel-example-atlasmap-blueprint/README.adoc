@@ -1,0 +1,49 @@
+== AtlasMap running with Apache Camel2 :: Blueprint XML
+https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap-blueprint
+
+=== Introduction
+
+This example shows how to work with AtlasMap Data Mapper running as a
+part of Camel route.
+
+=== Build
+
+You will need to compile this example first:
+
+....
+mvn compile
+....
+
+=== Run without container
+
+To run the example, type
+
+....
+mvn camel:run
+....
+
+To stop the example hit ctrl+c.
+
+=== Run on karaf container
+
+To run the example on the karaf container
+
+==== Step 1: Start karaf container
+
+....
+karaf / karaf.bat
+....
+
+==== Step 2: Deploy
+
+....
+feature:repo-add mvn:io.atlasmap.examples/camel-example-atlasmap-blueprint/${VERSION}/xml/features
+feature:install camel-example-atlasmap-blueprint
+....
+
+==== Step 3: Check the output
+
+You will see the output by log:tail or in $\{karaf}/data/karaf.log
+
+You can see the routing rules by looking at the Blueprint XML
+configuration lives in `src/main/resources/OSGI-INF/blueprint`

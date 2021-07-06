@@ -1,14 +1,22 @@
-### AtlasMap runtime API example
+== AtlasMap runtime API with ADM archive file example
+https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api-adm
 
-This is a small example of running AtlasMap mapping by interacting with runtime API directly. It consumes `order.json` JSON file, process mapping and produce XML output. The output XML is simply printed in console. 
+This is a small example of running AtlasMap mapping by interacting with
+runtime API directly. This example uses an ADM archive file to load a
+mapping definition from. It consumes `order.json` JSON file, process
+mapping and produce XML output. The output XML is simply printed in
+console.
 
 Compile and run an example:
-```
+
+....
 ../../mvnw clean package exec:java
-```
+....
 
 Then generated XML output is printed in console:
-```xml
+
+[source,xml]
+----
 Target Document:
 <?xml version="1.0" encoding="UTF-8"?><ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ns:Address>
@@ -25,4 +33,4 @@ Target Document:
   </ns:Contact>
   <ns:orderId>O001</ns:orderId>
 </ns:XmlOE>
-```
+----

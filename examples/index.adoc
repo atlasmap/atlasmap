@@ -1,0 +1,17 @@
+[[atlasmap-runtime-examples]]
+= AtlasMap Runtime Examples
+
+== Using AtlasMap API
+include::atlasmap-example-api/README.adoc[leveloffset=+1]
+include::atlasmap-example-api-adm/README.adoc[leveloffset=+1]
+
+== Running with Apache Camel 2.x
+include::camel-example-atlasmap/README.adoc[leveloffset=+1]
+include::camel-example-atlasmap-blueprint/README.adoc[leveloffset=+1]
+include::camel-example-atlasmap-msgmap/README.adoc[leveloffset=+1]
+include::camel-example-atlasmap-multidoc/README.adoc[leveloffset=+1]
+
+== Running with Apache Camel 3.x
+include::camel3/camel-example-atlasmap/README.adoc[leveloffset=+1]
+include::camel3/camel-example-atlasmap-msgmap/README.adoc[leveloffset=+1]
+include::camel3/camel-example-atlasmap-multidoc/README.adoc[leveloffset=+1]
