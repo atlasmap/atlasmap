@@ -127,9 +127,24 @@ const parameters = [
   { name: 'quote', label: 'Quote', value: '', required: false, enabled: false },
 ];
 
-export const parametersDialog = () => (
+/**
+ * The 'Select' parameters dialog doesn't specify predefined parameters, the
+ * 'Edit' dialog does.
+ *
+ * @returns
+ */
+export const parametersSelectDialog = () => (
   <ParametersDialog
     title={text('Title', 'Select CSV Processing Parameters')}
+    isOpen={boolean('Is open', true)}
+    onCancel={action('onCancel')}
+    onConfirm={action('onConfirm')}
+  />
+);
+
+export const parametersEditDialog = () => (
+  <ParametersDialog
+    title={text('Title', 'Edit CSV Processing Parameters')}
     isOpen={boolean('Is open', true)}
     onCancel={action('onCancel')}
     onConfirm={action('onConfirm')}

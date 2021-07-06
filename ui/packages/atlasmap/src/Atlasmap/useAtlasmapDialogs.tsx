@@ -14,8 +14,14 @@
     limitations under the License.
 */
 import { IConstant, IDocumentName, INamespace, IProperty } from '../UI';
+import { ICsvParameterOptions, IParameter } from '@atlasmap/core';
 import React, { useCallback, useMemo, useState } from 'react';
-import { enableCustomClass, getPropertyScopeOptions } from './utils';
+import {
+  enableCustomClass,
+  getDocCSVParams,
+  getPropertyScopeOptions,
+  setDocCSVParams,
+} from './utils';
 import {
   useAboutDialog,
   useCaptureDocumentNameToast,
@@ -31,6 +37,7 @@ import {
   useImportADMArchiveDialog,
   useImportDocumentDialog,
   useNamespaceDialog,
+  useParametersDialog,
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
@@ -72,7 +79,6 @@ export function useAtlasmapDialogs({
     },
     [createConstant, openCreateConstantDialog],
   );
-
   const [editConstantDialog, openEditConstantDialog] =
     useConstantDialog('Edit Constant');
   const onEditConstant = useCallback(
@@ -139,7 +145,6 @@ export function useAtlasmapDialogs({
     },
     [editProperty, openEditPropertyDialog],
   );
-
   const [deletePropertyDialog, onDeleteProperty] = useDeletePropertyDialog();
   //#endregion
 
@@ -170,21 +175,6 @@ export function useAtlasmapDialogs({
     },
     [changeDocumentName, openChangeDocumentNameDialog],
   );
-
-  const [removeMappedFieldDialog, onRemoveMappedField] =
-    useRemoveMappedFieldDialog();
-  const [deleteMappingDialog, onDeleteMapping] = useDeleteMappingDialog();
-  const onDeleteSelectedMapping = useCallback(() => {
-    if (selectedMapping) {
-      onDeleteMapping(selectedMapping);
-    }
-  }, [onDeleteMapping, selectedMapping]);
-
-  const [editMappingEnumerationDialog, onEditMappingEnumeration] =
-    useEditMappingEnumerationDialog();
-
-  const [specifyInstanceSchemaDialog, onSpecifyInstanceSchema] =
-    useSpecifyInstanceSchemaDialog(false);
   //#endregion
 
   //#region namespace table dialogs
@@ -220,9 +210,22 @@ export function useAtlasmapDialogs({
   );
   //#endregion
 
+  //#region mapping support dialogs
+  const [removeMappedFieldDialog, onRemoveMappedField] =
+    useRemoveMappedFieldDialog();
+  const [deleteMappingDialog, onDeleteMapping] = useDeleteMappingDialog();
+  const onDeleteSelectedMapping = useCallback(() => {
+    if (selectedMapping) {
+      onDeleteMapping(selectedMapping);
+    }
+  }, [onDeleteMapping, selectedMapping]);
+  const [editMappingEnumerationDialog, onEditMappingEnumeration] =
+    useEditMappingEnumerationDialog();
+  //#endregion
+
+  //#region custom class dialogs
   const [createEnableCustomClassDialog, openCreateEnableCustomClassDialog] =
     useCustomClassDialog('Load Java Document From Custom Class');
-
   const onEnableCustomClass = useCallback(
     (isSource: boolean): void => {
       openCreateEnableCustomClassDialog(({ customClassName, collectionType }) =>
@@ -236,6 +239,64 @@ export function useAtlasmapDialogs({
     },
     [configModel, openCreateEnableCustomClassDialog],
   );
+  //#endregion
+
+  //#region CSV processing dialogs
+  const [editCSVParamsDialog, openEditCSVParamsDialog] = useParametersDialog(
+    'Edit CSV Processing Parameters',
+  );
+  function initialCSVParams(docId: string, isSource: boolean): IParameter[] {
+    // User-defined CSV parameters.
+    const predefinedParameters: { [key: string]: string } = getDocCSVParams(
+      docId,
+      isSource,
+    );
+
+    // Complete list of available CSV parameters.
+    const initialCSVParameters = ICsvParameterOptions.getCsvParameterOptions();
+    const predefinedParamNames = Object.keys(predefinedParameters).map(
+      (key) => key,
+    );
+    const predefinedParamValues = Object.values(predefinedParameters).map(
+      (key) => key,
+    );
+
+    // Annotate the initial CSV parameters with the predefined values.
+    for (const { index } of initialCSVParameters.map((value, index) => ({
+      index,
+      value,
+    }))) {
+      for (const { pvalue, pindex } of predefinedParamNames.map(
+        (pvalue, pindex) => ({
+          pindex,
+          pvalue,
+        }),
+      )) {
+        if (initialCSVParameters[index].name === pvalue) {
+          initialCSVParameters[index].value = predefinedParamValues[pindex];
+          initialCSVParameters[index].enabled = true;
+          break;
+        }
+      }
+    }
+    return initialCSVParameters;
+  }
+  const onEditCSVParams = useCallback(
+    (docId: string, isSource: boolean) => {
+      openEditCSVParamsDialog((parameters) => {
+        const inspectionParameters: { [key: string]: string } = {};
+        for (let parameter of parameters) {
+          inspectionParameters[parameter.name] = parameter.value;
+        }
+        setDocCSVParams(docId, isSource, inspectionParameters);
+      }, initialCSVParams(docId, isSource));
+    },
+    [openEditCSVParamsDialog],
+  );
+  //#endregion
+
+  const [specifyInstanceSchemaDialog, onSpecifyInstanceSchema] =
+    useSpecifyInstanceSchemaDialog(false);
 
   const portal = useMemo(
     () =>
@@ -263,6 +324,7 @@ export function useAtlasmapDialogs({
           {editNamespaceDialog}
           {toggleExpressionModeDialog}
           {editMappingEnumerationDialog}
+          {editCSVParamsDialog}
         </>,
         modalContainer,
       ),
@@ -290,6 +352,7 @@ export function useAtlasmapDialogs({
       aboutDialog,
       toggleExpressionModeDialog,
       editMappingEnumerationDialog,
+      editCSVParamsDialog,
     ],
   );
 
@@ -319,6 +382,7 @@ export function useAtlasmapDialogs({
       deleteNamespace,
       onToggleExpressionMode,
       onEditMappingEnumeration,
+      onEditCSVParams,
     },
     dialogs: portal,
   };

@@ -26,6 +26,7 @@ export * from './useImportADMArchiveDialog';
 export * from './useExportADMArchiveDialog';
 export * from './useImportDocumentDialog';
 export * from './useNamespaceDialog';
+export * from './useParametersDialog';
 export * from './usePropertyDialog';
 export * from './useRemoveMappedFieldDialog';
 export * from './useResetAtlasmapDialog';

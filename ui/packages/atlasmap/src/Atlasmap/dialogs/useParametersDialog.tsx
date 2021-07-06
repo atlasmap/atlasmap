@@ -13,8 +13,9 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { IParameter, ParametersDialog } from '../../UI';
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { IParameter } from '@atlasmap/core';
+import { ParametersDialog } from '../../UI';
 
 import { useToggle } from '../../Atlasmap/utils';
 
@@ -27,6 +28,9 @@ export function useParametersDialog(
     useState<ParametersCallback | null>(null);
   const [parameters, setParameters] = useState<IParameter[]>([]);
   const { state, toggleOn, toggleOff } = useToggle(false);
+  const reset = useCallback(() => {
+    setParameters([]);
+  }, []);
   const onConfirm = useCallback(
     (parameters: IParameter[]) => {
       if (onParametersCb) {
@@ -55,5 +59,6 @@ export function useParametersDialog(
     },
     [toggleOn],
   );
+  useEffect(reset, [reset]);
   return [dialog, onOpenParametersDialog];
 }

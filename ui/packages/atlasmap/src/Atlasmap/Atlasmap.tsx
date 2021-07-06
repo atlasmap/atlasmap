@@ -224,6 +224,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onFieldPreviewChange,
       canStartMapping: () => true, // TODO: check that there is at least one target field unmapped and compatible
       onStartMapping: (field) => onCreateMapping(field, undefined),
+      onEditCSVParams: (docId, isSource) => {
+        handlers.onEditCSVParams(docId, isSource);
+      },
     }),
     [
       selectMapping,
@@ -304,6 +307,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onFieldPreviewChange,
       canStartMapping: (field) => !field.isConnected,
       onStartMapping: (field) => onCreateMapping(undefined, field),
+      onEditCSVParams: (docId, isSource) => {
+        handlers.onEditCSVParams(docId, isSource);
+      },
     }),
     [
       selectMapping,

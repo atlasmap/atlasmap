@@ -25,6 +25,7 @@ import {
   CaptureDocumentNameAction,
   ChangeDocumentNameAction,
   DeleteDocumentAction,
+  EditCSVParamsAction,
   EnableJavaClassAction,
   ImportAction,
 } from '../Actions';
@@ -49,6 +50,7 @@ import {
   TARGETS_WIDTH_BOUNDARY_ID,
 } from './constants';
 
+import { DocumentType } from '@atlasmap/core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { TraverseFields } from './TraverseFields';
 import { commonActions } from './commonActions';
@@ -76,6 +78,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   shouldShowMappingPreviewForField: (field: IAtlasmapField) => boolean;
   onFieldPreviewChange: (field: IAtlasmapField, value: string) => void;
   canAddToSelectedMapping: (isSource: boolean) => boolean;
+  onEditCSVParams: (id: string, isSource: boolean) => void;
 }
 
 export interface ITargetsColumnData {
@@ -98,6 +101,7 @@ export const TargetsColumn: FunctionComponent<
   onChangeDocumentName,
   onCustomClassSearch,
   onCreateProperty,
+  onEditCSVParams,
   onEditProperty,
   onDeleteProperty,
   onDrop,
@@ -231,29 +235,57 @@ export const TargetsColumn: FunctionComponent<
                           </DocumentFooter>
                         ) : undefined
                       }
-                      actions={[
-                        onCaptureDocumentName && (
-                          <CaptureDocumentNameAction
-                            id={documentId}
-                            onClick={() => onCaptureDocumentName(t.id)}
-                            key={'capture-document-name'}
-                          />
-                        ),
-                        onChangeDocumentName && (
-                          <ChangeDocumentNameAction
-                            id={documentId}
-                            onClick={() => onChangeDocumentName(t.id, t.name)}
-                            key={'change-document-name'}
-                          />
-                        ),
-                        onDeleteDocument && (
-                          <DeleteDocumentAction
-                            id={documentId}
-                            onClick={() => onDeleteDocument(t.id)}
-                            key={'delete-documents'}
-                          />
-                        ),
-                      ]}
+                      actions={
+                        t.type === DocumentType.CSV
+                          ? [
+                              onCaptureDocumentName && (
+                                <CaptureDocumentNameAction
+                                  id={documentId}
+                                  onClick={() => onCaptureDocumentName(t.id)}
+                                  key={'capture-tgt-csv-document-name'}
+                                />
+                              ),
+                              onEditCSVParams && (
+                                <EditCSVParamsAction
+                                  id={documentId}
+                                  onClick={() => onEditCSVParams(t.id, false)}
+                                  key={'on-edit-tgt-csv-params'}
+                                />
+                              ),
+                              onDeleteDocument && (
+                                <DeleteDocumentAction
+                                  id={documentId}
+                                  onClick={() => onDeleteDocument(t.id)}
+                                  key={'delete-tgt-csv-document'}
+                                />
+                              ),
+                            ]
+                          : [
+                              onCaptureDocumentName && (
+                                <CaptureDocumentNameAction
+                                  id={documentId}
+                                  onClick={() => onCaptureDocumentName(t.id)}
+                                  key={'capture-tgt-document-name'}
+                                />
+                              ),
+                              onChangeDocumentName && (
+                                <ChangeDocumentNameAction
+                                  id={documentId}
+                                  onClick={() =>
+                                    onChangeDocumentName(t.id, t.name)
+                                  }
+                                  key={'change-tgt-document-name'}
+                                />
+                              ),
+                              onDeleteDocument && (
+                                <DeleteDocumentAction
+                                  id={documentId}
+                                  onClick={() => onDeleteDocument(t.id)}
+                                  key={'delete-tgt-documents'}
+                                />
+                              ),
+                            ]
+                      }
                       noPadding={true}
                     >
                       <Tree>

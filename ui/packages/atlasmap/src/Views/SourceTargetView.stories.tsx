@@ -81,6 +81,7 @@ export const sourceTargetView = () =>
               isSource: true,
               acceptDropType: 'target',
               draggableType: 'source',
+              onEditCSVParams: action('onEditCSVParams'),
             }}
             targetEvents={{
               onCreateProperty: action('onCreateProperty'),
@@ -112,6 +113,7 @@ export const sourceTargetView = () =>
               isSource: false,
               acceptDropType: 'source',
               draggableType: 'target',
+              onEditCSVParams: action('onEditCSVParams'),
             }}
             showTypes={boolean('Show types', false)}
             showMappingPreview={boolean('Show mapping preview', false)}

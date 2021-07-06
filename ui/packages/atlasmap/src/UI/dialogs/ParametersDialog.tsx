@@ -34,25 +34,11 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-
-export interface IParameter {
-  name: string;
-  label: string;
-  value: string;
-  boolean?: boolean;
-  options?: IParameterOption[];
-  enabled?: boolean;
-  required?: boolean;
-}
-
-export interface IParameterOption {
-  label: string;
-  value: string;
-}
+import { IParameter } from '@atlasmap/core';
 
 export interface IParametersDialogProps {
   title: string;
-  parameters?: IParameter[];
+  parameters: IParameter[];
   isOpen: IConfirmationDialogProps['isOpen'];
   onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (parameters: IParameter[]) => void;
@@ -129,7 +115,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   const formLabelParamRequired = {
     '--pf-c-form__label--FontSize': 'large',
     '--pf-c-form--m-horizontal--md__group--GridTemplateColumns': '140px 1fr',
-    'margin-bottom': '1.0rem',
+    marginBottom: '1.0rem',
   } as React.CSSProperties;
   const formLabelTopPadding = {
     '--pf-c-form--m-horizontal__group-label--md--GridColumnWidth': '380px',
