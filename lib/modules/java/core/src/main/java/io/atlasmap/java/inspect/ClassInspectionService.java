@@ -306,7 +306,8 @@ public class ClassInspectionService {
         field.setName(StringUtil.getFieldNameFromGetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            field.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR
+            field.setPath(pathPrefix
+                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? "" : AtlasPath.PATH_SEPARATOR)
                     + StringUtil.getFieldNameFromGetter(m.getName()));
         } else {
             field.setPath(StringUtil.getFieldNameFromGetter(m.getName()));
@@ -378,7 +379,8 @@ public class ClassInspectionService {
         field.setName(StringUtil.getFieldNameFromSetter(m.getName()));
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            field.setPath(pathPrefix + AtlasPath.PATH_SEPARATOR
+            field.setPath(pathPrefix
+                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? "" : AtlasPath.PATH_SEPARATOR)
                     + StringUtil.getFieldNameFromSetter(m.getName()));
         } else {
             field.setPath(StringUtil.getFieldNameFromSetter(m.getName()));
@@ -456,7 +458,9 @@ public class ClassInspectionService {
         s.setName(f.getName());
 
         if (pathPrefix != null && pathPrefix.length() > 0) {
-            s.setPath(pathPrefix + (pathPrefix.endsWith("/") ? "" : AtlasPath.PATH_SEPARATOR) + f.getName());
+            s.setPath(pathPrefix
+                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? "" : AtlasPath.PATH_SEPARATOR)
+                    + f.getName());
         } else {
             s.setPath(f.getName());
         }

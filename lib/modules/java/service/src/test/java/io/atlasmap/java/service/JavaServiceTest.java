@@ -15,7 +15,8 @@
  */
 package io.atlasmap.java.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
@@ -23,13 +24,13 @@ import java.io.ByteArrayInputStream;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.v2.ClassInspectionRequest;
 import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.service.AtlasService;
@@ -38,31 +39,36 @@ import io.atlasmap.v2.Json;
 @ExtendWith(MockitoExtension.class)
 public class JavaServiceTest {
 
-    private JavaService javaService = null;
-
     @Mock
     private ResourceContext mockResourceContext;
-
-    @Before
-    public void setUp() {
-        javaService = new JavaService();
-    }
-
-    @After
-    public void tearDown() {
-        javaService = null;
-    }
+    @InjectMocks
+    private JavaService javaService;
 
     @Test
     public void testGetClass() throws Exception {
         when(mockResourceContext.getResource(AtlasService.class)).thenReturn(new AtlasService());
         ClassInspectionRequest request = new ClassInspectionRequest();
-        request.setClassName(JavaService.class.getName());
+        request.setClassName(ClassInspectionRequest.class.getName());
         byte[] bytes = Json.mapper().writeValueAsBytes(request);
         Response res = javaService.inspectClass(new ByteArrayInputStream(bytes));
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         ClassInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, ClassInspectionResponse.class);
-        assertEquals(JavaService.class.getName(), inspectionResponse.getJavaClass().getClassName());
+        String error = inspectionResponse.getErrorMessage();
+        assertTrue(error == null || error.isEmpty(), error);
+        assertEquals(ClassInspectionRequest.class.getName(), inspectionResponse.getJavaClass().getClassName());
+        request.setClassName(AtlasSession.class.getName());
+        bytes = Json.mapper().writeValueAsBytes(request);
+        res = javaService.inspectClass(new ByteArrayInputStream(bytes));
+        entity = res.getEntity();
+        assertEquals(byte[].class, entity.getClass());
+        inspectionResponse = Json.mapper().readValue((byte[]) entity, ClassInspectionResponse.class);
+        error = inspectionResponse.getErrorMessage();
+        assertTrue(error == null || error.isEmpty(), error);
+        assertEquals(AtlasSession.class.getName(), inspectionResponse.getJavaClass().getClassName());
+        inspectionResponse.getJavaClass().getJavaFields().getJavaField()
+                .stream().filter(f -> "properties".equals(f.getName()))
+                .forEach(f -> assertEquals("/properties", f.getPath(), "Invalid path: " + f.getPath()));
+                
     }
 }
