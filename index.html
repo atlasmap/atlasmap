@@ -448,7 +448,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
 <ul class="sectlevel1">
-<li><a href="#quickstart">1. Quickly get started using AtlasMap standalone</a></li>
+<li><a href="#quickstart">1. Quickly get started using AtlasMap UI standalone</a></li>
 <li><a href="#overview-of-atlasmap">2. Overview of AtlasMap</a>
 <ul class="sectlevel2">
 <li><a href="#general-procedure-for-using-atlasmap-standalone">2.1. General procedure for using AtlasMap standalone</a></li>
@@ -485,6 +485,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#exporting-mappings-to-an-atlasmap-catalog-file">5. Exporting mappings to an AtlasMap catalog file</a></li>
 <li><a href="#resetting-data-files-in-atlasmap">6. Resetting data files in AtlasMap</a></li>
 <li><a href="#running-atlasmap-with-apache-camel">7. Running AtlasMap with Apache Camel</a></li>
+<li><a href="#atlasmap-runtime-examples">8. AtlasMap Runtime Examples</a>
+<ul class="sectlevel2">
+<li><a href="#using-atlasmap-api">8.1. Using AtlasMap API</a>
+<ul class="sectlevel3">
+<li><a href="#atlasmap-runtime-api-example">8.1.1. AtlasMap runtime API example</a></li>
+<li><a href="#atlasmap-runtime-api-with-adm-archive-file-example">8.1.2. AtlasMap runtime API with ADM archive file example</a></li>
+</ul>
+</li>
+<li><a href="#running-with-apache-camel-2-x">8.2. Running with Apache Camel 2.x</a>
+<ul class="sectlevel3">
+<li><a href="#atlasmap-running-with-apache-camel2">8.2.1. AtlasMap running with Apache Camel2</a></li>
+<li><a href="#atlasmap-running-with-apache-camel2-blueprint-xml">8.2.2. AtlasMap running with Apache Camel2 :: Blueprint XML</a></li>
+<li><a href="#atlasmap-running-with-apache-camel2-message-map">8.2.3. AtlasMap running with Apache Camel2 :: Message Map</a></li>
+<li><a href="#atlasmap-running-with-apache-camel-multiple-source-documents">8.2.4. AtlasMap running with Apache Camel :: Multiple source Documents</a></li>
+</ul>
+</li>
+<li><a href="#running-with-apache-camel-3-x">8.3. Running with Apache Camel 3.x</a>
+<ul class="sectlevel3">
+<li><a href="#atlasmap-running-with-apache-camel-3">8.3.1. AtlasMap running with Apache Camel 3</a></li>
+<li><a href="#atlasmap-running-with-apache-camel3-message-map">8.3.2. AtlasMap running with Apache Camel3 :: Message Map</a></li>
+<li><a href="#atlasmap-running-with-apache-camel3-multiple-source-documents">8.3.3. AtlasMap running with Apache Camel3 :: Multiple source Documents</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -547,7 +572,7 @@ AtlasMap mapping definition and processes data mappings as a part of a Camel rou
 <div class="ulist">
 <ul>
 <li>
-<p><a href="#quickstart">Quickly get started using AtlasMap standalone</a></p>
+<p><a href="#quickstart">Quickly get started using AtlasMap UI standalone</a></p>
 </li>
 <li>
 <p><a href="#overview-of-atlasmap">Overview of AtlasMap</a></p>
@@ -567,15 +592,18 @@ AtlasMap mapping definition and processes data mappings as a part of a Camel rou
 <li>
 <p><a href="#running-atlasmap-with-apache-camel">Running AtlasMap with Apache Camel</a></p>
 </li>
+<li>
+<p><a href="#atlasmap-runtime-examples">AtlasMap Runtime Examples</a></p>
+</li>
 </ul>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="quickstart">1. Quickly get started using AtlasMap standalone</h2>
+<h2 id="quickstart">1. Quickly get started using AtlasMap UI standalone</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>To run AtlasMap standalone:</p>
+<p>To run AtlasMap UI standalone:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2973,11 +3001,421 @@ document payload.</p>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="atlasmap-runtime-examples">8. AtlasMap Runtime Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="using-atlasmap-api">8.1. Using AtlasMap API</h3>
+<div class="sect3">
+<h4 id="atlasmap-runtime-api-example">8.1.1. AtlasMap runtime API example</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api</a></p>
+</div>
+<div class="paragraph">
+<p>This is a small example of running AtlasMap mapping by interacting with
+runtime API directly. It consumes <code>order.json</code> JSON file, process
+mapping and produce XML output. The output XML is simply printed in
+console.</p>
+</div>
+<div class="paragraph">
+<p>Compile and run an example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>../../mvnw clean package exec:java</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then generated XML output is printed in console:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">Target Document:
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ns:Address&gt;
+    &lt;ns:addressLine1&gt;1040 Notexisting St&lt;/ns:addressLine1&gt;
+    &lt;ns:city&gt;Westford&lt;/ns:city&gt;
+    &lt;ns:state&gt;Massachusetts&lt;/ns:state&gt;
+    &lt;ns:zipCode&gt;01886&lt;/ns:zipCode&gt;
+  &lt;/ns:Address&gt;
+  &lt;ns:Contact&gt;
+    &lt;ns:firstName&gt;Bob&lt;/ns:firstName&gt;
+    &lt;ns:lastName&gt;Totton&lt;/ns:lastName&gt;
+    &lt;ns:phoneNumber&gt;123-456-7890&lt;/ns:phoneNumber&gt;
+    &lt;ns:zipCode&gt;01886&lt;/ns:zipCode&gt;
+  &lt;/ns:Contact&gt;
+  &lt;ns:orderId&gt;O001&lt;/ns:orderId&gt;
+&lt;/ns:XmlOE&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmap-runtime-api-with-adm-archive-file-example">8.1.2. AtlasMap runtime API with ADM archive file example</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api-adm" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api-adm</a></p>
+</div>
+<div class="paragraph">
+<p>This is a small example of running AtlasMap mapping by interacting with
+runtime API directly. This example uses an ADM archive file to load a
+mapping definition from. It consumes <code>order.json</code> JSON file, process
+mapping and produce XML output. The output XML is simply printed in
+console.</p>
+</div>
+<div class="paragraph">
+<p>Compile and run an example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>../../mvnw clean package exec:java</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then generated XML output is printed in console:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">Target Document:
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;ns:XmlOE xmlns:ns="http://atlasmap.io/xml/test/v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ns:Address&gt;
+    &lt;ns:addressLine1&gt;1040 Notexisting St&lt;/ns:addressLine1&gt;
+    &lt;ns:city&gt;Westford&lt;/ns:city&gt;
+    &lt;ns:state&gt;Massachusetts&lt;/ns:state&gt;
+    &lt;ns:zipCode&gt;01886&lt;/ns:zipCode&gt;
+  &lt;/ns:Address&gt;
+  &lt;ns:Contact&gt;
+    &lt;ns:firstName&gt;Bob&lt;/ns:firstName&gt;
+    &lt;ns:lastName&gt;Totton&lt;/ns:lastName&gt;
+    &lt;ns:phoneNumber&gt;123-456-7890&lt;/ns:phoneNumber&gt;
+    &lt;ns:zipCode&gt;01886&lt;/ns:zipCode&gt;
+  &lt;/ns:Contact&gt;
+  &lt;ns:orderId&gt;O001&lt;/ns:orderId&gt;
+&lt;/ns:XmlOE&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="running-with-apache-camel-2-x">8.2. Running with Apache Camel 2.x</h3>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel2">8.2.1. AtlasMap running with Apache Camel2</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap</a></p>
+</div>
+<div class="sect4">
+<h5 id="introduction-2">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to work with AtlasMap Data Mapper running as a
+part of Camel route.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run">Run</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel2-blueprint-xml">8.2.2. AtlasMap running with Apache Camel2 :: Blueprint XML</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap-blueprint" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap-blueprint</a></p>
+</div>
+<div class="sect4">
+<h5 id="introduction-3">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to work with AtlasMap Data Mapper running as a
+part of Camel route.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build-2">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-without-container">Run without container</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-on-karaf-container">Run on karaf container</h5>
+<div class="paragraph">
+<p>To run the example on the karaf container</p>
+</div>
+<div class="sect5">
+<h6 id="step-1-start-karaf-container">Step 1: Start karaf container</h6>
+<div class="literalblock">
+<div class="content">
+<pre>karaf / karaf.bat</pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="step-2-deploy">Step 2: Deploy</h6>
+<div class="literalblock">
+<div class="content">
+<pre>feature:repo-add mvn:io.atlasmap.examples/camel-example-atlasmap-blueprint/${VERSION}/xml/features
+feature:install camel-example-atlasmap-blueprint</pre>
+</div>
+</div>
+</div>
+<div class="sect5">
+<h6 id="step-3-check-the-output">Step 3: Check the output</h6>
+<div class="paragraph">
+<p>You will see the output by log:tail or in ${karaf}/data/karaf.log</p>
+</div>
+<div class="paragraph">
+<p>You can see the routing rules by looking at the Blueprint XML
+configuration lives in <code>src/main/resources/OSGI-INF/blueprint</code></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel2-message-map">8.2.3. AtlasMap running with Apache Camel2 :: Message Map</h4>
+<div class="sect4">
+<h5 id="introduction-4">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to perform data mapping from multiple source
+Documents and corresponding headers stored in Message Map with using
+AtlasMap Data Mapper running as a part of Camel route. AtlasMap expects
+Message Map to hold Camel Message with a Document ID as a key. The
+Message headers are handled as a scoped property where Document ID is
+equal to the scope. Syndesis provides this message mapping feature
+internally so that the Data Mapper step can consume multiple source
+Messages as well as headers. In this example, <code>MessageCaptureProcessor</code>
+does that part of managing Message Map.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build-3">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-2">Run</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel-multiple-source-documents">8.2.4. AtlasMap running with Apache Camel :: Multiple source Documents</h4>
+<div class="sect4">
+<h5 id="introduction-5">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to perform data mapping from multiple source
+Documents with using AtlasMap Data Mapper running as a part of Camel
+route.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build-4">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-3">Run</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="running-with-apache-camel-3-x">8.3. Running with Apache Camel 3.x</h3>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel-3">8.3.1. AtlasMap running with Apache Camel 3</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap</a></p>
+</div>
+<div class="sect4">
+<h5 id="introduction-6">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to work with AtlasMap Data Mapper running as a
+part of Camel route.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build-5">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-4">Run</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel3-message-map">8.3.2. AtlasMap running with Apache Camel3 :: Message Map</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-msgmap" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-msgmap</a></p>
+</div>
+<div class="sect4">
+<h5 id="introduction-7">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to perform data mapping from multiple source
+Documents and corresponding headers stored in Message Map with using
+AtlasMap Data Mapper running as a part of Camel route. AtlasMap expects
+Message Map to hold Camel Message with a Document ID as a key. The
+Message headers are handled as a scoped property where Document ID is
+equal to the scope. Syndesis provides this message mapping feature
+internally so that the Data Mapper step can consume multiple source
+Messages as well as headers. In this example, <code>MessageCaptureProcessor</code>
+does that part of managing Message Map.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build-6">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-5">Run</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="atlasmap-running-with-apache-camel3-multiple-source-documents">8.3.3. AtlasMap running with Apache Camel3 :: Multiple source Documents</h4>
+<div class="paragraph">
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-multidoc" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-multidoc</a></p>
+</div>
+<div class="sect4">
+<h5 id="introduction-8">Introduction</h5>
+<div class="paragraph">
+<p>This example shows how to perform data mapping from multiple source
+Documents with using AtlasMap Data Mapper running as a part of Camel
+route.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="build-7">Build</h5>
+<div class="paragraph">
+<p>You will need to compile this example first:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn compile</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="run-6">Run</h5>
+<div class="paragraph">
+<p>To run the example, type</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>mvn camel:run</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To stop the example hit ctrl+c.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 2.3.0-SNAPSHOT<br>
-Last updated 2021-07-06 16:39:21 UTC
+Last updated 2021-07-06 20:32:06 UTC
 </div>
 </div>
 </body>
