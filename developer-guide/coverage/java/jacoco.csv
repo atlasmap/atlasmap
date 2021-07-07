@@ -254,7 +254,7 @@ Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,TargetValueConve
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,ClassHelper,224,365,44,42,55,67,35,24,7,9
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,JarClassLoader,113,0,12,0,23,0,12,0,6,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructInvalidException,16,0,0,0,8,0,4,0,4,0
-Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ClassInspectionService,537,1825,103,217,111,382,94,105,7,32
+Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ClassInspectionService,434,1940,88,236,88,409,83,118,6,33
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructUnsupportedException,16,0,0,0,8,0,4,0,4,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,InspectionException,13,0,0,0,6,0,3,0,3,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructPrimitiveException,16,0,0,0,8,0,4,0,4,0
@@ -278,7 +278,7 @@ Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,ModifierList,106,
 Unit Test Coverage Report/atlas-java-module,io.atlasmap.java.module,JavaMappingFieldPairValidator,127,45,16,14,27,11,13,8,4,2
 Unit Test Coverage Report/atlas-java-module,io.atlasmap.java.module,JavaValidationService,117,265,5,19,20,56,8,16,3,9
 Unit Test Coverage Report/atlas-java-module,io.atlasmap.java.module,JavaModule,269,513,37,55,39,119,37,24,3,12
-Unit Test Coverage Report/atlas-java-service,io.atlasmap.java.service,JavaService,99,116,14,8,15,34,12,6,1,6
+Unit Test Coverage Report/atlas-java-service,io.atlasmap.java.service,JavaService,99,116,10,12,15,34,8,10,1,6
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonInspectionException,12,8,0,0,4,4,2,2,2,2
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonInspectionService,0,76,1,19,0,14,1,13,0,4
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonSchemaInspector.JsonFieldBuilder,0,68,0,4,0,18,0,4,0,2
