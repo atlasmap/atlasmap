@@ -52,6 +52,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getInputField().add(source);
         m.getOutputField().add(target);
         previewContext.processPreview(m);
+        target = m.getOutputField().get(0);
         assertEquals(Integer.class, target.getValue().getClass());
         assertEquals(404, target.getValue());
     }
@@ -71,6 +72,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getInputField().add(source);
         m.getOutputField().add(target);
         previewContext.processPreview(m);
+        target = m.getOutputField().get(0);
         assertEquals("ABC", target.getValue());
     }
 
@@ -89,6 +91,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getInputField().add(source);
         m.getOutputField().add(target);
         previewContext.processPreview(m);
+        target = m.getOutputField().get(0);
         assertEquals("ABC", target.getValue());
     }
 
@@ -110,6 +113,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getInputField().add(source2);
         m.getOutputField().add(target);
         previewContext.processPreview(m);
+        target = m.getOutputField().get(0);
         assertEquals("1 2", target.getValue());
     }
 
@@ -130,6 +134,8 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().add(target1);
         m.getOutputField().add(target2);
         previewContext.processPreview(m);
+        target1 = m.getOutputField().get(0);
+        target2 = m.getOutputField().get(1);
         assertEquals("1", target1.getValue());
         assertEquals("2", target2.getValue());
     }
@@ -159,6 +165,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         previewContext.processPreview(m);
+        target = m.getOutputField().get(0);
         assertEquals("one and two", target.getValue());
     }
 
@@ -194,6 +201,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         previewContext.processPreview(m);
+        target = m.getOutputField().get(0);
         assertEquals("-one--two--six", target.getValue());
     }
 
@@ -222,6 +230,9 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().add(target3);
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target1 = m.getOutputField().get(0);
+        target2 = m.getOutputField().get(1);
+        target3 = m.getOutputField().get(2);
         assertEquals("one", target1.getValue());
         assertEquals("two", target2.getValue());
         assertEquals("four", target3.getValue());
@@ -246,6 +257,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
         assertEquals("one", target.getValue());
     }
 
@@ -270,6 +282,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
         assertEquals("100.0", target.getValue());
     }
 
@@ -295,21 +308,23 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
         assertEquals("1.0", target.getValue());
     }
 
     @Test
     public void testProcessPreviewFieldTypes() throws AtlasException {
         Mapping m = new Mapping();
-        Field source = new Field() {private static final long serialVersionUID = 1L;};
+        Field source = new SimpleField();
         source.setFieldType(FieldType.STRING);
         source.setValue("foo");
-        Field target = new Field() {private static final long serialVersionUID = 1L;};
+        Field target = new SimpleField();
         target.setFieldType(FieldType.STRING);
         m.getInputField().add(source);
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
         assertEquals("foo", target.getValue());
     }
 
@@ -342,6 +357,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
         assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
         assertEquals("MA", target.getValue());
     }
 
