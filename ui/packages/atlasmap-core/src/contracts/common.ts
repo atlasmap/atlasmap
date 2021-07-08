@@ -158,3 +158,18 @@ export interface IFieldAction {
 export interface IStringList {
   string: string[];
 }
+
+export interface IParameterOption {
+  label: string;
+  value: string;
+}
+
+export interface IParameter {
+  name: string;
+  label: string;
+  value: string;
+  boolean?: boolean;
+  options?: IParameterOption[];
+  enabled?: boolean;
+  required?: boolean;
+}

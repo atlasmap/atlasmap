@@ -14,7 +14,7 @@
     limitations under the License.
 */
 import React, { ReactElement, useCallback, useState } from 'react';
-
+import { ICsvParameterOptions } from '@atlasmap/core';
 import { useAtlasmap } from '../AtlasmapProvider';
 import { useConfirmationDialog } from './useConfirmationDialog';
 import { useParametersDialog } from './useParametersDialog';
@@ -43,106 +43,19 @@ export function useImportDocumentDialog(): [
         const userFileSuffix: string =
           userFileSplit[userFileSplit.length - 1].toUpperCase();
         if (userFileSuffix === 'CSV') {
-          openParametersDialog(
-            (parameters) => {
-              const inspectionParameters: { [key: string]: string } = {};
-              for (let parameter of parameters) {
-                inspectionParameters[parameter.name] = parameter.value;
-              }
-              importInstanceSchema(selectedFile, configModel, isSource, false);
-            },
-            [
-              {
-                name: 'format',
-                label: 'CSV File Format',
-                value: 'Default',
-                options: [
-                  { label: 'Default', value: 'Default' },
-                  { label: 'Excel', value: 'Excel' },
-                  { label: 'InformixUnload', value: 'InformixUnload' },
-                  { label: 'InformixUnloadCsv', value: 'InformixUnloadCsv' },
-                  { label: 'MongoDBCsv', value: 'MongoDBCsv' },
-                  { label: 'MongoDBTsv', value: 'MongoDBTsv' },
-                  { label: 'MySQL', value: 'MySQL' },
-                  { label: 'Oracle', value: 'Oracle' },
-                  { label: 'PostgreSQLCsv', value: 'PostgreSQLCsv' },
-                  { label: 'PostgreSQLText', value: 'PostgreSQLText' },
-                  { label: 'RFC4180', value: 'RFC4180' },
-                  { label: 'TDF', value: 'TDF' },
-                ],
-                required: true,
-              },
-              {
-                name: 'allowDuplicateHeaderNames',
-                label: 'Allow Duplicate Header Names',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-              {
-                name: 'allowMissingColumnNames',
-                label: 'Allow Missing Column Names',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-              {
-                name: 'commentMarker',
-                label: 'Comment Marker',
-                value: '',
-                required: false,
-              },
-              {
-                name: 'delimiter',
-                label: 'Delimiter',
-                value: '',
-                required: false,
-              },
-              { name: 'escape', label: 'Escape', value: '', required: false },
-              {
-                name: 'firstRecordAsHeader',
-                label: 'First Record As Header',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-              { name: 'headers', label: 'Headers', value: '', required: false },
-              {
-                name: 'ignoreEmptyLines',
-                label: 'Ignore Empty Lines',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-              {
-                name: 'ignoreHeaderCase',
-                label: 'Ignore Header Case',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-              {
-                name: 'ignoreSurroundingSpaces',
-                label: 'Ignore Surrounding Spaces',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-              {
-                name: 'nullString',
-                label: 'Null String',
-                value: '',
-                required: false,
-              },
-              {
-                name: 'skipHeaderRecord',
-                label: 'Skip Header Record',
-                value: 'true',
-                boolean: true,
-                required: false,
-              },
-            ],
-          );
+          openParametersDialog((parameters) => {
+            const inspectionParameters: { [key: string]: string } = {};
+            for (let parameter of parameters) {
+              inspectionParameters[parameter.name] = parameter.value;
+            }
+            importInstanceSchema(
+              selectedFile,
+              configModel,
+              isSource,
+              false,
+              inspectionParameters,
+            );
+          }, ICsvParameterOptions.getCsvParameterOptions());
           return;
         }
 

@@ -182,8 +182,8 @@ export async function getCustomClassNameOptions(): Promise<string[]> {
 }
 
 /**
- * Import an instance or schema document into either the Source panel or Target
- * panel (JSON, XML, XSD).
+ * Import a CSV, instance or schema document into either the Source panel or Target
+ * panel (CSV, JSON, XML, XSD).
  *
  * @param selectedFile
  * @param cfg
@@ -282,4 +282,38 @@ export function getPropertyScopeOptions(isSource: boolean): {
     });
   }
   return scopeOptions;
+}
+
+/**
+ * Return CSV document inspection parameters.
+ *
+ * @param docId
+ * @param isSource
+ * @returns
+ */
+export function getDocCSVParams(
+  docId: string,
+  isSource: boolean,
+): { [key: string]: string } {
+  const doc = getDocDef(docId, ConfigModel.getConfig(), isSource);
+  return doc?.inspectionParameters;
+}
+
+/**
+ * Set CSV document inspection parameters.
+ *
+ * @param docId
+ * @param isSource
+ * @param parameters
+ */
+export async function setDocCSVParams(
+  docId: string,
+  isSource: boolean,
+  parameters: { [key: string]: string },
+) {
+  const cfg = ConfigModel.getConfig();
+  const docDef = getDocDef(docId, cfg, isSource);
+  docDef.inspectionParameters = parameters;
+  await cfg.mappingService.notifyMappingUpdated();
+  await cfg.fileService.updateDigestFile();
 }
