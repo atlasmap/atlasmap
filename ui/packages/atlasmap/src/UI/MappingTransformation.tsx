@@ -1,16 +1,35 @@
-import React, { FunctionComponent } from "react";
+/*
+    Copyright (C) 2017 Red Hat, Inc.
 
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+*/
 import {
   Button,
+  Checkbox,
+  FormGroup,
   FormSelect,
   FormSelectOption,
   InputGroup,
-  TextInput,
-  FormGroup,
+  Select,
+  SelectOption,
+  SelectOptionObject,
+  SelectVariant,
   Split,
   SplitItem,
-  Checkbox,
+  TextInput,
 } from "@patternfly/react-core";
+import React, { FunctionComponent, useState } from "react";
+
 import { TrashIcon } from "@patternfly/react-icons";
 
 export interface ITransformationSelectOption {
@@ -36,6 +55,22 @@ export interface IMappingTransformationProps {
   noPaddings?: boolean;
 }
 
+const formTransStyle = {
+  "--pf-c-form-control--FontSize": "small",
+  "--pf-c-form--GridGap": "0",
+  marginTop: "0.4rem",
+} as React.CSSProperties;
+
+const formTransGroupStyle = {
+  "--pf-c-form-control--FontSize": "small",
+  marginTop: "1.0rem",
+} as React.CSSProperties;
+
+const formTransTextInputStyle = {
+  "--pf-c-form-control--FontSize": "small",
+  marginTop: "0rem",
+} as React.CSSProperties;
+
 export const MappingTransformation: FunctionComponent<IMappingTransformationProps> = ({
   name,
   transformationsOptions,
@@ -45,6 +80,183 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
   onTransformationChange,
   onRemoveTransformation,
 }) => {
+  const RenderTransformationArgumentOptions = (
+    argId: string,
+    arg: ITransformationArgument,
+    disableTransformation: boolean,
+    onTransformationArgumentChange: (name: string, value: string) => void,
+  ) => {
+    /** If the option name is 'User defined', we assume it accepts a user input */
+    const isUserDefined = (option?: ITransformationSelectOption) => {
+      return option?.name === "User defined";
+    };
+
+    const userDefinedOption = arg.options?.find((option) =>
+      isUserDefined(option),
+    );
+
+    let initialSelected = arg.options?.find(
+      (option) => option.value === arg.value,
+    );
+    if (!initialSelected) {
+      if (arg.value) {
+        initialSelected = userDefinedOption;
+      } else if (arg.options) {
+        initialSelected = arg.options[1];
+        arg.value = arg.options[1].value;
+      }
+    }
+    let initialUserDefined = "";
+    if (isUserDefined(initialSelected)) {
+      initialUserDefined = arg.value;
+    }
+
+    const [isOpen, setIsOpen] = useState(false);
+    const [selected, setSelected] = useState<
+      ITransformationSelectOption | undefined
+    >(initialSelected);
+    const [userDefinedValue, setUserDefinedValue] = useState<string>(
+      initialUserDefined,
+    );
+
+    const onToggle = (isOpen: boolean) => {
+      setIsOpen(isOpen);
+    };
+
+    const onSelect = (
+      _event:
+        | React.MouseEvent<Element, MouseEvent>
+        | React.ChangeEvent<Element>,
+      selection: string | SelectOptionObject,
+      _isPlaceholder?: boolean,
+    ) => {
+      setIsOpen(false);
+      const selectedOption = arg.options!.find(
+        (option) => option.value === selection,
+      );
+      if (!selectedOption) {
+        return;
+      }
+      setSelected(selectedOption);
+      arg.value = isUserDefined(selectedOption)
+        ? userDefinedValue
+          ? userDefinedValue
+          : ""
+        : selection.toString();
+      onTransformationArgumentChange(arg.name, arg.value);
+    };
+
+    const onChangeUserDefinedValue = (value: string) => {
+      setUserDefinedValue(value);
+      arg.value = value;
+      onTransformationArgumentChange(arg.name, value);
+    };
+
+    return (
+      <Split>
+        <SplitItem>
+          <Select
+            variant={SelectVariant.single}
+            aria-label={arg.label}
+            onSelect={onSelect}
+            selections={selected?.value}
+            onToggle={onToggle}
+            isExpanded={isOpen}
+            placeholderText={"[None]"}
+            id={argId}
+            isDisabled={disableTransformation}
+            data-testid={arg.name}
+            style={formTransStyle}
+          >
+            {arg.options?.map((option, optIndx) => {
+              return (
+                <SelectOption value={option.value} key={optIndx}>
+                  {option.name}
+                </SelectOption>
+              );
+            })}
+          </Select>
+        </SplitItem>
+        {isUserDefined(selected) && (
+          <SplitItem>
+            <TextInput
+              id="userDefined"
+              type="text"
+              name="userDefined"
+              value={userDefinedValue}
+              onChange={onChangeUserDefinedValue}
+              style={formTransTextInputStyle}
+              data-testid={`userDefined`}
+              autoFocus
+            />
+          </SplitItem>
+        )}
+      </Split>
+    );
+  };
+
+  const renderTransformationArgumentText = (
+    argId: string,
+    a: ITransformationArgument,
+  ) => {
+    return (
+      <TextInput
+        id={argId}
+        type="text"
+        name={a.name}
+        isDisabled={disableTransformation}
+        value={a.value}
+        onChange={(value) => onTransformationArgumentChange(a.name, value)}
+        data-testid={`insert-transformation-parameter-${a.name}-input-field`}
+        style={formTransTextInputStyle}
+      />
+    );
+  };
+
+  const renderTransformationArgumentDelimitingEmptyValues = (
+    argId: string,
+    a: ITransformationArgument,
+  ) => {
+    return (
+      <Checkbox
+        id={argId}
+        key={argId}
+        label="Delimit empty values"
+        aria-label="Delimit empty values"
+        isChecked={a.value === "true"}
+        onChange={(value) =>
+          onTransformationArgumentChange(a.name, value.toString())
+        }
+      />
+    );
+  };
+
+  const renderTransformationArgument = (
+    a: ITransformationArgument,
+    idx: number,
+  ) => {
+    const argId = `${id}-transformation-${idx}`;
+    return a.name !== "delimitingEmptyValues" ? (
+      <FormGroup
+        fieldId={argId}
+        label={a.label}
+        key={idx}
+        style={formTransGroupStyle}
+      >
+        {a.options
+          ? RenderTransformationArgumentOptions(
+              argId,
+              a,
+              disableTransformation,
+              onTransformationArgumentChange,
+            )
+          : renderTransformationArgumentText(argId, a)}
+      </FormGroup>
+    ) : (
+      renderTransformationArgumentDelimitingEmptyValues(argId, a)
+    );
+  };
+
   const id = `user-field-action-${name}`;
   return (
     <>
@@ -56,6 +268,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
             isDisabled={disableTransformation}
             onChange={onTransformationChange}
             data-testid={id}
+            style={formTransStyle}
           >
             {transformationsOptions.map((a, idx) => (
               <FormSelectOption label={a.name} value={a.value} key={idx} />
@@ -73,94 +286,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
           )}
         </InputGroup>
       </FormGroup>
-      {transformationsArguments.map((a, idx) => {
-        const argId = `${id}-transformation-${idx}`;
-        const udOption = a.options?.find(
-          (option) => option.name === "User defined",
-        );
-        // If user-defined option, then this must be a delimiter argument.
-        // Replace user-defined option value with arg value, since arg options
-        // are always reset with static values
-        if (
-          a.options &&
-          udOption &&
-          !a.options.find((option) => option.value === a.value)
-        ) {
-          udOption.value = a.value;
-        }
-        return a.name !== "delimitingEmptyValues" ? (
-          <FormGroup fieldId={argId} label={a.label} key={idx}>
-            {a.options ? (
-              <Split>
-                <SplitItem>
-                  <FormSelect
-                    label={a.label}
-                    value={a.value}
-                    id={argId}
-                    isDisabled={disableTransformation}
-                    onChange={(value) =>
-                      onTransformationArgumentChange(a.name, value)
-                    }
-                    data-testid={a.name}
-                  >
-                    {a.options.map((option, optIndx) => {
-                      return (
-                        <FormSelectOption
-                          label={option.name}
-                          value={option.value}
-                          key={optIndx}
-                        />
-                      );
-                    })}
-                  </FormSelect>
-                </SplitItem>
-                {a.value === udOption?.value && (
-                  <SplitItem>
-                    <TextInput
-                      id="userDefined"
-                      type="text"
-                      name="userDefined"
-                      defaultValue={a.value}
-                      value={a.value}
-                      onChange={(value) =>
-                        onTransformationArgumentChange(a.name, value)
-                      }
-                      data-testid={`userDefined`}
-                      autoFocus
-                    />
-                  </SplitItem>
-                )}
-              </Split>
-            ) : (
-              <TextInput
-                id={argId}
-                type="text"
-                name={a.name}
-                isDisabled={disableTransformation}
-                defaultValue={
-                  a.value
-                } /* uncontrolled component because the state will be updated slowly after some API call */
-                value={a.value}
-                onChange={(value) =>
-                  onTransformationArgumentChange(a.name, value)
-                }
-                data-testid={`insert-transformation-parameter-${a.name}-input-field`}
-              />
-            )}
-          </FormGroup>
-        ) : (
-          <Checkbox
-            id={argId}
-            key={argId}
-            label="Delimit empty values"
-            aria-label="Delimit empty values"
-            isChecked={a.value === "true"}
-            onChange={(value) =>
-              onTransformationArgumentChange(a.name, value.toString())
-            }
-          />
-        );
-      })}
+      {transformationsArguments.map(renderTransformationArgument)}
     </>
   );
 };
