@@ -14,7 +14,7 @@
     limitations under the License.
 */
 import { IConstant, IDocumentName, INamespace, IProperty } from '../UI';
-import { ICsvParameterOptions, IParameter } from '@atlasmap/core';
+import { IParameter, getCsvParameterOptions } from '@atlasmap/core';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
   enableCustomClass,
@@ -253,7 +253,7 @@ export function useAtlasmapDialogs({
     );
 
     // Complete list of available CSV parameters.
-    const initialCSVParameters = ICsvParameterOptions.getCsvParameterOptions();
+    const initialCSVParameters = getCsvParameterOptions();
     const predefinedParamNames = Object.keys(predefinedParameters).map(
       (key) => key,
     );

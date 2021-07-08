@@ -14,7 +14,7 @@
     limitations under the License.
 */
 import React, { ReactElement, useCallback, useState } from 'react';
-import { ICsvParameterOptions } from '@atlasmap/core';
+import { getCsvParameterOptions } from '@atlasmap/core';
 import { useAtlasmap } from '../AtlasmapProvider';
 import { useConfirmationDialog } from './useConfirmationDialog';
 import { useParametersDialog } from './useParametersDialog';
@@ -55,7 +55,7 @@ export function useImportDocumentDialog(): [
               false,
               inspectionParameters,
             );
-          }, ICsvParameterOptions.getCsvParameterOptions());
+          }, getCsvParameterOptions());
           return;
         }
 
