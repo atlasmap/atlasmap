@@ -1,0 +1,45 @@
+{
+  "ProcessMappingRequest": {
+    "jsonType": "io.atlasmap.v2.ProcessMappingRequest",
+    "mapping": {
+      "jsonType": "io.atlasmap.v2.Mapping",
+      "inputField": [
+        {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "actions": [
+            {
+              "delimiter": "t",
+              "@type": "Split"
+            }
+          ],
+          "value": "aaatbb",
+          "docId": "JSONSchemaSource-1f0ac640-ccf3-4ac9-91f6-02fff52d6621",
+          "path": "/primitives/stringPrimitive",
+          "fieldType": "STRING",
+          "name": "stringPrimitive"
+        }
+      ],
+      "outputField": [
+        {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "value": "aaa",
+          "docId": "JSONSchemaSource-a6a342b3-3cca-4dd4-884f-66e120b152e0",
+          "index": 0,
+          "path": "/order/address/city",
+          "fieldType": "STRING",
+          "name": "city"
+        },
+        {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "value": "",
+          "docId": "JSONSchemaSource-a6a342b3-3cca-4dd4-884f-66e120b152e0",
+          "index": 1,
+          "path": "/order/address/state",
+          "fieldType": "STRING",
+          "name": "state"
+        }
+      ],
+      "id": "preview"
+    }
+  }
+}

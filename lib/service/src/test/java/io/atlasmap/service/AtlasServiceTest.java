@@ -230,6 +230,16 @@ public class AtlasServiceTest {
         assertEquals("Boston", field.getValue());
     }
 
+    @Test
+    public void testProcessMapping3064() throws Exception {
+        Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-3064.json"),
+                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
+        ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
+        assertEquals(printAudit(resp.getAudits()), 0, resp.getAudits().getAudit().size());
+        Field field = resp.getMapping().getInputField().get(0);
+        assertEquals("/primitives/stringPrimitive", field.getPath());
+    }
+
     protected UriInfo generateTestUriInfo(String baseUri, String absoluteUri) throws Exception {
         return new TestUriInfo(new URI(baseUri), new URI(absoluteUri));
     }

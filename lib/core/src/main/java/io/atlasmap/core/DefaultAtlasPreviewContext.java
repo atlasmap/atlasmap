@@ -22,6 +22,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasPreviewContext;
@@ -35,6 +37,7 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.SimpleField;
@@ -49,13 +52,15 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasPreviewContext.class);
 
-    private Mapping mapping;
+    private Mapping originalMapping;
+    private ObjectMapper jsonMapper;
     private PreviewModule previewModule = new PreviewModule();
     private AtlasCollectionHelper collectionHelper;
 
 
     DefaultAtlasPreviewContext(DefaultAtlasContextFactory factory) {
         super(factory, new AtlasMapping());
+        this.jsonMapper = Json.withClassLoader(factory.getClassLoader());
         this.collectionHelper = new DefaultAtlasCollectionHelper(factory.getFieldActionService());
     }
 
@@ -68,13 +73,20 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
     @Override
     public Audits processPreview(Mapping mapping) throws AtlasException {
         DefaultAtlasSession session = new DefaultAtlasSession(this);
-        this.mapping = mapping;
-        session.head().setMapping(mapping);
-        MappingType mappingType = mapping.getMappingType();
-        String expression = mapping.getExpression();
-        FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
-        List<Field> sourceFields = mapping.getInputField();
-        List<Field> targetFields = mapping.getOutputField();
+        this.originalMapping = mapping;
+        Mapping cloned;
+        try {
+            byte[] serialized = jsonMapper.writeValueAsBytes(mapping);
+            cloned = jsonMapper.readValue(serialized, Mapping.class);
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
+        session.head().setMapping(cloned);
+        MappingType mappingType = cloned.getMappingType();
+        String expression = cloned.getExpression();
+        FieldGroup sourceFieldGroup = cloned.getInputFieldGroup();
+        List<Field> sourceFields = cloned.getInputField();
+        List<Field> targetFields = cloned.getOutputField();
 
         targetFields.forEach(tf -> tf.setValue(null));
         if ((sourceFieldGroup == null && sourceFields.isEmpty()) || targetFields.isEmpty()) {
@@ -174,7 +186,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 
         } else if (mappingType == MappingType.COMBINE) {
             targetField = targetFields.get(0);
-            Field combined = processCombineField(session, mapping, sourceFields, targetField);
+            Field combined = processCombineField(session, cloned, sourceFields, targetField);
             if (!convertSourceToTarget(session, combined, targetField)) {
                 return session.getAudits();
             }
@@ -183,7 +195,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         } else if (mappingType == MappingType.SEPARATE) {
             List<Field> separatedFields;
             try {
-                separatedFields = processSeparateField(session, mapping, sourceField);
+                separatedFields = processSeparateField(session, cloned, sourceField);
             } catch (AtlasException e) {
                 AtlasUtil.addAudit(session, sourceField, String.format(
                         "Failed to separate field: %s", AtlasUtil.getChainedMessage(e)),
@@ -219,9 +231,11 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
 
         } else {
             AtlasUtil.addAudit(session, (String)null, String.format(
-                    "Unsupported mappingType=%s detected", mapping.getMappingType()),
+                    "Unsupported mappingType=%s detected", cloned.getMappingType()),
                     AuditStatus.ERROR, null);
         }
+        mapping.getOutputField().clear();
+        mapping.getOutputField().addAll(cloned.getOutputField());
         return session.getAudits();
     }
 
@@ -270,7 +284,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         @Override
         public void readSourceValue(AtlasInternalSession session) throws AtlasException {
             Field sourceField = session.head().getSourceField();
-            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
+            FieldGroup sourceFieldGroup = originalMapping.getInputFieldGroup();
             if (sourceFieldGroup != null) {
                 if (matches(sourceField, sourceFieldGroup)) {
                     session.head().setSourceField(sourceFieldGroup);
@@ -280,7 +294,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                  session.head().setSourceField(f);
                  return;
             }
-            for (Field f : mapping.getInputField()) {
+            for (Field f : originalMapping.getInputField()) {
                 if (matches(sourceField, f)) {
                     session.head().setSourceField(f);
                     return;
