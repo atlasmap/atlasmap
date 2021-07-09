@@ -1,0 +1,39 @@
+name: 'Chromatic'
+
+on:
+  push:
+    branches: [ atlasmap-2.2.x ]
+  pull_request:
+    branches: [ atlasmap-2.2.x ]
+
+jobs:
+  deploy-chromatic:
+    if: ${{ github.repository == 'atlasmap/atlasmap' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ui/node_modules
+            ui/packages/*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}-2.2.x
+      - name: Install dependencies
+        run: yarn install
+        working-directory: ui
+      - name: build @atlasmap/core
+        run: yarn build:module
+        working-directory: ui/packages/atlasmap-core
+      - name: prebuild
+        run: yarn prebuild
+        working-directory: ui/packages/atlasmap
+      - name: Publish to Chromatic
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: adaaa25c3df8
+          workingDir: ui/packages/atlasmap
+          buildScriptName: build:storybook

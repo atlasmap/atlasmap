@@ -1,0 +1,39 @@
+name: 'Build'
+
+on:
+  push:
+    branches: [ atlasmap-2.2.x ]
+  pull_request:
+    branches: [ atlasmap-2.2.x ]
+
+jobs:
+  build-branch:
+    if: ${{ github.repository == 'atlasmap/atlasmap' }}
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up Java versions
+        uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: 'adopt'
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}-2.2.x
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            ui/node_modules
+            ui/packages/*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}-2.2.x
+      - name: Build
+        run: mvn --batch-mode -Pcoverage -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install
