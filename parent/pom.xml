@@ -78,7 +78,7 @@
     <osgi.include.resource.atlasmap>${osgi.include.resource}</osgi.include.resource.atlasmap>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
-    <resteasy-spring-boot-starter.version>4.8.1.Final</resteasy-spring-boot-starter.version>
+    <resteasy-spring-boot-starter.version>4.8.2.Final</resteasy-spring-boot-starter.version>
     <selenium.version>3.141.59</selenium.version>
     <slf4j.version>1.7.31</slf4j.version>
     <spring.version>5.3.8</spring.version>
