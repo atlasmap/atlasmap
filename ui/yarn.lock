@@ -4015,9 +4015,9 @@
     "@types/d3-path" "^1"
 
 "@types/d3-shape@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/d3-shape/-/d3-shape-3.0.0.tgz#bb1f9f4b06314bf271828abd21e7a5f2fce9cec4"
-  integrity sha512-c1Wu/JwJJHSeY/M26pzNfuaybLCcTOkn1xxxVH7riuYObpvI8SfyDD30F8mqG+NHZuZTeIdKj4lej1USZ0V5vQ==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/d3-shape/-/d3-shape-3.0.1.tgz#8cebf5f3d56dd81674e1822279db58a38848a250"
+  integrity sha512-HnpwE2zl45cOaXLLo0zR4OfRQM9u9sI/ESb0w41PrrsQfkibj8pVIS8VYMSem2Wf5RuWxcgy3/8Kw2/FcIqAEQ==
   dependencies:
     "@types/d3-path" "*"
 
