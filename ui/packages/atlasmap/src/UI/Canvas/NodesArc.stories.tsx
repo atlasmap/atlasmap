@@ -16,7 +16,7 @@ import {
 import PrintNodeRef from "./PrintNodeRef";
 
 const obj = {
-  title: 'UI|Canvas/NodesArc',
+  title: "UI|Canvas/NodesArc",
   includeStories: [], // or don't load this file at all
   parameters: {
     chromatic: { disableSnapshot: true },
