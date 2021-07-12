@@ -94,7 +94,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.validators,DefaultAtlasValidati
 Unit Test Coverage Report/atlas-core,io.atlasmap.validators,StringPatternValidator,0,122,1,9,0,32,1,9,0,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.validators,PositiveIntegerValidator,1,70,2,8,0,16,2,7,0,4
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,ExpressionFieldAction,13,32,0,4,2,7,0,5,0,3
-Unit Test Coverage Report/atlas-core,io.atlasmap.actions,StringComplexFieldActions,9,566,12,150,3,117,12,90,0,21
+Unit Test Coverage Report/atlas-core,io.atlasmap.actions,StringComplexFieldActions,9,567,12,150,3,117,12,90,0,21
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,ObjectFieldActions,8,145,5,27,2,32,5,19,0,8
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,NumberFieldActions,18,1176,15,123,2,241,15,74,0,20
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,DateFieldActions,4,84,2,16,0,17,2,16,0,9
@@ -102,7 +102,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.actions,CollectionActions,3,3,0
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,StringSimpleFieldActions,6,202,3,49,1,48,3,38,0,15
 Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,BaseModuleValidationService,109,852,37,119,32,179,40,63,3,22
 Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,MultipleFieldSelectionValidator,77,0,8,0,19,0,6,0,2,0
-Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,MappingFieldPairValidator,136,310,22,50,35,69,18,30,1,11
+Unit Test Coverage Report/atlas-core,io.atlasmap.core.validate,MappingFieldPairValidator,136,310,23,49,35,69,19,29,1,11
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ActionParameter,8,34,0,2,4,12,2,9,2,8
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Capitalize,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Format,0,10,0,0,0,4,0,3,0,3

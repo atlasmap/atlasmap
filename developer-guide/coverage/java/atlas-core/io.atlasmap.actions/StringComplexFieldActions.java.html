@@ -205,7 +205,7 @@ import io.atlasmap.v2.SubStringBefore;
 <span class="fc" id="L205">            throw new IllegalArgumentException(&quot;Split must be specified with a delimiter&quot;);</span>
         }
 
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        return input == null ? null : input.toString().split(split.getDelimiter());</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        return input == null ? null : input.toString().split(Pattern.quote(split.getDelimiter()));</span>
     }
 
     @AtlasActionProcessor(sourceType = FieldType.ANY)
