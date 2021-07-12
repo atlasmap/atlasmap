@@ -380,6 +380,23 @@ public class StringComplexFieldActionsTest {
     }
 
     @Test
+    public void testSplitEscape() {
+        Split action = new Split();
+        action.setDelimiter("\\");
+        assertArrayEquals(null, StringComplexFieldActions.split(action, null));
+        assertArrayEquals(new String[] {"1", "2", "3"}, StringComplexFieldActions.split(action, "1\\2\\3"));
+        action.setDelimiter("|");
+        assertArrayEquals(null, StringComplexFieldActions.split(action, null));
+        assertArrayEquals(new String[] {"1", "2", "3"}, StringComplexFieldActions.split(action, "1|2|3"));
+        action.setDelimiter(".");
+        assertArrayEquals(null, StringComplexFieldActions.split(action, null));
+        assertArrayEquals(new String[] {"1", "2", "3"}, StringComplexFieldActions.split(action, "1.2.3"));
+        action.setDelimiter("$");
+        assertArrayEquals(null, StringComplexFieldActions.split(action, null));
+        assertArrayEquals(new String[] {"1", "2", "3"}, StringComplexFieldActions.split(action, "1$2$3"));
+    }
+
+    @Test
     public void testStartsWith() {
         StartsWith action = new StartsWith();
         action.setString("");
