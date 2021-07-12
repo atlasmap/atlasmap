@@ -205,7 +205,7 @@ public class StringComplexFieldActions implements AtlasFieldAction {
             throw new IllegalArgumentException("Split must be specified with a delimiter");
         }
 
-        return input == null ? null : input.toString().split(split.getDelimiter());
+        return input == null ? null : input.toString().split(Pattern.quote(split.getDelimiter()));
     }
 
     @AtlasActionProcessor(sourceType = FieldType.ANY)
