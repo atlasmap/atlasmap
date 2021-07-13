@@ -40,7 +40,7 @@ jobs:
           ui/node_modules
           ui/packages/*/node_modules
         key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}
-    - name: Build from root with Maven - FIXME: https://github.com/atlasmap/atlasmap/issues/3101
+    - name: Build from root with Maven - FIXME - https://github.com/atlasmap/atlasmap/issues/3101
       if: ${{ runner.os == 'Windows' }}
       run: mvn --batch-mode -Pcoverage "-Dwebdriver.chrome.driver=$Env:CHROMEWEBDRIVER\chromedriver.exe" clean install
       continue-on-error: true
