@@ -51,9 +51,11 @@ jobs:
       working-directory: lib
       run: mvn --batch-mode clean install
     - name: Build docs
+      if: ${{ runner.os == 'Linux' }}
       working-directory: docs
       run: mvn "-Phtml,pdf" package
     - name: Build aggregated javadoc
+      if: ${{ runner.os == 'Linux' }}
       working-directory: docs
       run: mvn -f pom-javadoc.xml -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
   build_yarn:
