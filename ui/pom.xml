@@ -112,7 +112,7 @@
                 <goal>yarn</goal>
               </goals>
               <configuration>
-                <arguments>install -s --no-progress</arguments>
+                <arguments>install -s --no-progress --network-timeout 1000000</arguments>
               </configuration>
             </execution>
             <execution>
