@@ -21,7 +21,7 @@ import {
 import React, { ReactElement, useCallback, useState } from 'react';
 import { getEnumerationValues, updateEnumerationValues } from '../utils';
 
-import { useToggle } from '../../Atlasmap/utils';
+import { useToggle } from '../utils';
 
 type LookupTableCallback = () => void;
 

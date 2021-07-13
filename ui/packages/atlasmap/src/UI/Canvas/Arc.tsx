@@ -19,7 +19,7 @@ import { linkHorizontal, linkVertical } from 'd3-shape';
 import { Coords } from './models';
 import { css } from '@patternfly/react-styles';
 import styles from './Arc.module.css';
-import { useToggle } from '../../Atlasmap/utils';
+import { useToggle } from '../../impl/utils';
 
 export interface IArcProps extends Omit<SVGAttributes<SVGPathElement>, 'end'> {
   start: Coords;

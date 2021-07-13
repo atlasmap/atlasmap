@@ -21,7 +21,7 @@ import {
   TextInput,
   Tooltip,
 } from '@patternfly/react-core';
-import { EnumValue, useToggle } from '../Atlasmap/utils';
+import { EnumValue, useToggle } from '../impl/utils';
 import { Observable, Subscription } from 'rxjs';
 import React, {
   FunctionComponent,

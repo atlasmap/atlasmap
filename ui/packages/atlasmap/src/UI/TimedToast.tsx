@@ -21,7 +21,7 @@ import {
 } from '@patternfly/react-core';
 import React, { FunctionComponent, useEffect, useState } from 'react';
 
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from '../impl/utils';
 
 export interface ITimedToastProps {
   variant: AlertProps['variant'];

@@ -16,7 +16,7 @@
 import { Dropdown, DropdownProps } from '@patternfly/react-core';
 import React, { FunctionComponent, ReactElement } from 'react';
 
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from '../impl/utils';
 
 export interface IAutoDropdown
   extends Omit<Omit<DropdownProps, 'css'>, 'toggle'> {

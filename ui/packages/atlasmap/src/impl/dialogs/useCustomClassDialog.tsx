@@ -18,7 +18,7 @@ import React, { ReactElement, useCallback, useState } from 'react';
 
 import { collectionTypes } from '@atlasmap/core';
 import { getCustomClassNameOptions } from '../utils/document';
-import { useToggle } from '../../Atlasmap/utils';
+import { useToggle } from '../utils';
 
 type CustomClassCallback = (constant: ICustomClass) => void;
 

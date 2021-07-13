@@ -44,7 +44,7 @@ import React, { FunctionComponent, useEffect, useRef } from 'react';
 import { css } from '@patternfly/react-styles';
 import styles from './toolbarItems.module.css';
 import { useFilePicker } from 'react-sage';
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from './utils';
 
 export interface IAtlasmapToolbarItemProps {
   showImportAtlasFileToolbarItem: boolean;

@@ -13,17 +13,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { EnumValue, useToggle } from '../impl/utils';
 import {
   Select,
   SelectOption,
   SelectOptionObject,
 } from '@patternfly/react-core';
 
-import { EnumValue } from '../../src/Atlasmap/utils';
 import { FunctionComponent } from 'react';
 import React from 'react';
 import styles from './ExpressionEnumSelect.module.css';
-import { useToggle } from '../Atlasmap/utils';
 
 export interface IExpressionEnumSelectProps {
   selectedNodeId: string;
