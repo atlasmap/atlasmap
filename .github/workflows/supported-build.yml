@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Supported
+name: Checked
 
 on:
   push:
@@ -12,12 +12,13 @@ on:
 jobs:
   build_maven:
     if: ${{ github.repository == 'atlasmap/atlasmap' }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         java: [ '8', '11' ]
-    name: Java ${{ matrix.java }}
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: ${{ matrix.os }} / Java${{ matrix.java }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java versions
@@ -40,7 +41,11 @@ jobs:
           ui/packages/*/node_modules
         key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}
     - name: Build from root with Maven
-      run: mvn --batch-mode -Pcoverage -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install
+      if: ${{ runner.os == 'Windows' }}
+      run: mvn --batch-mode -Pcoverage "-Dwebdriver.chrome.driver=$Env:CHROMEWEBDRIVER\chromedriver.exe" clean install
+    - name: Build from root with Maven
+      if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+      run: mvn --batch-mode -Pcoverage "-Dwebdriver.chrome.driver=${CHROMEWEBDRIVER}/chromedriver" clean install
     - name: Build lib with Maven
       working-directory: lib
       run: mvn --batch-mode clean install
@@ -57,7 +62,7 @@ jobs:
       fail-fast: false
       matrix:
         node: [ '12', '14' ]
-    name: node ${{ matrix.node }}
+    name: node${{ matrix.node }}
     steps:
     - uses: actions/checkout@v2
     - name: Setup node versions
