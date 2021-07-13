@@ -18,7 +18,7 @@ import React, { ReactElement, useCallback, useState } from 'react';
 
 import { IAtlasmapDocument } from '../../Views';
 import { constantTypes } from '@atlasmap/core';
-import { useToggle } from '../../Atlasmap/utils';
+import { useToggle } from '../utils';
 
 type ConstantCallback = (constant: IConstant, origName?: string) => void;
 

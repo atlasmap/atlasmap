@@ -24,7 +24,7 @@ import { SOURCES_FIELD_ID_PREFIX, TARGETS_FIELD_ID_PREFIX } from '../Columns';
 import { IAtlasmapMapping } from '../../../Views';
 import { NodesArc } from '../../../UI';
 import styles from './SourceTargetLinks.module.css';
-import { useToggle } from '../../../Atlasmap/utils';
+import { useToggle } from '../../../impl/utils';
 
 export interface ISourceTargetLinksProps {
   mappings: IAtlasmapMapping[];

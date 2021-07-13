@@ -23,7 +23,7 @@ import { Button, Tooltip } from '@patternfly/react-core';
 import React, { FunctionComponent } from 'react';
 
 import styles from './MappingFields.module.css';
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from '../impl/utils';
 
 export interface IMappingFieldsProps {
   isSource: boolean;

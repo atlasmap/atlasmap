@@ -15,7 +15,7 @@
 */
 import { boolean, text } from '@storybook/addon-knobs';
 
-import { EnumValue } from '../../src/Atlasmap/utils';
+import { EnumValue } from '../impl/utils';
 import { ExpressionContent } from './ExpressionContent';
 import React from 'react';
 import { action } from '@storybook/addon-actions';

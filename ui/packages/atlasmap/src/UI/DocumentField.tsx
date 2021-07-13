@@ -24,7 +24,7 @@ import { Tooltip } from '@patternfly/react-core';
 import { TruncatedString } from './TruncatedString';
 import { css } from '@patternfly/react-styles';
 import styles from './DocumentField.module.css';
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from '../impl/utils';
 
 export interface IDocumentFieldProps {
   name: ReactChild;

@@ -17,7 +17,7 @@ import React, { ReactChild, ReactElement, useRef } from 'react';
 
 import { ConfirmationDialog } from '../../UI';
 import { TextContent } from '@patternfly/react-core';
-import { useToggle } from '../../Atlasmap/utils';
+import { useToggle } from '../utils';
 
 export function useConfirmationDialog(
   title: string,

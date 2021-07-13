@@ -37,7 +37,7 @@ import React, {
 import { TruncatedString } from './TruncatedString';
 import { css } from '@patternfly/react-styles';
 import styles from './Document.module.css';
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from '../impl/utils';
 
 export interface IDocumentProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {

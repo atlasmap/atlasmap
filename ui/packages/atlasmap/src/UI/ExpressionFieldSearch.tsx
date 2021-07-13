@@ -21,7 +21,7 @@ import {
 import { FunctionComponent } from 'react';
 import React from 'react';
 import styles from './ExpressionFieldSearch.module.css';
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from '../impl/utils';
 
 export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) => void;

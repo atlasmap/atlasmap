@@ -30,7 +30,7 @@ import React, { useMemo, useState } from 'react';
 import { ContextToolbar } from '../Layout';
 import { ToolbarGroup } from '@patternfly/react-core';
 import { useAtlasmap } from './AtlasmapProvider';
-import { useToggle } from '../Atlasmap/utils';
+import { useToggle } from './utils';
 
 export type Views =
   | 'ColumnMapper'
