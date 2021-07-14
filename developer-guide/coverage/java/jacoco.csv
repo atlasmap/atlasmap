@@ -50,7 +50,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,CompoundClassLoader,0,3,0,
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFieldActionService,498,1636,91,200,87,351,71,118,4,38
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasSession.HeadImpl,45,72,7,1,9,24,5,12,1,12
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,ConstantModule,56,118,5,7,18,35,19,25,14,24
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext,230,426,31,61,48,95,28,26,0,8
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext,236,453,31,61,50,101,28,26,0,8
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,ISEMPTY.new BooleanExpression() {...},2,45,2,8,0,8,2,6,0,3
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,LT,5,17,1,1,1,3,1,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.functions,FILTER,27,113,6,10,4,28,6,7,0,5
