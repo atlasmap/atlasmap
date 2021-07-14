@@ -13,7 +13,11 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType, InspectionType } from '../contracts/common';
+import {
+  DocumentType,
+  IStringContainer,
+  InspectionType,
+} from '../contracts/common';
 
 import { DocumentInitializationModel } from '../models/config.model';
 import { InitializationService } from '../services/initialization.service';
@@ -45,8 +49,8 @@ describe('InitializationService', () => {
   test('runtimeServiceActive()', (done) => {
     spyOn(ky, 'get').and.returnValue(
       new (class {
-        json(): Promise<any> {
-          return Promise.resolve({ string: 'pong' });
+        json(): Promise<IStringContainer> {
+          return Promise.resolve({ String: 'pong' });
         }
       })()
     );
@@ -64,8 +68,8 @@ describe('InitializationService', () => {
   test('getRuntimeVersion()', (done) => {
     spyOn(ky, 'get').and.returnValue(
       new (class {
-        json(): Promise<any> {
-          return Promise.resolve({ string: '10.9.8' });
+        json(): Promise<IStringContainer> {
+          return Promise.resolve({ String: '10.9.8' });
         }
       })()
     );

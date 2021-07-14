@@ -173,3 +173,7 @@ export interface IParameter {
   enabled?: boolean;
   required?: boolean;
 }
+
+export interface IStringContainer {
+  String: string;
+}
