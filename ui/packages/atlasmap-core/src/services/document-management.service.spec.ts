@@ -92,6 +92,13 @@ describe('DocumentManagementService', () => {
         expect(screenName[0]?.path).toBe('/user/screenName');
         expect(screenName[0]?.type).toBe('STRING');
         expect(screenName[0]?.children.length).toBe(0);
+        const url = answer.getField('/place/name');
+        expect(url?.name).toBe('name');
+        expect(url?.path).toBe('/place/name');
+        expect(url?.type).toBe('STRING');
+        const urlParent = url?.parentField;
+        expect(urlParent?.name).toBe('place');
+        expect(screenName[0]?.children.length).toBe(0);
         done();
       },
       error: (error) => {
