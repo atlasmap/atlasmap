@@ -1,4 +1,4 @@
 image:https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/badge.svg?style=flat-square[caption="Runtime @ Maven Central", link=https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/]
 image:https://badge.fury.io/js/%40atlasmap%2Fatlasmap.svg[caption="UI @ NPM", link=https://badge.fury.io/js/%40atlasmap%2Fatlasmap]
 image:https://badges.gitter.im/atlasmap/community.png[caption="Gitter chat", link=https://gitter.im/atlasmap/community]
-link:https://groups.google.com/d/forum/atlasmap[Google Group]
+image:https://img.shields.io/github/discussions/atlasmap/atlasmap[caption="GitHub Discussions", link=https://github.com/atlasmap/atlasmap/discussions]
