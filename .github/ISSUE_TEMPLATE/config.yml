@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: User Guide
+    url: https://docs.atlasmap.io/
+    about: AtlasMap User Guide
+  - name: Developer Guide
+    url: https://docs.atlasmap.io/developer-guide/
+    about: AtlasMap Developer Guide
   - name: Gitter
     url: https://gitter.im/atlasmap/community
     about: Gitter channel for a quick question and instant chat
