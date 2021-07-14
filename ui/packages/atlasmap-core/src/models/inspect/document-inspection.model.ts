@@ -74,6 +74,7 @@ export abstract class DocumentInspectionModel {
     }
 
     if (parentField != null) {
+      parsedField.parentField = parentField;
       parentField.children.push(parsedField);
     } else {
       this.doc.fields.push(parsedField);
