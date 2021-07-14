@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.97% </span>
+                <span class="strong">72.94% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>162/222</span>
+                <span class='fraction'>159/218</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.04% </span>
+                <span class="strong">38.89% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>20/54</span>
+                <span class='fraction'>21/54</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.5% </span>
+                <span class="strong">73.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>147/200</span>
+                <span class='fraction'>144/196</span>
             </div>
         
             
@@ -482,13 +482,8 @@
 <a name='L424'></a><a href='#L424'>424</a>
 <a name='L425'></a><a href='#L425'>425</a>
 <a name='L426'></a><a href='#L426'>426</a>
-<a name='L427'></a><a href='#L427'>427</a>
-<a name='L428'></a><a href='#L428'>428</a>
-<a name='L429'></a><a href='#L429'>429</a>
-<a name='L430'></a><a href='#L430'>430</a>
-<a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a>
-<a name='L433'></a><a href='#L433'>433</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L427'></a><a href='#L427'>427</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -515,7 +510,6 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
@@ -664,12 +658,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -935,6 +923,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DocumentType, IStringContainer } from '../contracts/common';
 import {
   ErrorInfo,
   ErrorLevel,
@@ -947,7 +936,6 @@ import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { DocumentManagementService } from './document-management.service';
-import { DocumentType } from '../contracts/common';
 import { ErrorHandlerService } from './error-handler.service';
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
@@ -1090,18 +1078,12 @@ export class InitializationService {
       this.cfg.logger!.debug('Runtime Service Ping Request');
       this.api
         .get(url)
-        .json()
-        .then((body: any) =&gt; {
+        .json&lt;IStringContainer&gt;()
+        .then((body) =&gt; {
           this.cfg.logger!.debug(
-            `Runtime Service Ping Response: ${JSON.stringify(body)}`
+            `Runtime Service Ping Response: ${body.String}`
           );
-          <span class="missing-if-branch" title="else path not taken" >E</span>if (body) {
-            <span class="missing-if-branch" title="else path not taken" >E</span>if (JSON.stringify(body).match('pong')) {
-              resolve(true);
-              return;
-            }
-          }
-<span class="cstat-no" title="statement not covered" >          resolve(false);</span>
+          resolve(body<span class="branch-0 cbranch-no" title="branch not covered" >?.S</span>tring === 'pong');
         })
         .catch(<span class="fstat-no" title="function not covered" >(e</span>rror: any) =&gt; {
 <span class="cstat-no" title="statement not covered" >          reject(error);</span>
@@ -1118,12 +1100,12 @@ export class InitializationService {
     return new Promise&lt;string&gt;((resolve, reject) =&gt; {
       this.api
         .get(url)
-        .json()
-        .then((body: any) =&gt; {
+        .json&lt;IStringContainer&gt;()
+        .then((body) =&gt; {
           this.cfg.logger!.debug(
-            `Runtime Service Version Response: ${JSON.stringify(body)}`
+            `Runtime Service Version Response: ${body.String}`
           );
-          resolve(body.string);
+          resolve(body.String);
         })
         .catch(<span class="fstat-no" title="function not covered" >(e</span>rror) =&gt; {
 <span class="cstat-no" title="statement not covered" >          reject(error);</span>
@@ -1359,7 +1341,7 @@ export class InitializationService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jul 14 2021 16:35:34 GMT+0000 (Coordinated Universal Time)
+                at Wed Jul 14 2021 17:03:13 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
