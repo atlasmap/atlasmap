@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DocumentType, IStringContainer } from '../contracts/common';
 import {
   ErrorInfo,
   ErrorLevel,
@@ -25,7 +26,6 @@ import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { DocumentManagementService } from './document-management.service';
-import { DocumentType } from '../contracts/common';
 import { ErrorHandlerService } from './error-handler.service';
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
@@ -168,18 +168,12 @@ export class InitializationService {
       this.cfg.logger!.debug('Runtime Service Ping Request');
       this.api
         .get(url)
-        .json()
-        .then((body: any) => {
+        .json<IStringContainer>()
+        .then((body) => {
           this.cfg.logger!.debug(
-            `Runtime Service Ping Response: ${JSON.stringify(body)}`
+            `Runtime Service Ping Response: ${body.String}`
           );
-          if (body) {
-            if (JSON.stringify(body).match('pong')) {
-              resolve(true);
-              return;
-            }
-          }
-          resolve(false);
+          resolve(body?.String === 'pong');
         })
         .catch((error: any) => {
           reject(error);
@@ -196,12 +190,12 @@ export class InitializationService {
     return new Promise<string>((resolve, reject) => {
       this.api
         .get(url)
-        .json()
-        .then((body: any) => {
+        .json<IStringContainer>()
+        .then((body) => {
           this.cfg.logger!.debug(
-            `Runtime Service Version Response: ${JSON.stringify(body)}`
+            `Runtime Service Version Response: ${body.String}`
           );
-          resolve(body.string);
+          resolve(body.String);
         })
         .catch((error) => {
           reject(error);
