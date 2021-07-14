@@ -542,29 +542,27 @@ types of data including:</p>
 </ul>
 </div>
 <div class="paragraph">
-<p>To use AtlasMap, you import your data shape definition files, map source
-fields to target fields, optionally apply transformations or conditions,
+<p>To use AtlasMap, you start from AtlasMap UI and import your data shape definition files,
+ map source fields to target fields, optionally apply transformations or conditions,
 and then execute defined mappings by means of the AtlasMap runtime engine.
 AtlasMap provides standard transformations and
 supports the creation of custom, user-defined transformations.</p>
 </div>
 <div class="paragraph">
-<p>AtlasMap is available:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>As a standalone application</p>
-</li>
-<li>
-<p>Embedded in
+<p>AtlasMap UI is available:
+* As a standalone application
+* Embedded in
 <a href="https://syndesis.io/">Syndesis</a>, which is an open-source integration platform</p>
-</li>
-</ul>
 </div>
 <div class="paragraph">
-<p>There is also a <code>camel-atlasmap</code> component that consumes an
-AtlasMap mapping definition and processes data mappings as a part of a Camel route.</p>
+<p>To execute the mappings created through AtlasMap UI,
+there is a <code>camel-atlasmap</code> component that consumes an
+AtlasMap mapping definition and processes data mappings as a part of a Camel route
+<a href="https://camel.apache.org/components/latest/atlasmap-component.html" class="bare">https://camel.apache.org/components/latest/atlasmap-component.html</a></p>
+</div>
+<div class="paragraph">
+<p>Also, There is a Camel Quarkus extension for AtlasMap
+<a href="https://camel.apache.org/camel-quarkus/latest/reference/extensions/atlasmap.html" class="bare">https://camel.apache.org/camel-quarkus/latest/reference/extensions/atlasmap.html</a></p>
 </div>
 <div class="paragraph">
 <p>This user guide is organized as follows:</p>
@@ -2965,6 +2963,21 @@ canvas by clicking the trash icon, as in the following image:</p>
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Camel Quarkus extension for AtlasMap is available here
+<a href="https://camel.apache.org/camel-quarkus/latest/reference/extensions/atlasmap.html" class="bare">https://camel.apache.org/camel-quarkus/latest/reference/extensions/atlasmap.html</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Developers who are familiar with Apache Camel can implement a
 Camel application that uses the <code>camel-atlasmap</code> component.
@@ -3415,7 +3428,7 @@ route.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.3.0-SNAPSHOT<br>
-Last updated 2021-07-14 17:23:15 UTC
+Last updated 2021-07-14 18:13:54 UTC
 </div>
 </div>
 </body>
