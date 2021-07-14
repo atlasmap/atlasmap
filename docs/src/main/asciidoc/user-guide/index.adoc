@@ -28,20 +28,24 @@ types of data including:
 * JSON schema or instance files
 * Java class files
 
-To use AtlasMap, you import your data shape definition files, map source
-fields to target fields, optionally apply transformations or conditions, 
-and then execute defined mappings by means of the AtlasMap runtime engine. 
+To use AtlasMap, you start from AtlasMap UI and import your data shape definition files,
+ map source fields to target fields, optionally apply transformations or conditions,
+and then execute defined mappings by means of the AtlasMap runtime engine.
 AtlasMap provides standard transformations and 
 supports the creation of custom, user-defined transformations.  
 
-AtlasMap is available: 
-
+AtlasMap UI is available:
 * As a standalone application
 * Embedded in 
 link:https://syndesis.io/[Syndesis], which is an open-source integration platform
 
-There is also a `camel-atlasmap` component that consumes an
-AtlasMap mapping definition and processes data mappings as a part of a Camel route.
+To execute the mappings created through AtlasMap UI,
+there is a `camel-atlasmap` component that consumes an
+AtlasMap mapping definition and processes data mappings as a part of a Camel route
+https://camel.apache.org/components/latest/atlasmap-component.html
+
+Also, There is a Camel Quarkus extension for AtlasMap
+https://camel.apache.org/camel-quarkus/latest/reference/extensions/atlasmap.html
 
 This user guide is organized as follows: 
 
