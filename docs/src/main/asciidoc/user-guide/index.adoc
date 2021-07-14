@@ -35,6 +35,7 @@ AtlasMap provides standard transformations and
 supports the creation of custom, user-defined transformations.  
 
 AtlasMap UI is available:
+
 * As a standalone application
 * Embedded in 
 link:https://syndesis.io/[Syndesis], which is an open-source integration platform
