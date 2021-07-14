@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Gitter
+    url: https://gitter.im/atlasmap/community
+    about: Gitter channel for a quick question and instant chat
+  - name: Discussions
+    url: https://github.com/atlasmap/atlasmap/discussions
+    about: GitHub Discussions for longer and/or detailed questions and discussions
