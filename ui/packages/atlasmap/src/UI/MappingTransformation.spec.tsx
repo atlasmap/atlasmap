@@ -28,6 +28,11 @@ describe('MappingTransformation', () => {
       expect(
         getByTestId(`user-field-action-Sample transformation`).tagName,
       ).toBe('SELECT');
+      const checkbox = getByTestId(
+        `user-field-action-Sample transformation-transformation-3-checkbox`,
+      );
+      expect(checkbox.tagName).toBe('INPUT');
+      expect(checkbox.getAttribute('type')).toBe('checkbox');
     });
   });
 
@@ -37,6 +42,11 @@ describe('MappingTransformation', () => {
       expect(
         getByTestId(`user-field-action-Sample transformation`).tagName,
       ).toBe('SELECT');
+      const checkbox = getByTestId(
+        `user-field-action-Sample transformation-transformation-3-checkbox`,
+      );
+      expect(checkbox.tagName).toBe('INPUT');
+      expect(checkbox.getAttribute('type')).toBe('checkbox');
     });
   });
 
@@ -46,6 +56,12 @@ describe('MappingTransformation', () => {
       getAllByTestId(`user-field-action-Sample transformation`).forEach(
         (element) => expect(element.tagName).toBe('SELECT'),
       );
+      getAllByTestId(
+        `user-field-action-Sample transformation-transformation-3-checkbox`,
+      ).forEach((element) => {
+        expect(element.tagName).toBe('INPUT');
+        expect(element.getAttribute('type')).toBe('checkbox');
+      });
     });
   });
 });

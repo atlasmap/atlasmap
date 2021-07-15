@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { FieldType } from './common';
+import { CollectionType, FieldType } from './common';
 
 /**
  * The field action Data model contracts between frontend and backend.
@@ -92,14 +92,13 @@ export interface IActionSchema {
  * The newer style of field action parameter metadata.
  */
 export interface IActionSchemaProperties {
-  [key: string]:
-    | {
-        type: string;
-        description: string;
-        title: string;
-      }
-    | {
-        type: string;
-        const: string;
-      };
+  [key: string]: {
+    type: string;
+    const: string;
+    description: string;
+    title: string;
+    enum?: string[];
+    'atlas-field-type'?: FieldType;
+    'atlas-collection-type'?: CollectionType;
+  };
 }

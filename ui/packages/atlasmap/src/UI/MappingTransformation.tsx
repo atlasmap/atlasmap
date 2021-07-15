@@ -30,6 +30,7 @@ import {
 } from '@patternfly/react-core';
 import React, { FunctionComponent, useState } from 'react';
 
+import { FieldType } from '@atlasmap/core';
 import { TrashIcon } from '@patternfly/react-icons';
 import { css } from '@patternfly/react-styles';
 import styles from './MappingTransformation.module.css';
@@ -43,6 +44,7 @@ export interface ITransformationArgument {
   label: string;
   name: string;
   value: string;
+  type?: FieldType;
   options?: ITransformationSelectOption[];
 }
 
@@ -215,7 +217,7 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
       );
     };
 
-    const renderTransformationArgumentDelimitingEmptyValues = (
+    const renderTransformationArgumentBoolean = (
       argId: string,
       a: ITransformationArgument,
     ) => {
@@ -223,9 +225,10 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
         <Checkbox
           className={css(styles.transArgs)}
           id={argId}
+          data-testid={argId + '-checkbox'}
           key={argId}
-          label="Delimit empty values"
-          aria-label="Delimit empty values"
+          label={a.label}
+          aria-label={a.label}
           isChecked={a.value === 'true'}
           onChange={(value) =>
             onTransformationArgumentChange(a.name, value.toString())
@@ -239,26 +242,31 @@ export const MappingTransformation: FunctionComponent<IMappingTransformationProp
       idx: number,
     ) => {
       const argId = `${id}-transformation-${idx}`;
-      return a.name !== 'delimitingEmptyValues' ? (
-        <FormGroup
-          className={css(styles.transArgs)}
-          fieldId={argId}
-          label={a.label}
-          key={idx}
-          style={formTransGroupStyle}
-        >
-          {a.options
-            ? RenderTransformationArgumentOptions(
-                argId,
-                a,
-                disableTransformation,
-                onTransformationArgumentChange,
-              )
-            : renderTransformationArgumentText(argId, a)}
-        </FormGroup>
-      ) : (
-        renderTransformationArgumentDelimitingEmptyValues(argId, a)
-      );
+      switch (a.type) {
+        case FieldType.BOOLEAN: {
+          return renderTransformationArgumentBoolean(argId, a);
+        }
+        default: {
+          return (
+            <FormGroup
+              className={css(styles.transArgs)}
+              fieldId={argId}
+              label={a.label}
+              key={idx}
+              style={formTransGroupStyle}
+            >
+              {a.options
+                ? RenderTransformationArgumentOptions(
+                    argId,
+                    a,
+                    disableTransformation,
+                    onTransformationArgumentChange,
+                  )
+                : renderTransformationArgumentText(argId, a)}
+            </FormGroup>
+          );
+        }
+      }
     };
 
     const id = `user-field-action-${name}`;

@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { FieldType, TransitionModel } from '@atlasmap/core';
 import {
   ITransformationArgument,
   MappingTransformation,
@@ -20,7 +21,6 @@ import {
 import { boolean, text } from '@storybook/addon-knobs';
 import { Form } from '@patternfly/react-core';
 import React from 'react';
-import { TransitionModel } from '@atlasmap/core';
 import { action } from '@storybook/addon-actions';
 
 const obj = {
@@ -56,6 +56,14 @@ const transformationsArguments: ITransformationArgument[] = [
         value: model.actualDelimiter,
       };
     }),
+  },
+  {
+    label: 'Collapse Repeating Delimiter',
+    name: 'Collapse Repeating Delimiter',
+    type: FieldType.BOOLEAN,
+    value: boolean('Collapse Repeating Delimiter value', false)
+      ? 'true'
+      : 'false',
   },
 ];
 

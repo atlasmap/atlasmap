@@ -35,7 +35,6 @@ export enum TransitionDelimiter {
   DASH,
   EQUAL,
   HASH,
-  MULTI_SPACE,
   PERIOD,
   PIPE,
   SEMICOLON,
@@ -152,14 +151,6 @@ export class TransitionModel {
           'Hash',
           'Hash [#]',
           '#'
-        )
-      );
-      models.push(
-        new TransitionDelimiterModel(
-          TransitionDelimiter.MULTI_SPACE,
-          'MultiSpace',
-          'Multi Spaces',
-          '  '
         )
       );
       models.push(

@@ -204,8 +204,14 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         if (split == null || split.getDelimiter() == null) {
             throw new IllegalArgumentException("Split must be specified with a delimiter");
         }
-
-        return input == null ? null : input.toString().split(Pattern.quote(split.getDelimiter()));
+        String quotedDelimiter = Pattern.quote(split.getDelimiter());
+        boolean collapseRepeatingDelimiter = split.getCollapseRepeatingDelimiters() == null
+                ? false
+                : split.getCollapseRepeatingDelimiters();
+        if (collapseRepeatingDelimiter) {
+            quotedDelimiter = "(" + quotedDelimiter + ")+";
+        }
+        return input == null ? null : input.toString().split(quotedDelimiter);
     }
 
     @AtlasActionProcessor(sourceType = FieldType.ANY)
