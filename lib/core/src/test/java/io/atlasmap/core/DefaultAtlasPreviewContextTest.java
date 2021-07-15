@@ -239,6 +239,67 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
     }
 
     @Test
+    public void testProcessPreviewSplitCollection() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source = new SimpleField();
+        source.setFieldType(FieldType.STRING);
+        source.setPath("/source");
+        source.setValue("one two three four");
+        source.setActions(new ArrayList<>());
+        Split action = new Split();
+        action.setDelimiter(" ");
+        source.getActions().add(action);
+        m.getInputField().add(source);
+        Field target = new SimpleField();
+        target.setCollectionType(CollectionType.LIST);
+        target.setFieldType(FieldType.STRING);
+        target.setPath("/results<>");
+        m.getOutputField().add(target);
+        Audits audits = previewContext.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
+        assertEquals(FieldGroup.class, target.getClass());
+        FieldGroup targetGroup = (FieldGroup)target;
+        Field one = targetGroup.getField().get(0);
+        Field two = targetGroup.getField().get(1);
+        Field three = targetGroup.getField().get(2);
+        Field four = targetGroup.getField().get(3);
+        assertEquals("/results<0>", one.getPath());
+        assertEquals("one", one.getValue());
+        assertEquals("/results<1>", two.getPath());
+        assertEquals("two", two.getValue());
+        assertEquals("/results<2>", three.getPath());
+        assertEquals("three", three.getValue());
+        assertEquals("/results<3>", four.getPath());
+        assertEquals("four", four.getValue());
+
+        target = new SimpleField();
+        target.setCollectionType(CollectionType.NONE);
+        target.setPath("/collection<>/result");
+        target.setFieldType(FieldType.STRING);
+        target.setIndex(0);
+        m.getOutputField().clear();
+        m.getOutputField().add(target);
+        audits = previewContext.processPreview(m);
+        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        target = m.getOutputField().get(0);
+        assertEquals(FieldGroup.class, target.getClass());
+        targetGroup = (FieldGroup)target;
+        one = targetGroup.getField().get(0);
+        two = targetGroup.getField().get(1);
+        three = targetGroup.getField().get(2);
+        four = targetGroup.getField().get(3);
+        assertEquals("/collection<0>/result", one.getPath());
+        assertEquals("one", one.getValue());
+        assertEquals("/collection<1>/result", two.getPath());
+        assertEquals("two", two.getValue());
+        assertEquals("/collection<2>/result", three.getPath());
+        assertEquals("three", three.getValue());
+        assertEquals("/collection<3>/result", four.getPath());
+        assertEquals("four", four.getValue());
+    }
+
+    @Test
     public void testProcessPreviewSourceCollection() throws AtlasException {
         Mapping m = new Mapping();
         Field source = new SimpleField();

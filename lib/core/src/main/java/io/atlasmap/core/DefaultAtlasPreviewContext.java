@@ -137,6 +137,11 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                                     AuditStatus.ERROR, null);
                             return session.getAudits();
                         }
+                        if (index != null) {
+                            LOG.warn("Field index '{}' is detected on target field '{}:{}' while there's only one target field, ignoring",
+                                    index, targetField.getDocId(), targetField.getPath());
+                            targetField.setIndex(null);
+                        }
                         FieldGroup targetFieldGroup = targetField instanceof FieldGroup
                                 ? (FieldGroup)targetField
                                 : AtlasModelFactory.createFieldGroupFrom(targetField, true);

@@ -1,0 +1,65 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "JSONSchemaSource",
+        "name": "JSONSchemaSource",
+        "description": "random desc",
+        "uri": "atlas:json:JSONSchemaSource",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "JSONSchemaSource",
+        "name": "JSONSchemaSource",
+        "description": "random desc",
+        "uri": "atlas:json:JSONSchemaSource",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "actions": [
+                {
+                  "delimiter": " ",
+                  "@type": "Split"
+                }
+              ],
+              "docId": "JSONSchemaSource",
+              "path": "/primitives/stringPrimitive",
+              "fieldType": "STRING",
+              "name": "stringPrimitive"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "docId": "JSONSchemaSource",
+              "path": "/addressList<>/city",
+              "fieldType": "STRING",
+              "name": "city"
+            }
+          ],
+          "id": "mapping.927111"
+        }
+      ]
+    },
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "constant": []
+    },
+    "name": "UI.950612"
+  }
+}

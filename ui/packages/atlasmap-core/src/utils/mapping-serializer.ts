@@ -773,9 +773,7 @@ export class MappingSerializer {
       }
 
       let includeIndexes: boolean =
-        mapping.transition.isOneToManyMode() && !isSource;
-      includeIndexes =
-        includeIndexes || (mapping.transition.isManyToOneMode() && isSource);
+        mapping.getMappedFields(isSource).length > 1;
       includeIndexes =
         includeIndexes || (mapping.transition.isExpressionMode() && isSource);
       if (includeIndexes) {

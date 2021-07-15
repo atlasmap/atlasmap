@@ -51,10 +51,314 @@ import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atla
 import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
 import atlasMappingEnumLookupTableMapping from '../../../../test-resources/mapping/atlasmapping-enum-lookup-table.json';
 import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
+import atlasMappingSplitJson from '../../../../test-resources/mapping/atlasmapping-split.json';
 import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 
 import ky from 'ky';
+
+function createTwitter4jSourceDoc() {
+  const twitter = new DocumentDefinition();
+  twitter.type = DocumentType.JAVA;
+  twitter.name = 'twitter4j.Status';
+  twitter.isSource = true;
+  twitter.id = 'twitter4j.Status';
+  twitter.uri = 'atlas:java?className=twitter4j.Status';
+  twitter.description = 'random desc';
+  const user = new Field();
+  user.name = 'User';
+  user.path = '/User';
+  user.type = FieldType.COMPLEX;
+  twitter.addField(user);
+  const userName = new Field();
+  userName.name = 'Name';
+  userName.path = '/User/Name';
+  userName.type = FieldType.STRING;
+  userName.parentField = user;
+  twitter.addField(userName);
+  const userScreenName = new Field();
+  userScreenName.name = 'ScreenName';
+  userScreenName.path = '/User/ScreenName';
+  userScreenName.type = FieldType.STRING;
+  userScreenName.parentField = user;
+  twitter.addField(userScreenName);
+  const text = new Field();
+  text.name = 'Text';
+  text.path = '/Text';
+  text.type = FieldType.STRING;
+  twitter.addField(text);
+  twitter.initializeFromFields();
+  return twitter;
+}
+
+function createSomeJsonSourceSourceDoc() {
+  const jsonSource = new DocumentDefinition();
+  jsonSource.type = DocumentType.JSON;
+  jsonSource.name = 'SomeJsonSource';
+  jsonSource.isSource = true;
+  jsonSource.id = 'SomeJsonSource';
+  jsonSource.uri = 'atlas:json:SomeJsonSource';
+  jsonSource.description = 'random desc';
+  const js0 = new Field();
+  js0.name = 'js0';
+  js0.path = '/js0';
+  js0.type = FieldType.STRING;
+  jsonSource.addField(js0);
+  const js1 = new Field();
+  js1.name = 'js1';
+  js1.path = '/js1';
+  js1.type = FieldType.STRING;
+  jsonSource.addField(js1);
+  jsonSource.initializeFromFields();
+  return jsonSource;
+}
+
+function createPrimitivesField() {
+  const primitives = new Field();
+  primitives.name = 'primitives';
+  primitives.path = '/primitives';
+  primitives.type = FieldType.COMPLEX;
+  primitives.documentField.status = FieldStatus.SUPPORTED;
+  return primitives;
+}
+
+function createJSONSchemaSourceSourceDoc() {
+  const jsonSchemaSource = new DocumentDefinition();
+  jsonSchemaSource.type = DocumentType.JSON;
+  jsonSchemaSource.name = 'JSONSchemaSource';
+  jsonSchemaSource.isSource = true;
+  jsonSchemaSource.id = 'JSONSchemaSource';
+  jsonSchemaSource.uri = 'atlas:json:JSONSchemaSource';
+  jsonSchemaSource.description = 'random desc';
+  const jc0 = new Field();
+  jc0.name = 'addressList';
+  jc0.path = '/addressList<>';
+  jc0.type = FieldType.COMPLEX;
+  jc0.isCollection = true;
+  jc0.documentField.status = FieldStatus.SUPPORTED;
+  jsonSchemaSource.addField(jc0);
+  const jcc0 = new Field();
+  jcc0.name = 'city';
+  jcc0.path = '/addressList<>/city';
+  jcc0.type = FieldType.STRING;
+  jcc0.isPrimitive = true;
+  jcc0.parentField = jc0;
+  jc0.children.push(jcc0);
+  jsonSchemaSource.addField(jcc0);
+  const jcc1 = new Field();
+  jcc1.name = 'state';
+  jcc1.path = '/addressList<>/state';
+  jcc1.type = FieldType.STRING;
+  jcc1.isPrimitive = true;
+  jcc1.parentField = jc0;
+  jc0.children.push(jcc1);
+  jsonSchemaSource.addField(jcc1);
+  const jcc2 = new Field();
+  jcc2.name = 'street';
+  jcc2.path = '/addressList<>/street';
+  jcc2.type = FieldType.STRING;
+  jcc2.isPrimitive = true;
+  jcc2.parentField = jc0;
+  jc0.children.push(jcc2);
+  jsonSchemaSource.addField(jcc2);
+  const jcc3 = new Field();
+  jcc3.name = 'zip';
+  jcc3.path = '/addressList<>/zip';
+  jcc3.type = FieldType.STRING;
+  jcc3.isPrimitive = true;
+  jcc3.parentField = jc0;
+  jc0.children.push(jcc3);
+  jsonSchemaSource.addField(jcc3);
+  const primitives = createPrimitivesField();
+  jsonSchemaSource.addField(primitives);
+  const stringPrimitive = new Field();
+  stringPrimitive.name = 'stringPrimitive';
+  stringPrimitive.path = '/primitives/stringPrimitive';
+  stringPrimitive.type = FieldType.STRING;
+  stringPrimitive.isPrimitive = true;
+  stringPrimitive.parentField = primitives;
+  primitives.children.push(stringPrimitive);
+  jsonSchemaSource.addField(stringPrimitive);
+  jsonSchemaSource.initializeFromFields();
+  return jsonSchemaSource;
+}
+
+function createSomeXmlSourceSourceDoc() {
+  const xmlSource = new DocumentDefinition();
+  xmlSource.type = DocumentType.XML;
+  xmlSource.name = 'SomeXmlSource';
+  xmlSource.isSource = true;
+  xmlSource.id = 'SomeXmlSource';
+  xmlSource.uri = 'atlas:xml:SomeXmlSource';
+  xmlSource.description = 'random desc';
+  const xs0 = new Field();
+  xs0.name = 'xs0';
+  xs0.path = '/xs0';
+  xs0.type = FieldType.STRING;
+  xmlSource.addField(xs0);
+  const xs1 = new Field();
+  xs1.name = 'xs1';
+  xs1.path = '/xs1';
+  xs1.type = FieldType.STRING;
+  xmlSource.addField(xs1);
+  xmlSource.initializeFromFields();
+  return xmlSource;
+}
+
+function createSalesforceContactTargetDoc() {
+  const contact = new DocumentDefinition();
+  contact.type = DocumentType.JAVA;
+  contact.name = 'salesforce.Contact';
+  contact.isSource = false;
+  contact.id = 'salesforce.Contact';
+  contact.uri = 'atlas:java?className=org.apache.camel.salesforce.dto.Contact';
+  contact.description = 'random desc';
+  const desc = new Field();
+  desc.name = 'Description';
+  desc.path = '/Description';
+  desc.type = FieldType.STRING;
+  contact.addField(desc);
+  const title = new Field();
+  title.name = 'Title';
+  title.path = '/Title';
+  title.type = FieldType.STRING;
+  contact.addField(title);
+  const firstName = new Field();
+  firstName.name = 'FirstName';
+  firstName.path = '/FirstName';
+  firstName.type = FieldType.STRING;
+  contact.addField(firstName);
+  const lastName = new Field();
+  lastName.name = 'LastName';
+  lastName.path = '/LastName';
+  lastName.type = FieldType.STRING;
+  contact.addField(lastName);
+  contact.initializeFromFields();
+  return contact;
+}
+
+function createSomeJsonTargetTargetDoc() {
+  const jsonTarget = new DocumentDefinition();
+  jsonTarget.type = DocumentType.JSON;
+  jsonTarget.name = 'SomeJsonTarget';
+  jsonTarget.isSource = false;
+  jsonTarget.id = 'SomeJsonTarget';
+  jsonTarget.uri = 'atlas:json:SomeJsonTarget';
+  jsonTarget.description = 'random desc';
+  const jt0 = new Field();
+  jt0.name = 'jt0';
+  jt0.path = '/jt0';
+  jt0.type = FieldType.STRING;
+  jsonTarget.addField(jt0);
+  const jt1 = new Field();
+  jt1.name = 'jt1';
+  jt1.path = '/jt1';
+  jt1.type = FieldType.STRING;
+  jsonTarget.addField(jt1);
+  jsonTarget.initializeFromFields();
+  return jsonTarget;
+}
+
+function createJSONSchemaSourceTargetDoc() {
+  const jsonSchemaSource = new DocumentDefinition();
+  jsonSchemaSource.type = DocumentType.JSON;
+  jsonSchemaSource.name = 'JSONSchemaSource';
+  jsonSchemaSource.isSource = false;
+  jsonSchemaSource.id = 'JSONSchemaSource';
+  jsonSchemaSource.uri = 'atlas:json:JSONSchemaSource';
+  jsonSchemaSource.description = 'random desc';
+  const jtc0 = new Field();
+  jtc0.name = 'addressList';
+  jtc0.path = '/addressList<>';
+  jtc0.type = FieldType.COMPLEX;
+  jtc0.isCollection = true;
+  jtc0.documentField.status = FieldStatus.SUPPORTED;
+  jsonSchemaSource.addField(jtc0);
+  const jtcc0 = new Field();
+  jtcc0.name = 'city';
+  jtcc0.path = '/addressList<>/city';
+  jtcc0.type = FieldType.STRING;
+  jtcc0.isPrimitive = true;
+  jtcc0.parentField = jtc0;
+  jtc0.children.push(jtcc0);
+  jsonSchemaSource.addField(jtcc0);
+  const jtcc1 = new Field();
+  jtcc1.name = 'zip';
+  jtcc1.path = '/addressList<>/zip';
+  jtcc1.type = FieldType.STRING;
+  jtcc1.isPrimitive = true;
+  jtcc1.parentField = jtc0;
+  jtc0.children.push(jtcc1);
+  jsonSchemaSource.addField(jtcc1);
+  const tprimitives = new Field();
+  tprimitives.name = 'primitives';
+  tprimitives.path = '/primitives';
+  tprimitives.type = FieldType.COMPLEX;
+  tprimitives.documentField.status = FieldStatus.SUPPORTED;
+  jsonSchemaSource.addField(tprimitives);
+  const tstringPrimitive = new Field();
+  tstringPrimitive.name = 'stringPrimitive';
+  tstringPrimitive.path = '/primitives/stringPrimitive';
+  tstringPrimitive.type = FieldType.STRING;
+  tstringPrimitive.isPrimitive = true;
+  tstringPrimitive.parentField = createPrimitivesField();
+  tprimitives.children.push(tstringPrimitive);
+  jsonSchemaSource.addField(tstringPrimitive);
+  jsonSchemaSource.initializeFromFields();
+  return jsonSchemaSource;
+}
+
+function createXMLInstanceSourceTargetDoc() {
+  const xmlTarget = new DocumentDefinition();
+  xmlTarget.type = DocumentType.XML;
+  xmlTarget.name = 'XMLInstanceSource';
+  xmlTarget.isSource = false;
+  xmlTarget.id = 'XMLInstanceSource';
+  xmlTarget.uri = 'atlas:xml:XMLInstanceSource';
+  xmlTarget.description = 'random desc';
+  const ns: NamespaceModel = new NamespaceModel();
+  ns.alias = 'xsi';
+  ns.uri = 'http://www.w3.org/2001/XMLSchema-instance';
+  ns.locationUri = 'http://www.w3.org/2001/XMLSchema-instance';
+  ns.isTarget = true;
+  xmlTarget.namespaces.push(ns);
+  const xt0 = new Field();
+  xt0.name = 'xt0';
+  xt0.path = '/xt0';
+  xt0.type = FieldType.STRING;
+  xmlTarget.addField(xt0);
+  const xt1 = new Field();
+  xt1.name = 'xt1';
+  xt1.path = '/xt1';
+  xt1.type = FieldType.STRING;
+  xmlTarget.addField(xt1);
+  const xt2 = new Field();
+  xt2.name = 'xt2';
+  xt2.path = '/xt2';
+  xt2.type = FieldType.STRING;
+  xmlTarget.addField(xt2);
+  xmlTarget.initializeFromFields();
+  return xmlTarget;
+}
+
+function createAllDocs(cfg: ConfigModel) {
+  // Source Java doc
+  cfg.sourceDocs.push(createTwitter4jSourceDoc());
+  // Source JSON doc
+  cfg.sourceDocs.push(createSomeJsonSourceSourceDoc());
+  // Source JSON doc - collection
+  cfg.sourceDocs.push(createJSONSchemaSourceSourceDoc());
+  // Source XML doc
+  cfg.sourceDocs.push(createSomeXmlSourceSourceDoc());
+  // Target Java doc
+  cfg.targetDocs.push(createSalesforceContactTargetDoc());
+  // Target JSON doc
+  cfg.targetDocs.push(createSomeJsonTargetTargetDoc());
+  // Target JSON doc - collection
+  cfg.targetDocs.push(createJSONSchemaSourceTargetDoc());
+  // Target XML Namespace doc
+  cfg.targetDocs.push(createXMLInstanceSourceTargetDoc());
+}
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
@@ -63,281 +367,10 @@ describe('MappingSerializer', () => {
     init.initialize();
     cfg = init.cfg;
     cfg.mappings = new MappingDefinition();
-
-    // Source Java doc
-    const twitter = new DocumentDefinition();
-    twitter.type = DocumentType.JAVA;
-    twitter.name = 'twitter4j.Status';
-    twitter.isSource = true;
-    twitter.id = 'twitter4j.Status';
-    twitter.uri = 'atlas:java?className=twitter4j.Status';
-    twitter.description = 'random desc';
-    const user = new Field();
-    user.name = 'User';
-    user.path = '/User';
-    user.type = FieldType.COMPLEX;
-    twitter.addField(user);
-    const userName = new Field();
-    userName.name = 'Name';
-    userName.path = '/User/Name';
-    userName.type = FieldType.STRING;
-    userName.parentField = user;
-    twitter.addField(userName);
-    const userScreenName = new Field();
-    userScreenName.name = 'ScreenName';
-    userScreenName.path = '/User/ScreenName';
-    userScreenName.type = FieldType.STRING;
-    userScreenName.parentField = user;
-    twitter.addField(userScreenName);
-    const text = new Field();
-    text.name = 'Text';
-    text.path = '/Text';
-    text.type = FieldType.STRING;
-    twitter.addField(text);
-    twitter.initializeFromFields();
-    cfg.sourceDocs.push(twitter);
-
-    // Source JSON doc
-    const jsonSource = new DocumentDefinition();
-    jsonSource.type = DocumentType.JSON;
-    jsonSource.name = 'SomeJsonSource';
-    jsonSource.isSource = true;
-    jsonSource.id = 'SomeJsonSource';
-    jsonSource.uri = 'atlas:json:SomeJsonSource';
-    jsonSource.description = 'random desc';
-    const js0 = new Field();
-    js0.name = 'js0';
-    js0.path = '/js0';
-    js0.type = FieldType.STRING;
-    jsonSource.addField(js0);
-    const js1 = new Field();
-    js1.name = 'js1';
-    js1.path = '/js1';
-    js1.type = FieldType.STRING;
-    jsonSource.addField(js1);
-    jsonSource.initializeFromFields();
-    cfg.sourceDocs.push(jsonSource);
-
-    // Source JSON doc - collection
-    const jsonSchemaSource = new DocumentDefinition();
-    jsonSchemaSource.type = DocumentType.JSON;
-    jsonSchemaSource.name = 'JSONSchemaSource';
-    jsonSchemaSource.isSource = true;
-    jsonSchemaSource.id = 'JSONSchemaSource';
-    jsonSchemaSource.uri = 'atlas:json:JSONSchemaSource';
-    jsonSchemaSource.description = 'random desc';
-    const jc0 = new Field();
-    jc0.name = 'addressList';
-    jc0.path = '/addressList<>';
-    jc0.type = FieldType.COMPLEX;
-    jc0.isCollection = true;
-    jc0.documentField.status = FieldStatus.SUPPORTED;
-    jsonSchemaSource.addField(jc0);
-    const jcc0 = new Field();
-    jcc0.name = 'city';
-    jcc0.path = '/addressList<>/city';
-    jcc0.type = FieldType.STRING;
-    jcc0.isPrimitive = true;
-    jcc0.parentField = jc0;
-    jc0.children.push(jcc0);
-    jsonSchemaSource.addField(jcc0);
-    const jcc1 = new Field();
-    jcc1.name = 'state';
-    jcc1.path = '/addressList<>/state';
-    jcc1.type = FieldType.STRING;
-    jcc1.isPrimitive = true;
-    jcc1.parentField = jc0;
-    jc0.children.push(jcc1);
-    jsonSchemaSource.addField(jcc1);
-    const jcc2 = new Field();
-    jcc2.name = 'street';
-    jcc2.path = '/addressList<>/street';
-    jcc2.type = FieldType.STRING;
-    jcc2.isPrimitive = true;
-    jcc2.parentField = jc0;
-    jc0.children.push(jcc2);
-    jsonSchemaSource.addField(jcc2);
-    const jcc3 = new Field();
-    jcc3.name = 'zip';
-    jcc3.path = '/addressList<>/zip';
-    jcc3.type = FieldType.STRING;
-    jcc3.isPrimitive = true;
-    jcc3.parentField = jc0;
-    jc0.children.push(jcc3);
-    jsonSchemaSource.addField(jcc3);
-    const primitives = new Field();
-    primitives.name = 'primitives';
-    primitives.path = '/primitives';
-    primitives.type = FieldType.COMPLEX;
-    primitives.documentField.status = FieldStatus.SUPPORTED;
-    jsonSchemaSource.addField(primitives);
-    const stringPrimitive = new Field();
-    stringPrimitive.name = 'stringPrimitive';
-    stringPrimitive.path = '/primitives/stringPrimitive';
-    stringPrimitive.type = FieldType.STRING;
-    stringPrimitive.isPrimitive = true;
-    stringPrimitive.parentField = primitives;
-    primitives.children.push(stringPrimitive);
-    jsonSchemaSource.addField(stringPrimitive);
-    jsonSchemaSource.initializeFromFields();
-    cfg.sourceDocs.push(jsonSchemaSource);
-
-    // Source XML doc
-    const xmlSource = new DocumentDefinition();
-    xmlSource.type = DocumentType.XML;
-    xmlSource.name = 'SomeXmlSource';
-    xmlSource.isSource = true;
-    xmlSource.id = 'SomeXmlSource';
-    xmlSource.uri = 'atlas:xml:SomeXmlSource';
-    xmlSource.description = 'random desc';
-    const xs0 = new Field();
-    xs0.name = 'xs0';
-    xs0.path = '/xs0';
-    xs0.type = FieldType.STRING;
-    xmlSource.addField(xs0);
-    const xs1 = new Field();
-    xs1.name = 'xs1';
-    xs1.path = '/xs1';
-    xs1.type = FieldType.STRING;
-    xmlSource.addField(xs1);
-    xmlSource.initializeFromFields();
-    cfg.sourceDocs.push(xmlSource);
-
-    // Target Java doc
-    const contact = new DocumentDefinition();
-    contact.type = DocumentType.JAVA;
-    contact.name = 'salesforce.Contact';
-    contact.isSource = false;
-    contact.id = 'salesforce.Contact';
-    contact.uri =
-      'atlas:java?className=org.apache.camel.salesforce.dto.Contact';
-    contact.description = 'random desc';
-    const desc = new Field();
-    desc.name = 'Description';
-    desc.path = '/Description';
-    desc.type = FieldType.STRING;
-    contact.addField(desc);
-    const title = new Field();
-    title.name = 'Title';
-    title.path = '/Title';
-    title.type = FieldType.STRING;
-    contact.addField(title);
-    const firstName = new Field();
-    firstName.name = 'FirstName';
-    firstName.path = '/FirstName';
-    firstName.type = FieldType.STRING;
-    contact.addField(firstName);
-    const lastName = new Field();
-    lastName.name = 'LastName';
-    lastName.path = '/LastName';
-    lastName.type = FieldType.STRING;
-    contact.addField(lastName);
-    contact.initializeFromFields();
-    cfg.targetDocs.push(contact);
-
-    // Target JSON doc
-    const jsonTarget = new DocumentDefinition();
-    jsonTarget.type = DocumentType.JSON;
-    jsonTarget.name = 'SomeJsonTarget';
-    jsonTarget.isSource = false;
-    jsonTarget.id = 'SomeJsonTarget';
-    jsonTarget.uri = 'atlas:json:SomeJsonTarget';
-    jsonTarget.description = 'random desc';
-    const jt0 = new Field();
-    jt0.name = 'jt0';
-    jt0.path = '/jt0';
-    jt0.type = FieldType.STRING;
-    jsonTarget.addField(jt0);
-    const jt1 = new Field();
-    jt1.name = 'jt1';
-    jt1.path = '/jt1';
-    jt1.type = FieldType.STRING;
-    jsonTarget.addField(jt1);
-    jsonTarget.initializeFromFields();
-    cfg.targetDocs.push(jsonTarget);
-
-    // Target JSON doc - collection
-    const jsonSchemaSource2 = new DocumentDefinition();
-    jsonSchemaSource2.type = DocumentType.JSON;
-    jsonSchemaSource2.name = 'JSONSchemaSource';
-    jsonSchemaSource2.isSource = false;
-    jsonSchemaSource2.id = 'JSONSchemaSource';
-    jsonSchemaSource2.uri = 'atlas:json:JSONSchemaSource';
-    jsonSchemaSource2.description = 'random desc';
-    const jtc0 = new Field();
-    jtc0.name = 'addressList';
-    jtc0.path = '/addressList<>';
-    jtc0.type = FieldType.COMPLEX;
-    jtc0.isCollection = true;
-    jtc0.documentField.status = FieldStatus.SUPPORTED;
-    jsonSchemaSource2.addField(jtc0);
-    const jtcc0 = new Field();
-    jtcc0.name = 'city';
-    jtcc0.path = '/addressList<>/city';
-    jtcc0.type = FieldType.STRING;
-    jtcc0.isPrimitive = true;
-    jtcc0.parentField = jtc0;
-    jtc0.children.push(jtcc0);
-    jsonSchemaSource2.addField(jtcc0);
-    const jtcc1 = new Field();
-    jtcc1.name = 'zip';
-    jtcc1.path = '/addressList<>/zip';
-    jtcc1.type = FieldType.STRING;
-    jtcc1.isPrimitive = true;
-    jtcc1.parentField = jtc0;
-    jtc0.children.push(jtcc1);
-    jsonSchemaSource2.addField(jtcc1);
-    const tprimitives = new Field();
-    tprimitives.name = 'primitives';
-    tprimitives.path = '/primitives';
-    tprimitives.type = FieldType.COMPLEX;
-    tprimitives.documentField.status = FieldStatus.SUPPORTED;
-    jsonSchemaSource2.addField(tprimitives);
-    const tstringPrimitive = new Field();
-    tstringPrimitive.name = 'stringPrimitive';
-    tstringPrimitive.path = '/primitives/stringPrimitive';
-    tstringPrimitive.type = FieldType.STRING;
-    tstringPrimitive.isPrimitive = true;
-    tstringPrimitive.parentField = primitives;
-    tprimitives.children.push(tstringPrimitive);
-    jsonSchemaSource2.addField(tstringPrimitive);
-    jsonSchemaSource2.initializeFromFields();
-    cfg.targetDocs.push(jsonSchemaSource2);
-
-    // Target XML Namespace doc
-    const xmlTarget = new DocumentDefinition();
-    xmlTarget.type = DocumentType.XML;
-    xmlTarget.name = 'XMLInstanceSource';
-    xmlTarget.isSource = false;
-    xmlTarget.id = 'XMLInstanceSource';
-    xmlTarget.uri = 'atlas:xml:XMLInstanceSource';
-    xmlTarget.description = 'random desc';
-    const ns: NamespaceModel = new NamespaceModel();
-    ns.alias = 'xsi';
-    ns.uri = 'http://www.w3.org/2001/XMLSchema-instance';
-    ns.locationUri = 'http://www.w3.org/2001/XMLSchema-instance';
-    ns.isTarget = true;
-    xmlTarget.namespaces.push(ns);
-    const xt0 = new Field();
-    xt0.name = 'xt0';
-    xt0.path = '/xt0';
-    xt0.type = FieldType.STRING;
-    xmlTarget.addField(xt0);
-    const xt1 = new Field();
-    xt1.name = 'xt1';
-    xt1.path = '/xt1';
-    xt1.type = FieldType.STRING;
-    xmlTarget.addField(xt1);
-    const xt2 = new Field();
-    xt2.name = 'xt2';
-    xt2.path = '/xt2';
-    xt2.type = FieldType.STRING;
-    xmlTarget.addField(xt2);
-    xmlTarget.initializeFromFields();
-    cfg.targetDocs.push(xmlTarget);
   });
 
   test('deserialize & serialize mapping definition', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -365,6 +398,7 @@ describe('MappingSerializer', () => {
   });
 
   test('deserialize & serialize conditional expression mapping definitions', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -422,6 +456,7 @@ describe('MappingSerializer', () => {
   });
 
   test('serialize many-to-one action', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -483,6 +518,7 @@ describe('MappingSerializer', () => {
   });
 
   test('serialize one-to-many action', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -523,6 +559,7 @@ describe('MappingSerializer', () => {
   });
 
   test('serialize expression action', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -575,6 +612,7 @@ describe('MappingSerializer', () => {
   });
 
   test('serialize/ preview collection expression: repeat(count(city), const-str)', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -659,6 +697,7 @@ describe('MappingSerializer', () => {
   });
 
   test('serialize/ preview reference collection expression', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -736,6 +775,7 @@ describe('MappingSerializer', () => {
   });
 
   test('collection many-to-one deserialize/serialize', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -769,7 +809,38 @@ describe('MappingSerializer', () => {
       });
   });
 
+  test('collection one-to-many deserialize/serialize', (done) => {
+    cfg.sourceDocs.push(createJSONSchemaSourceSourceDoc());
+    cfg.targetDocs.push(createJSONSchemaSourceTargetDoc());
+    cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        const mappingJson = atlasMappingSplitJson as IAtlasMappingContainer;
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        cfg.mappingService.updateMappingsTransition();
+
+        expect(cfg.mappings?.mappings).toBeDefined();
+        expect(cfg.mappings?.mappings.length).toBe(1);
+        const mapping = cfg.mappings?.mappings[0];
+        expect(mapping).toBeDefined();
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingSplitJson,
+            MappingSerializer.serializeMappings(cfg)
+          )
+        ).toBe(true);
+
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
   test('remove a field node from a conditional expression', (done) => {
+    createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -815,7 +886,6 @@ describe('MappingSerializer', () => {
   });
 
   test('map enumeration values through a lookup table', (done) => {
-    cfg.clearDocs();
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -948,7 +1018,6 @@ describe('MappingSerializer', () => {
   });
 
   test('process a CSV mapping', (done) => {
-    cfg.clearDocs();
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
