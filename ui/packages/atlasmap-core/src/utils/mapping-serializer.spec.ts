@@ -51,6 +51,7 @@ import atlasMappingCollExprPreview from '../../../../test-resources/mapping/atla
 import atlasMappingCollRefExprPreview from '../../../../test-resources/mapping/atlasmapping-coll-ref-expr-preview.json';
 import atlasMappingEnumLookupTableMapping from '../../../../test-resources/mapping/atlasmapping-enum-lookup-table.json';
 import atlasMappingExprPropJson from '../../../../test-resources/mapping/atlasmapping-expr-prop.json';
+import atlasMappingSplitCollapseJson from '../../../../test-resources/mapping/atlasmapping-split-collapse.json';
 import atlasMappingSplitJson from '../../../../test-resources/mapping/atlasmapping-split.json';
 import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
@@ -828,6 +829,37 @@ describe('MappingSerializer', () => {
         expect(
           TestUtils.isEqualJSON(
             atlasMappingSplitJson,
+            MappingSerializer.serializeMappings(cfg)
+          )
+        ).toBe(true);
+
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
+  });
+
+  test('collection one-to-many collapse deserialize/serialize', (done) => {
+    cfg.sourceDocs.push(createJSONSchemaSourceSourceDoc());
+    cfg.targetDocs.push(createJSONSchemaSourceTargetDoc());
+    cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
+    return cfg.fieldActionService
+      .fetchFieldActions()
+      .then(() => {
+        const mappingJson =
+          atlasMappingSplitCollapseJson as IAtlasMappingContainer;
+        MappingSerializer.deserializeMappingServiceJSON(mappingJson, cfg);
+        MappingUtil.updateMappingsFromDocuments(cfg);
+        cfg.mappingService.updateMappingsTransition();
+
+        expect(cfg.mappings?.mappings).toBeDefined();
+        expect(cfg.mappings?.mappings.length).toBe(1);
+        const mapping = cfg.mappings?.mappings[0];
+        expect(mapping).toBeDefined();
+        expect(
+          TestUtils.isEqualJSON(
+            atlasMappingSplitCollapseJson,
             MappingSerializer.serializeMappings(cfg)
           )
         ).toBe(true);

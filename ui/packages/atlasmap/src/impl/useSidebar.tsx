@@ -115,6 +115,9 @@ export function useSidebar({
             (a) => ({
               label: CommonUtil.toDisplayable(a.name),
               name: a.name,
+              type: multiplicityFieldAction.definition?.arguments.find(
+                (arg) => arg.name === a.name,
+              )?.type,
               value: a.value,
               options: a.name === 'delimiter' ? delimitersOptions : undefined,
             }),

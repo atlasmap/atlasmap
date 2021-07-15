@@ -24,6 +24,7 @@ public class Split extends Action implements Serializable {
     private static final long serialVersionUID = 1L;
 
     protected String delimiter;
+    private boolean collapseRepeatingDelimiter = false;
 
     /**
      * Gets the value of the delimiter property.
@@ -49,6 +50,16 @@ public class Split extends Action implements Serializable {
     @AtlasActionProperty(title = "Delimiter", type = FieldType.STRING)
     public void setDelimiter(String value) {
         this.delimiter = value;
+    }
+
+    public Boolean getCollapseRepeatingDelimiters() {
+        return collapseRepeatingDelimiter;
+    }
+
+    @JsonPropertyDescription("Check to collapse repeating delimiters")
+    @AtlasActionProperty(title = "Collapse Repeating Delimiters", type = FieldType.STRING)
+    public void setCollapseRepeatingDelimiters(Boolean collapseRepeatingDelimiter) {
+        this.collapseRepeatingDelimiter = collapseRepeatingDelimiter;
     }
 
 }

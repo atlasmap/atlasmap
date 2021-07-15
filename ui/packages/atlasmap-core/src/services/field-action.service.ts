@@ -24,12 +24,14 @@ import {
   FieldActionDefinition,
 } from '../models/field-action.model';
 import {
+  IActionDetail,
   IActionDetailsContainer,
   Multiplicity,
 } from '../contracts/field-action';
 
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
+import { FieldType } from '../contracts/common';
 import { MappingModel } from '../models/mapping.model';
 import ky from 'ky';
 
@@ -205,7 +207,7 @@ export class FieldActionService {
   }
 
   private extractFieldActionDefinition(
-    actionDetail: any
+    actionDetail: IActionDetail
   ): FieldActionDefinition {
     this.cfg.logger!.trace(
       `Deserializing field action definition: ${JSON.stringify(actionDetail)}`
@@ -227,10 +229,16 @@ export class FieldActionService {
           fieldActionDefinition.name = propertyObject.const;
           continue;
         }
+        const argTypeString = (propertyObject.type as string).toUpperCase();
+        const argType = argTypeString
+          ? FieldType[argTypeString as keyof typeof FieldType]
+          : FieldType.STRING;
         const argumentDefinition = new FieldActionArgument();
         argumentDefinition.name = key;
-        argumentDefinition.type = propertyObject.type;
-        argumentDefinition.values = propertyObject.enum;
+        argumentDefinition.type = argType;
+        if (propertyObject.enum) {
+          argumentDefinition.values = propertyObject.enum;
+        }
         argumentDefinition.serviceObject = propertyObject;
         fieldActionDefinition.arguments.push(argumentDefinition);
       }

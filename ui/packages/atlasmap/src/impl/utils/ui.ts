@@ -207,6 +207,7 @@ export function fromMappedFieldToIMappingField(
             av.serviceObject?.title?.length > 0
               ? av.serviceObject.title
               : CommonUtil.toDisplayable(av.name),
+          type: av.type,
           name: av.name,
           value: a.argumentValues[idx].value,
           options: av.values
