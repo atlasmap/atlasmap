@@ -121,6 +121,8 @@ public class E2ETest {
         WebElement cityDiv = addrDiv.findElement(By.xpath(".//button[@data-testid='grip-city-button']/../../../.."));
         Actions action = new Actions(driver);
         action.moveToElement(cityDiv).perform();
+        waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                "//button[@data-testid='show-mapping-details-button']")));
         WebElement showDetailsBtn = cityDiv.findElement(By.xpath(".//button[@data-testid='show-mapping-details-button']"));
         showDetailsBtn.click();
         WebElement detailsCity = waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
@@ -134,6 +136,8 @@ public class E2ETest {
         WebElement paramDiv = customClassDoc.findElement(By.xpath(".//button[@data-testid='grip-param-button']/../../../.."));
         action = new Actions(driver);
         action.moveToElement(paramDiv).perform();
+        waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+                "//button[@data-testid='show-mapping-details-button']")));
         showDetailsBtn = paramDiv.findElement(By.xpath(".//button[@data-testid='show-mapping-details-button']"));
         showDetailsBtn.click();
         WebElement detailsPhotoUrl = waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
