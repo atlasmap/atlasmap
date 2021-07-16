@@ -30,7 +30,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,PropertyModule,67,85,6,10,13,30,8,15,2,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,AtlasUtil,307,895,57,113,71,200,47,71,5,26
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,ValidationConstants,0,3,0,0,0,1,0,1,0,1
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,ADMArchiveHandler,187,760,19,71,46,191,19,58,0,32
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,ADMArchiveHandler,187,763,19,71,46,191,19,58,0,32
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext.new HashMap() {...},0,10,0,0,0,2,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,TemplateCombineStrategy,11,89,8,12,3,18,7,5,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService.ConverterMethodHolder,0,21,0,0,0,7,0,2,0,2

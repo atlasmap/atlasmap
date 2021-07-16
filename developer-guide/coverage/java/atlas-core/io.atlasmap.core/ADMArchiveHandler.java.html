@@ -428,7 +428,7 @@ public class ADMArchiveHandler {
 <span class="pc bpc" id="L428" title="1 of 2 branches missed.">                    if (this.libraryDirectory == null) {</span>
 <span class="nc" id="L429">                        throw new AtlasException(&quot;Library directory is not specified&quot;);</span>
                     }
-<span class="fc" id="L431">                    int separatorPos = catEntryName.lastIndexOf(File.separator);</span>
+<span class="fc" id="L431">                    int separatorPos = catEntryName.replaceAll(&quot;\\\\&quot;, &quot;/&quot;).lastIndexOf(&quot;/&quot;);</span>
 <span class="pc bpc" id="L432" title="1 of 2 branches missed.">                    String name = separatorPos == -1 ? catEntryName : catEntryName.substring(separatorPos + 1);</span>
 <span class="fc" id="L433">                    Path libPath = this.libraryDirectory.resolve(name);</span>
 <span class="fc" id="L434">                    try (FileOutputStream fos = new FileOutputStream(libPath.toFile())) {</span>
