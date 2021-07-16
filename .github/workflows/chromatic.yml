@@ -3,7 +3,8 @@ name: 'Chromatic'
 on:
   pull_request:
     branches: [ atlasmap-2.2.x ]
-
+    paths:
+      - 'ui/**'
 jobs:
   deploy-chromatic:
     if: ${{ github.repository == 'atlasmap/atlasmap' }}
