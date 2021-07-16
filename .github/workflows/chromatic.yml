@@ -3,6 +3,8 @@ name: 'Chromatic'
 on:
   pull_request:
     branches: [ master ]
+    paths:
+      - 'ui/**'
 
 jobs:
   deploy:
