@@ -1,8 +1,6 @@
 name: 'Chromatic'
 
 on:
-  push:
-    branches: [ atlasmap-2.2.x ]
   pull_request:
     branches: [ atlasmap-2.2.x ]
 
