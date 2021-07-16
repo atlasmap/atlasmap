@@ -428,7 +428,7 @@ public class ADMArchiveHandler {
                     if (this.libraryDirectory == null) {
                         throw new AtlasException("Library directory is not specified");
                     }
-                    int separatorPos = catEntryName.lastIndexOf(File.separator);
+                    int separatorPos = catEntryName.replaceAll("\\\\", "/").lastIndexOf("/");
                     String name = separatorPos == -1 ? catEntryName : catEntryName.substring(separatorPos + 1);
                     Path libPath = this.libraryDirectory.resolve(name);
                     try (FileOutputStream fos = new FileOutputStream(libPath.toFile())) {
