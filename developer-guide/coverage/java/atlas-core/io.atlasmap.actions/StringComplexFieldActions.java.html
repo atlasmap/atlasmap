@@ -204,102 +204,108 @@ import io.atlasmap.v2.SubStringBefore;
 <span class="pc bpc" id="L204" title="1 of 4 branches missed.">        if (split == null || split.getDelimiter() == null) {</span>
 <span class="fc" id="L205">            throw new IllegalArgumentException(&quot;Split must be specified with a delimiter&quot;);</span>
         }
-
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        return input == null ? null : input.toString().split(Pattern.quote(split.getDelimiter()));</span>
+<span class="fc" id="L207">        String quotedDelimiter = Pattern.quote(split.getDelimiter());</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        boolean collapseRepeatingDelimiter = split.getCollapseRepeatingDelimiters() == null</span>
+<span class="nc" id="L209">                ? false</span>
+<span class="fc" id="L210">                : split.getCollapseRepeatingDelimiters();</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (collapseRepeatingDelimiter) {</span>
+<span class="fc" id="L212">            quotedDelimiter = &quot;(&quot; + quotedDelimiter + &quot;)+&quot;;</span>
+        }
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        return input == null ? null : input.toString().split(quotedDelimiter);</span>
     }
 
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String[] repeat(Repeat repeat, String input) {
 
-<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (repeat == null) {</span>
-<span class="nc" id="L215">            throw new IllegalArgumentException(&quot;repeat is not defined&quot;);</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (repeat == null) {</span>
+<span class="nc" id="L221">            throw new IllegalArgumentException(&quot;repeat is not defined&quot;);</span>
         }
 
-<span class="fc" id="L218">        String[] returnObj = null;</span>
+<span class="fc" id="L224">        String[] returnObj = null;</span>
 
         // Repeat the value based on count
-<span class="fc" id="L221">        int count = repeat.getCount();</span>
+<span class="fc" id="L227">        int count = repeat.getCount();</span>
 
-<span class="fc" id="L223">        returnObj = new String[count];</span>
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        for (int i = 0; i &lt; count; i++) {</span>
-<span class="fc" id="L225">            returnObj[i] = input;</span>
+<span class="fc" id="L229">        returnObj = new String[count];</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        for (int i = 0; i &lt; count; i++) {</span>
+<span class="fc" id="L231">            returnObj[i] = input;</span>
         }
 
-<span class="fc" id="L228">        return returnObj;</span>
+<span class="fc" id="L234">        return returnObj;</span>
     }
 
     @AtlasActionProcessor
     public static Boolean startsWith(StartsWith startsWith, String input) {
-<span class="fc bfc" id="L233" title="All 4 branches covered.">        if (startsWith == null || startsWith.getString() == null) {</span>
-<span class="fc" id="L234">            throw new IllegalArgumentException(&quot;StartsWith must be specified with a string&quot;);</span>
+<span class="fc bfc" id="L239" title="All 4 branches covered.">        if (startsWith == null || startsWith.getString() == null) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException(&quot;StartsWith must be specified with a string&quot;);</span>
         }
 
-<span class="fc bfc" id="L237" title="All 2 branches covered.">        return input == null ? false : input.startsWith(startsWith.getString());</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        return input == null ? false : input.startsWith(startsWith.getString());</span>
     }
 
     @AtlasActionProcessor
     public static String subString(SubString subString, String input) {
-<span class="fc bfc" id="L242" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L243">            return input;</span>
+<span class="fc bfc" id="L248" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L249">            return input;</span>
         }
 
-<span class="pc bpc" id="L246" title="2 of 6 branches missed.">        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() &lt; 0) {</span>
-<span class="fc" id="L247">            throw new IllegalArgumentException(&quot;SubString action must be specified with a positive startIndex&quot;);</span>
+<span class="pc bpc" id="L252" title="2 of 6 branches missed.">        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() &lt; 0) {</span>
+<span class="fc" id="L253">            throw new IllegalArgumentException(&quot;SubString action must be specified with a positive startIndex&quot;);</span>
         }
 
-<span class="fc" id="L250">        return doSubString(input, subString.getStartIndex(), subString.getEndIndex());</span>
+<span class="fc" id="L256">        return doSubString(input, subString.getStartIndex(), subString.getEndIndex());</span>
     }
 
     @AtlasActionProcessor
     public static String subStringAfter(SubStringAfter subStringAfter, String input) {
-<span class="fc bfc" id="L255" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L256">            return input;</span>
+<span class="fc bfc" id="L261" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L262">            return input;</span>
         }
 
-<span class="fc bfc" id="L259" title="All 4 branches covered.">        if (subStringAfter == null || subStringAfter.getStartIndex() == null</span>
-<span class="pc bpc" id="L260" title="1 of 4 branches missed.">                || subStringAfter.getStartIndex() &lt; 0 || subStringAfter.getMatch() == null</span>
-<span class="fc bfc" id="L261" title="All 2 branches covered.">                || (subStringAfter.getEndIndex() != null</span>
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">                        &amp;&amp; subStringAfter.getEndIndex() &lt; subStringAfter.getStartIndex())) {</span>
-<span class="fc" id="L263">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L265" title="All 4 branches covered.">        if (subStringAfter == null || subStringAfter.getStartIndex() == null</span>
+<span class="pc bpc" id="L266" title="1 of 4 branches missed.">                || subStringAfter.getStartIndex() &lt; 0 || subStringAfter.getMatch() == null</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                || (subStringAfter.getEndIndex() != null</span>
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                        &amp;&amp; subStringAfter.getEndIndex() &lt; subStringAfter.getStartIndex())) {</span>
+<span class="fc" id="L269">            throw new IllegalArgumentException(</span>
                     &quot;SubStringAfter action must be specified with a positive startIndex and a string to match&quot;);
         }
 
-<span class="fc" id="L267">        int idx = input.indexOf(subStringAfter.getMatch());</span>
-<span class="fc bfc" id="L268" title="All 2 branches covered.">        if (idx &lt; 0) {</span>
-<span class="fc" id="L269">            return input;</span>
+<span class="fc" id="L273">        int idx = input.indexOf(subStringAfter.getMatch());</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (idx &lt; 0) {</span>
+<span class="fc" id="L275">            return input;</span>
         }
-<span class="fc" id="L271">        idx = idx + subStringAfter.getMatch().length();</span>
-<span class="fc" id="L272">        return doSubString(input.substring(idx), subStringAfter.getStartIndex(), subStringAfter.getEndIndex());</span>
+<span class="fc" id="L277">        idx = idx + subStringAfter.getMatch().length();</span>
+<span class="fc" id="L278">        return doSubString(input.substring(idx), subStringAfter.getStartIndex(), subStringAfter.getEndIndex());</span>
     }
 
     @AtlasActionProcessor
     public static String subStringBefore(SubStringBefore subStringBefore, String input) {
-<span class="fc bfc" id="L277" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L278">            return input;</span>
+<span class="fc bfc" id="L283" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L284">            return input;</span>
         }
 
-<span class="fc bfc" id="L281" title="All 4 branches covered.">        if (subStringBefore == null || subStringBefore.getStartIndex() == null</span>
-<span class="pc bpc" id="L282" title="1 of 4 branches missed.">                || subStringBefore.getStartIndex() &lt; 0 || subStringBefore.getMatch() == null</span>
-<span class="fc bfc" id="L283" title="All 2 branches covered.">                || (subStringBefore.getEndIndex() != null</span>
-<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                        &amp;&amp; subStringBefore.getEndIndex() &lt; subStringBefore.getStartIndex())) {</span>
-<span class="fc" id="L285">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L287" title="All 4 branches covered.">        if (subStringBefore == null || subStringBefore.getStartIndex() == null</span>
+<span class="pc bpc" id="L288" title="1 of 4 branches missed.">                || subStringBefore.getStartIndex() &lt; 0 || subStringBefore.getMatch() == null</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">                || (subStringBefore.getEndIndex() != null</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">                        &amp;&amp; subStringBefore.getEndIndex() &lt; subStringBefore.getStartIndex())) {</span>
+<span class="fc" id="L291">            throw new IllegalArgumentException(</span>
                     &quot;SubStringBefore action must be specified with a positive startIndex and a string to match&quot;);
         }
 
-<span class="fc" id="L289">        int idx = input.indexOf(subStringBefore.getMatch());</span>
-<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        if (idx &lt; 0) {</span>
-<span class="nc" id="L291">            return input;</span>
+<span class="fc" id="L295">        int idx = input.indexOf(subStringBefore.getMatch());</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        if (idx &lt; 0) {</span>
+<span class="nc" id="L297">            return input;</span>
         }
 
-<span class="fc" id="L294">        return doSubString(input.substring(0, idx), subStringBefore.getStartIndex(), subStringBefore.getEndIndex());</span>
+<span class="fc" id="L300">        return doSubString(input.substring(0, idx), subStringBefore.getStartIndex(), subStringBefore.getEndIndex());</span>
     }
 
     private static String doSubString(String input, Integer startIndex, Integer endIndex) {
-<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (endIndex == null) {</span>
-<span class="fc" id="L299">            return input.substring(startIndex);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (endIndex == null) {</span>
+<span class="fc" id="L305">            return input.substring(startIndex);</span>
         }
 
-<span class="fc" id="L302">        return input.substring(startIndex, endIndex);</span>
+<span class="fc" id="L308">        return input.substring(startIndex, endIndex);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

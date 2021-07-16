@@ -94,7 +94,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.validators,DefaultAtlasValidati
 Unit Test Coverage Report/atlas-core,io.atlasmap.validators,StringPatternValidator,0,122,1,9,0,32,1,9,0,5
 Unit Test Coverage Report/atlas-core,io.atlasmap.validators,PositiveIntegerValidator,1,70,2,8,0,16,2,7,0,4
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,ExpressionFieldAction,13,32,0,4,2,7,0,5,0,3
-Unit Test Coverage Report/atlas-core,io.atlasmap.actions,StringComplexFieldActions,9,567,12,150,3,117,12,90,0,21
+Unit Test Coverage Report/atlas-core,io.atlasmap.actions,StringComplexFieldActions,11,589,13,153,4,122,13,91,0,21
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,ObjectFieldActions,8,145,5,27,2,32,5,19,0,8
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,NumberFieldActions,18,1176,15,123,2,241,15,74,0,20
 Unit Test Coverage Report/atlas-core,io.atlasmap.actions,DateFieldActions,4,84,2,16,0,17,2,16,0,9
@@ -224,7 +224,7 @@ Unit Test Coverage Report/atlas-model,io.atlasmap.v2,CurrentDate,0,3,0,0,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,PadStringLeft,0,17,0,0,0,7,0,5,0,5
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Property,4,34,0,0,2,14,1,10,1,10
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ReplaceAll,0,17,0,0,0,7,0,5,0,5
-Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Split,0,10,0,0,0,4,0,3,0,3
+Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Split,0,22,0,0,0,8,0,5,0,5
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,SubStringBefore,0,24,0,0,0,10,0,7,0,7
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Prepend,0,10,0,0,0,4,0,3,0,3
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,TrimRight,0,3,0,0,0,1,0,1,0,1

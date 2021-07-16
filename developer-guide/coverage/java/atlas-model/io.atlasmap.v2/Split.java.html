@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     private static final long serialVersionUID = 1L;
 
     protected String delimiter;
+<span class="fc" id="L27">    private boolean collapseRepeatingDelimiter = false;</span>
 
     /**
      * Gets the value of the delimiter property.
@@ -34,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getDelimiter() {
-<span class="fc" id="L37">        return delimiter;</span>
+<span class="fc" id="L38">        return delimiter;</span>
     }
 
     /**
@@ -48,8 +49,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The delimiter string to split with&quot;)
     @AtlasActionProperty(title = &quot;Delimiter&quot;, type = FieldType.STRING)
     public void setDelimiter(String value) {
-<span class="fc" id="L51">        this.delimiter = value;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L52">        this.delimiter = value;</span>
+<span class="fc" id="L53">    }</span>
+
+    public Boolean getCollapseRepeatingDelimiters() {
+<span class="fc" id="L56">        return collapseRepeatingDelimiter;</span>
+    }
+
+    @JsonPropertyDescription(&quot;Check to collapse repeating delimiters&quot;)
+    @AtlasActionProperty(title = &quot;Collapse Repeating Delimiters&quot;, type = FieldType.STRING)
+    public void setCollapseRepeatingDelimiters(Boolean collapseRepeatingDelimiter) {
+<span class="fc" id="L62">        this.collapseRepeatingDelimiter = collapseRepeatingDelimiter;</span>
+<span class="fc" id="L63">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
