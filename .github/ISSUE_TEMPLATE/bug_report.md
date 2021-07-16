@@ -10,6 +10,9 @@ assignees: ''
 **Describe the bug**
 A clear and concise description of what the bug is.
 
+**Attach .adm file and source document examples**
+The .adm archive file you can export from AtlasMap UI contains all metadata to reproduce your mapping. Also don't forget to provide source document examples to reproduce the runtime behavior exactly what you see.
+ 
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
