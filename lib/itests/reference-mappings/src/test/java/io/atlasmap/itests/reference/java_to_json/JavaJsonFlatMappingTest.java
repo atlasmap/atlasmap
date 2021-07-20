@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.reference.java_to_json;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -96,7 +96,7 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     protected BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
             throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
@@ -112,32 +112,32 @@ public class JavaJsonFlatMappingTest extends AtlasMappingBaseTest {
     protected BaseFlatPrimitiveClass generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(
             Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBooleanField(Boolean.FALSE);
-        newObject.setByteField(new Byte((byte) 99));
-        newObject.setCharField(new Character('a'));
-        newObject.setDoubleField(new Double(50000000d));
-        newObject.setFloatField(new Float(40000000f));
-        newObject.setIntField(new Integer(2));
-        newObject.setLongField(new Long(30000L));
-        newObject.setShortField(new Short((short) 1));
+        newObject.setByteField(Byte.valueOf((byte) 99));
+        newObject.setCharField(Character.valueOf('a'));
+        newObject.setDoubleField(Double.valueOf(50000000d));
+        newObject.setFloatField(Float.valueOf(40000000f));
+        newObject.setIntField(Integer.valueOf(2));
+        newObject.setLongField(Long.valueOf(30000L));
+        newObject.setShortField(Short.valueOf((short) 1));
         return newObject;
     }
 
     protected BaseFlatPrimitiveClass generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
             Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBoxedBooleanField(Boolean.valueOf(Boolean.TRUE));
-        newObject.setBoxedByteField(new Byte((byte) 87));
-        newObject.setBoxedCharField(new Character('z'));
-        newObject.setBoxedDoubleField(new Double(90000000d));
-        newObject.setBoxedFloatField(new Float(70000000f));
-        newObject.setBoxedIntField(new Integer(5));
-        newObject.setBoxedLongField(new Long(20000L));
-        newObject.setBoxedShortField(new Short((short) 5));
+        newObject.setBoxedByteField(Byte.valueOf((byte) 87));
+        newObject.setBoxedCharField(Character.valueOf('z'));
+        newObject.setBoxedDoubleField(Double.valueOf(90000000d));
+        newObject.setBoxedFloatField(Float.valueOf(70000000f));
+        newObject.setBoxedIntField(Integer.valueOf(5));
+        newObject.setBoxedLongField(Long.valueOf(20000L));
+        newObject.setBoxedShortField(Short.valueOf((short) 5));
         newObject.setBoxedStringField("boxedStringValue");
         return newObject;
     }

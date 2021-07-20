@@ -15,8 +15,8 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -46,7 +46,7 @@ public class Atlasmap381Test {
         Date sourceDate = dateFormat.parse("2001-01-01-01-01-01.001");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", new SourceClass().setSourceDate(sourceDate));
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         Date targetDate = ((TargetClass)output).getTargetDate();

@@ -15,11 +15,12 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -31,7 +32,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.ValidationStatus;
 
@@ -123,9 +124,11 @@ public class AtlasUtilTest {
         assertEquals("util", AtlasUtil.getUriDataType("atlas:java:util?param1=value1&param2=value2"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testFindClassesForPackageIllegalArgumentException() {
-        AtlasUtil.findClassesForPackage("io.atlasmapv2");
+        assertThrows(IllegalArgumentException.class, () -> {
+            AtlasUtil.findClassesForPackage("io.atlasmapv2");
+        });
     }
 
     @Test
@@ -145,14 +148,18 @@ public class AtlasUtilTest {
         assertEquals("value2", properties.get("key2"));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testLoadPropertiesFromURLNullPointerException() throws Exception {
-        AtlasUtil.loadPropertiesFromURL(null);
+        assertThrows(NullPointerException.class, () -> {
+            AtlasUtil.loadPropertiesFromURL(null);
+        });
     }
 
-    @Test(expected = MalformedURLException.class)
+    @Test
     public void testLoadPropertiesFromURLMalformedURLException() throws Exception {
-        AtlasUtil.loadPropertiesFromURL(new URL("invalid URL"));
+        assertThrows(MalformedURLException.class, () -> {
+            AtlasUtil.loadPropertiesFromURL(new URL("invalid URL"));
+        });
     }
 
     @Test
@@ -168,14 +175,18 @@ public class AtlasUtilTest {
         assertTrue(AtlasUtil.matchUriModule("atlas:java", "atlas:java"));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testValidateUriIllegalStateException() {
-        AtlasUtil.validateUri("java:atlas");
+        assertThrows(IllegalStateException.class, () -> {
+            AtlasUtil.validateUri("java:atlas");
+        });
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testValidateUriIllegalStateExceptionMultipleQuestionMark() {
-        AtlasUtil.validateUri("atlas:?java?");
+        assertThrows(IllegalStateException.class, () -> {
+            AtlasUtil.validateUri("atlas:?java?");
+        });
     }
 
     @Test
@@ -216,9 +227,11 @@ public class AtlasUtilTest {
         assertEquals(0, AtlasUtil.getUriParameters("atlas:?p").size());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testGetUriParametersIllegalArgumentException() {
-        AtlasUtil.getUriParameters("atlas:?%%XX");
+        assertThrows(IllegalArgumentException.class, () -> {
+            AtlasUtil.getUriParameters("atlas:?%%XX");
+        });
     }
 
     @Test
@@ -247,10 +260,12 @@ public class AtlasUtilTest {
         assertEquals(0, AtlasUtil.findClassesFromJar(new URL(urlString)).size());
     }
 
-    @Test(expected = ClassCastException.class)
+    @Test
     public void testFindClassesFromJarClassCastException() throws Exception {
-        URL url = Paths.get("target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar").toUri().toURL();
-        AtlasUtil.findClassesFromJar(url);
+        assertThrows(ClassCastException.class, () -> {
+            URL url = Paths.get("target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar").toUri().toURL();
+            AtlasUtil.findClassesFromJar(url);
+        });
     }
 
     @Test

@@ -15,14 +15,14 @@
  */
 package io.atlasmap.itests.reference.java_to_xml;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -42,7 +42,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -62,7 +62,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -82,7 +82,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -103,7 +103,7 @@ public class JavaXmlCombineTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceContact);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);

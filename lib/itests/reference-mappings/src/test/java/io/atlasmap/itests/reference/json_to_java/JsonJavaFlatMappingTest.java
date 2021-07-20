@@ -15,16 +15,16 @@
  */
 package io.atlasmap.itests.reference.json_to_java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -96,7 +96,7 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
     protected BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
             throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
@@ -112,45 +112,45 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
     protected BaseFlatPrimitiveClass generateFlatPrimitiveClassPrimitiveFieldsBoxedValues(
             Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBooleanField(Boolean.valueOf(Boolean.FALSE));
-        newObject.setByteField(new Byte((byte) 99));
-        newObject.setCharField(new Character('a'));
-        newObject.setDoubleField(new Double(50000000d));
-        newObject.setFloatField(new Float(40000000f));
-        newObject.setIntField(new Integer(2));
-        newObject.setLongField(new Long(30000L));
-        newObject.setShortField(new Short((short) 1));
+        newObject.setByteField(Byte.valueOf((byte) 99));
+        newObject.setCharField(Character.valueOf('a'));
+        newObject.setDoubleField(Double.valueOf(50000000d));
+        newObject.setFloatField(Float.valueOf(40000000f));
+        newObject.setIntField(Integer.valueOf(2));
+        newObject.setLongField(Long.valueOf(30000L));
+        newObject.setShortField(Short.valueOf((short) 1));
         return newObject;
     }
 
     protected BaseFlatPrimitiveClass generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
             Class<? extends BaseFlatPrimitiveClass> clazz) throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBoxedBooleanField(Boolean.valueOf(Boolean.TRUE));
-        newObject.setBoxedByteField(new Byte((byte) 87));
-        newObject.setBoxedCharField(new Character('z'));
-        newObject.setBoxedDoubleField(new Double(90000000d));
-        newObject.setBoxedFloatField(new Float(70000000f));
-        newObject.setBoxedIntField(new Integer(5));
-        newObject.setBoxedLongField(new Long(20000L));
-        newObject.setBoxedShortField(new Short((short) 5));
+        newObject.setBoxedByteField(Byte.valueOf((byte) 87));
+        newObject.setBoxedCharField(Character.valueOf('z'));
+        newObject.setBoxedDoubleField(Double.valueOf(90000000d));
+        newObject.setBoxedFloatField(Float.valueOf(70000000f));
+        newObject.setBoxedIntField(Integer.valueOf(5));
+        newObject.setBoxedLongField(Long.valueOf(20000L));
+        newObject.setBoxedShortField(Short.valueOf((short) 5));
         return newObject;
     }
 
     protected void validateFlatPrimitiveClassPrimitiveFields(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Double(50000000d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(40000000f), new Float(targetObject.getFloatField()));
-        assertEquals(new Integer(2), new Integer(targetObject.getIntField()));
-        assertEquals(new Long(30000L), new Long(targetObject.getLongField()));
-        assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
+        assertEquals(Double.valueOf(50000000d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(40000000f), Float.valueOf(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(2), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Long.valueOf(30000L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Short.valueOf((short) 1), Short.valueOf(targetObject.getShortField()));
         assertEquals(Boolean.FALSE, targetObject.isBooleanField());
         // assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
-        assertEquals(new Character('a'), new Character(targetObject.getCharField()));
+        assertEquals(Character.valueOf('a'), Character.valueOf(targetObject.getCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanField());
@@ -173,15 +173,15 @@ public class JsonJavaFlatMappingTest extends AtlasMappingBaseTest {
     }
 
     protected void validateFlatPrimitiveClassBoxedPrimitiveFields(BaseFlatPrimitiveClass targetObject) {
-        assertEquals(new Double(90000000d), new Double(targetObject.getBoxedDoubleField()));
-        assertEquals(new Float(70000000f), new Float(targetObject.getBoxedFloatField()));
-        assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
-        assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField()));
-        assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField()));
+        assertEquals(Double.valueOf(90000000d), Double.valueOf(targetObject.getBoxedDoubleField()));
+        assertEquals(Float.valueOf(70000000f), Float.valueOf(targetObject.getBoxedFloatField()));
+        assertEquals(Integer.valueOf(5), Integer.valueOf(targetObject.getBoxedIntField()));
+        assertEquals(Long.valueOf(20000L), Long.valueOf(targetObject.getBoxedLongField()));
+        assertEquals(Short.valueOf((short) 5), Short.valueOf(targetObject.getBoxedShortField()));
         assertEquals(Boolean.TRUE, targetObject.getBoxedBooleanField());
         // assertEquals(new Byte((byte) 87), new
         // Byte(targetObject.getBoxedByteField()));
-        assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField()));
+        assertEquals(Character.valueOf('z'), Character.valueOf(targetObject.getBoxedCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
         assertFalse(targetObject.isBooleanField());

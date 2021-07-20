@@ -30,12 +30,13 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -43,7 +44,7 @@ import java.nio.CharBuffer;
 import java.time.Instant;
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -152,16 +153,20 @@ public class CharSequenceConverterTest {
         assertEquals(Byte.MIN_VALUE, l, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteGreaterThanMAX() throws Exception {
-        String s = "128";
-        converter.toByte(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "128";
+            converter.toByte(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteLessThanMIN() throws Exception {
-        String s = "-129";
-        converter.toByte(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "-129";
+            converter.toByte(s);
+        });
     }
 
     @Test
@@ -178,10 +183,12 @@ public class CharSequenceConverterTest {
         assertNull(c);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterEmptyString() throws Exception {
-        String s = "";
-        converter.toCharacter(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "";
+            converter.toCharacter(s);
+        });
     }
 
     @Test
@@ -223,10 +230,12 @@ public class CharSequenceConverterTest {
         assertEquals(Double.MAX_VALUE, d, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToDoubleGreaterThanMAX() throws Exception {
-        String s = "1.7976931348623157E400";
-        converter.toDouble(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "1.7976931348623157E400";
+            converter.toDouble(s);
+        });
     }
 
     @Test
@@ -237,10 +246,12 @@ public class CharSequenceConverterTest {
         assertEquals(0.0, d, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToDoubleUnparseable() throws Exception {
-        String s = "1.2efff";
-        converter.toDouble(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "1.2efff";
+            converter.toDouble(s);
+        });
     }
 
     @Test
@@ -276,16 +287,20 @@ public class CharSequenceConverterTest {
         assertEquals(Float.MIN_VALUE, f, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToFloatUnparsable() throws Exception {
-        String s = "QWERTY";
-        converter.toFloat(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "QWERTY";
+            converter.toFloat(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToFloatGreaterThanMAX() throws Exception {
-        String s = "3.4028235E39";
-        converter.toFloat(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "3.4028235E39";
+            converter.toFloat(s);
+        });
     }
 
     @Test
@@ -314,22 +329,28 @@ public class CharSequenceConverterTest {
         assertNull(i);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerLessThanMIN() throws Exception {
-        String s = "-21474836495554545";
-        converter.toInteger(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "-21474836495554545";
+            converter.toInteger(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerGreaterThanMAX() throws Exception {
-        String s = "214748364755545422145221";
-        converter.toInteger(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "214748364755545422145221";
+            converter.toInteger(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerUnparseable() throws Exception {
-        String s = "2147483648qwerty";
-        converter.toInteger(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "2147483648qwerty";
+            converter.toInteger(s);
+        });
     }
 
     @Test
@@ -366,22 +387,28 @@ public class CharSequenceConverterTest {
         assertEquals(Long.MIN_VALUE, l, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToLongGreaterThanMAX() throws Exception {
-        String s = "9223372036854775808";
-        converter.toLong(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "9223372036854775808";
+            converter.toLong(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToLongLessThanMIN() throws Exception {
-        String s = "-9223372036854775809";
-        converter.toLong(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "-9223372036854775809";
+            converter.toLong(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToLongUnparsable() throws Exception {
-        String s = "QWERTY";
-        converter.toLong(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "QWERTY";
+            converter.toLong(s);
+        });
     }
 
     @Test
@@ -414,22 +441,28 @@ public class CharSequenceConverterTest {
         assertEquals(Short.MIN_VALUE, l, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortGreaterThanMAX() throws Exception {
-        String s = "9223372036854775808";
-        converter.toShort(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "9223372036854775808";
+            converter.toShort(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortLessThanMIN() throws Exception {
-        String s = "-9223372036854775809";
-        converter.toShort(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "-9223372036854775809";
+            converter.toShort(s);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortUnparsable() throws Exception {
-        String s = "QWERTY";
-        converter.toShort(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            String s = "QWERTY";
+            converter.toShort(s);
+        });
     }
 
     @Test
@@ -508,9 +541,11 @@ public class CharSequenceConverterTest {
         assertNotNull(converter.toNumber("1.99"));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void testConvertToNumberAtlasConversionException() throws AtlasConversionException {
-        CharSequenceConverter converter = new CharSequenceConverter();
-        assertNull(converter.toNumber("abc"));
+        assertThrows(AtlasConversionException.class, () -> {
+            CharSequenceConverter converter = new CharSequenceConverter();
+            assertNull(converter.toNumber("abc"));
+        });
     }
 }

@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.reference.multidoc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -52,7 +52,7 @@ public class MultidocFlatMappingTest extends AtlasMappingBaseTest {
         session.setSourceDocument("SourceXml", sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object targetJava = session.getTargetDocument("TargetJava");
         assertNotNull(targetJava);
         assertTrue(targetJava instanceof TargetFlatPrimitiveClass);
@@ -66,15 +66,16 @@ public class MultidocFlatMappingTest extends AtlasMappingBaseTest {
         Object targetXml = session.getTargetDocument("TargetXml");
         assertNotNull(targetXml);
         assertTrue(targetXml instanceof String);
-        assertEquals(targetXml.toString(),
+        assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" byteField=\"99\" charField=\"a\" doubleField=\"5.0E7\" floatField=\"4.0E7\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
-                targetXml);
+                targetXml,
+                targetXml.toString());
     }
 
     private BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
             throws Exception {
         Class<?> targetClazz = this.getClass().getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setBooleanField(false);
         newObject.setByteField((byte) 99);
@@ -89,14 +90,14 @@ public class MultidocFlatMappingTest extends AtlasMappingBaseTest {
 
     private void validateFlatPrimitiveClassPrimitiveFields(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Double(50000000d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(40000000f), new Float(targetObject.getFloatField()));
-        assertEquals(new Integer(2), new Integer(targetObject.getIntField()));
-        assertEquals(new Long(30000L), new Long(targetObject.getLongField()));
-        assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
+        assertEquals(Double.valueOf(50000000d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(40000000f), Float.valueOf(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(2), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Long.valueOf(30000L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Short.valueOf((short) 1), Short.valueOf(targetObject.getShortField()));
         assertEquals(Boolean.FALSE, targetObject.isBooleanField());
-        assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
-        assertEquals(new Character('a'), new Character(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 99), Byte.valueOf(targetObject.getByteField()));
+        assertEquals(Character.valueOf('a'), Character.valueOf(targetObject.getCharField()));
         assertNull(targetObject.getBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanArrayField());
         assertNull(targetObject.getBoxedBooleanField());

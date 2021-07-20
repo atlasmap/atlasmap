@@ -15,11 +15,11 @@
  */
 package io.atlasmap.java.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,8 +27,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath.SegmentContext;
@@ -44,7 +44,7 @@ public class JavaFieldWriterUtilTest extends BaseJavaFieldWriterTest {
     private List<TargetContact> targetContactList;
     private Map<String, TargetOrder> targetOrderMap;
 
-    @Before
+    @BeforeEach
     public void before() {
         reset();
         targetContactList = new ArrayList<>();
@@ -155,25 +155,25 @@ public class JavaFieldWriterUtilTest extends BaseJavaFieldWriterTest {
             writerUtil.setCollectionItem(targetOrderMap, new TargetOrder(), new SegmentContext("targetOrderMap{foo}"));
             fail("AtlasException is expected");
         } catch (AtlasException e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("TODO"));
+            assertTrue(e.getMessage().contains("TODO"), e.getMessage());
         }
         try {
             writerUtil.createComplexCollectionItem(targetOrderMap, TargetOrder.class, new SegmentContext("targetOrderMap{foo}"));
             fail("AtlasException is expected");
         } catch (AtlasException e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("TODO"));
+            assertTrue(e.getMessage().contains("TODO"), e.getMessage());
         }
         try {
             writerUtil.createComplexCollectionItem(this, targetOrderMap, new SegmentContext("targetOrderMap{foo}"));
             fail("AtlasException is expected");
         } catch (AtlasException e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("TODO"));
+            assertTrue(e.getMessage().contains("TODO"), e.getMessage());
         }
         try {
             writerUtil.setCollectionItem(targetOrderMap, new TargetOrder(), new SegmentContext("targetOrderMap{foo}"));
             fail("AtlasException is expected");
         } catch (AtlasException e) {
-            assertTrue(e.getMessage(), e.getMessage().contains("TODO"));
+            assertTrue(e.getMessage().contains("TODO"), e.getMessage());
         }
     }
 }

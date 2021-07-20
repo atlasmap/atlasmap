@@ -15,19 +15,19 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.spi.AtlasPropertyType;
 import io.atlasmap.v2.AtlasMapping;
@@ -38,13 +38,13 @@ public class DefaultAtlasPropertyStrategyTest {
 
     private DefaultAtlasPropertyStrategy propStrategy = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         propStrategy = new DefaultAtlasPropertyStrategy();
         propStrategy.setAtlasConversionService(DefaultAtlasConversionService.getInstance());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         propStrategy = null;
     }
@@ -95,8 +95,8 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertTrue((String)propField.getValue(),
-                Double.parseDouble((String)propField.getValue()) >= Double.parseDouble("1.8"));
+        assertTrue(Double.parseDouble((String)propField.getValue()) >= Double.parseDouble("1.8"),
+                (String)propField.getValue());
     }
 
     @Test
@@ -167,7 +167,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof Integer);
-        assertEquals(new Integer(Integer.MIN_VALUE), new Integer((Integer) propField.getValue()));
+        assertEquals(Integer.valueOf(Integer.MIN_VALUE), Integer.valueOf((Integer) propField.getValue()));
     }
 
     @Test
@@ -231,7 +231,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof Integer);
-        assertEquals(new Integer(Integer.MIN_VALUE), new Integer((Integer) propField.getValue()));
+        assertEquals(Integer.valueOf(Integer.MIN_VALUE), Integer.valueOf((Integer) propField.getValue()));
     }
 
     @Test
@@ -244,7 +244,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof Integer);
-        assertEquals(new Integer(Integer.MIN_VALUE), new Integer((Integer) propField.getValue()));
+        assertEquals(Integer.valueOf(Integer.MIN_VALUE), Integer.valueOf((Integer) propField.getValue()));
     }
 
     @Test
@@ -258,7 +258,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof String);
-        assertEquals(new Integer(Integer.MIN_VALUE).toString(), propField.getValue());
+        assertEquals(Integer.valueOf(Integer.MIN_VALUE).toString(), propField.getValue());
     }
 
     @Test
@@ -271,7 +271,7 @@ public class DefaultAtlasPropertyStrategyTest {
         assertNotNull(propField);
         assertNotNull(propField.getValue());
         assertTrue(propField.getValue() instanceof Float);
-        assertEquals(new Float(Float.MAX_VALUE), new Float((Float) propField.getValue()));
+        assertEquals(Float.valueOf(Float.MAX_VALUE), Float.valueOf((Float) propField.getValue()));
     }
 
     @Test
@@ -290,7 +290,7 @@ public class DefaultAtlasPropertyStrategyTest {
     public void testGetSetPropertyOrderValue() {
         List<AtlasPropertyType> propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
-        assertEquals(new Integer(4), new Integer(propTypes.size()));
+        assertEquals(Integer.valueOf(4), Integer.valueOf(propTypes.size()));
         assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
         assertEquals(AtlasPropertyType.JAVA_SYSTEM_PROPERTIES, propTypes.get(1));
         assertEquals(AtlasPropertyType.ENVIRONMENT_VARIABLES, propTypes.get(2));
@@ -300,7 +300,7 @@ public class DefaultAtlasPropertyStrategyTest {
                 AtlasPropertyType.MAPPING_DEFINED_PROPERTIES.value()));
         propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
-        assertEquals(new Integer(2), new Integer(propTypes.size()));
+        assertEquals(Integer.valueOf(2), Integer.valueOf(propTypes.size()));
         assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
         assertEquals(AtlasPropertyType.MAPPING_DEFINED_PROPERTIES, propTypes.get(1));
     }
@@ -318,7 +318,7 @@ public class DefaultAtlasPropertyStrategyTest {
         propStrategy.setPropertyOrderValue(Arrays.asList("foo", AtlasPropertyType.RUNTIME_PROPERTIES.value()));
         propTypes = propStrategy.getPropertyOrder();
         assertNotNull(propTypes);
-        assertEquals(new Integer(1), new Integer(propTypes.size()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(propTypes.size()));
         assertEquals(AtlasPropertyType.RUNTIME_PROPERTIES, propTypes.get(0));
     }
 

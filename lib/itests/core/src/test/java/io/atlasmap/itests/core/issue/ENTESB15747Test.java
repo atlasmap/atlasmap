@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj.XmlAssert;
@@ -52,7 +52,7 @@ public class ENTESB15747Test {
         session.setSourceDocument("-MT5ptb_dciq61nmn53T", source1);
         session.setSourceDocument("-MT5pxPYdciq61nmn53T", source2);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object target = session.getTargetDocument("-MT5pwFQdciq61nmn53T");
         assertNotNull(target);
         LOG.info(target.toString());

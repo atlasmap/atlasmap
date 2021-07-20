@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +46,7 @@ public class MultiplicityTransformationRepeatConstantTest {
         session.setSourceDocument("JSONSchemaSource-9c57df5a-9511-411a-a8a9-ce232fc8f3f6", sourceJson);
         
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("JSONSchemaSource-3ddde8cd-f588-4fd4-a996-75c048c648ea");
         JsonNode root = new ObjectMapper().readTree((String)output);
         ArrayNode addrs = (ArrayNode) root.get("addressList");

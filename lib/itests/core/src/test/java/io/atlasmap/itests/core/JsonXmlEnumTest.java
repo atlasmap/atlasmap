@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.assertj.XmlAssert;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -55,7 +55,7 @@ public class JsonXmlEnumTest {
                 + "<tns:body><Pet><status>%s</status></Pet></tns:body></tns:request>", sourceXmlValue);
         session.setSourceDocument("XMLSchemaSource-2c88ee00-7ddc-4137-b906-52d56e9b7f9e", sourceXml);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
 
         String targetJson = (String) session.getTargetDocument("address-enum-schema-afdf5b0b-416a-4b7a-a4ba-f6219af64f43");
         JsonNode root = new ObjectMapper().readTree(targetJson);

@@ -15,10 +15,10 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
@@ -37,7 +37,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         recreateSession();
         session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals("foo", session.head().getSourceField().getValue());
     }
 
@@ -53,7 +53,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         wrapper.getField().add(source.getField().get(0));
         session.head().setSourceField(wrapper);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
         FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
         assertEquals("/testPathfoo<>", fieldGroup.getPath());
@@ -73,7 +73,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         wrapper.getField().add((Field)reader.sources.get("/testPathfoo<>/value"));
         session.head().setSourceField(wrapper);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
         FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
         assertEquals("/testPathfoo<>/value", fieldGroup.getPath());
@@ -95,7 +95,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         recreateSession();
         session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
         FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
         assertEquals("/testPathfoo<>", fieldGroup.getPath());
@@ -119,7 +119,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         recreateSession();
         session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
         FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
         assertEquals("/testPathfoo<>/value", fieldGroup.getPath());
@@ -141,7 +141,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         recreateSession();
         session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
         FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
         assertEquals("/testPathfoo<>/value", fieldGroup.getPath());
@@ -183,7 +183,7 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         context.getSourceModules().put(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID, new PropertyModule(new DefaultAtlasPropertyStrategy()));
         session.head().setSourceField(source);
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(SimpleField.class, session.head().getSourceField().getClass());
         SimpleField field = (SimpleField) session.head().getSourceField();
         assertEquals("$ATLASMAP", field.getPath());

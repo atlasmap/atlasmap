@@ -15,10 +15,10 @@
  */
 package io.atlasmap.json.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,8 +27,7 @@ import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.hamcrest.core.Is;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.DefaultAtlasConversionService;
@@ -73,10 +72,12 @@ public class JsonFieldReaderTest {
         assertEquals(AuditStatus.ERROR, audits.getAudit().get(0).getStatus());
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testWithNullJsonField() throws Exception {
-        reader.setDocument("{qwerty : ytrewq}");
-        reader.read(mock(AtlasInternalSession.class));
+        assertThrows(AtlasException.class, () -> {
+            reader.setDocument("{qwerty : ytrewq}");
+            reader.read(mock(AtlasInternalSession.class));
+        });
     }
 
     @Test
@@ -90,13 +91,13 @@ public class JsonFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(field);
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Mercedes"));
+        assertEquals("Mercedes", field.getValue());
 
         field.setFieldType(null);
         field.setPath("/doors");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(5));
+        assertEquals(5, field.getValue());
 
     }
 
@@ -111,13 +112,13 @@ public class JsonFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(field);
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(5));
+        assertEquals(5, field.getValue());
         resetField(field);
 
         field.setPath("/car/brand");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Mercedes"));
+        assertEquals("Mercedes", field.getValue());
     }
 
     @Test
@@ -136,42 +137,42 @@ public class JsonFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(field);
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("file"));
+        assertEquals("file", field.getValue());
 
         field.setPath("/menu/value");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Filed"));
+        assertEquals("Filed", field.getValue());
 
         field.setPath("/menu/popup/menuitem[0]/value");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("New"));
+        assertEquals("New", field.getValue());
 
         field.setPath("/menu/popup/menuitem[0]/onclick");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("CreateNewDoc()"));
+        assertEquals("CreateNewDoc()", field.getValue());
 
         field.setPath("/menu/popup/menuitem[1]/value");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Open"));
+        assertEquals("Open", field.getValue());
 
         field.setPath("/menu/popup/menuitem[1]/onclick");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("OpenDoc()"));
+        assertEquals("OpenDoc()", field.getValue());
 
         field.setPath("/menu/popup/menuitem[2]/value");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Close"));
+        assertEquals("Close", field.getValue());
 
         field.setPath("/menu/popup/menuitem[2]/onclick");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("CloseDoc()"));
+        assertEquals("CloseDoc()", field.getValue());
     }
 
     @Test
@@ -187,157 +188,157 @@ public class JsonFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(field);
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0001"));
+        assertEquals("0001", field.getValue());
         resetField(field);
 
         field.setPath("/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("donut"));
+        assertEquals("donut", field.getValue());
         resetField(field);
 
         field.setPath("/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Cake"));
+        assertEquals("Cake", field.getValue());
         resetField(field);
 
         field.setPath("/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.55));
+        assertEquals(0.55, field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[0]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1001"));
+        assertEquals("1001", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Regular"));
+        assertEquals("Regular", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[1]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1002"));
+        assertEquals("1002", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[1]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate"));
+        assertEquals("Chocolate", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1003"));
+        assertEquals("1003", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[2]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Blueberry"));
+        assertEquals("Blueberry", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[3]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1004"));
+        assertEquals("1004", field.getValue());
         resetField(field);
 
         field.setPath("/batters/batter[3]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Devil's Food"));
+        assertEquals("Devil's Food", field.getValue());
         resetField(field);
 
         field.setPath("/topping[0]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5001"));
+        assertEquals("5001", field.getValue());
         resetField(field);
 
         field.setPath("/topping[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("None"));
+        assertEquals("None", field.getValue());
         resetField(field);
 
         field.setPath("/topping[1]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5002"));
+        assertEquals("5002", field.getValue());
         resetField(field);
 
         field.setPath("/topping[1]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Glazed"));
+        assertEquals("Glazed", field.getValue());
         resetField(field);
 
         field.setPath("/topping[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5005"));
+        assertEquals("5005", field.getValue());
         resetField(field);
 
         field.setPath("/topping[2]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Sugar"));
+        assertEquals("Sugar", field.getValue());
         resetField(field);
 
         field.setPath("/topping[3]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5007"));
+        assertEquals("5007", field.getValue());
         resetField(field);
 
         field.setPath("/topping[3]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Powdered Sugar"));
+        assertEquals("Powdered Sugar", field.getValue());
         resetField(field);
 
         field.setPath("/topping[4]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5006"));
+        assertEquals("5006", field.getValue());
         resetField(field);
 
         field.setPath("/topping[4]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate with Sprinkles"));
+        assertEquals("Chocolate with Sprinkles", field.getValue());
         resetField(field);
 
         field.setPath("/topping[5]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5003"));
+        assertEquals("5003", field.getValue());
         resetField(field);
 
         field.setPath("/topping[5]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate"));
+        assertEquals("Chocolate", field.getValue());
         resetField(field);
 
         field.setPath("/topping[6]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5004"));
+        assertEquals("5004", field.getValue());
         resetField(field);
 
         field.setPath("/topping[6]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Maple"));
+        assertEquals("Maple", field.getValue());
         resetField(field);
     }
 
@@ -354,256 +355,256 @@ public class JsonFieldReaderTest {
         when(session.getAudits()).thenReturn(new Audits());
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0001"));
+        assertEquals("0001", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("donut"));
+        assertEquals("donut", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Cake"));
+        assertEquals("Cake", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.55));
+        assertEquals(0.55, field.getValue());
         resetField(field);
 
         // array of objects
         field.setPath("/items/item[0]/batters/batter[0]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1001"));
+        assertEquals("1001", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Regular"));
+        assertEquals("Regular", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[1]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1002"));
+        assertEquals("1002", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[1]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate"));
+        assertEquals("Chocolate", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1003"));
+        assertEquals("1003", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[2]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Blueberry"));
+        assertEquals("Blueberry", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[3]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1004"));
+        assertEquals("1004", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/batters/batter[3]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Devil's Food"));
+        assertEquals("Devil's Food", field.getValue());
         resetField(field);
 
         // simple array
         field.setPath("/items/item[0]/topping[0]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5001"));
+        assertEquals("5001", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("None"));
+        assertEquals("None", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[1]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5002"));
+        assertEquals("5002", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[1]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Glazed"));
+        assertEquals("Glazed", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5005"));
+        assertEquals("5005", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[2]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Sugar"));
+        assertEquals("Sugar", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[3]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5007"));
+        assertEquals("5007", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[3]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Powdered Sugar"));
+        assertEquals("Powdered Sugar", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[4]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5006"));
+        assertEquals("5006", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[4]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate with Sprinkles"));
+        assertEquals("Chocolate with Sprinkles", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[5]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5003"));
+        assertEquals("5003", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[5]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate"));
+        assertEquals("Chocolate", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[6]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5004"));
+        assertEquals("5004", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[0]/topping[6]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Maple"));
+        assertEquals("Maple", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0002"));
+        assertEquals("0002", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("donut"));
+        assertEquals("donut", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Raised"));
+        assertEquals("Raised", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.55));
+        assertEquals(0.55, field.getValue());
         resetField(field);
 
         // array of objects
         field.setPath("/items/item[1]/batters/batter[0]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("1001"));
+        assertEquals("1001", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/batters/batter[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Regular"));
+        assertEquals("Regular", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[0]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5001"));
+        assertEquals("5001", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[0]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("None"));
+        assertEquals("None", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[1]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5002"));
+        assertEquals("5002", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[1]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Glazed"));
+        assertEquals("Glazed", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5005"));
+        assertEquals("5005", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[2]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Sugar"));
+        assertEquals("Sugar", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[3]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5003"));
+        assertEquals("5003", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[3]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Chocolate"));
+        assertEquals("Chocolate", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[4]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("5004"));
+        assertEquals("5004", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[4]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Maple"));
+        assertEquals("Maple", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[1]/topping[5]/id");
@@ -614,109 +615,109 @@ public class JsonFieldReaderTest {
         field.setPath("/items/item[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0003"));
+        assertEquals("0003", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[2]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("donut"));
+        assertEquals("donut", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[2]/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Old Fashioned"));
+        assertEquals("Old Fashioned", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[2]/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.55));
+        assertEquals(0.55, field.getValue());
         resetField(field);
 
         field.setPath("/items/item[3]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0004"));
+        assertEquals("0004", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[3]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("bar"));
+        assertEquals("bar", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[3]/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Bar"));
+        assertEquals("Bar", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[3]/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.75));
+        assertEquals(0.75, field.getValue());
         resetField(field);
 
         field.setPath("/items/item[4]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0005"));
+        assertEquals("0005", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[4]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("twist"));
+        assertEquals("twist", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[4]/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Twist"));
+        assertEquals("Twist", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[4]/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.65));
+        assertEquals(0.65, field.getValue());
         resetField(field);
 
         field.setPath("/items/item[5]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("0006"));
+        assertEquals("0006", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[5]/type");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("filled"));
+        assertEquals("filled", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[5]/name");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("Filled"));
+        assertEquals("Filled", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[5]/ppu");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(0.75));
+        assertEquals(0.75, field.getValue());
         resetField(field);
 
         field.setPath("/items/item[5]/fillings/filling[2]/id");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("7004"));
+        assertEquals("7004", field.getValue());
         resetField(field);
 
         field.setPath("/items/item[5]/fillings/filling[3]/addcost");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(new BigInteger("100000000000000000000000000000000000")));
+        assertEquals(new BigInteger("100000000000000000000000000000000000"), field.getValue());
         resetField(field);
     }
 
@@ -1110,7 +1111,7 @@ public class JsonFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(field);
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is(500));
+        assertEquals(500, field.getValue());
 
         field.setFieldType(null);
         field.setPath("/<>");
@@ -1138,11 +1139,11 @@ public class JsonFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(field);
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("red"));
+        assertEquals("red", field.getValue());
         field.setPath("/<1>/value");
         reader.read(session);
         assertNotNull(field.getValue());
-        assertThat(field.getValue(), Is.is("#0f0"));
+        assertEquals("#0f0", field.getValue());
 
         field.setFieldType(null);
         field.setPath("/<>/color");

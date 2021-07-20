@@ -15,10 +15,11 @@
  */
 package io.atlasmap.json.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,8 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -44,34 +45,44 @@ public class JsonSchemaInspectorTest {
 
     private final JsonInspectionService inspectionService = new JsonInspectionService();
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void inspectJsonSchemaEmpty() throws Exception {
         final String schema = "";
-        inspectionService.inspectJsonSchema(schema);
+        assertThrows(IllegalArgumentException.class, () -> {
+            inspectionService.inspectJsonSchema(schema);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void inspectJsonSchemaWhitespaceOnly() throws Exception {
         final String schema = " ";
-        inspectionService.inspectJsonSchema(schema);
+        assertThrows(IllegalArgumentException.class, () -> {
+            inspectionService.inspectJsonSchema(schema);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void inspectJsonSchemaNull() throws Exception {
         final String schema = null;
-        inspectionService.inspectJsonSchema(schema);
+        assertThrows(IllegalArgumentException.class, () -> {
+            inspectionService.inspectJsonSchema(schema);
+        });
     }
 
-    @Test(expected = JsonInspectionException.class)
+    @Test
     public void inspectJsonSchemaUnparseableMissingOpenCurly() throws Exception {
         final String schema = "\"$schema\": \"http://json-schema.org/\"}";
-        inspectionService.inspectJsonSchema(schema);
+        assertThrows(JsonInspectionException.class, () -> {
+            inspectionService.inspectJsonSchema(schema);
+        });
     }
 
-    @Test(expected = JsonInspectionException.class)
+    @Test
     public void inspectJsonSchemaUnparseableMissingClosingCurly() throws Exception {
         final String schema = "{\"$schema\": \"http://json-schema.org/\"";
-        inspectionService.inspectJsonSchema(schema);
+        assertThrows(JsonInspectionException.class, () -> {
+            inspectionService.inspectJsonSchema(schema);
+        });
     }
 
     @Test
@@ -649,7 +660,7 @@ public class JsonSchemaInspectorTest {
         assertEquals(FieldType.STRING, f.getFieldType());
     }
 
-    @Ignore("internet access")
+    @Disabled("https://github.com/atlasmap/atlasmap/issues/3129")
     @Test
     public void inspectJsonSchemaCalendarExternal() throws Exception {
         final String instance = new String(Files
@@ -729,7 +740,7 @@ public class JsonSchemaInspectorTest {
         assertEquals(FieldType.NUMBER, f.getFieldType());
     }
 
-    @Ignore("internet access")
+    @Disabled("https://github.com/atlasmap/atlasmap/issues/3129")
     @Test
     public void inspectJsonSchemaCardExternal() throws Exception {
         final String schema = new String(Files

@@ -15,18 +15,19 @@
  */
 package io.atlasmap.actions;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Append;
 import io.atlasmap.v2.Concatenate;
@@ -63,9 +64,11 @@ public class StringComplexFieldActionsTest {
         assertEquals("1bar", StringComplexFieldActions.append(action, "1"));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testAppendNullAction() {
-        StringComplexFieldActions.append(null, null);
+        assertThrows(IllegalArgumentException.class, ()-> {
+            StringComplexFieldActions.append(null, null);
+        });
     }
 
     @Test
@@ -81,9 +84,11 @@ public class StringComplexFieldActionsTest {
         assertEquals("1-true-2.0", StringComplexFieldActions.concatenate(action, Arrays.asList("1", "true", "2.0")));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testConcatenateNullAction() {
-        StringComplexFieldActions.concatenate(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.concatenate(null, null);
+        });
     }
 
     @Test
@@ -101,14 +106,18 @@ public class StringComplexFieldActionsTest {
         assertFalse(StringComplexFieldActions.endsWith(action, "barfoo"));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testEndsWithNullAction() {
-        StringComplexFieldActions.endsWith(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.endsWith(null, null);
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testEndsWithNullString() {
-        StringComplexFieldActions.endsWith(new EndsWith(), null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.endsWith(new EndsWith(), null);
+        });
     }
 
     @Test
@@ -126,14 +135,18 @@ public class StringComplexFieldActionsTest {
         assertEquals("foobarfoobar", StringComplexFieldActions.format(action, Arrays.asList("bar")));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testFormatNullAction() {
-        StringComplexFieldActions.format(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.format(null, null);
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testFormatNullTemplate() {
-        StringComplexFieldActions.format(new Format(), null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.format(new Format(), null);
+        });
     }
 
     @Test
@@ -156,14 +169,18 @@ public class StringComplexFieldActionsTest {
         assertEquals(3, StringComplexFieldActions.indexOf(action, "foobarbar"));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testIndexOfNullAction() {
-        StringComplexFieldActions.indexOf(null, null);
+        assertThrows(IllegalArgumentException.class, () ->{
+            StringComplexFieldActions.indexOf(null, null);
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testIndexOfNullString() {
-        StringComplexFieldActions.indexOf(new IndexOf(), null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.indexOf(new IndexOf(), null);
+        });
     }
 
     @Test
@@ -181,14 +198,18 @@ public class StringComplexFieldActionsTest {
         assertEquals(6, StringComplexFieldActions.lastIndexOf(action, "foobarbar"));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testLastIndexOfNullAction() {
-        StringComplexFieldActions.lastIndexOf(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.lastIndexOf(null, null);
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testLastIndexOfNullString() {
-        StringComplexFieldActions.lastIndexOf(new LastIndexOf(), null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.lastIndexOf(new LastIndexOf(), null);
+        });
     }
 
     @Test
@@ -290,9 +311,11 @@ public class StringComplexFieldActionsTest {
         assertEquals("bar1", StringComplexFieldActions.prepend(action, "1"));
     }
 
-    @Test(expected=NullPointerException.class)
+    @Test
     public void testPrependNullAction() {
-        StringComplexFieldActions.prepend(null, null);
+        assertThrows(NullPointerException.class, () -> {
+            StringComplexFieldActions.prepend(null, null);
+        });
     }
 
     @Test
@@ -312,22 +335,28 @@ public class StringComplexFieldActionsTest {
         assertEquals("That is a test", StringComplexFieldActions.replaceFirst(replaceFirst, "This is a test"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testReplaceFirstEmptyMatch() {
-        ReplaceFirst replaceFirst = new ReplaceFirst();
-        replaceFirst.setMatch("");
-        StringComplexFieldActions.replaceFirst(replaceFirst, " ");
+        assertThrows(IllegalArgumentException.class, () -> {
+            ReplaceFirst replaceFirst = new ReplaceFirst();
+            replaceFirst.setMatch("");
+            StringComplexFieldActions.replaceFirst(replaceFirst, " ");
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testReplaceFirstNullAction() {
-        StringComplexFieldActions.replaceFirst(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.replaceFirst(null, null);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testReplaceFirstNullMatch() {
-        ReplaceFirst replaceFirst = new ReplaceFirst();
-        StringComplexFieldActions.replaceFirst(replaceFirst, " ");
+        assertThrows(IllegalArgumentException.class, () -> {
+            ReplaceFirst replaceFirst = new ReplaceFirst();
+            StringComplexFieldActions.replaceFirst(replaceFirst, " ");
+        });
     }
 
     @Test
@@ -347,28 +376,36 @@ public class StringComplexFieldActionsTest {
         assertEquals("That at a test", StringComplexFieldActions.replaceAll(replaceAll, "This is a test"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testReplaceAllEmptyMatch() {
-        ReplaceAll replaceAll = new ReplaceAll();
-        replaceAll.setMatch("");
-        StringComplexFieldActions.replaceAll(replaceAll, " ");
+        assertThrows(IllegalArgumentException.class, () -> {
+            ReplaceAll replaceAll = new ReplaceAll();
+            replaceAll.setMatch("");
+            StringComplexFieldActions.replaceAll(replaceAll, " ");
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testReplaceAllNullAction() {
-        StringComplexFieldActions.replaceAll(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.replaceAll(null, null);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testReplaceAllNullOldString() {
-        ReplaceAll replaceAll = new ReplaceAll();
-        StringComplexFieldActions.replaceAll(replaceAll, " ");
+        assertThrows(IllegalArgumentException.class, () -> {
+            ReplaceAll replaceAll = new ReplaceAll();
+            StringComplexFieldActions.replaceAll(replaceAll, " ");
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testSplitNoDelimiter() {
-        Split action = new Split();
-        StringComplexFieldActions.split(action, "foobar");
+        assertThrows(IllegalArgumentException.class, () -> {
+            Split action = new Split();
+            StringComplexFieldActions.split(action, "foobar");
+        });
     }
 
     @Test
@@ -431,14 +468,18 @@ public class StringComplexFieldActionsTest {
         assertFalse(StringComplexFieldActions.startsWith(action, "barfoo"));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testStartsWithNullAction() {
-        StringComplexFieldActions.startsWith(null, null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.startsWith(null, null);
+        });
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testStartsWithNullString() {
-        StringComplexFieldActions.startsWith(new StartsWith(), null);
+        assertThrows(IllegalArgumentException.class, () -> {
+            StringComplexFieldActions.startsWith(new StartsWith(), null);
+        });
     }
 
     @Test

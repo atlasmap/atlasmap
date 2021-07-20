@@ -15,16 +15,16 @@
  */
 package io.atlasmap.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AtlasModelFactoryTest {
 
@@ -66,8 +66,8 @@ public class AtlasModelFactoryTest {
         assertNull(fm.getDescription());
         assertNotNull(fm.getOutputField());
         assertNotNull(fm.getInputField());
-        assertEquals(new Integer(0), new Integer(fm.getOutputField().size()));
-        assertEquals(new Integer(0), new Integer(fm.getOutputField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(fm.getOutputField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(fm.getOutputField().size()));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AtlasModelFactoryTest {
         for (Action a : ModelTestUtil.getAllOOTBActions()) {
             assertNotNull(a);
             Action b = AtlasModelFactory.cloneAction((Action)a);
-            assertNotNull(String.format("Add %s to AtlasModelFactory#cloneAction()", a.getClass().getSimpleName()), b);
+            assertNotNull(b, String.format("Add %s to AtlasModelFactory#cloneAction()", a.getClass().getSimpleName()));
             assertNotSame(a, b);
             assertEquals(a.getClass().getCanonicalName(), b.getClass().getCanonicalName());
         }

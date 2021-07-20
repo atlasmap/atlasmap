@@ -15,15 +15,14 @@
  */
 package io.atlasmap.core;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -40,12 +39,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
-import io.atlasmap.converters.CharSequenceConverter;
 import io.atlasmap.converters.StringConverter;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasConverter;
@@ -56,12 +54,12 @@ public class DefaultAtlasConversionServiceTest {
 
     private AtlasConversionService service = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         service = DefaultAtlasConversionService.getInstance();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         if (service != null) {
             service = null;
@@ -85,7 +83,7 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals(StringConverter.class, atlasConverter.get().getClass());
         StringConverter stringConverter = (StringConverter) atlasConverter.get();
         assertNotNull(stringConverter);
-        assertThat("io.atlasmap.converters.StringConverter", is(atlasConverter.get().getClass().getCanonicalName()));
+        assertEquals("io.atlasmap.converters.StringConverter", atlasConverter.get().getClass().getCanonicalName());
         Boolean t = stringConverter.toBoolean("T", null, null);
         assertNotNull(t);
         assertTrue(t);
@@ -105,7 +103,7 @@ public class DefaultAtlasConversionServiceTest {
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
         assertTrue(AtlasConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
-        assertThat("io.atlasmap.converters.StringConverter", is(atlasConverter.get().getClass().getCanonicalName()));
+        assertEquals("io.atlasmap.converters.StringConverter", atlasConverter.get().getClass().getCanonicalName());
     }
 
     @Test
@@ -123,7 +121,7 @@ public class DefaultAtlasConversionServiceTest {
         assertNotNull(atlasConverter);
         assertTrue(atlasConverter.isPresent());
         assertTrue(AtlasConverter.class.isAssignableFrom(atlasConverter.get().getClass()));
-        assertThat("io.atlasmap.converters.DateConverter", is(atlasConverter.get().getClass().getCanonicalName()));
+        assertEquals("io.atlasmap.converters.DateConverter", atlasConverter.get().getClass().getCanonicalName());
     }
 
     @Test
@@ -278,78 +276,78 @@ public class DefaultAtlasConversionServiceTest {
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Byte.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Byte((byte) 1), targetValue);
+        assertEquals(Byte.valueOf((byte) 1), targetValue);
         sourceValue = (byte) 0;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Byte.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Byte((byte) 0), targetValue);
+        assertEquals(Byte.valueOf((byte) 0), targetValue);
 
         sourceValue = (char) 'a';
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Character.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Character('a'), targetValue);
+        assertEquals(Character.valueOf('a'), targetValue);
         sourceValue = (char) 'z';
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Character.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Character('z'), targetValue);
+        assertEquals(Character.valueOf('z'), targetValue);
 
         sourceValue = Double.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Double.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Double(Double.MIN_VALUE), targetValue);
+        assertEquals(Double.valueOf(Double.MIN_VALUE), targetValue);
         sourceValue = Double.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Double.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Double(Double.MAX_VALUE), targetValue);
+        assertEquals(Double.valueOf(Double.MAX_VALUE), targetValue);
 
         sourceValue = Float.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Float.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Float(Float.MIN_VALUE), targetValue);
+        assertEquals(Float.valueOf(Float.MIN_VALUE), targetValue);
         sourceValue = Float.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Float.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Float(Float.MAX_VALUE), targetValue);
+        assertEquals(Float.valueOf(Float.MAX_VALUE), targetValue);
 
         sourceValue = Integer.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Integer.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Integer(Integer.MIN_VALUE), targetValue);
+        assertEquals(Integer.valueOf(Integer.MIN_VALUE), targetValue);
         sourceValue = Integer.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Integer.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Integer(Integer.MAX_VALUE), targetValue);
+        assertEquals(Integer.valueOf(Integer.MAX_VALUE), targetValue);
 
         sourceValue = Long.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Long.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Long(Long.MIN_VALUE), targetValue);
+        assertEquals(Long.valueOf(Long.MIN_VALUE), targetValue);
         sourceValue = Long.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Long.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Long(Long.MAX_VALUE), targetValue);
+        assertEquals(Long.valueOf(Long.MAX_VALUE), targetValue);
 
         sourceValue = Short.MIN_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Short.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Short(Short.MIN_VALUE), targetValue);
+        assertEquals(Short.valueOf(Short.MIN_VALUE), targetValue);
         sourceValue = Short.MAX_VALUE;
         targetValue = service.copyPrimitive(sourceValue);
         assertNotNull(targetValue);
         assertTrue(Short.class.getCanonicalName().equals(targetValue.getClass().getCanonicalName()));
-        assertEquals(new Short(Short.MAX_VALUE), targetValue);
+        assertEquals(Short.valueOf(Short.MAX_VALUE), targetValue);
 
         // Non primitive handling
         sourceValue = new ArrayList<String>();
@@ -459,7 +457,7 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals(LocalTime.class, service.convertType(BigDecimal.valueOf(1), FieldType.DECIMAL, FieldType.TIME).getClass());
         assertEquals(-1.68d, service.convertType(BigDecimal.valueOf(-1.68d), null, FieldType.DOUBLE, null));
         assertEquals(-1.68f, service.convertType(BigDecimal.valueOf(-1.68f), null, FieldType.FLOAT, null));
-        assertEquals(new Float(-1.68f).doubleValue(), service.convertType(BigDecimal.valueOf(-1.68f), null, FieldType.DOUBLE, null));
+        assertEquals(Float.valueOf(-1.68f).doubleValue(), service.convertType(BigDecimal.valueOf(-1.68f), null, FieldType.DOUBLE, null));
         assertEquals(-1.68f, service.convertType(BigDecimal.valueOf(-1.68d), null, FieldType.FLOAT, null));
     }
 
@@ -564,70 +562,70 @@ public class DefaultAtlasConversionServiceTest {
 
     @Test
     public void testConvertTypeFromDouble() throws AtlasConversionException {
-        assertEquals(BigInteger.valueOf(1), service.convertType(new Double(1), FieldType.DOUBLE, FieldType.BIG_INTEGER));
-        assertEquals(true, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.BOOLEAN));
-        assertEquals((byte)0x01, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.BYTE));
-        assertEquals((char)1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.CHAR));
-        assertEquals(LocalDate.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE).getClass());
-        assertEquals(Date.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE_TIME).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.TIME_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DATE_TIME_TZ).getClass());
-        assertEquals(BigDecimal.valueOf(1.0), service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DECIMAL));
-        assertEquals(1.0d, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.DOUBLE));
-        assertEquals(1.0f, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.FLOAT));
-        assertEquals(1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.INTEGER));
-        assertEquals(1L, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.LONG));
-        assertEquals(1.0, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.NUMBER));
-        assertEquals((short)1, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.SHORT));
-        assertEquals("1.0", service.convertType(new Double(1), FieldType.DOUBLE, FieldType.STRING));
-        assertEquals(LocalTime.class, service.convertType(new Double(1), FieldType.DOUBLE, FieldType.TIME).getClass());
+        assertEquals(BigInteger.valueOf(1), service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1.0), service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.FLOAT));
+        assertEquals(1, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.LONG));
+        assertEquals(1.0, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.SHORT));
+        assertEquals("1.0", service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(Double.valueOf(1), FieldType.DOUBLE, FieldType.TIME).getClass());
         assertEquals(-1.68f, service.convertType(-1.68d, null, FieldType.FLOAT, null));
     }
 
     @Test
     public void testConvertTypeFromFloat() throws AtlasConversionException {
-        assertEquals(BigInteger.valueOf(1), service.convertType(new Float(1), FieldType.FLOAT, FieldType.BIG_INTEGER));
-        assertEquals(true, service.convertType(new Float(1), FieldType.FLOAT, FieldType.BOOLEAN));
-        assertEquals((byte)0x01, service.convertType(new Float(1), FieldType.FLOAT, FieldType.BYTE));
-        assertEquals((char)1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.CHAR));
-        assertEquals(LocalDate.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE).getClass());
-        assertEquals(Date.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE_TIME).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.TIME_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DATE_TIME_TZ).getClass());
-        assertEquals(BigDecimal.valueOf(1.0), service.convertType(new Float(1), FieldType.FLOAT, FieldType.DECIMAL));
-        assertEquals(1.0d, service.convertType(new Float(1), FieldType.FLOAT, FieldType.DOUBLE));
-        assertEquals(1.0f, service.convertType(new Float(1), FieldType.FLOAT, FieldType.FLOAT));
-        assertEquals(1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.INTEGER));
-        assertEquals(1L, service.convertType(new Float(1), FieldType.FLOAT, FieldType.LONG));
-        assertEquals(1.0f, service.convertType(new Float(1), FieldType.FLOAT, FieldType.NUMBER));
-        assertEquals((short)1, service.convertType(new Float(1), FieldType.FLOAT, FieldType.SHORT));
-        assertEquals("1.0", service.convertType(new Float(1), FieldType.FLOAT, FieldType.STRING));
-        assertEquals(LocalTime.class, service.convertType(new Float(1), FieldType.FLOAT, FieldType.TIME).getClass());
-        assertEquals(new Float(-1.68f).doubleValue(), service.convertType(-1.68f, null, FieldType.DOUBLE, null));
+        assertEquals(BigInteger.valueOf(1), service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1.0), service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.FLOAT));
+        assertEquals(1, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.LONG));
+        assertEquals(1.0f, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.SHORT));
+        assertEquals("1.0", service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(Float.valueOf(1), FieldType.FLOAT, FieldType.TIME).getClass());
+        assertEquals(Float.valueOf(-1.68f).doubleValue(), service.convertType(-1.68f, null, FieldType.DOUBLE, null));
     }
 
     @Test
     public void testConvertTypeFromInteger() throws AtlasConversionException {
-        assertEquals(BigInteger.valueOf(1), service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BIG_INTEGER));
-        assertEquals(true, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BOOLEAN));
-        assertEquals((byte)0x01, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.BYTE));
-        assertEquals((char)1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.CHAR));
-        assertEquals(LocalDate.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE).getClass());
-        assertEquals(Date.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE_TIME).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.TIME_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DATE_TIME_TZ).getClass());
-        assertEquals(BigDecimal.valueOf(1), service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DECIMAL));
-        assertEquals(1.0d, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.DOUBLE));
-        assertEquals(1.0f, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.FLOAT));
-        assertEquals(1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.INTEGER));
-        assertEquals(1L, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.LONG));
-        assertEquals(1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.NUMBER));
-        assertEquals((short)1, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.SHORT));
-        assertEquals("1", service.convertType(new Integer(1), FieldType.INTEGER, FieldType.STRING));
-        assertEquals(LocalTime.class, service.convertType(new Integer(1), FieldType.INTEGER, FieldType.TIME).getClass());
+        assertEquals(BigInteger.valueOf(1), service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.FLOAT));
+        assertEquals(1, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.LONG));
+        assertEquals(1, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.SHORT));
+        assertEquals("1", service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(Integer.valueOf(1), FieldType.INTEGER, FieldType.TIME).getClass());
     }
 
     @Test
@@ -665,24 +663,24 @@ public class DefaultAtlasConversionServiceTest {
 
     @Test
     public void testConvertTypeFromLong() throws AtlasConversionException {
-        assertEquals(BigInteger.valueOf(1), service.convertType(new Long(1), FieldType.LONG, FieldType.BIG_INTEGER));
-        assertEquals(true, service.convertType(new Long(1), FieldType.LONG, FieldType.BOOLEAN));
-        assertEquals((byte)0x01, service.convertType(new Long(1), FieldType.LONG, FieldType.BYTE));
-        assertEquals((char)1, service.convertType(new Long(1), FieldType.LONG, FieldType.CHAR));
-        assertEquals(LocalDate.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE).getClass());
-        assertEquals(Date.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE_TIME).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.TIME_TZ).getClass());
-        assertEquals(ZonedDateTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.DATE_TIME_TZ).getClass());
-        assertEquals(BigDecimal.valueOf(1), service.convertType(new Long(1), FieldType.LONG, FieldType.DECIMAL));
-        assertEquals(1.0d, service.convertType(new Long(1), FieldType.LONG, FieldType.DOUBLE));
-        assertEquals(1.0f, service.convertType(new Long(1), FieldType.LONG, FieldType.FLOAT));
-        assertEquals(1, service.convertType(new Long(1), FieldType.LONG, FieldType.INTEGER));
-        assertEquals(1L, service.convertType(new Long(1), FieldType.LONG, FieldType.LONG));
-        assertEquals(1L, service.convertType(new Long(1), FieldType.LONG, FieldType.NUMBER));
-        assertEquals((short)1, service.convertType(new Long(1), FieldType.LONG, FieldType.SHORT));
-        assertEquals("1", service.convertType(new Long(1), FieldType.LONG, FieldType.STRING));
-        assertEquals(LocalTime.class, service.convertType(new Long(1), FieldType.LONG, FieldType.TIME).getClass());
+        assertEquals(BigInteger.valueOf(1), service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.BIG_INTEGER));
+        assertEquals(true, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.BOOLEAN));
+        assertEquals((byte)0x01, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.BYTE));
+        assertEquals((char)1, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.CHAR));
+        assertEquals(LocalDate.class, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.DATE).getClass());
+        assertEquals(Date.class, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.DATE_TIME).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.DATE_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.TIME_TZ).getClass());
+        assertEquals(ZonedDateTime.class, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.DATE_TIME_TZ).getClass());
+        assertEquals(BigDecimal.valueOf(1), service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.DECIMAL));
+        assertEquals(1.0d, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.DOUBLE));
+        assertEquals(1.0f, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.FLOAT));
+        assertEquals(1, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.INTEGER));
+        assertEquals(1L, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.LONG));
+        assertEquals(1L, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.NUMBER));
+        assertEquals((short)1, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.SHORT));
+        assertEquals("1", service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.STRING));
+        assertEquals(LocalTime.class, service.convertType(Long.valueOf(1), FieldType.LONG, FieldType.TIME).getClass());
     }
 
     @Test
@@ -794,9 +792,11 @@ public class DefaultAtlasConversionServiceTest {
         assertEquals("passthrough", service.convertType("passthrough", FieldType.TIME, FieldType.ANY));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void testConvertTypeAtlasConversionException() throws AtlasConversionException {
-        assertNotNull(service.convertType(new Object(), null, null));
+        assertThrows(AtlasConversionException.class, () -> {
+            assertNotNull(service.convertType(new Object(), null, null));
+        });
     }
 
 }

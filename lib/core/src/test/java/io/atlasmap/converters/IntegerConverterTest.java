@@ -15,18 +15,19 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -68,9 +69,11 @@ public class IntegerConverterTest {
         assertEquals(value, converter.toByte(100));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteOutOfRange() throws Exception {
-        converter.toByte(Integer.MAX_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toByte(Integer.MAX_VALUE);
+        });
     }
 
     @Test
@@ -87,23 +90,27 @@ public class IntegerConverterTest {
 
     @Test
     public void convertToCharacter() throws Exception {
-        Integer integer = new Integer(4);
+        Integer integer = Integer.valueOf(4);
         Character character = converter.toCharacter(integer);
         assertNotNull(character);
         int revert = character.charValue();
-        assertEquals(integer, new Integer(revert));
+        assertEquals(integer, Integer.valueOf(revert));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterGreaterThanMAX() throws Exception {
-        Integer integer = 1500000;
-        converter.toCharacter(integer);
+        assertThrows(AtlasConversionException.class, () -> {
+            Integer integer = 1500000;
+            converter.toCharacter(integer);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterLessThanMIN() throws Exception {
-        Integer integer = -1500000;
-        converter.toCharacter(integer);
+        assertThrows(AtlasConversionException.class, () -> {
+            Integer integer = -1500000;
+            converter.toCharacter(integer);
+        });
     }
 
     @Test
@@ -161,14 +168,18 @@ public class IntegerConverterTest {
         assertNull(out);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortConvertExceptionGreaterThanMax() throws Exception {
-        converter.toShort(Integer.MAX_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toShort(Integer.MAX_VALUE);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortConvertExceptionLessThanMin() throws Exception {
-        converter.toShort(Integer.MIN_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toShort(Integer.MIN_VALUE);
+        });
     }
 
     @Test

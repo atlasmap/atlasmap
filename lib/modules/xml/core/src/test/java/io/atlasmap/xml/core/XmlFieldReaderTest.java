@@ -15,11 +15,10 @@
  */
 package io.atlasmap.xml.core;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -36,7 +35,7 @@ import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -75,7 +74,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("12312"));
+        assertEquals("12312", xmlField.getValue());
     }
 
     @Test
@@ -91,7 +90,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("12525.00"));
+        assertEquals("12525.00", xmlField.getValue());
     }
 
     @Test
@@ -107,7 +106,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("54554555"));
+        assertEquals("54554555", xmlField.getValue());
     }
 
     @Test
@@ -122,7 +121,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("a"));
+        assertEquals("a", xmlField.getValue());
     }
 
     @Test
@@ -137,7 +136,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("b"));
+        assertEquals("b", xmlField.getValue());
     }
 
     @Test
@@ -152,7 +151,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("12312"));
+        assertEquals("12312", xmlField.getValue());
     }
 
     @Test
@@ -167,7 +166,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("a"));
+        assertEquals("a", xmlField.getValue());
     }
 
     @Test
@@ -182,7 +181,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("b"));
+        assertEquals("b", xmlField.getValue());
     }
 
     @Test
@@ -207,7 +206,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("cx"));
+        assertEquals("cx", xmlField.getValue());
 
         XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
         xmlField2.setDocId(docId);
@@ -216,7 +215,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField2);
         reader.read(session);
         assertNotNull(xmlField2.getValue());
-        assertThat(xmlField2.getValue(), is("aa"));
+        assertEquals("aa", xmlField2.getValue());
 
         XmlField xmlField3 = AtlasXmlModelFactory.createXmlField();
         xmlField3.setDocId(docId);
@@ -225,7 +224,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField3);
         reader.read(session);
         assertNotNull(xmlField3.getValue());
-        assertThat(xmlField3.getValue(), is("ea"));
+        assertEquals("ea", xmlField3.getValue());
     }
 
     @Test
@@ -251,14 +250,14 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         multipleNamespacesReader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("cx"));
+        assertEquals("cx", xmlField.getValue());
         XmlField xmlField2 = AtlasXmlModelFactory.createXmlField();
         xmlField2.setPath("/orders/order/id/@y:custId");
         assertNull(xmlField2.getValue());
         when(session.head().getSourceField()).thenReturn(xmlField2);
         multipleNamespacesReader.read(session);
         assertNotNull(xmlField2.getValue());
-        assertThat(xmlField2.getValue(), is("aa"));
+        assertEquals("aa", xmlField2.getValue());
     }
 
     @Test
@@ -287,9 +286,9 @@ public class XmlFieldReaderTest {
             reader.read(session);
             assertNotNull(field.getValue());
         }
-        assertThat(fieldList.getFirst().getValue(), is("54554555"));
-        assertThat(fieldList.get(1).getValue(), is("12312"));
-        assertThat(fieldList.getLast().getValue(), is("54554555"));
+        assertEquals("54554555", fieldList.getFirst().getValue());
+        assertEquals("12312", fieldList.get(1).getValue());
+        assertEquals("54554555", fieldList.getLast().getValue());
     }
 
     @Test
@@ -320,7 +319,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("12312"));
+        assertEquals("12312", xmlField.getValue());
     }
 
     @Test
@@ -336,7 +335,7 @@ public class XmlFieldReaderTest {
         when(session.head().getSourceField()).thenReturn(xmlField);
         reader.read(session);
         assertNotNull(xmlField.getValue());
-        assertThat(xmlField.getValue(), is("12312"));
+        assertEquals("12312", xmlField.getValue());
     }
 
     @Test
@@ -375,7 +374,7 @@ public class XmlFieldReaderTest {
         reader.read(session);
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testThrowExceptionOnNullXmlField() throws Exception {
         Document doc = getDocumentFromFile("src/test/resources/complex_example.xml", false);
         reader.setDocument(doc);
@@ -383,7 +382,9 @@ public class XmlFieldReaderTest {
         AtlasInternalSession session = mock(AtlasInternalSession.class);
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(xmlField);
-        reader.read(session);
+        assertThrows(AtlasException.class, () -> {
+            reader.read(session);
+        });
     }
 
     @Test

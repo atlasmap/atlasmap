@@ -15,18 +15,18 @@
  */
 package io.atlasmap.itests.validation.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasException;
@@ -40,18 +40,19 @@ import io.atlasmap.validators.AtlasValidationTestHelper;
 
 public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
 
-    @Rule
-    public TestName name = new TestName();
-
     protected AtlasContext context = null;
     protected AtlasSession session = null;
 
-    @Before
-    public void setUp() {
-        super.setUp();
+    @BeforeAll
+    public static void init(TestInfo testInfo) {
+    }
+
+    @BeforeEach
+    public void setUp(TestInfo testInfo) {
+        super.setUp(testInfo);
         try {
             context = atlasContextFactory.createContext(
-                    new File("src/test/resources/validation/core/atlasmapping-" + name.getMethodName() + ".json"));
+                    new File("src/test/resources/validation/core/atlasmapping-" + testMethodName + ".json"));
             session = context.createSession();
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,7 +61,7 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
         }
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDown();
     }

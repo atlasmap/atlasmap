@@ -15,17 +15,18 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -71,9 +72,11 @@ public class ShortConverterTest {
         assertEquals(value, converter.toByte(l));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteOutOfRange() throws Exception {
-        converter.toByte(Short.MAX_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toByte(Short.MAX_VALUE);
+        });
     }
 
     @Test
@@ -83,7 +86,7 @@ public class ShortConverterTest {
 
     @Test
     public void convertToCharacter() throws Exception {
-        Short shorty = new Short((short) 4);
+        Short shorty = Short.valueOf((short) 4);
         Character character = converter.toCharacter(shorty);
         assertNotNull(character);
         assertEquals(Character.valueOf((char) shorty.shortValue()), character);
@@ -104,10 +107,12 @@ public class ShortConverterTest {
         assertEquals(Character.valueOf((char) s.shortValue()), c);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMIN() throws Exception {
-        Short s = Short.MIN_VALUE;
-        converter.toCharacter(s);
+        assertThrows(AtlasConversionException.class, () -> {
+            Short s = Short.MIN_VALUE;
+            converter.toCharacter(s);
+        });
     }
 
     @Test

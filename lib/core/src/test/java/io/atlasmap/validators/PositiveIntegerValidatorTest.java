@@ -15,13 +15,13 @@
  */
 package io.atlasmap.validators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
@@ -31,14 +31,14 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     private PositiveIntegerValidator validator;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         validator = new PositiveIntegerValidator(ValidationScope.MAPPING, "Integer must be >= 0");
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDown();
         validator = null;
@@ -66,7 +66,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
     public void testValidateInvalid() {
         validator.validate(-1, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
         assertEquals("testValidateInvalid", validationHelper.getValidation().get(0).getId());
     }
 
@@ -75,7 +75,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
         validator.validate(-1, validations, "testValidateInvalidWarn", ValidationStatus.WARN);
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
         assertEquals("testValidateInvalidWarn", validationHelper.getValidation().get(0).getId());
     }
 
@@ -85,7 +85,7 @@ public class PositiveIntegerValidatorTest extends BaseValidatorTest {
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertTrue(validationHelper.hasInfos());
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
         assertEquals("testValidateInvalidInfo", validationHelper.getValidation().get(0).getId());
     }
 

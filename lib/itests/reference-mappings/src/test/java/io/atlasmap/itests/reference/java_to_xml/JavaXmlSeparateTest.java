@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.reference.java_to_xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -108,14 +108,14 @@ public class JavaXmlSeparateTest extends AtlasMappingBaseTest {
         assertThat(object).valueByXPath("/Contact/@firstName").isEqualTo("Ozzie");
         assertThat(object).valueByXPath("/Contact/@lastName").isNullOrEmpty();
         assertTrue(session.hasWarns());
-        assertEquals(printAudit(session), 8, session.getAudits().getAudit().size());
+        assertEquals(8, session.getAudits().getAudit().size(), printAudit(session));
         boolean found = false;
         for (Audit a : session.getAudits().getAudit()) {
             if ("Separate returned fewer segments count=3 when targetField.path=/Contact/@lastName requested index=3".equals(a.getMessage())) {
                 found = true;
             }
         }
-        assertTrue(printAudit(session), found);
+        assertTrue(found, printAudit(session));
     }
 
     @Test

@@ -15,15 +15,15 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.spi.AtlasModule;
 
@@ -31,7 +31,7 @@ public class DefaultAtlasModuleInfoTest {
 
     private static DefaultAtlasModuleInfo module = null;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
 
         List<String> formats = new ArrayList<>();
@@ -42,7 +42,7 @@ public class DefaultAtlasModuleInfoTest {
         module = new DefaultAtlasModuleInfo("name", "atlas:java", AtlasModule.class, null, formats, packageNames);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         module = null;
     }

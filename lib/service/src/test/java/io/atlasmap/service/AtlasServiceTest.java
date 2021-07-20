@@ -16,9 +16,9 @@
 package io.atlasmap.service;
 
 import static io.atlasmap.v2.MappingFileType.JSON;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -34,9 +34,9 @@ import javax.tools.ToolProvider;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,13 +64,13 @@ public class AtlasServiceTest {
     private AtlasService service = null;
     private ObjectMapper mapper = null;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         service = new AtlasService();
         mapper = Json.mapper();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         service = null;
         mapper = null;
@@ -194,7 +194,7 @@ public class AtlasServiceTest {
         Response resFA = service.listFieldActions(null);
         assertEquals(200, resFA.getStatus());
         String responseJson = new String((byte[])resFA.getEntity());
-        assertTrue(responseJson, responseJson.contains("myCustomFieldAction"));
+        assertTrue(responseJson.contains("myCustomFieldAction"), responseJson);
         Response resMB = service.listMappingBuilderClasses(null);
         assertEquals(200, resMB.getStatus());
         ArrayNode builders = (ArrayNode) new ObjectMapper().readTree((byte[])resMB.getEntity()).get("ArrayList");
@@ -211,7 +211,7 @@ public class AtlasServiceTest {
         Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request.json"),
                 generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
         ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
-        assertEquals(printAudit(resp.getAudits()), 0, resp.getAudits().getAudit().size());
+        assertEquals(0, resp.getAudits().getAudit().size(), printAudit(resp.getAudits()));
         FieldGroup group = (FieldGroup) resp.getMapping().getOutputField().get(0);
         assertEquals("/addressList<>/city", group.getPath());
         Field f = group.getField().get(0);
@@ -224,7 +224,7 @@ public class AtlasServiceTest {
         Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-2977.json"),
                 generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
         ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
-        assertEquals(printAudit(resp.getAudits()), 0, resp.getAudits().getAudit().size());
+        assertEquals(0, resp.getAudits().getAudit().size(), printAudit(resp.getAudits()));
         Field field = resp.getMapping().getOutputField().get(0);
         assertEquals("/ns:XmlOE/ns:Address/ns:addressLine1", field.getPath());
         assertEquals("Boston", field.getValue());
@@ -235,7 +235,7 @@ public class AtlasServiceTest {
         Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-3064.json"),
                 generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
         ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
-        assertEquals(printAudit(resp.getAudits()), 0, resp.getAudits().getAudit().size());
+        assertEquals(0, resp.getAudits().getAudit().size(), printAudit(resp.getAudits()));
         Field field = resp.getMapping().getInputField().get(0);
         assertEquals("/primitives/stringPrimitive", field.getPath());
     }

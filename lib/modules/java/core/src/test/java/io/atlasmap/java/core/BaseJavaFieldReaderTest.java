@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -46,7 +46,7 @@ public abstract class BaseJavaFieldReaderTest {
     protected FieldGroup fieldGroup = null;
     private Field sourceField = null;
 
-    @Before
+    @BeforeEach
     public void reset() {
         audits = new LinkedList<>();
         reader = new JavaFieldReader();

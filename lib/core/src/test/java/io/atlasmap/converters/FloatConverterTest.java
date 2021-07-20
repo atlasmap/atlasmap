@@ -15,17 +15,18 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -71,10 +72,12 @@ public class FloatConverterTest {
         assertEquals(value, converter.toByte(df));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteOutOfRange() throws Exception {
-        Float df = Float.MAX_VALUE;
-        converter.toByte(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Float df = Float.MAX_VALUE;
+            converter.toByte(df);
+        });
     }
 
     @Test
@@ -97,16 +100,20 @@ public class FloatConverterTest {
         assertNull(c);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMAX() throws Exception {
-        Float df = Float.MAX_VALUE;
-        converter.toCharacter(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Float df = Float.MAX_VALUE;
+            converter.toCharacter(df);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMIN() throws Exception {
-        Float df = -1.00f;
-        converter.toCharacter(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Float df = -1.00f;
+            converter.toCharacter(df);
+        });
     }
 
     @Test
@@ -162,10 +169,12 @@ public class FloatConverterTest {
         assertNull(i);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerExceptionMAX() throws Exception {
-        Float df = Float.MAX_VALUE;
-        converter.toInteger(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Float df = Float.MAX_VALUE;
+            converter.toInteger(df);
+        });
     }
 
     @Test
@@ -183,10 +192,12 @@ public class FloatConverterTest {
         assertNull(l);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToLongExceptionMAX() throws Exception {
-        Float df = Float.MAX_VALUE;
-        converter.toLong(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Float df = Float.MAX_VALUE;
+            converter.toLong(df);
+        });
     }
 
     @Test
@@ -204,10 +215,12 @@ public class FloatConverterTest {
         assertNull(s);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortExceptionMAX() throws Exception {
-        Float df = Float.MAX_VALUE;
-        converter.toShort(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Float df = Float.MAX_VALUE;
+            converter.toShort(df);
+        });
     }
 
     @Test

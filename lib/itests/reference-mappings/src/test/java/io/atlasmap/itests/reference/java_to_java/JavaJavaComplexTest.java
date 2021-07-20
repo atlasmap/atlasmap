@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.reference.java_to_java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -51,11 +51,11 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertEquals(TargetOrder.class.getName(), object.getClass().getName());
         TargetOrder targetOrder = (TargetOrder) object;
-        assertEquals(new Integer(8765309), targetOrder.getOrderId());
+        assertEquals(Integer.valueOf(8765309), targetOrder.getOrderId());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(TargetContact.class.getName(), object.getContact().getClass().getName());
@@ -86,7 +86,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(TargetContact.class.getName(), object.getContact().getClass().getName());
@@ -104,7 +104,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         AtlasSession session = context.createSession();
         session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
@@ -118,7 +118,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         assertNotNull(object);
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertNull(object.getStatesShort());
-        assertTrue(printAudit(session), session.hasErrors());
+        assertTrue(session.hasErrors(), printAudit(session));
     }
 
     @Test
@@ -131,13 +131,13 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
         TargetOrder targetOrder = (TargetOrder) object;
         assertNotNull(targetOrder.getOrderId());
-        assertEquals(new Integer(8765309), targetOrder.getOrderId());
+        assertEquals(Integer.valueOf(8765309), targetOrder.getOrderId());
 
         // Address should _not_ be populated
         assertNull(targetOrder.getAddress());
@@ -163,7 +163,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);
@@ -180,7 +180,7 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof TargetOrder);

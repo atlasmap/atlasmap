@@ -15,12 +15,11 @@
  */
 package io.atlasmap.csv.core;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -61,7 +60,7 @@ public class CsvFieldWriterTest {
 
         write(writer, sourceField, targetField);
         String csv = writer.toCsv();
-        assertThat(csv, is("givenName\r\nBob\r\nAndrew\r\n"));
+        assertEquals("givenName\r\nBob\r\nAndrew\r\n", csv);
     }
 
     @Test
@@ -89,7 +88,7 @@ public class CsvFieldWriterTest {
 
         write(writer, sourceField, targetField);
         String csv = writer.toCsv();
-        assertThat(csv, is("Bob\r\nAndrew\r\n"));
+        assertEquals("Bob\r\nAndrew\r\n", csv);
     }
 
     @Test
@@ -117,7 +116,7 @@ public class CsvFieldWriterTest {
 
         write(writer, sourceField, targetField);
         String csv = writer.toCsv();
-        assertThat(csv, is("givenName\r\nBob\r\nAndrew\r\n"));
+        assertEquals("givenName\r\nBob\r\nAndrew\r\n", csv);
     }
 
     @Test
@@ -146,7 +145,7 @@ public class CsvFieldWriterTest {
         write(writer, sourceField, targetField);
 
         String csv = writer.toCsv();
-        assertThat(csv, is("FAMILYNAME,GIVENNAME\r\n,\r\n,\r\n"));
+        assertEquals("FAMILYNAME,GIVENNAME\r\n,\r\n,\r\n", csv);
     }
 
     @Test
@@ -176,7 +175,7 @@ public class CsvFieldWriterTest {
         write(writer, sourceField, targetField);
 
         String csv = writer.toCsv();
-        assertThat(csv, is("FAMILYNAME,GIVENNAME\r\n,Bob\r\n,Andrew\r\n"));
+        assertEquals("FAMILYNAME,GIVENNAME\r\n,Bob\r\n,Andrew\r\n", csv);
     }
 
     @Test
@@ -226,7 +225,7 @@ public class CsvFieldWriterTest {
         write(writer, sourceField, targetField);
 
         String csv = writer.toCsv();
-        assertThat(csv, is("familyName;givenName\r\nSmith;Bob\r\nJohnson;Andrew\r\n"));
+        assertEquals("familyName;givenName\r\nSmith;Bob\r\nJohnson;Andrew\r\n", csv);
     }
 
     @Test
@@ -274,6 +273,6 @@ public class CsvFieldWriterTest {
         write(writer, secondSourceField, secondTargetField);
 
         String csv = writer.toCsv();
-        assertThat(csv, is("familyName,givenName\r\nSmith,Bob\r\nJohnson,Andrew\r\n"));
+        assertEquals("familyName,givenName\r\nSmith,Bob\r\nJohnson,Andrew\r\n", csv);
     }
 }

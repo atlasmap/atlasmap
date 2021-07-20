@@ -15,18 +15,18 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.StringDelimiter;
@@ -35,12 +35,12 @@ public class DefaultAtlasCombineStrategyTest {
 
     private AtlasCombineStrategy combine = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         combine = new DefaultAtlasCombineStrategy();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         combine = null;
     }

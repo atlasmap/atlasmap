@@ -30,10 +30,8 @@
 
   <modules>
     <module>core</module>
-    <module>fieldaction-override</module>
     <module>reference-mappings</module>
     <module>validation-mappings</module>
-    <module>concurrency</module>
   </modules>
 
 </project>

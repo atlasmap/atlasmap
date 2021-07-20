@@ -15,18 +15,19 @@
  */
 package io.atlasmap.itests.reference.json_to_json;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.v2.CopyTo;
-
-
-import static org.junit.Assert.*;
 
 public class JsonJsonCopyToTest extends AtlasMappingBaseTest {
 
@@ -34,7 +35,7 @@ public class JsonJsonCopyToTest extends AtlasMappingBaseTest {
     private AtlasContext context;
     private String input = "{ \"contact\": { \"firstName\": \"name9\" } }";
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         context = atlasContextFactory.createContext(
             new File("src/test/resources/jsonToJson/atlasmapping-empty-mapping.json").toURI());

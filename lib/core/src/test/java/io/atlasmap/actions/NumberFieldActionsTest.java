@@ -15,15 +15,16 @@
  */
 package io.atlasmap.actions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.AbsoluteValue;
 import io.atlasmap.v2.Add;
@@ -194,24 +195,30 @@ public class NumberFieldActionsTest {
         assertEquals(0, NumberFieldActions.convertMassUnit(action, null).intValue());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertMassUnitErrorNoFromNorToSpecified() {
-        ConvertMassUnit action = new ConvertMassUnit();
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        assertThrows(IllegalArgumentException.class, () -> {
+            ConvertMassUnit action = new ConvertMassUnit();
+            assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertMassUnitErrorNoFromSpecified() {
-        ConvertMassUnit action = new ConvertMassUnit();
-        action.setToUnit(MassUnitType.POUND_LB);
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        assertThrows(IllegalArgumentException.class, () -> {
+            ConvertMassUnit action = new ConvertMassUnit();
+            action.setToUnit(MassUnitType.POUND_LB);
+            assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertMassUnitErrorNoToSpecified() {
-        ConvertMassUnit action = new ConvertMassUnit();
-        action.setFromUnit(MassUnitType.KILOGRAM_KG);
-        assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        assertThrows(IllegalArgumentException.class, () -> {
+            ConvertMassUnit action = new ConvertMassUnit();
+            action.setFromUnit(MassUnitType.KILOGRAM_KG);
+            assertEquals(11, NumberFieldActions.convertMassUnit(action, 5));
+        });
     }
 
     @Test
@@ -322,27 +329,35 @@ public class NumberFieldActionsTest {
         assertEquals(-8.0, NumberFieldActions.subtract(new Subtract(), Arrays.asList(null, 1.0, null, 2.0, 3.0, null, 4.0, null)));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertMassUnitIllegalArgumentException() {
-        assertEquals(11, NumberFieldActions.convertMassUnit(new ConvertMassUnit(), 5).intValue());
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertEquals(11, NumberFieldActions.convertMassUnit(new ConvertMassUnit(), 5).intValue());
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertDistanceUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertDistanceUnit(new ConvertDistanceUnit(), null).intValue());
-        NumberFieldActions.convertDistanceUnit(new ConvertDistanceUnit(), 5);
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertEquals(0, NumberFieldActions.convertDistanceUnit(new ConvertDistanceUnit(), null).intValue());
+            NumberFieldActions.convertDistanceUnit(new ConvertDistanceUnit(), 5);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertAreaUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertAreaUnit(new ConvertAreaUnit(), null).intValue());
-        NumberFieldActions.convertAreaUnit(new ConvertAreaUnit(), 5);
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertEquals(0, NumberFieldActions.convertAreaUnit(new ConvertAreaUnit(), null).intValue());
+            NumberFieldActions.convertAreaUnit(new ConvertAreaUnit(), 5);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testConvertVolumeUnitIllegalArgumentException() {
-        assertEquals(0, NumberFieldActions.convertVolumeUnit(new ConvertVolumeUnit(), null).intValue());
-        NumberFieldActions.convertVolumeUnit(new ConvertVolumeUnit(), 5);
+        assertThrows(IllegalArgumentException.class, () -> {
+            assertEquals(0, NumberFieldActions.convertVolumeUnit(new ConvertVolumeUnit(), null).intValue());
+            NumberFieldActions.convertVolumeUnit(new ConvertVolumeUnit(), 5);
+        });
     }
 
     @Test

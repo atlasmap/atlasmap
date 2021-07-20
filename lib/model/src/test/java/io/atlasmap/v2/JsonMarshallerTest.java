@@ -15,16 +15,17 @@
  */
 package io.atlasmap.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,9 +34,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     public ObjectMapper mapper = null;
 
     @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    public void setUp(TestInfo testInfo) throws Exception {
+        super.setUp(testInfo);
 
         this.deleteTestFolders = false;
 
@@ -43,9 +44,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     }
 
     @Override
-    @After
-    public void tearDown() throws Exception {
-        super.tearDown();
+    @AfterEach
+    public void tearDown(TestInfo testInfo) throws Exception {
+        super.tearDown(testInfo);
 
         mapper = null;
     }
@@ -55,9 +56,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         AtlasMapping atlasMapping = generateReferenceAtlasMapping();
         // Object to JSON in file
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-            + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+            + testMethodName + File.separator + "atlasmapping.json"), atlasMapping);
         AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
-            + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+            + testMethodName + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
         validateReferenceAtlasMapping(uMapping);
     }
@@ -68,9 +69,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         atlasMapping.getLookupTables().getLookupTable().add(generateLookupTable());
         // Object to JSON in file
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-            + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+            + testMethodName + File.separator + "atlasmapping.json"), atlasMapping);
         AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
-            + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+            + testMethodName + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
         validateReferenceAtlasMapping(uMapping);
     }
@@ -137,19 +138,21 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
             }
         }
 
-        mapper.writeValue(new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"),
+        mapper.writeValue(new File("target/junit/" + testMethodName + "/" + "atlasmapping.json"),
             atlasMapping);
         AtlasMapping generatedMapping = mapper.readValue(
-            new File("target/junit/" + testName.getMethodName() + "/" + "atlasmapping.json"), AtlasMapping.class);
+            new File("target/junit/" + testMethodName + "/" + "atlasmapping.json"), AtlasMapping.class);
 
         List<Action> generatedActions = ((Mapping) generatedMapping.getMappings().getMapping().get(0))
             .getOutputField().get(0).getActions();
         assertEquals(actionsList.size(), generatedActions.size());
         for (int i = 0; i < actionsList.size(); i++) {
-            assertEquals(String.format(
-                "Did you forget to add '%s' in ActionsJsonDeserializer/ActionsJsonSerializer?",
-                actionsList.get(i).getClass().getName()),
-                actionsList.get(i).getClass().getName(), generatedActions.get(i).getClass().getName());
+            assertEquals(
+                actionsList.get(i).getClass().getName(),
+                generatedActions.get(i).getClass().getName(),
+                String.format(
+                        "Did you forget to add '%s' in ActionsJsonDeserializer/ActionsJsonSerializer?",
+                        actionsList.get(i).getClass().getName()));
         }
     }
 

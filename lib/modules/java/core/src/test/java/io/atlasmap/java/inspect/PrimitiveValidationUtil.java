@@ -15,11 +15,11 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
@@ -38,7 +38,7 @@ public class PrimitiveValidationUtil {
     public static void validatePrimitiveArray(JavaClass j, String name, int dim) throws Exception {
         validatePrimitiveCommon(j);
         assertEquals(name, j.getClassName());
-        assertEquals(new Integer(dim), j.getArrayDimensions());
+        assertEquals(Integer.valueOf(dim), j.getArrayDimensions());
         assertEquals(CollectionType.ARRAY, j.getCollectionType());
     }
 

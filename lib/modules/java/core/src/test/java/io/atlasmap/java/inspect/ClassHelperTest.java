@@ -15,14 +15,14 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.java.core.ClassHelper;
 
@@ -53,7 +53,7 @@ public class ClassHelperTest {
         assertNotNull(setter);
         assertEquals("setParam", setter.getName());
         assertNotNull(setter.getParameters());
-        assertEquals(new Integer(1), new Integer(setter.getParameterCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(setter.getParameterCount()));
         assertEquals(String.class, setter.getParameterTypes()[0]);
     }
 
@@ -63,7 +63,7 @@ public class ClassHelperTest {
         assertNotNull(setter);
         assertEquals("setOverloadParam", setter.getName());
         assertNotNull(setter.getParameters());
-        assertEquals(new Integer(1), new Integer(setter.getParameterCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(setter.getParameterCount()));
         assertEquals(String.class, setter.getParameterTypes()[0]);
     }
 
@@ -73,7 +73,7 @@ public class ClassHelperTest {
         assertNotNull(setter);
         assertEquals("setOverloadParam", setter.getName());
         assertNotNull(setter.getParameters());
-        assertEquals(new Integer(1), new Integer(setter.getParameterCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(setter.getParameterCount()));
         assertEquals(String.class, setter.getParameterTypes()[0]);
     }
 

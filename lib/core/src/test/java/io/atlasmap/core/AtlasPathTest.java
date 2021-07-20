@@ -15,16 +15,16 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.AtlasPath.SegmentContext;
 
@@ -90,14 +90,14 @@ public class AtlasPathTest {
         assertNull(new SegmentContext("foo<>").getCollectionIndex());
         assertNull(new SegmentContext("foo{}").getCollectionIndex());
 
-        assertEquals(new Integer(0), new SegmentContext("foo[0]").getCollectionIndex());
-        assertEquals(new Integer(1234), new SegmentContext("foo<1234>").getCollectionIndex());
+        assertEquals(Integer.valueOf(0), new SegmentContext("foo[0]").getCollectionIndex());
+        assertEquals(Integer.valueOf(1234), new SegmentContext("foo<1234>").getCollectionIndex());
         assertNull(new SegmentContext("foo{bar}").getCollectionIndex());
 
         AtlasPath p = new AtlasPath("/orders[4]/contact/firstName");
         p.setCollectionIndex(1, 5);
         assertEquals("/orders[5]/contact/firstName", p.toString());
-        assertEquals(new Integer(5), p.getSegments(true).get(1).getCollectionIndex());
+        assertEquals(Integer.valueOf(5), p.getSegments(true).get(1).getCollectionIndex());
 
         try {
             p.setCollectionIndex(1, -3);
@@ -108,13 +108,13 @@ public class AtlasPathTest {
         AtlasPath q = new AtlasPath("/orders<4>/contact/firstName");
         q.setCollectionIndex(1, 6);
         assertEquals("/orders<6>/contact/firstName", q.toString());
-        assertEquals(new Integer(6), q.getSegments(true).get(1).getCollectionIndex());
+        assertEquals(Integer.valueOf(6), q.getSegments(true).get(1).getCollectionIndex());
 
         AtlasPath r = new AtlasPath("/orders<>/contact/firstName");
         assertEquals("orders<>", r.getSegments(true).get(1).getExpression());
         r.setCollectionIndex(1, 6);
         assertEquals("/orders<6>/contact/firstName", r.toString());
-        assertEquals(new Integer(6), r.getSegments(false).get(0).getCollectionIndex());
+        assertEquals(Integer.valueOf(6), r.getSegments(false).get(0).getCollectionIndex());
     }
 
     @Test
@@ -203,13 +203,13 @@ public class AtlasPathTest {
     @Test
     public void testGetCollectionIndex() {
         AtlasPath p = new AtlasPath("orders/order[1]");
-        assertEquals(new Integer(1), p.getSegments(false).get(1).getCollectionIndex());
+        assertEquals(Integer.valueOf(1), p.getSegments(false).get(1).getCollectionIndex());
 
         p = new AtlasPath("order");
         assertEquals(null, p.getSegments(false).get(0).getCollectionIndex());
 
         p = new AtlasPath("orders/order<2>");
-        assertEquals(new Integer(2), p.getSegments(false).get(1).getCollectionIndex());
+        assertEquals(Integer.valueOf(2), p.getSegments(false).get(1).getCollectionIndex());
     }
 
     @Test

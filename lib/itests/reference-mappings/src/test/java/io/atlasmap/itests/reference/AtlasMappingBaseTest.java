@@ -18,8 +18,8 @@ package io.atlasmap.itests.reference;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
@@ -35,12 +35,12 @@ public abstract class AtlasMappingBaseTest {
 
     protected AtlasContextFactory atlasContextFactory = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         atlasContextFactory = null;
     }

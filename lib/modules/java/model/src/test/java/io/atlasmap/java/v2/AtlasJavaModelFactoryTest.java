@@ -15,10 +15,10 @@
  */
 package io.atlasmap.java.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AtlasJavaModelFactoryTest {
 
@@ -28,10 +28,10 @@ public class AtlasJavaModelFactoryTest {
         assertNotNull(javaClass);
         assertNotNull(javaClass.getJavaFields());
         assertNotNull(javaClass.getJavaFields().getJavaField());
-        assertEquals(new Integer(0), new Integer(javaClass.getJavaFields().getJavaField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(javaClass.getJavaFields().getJavaField().size()));
         assertNotNull(javaClass.getJavaEnumFields());
         assertNotNull(javaClass.getJavaEnumFields().getJavaEnumField());
-        assertEquals(new Integer(0), new Integer(javaClass.getJavaEnumFields().getJavaEnumField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(javaClass.getJavaEnumFields().getJavaEnumField().size()));
     }
 
 }

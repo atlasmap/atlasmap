@@ -15,18 +15,19 @@
  */
 package io.atlasmap.java.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.java.test.BaseOrder;
@@ -43,7 +44,7 @@ import io.atlasmap.java.test.TestListOrders;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.v2.FieldType;
 
-@FixMethodOrder(MethodSorters.JVM)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
 
     @Test
@@ -124,10 +125,12 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
         assertEquals("boxedString", o.getBoxedStringArrayField()[10]);
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testClassLookupAbstract() throws Exception {
         writer.setRootObject(new TargetTestClass());
-        write(createField("/orders[4]/address/addressLine1", "hello world."));
+        assertThrows(AtlasException.class, () -> {
+            write(createField("/orders[4]/address/addressLine1", "hello world."));
+        });
     }
 
     @Test

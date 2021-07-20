@@ -175,10 +175,6 @@
         </dependency>
         <dependency>
           <groupId>io.atlasmap</groupId>
-          <artifactId>atlas-itests-fieldaction-override</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>io.atlasmap</groupId>
           <artifactId>atlas-itests-reference-mappings</artifactId>
         </dependency>
         <dependency>

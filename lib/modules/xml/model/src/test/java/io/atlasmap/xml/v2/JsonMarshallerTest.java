@@ -15,13 +15,14 @@
  */
 package io.atlasmap.xml.v2;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -35,9 +36,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     public ObjectMapper mapper = null;
 
     @Override
-    @Before
-    public void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    public void setUp(TestInfo testInfo) throws Exception {
+        super.setUp(testInfo);
 
         this.deleteTestFolders = false;
 
@@ -49,7 +50,7 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         super.tearDown();
         mapper = null;
@@ -61,9 +62,9 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
 
         // Object to JSON in file
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping.json"), atlasMapping);
+                + testMethodName + File.separator + "atlasmapping.json"), atlasMapping);
         AtlasMapping uMapping = mapper.readValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping.json"), AtlasMapping.class);
+                + testMethodName + File.separator + "atlasmapping.json"), AtlasMapping.class);
         assertNotNull(uMapping);
         validateAtlasMapping(uMapping);
     }
@@ -73,10 +74,10 @@ public class JsonMarshallerTest extends BaseMarshallerTest {
         XmlInspectionRequest request = generateInspectionRequest();
         // Object to JSON in file
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File("target" + File.separator + "junit" + File.separator
-                + testName.getMethodName() + File.separator + "atlasmapping-xmlinspection-request.json"), request);
+                + testMethodName + File.separator + "atlasmapping-xmlinspection-request.json"), request);
         XmlInspectionRequest uRequest = mapper
                 .readValue(
-                        new File("target" + File.separator + "junit" + File.separator + testName.getMethodName()
+                        new File("target" + File.separator + "junit" + File.separator + testMethodName
                                 + File.separator + "atlasmapping-xmlinspection-request.json"),
                         XmlInspectionRequest.class);
         assertNotNull(uRequest);

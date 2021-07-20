@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,14 +48,14 @@ public class AtlasMap1241Test {
         session.setSourceDocument("-LqbL_NuYtpimSmmPVQR", "[{\"id\":1, \"task\":\"first\"},{\"id\":2, \"task\":\"second\"}]");
         context.process(session);
 
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object outputJson = session.getTargetDocument("-LqbLf8BYtpimSmmPVQR");
-        assertNotNull("target-json document was null", outputJson);
+        assertNotNull(outputJson, "target-json document was null");
         ObjectMapper om = new ObjectMapper();
         JsonNode expected = om.readTree("{\"id\":3,\"task\":\"first second\"}");
         JsonNode actual = om.readTree((String)outputJson);
         LOG.info(">>> output:target-json >>> {}", actual.toString());
-        assertTrue(actual.toString(), expected.equals(actual));
+        assertTrue(expected.equals(actual), actual.toString());
     }
 
 }

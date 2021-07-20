@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,22 +50,22 @@ public class AtlasMap846Test {
         session.setSourceDocument("source", "[]");
         context.process(session);
 
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object outputJson = session.getTargetDocument("target-json");
-        assertNotNull("target-json document was null", outputJson);
+        assertNotNull(outputJson, "target-json document was null");
         ObjectMapper om = new ObjectMapper();
         JsonNode expected = om.readTree("{\"body\":[],\"three\":[]}");
         JsonNode actual = om.readTree((String)outputJson);
         LOG.info(">>> output:target-json >>> {}", actual.toString());
-        assertTrue(actual.toString(), expected.equals(actual));
+        assertTrue(expected.equals(actual), actual.toString());
 
         Object outputXml = session.getTargetDocument("target-xml");
-        assertNotNull("target-xml document was null", outputXml);
+        assertNotNull(outputXml, "target-xml document was null");
         assertThat(outputXml).nodesByXPath("/root").exist();
         LOG.info(">>> output:target-xml >>> {}", outputXml.toString());
 
         Object outputJava = session.getTargetDocument("target-java");
-        assertNotNull("target-java document was null", outputJava);
+        assertNotNull(outputJava, "target-java document was null");
         assertEquals(TargetClass.class, outputJava.getClass());
         TargetClass targetClass = (TargetClass)outputJava;
         assertEquals(0, targetClass.getTargetList().size());
@@ -80,24 +80,24 @@ public class AtlasMap846Test {
         session.setSourceDocument("source", "[{\"first_name\":\"Tom\",\"last_name\":\"Silva\",\"three\":\"three\"}]");
         context.process(session);
 
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object outputJson = session.getTargetDocument("target-json");
-        assertNotNull("target-json document was null", outputJson);
+        assertNotNull(outputJson, "target-json document was null");
         ObjectMapper om = new ObjectMapper();
         JsonNode expected = om.readTree("{\"body\":[{\"A\":\"Tom\",\"B\":\"Silva\"}],\"three\":[\"three\"]}");
         JsonNode actual = om.readTree((String)outputJson);
         LOG.info(">>> output:target-json >>> {}", actual.toString());
-        assertTrue(actual.toString(), expected.equals(actual));
+        assertTrue(expected.equals(actual), actual.toString());
 
         Object outputXml = session.getTargetDocument("target-xml");
-        assertNotNull("target-xml document was null", outputXml);
+        assertNotNull(outputXml, "target-xml document was null");
         assertThat(outputXml).valueByXPath("/root/body/A").isEqualTo("Tom");
         assertThat(outputXml).valueByXPath("/root/body/B").isEqualTo("Silva");
         assertThat(outputXml).valueByXPath("/root/three").isEqualTo("three");
         LOG.info(">>> output:target-xml >>> {}", outputXml.toString());
 
         Object outputJava = session.getTargetDocument("target-java");
-        assertNotNull("target-java document was null", outputJava);
+        assertNotNull(outputJava, "target-java document was null");
         assertEquals(TargetClass.class, outputJava.getClass());
         TargetClass targetClass = (TargetClass)outputJava;
         assertEquals(1, targetClass.getTargetList().size());

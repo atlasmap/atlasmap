@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -37,7 +37,7 @@ public class ConstantPropertyTest {
         AtlasSession session = context.createSession();
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         TargetClass output = TargetClass.class.cast(session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass"));
         assertEquals("testValue", output.getTargetName());
         assertNotEquals("testPath", output.getTargetFirstName());
@@ -46,16 +46,16 @@ public class ConstantPropertyTest {
         System.setProperty("testProp", "testProp-sysProp");
         System.setProperty("PATH", "PATH-sysProp");
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         output = TargetClass.class.cast(session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass"));
         assertEquals("testProp-sysProp", output.getTargetName());
         assertEquals("PATH-sysProp", output.getTargetFirstName());
         assertEquals(777, output.getTargetInteger());
 
-        session.getProperties().put("testProp", "testProp-runtimeProp");
-        session.getProperties().put("PATH", "PATH-runtimeProp");
+        session.getSourceProperties().put("testProp", "testProp-runtimeProp");
+        session.getSourceProperties().put("PATH", "PATH-runtimeProp");
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         output = TargetClass.class.cast(session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass"));
         assertEquals("testProp-runtimeProp", output.getTargetName());
         assertEquals("PATH-runtimeProp", output.getTargetFirstName());

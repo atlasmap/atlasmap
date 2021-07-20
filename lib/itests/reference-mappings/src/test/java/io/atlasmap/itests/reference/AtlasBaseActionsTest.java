@@ -15,8 +15,8 @@
  */
 package io.atlasmap.itests.reference;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 // import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 // import java.util.regex.Pattern;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;

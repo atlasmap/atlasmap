@@ -15,7 +15,7 @@
  */
 package io.atlasmap.xml.inspect;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Fields;
@@ -28,7 +28,7 @@ public class BaseXmlInspectionServiceTest {
 
     protected void debugFields(Fields xmlFields) {
         for (Field field : xmlFields.getField()) {
-            Assert.assertTrue(field instanceof XmlField);
+            assertTrue(field instanceof XmlField);
             XmlField xmlField = (XmlField) field;
             printXmlField(xmlField);
             if (xmlField instanceof XmlComplexType) {

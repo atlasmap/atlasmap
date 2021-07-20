@@ -15,12 +15,12 @@
  */
 package io.atlasmap.java.module;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.java.v2.JavaEnumField;
 import io.atlasmap.java.v2.JavaField;
@@ -32,12 +32,12 @@ public class JavaModuleTest {
 
     private JavaModule module = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         module = new JavaModule();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         module = null;
     }

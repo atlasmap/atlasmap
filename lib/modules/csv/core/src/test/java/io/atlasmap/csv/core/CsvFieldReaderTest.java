@@ -15,9 +15,7 @@
  */
 package io.atlasmap.csv.core;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -25,7 +23,7 @@ import java.io.ByteArrayInputStream;
 
 import io.atlasmap.csv.v2.CsvComplexType;
 import io.atlasmap.v2.Document;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -65,8 +63,8 @@ public class CsvFieldReaderTest {
         when(session.getAudits()).thenReturn(audits);
         FieldGroup field = (FieldGroup) csvFieldReader.read(session);
         assertEquals(0, audits.getAudit().size());
-        assertThat(field.getField().get(0).getValue(), is("Bob"));
-        assertThat(field.getField().get(1).getValue(), is("Andrew"));
+        assertEquals("Bob", field.getField().get(0).getValue());
+        assertEquals("Andrew", field.getField().get(1).getValue());
     }
 
     @Test
@@ -85,8 +83,8 @@ public class CsvFieldReaderTest {
         when(session.getAudits()).thenReturn(audits);
         FieldGroup field = (FieldGroup) csvFieldReader.read(session);
         assertEquals(0, audits.getAudit().size());
-        assertThat(field.getField().get(0).getValue(), is("Smith"));
-        assertThat(field.getField().get(1).getValue(), is("Johnson"));
+        assertEquals("Smith", field.getField().get(0).getValue());
+        assertEquals("Johnson", field.getField().get(1).getValue());
     }
 
     @Test
@@ -105,8 +103,8 @@ public class CsvFieldReaderTest {
         when(session.getAudits()).thenReturn(audits);
         FieldGroup field = (FieldGroup) csvFieldReader.read(session);
         assertEquals(0, audits.getAudit().size());
-        assertThat(field.getField().get(0).getValue(), is("Smith"));
-        assertThat(field.getField().get(1).getValue(), is("Johnson"));
+        assertEquals("Smith", field.getField().get(0).getValue());
+        assertEquals("Johnson", field.getField().get(1).getValue());
     }
 
     @Test
@@ -126,10 +124,10 @@ public class CsvFieldReaderTest {
         when(session.getAudits()).thenReturn(audits);
         FieldGroup field = (FieldGroup) csvFieldReader.read(session);
         assertEquals(0, audits.getAudit().size());
-        assertThat(field.getField().get(0).getValue(), is("Smith"));
-        assertThat(field.getField().get(0).getPath(), is("/<0>/familyName"));
-        assertThat(field.getField().get(1).getValue(), is("Johnson"));
-        assertThat(field.getField().get(1).getPath(), is("/<1>/familyName"));
+        assertEquals("Smith", field.getField().get(0).getValue());
+        assertEquals("/<0>/familyName", field.getField().get(0).getPath());
+        assertEquals("Johnson", field.getField().get(1).getValue());
+        assertEquals("/<1>/familyName", field.getField().get(1).getPath());
     }
 
     @Test
@@ -149,10 +147,10 @@ public class CsvFieldReaderTest {
         when(session.getAudits()).thenReturn(audits);
         FieldGroup field = (FieldGroup) csvFieldReader.read(session);
         assertEquals(0, audits.getAudit().size());
-        assertThat(field.getField().get(0).getValue(), is("Smith"));
-        assertThat(field.getField().get(0).getPath(), is("/<0>/FAMILYNAME"));
-        assertThat(field.getField().get(1).getValue(), is("Johnson"));
-        assertThat(field.getField().get(1).getPath(), is("/<1>/FAMILYNAME"));
+        assertEquals("Smith", field.getField().get(0).getValue());
+        assertEquals("/<0>/FAMILYNAME", field.getField().get(0).getPath());
+        assertEquals("Johnson", field.getField().get(1).getValue());
+        assertEquals("/<1>/FAMILYNAME", field.getField().get(1).getPath());
     }
 
     @Test
@@ -165,8 +163,8 @@ public class CsvFieldReaderTest {
         when(session.head()).thenReturn(mock(AtlasInternalSession.Head.class));
         Document document = csvFieldReader.readSchema();
         CsvComplexType list = (CsvComplexType) document.getFields().getField().get(0);
-        assertThat(list.getCsvFields().getCsvField().get(0).getName(), is("givenName"));
-        assertThat(list.getCsvFields().getCsvField().get(1).getName(), is("familyName"));
+        assertEquals("givenName", list.getCsvFields().getCsvField().get(0).getName());
+        assertEquals("familyName", list.getCsvFields().getCsvField().get(1).getName());
     }
 
     @Test
@@ -179,7 +177,7 @@ public class CsvFieldReaderTest {
         when(session.head()).thenReturn(mock(AtlasInternalSession.Head.class));
         Document document = csvFieldReader.readSchema();
         CsvComplexType list = (CsvComplexType) document.getFields().getField().get(0);
-        assertThat(list.getCsvFields().getCsvField().get(0).getName(), is("givenName"));
-        assertThat(list.getCsvFields().getCsvField().get(1).getName(), is("familyName"));
+        assertEquals("givenName", list.getCsvFields().getCsvField().get(0).getName());
+        assertEquals("familyName", list.getCsvFields().getCsvField().get(1).getName());
     }
 }

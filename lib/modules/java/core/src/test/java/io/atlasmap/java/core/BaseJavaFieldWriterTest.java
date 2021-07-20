@@ -21,7 +21,7 @@ import static org.mockito.Mockito.when;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
@@ -60,7 +60,7 @@ public abstract class BaseJavaFieldWriterTest {
     protected ClassLoader classLoader;
     protected Audits audits;
 
-    @Before
+    @BeforeEach
     public void reset() {
         classLoader = Thread.currentThread().getContextClassLoader();
         writerUtil = new JavaFieldWriterUtil(conversionService);

@@ -15,17 +15,19 @@
  */
 package io.atlasmap.expression;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.internal.LogicExpression;
 import io.atlasmap.expression.internal.VariableExpression;
-import junit.framework.TestCase;
+
+import org.junit.jupiter.api.Test;
 
 
-/**
- * @version $Revision: 1.2 $
- */
-public class ExpressionParserTest extends TestCase {
+public class ExpressionParserTest {
 
+    @Test
     public void testParseWithParensAround() throws Exception {
         String[] values = {"${x} == 1 && ${y} == 2", "(${x} == 1) && (${y} == 2)", "((${x} == 1) && (${y} == 2))"};
 
@@ -34,13 +36,13 @@ public class ExpressionParserTest extends TestCase {
             info("Parsing: " + value);
 
             Expression andExpression = parse(value);
-            assertTrue("Created LogicExpression expression", andExpression instanceof LogicExpression);
+            assertTrue(andExpression instanceof LogicExpression, "Created LogicExpression expression");
             LogicExpression logicExpression = (LogicExpression)andExpression;
             Expression left = logicExpression.getLeft();
             Expression right = logicExpression.getRight();
 
-            assertTrue("Left is a binary filter", left instanceof ComparisonExpression);
-            assertTrue("Right is a binary filter", right instanceof ComparisonExpression);
+            assertTrue(left instanceof ComparisonExpression, "Left is a binary filter");
+            assertTrue(right instanceof ComparisonExpression, "Right is a binary filter");
             ComparisonExpression leftCompare = (ComparisonExpression)left;
             ComparisonExpression rightCompare = (ComparisonExpression)right;
             assertPropertyExpression("left", leftCompare.getLeft(), "x");
@@ -53,9 +55,9 @@ public class ExpressionParserTest extends TestCase {
     }
 
     protected void assertPropertyExpression(String message, Expression expression, String expected) {
-        assertTrue(message + ". Must be PropertyExpression", expression instanceof VariableExpression);
+        assertTrue(expression instanceof VariableExpression, message + ". Must be PropertyExpression");
         VariableExpression propExp = (VariableExpression)expression;
-        assertEquals(message + ". Property name", expected, propExp.getName());
+        assertEquals(expected, propExp.getName(), message + ". Property name");
     }
 
     protected Expression parse(String text) throws Exception {

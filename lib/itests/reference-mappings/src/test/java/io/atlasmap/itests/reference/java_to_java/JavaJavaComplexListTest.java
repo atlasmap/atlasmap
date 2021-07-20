@@ -15,14 +15,14 @@
  */
 package io.atlasmap.itests.reference.java_to_java;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.Arrays;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -121,7 +121,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/48 - Allow default implementation for abstract target field")
+    @Disabled("https://github.com/atlasmap/atlasmap/issues/3130")
     public void testProcessJavaJavaComplexAutoDetectBaseTest() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-base.json"));
@@ -138,7 +138,7 @@ public class JavaJavaComplexListTest extends AtlasMappingBaseTest {
     }
 
     @Test
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/48 - Allow default implementation for abstract target field")
+    @Disabled("https://github.com/atlasmap/atlasmap/issues/3130")
     public void testProcessJavaJavaComplexAutoDetectFullTest() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-list-autodetect-full.json"));

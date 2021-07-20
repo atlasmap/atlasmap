@@ -15,18 +15,15 @@
  */
 package io.atlasmap.validators;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
@@ -39,7 +36,7 @@ public class AtlasValidationTestHelperTest {
     private Validation warning = null;
     private Validation info = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validations = new AtlasValidationTestHelper();
         error = new Validation();
@@ -63,7 +60,7 @@ public class AtlasValidationTestHelperTest {
         validations.addValidation(info);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         validations = null;
         error = null;
@@ -101,20 +98,20 @@ public class AtlasValidationTestHelperTest {
 
     @Test
     public void testToString() {
-        assertThat(error.getScope(), is(ValidationScope.ALL));
-        assertThat(error.getId(), nullValue());
-        assertThat(error.getMessage(), is("Error message"));
-        assertThat(error.getStatus(), is(ValidationStatus.ERROR));
+        assertEquals(ValidationScope.ALL, error.getScope());
+        assertNull(error.getId());
+        assertEquals("Error message", error.getMessage());
+        assertEquals(ValidationStatus.ERROR, error.getStatus());
 
-        assertThat(warning.getScope(), is(ValidationScope.DATA_SOURCE));
-        assertThat(warning.getId(), is("atlas:testDataSource"));
-        assertThat(warning.getMessage(), is("Warning message"));
-        assertThat(warning.getStatus(), is(ValidationStatus.WARN));
+        assertEquals(ValidationScope.DATA_SOURCE, warning.getScope());
+        assertEquals("atlas:testDataSource", warning.getId());
+        assertEquals("Warning message", warning.getMessage());
+        assertEquals(ValidationStatus.WARN, warning.getStatus());
 
-        assertThat(info.getScope(), is(ValidationScope.MAPPING));
-        assertThat(info.getId(), is("0001"));
-        assertThat(info.getMessage(), is("Information message"));
-        assertThat(info.getStatus(), is(ValidationStatus.INFO));
+        assertEquals(ValidationScope.MAPPING, info.getScope());
+        assertEquals("0001", info.getId());
+        assertEquals("Information message", info.getMessage());
+        assertEquals(ValidationStatus.INFO, info.getStatus());
     }
 
     @Test
@@ -123,7 +120,7 @@ public class AtlasValidationTestHelperTest {
     }
 
     @Test
-    @Ignore // Hashcode not consistent across instances
+    @Disabled // Hashcode not consistent across instances
     public void testHashCode() {
         assertEquals(1000142829, error.hashCode());
         assertEquals(warning.hashCode(), -187767976);

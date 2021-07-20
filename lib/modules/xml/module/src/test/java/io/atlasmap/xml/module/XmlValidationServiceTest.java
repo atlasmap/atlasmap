@@ -15,20 +15,18 @@
  */
 package io.atlasmap.xml.module;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +61,7 @@ public class XmlValidationServiceTest {
     protected List<Validation> validations = null;
     protected AtlasModuleDetail moduleDetail = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
@@ -78,7 +76,7 @@ public class XmlValidationServiceTest {
         validations = validationHelper.getValidation();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         mappingUtil = null;
         sourceValidationService = null;
@@ -235,7 +233,7 @@ public class XmlValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -290,7 +288,7 @@ public class XmlValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -344,7 +342,7 @@ public class XmlValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
+        assertEquals(1, validationHelper.getCount());
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
@@ -372,7 +370,7 @@ public class XmlValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(3, is(validationHelper.getCount()));
+        assertEquals(3, validationHelper.getCount());
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));

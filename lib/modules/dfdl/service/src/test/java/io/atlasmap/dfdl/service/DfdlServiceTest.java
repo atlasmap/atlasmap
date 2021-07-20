@@ -15,15 +15,14 @@
  */
 package io.atlasmap.dfdl.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.dfdl.core.schema.CsvDfdlSchemaGenerator;
 import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
@@ -39,12 +38,12 @@ public class DfdlServiceTest {
 
     private DfdlService dfdlService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dfdlService = new DfdlService();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         dfdlService = null;
     }

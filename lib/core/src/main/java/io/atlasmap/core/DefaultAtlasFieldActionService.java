@@ -246,7 +246,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                                 ? method.invoke(null, action) : method.invoke(null, action, convertedSourceObject);
                         }
                     } else {
-                        Object object = clazz.newInstance();
+                        Object object = clazz.getDeclaredConstructor().newInstance();
                         if (det.isCustom() != null && det.isCustom()) {
                             targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE
                                 ? method.invoke(object) : method.invoke(object, convertedSourceObject);
@@ -345,7 +345,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
         Object o = null;
         try {
-            o = Modifier.isStatic(method.getModifiers()) ? clazz.newInstance() : null;
+            o = Modifier.isStatic(method.getModifiers()) ? clazz.getDeclaredConstructor().newInstance() : null;
         } catch (Throwable e) {
             LOG.error(String.format("Error creating object instance for action=%s msg=%s", det.getName(), e.getMessage()), e);
         }
@@ -674,7 +674,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
         FieldType valueType = determineFieldType(flattenedValues);
         try {
-            Action action = actionProcessor.getActionClass().newInstance();
+            Action action = actionProcessor.getActionClass().getDeclaredConstructor().newInstance();
             for (Map.Entry<String, Object> property : actionParameters.entrySet()) {
                 String setter = "set" + property.getKey().substring(0, 1).toUpperCase() + property.getKey().substring(1);
                 action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());

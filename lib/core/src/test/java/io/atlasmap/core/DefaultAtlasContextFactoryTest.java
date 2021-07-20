@@ -15,12 +15,13 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -214,12 +215,14 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.createContext(atlasMapping));
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testCreateContextWithFileAtlasMappingFormat() throws AtlasException {
-        factory = DefaultAtlasContextFactory.getInstance();
-        factory.init();
-        File file = null;
-        assertNotNull(factory.createContext(file));
+        assertThrows(AtlasException.class, () -> {
+            factory = DefaultAtlasContextFactory.getInstance();
+            factory.init();
+            File file = null;
+            assertNotNull(factory.createContext(file));
+        });
     }
 
     @Test
@@ -232,12 +235,14 @@ public class DefaultAtlasContextFactoryTest {
         assertNotNull(factory.createContext(file.toURI()));
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testCreateContextWithURIAtlasExceptionNoUri() throws AtlasException {
-        factory = DefaultAtlasContextFactory.getInstance();
-        factory.init();
-        URI uri = null;
-        assertNotNull(factory.createContext(uri));
+        assertThrows(AtlasException.class, () -> {
+            factory = DefaultAtlasContextFactory.getInstance();
+            factory.init();
+            URI uri = null;
+            assertNotNull(factory.createContext(uri));
+        });
     }
 
     @Test

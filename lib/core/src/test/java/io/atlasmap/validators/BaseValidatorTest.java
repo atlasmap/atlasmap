@@ -17,8 +17,8 @@ package io.atlasmap.validators;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,13 +49,13 @@ public abstract class BaseValidatorTest {
     protected List<Validation> validations = null;
     protected AtlasValidator validator = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         validationHelper = new AtlasValidationTestHelper();
         validations = validationHelper.getValidation();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         validationHelper = null;
         validations = null;

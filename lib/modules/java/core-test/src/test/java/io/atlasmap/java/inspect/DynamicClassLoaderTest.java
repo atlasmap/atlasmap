@@ -15,9 +15,9 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.FileInputStream;
 import java.nio.file.DirectoryStream;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class DynamicClassLoaderTest {
 
@@ -84,7 +84,7 @@ public class DynamicClassLoaderTest {
             assertEquals("io.atlasmap.java.test.BaseFlatPrimitiveClass", flatClazz.getName());
 
             // TODO: Fix support for inheritance
-            // Object newFlatClazz = flatClazz.newInstance();
+            // Object newFlatClazz = flatClazz.getDeclaredConstructor().newInstance();
             // assertNotNull(newFlatClazz);
         } catch (ClassNotFoundException e) {
             fail("Expected class to load");
