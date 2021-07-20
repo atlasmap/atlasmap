@@ -15,18 +15,19 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -72,9 +73,11 @@ public class LongConverterTest {
         assertEquals(value, converter.toByte(l));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteOutOfRange() throws Exception {
-        converter.toByte(Long.MAX_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toByte(Long.MAX_VALUE);
+        });
     }
 
     @Test
@@ -97,16 +100,20 @@ public class LongConverterTest {
         assertNull(c);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMAX() throws Exception {
-        Long l = Long.MAX_VALUE;
-        converter.toCharacter(l);
+        assertThrows(AtlasConversionException.class, () -> {
+            Long l = Long.MAX_VALUE;
+            converter.toCharacter(l);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMIN() throws Exception {
-        Long l = -1L;
-        converter.toCharacter(l);
+        assertThrows(AtlasConversionException.class, () -> {
+            Long l = -1L;
+            converter.toCharacter(l);
+        });
     }
 
     @Test
@@ -176,14 +183,18 @@ public class LongConverterTest {
         assertEquals(0, i, 0.0);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerMAX() throws Exception {
-        converter.toInteger(Long.MAX_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toInteger(Long.MAX_VALUE);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerMIN() throws Exception {
-        converter.toInteger(Long.MIN_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toInteger(Long.MIN_VALUE);
+        });
     }
 
     @Test
@@ -224,10 +235,12 @@ public class LongConverterTest {
         assertNull(s);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortExceptionMAX() throws Exception {
-        Long l = Long.MAX_VALUE;
-        converter.toShort(l);
+        assertThrows(AtlasConversionException.class, () -> {
+            Long l = Long.MAX_VALUE;
+            converter.toShort(l);
+        });
     }
 
     @Test

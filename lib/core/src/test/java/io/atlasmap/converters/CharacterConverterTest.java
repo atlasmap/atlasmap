@@ -15,17 +15,18 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -78,10 +79,12 @@ public class CharacterConverterTest {
         assertEquals(value, converter.toByte('c').byteValue());
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteOutOfRange() throws Exception {
-        byte value = 99;
-        assertEquals(value, converter.toByte('\uD840').byteValue());
+        assertThrows(AtlasConversionException.class, () -> {
+            byte value = 99;
+            assertEquals(value, converter.toByte('\uD840').byteValue());
+        });
     }
 
     @Test
@@ -202,10 +205,12 @@ public class CharacterConverterTest {
         assertNull(s);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortException() throws Exception {
-        Character c = Character.MAX_VALUE;
-        converter.toShort(c);
+        assertThrows(AtlasConversionException.class, () -> {
+            Character c = Character.MAX_VALUE;
+            converter.toShort(c);
+        });
     }
 
     @Test

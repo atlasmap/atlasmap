@@ -15,14 +15,14 @@
  */
 package io.atlasmap.xml.service;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Json;
 import io.atlasmap.xml.v2.InspectionType;
@@ -35,12 +35,12 @@ public class XmlServiceTest {
 
     private XmlService xmlService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         xmlService = new XmlService();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         xmlService = null;
     }

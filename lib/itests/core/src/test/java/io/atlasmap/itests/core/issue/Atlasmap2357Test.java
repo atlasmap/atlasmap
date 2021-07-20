@@ -15,16 +15,16 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +58,7 @@ public class Atlasmap2357Test {
         r.close();
         session.setSourceDocument("-LYbkepiv8lNqAFpXmwF", buf.toString());
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("-LYbkkbvv8lNqAFpXmwF");
         assertNotNull(output);
         in = Thread.currentThread().getContextClassLoader().getResourceAsStream("mappings/issue/atlasmap-2357-target.json");
@@ -66,7 +66,7 @@ public class Atlasmap2357Test {
         JsonNode expected = om.readTree(in);
         JsonNode actual = om.readTree((String)output);
         LOG.info(">>> output >>> {}", actual.toString());
-        assertTrue(actual.toString(), expected.equals(actual));
+        assertTrue(expected.equals(actual), actual.toString());
     }
 
 }

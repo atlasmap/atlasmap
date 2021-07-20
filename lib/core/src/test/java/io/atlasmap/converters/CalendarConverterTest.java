@@ -15,13 +15,13 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CalendarConverterTest {
 

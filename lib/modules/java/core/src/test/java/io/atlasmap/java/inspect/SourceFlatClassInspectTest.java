@@ -15,9 +15,9 @@
  */
 package io.atlasmap.java.inspect;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
@@ -26,13 +26,13 @@ public class SourceFlatClassInspectTest {
 
     private ClassInspectionService classInspectionService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         classInspectionService = null;
     }

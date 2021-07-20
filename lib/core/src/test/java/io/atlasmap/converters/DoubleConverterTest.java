@@ -15,17 +15,18 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.spi.AtlasConversionConcern;
@@ -72,9 +73,11 @@ public class DoubleConverterTest {
         assertEquals(value, converter.toByte(df));
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToByteOutOfRange() throws Exception {
-        converter.toByte(Double.MAX_VALUE);
+        assertThrows(AtlasConversionException.class, () -> {
+            converter.toByte(Double.MAX_VALUE);
+        });
     }
 
     @Test
@@ -97,16 +100,20 @@ public class DoubleConverterTest {
         assertNull(c);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMAX() throws Exception {
-        Double df = 65556.00;
-        converter.toCharacter(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = 65556.00;
+            converter.toCharacter(df);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToCharacterMIN() throws Exception {
-        Double df = -1.00;
-        converter.toCharacter(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = -1.00;
+            converter.toCharacter(df);
+        });
     }
 
     @Test
@@ -145,16 +152,20 @@ public class DoubleConverterTest {
         assertNull(f);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToFloatExceptionMAX() throws Exception {
-        Double df = Double.MAX_VALUE;
-        converter.toFloat(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = Double.MAX_VALUE;
+            converter.toFloat(df);
+        });
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToFloatExceptionMIN() throws Exception {
-        Double df = Double.MIN_VALUE;
-        converter.toFloat(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = Double.MIN_VALUE;
+            converter.toFloat(df);
+        });
     }
 
     @Test
@@ -172,10 +183,12 @@ public class DoubleConverterTest {
         assertNull(i);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToIntegerExceptionMAX() throws Exception {
-        Double df = Double.MAX_VALUE;
-        converter.toInteger(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = Double.MAX_VALUE;
+            converter.toInteger(df);
+        });
     }
 
     @Test
@@ -193,10 +206,12 @@ public class DoubleConverterTest {
         assertNull(l);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToLongExceptionMAX() throws Exception {
-        Double df = Double.MAX_VALUE;
-        converter.toLong(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = Double.MAX_VALUE;
+            converter.toLong(df);
+        });
     }
 
     @Test
@@ -214,10 +229,12 @@ public class DoubleConverterTest {
         assertNull(s);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void convertToShortExceptionMAX() throws Exception {
-        Double df = Double.MAX_VALUE;
-        converter.toShort(df);
+        assertThrows(AtlasConversionException.class, () -> {
+            Double df = Double.MAX_VALUE;
+            converter.toShort(df);
+        });
     }
 
     @Test

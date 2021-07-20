@@ -15,15 +15,15 @@
  */
 package io.atlasmap.validators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
@@ -31,14 +31,14 @@ import io.atlasmap.v2.ValidationScope;
 public class NonNullValidatorTest extends BaseValidatorTest {
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         validator = new NonNullValidator(ValidationScope.MAPPING, "Cannot be null");
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDown();
         validator = null;
@@ -62,7 +62,7 @@ public class NonNullValidatorTest extends BaseValidatorTest {
     public void testValidateInvalid() {
         validator.validate(null, validations, null);
         assertTrue(validationHelper.hasErrors());
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validationHelper.getAllValidations().get(0);
         assertNotNull(validation);
@@ -77,7 +77,7 @@ public class NonNullValidatorTest extends BaseValidatorTest {
         validator.validate(empty, validations, "testValidateInvalid-2");
 
         assertTrue(validationHelper.hasErrors());
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
         assertEquals(ValidationScope.MAPPING, validationHelper.getValidation().get(0).getScope());
         assertEquals("testValidateInvalid-2", validationHelper.getValidation().get(0).getId());
     }

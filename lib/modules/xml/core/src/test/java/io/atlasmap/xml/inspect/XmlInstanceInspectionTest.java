@@ -15,17 +15,18 @@
  */
 package io.atlasmap.xml.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import io.atlasmap.v2.CollectionType;
@@ -255,39 +256,49 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
         // debugFields(xmlDocument.getFields());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInspectXmlStringAsSourceNull() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         String xmlDocument = null;
-        service.inspectXmlDocument(xmlDocument);
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.inspectXmlDocument(xmlDocument);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInspectXmlStringAsSourceBlank() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         String xmlDocument = "";
-        service.inspectXmlDocument(xmlDocument);
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.inspectXmlDocument(xmlDocument);
+        });
     }
 
-    @Test(expected = XmlInspectionException.class)
+    @Test
     public void testInspectXmlStringAsSourceParseExpection() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         String xmlDocument = "<?>";
-        service.inspectXmlDocument(xmlDocument);
+        assertThrows(XmlInspectionException.class, () -> {
+            service.inspectXmlDocument(xmlDocument);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInspectXmlDocumentAsSourceNull() {
         XmlInspectionService service = new XmlInspectionService();
         Document xmlDocument = null;
-        service.inspectXmlDocument(xmlDocument);
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.inspectXmlDocument(xmlDocument);
+        });
     }
 
-    @Test(expected = XmlInspectionException.class)
+    @Test
     public void testInspectXmlStringAsSourceBadHeaderWithBOM() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         String xmlDocument = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\\ufeff" + "<foo>bar</foo>";
-        service.inspectXmlDocument(xmlDocument);
+        assertThrows(XmlInspectionException.class, () -> {
+            service.inspectXmlDocument(xmlDocument);
+        });
     }
 
     @Test

@@ -15,10 +15,10 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
@@ -28,7 +28,7 @@ public class DefaultAtlasContextTest {
     public void testModuleInit() {
         DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         assertNotNull(factory.getModuleInfoRegistry());
-        assertEquals(new Integer(5), new Integer(factory.getModuleInfoRegistry().size()));
+        assertEquals(Integer.valueOf(5), Integer.valueOf(factory.getModuleInfoRegistry().size()));
     }
 
 }

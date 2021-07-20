@@ -15,11 +15,11 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
@@ -229,7 +229,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target3.setFieldType(FieldType.STRING);
         m.getOutputField().add(target3);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target1 = m.getOutputField().get(0);
         target2 = m.getOutputField().get(1);
         target3 = m.getOutputField().get(2);
@@ -256,7 +256,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setPath("/results<>");
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals(FieldGroup.class, target.getClass());
         FieldGroup targetGroup = (FieldGroup)target;
@@ -281,7 +281,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getOutputField().clear();
         m.getOutputField().add(target);
         audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals(FieldGroup.class, target.getClass());
         targetGroup = (FieldGroup)target;
@@ -317,7 +317,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals("one", target.getValue());
     }
@@ -342,7 +342,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals("100.0", target.getValue());
     }
@@ -368,7 +368,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals("1.0", target.getValue());
     }
@@ -384,7 +384,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         m.getInputField().add(source);
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals("foo", target.getValue());
     }
@@ -417,7 +417,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setFieldType(FieldType.STRING);
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         target = m.getOutputField().get(0);
         assertEquals("MA", target.getValue());
     }
@@ -457,7 +457,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         target.setPath("/addressList<>/city");
         m.getOutputField().add(target);
         Audits audits = previewContext.processPreview(m);
-        assertEquals(printAudit(audits), 0, audits.getAudit().size());
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
         FieldGroup targetGroup = (FieldGroup) m.getOutputField().get(0);
         assertEquals("/addressList<>/city", targetGroup.getPath());
         assertEquals(1, targetGroup.getField().size());

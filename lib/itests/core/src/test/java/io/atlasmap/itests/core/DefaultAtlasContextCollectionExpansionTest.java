@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.core.DefaultAtlasContextFactory;

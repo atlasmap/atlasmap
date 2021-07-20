@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
@@ -60,7 +60,7 @@ public abstract class BaseDefaultAtlasContextTest {
     protected MockFieldReader reader = null;
     protected MockFieldWriter writer = null;
 
-    @Before
+    @BeforeEach
     public void init() throws AtlasException {
         mapping = AtlasTestData.generateAtlasMapping();
         context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping) {

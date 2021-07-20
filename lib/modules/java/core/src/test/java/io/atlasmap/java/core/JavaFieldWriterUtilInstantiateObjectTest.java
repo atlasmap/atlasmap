@@ -15,13 +15,14 @@
  */
 package io.atlasmap.java.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.DefaultAtlasConversionService;
@@ -72,16 +73,20 @@ public class JavaFieldWriterUtilInstantiateObjectTest extends BaseJavaFieldWrite
         assertEquals(Object[].class, targetObject.getClass());
     }
 
-    @Test(expected=AtlasException.class)
+    @Test
     public void testAbstractBaseContact() throws Exception {
-        writerUtil.instantiateObject(writerUtil.loadClass("io.atlasmap.java.test.BaseContact"));
+        assertThrows(AtlasException.class, () -> {
+            writerUtil.instantiateObject(writerUtil.loadClass("io.atlasmap.java.test.BaseContact"));
+        });
     }
 
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testNullClass() throws Exception {
-        Object created = writerUtil.instantiateObject(null);
-        fail(created.getClass().getName());
+        assertThrows(AtlasException.class, () -> {
+            Object created = writerUtil.instantiateObject(null);
+            fail(created.getClass().getName());
+        });
     }
 
     @Test
@@ -115,9 +120,11 @@ public class JavaFieldWriterUtilInstantiateObjectTest extends BaseJavaFieldWrite
         assertNull(parentOrder.getOrder());
     }
 
-    @Test(expected=AtlasException.class)
+    @Test
     public void testAbstractBaseOrder() throws Exception {
-        writerUtil.instantiateObject(writerUtil.loadClass("io.atlasmap.java.test.BaseOrder"));
+        assertThrows(AtlasException.class, () -> {
+            writerUtil.instantiateObject(writerUtil.loadClass("io.atlasmap.java.test.BaseOrder"));
+        });
     }
 
 }

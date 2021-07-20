@@ -15,8 +15,8 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -300,9 +300,9 @@ public class NestedCollectionXmlTest {
             Thread.currentThread().getContextClassLoader().getResource("mappings/document-nested-collection.xml").toURI())));
         session.setSourceDocument("XMLInstanceNestedCollection", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         if (assertNoWarnings) {
-            assertFalse(TestHelper.printAudit(session), session.hasWarns());
+            assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         }
         Object output = session.getTargetDocument("XMLInstanceNestedCollection");
         return (String) output;

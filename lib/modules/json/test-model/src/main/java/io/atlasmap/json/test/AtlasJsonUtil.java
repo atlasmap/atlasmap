@@ -15,8 +15,8 @@
  */
 package io.atlasmap.json.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class AtlasJsonUtil {
             Class<? extends BaseOrder> orderClazz, Class<? extends BaseAddress> addressClazz,
             Class<? extends BaseContact> contactClazz) throws Exception {
         Class<?> targetClazz = AtlasJsonUtil.class.getClassLoader().loadClass(orderListClazz.getName());
-        BaseOrderList orderList = (BaseOrderList) targetClazz.newInstance();
+        BaseOrderList orderList = (BaseOrderList) targetClazz.getDeclaredConstructor().newInstance();
         orderList.setNumberOrders(5);
         orderList.setOrderBatchNumber(4123562);
 
@@ -44,7 +44,7 @@ public class AtlasJsonUtil {
     public static BaseOrder generateOrderClass(Class<? extends BaseOrder> orderClazz,
             Class<? extends BaseAddress> addressClazz, Class<? extends BaseContact> contactClazz) throws Exception {
         Class<?> targetClazz = AtlasJsonUtil.class.getClassLoader().loadClass(orderClazz.getName());
-        BaseOrder newObject = (BaseOrder) targetClazz.newInstance();
+        BaseOrder newObject = (BaseOrder) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setOrderId(8765309);
         newObject.setAddress(generateAddress(addressClazz));
@@ -54,7 +54,7 @@ public class AtlasJsonUtil {
 
     public static BaseAddress generateAddress(Class<? extends BaseAddress> addressClass) throws Exception {
         Class<?> targetClazz = AtlasJsonUtil.class.getClassLoader().loadClass(addressClass.getName());
-        BaseAddress newObject = (BaseAddress) targetClazz.newInstance();
+        BaseAddress newObject = (BaseAddress) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setAddressLine1("123 Main St");
         newObject.setAddressLine2("Suite 42b");
@@ -66,7 +66,7 @@ public class AtlasJsonUtil {
 
     public static BaseContact generateContact(Class<? extends BaseContact> contactClass) throws Exception {
         Class<?> targetClazz = AtlasJsonUtil.class.getClassLoader().loadClass(contactClass.getName());
-        BaseContact newObject = (BaseContact) targetClazz.newInstance();
+        BaseContact newObject = (BaseContact) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setFirstName("Ozzie");
         newObject.setLastName("Smith");
@@ -80,8 +80,8 @@ public class AtlasJsonUtil {
         assertNotNull(orderListObject.getNumberOrders());
         assertNotNull(orderListObject.getOrderBatchNumber());
 
-        assertEquals(new Integer(5), orderListObject.getNumberOrders());
-        assertEquals(new Integer(4123562), orderListObject.getOrderBatchNumber());
+        assertEquals(Integer.valueOf(5), orderListObject.getNumberOrders());
+        assertEquals(Integer.valueOf(4123562), orderListObject.getOrderBatchNumber());
 
         if (orderListObject.getOrders() != null) {
             for (int i = 0; i < orderListObject.getOrders().size(); i++) {
@@ -93,7 +93,7 @@ public class AtlasJsonUtil {
     public static void validateOrder(BaseOrder orderObject) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());
-        assertEquals(new Integer(8765309), orderObject.getOrderId());
+        assertEquals(Integer.valueOf(8765309), orderObject.getOrderId());
         validateAddress(orderObject.getAddress());
         validateContact(orderObject.getContact());
     }
@@ -101,7 +101,7 @@ public class AtlasJsonUtil {
     public static void validateOrder(BaseOrder orderObject, int expectedOrderId) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());
-        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        assertEquals(Integer.valueOf(expectedOrderId), orderObject.getOrderId());
         validateAddress(orderObject.getAddress());
         validateContact(orderObject.getContact());
     }

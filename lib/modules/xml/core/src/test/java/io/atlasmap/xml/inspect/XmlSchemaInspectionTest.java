@@ -15,17 +15,17 @@
  */
 package io.atlasmap.xml.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
@@ -349,7 +349,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
 
         // comment
         XmlField itemComment = item.getXmlFields().getXmlField().get(4);
-        Assert.assertNotNull(itemComment);
+        assertNotNull(itemComment);
         assertEquals("tns:comment", itemComment.getName());
         assertNull(itemComment.getValue());
         assertEquals("/tns:purchaseOrder/items/item/tns:comment", itemComment.getPath());
@@ -366,7 +366,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals(false, shipDate.isAttribute());
 
         // namespaces
-        Assert.assertNotNull(xmlDocument.getXmlNamespaces());
+        assertNotNull(xmlDocument.getXmlNamespaces());
         assertEquals(1, xmlDocument.getXmlNamespaces().getXmlNamespace().size());
 
         XmlNamespace namespace = xmlDocument.getXmlNamespaces().getXmlNamespace().get(0);
@@ -377,39 +377,49 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         // debugFields(xmlDocument.getFields());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInspectSchemaStringAsSourceNull() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         String schema = null;
-        service.inspectSchema(schema);
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.inspectSchema(schema);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInspectSchemaStringAsSourceBlank() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         String schema = "";
-        service.inspectSchema(schema);
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.inspectSchema(schema);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testInspectSchemaFileAsSourceNull() throws Exception {
         XmlInspectionService service = new XmlInspectionService();
         File schema = null;
-        service.inspectSchema(schema);
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.inspectSchema(schema);
+        });
     }
 
-    @Test(expected = XmlInspectionException.class)
+    @Test
     public void testInspectSchemaBad() throws Exception {
         final String source = "<xs:schema/>";
         XmlInspectionService service = new XmlInspectionService();
-        service.inspectSchema(source);
+        assertThrows(XmlInspectionException.class, () -> {
+            service.inspectSchema(source);
+        });
     }
 
-    @Test(expected = XmlInspectionException.class)
+    @Test
     public void testInspectSchemaFileBad() throws Exception {
         File schemaFile = Paths.get("src/test/resources/inspect/simple-schema-bad.xsd").toFile();
         XmlInspectionService service = new XmlInspectionService();
-        service.inspectSchema(schemaFile);
+        assertThrows(XmlInspectionException.class, () -> {
+            service.inspectSchema(schemaFile);
+        });
     }
 
 }

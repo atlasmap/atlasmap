@@ -15,10 +15,10 @@
  */
 package io.atlasmap.itests.reference;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.nio.file.Files;
@@ -43,7 +43,7 @@ public class AtlasTestUtil {
     public static BaseFlatPrimitiveClass generateFlatPrimitiveClass(Class<? extends BaseFlatPrimitiveClass> clazz)
             throws Exception {
         Class<?> targetClazz = AtlasTestUtil.class.getClassLoader().loadClass(clazz.getName());
-        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.newInstance();
+        BaseFlatPrimitiveClass newObject = (BaseFlatPrimitiveClass) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setIntField(2);
         newObject.setShortField((short) 3);
@@ -61,7 +61,7 @@ public class AtlasTestUtil {
             Class<? extends BaseOrder> orderClazz, Class<? extends BaseAddress> addressClazz,
             Class<? extends BaseContact> contactClazz) throws Exception {
         Class<?> targetClazz = AtlasTestUtil.class.getClassLoader().loadClass(orderListClazz.getName());
-        BaseOrderList orderList = (BaseOrderList) targetClazz.newInstance();
+        BaseOrderList orderList = (BaseOrderList) targetClazz.getDeclaredConstructor().newInstance();
         orderList.setNumberOrders(5);
         orderList.setOrderBatchNumber(4123562);
 
@@ -79,7 +79,7 @@ public class AtlasTestUtil {
     public static BaseOrder generateOrderClass(Class<? extends BaseOrder> orderClazz,
             Class<? extends BaseAddress> addressClazz, Class<? extends BaseContact> contactClazz) throws Exception {
         Class<?> targetClazz = AtlasTestUtil.class.getClassLoader().loadClass(orderClazz.getName());
-        BaseOrder newObject = (BaseOrder) targetClazz.newInstance();
+        BaseOrder newObject = (BaseOrder) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setOrderId(8765309);
         newObject.setAddress(generateAddress(addressClazz));
@@ -89,7 +89,7 @@ public class AtlasTestUtil {
 
     public static BaseAddress generateAddress(Class<? extends BaseAddress> addressClass) throws Exception {
         Class<?> targetClazz = AtlasTestUtil.class.getClassLoader().loadClass(addressClass.getName());
-        BaseAddress newObject = (BaseAddress) targetClazz.newInstance();
+        BaseAddress newObject = (BaseAddress) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setAddressLine1("123 Main St");
         newObject.setAddressLine2("Suite 42b");
@@ -101,7 +101,7 @@ public class AtlasTestUtil {
 
     public static BaseContact generateContact(Class<? extends BaseContact> contactClass) throws Exception {
         Class<?> targetClazz = AtlasTestUtil.class.getClassLoader().loadClass(contactClass.getName());
-        BaseContact newObject = (BaseContact) targetClazz.newInstance();
+        BaseContact newObject = (BaseContact) targetClazz.getDeclaredConstructor().newInstance();
 
         newObject.setFirstName("Ozzie");
         newObject.setLastName("Smith");
@@ -115,8 +115,8 @@ public class AtlasTestUtil {
         assertNotNull(orderListObject.getNumberOrders());
         assertNotNull(orderListObject.getOrderBatchNumber());
 
-        assertEquals(new Integer(5), orderListObject.getNumberOrders());
-        assertEquals(new Integer(4123562), orderListObject.getOrderBatchNumber());
+        assertEquals(Integer.valueOf(5), orderListObject.getNumberOrders());
+        assertEquals(Integer.valueOf(4123562), orderListObject.getOrderBatchNumber());
 
         if (orderListObject.getOrders() != null) {
             for (int i = 0; i < orderListObject.getOrders().size(); i++) {
@@ -130,8 +130,8 @@ public class AtlasTestUtil {
         assertNotNull(orderListObject.getNumberOrders());
         assertNotNull(orderListObject.getOrderBatchNumber());
 
-        assertEquals(new Integer(5), orderListObject.getNumberOrders());
-        assertEquals(new Integer(4123562), orderListObject.getOrderBatchNumber());
+        assertEquals(Integer.valueOf(5), orderListObject.getNumberOrders());
+        assertEquals(Integer.valueOf(4123562), orderListObject.getOrderBatchNumber());
 
         if (orderListObject.getOrders() != null) {
             for (int i = 0; i < orderListObject.getOrders().size(); i++) {
@@ -143,7 +143,7 @@ public class AtlasTestUtil {
     public static void validateOrderNoAbstract(BaseOrder orderObject, int expectedOrderId) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());
-        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        assertEquals(Integer.valueOf(expectedOrderId), orderObject.getOrderId());
         // https://github.com/atlasmap/atlasmap-runtime/issues/229 - Allow default
         // implementation for abstract target field
         assertNull(orderObject.getAddress());
@@ -153,7 +153,7 @@ public class AtlasTestUtil {
     public static void validateOrder(BaseOrder orderObject) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());
-        assertEquals(new Integer(8765309), orderObject.getOrderId());
+        assertEquals(Integer.valueOf(8765309), orderObject.getOrderId());
         validateAddress(orderObject.getAddress());
         validateContact(orderObject.getContact());
     }
@@ -161,7 +161,7 @@ public class AtlasTestUtil {
     public static void validateOrder(BaseOrder orderObject, int expectedOrderId) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());
-        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        assertEquals(Integer.valueOf(expectedOrderId), orderObject.getOrderId());
         validateAddress(orderObject.getAddress());
         validateContact(orderObject.getContact());
     }
@@ -212,112 +212,112 @@ public class AtlasTestUtil {
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion1(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(3), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 4), new Short(targetObject.getShortField()));
-        assertEquals(new Long(5L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(6d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(1f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(3), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 4), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(5L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(6d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(1f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('9'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte("2"), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('9'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf("2"), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion2(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(4), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 5), new Short(targetObject.getShortField()));
-        assertEquals(new Long(6L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(1.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(56f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(4), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 5), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(6L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(1.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(56f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('\u0002'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 3), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('\u0002'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 3), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion3(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(5), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 6), new Short(targetObject.getShortField()));
-        assertEquals(new Long(1L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(56d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(57.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(5), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 6), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(1L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(56d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(57.0f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('\u0003'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 4), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('\u0003'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 4), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion4(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(6), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 1), new Short(targetObject.getShortField()));
-        assertEquals(new Long(56L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(57.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(6), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 1), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(56L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(57.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(2.0f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('\u0004'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 5), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('\u0004'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 5), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion5(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(1), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 56), new Short(targetObject.getShortField()));
-        assertEquals(new Long(57L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(2.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(3.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 56), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(57L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(2.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(3.0f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('\u0005'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 6), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('\u0005'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 6), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion6(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(56), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 57), new Short(targetObject.getShortField()));
-        assertEquals(new Long(2L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(3.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(4.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(56), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 57), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(2L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(3.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(4.0f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('\u0006'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 1), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('\u0006'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 1), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateFlatPrimitiveClassPrimitiveFieldAutoConversion7(BaseFlatPrimitiveClass targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(57), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 2), new Short(targetObject.getShortField()));
-        assertEquals(new Long(3L), new Long(targetObject.getLongField()));
-        assertEquals(new Double(4.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(5.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(57), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 2), Short.valueOf(targetObject.getShortField()));
+        assertEquals(Long.valueOf(3L), Long.valueOf(targetObject.getLongField()));
+        assertEquals(Double.valueOf(4.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Float.valueOf(5.0f), Float.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.isBooleanField());
-        assertEquals(new Character('\u0001'), new Character(targetObject.getCharField()));
-        assertEquals(new Byte((byte) 56), new Byte(targetObject.getByteField()));
+        assertEquals(Character.valueOf('\u0001'), Character.valueOf(targetObject.getCharField()));
+        assertEquals(Byte.valueOf((byte) 56), Byte.valueOf(targetObject.getByteField()));
 
         unusedPrimativeMappingAsserts(targetObject);
     }
 
     public static void validateJsonFlatPrimitivePrimitiveFields(io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Double(50000000d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(40000000f), new Float(targetObject.getFloatField()));
-        assertEquals(new Integer(2), new Integer(targetObject.getIntField()));
-        assertEquals(new Long(30000L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Short((short) 1), new Short(targetObject.getShortField().shortValue()));
+        assertEquals(Double.valueOf(50000000d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(40000000d), Double.valueOf(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(2), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Long.valueOf(30000L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Short.valueOf((short) 1), Short.valueOf(targetObject.getShortField().shortValue()));
         assertEquals(Boolean.FALSE, targetObject.getBooleanField());
         // assertEquals(new Byte((byte) 99), new Byte(targetObject.getByteField()));
-        assertEquals(new Character('a'), new Character(targetObject.getCharField().charAt(0)));
+        assertEquals(Character.valueOf('a'), Character.valueOf(targetObject.getCharField().charAt(0)));
         assertNotNull(targetObject.getBooleanArrayField());
         assertTrue(targetObject.getBooleanArrayField().isEmpty());
         assertNotNull(targetObject.getBoxedBooleanArrayField());
@@ -350,15 +350,15 @@ public class AtlasTestUtil {
 
     public static void validateJsonFlatPrimitiveBoxedPrimitiveFields(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
-        assertEquals(new Double(90000000d), new Double(targetObject.getBoxedDoubleField()));
-        assertEquals(new Float(70000000f), new Float(targetObject.getBoxedFloatField()));
-        assertEquals(new Integer(5), new Integer(targetObject.getBoxedIntField()));
-        assertEquals(new Long(20000L), new Long(targetObject.getBoxedLongField().longValue()));
-        assertEquals(new Short((short) 5), new Short(targetObject.getBoxedShortField().shortValue()));
+        assertEquals(Double.valueOf(90000000d), Double.valueOf(targetObject.getBoxedDoubleField()));
+        assertEquals(Double.valueOf(70000000d), Double.valueOf(targetObject.getBoxedFloatField()));
+        assertEquals(Integer.valueOf(5), Integer.valueOf(targetObject.getBoxedIntField()));
+        assertEquals(Long.valueOf(20000L), Long.valueOf(targetObject.getBoxedLongField().longValue()));
+        assertEquals(Short.valueOf((short) 5), Short.valueOf(targetObject.getBoxedShortField().shortValue()));
         assertEquals(Boolean.TRUE, targetObject.getBoxedBooleanField());
         // assertEquals(new Byte((byte) 87), new
         // Byte(targetObject.getBoxedByteField()));
-        assertEquals(new Character('z'), new Character(targetObject.getBoxedCharField().charAt(0)));
+        assertEquals(Character.valueOf('z'), Character.valueOf(targetObject.getBoxedCharField().charAt(0)));
         assertNotNull(targetObject.getBooleanArrayField());
         assertTrue(targetObject.getBooleanArrayField().isEmpty());
         assertNotNull(targetObject.getBoxedBooleanArrayField());
@@ -391,9 +391,9 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonOrder(io.atlasmap.json.test.BaseOrder orderObject) {
-        assertNotNull("Order object is null", orderObject);
-        assertNotNull("orderId is null: " + orderObject.toString(), orderObject.getOrderId());
-        assertEquals(new Integer(8765309), orderObject.getOrderId());
+        assertNotNull(orderObject, "Order object is null");
+        assertNotNull(orderObject.getOrderId(), "orderId is null: " + orderObject.toString());
+        assertEquals(Integer.valueOf(8765309), orderObject.getOrderId());
         validateJsonAddress(orderObject.getAddress());
         validateJsonContact(orderObject.getContact());
     }
@@ -401,13 +401,13 @@ public class AtlasTestUtil {
     public static void validateJsonOrder(io.atlasmap.json.test.BaseOrder orderObject, int expectedOrderId) {
         assertNotNull(orderObject);
         assertNotNull(orderObject.getOrderId());
-        assertEquals(new Integer(expectedOrderId), orderObject.getOrderId());
+        assertEquals(Integer.valueOf(expectedOrderId), orderObject.getOrderId());
         validateJsonAddress(orderObject.getAddress());
         validateJsonContact(orderObject.getContact());
     }
 
     public static void validateJsonAddress(io.atlasmap.json.test.BaseAddress addressObject) {
-        assertNotNull("Address object is null", addressObject);
+        assertNotNull(addressObject, "Address object is null");
         assertEquals("123 Main St", addressObject.getAddressLine1());
         assertEquals("Suite 42b", addressObject.getAddressLine2());
         assertEquals("Anytown", addressObject.getCity());
@@ -416,7 +416,7 @@ public class AtlasTestUtil {
     }
 
     public static void validateJsonContact(io.atlasmap.json.test.BaseContact contactObject) {
-        assertNotNull("Contact object is null", contactObject);
+        assertNotNull(contactObject, "Contact object is null");
         assertEquals("Ozzie", contactObject.getFirstName());
         assertEquals("Smith", contactObject.getLastName());
         assertEquals("5551212", contactObject.getPhoneNumber());
@@ -457,14 +457,14 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion1(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(3), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 4), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(5L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(6d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(1.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(3), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 4), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(5L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(6d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(1.0d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
-        assertEquals(new Character('9'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 2), new Byte(targetObject.getByteField().toString()));
+        assertEquals(Character.valueOf('9'), Character.valueOf(targetObject.getCharField().charAt(0)));
+        assertEquals(Byte.valueOf((byte) 2), Byte.valueOf(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
     }
@@ -472,11 +472,11 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion2(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(4), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 5), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(6L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(1.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(56f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(4), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 5), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(6L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(1.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(56d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
 
         unusedJsonPrimativeMappingAsserts(targetObject);
@@ -485,14 +485,14 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion3(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(5), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 6), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(1L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(56.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(57.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(5), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 6), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(1L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(56.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(57.0d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
-        assertEquals(new Character('\u0003'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 4), new Byte(targetObject.getByteField().toString()));
+        assertEquals(Character.valueOf('\u0003'), Character.valueOf(targetObject.getCharField().charAt(0)));
+        assertEquals(Byte.valueOf((byte) 4), Byte.valueOf(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
 
@@ -501,14 +501,14 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion4(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(6), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 1), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(56L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(57.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(2.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(6), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 1), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(56L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(57.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(2.0d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
-        assertEquals(new Character('\u0004'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 5), new Byte(targetObject.getByteField().toString()));
+        assertEquals(Character.valueOf('\u0004'), Character.valueOf(targetObject.getCharField().charAt(0)));
+        assertEquals(Byte.valueOf((byte) 5), Byte.valueOf(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
     }
@@ -516,14 +516,14 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion5(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(1), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 56), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(57L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(2.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(3.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 56), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(57L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(2.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(3.0d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
-        assertEquals(new Character('\u0005'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 6), new Byte(targetObject.getByteField().toString()));
+        assertEquals(Character.valueOf('\u0005'), Character.valueOf(targetObject.getCharField().charAt(0)));
+        assertEquals(Byte.valueOf((byte) 6), Byte.valueOf(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
     }
@@ -531,14 +531,14 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion6(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(56), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 57), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(2L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(3.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(4.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(56), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 57), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(2L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(3.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(4.0d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
-        assertEquals(new Character('\u0006'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 1), new Byte(targetObject.getByteField().toString()));
+        assertEquals(Character.valueOf('\u0006'), Character.valueOf(targetObject.getCharField().charAt(0)));
+        assertEquals(Byte.valueOf((byte) 1), Byte.valueOf(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
     }
@@ -546,14 +546,14 @@ public class AtlasTestUtil {
     public static void validateJsonFlatPrimitivePrimitiveFieldAutoConversion7(
             io.atlasmap.json.test.BaseFlatPrimitive targetObject) {
         assertNotNull(targetObject);
-        assertEquals(new Integer(57), new Integer(targetObject.getIntField()));
-        assertEquals(new Short((short) 2), new Short(targetObject.getShortField().shortValue()));
-        assertEquals(new Long(3L), new Long(targetObject.getLongField().longValue()));
-        assertEquals(new Double(4.0d), new Double(targetObject.getDoubleField()));
-        assertEquals(new Float(5.0f), new Float(targetObject.getFloatField()));
+        assertEquals(Integer.valueOf(57), Integer.valueOf(targetObject.getIntField()));
+        assertEquals(Short.valueOf((short) 2), Short.valueOf(targetObject.getShortField().shortValue()));
+        assertEquals(Long.valueOf(3L), Long.valueOf(targetObject.getLongField().longValue()));
+        assertEquals(Double.valueOf(4.0d), Double.valueOf(targetObject.getDoubleField()));
+        assertEquals(Double.valueOf(5.0d), Double.valueOf(targetObject.getFloatField()));
         assertEquals(true, targetObject.getBooleanField());
-        assertEquals(new Character('\u0001'), new Character(targetObject.getCharField().charAt(0)));
-        assertEquals(new Byte((byte) 56), new Byte(targetObject.getByteField().toString()));
+        assertEquals(Character.valueOf('\u0001'), Character.valueOf(targetObject.getCharField().charAt(0)));
+        assertEquals(Byte.valueOf((byte) 56), Byte.valueOf(targetObject.getByteField().toString()));
 
         unusedJsonPrimativeMappingAsserts(targetObject);
     }

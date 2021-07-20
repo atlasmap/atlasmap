@@ -15,15 +15,16 @@
  */
 package io.atlasmap.actions;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.AddDays;
 import io.atlasmap.v2.AddSeconds;
@@ -40,9 +41,11 @@ public class DateFieldActionsTest {
         assertEquals(laterDate, DateFieldActions.addDays(action, origDate));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testAddDaysWithNullAction() {
-        DateFieldActions.addDays(null, ZonedDateTime.now());
+        assertThrows(IllegalArgumentException.class, () -> {
+            DateFieldActions.addDays(null, ZonedDateTime.now());
+        });
     }
 
     @Test
@@ -55,9 +58,11 @@ public class DateFieldActionsTest {
         assertEquals(laterDate, DateFieldActions.addSeconds(action, origDate));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test
     public void testAddSecondsWithNullAction() {
-        DateFieldActions.addSeconds(null, ZonedDateTime.now());
+        assertThrows(IllegalArgumentException.class, () -> {
+            DateFieldActions.addSeconds(null, ZonedDateTime.now());
+        });
     }
 
     @Test

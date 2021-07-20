@@ -15,15 +15,15 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.TestListOrders;
@@ -37,13 +37,13 @@ public class TestListOrdersTest {
 
     private ClassInspectionService classInspectionService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         classInspectionService = null;
     }

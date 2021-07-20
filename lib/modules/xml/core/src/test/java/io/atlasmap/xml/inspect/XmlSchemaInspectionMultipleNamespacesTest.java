@@ -15,12 +15,15 @@
  */
 package io.atlasmap.xml.inspect;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
@@ -36,84 +39,84 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         File schemaFile = Paths.get("src/test/resources/inspect/multiple-namespaces-schemaset.xml").toFile();
         XmlInspectionService service = new XmlInspectionService();
         XmlDocument answer = service.inspectSchema(schemaFile);
-        Assert.assertEquals(3, answer.getXmlNamespaces().getXmlNamespace().size());
+        assertEquals(3, answer.getXmlNamespaces().getXmlNamespace().size());
         for (XmlNamespace namespace : answer.getXmlNamespaces().getXmlNamespace()) {
             switch (namespace.getAlias()) {
             case "tns":
-                Assert.assertEquals("io.atlasmap.xml.test:Root", namespace.getUri());
-                Assert.assertEquals(null, namespace.isTargetNamespace());
+                assertEquals("io.atlasmap.xml.test:Root", namespace.getUri());
+                assertEquals(null, namespace.isTargetNamespace());
                 break;
             case "first":
-                Assert.assertEquals("io.atlasmap.xml.test:First", namespace.getUri());
-                Assert.assertEquals(null, namespace.isTargetNamespace());
+                assertEquals("io.atlasmap.xml.test:First", namespace.getUri());
+                assertEquals(null, namespace.isTargetNamespace());
                 break;
             case "second":
-                Assert.assertEquals("io.atlasmap.xml.test:Second", namespace.getUri());
-                Assert.assertEquals(null, namespace.isTargetNamespace());
+                assertEquals("io.atlasmap.xml.test:Second", namespace.getUri());
+                assertEquals(null, namespace.isTargetNamespace());
                 break;
             default:
-                Assert.fail(String.format("Unknown alias '%s'", namespace.getAlias()));
+                fail(String.format("Unknown alias '%s'", namespace.getAlias()));
             }
         }
 
         List<Field> fields = answer.getFields().getField();
-        Assert.assertEquals(1, fields.size());
+        assertEquals(1, fields.size());
         XmlComplexType complex = XmlComplexType.class.cast(fields.get(0));
-        Assert.assertEquals("tns:RootDocument", complex.getName());
+        assertEquals("tns:RootDocument", complex.getName());
         List<XmlField> rootFields = complex.getXmlFields().getXmlField();
-        Assert.assertEquals(4, rootFields.size());
+        assertEquals(4, rootFields.size());
         for (XmlField xmlField : rootFields) {
             switch (xmlField.getName()) {
             case "Name":
-                Assert.assertEquals(FieldType.STRING, xmlField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/Name", xmlField.getPath());
+                assertEquals(FieldType.STRING, xmlField.getFieldType());
+                assertEquals("/tns:RootDocument/Name", xmlField.getPath());
                 break;
             case "Value":
-                Assert.assertEquals(FieldType.STRING, xmlField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/Value", xmlField.getPath());
+                assertEquals(FieldType.STRING, xmlField.getFieldType());
+                assertEquals("/tns:RootDocument/Value", xmlField.getPath());
                 break;
             case "first:FirstElement":
-                Assert.assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/first:FirstElement", xmlField.getPath());
+                assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
+                assertEquals("/tns:RootDocument/first:FirstElement", xmlField.getPath());
                 List<XmlField> firstFields = XmlComplexType.class.cast(xmlField).getXmlFields().getXmlField();
-                Assert.assertEquals(2, firstFields.size());
+                assertEquals(2, firstFields.size());
                 for (XmlField firstField : firstFields) {
                     switch (firstField.getName()) {
                     case "Name":
-                        Assert.assertEquals(FieldType.STRING, firstField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/first:FirstElement/Name", firstField.getPath());
+                        assertEquals(FieldType.STRING, firstField.getFieldType());
+                        assertEquals("/tns:RootDocument/first:FirstElement/Name", firstField.getPath());
                         break;
                     case "Value":
-                        Assert.assertEquals(FieldType.STRING, firstField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/first:FirstElement/Value", firstField.getPath());
+                        assertEquals(FieldType.STRING, firstField.getFieldType());
+                        assertEquals("/tns:RootDocument/first:FirstElement/Value", firstField.getPath());
                         break;
                     default:
-                        Assert.fail(String.format("Unknown field '%s'", firstField.getPath()));
+                        fail(String.format("Unknown field '%s'", firstField.getPath()));
                     }
                 }
                 break;
             case "second:SecondElement":
-                Assert.assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/second:SecondElement", xmlField.getPath());
+                assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
+                assertEquals("/tns:RootDocument/second:SecondElement", xmlField.getPath());
                 List<XmlField> secondFields = XmlComplexType.class.cast(xmlField).getXmlFields().getXmlField();
-                Assert.assertEquals(2, secondFields.size());
+                assertEquals(2, secondFields.size());
                 for (XmlField secondField : secondFields) {
                     switch (secondField.getName()) {
                     case "Name":
-                        Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/second:SecondElement/Name", secondField.getPath());
+                        assertEquals(FieldType.STRING, secondField.getFieldType());
+                        assertEquals("/tns:RootDocument/second:SecondElement/Name", secondField.getPath());
                         break;
                     case "Value":
-                        Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                        Assert.assertEquals("/tns:RootDocument/second:SecondElement/Value", secondField.getPath());
+                        assertEquals(FieldType.STRING, secondField.getFieldType());
+                        assertEquals("/tns:RootDocument/second:SecondElement/Value", secondField.getPath());
                         break;
                     default:
-                        Assert.fail(String.format("Unknown field '%s'", secondField.getPath()));
+                        fail(String.format("Unknown field '%s'", secondField.getPath()));
                     }
                 }
                 break;
             default:
-                Assert.fail(String.format("Unknown field '%s'", xmlField.getPath()));
+                fail(String.format("Unknown field '%s'", xmlField.getPath()));
             }
         }
     }
@@ -123,40 +126,40 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         File schemaFile = Paths.get("src/test/resources/inspect/multiple-no-namespace-schemas.xml").toFile();
         XmlInspectionService service = new XmlInspectionService();
         XmlDocument answer = service.inspectSchema(schemaFile);
-        Assert.assertEquals(1, answer.getXmlNamespaces().getXmlNamespace().size());
+        assertEquals(1, answer.getXmlNamespaces().getXmlNamespace().size());
         XmlNamespace namespace = answer.getXmlNamespaces().getXmlNamespace().get(0);
-        Assert.assertEquals("tns", namespace.getAlias());
-        Assert.assertEquals("io.atlasmap.xml.test:Root", namespace.getUri());
-        Assert.assertEquals(null, namespace.isTargetNamespace());
+        assertEquals("tns", namespace.getAlias());
+        assertEquals("io.atlasmap.xml.test:Root", namespace.getUri());
+        assertEquals(null, namespace.isTargetNamespace());
 
-        Assert.assertEquals(1,  answer.getFields().getField().size());
+        assertEquals(1,  answer.getFields().getField().size());
         XmlComplexType complex = XmlComplexType.class.cast(answer.getFields().getField().get(0));
-        Assert.assertEquals("tns:RootDocument", complex.getName());
-        Assert.assertEquals(2,  complex.getXmlFields().getXmlField().size());
+        assertEquals("tns:RootDocument", complex.getName());
+        assertEquals(2,  complex.getXmlFields().getXmlField().size());
         for (XmlField field : complex.getXmlFields().getXmlField()) {
             switch (field.getName()) {
             case "FirstElement":
-                Assert.assertEquals(FieldType.COMPLEX, field.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/FirstElement", field.getPath());
+                assertEquals(FieldType.COMPLEX, field.getFieldType());
+                assertEquals("/tns:RootDocument/FirstElement", field.getPath());
                 List<XmlField> firstFields = XmlComplexType.class.cast(field).getXmlFields().getXmlField();
-                Assert.assertEquals(1, firstFields.size());
+                assertEquals(1, firstFields.size());
                 XmlField firstField = firstFields.get(0);
-                Assert.assertEquals("FirstValue", firstField.getName());
-                Assert.assertEquals(FieldType.STRING, firstField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/FirstElement/FirstValue", firstField.getPath());
+                assertEquals("FirstValue", firstField.getName());
+                assertEquals(FieldType.STRING, firstField.getFieldType());
+                assertEquals("/tns:RootDocument/FirstElement/FirstValue", firstField.getPath());
                 break;
             case "SecondElement":
-                Assert.assertEquals(FieldType.COMPLEX, field.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/SecondElement", field.getPath());
+                assertEquals(FieldType.COMPLEX, field.getFieldType());
+                assertEquals("/tns:RootDocument/SecondElement", field.getPath());
                 List<XmlField> secondFields = XmlComplexType.class.cast(field).getXmlFields().getXmlField();
-                Assert.assertEquals(1, secondFields.size());
+                assertEquals(1, secondFields.size());
                 XmlField secondField = secondFields.get(0);
-                Assert.assertEquals("SecondValue", secondField.getName());
-                Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                Assert.assertEquals("/tns:RootDocument/SecondElement/SecondValue", secondField.getPath());
+                assertEquals("SecondValue", secondField.getName());
+                assertEquals(FieldType.STRING, secondField.getFieldType());
+                assertEquals("/tns:RootDocument/SecondElement/SecondValue", secondField.getPath());
                 break;
             default:
-                Assert.fail(String.format("Unknown field '%s'", field.getPath()));
+                fail(String.format("Unknown field '%s'", field.getPath()));
             }
         }
     }
@@ -166,50 +169,52 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         File schemaFile = Paths.get("src/test/resources/inspect/multiple-no-namespace-root-schema.xml").toFile();
         XmlInspectionService service = new XmlInspectionService();
         XmlDocument answer = service.inspectSchema(schemaFile);
-        Assert.assertEquals(1, answer.getXmlNamespaces().getXmlNamespace().size());
+        assertEquals(1, answer.getXmlNamespaces().getXmlNamespace().size());
         XmlNamespace namespace = answer.getXmlNamespaces().getXmlNamespace().get(0);
-        Assert.assertEquals("second", namespace.getAlias());
-        Assert.assertEquals("io.atlasmap.xml.test:Second", namespace.getUri());
-        Assert.assertEquals(null, namespace.isTargetNamespace());
+        assertEquals("second", namespace.getAlias());
+        assertEquals("io.atlasmap.xml.test:Second", namespace.getUri());
+        assertEquals(null, namespace.isTargetNamespace());
 
         // Note that the FirstElement also appears here as it's a top level element of namespace ""
-        Assert.assertEquals(2,  answer.getFields().getField().size());
+        assertEquals(2,  answer.getFields().getField().size());
         XmlComplexType complex = XmlComplexType.class.cast(answer.getFields().getField().get(1));
-        Assert.assertEquals("RootDocument", complex.getName());
-        Assert.assertEquals(2,  complex.getXmlFields().getXmlField().size());
+        assertEquals("RootDocument", complex.getName());
+        assertEquals(2,  complex.getXmlFields().getXmlField().size());
         for (XmlField field : complex.getXmlFields().getXmlField()) {
             switch (field.getName()) {
             case "FirstElement":
-                Assert.assertEquals(FieldType.COMPLEX, field.getFieldType());
-                Assert.assertEquals("/RootDocument/FirstElement", field.getPath());
+                assertEquals(FieldType.COMPLEX, field.getFieldType());
+                assertEquals("/RootDocument/FirstElement", field.getPath());
                 List<XmlField> firstFields = XmlComplexType.class.cast(field).getXmlFields().getXmlField();
-                Assert.assertEquals(1, firstFields.size());
+                assertEquals(1, firstFields.size());
                 XmlField firstField = firstFields.get(0);
-                Assert.assertEquals("FirstValue", firstField.getName());
-                Assert.assertEquals(FieldType.STRING, firstField.getFieldType());
-                Assert.assertEquals("/RootDocument/FirstElement/FirstValue", firstField.getPath());
+                assertEquals("FirstValue", firstField.getName());
+                assertEquals(FieldType.STRING, firstField.getFieldType());
+                assertEquals("/RootDocument/FirstElement/FirstValue", firstField.getPath());
                 break;
             case "second:SecondElement":
-                Assert.assertEquals(FieldType.COMPLEX, field.getFieldType());
-                Assert.assertEquals("/RootDocument/second:SecondElement", field.getPath());
+                assertEquals(FieldType.COMPLEX, field.getFieldType());
+                assertEquals("/RootDocument/second:SecondElement", field.getPath());
                 List<XmlField> secondFields = XmlComplexType.class.cast(field).getXmlFields().getXmlField();
-                Assert.assertEquals(1, secondFields.size());
+                assertEquals(1, secondFields.size());
                 XmlField secondField = secondFields.get(0);
-                Assert.assertEquals("SecondValue", secondField.getName());
-                Assert.assertEquals(FieldType.STRING, secondField.getFieldType());
-                Assert.assertEquals("/RootDocument/second:SecondElement/SecondValue", secondField.getPath());
+                assertEquals("SecondValue", secondField.getName());
+                assertEquals(FieldType.STRING, secondField.getFieldType());
+                assertEquals("/RootDocument/second:SecondElement/SecondValue", secondField.getPath());
                 break;
             default:
-                Assert.fail(String.format("Unknown field '%s'", field.getPath()));
+                fail(String.format("Unknown field '%s'", field.getPath()));
             }
         }
     }
 
-    @Test(expected = XmlInspectionException.class)
+    @Test
     public void testMultipleNoNamespaceSchemasConflict() throws Exception {
         File schemaFile = Paths.get("src/test/resources/inspect/multiple-no-namespace-schemas-conflict.xml").toFile();
         XmlInspectionService service = new XmlInspectionService();
-        service.inspectSchema(schemaFile);
+        assertThrows(XmlInspectionException.class, () -> {
+            service.inspectSchema(schemaFile);
+        });
     }
 
     @Test
@@ -217,96 +222,96 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
         File schemaFile = Paths.get("src/test/resources/inspect/multiple-namespaces-syndesis.xml").toFile();
         XmlInspectionService service = new XmlInspectionService();
         XmlDocument answer = service.inspectSchema(schemaFile);
-        Assert.assertEquals(1, answer.getXmlNamespaces().getXmlNamespace().size());
+        assertEquals(1, answer.getXmlNamespaces().getXmlNamespace().size());
         XmlNamespace namespace = answer.getXmlNamespaces().getXmlNamespace().get(0);
-        Assert.assertEquals("tns", namespace.getAlias());
-        Assert.assertEquals("http://syndesis.io/v1/swagger-connector-template/request", namespace.getUri());
-        Assert.assertEquals(null, namespace.isTargetNamespace());
+        assertEquals("tns", namespace.getAlias());
+        assertEquals("http://syndesis.io/v1/swagger-connector-template/request", namespace.getUri());
+        assertEquals(null, namespace.isTargetNamespace());
 
         List<Field> fields = answer.getFields().getField();
-        Assert.assertEquals(1, fields.size());
+        assertEquals(1, fields.size());
         XmlComplexType complex = XmlComplexType.class.cast(fields.get(0));
-        Assert.assertEquals("tns:request", complex.getName());
+        assertEquals("tns:request", complex.getName());
         List<XmlField> rootFields = complex.getXmlFields().getXmlField();
-        Assert.assertEquals(1, rootFields.size());
+        assertEquals(1, rootFields.size());
         complex = XmlComplexType.class.cast(rootFields.get(0));
-        Assert.assertEquals("tns:body", complex.getName());
+        assertEquals("tns:body", complex.getName());
         List<XmlField> bodyFields = complex.getXmlFields().getXmlField();
-        Assert.assertEquals(1,  bodyFields.size());
+        assertEquals(1,  bodyFields.size());
         complex = XmlComplexType.class.cast(bodyFields.get(0));
-        Assert.assertEquals("Pet", complex.getName());
+        assertEquals("Pet", complex.getName());
         List<XmlField> petFields = complex.getXmlFields().getXmlField();
-        Assert.assertEquals(6, petFields.size());
+        assertEquals(6, petFields.size());
         for (XmlField xmlField : petFields) {
             switch (xmlField.getName()) {
             case "id":
-                Assert.assertEquals(FieldType.DECIMAL, xmlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/id", xmlField.getPath());
+                assertEquals(FieldType.DECIMAL, xmlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/id", xmlField.getPath());
                 break;
             case "Category":
-                Assert.assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/Category", xmlField.getPath());
+                assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/Category", xmlField.getPath());
                 List<XmlField> categoryFields = XmlComplexType.class.cast(xmlField).getXmlFields().getXmlField();
-                Assert.assertEquals(2, categoryFields.size());
+                assertEquals(2, categoryFields.size());
                 for (XmlField categoryField : categoryFields) {
                     switch (categoryField.getName()) {
                     case "id":
-                        Assert.assertEquals(FieldType.DECIMAL, categoryField.getFieldType());
-                        Assert.assertEquals("/tns:request/tns:body/Pet/Category/id", categoryField.getPath());
+                        assertEquals(FieldType.DECIMAL, categoryField.getFieldType());
+                        assertEquals("/tns:request/tns:body/Pet/Category/id", categoryField.getPath());
                         break;
                     case "name":
-                        Assert.assertEquals(FieldType.STRING, categoryField.getFieldType());
-                        Assert.assertEquals("/tns:request/tns:body/Pet/Category/name", categoryField.getPath());
+                        assertEquals(FieldType.STRING, categoryField.getFieldType());
+                        assertEquals("/tns:request/tns:body/Pet/Category/name", categoryField.getPath());
                         break;
                     default:
-                        Assert.fail(String.format("Unknown field '%s'", categoryField.getPath()));
+                        fail(String.format("Unknown field '%s'", categoryField.getPath()));
                     }
                 }
                 break;
             case "name":
-                Assert.assertEquals(FieldType.STRING, xmlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/name", xmlField.getPath());
+                assertEquals(FieldType.STRING, xmlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/name", xmlField.getPath());
                 break;
             case "photoUrl":
-                Assert.assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/photoUrl", xmlField.getPath());
+                assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/photoUrl", xmlField.getPath());
                 List<XmlField> photoUrlFields = XmlComplexType.class.cast(xmlField).getXmlFields().getXmlField();
-                Assert.assertEquals(1, photoUrlFields.size());
+                assertEquals(1, photoUrlFields.size());
                 XmlField photoUrlField = photoUrlFields.get(0);
-                Assert.assertEquals(FieldType.STRING, photoUrlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/photoUrl/photoUrl", photoUrlField.getPath());
+                assertEquals(FieldType.STRING, photoUrlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/photoUrl/photoUrl", photoUrlField.getPath());
                 break;
             case "tag":
-                Assert.assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/tag", xmlField.getPath());
+                assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/tag", xmlField.getPath());
                 List<XmlField> tagFields = XmlComplexType.class.cast(xmlField).getXmlFields().getXmlField();
-                Assert.assertEquals(1, tagFields.size());
+                assertEquals(1, tagFields.size());
                 XmlField tagField = tagFields.get(0);
-                Assert.assertEquals(FieldType.COMPLEX, tagField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/tag/Tag", tagField.getPath());
+                assertEquals(FieldType.COMPLEX, tagField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/tag/Tag", tagField.getPath());
                 List<XmlField> tagTagFields = XmlComplexType.class.cast(tagField).getXmlFields().getXmlField();
-                Assert.assertEquals(2, tagTagFields.size());
+                assertEquals(2, tagTagFields.size());
                 for (XmlField tagTagField : tagTagFields) {
                     switch (tagTagField.getName()) {
                     case "id":
-                        Assert.assertEquals(FieldType.DECIMAL, tagTagField.getFieldType());
-                        Assert.assertEquals("/tns:request/tns:body/Pet/tag/Tag/id", tagTagField.getPath());
+                        assertEquals(FieldType.DECIMAL, tagTagField.getFieldType());
+                        assertEquals("/tns:request/tns:body/Pet/tag/Tag/id", tagTagField.getPath());
                         break;
                     case "name":
-                        Assert.assertEquals(FieldType.STRING, tagTagField.getFieldType());
-                        Assert.assertEquals("/tns:request/tns:body/Pet/tag/Tag/name", tagTagField.getPath());
+                        assertEquals(FieldType.STRING, tagTagField.getFieldType());
+                        assertEquals("/tns:request/tns:body/Pet/tag/Tag/name", tagTagField.getPath());
                         break;
                     default:
-                        Assert.fail(String.format("Unknown field '%s'", tagTagField.getPath()));
+                        fail(String.format("Unknown field '%s'", tagTagField.getPath()));
                     }
                 }
                 break;
             case "status":
-                Assert.assertEquals(FieldType.STRING, xmlField.getFieldType());
-                Assert.assertEquals("/tns:request/tns:body/Pet/status", xmlField.getPath());
+                assertEquals(FieldType.STRING, xmlField.getFieldType());
+                assertEquals("/tns:request/tns:body/Pet/status", xmlField.getPath());
                 break;
             default:
-                Assert.fail(String.format("Unknown field '%s'", xmlField.getPath()));
+                fail(String.format("Unknown field '%s'", xmlField.getPath()));
             }
         }
     }

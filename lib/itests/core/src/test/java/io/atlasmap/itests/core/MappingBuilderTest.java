@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.assertj.XmlAssert;
 
 import io.atlasmap.api.AtlasContext;
@@ -42,7 +42,7 @@ public class MappingBuilderTest {
                 Thread.currentThread().getContextClassLoader().getResource("data/json-source-builder.json").toURI())));
             session.setSourceDocument("SourceJson", sourceJson);
             context.process(session);
-            assertFalse(TestHelper.printAudit(session), session.hasErrors());
+            assertFalse(session.hasErrors(), TestHelper.printAudit(session));
             String targetXml = (String) session.getTargetDocument("TargetXml");
             assertNotNull("target XML is null", targetXml);
             HashMap<String, String> namespaces = new HashMap<>();

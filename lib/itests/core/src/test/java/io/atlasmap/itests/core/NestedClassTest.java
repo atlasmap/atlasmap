@@ -15,12 +15,12 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -40,8 +40,8 @@ public class NestedClassTest {
         sic.setSomeField("some nested class value");
         session.setSourceDocument("io.atlasmap.itests.core.BaseClass$SomeNestedClass", sic);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object tc = session.getTargetDocument("io.atlasmap.itests.core.TargetClass");
         assertEquals(TargetClass.class, tc.getClass());
         TargetClass target = TargetClass.class.cast(tc);

@@ -15,9 +15,9 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.LinkedList;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -62,8 +62,8 @@ public class DfdlCsvTest {
         session.setSourceDocument("dfdl-csv-source", csvSource);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertTrue(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertTrue(session.hasWarns(), TestHelper.printAudit(session));
         Object jt = session.getTargetDocument("java-target");
         assertEquals(TargetTestClass.class, jt.getClass());
         TargetTestClass javaTarget = TargetTestClass.class.cast(jt);

@@ -15,9 +15,10 @@
  */
 package io.atlasmap.xml.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,8 +33,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.validation.Schema;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import io.atlasmap.api.AtlasException;
@@ -59,7 +60,7 @@ public class XmlFieldWriterTest {
     private XmlFieldReader reader = new XmlFieldReader(XmlFieldReader.class.getClassLoader(), DefaultAtlasConversionService.getInstance());
     private XmlIOHelper xmlHelper = new XmlIOHelper(XmlIOHelper.class.getClassLoader());
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.writer = null;
         this.document = null;
@@ -276,7 +277,7 @@ public class XmlFieldWriterTest {
         checkResult(expected);
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testThrowExceptionOnNullXmlField() throws Exception {
         createWriter();
         XmlField field = null;
@@ -284,7 +285,9 @@ public class XmlFieldWriterTest {
         when(session.head()).thenReturn(mock(Head.class));
         when(session.head().getSourceField()).thenReturn(mock(Field.class));
         when(session.head().getTargetField()).thenReturn(field);
-        writer.write(session);
+        assertThrows(AtlasException.class, () -> {
+            writer.write(session);
+        });
     }
 
     @Test

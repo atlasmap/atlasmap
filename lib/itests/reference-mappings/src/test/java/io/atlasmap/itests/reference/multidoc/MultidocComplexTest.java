@@ -15,17 +15,17 @@
  */
 package io.atlasmap.itests.reference.multidoc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 import java.io.File;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -57,11 +57,11 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         session.setSourceDocument("XmlOrderAttribute", xmlOrderAttribute);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object javaTargetTestClass = session.getTargetDocument("JavaTargetTestClass");
         assertEquals(TargetTestClass.class.getName(), javaTargetTestClass.getClass().getName());
         TargetTestClass targetTestClass = (TargetTestClass) javaTargetTestClass;
-        assertEquals(new Integer(8765309), targetTestClass.getOrder().getOrderId());
+        assertEquals(Integer.valueOf(8765309), targetTestClass.getOrder().getOrderId());
         assertEquals("Ozzie", targetTestClass.getContact().getFirstName());
         assertEquals("Smith", targetTestClass.getContact().getLastName());
 
@@ -70,7 +70,7 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
         io.atlasmap.json.test.TargetOrder jsonTargetOrderObject = testMapper.readValue((String) jsonTargetOrder,
                 io.atlasmap.json.test.TargetOrder.class);
-        assertEquals(new Integer(8765309), jsonTargetOrderObject.getOrderId());
+        assertEquals(Integer.valueOf(8765309), jsonTargetOrderObject.getOrderId());
         assertEquals("Ozzie", jsonTargetOrderObject.getContact().getFirstName());
         assertEquals("Smith", jsonTargetOrderObject.getContact().getLastName());
 
@@ -101,11 +101,11 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         session.setSourceDocument("XmlOrderAttribute", xmlOrderAttribute);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass targetTestClass = (TargetTestClass) session.getTargetDocument("JavaTargetTestClass");
         assertEquals(TargetTestClass.class.getName(), targetTestClass.getClass().getName());
         assertEquals(TargetContact.class.getName(), targetTestClass.getContact().getClass().getName());
-        assertEquals(new Integer(8765309), targetTestClass.getOrder().getOrderId());
+        assertEquals(Integer.valueOf(8765309), targetTestClass.getOrder().getOrderId());
         assertEquals("Ozzie", targetTestClass.getContact().getFirstName());
         assertEquals("Smith", targetTestClass.getContact().getLastName());
 
@@ -114,7 +114,7 @@ public class MultidocComplexTest extends AtlasMappingBaseTest {
         AtlasJsonTestUnrootedMapper testMapper = new AtlasJsonTestUnrootedMapper();
         io.atlasmap.json.test.TargetOrder jsonTargetOrderObject = testMapper.readValue((String) jsonTargetOrder,
                 io.atlasmap.json.test.TargetOrder.class);
-        assertEquals(new Integer(8765309), jsonTargetOrderObject.getOrderId());
+        assertEquals(Integer.valueOf(8765309), jsonTargetOrderObject.getOrderId());
         assertEquals("Ozzie", jsonTargetOrderObject.getContact().getFirstName());
         assertNull(jsonTargetOrderObject.getContact().getLastName());
 

@@ -15,11 +15,12 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -32,7 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasConstants;
 import io.atlasmap.api.AtlasException;
@@ -69,7 +70,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target");
         recreateSession();
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals("foo", writer.targets.get("/target"));
     }
 
@@ -81,7 +82,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target");
         recreateSession();
         context.process(session);
-        assertTrue(printAudit(session), session.hasErrors());
+        assertTrue(session.hasErrors(), printAudit(session));
         assertEquals(1,
                 session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.ERROR).count());
     }
@@ -90,8 +91,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     public void testProcessWithoutMappings() throws AtlasException {
         recreateSession();
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
-        assertTrue(printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertTrue(session.hasWarns(), printAudit(session));
         assertEquals(1, session.getAudits().getAudit().size());
         assertEquals("Field mappings should not be empty",
             session.getAudits().getAudit().get(0).getMessage());
@@ -101,8 +102,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
     public void testProcessValidationWithoutMappings() throws AtlasException {
         recreateSession();
         context.processValidation(session);
-        assertFalse(printAudit(session), session.hasErrors());
-        assertFalse(printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertFalse(session.hasWarns(), printAudit(session));
     }
 
     @Test
@@ -124,7 +125,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target");
         recreateSession();
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(new Date(0).toInstant().toString() + ";1;2.0;3.0;true;5;6;string;8;9;10",
                 writer.targets.get("/target"));
     }
@@ -141,7 +142,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         mapping.setDelimiterString("String: {1}, Integer: {2}, Double: {3}, String again: {1}");
         recreateSession();
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals("String: string, Integer: 1, Double: 2.0, String again: string", writer.targets.get("/target"));
     }
 
@@ -155,7 +156,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target");
         recreateSession();
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals("foo;bar", writer.targets.get("/target"));
     }
 
@@ -179,7 +180,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         recreateSession();
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals(new Date(0).toString(), writer.targets.get("/target0"));
         assertEquals("1", writer.targets.get("/target1"));
         assertEquals("2.0", writer.targets.get("/target2"));
@@ -209,7 +210,7 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         prepareTargetField(m, "/target");
         recreateSession();
         context.process(session);
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         assertEquals("bar", writer.targets.get("/target"));
     }
 
@@ -239,33 +240,37 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         assertNotNull(new DefaultAtlasContext(file.toURI()));
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testProcessValidationAtlasException() throws AtlasException {
-        File file = Paths.get(
-                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
-                .toFile();
-        DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
-        factory.init();
+        assertThrows(AtlasException.class, () -> {
+            File file = Paths.get(
+                    "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
+                    .toFile();
+            DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
+            factory.init();
 
-        DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
-        context.init();
+            DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
+            context.init();
 
-        AtlasSession mockAtlasSession = mock(AtlasSession.class);
+            AtlasSession mockAtlasSession = mock(AtlasSession.class);
 
-        context.processValidation(mockAtlasSession);
+            context.processValidation(mockAtlasSession);
+        });
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testProcessValidationAtlasExceptionOtherContext() throws AtlasException {
-        File file = Paths.get(
-                "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
-                .toFile();
-        DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
-        factory.init();
+        assertThrows(AtlasException.class, () -> {
+            File file = Paths.get(
+                    "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")
+                    .toFile();
+            DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
+            factory.init();
 
-        DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
-        context.init();
-        context.processValidation(new DefaultAtlasSession(new DefaultAtlasContext(factory, file.toURI())));
+            DefaultAtlasContext context = new DefaultAtlasContext(factory, file.toURI());
+            context.init();
+            context.processValidation(new DefaultAtlasSession(new DefaultAtlasContext(factory, file.toURI())));
+        });
     }
 
     @Test
@@ -326,17 +331,21 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
         ctx.init();
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testProcessAtlasExceptionUnspported() throws AtlasException {
-        AtlasSession session = spy(AtlasSession.class);
-        context.process(session);
+        assertThrows(AtlasException.class, () -> {
+            AtlasSession session = spy(AtlasSession.class);
+            context.process(session);
+        });
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testProcessAtlasExceptionOtherContext() throws AtlasException {
-        DefaultAtlasContext context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping);
-        AtlasSession session = new DefaultAtlasSession(context);
-        new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping).process(session);
+        assertThrows(AtlasException.class, () -> {
+            DefaultAtlasContext context = new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping);
+            AtlasSession session = new DefaultAtlasSession(context);
+            new DefaultAtlasContext(DefaultAtlasContextFactory.getInstance(), mapping).process(session);
+        });
     }
 
     @Test

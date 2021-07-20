@@ -15,14 +15,14 @@
  */
 package io.atlasmap.validators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
@@ -32,14 +32,14 @@ public class StringLengthValidatorTest extends BaseValidatorTest {
     private StringLengthValidator validator;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         validator = new StringLengthValidator(ValidationScope.MAPPING, "Must be of this length", 1, 10);
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDown();
         validator = null;
@@ -67,7 +67,7 @@ public class StringLengthValidatorTest extends BaseValidatorTest {
         String pass = "";
         validator.validate(pass, validations, "testValidateInvalid");
         assertTrue(validationHelper.hasErrors());
-        assertEquals(new Integer(1), new Integer(validationHelper.getAllValidations().size()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getAllValidations().size()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);

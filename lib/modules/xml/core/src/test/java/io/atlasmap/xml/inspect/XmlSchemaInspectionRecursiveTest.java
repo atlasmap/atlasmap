@@ -15,11 +15,13 @@
  */
 package io.atlasmap.xml.inspect;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.File;
 import java.nio.file.Paths;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -31,12 +33,12 @@ public class XmlSchemaInspectionRecursiveTest extends BaseXmlInspectionServiceTe
         File schemaFile = Paths.get("src/test/resources/inspect/recursive.xsd").toFile();
         XmlInspectionService service = new XmlInspectionService();
         XmlDocument xmlDocument = service.inspectSchema(schemaFile);
-        Assert.assertNotNull(xmlDocument);
-        Assert.assertNotNull(xmlDocument.getFields());
-        Assert.assertEquals(1, xmlDocument.getFields().getField().size());
+        assertNotNull(xmlDocument);
+        assertNotNull(xmlDocument.getFields());
+        assertEquals(1, xmlDocument.getFields().getField().size());
         XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
-        Assert.assertNotNull(root);
-        Assert.assertEquals(1, root.getXmlFields().getXmlField().size());
+        assertNotNull(root);
+        assertEquals(1, root.getXmlFields().getXmlField().size());
         debugFields(xmlDocument.getFields());
     }
 

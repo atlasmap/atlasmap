@@ -16,6 +16,9 @@
 package io.atlasmap.expression;
 
 import static io.atlasmap.v2.AtlasModelFactory.wrapWithField;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,13 +28,9 @@ import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.Field;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-/**
- * @version $Revision: 1.7 $
- */
-@SuppressWarnings("unchecked")
-public class ExpressionTest extends TestCase {
+public class ExpressionTest {
 
     static final FunctionResolver FUNCTION_RESOLVER = (name, args) -> {
 
@@ -183,7 +182,7 @@ public class ExpressionTest extends TestCase {
 
     }
 
-
+    @Test
     public void testBooleanSelector() throws Exception {
         MockMessage message = createMessage();
 
@@ -192,7 +191,7 @@ public class ExpressionTest extends TestCase {
 
     }
 
-
+    @Test
     public void testJMSPropertySelectors() throws Exception {
         MockMessage message = createMessage();
         message.setJMSType("selector-test");
@@ -212,6 +211,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${JMSType} == 'crap'", false);
     }
 
+    @Test
     public void testBasicSelectors() throws Exception {
         MockMessage message = createMessage();
 
@@ -222,6 +222,7 @@ public class ExpressionTest extends TestCase {
 
     }
 
+    @Test
     public void testPropertyTypes() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "${byteProp} == 123", true);
@@ -249,6 +250,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${bigDecimalProp} == 8", false);
     }
 
+    @Test
     public void testAndSelectors() throws Exception {
         MockMessage message = createMessage();
 
@@ -258,6 +260,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${unknown} == 'Foo' && ${anotherUnknown} < 200", false);
     }
 
+    @Test
     public void testOrSelectors() throws Exception {
         MockMessage message = createMessage();
 
@@ -268,6 +271,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${unknown} == 'Foo' || ${anotherUnknown} < 200", null);
     }
 
+    @Test
     public void testPlus() throws Exception {
         MockMessage message = createMessage();
 
@@ -279,6 +283,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${name} + '!' == 'James!'", true);
     }
 
+    @Test
     public void testMinus() throws Exception {
         MockMessage message = createMessage();
 
@@ -287,6 +292,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${rank} - 2 > 122", false);
     }
 
+    @Test
     public void testMultiply() throws Exception {
         MockMessage message = createMessage();
 
@@ -295,6 +301,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${rank} * 2 < 130", false);
     }
 
+    @Test
     public void testDivide() throws Exception {
         MockMessage message = createMessage();
 
@@ -305,7 +312,7 @@ public class ExpressionTest extends TestCase {
 
     }
 
-
+    @Test
     public void testIsNull() throws Exception {
         MockMessage message = createMessage();
 
@@ -315,10 +322,10 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${name} == null", false);
     }
 
-
     /*
      * Test cases from Mats Henricson
      */
+    @Test
     public void testMatsHenricsonUseCases() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "${SessionserverId}==1870414179", false);
@@ -330,6 +337,7 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "${SessionserverId}==1870414179", false);
     }
 
+    @Test
     public void testFloatComparisons() throws Exception {
         MockMessage message = createMessage();
 
@@ -379,38 +387,45 @@ public class ExpressionTest extends TestCase {
         assertSelector(message, "4E-10 < 5E-10", true);
     }
 
+    @Test
     public void testStringQuoteParsing() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "${quote} == '''In God We Trust'''", true);
     }
 
+    @Test
     public void testToLowerFunction() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "ToLower(${name})", "james");
     }
 
+    @Test
     public void testIfFunction() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "IF(.1 < .5, 'good', 'bad')", "good");
         assertSelector(message, "IF(.1 > .5, 'good', 'bad')", "bad");
     }
 
+    @Test
     public void testNestedFunction() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "IF(ToLower(${name}) == 'james', 'good', 'bad')", "good");
         assertSelector(message, "IF(ToLower(${name}) == 'James', 'good', 'bad')", "bad");
     }
 
+    @Test
     public void testConcatenateAction() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "concatenate('', ToLower(${name}), ${name})", "jamesJames");
     }
 
+    @Test
     public void testConcatenateWithDelimiterAction() throws Exception {
         MockMessage message = createMessage();
         assertSelector(message, "concatenate(',', ToLower(${name}), ${name})", "james,James");
     }
 
+    @Test
     public void testInvalidSelector() throws Exception {
         MockMessage message = createMessage();
         assertInvalidSelector(message, "True && 3+5");
@@ -456,9 +471,9 @@ public class ExpressionTest extends TestCase {
     protected void assertSelector(MockMessage message, String text, Object expected) throws ExpressionException {
         Expression selector = null;
         selector = Expression.parse(text, FUNCTION_RESOLVER);
-        assertTrue("Created a valid selector", selector != null);
+        assertTrue(selector != null, "Created a valid selector");
         Object value = selector.evaluate(message).getValue();
-        assertEquals("Selector for: " + text, expected, value);
+        assertEquals(expected, value, "Selector for: " + text);
     }
 
     protected MockMessage createMessage(String subject) {

@@ -15,13 +15,13 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import io.atlasmap.java.v2.AtlasJavaModelFactory;
 import io.atlasmap.java.v2.JavaClass;
@@ -49,7 +49,7 @@ public class ClassValidationUtil {
         JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
-        assertEquals(new Integer(1), flatClass.getArrayDimensions());
+        assertEquals(Integer.valueOf(1), flatClass.getArrayDimensions());
         assertEquals(null, flatClass.getArraySize());
         assertFalse(flatClass.isInterface());
         assertEquals(className, flatClass.getClassName());
@@ -61,7 +61,7 @@ public class ClassValidationUtil {
         JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
-        assertEquals(new Integer(2), flatClass.getArrayDimensions());
+        assertEquals(Integer.valueOf(2), flatClass.getArrayDimensions());
         assertEquals(null, flatClass.getArraySize());
         assertFalse(flatClass.isInterface());
         assertEquals(className, flatClass.getClassName());
@@ -73,7 +73,7 @@ public class ClassValidationUtil {
         JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
-        assertEquals(new Integer(3), flatClass.getArrayDimensions());
+        assertEquals(Integer.valueOf(3), flatClass.getArrayDimensions());
         assertFalse(flatClass.isInterface());
         assertEquals(className, flatClass.getClassName());
         validateFlatPrimitiveFields(flatClass);
@@ -91,7 +91,7 @@ public class ClassValidationUtil {
         JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
-        assertEquals(new Integer(1), flatClass.getArrayDimensions());
+        assertEquals(Integer.valueOf(1), flatClass.getArrayDimensions());
         assertTrue(flatClass.isInterface());
         assertEquals("io.atlasmap.java.test.FlatPrimitiveInterface", flatClass.getClassName());
         validateFlatPrimitiveFields(flatClass);
@@ -102,7 +102,7 @@ public class ClassValidationUtil {
         JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
-        assertEquals(new Integer(2), flatClass.getArrayDimensions());
+        assertEquals(Integer.valueOf(2), flatClass.getArrayDimensions());
         assertTrue(flatClass.isInterface());
         assertEquals("io.atlasmap.java.test.FlatPrimitiveInterface", flatClass.getClassName());
         validateFlatPrimitiveFields(flatClass);
@@ -113,7 +113,7 @@ public class ClassValidationUtil {
         JavaClass flatClass = classInspectionService.inspectClass(clazz, CollectionType.NONE, null);
         validateFlatClass(flatClass);
         assertEquals(CollectionType.ARRAY, flatClass.getCollectionType());
-        assertEquals(new Integer(3), flatClass.getArrayDimensions());
+        assertEquals(Integer.valueOf(3), flatClass.getArrayDimensions());
         assertTrue(flatClass.isInterface());
         assertEquals("io.atlasmap.java.test.FlatPrimitiveInterface", flatClass.getClassName());
         validateFlatPrimitiveFields(flatClass);
@@ -138,7 +138,7 @@ public class ClassValidationUtil {
         assertNotNull(flatClass.getJavaFields());
         assertNotNull(flatClass.getJavaFields().getJavaField());
         assertFalse(flatClass.getJavaFields().getJavaField().isEmpty());
-        assertEquals(new Integer(35), new Integer(flatClass.getJavaFields().getJavaField().size()));
+        assertEquals(Integer.valueOf(35), Integer.valueOf(flatClass.getJavaFields().getJavaField().size()));
         assertNotNull(flatClass.getJavaEnumFields());
         assertNotNull(flatClass.getJavaEnumFields().getJavaEnumField());
         assertTrue(flatClass.getJavaEnumFields().getJavaEnumField().isEmpty());
@@ -192,9 +192,9 @@ public class ClassValidationUtil {
     public static void validatePrimitiveField(String lowName, String capName, JavaField j, boolean usesIs) {
         assertNotNull("Field: " + j.getName(), j.getGetMethod());
         assertNotNull("Field: " + j.getName(), j.getSetMethod());
-        assertNotNull("Field: " + j.getName(), j.getFieldType());
-        assertNull("Field: " + j.getName(), j.getValue());
-        assertNull("Field: " + j.getName(), j.getAnnotations());
+        assertNotNull(j.getFieldType(), "Field: " + j.getName());
+        assertNull(j.getValue(), "Field: " + j.getName());
+        assertNull(j.getAnnotations(), "Field: " + j.getName());
 
         assertEquals(FieldStatus.SUPPORTED, j.getStatus());
         assertTrue(j.isPrimitive());
@@ -203,7 +203,7 @@ public class ClassValidationUtil {
         String fieldText = "Field";
         if (CollectionType.ARRAY.equals(j.getCollectionType())) {
             fieldText = "ArrayField";
-            assertEquals(new Integer(1), j.getArrayDimensions());
+            assertEquals(Integer.valueOf(1), j.getArrayDimensions());
         } else if (CollectionType.LIST.equals(j.getCollectionType())) {
             fieldText = "ListField";
             assertNotNull(j.getCollectionClassName());
@@ -241,10 +241,10 @@ public class ClassValidationUtil {
         assertEquals("io.atlasmap.java.test", c.getPackageName());
         assertNotNull(c.getJavaEnumFields());
         assertNotNull(c.getJavaEnumFields().getJavaEnumField());
-        assertEquals(new Integer(0), new Integer(c.getJavaEnumFields().getJavaEnumField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(c.getJavaEnumFields().getJavaEnumField().size()));
         assertNotNull(c.getJavaFields());
         assertNotNull(c.getJavaFields().getJavaField());
-        assertEquals(new Integer(5), new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(Integer.valueOf(5), Integer.valueOf(c.getJavaFields().getJavaField().size()));
 
         for (JavaField f : c.getJavaFields().getJavaField()) {
             switch (f.getName()) {
@@ -282,10 +282,10 @@ public class ClassValidationUtil {
         assertEquals("io.atlasmap.java.test", c.getPackageName());
         assertNotNull(c.getJavaEnumFields());
         assertNotNull(c.getJavaEnumFields().getJavaEnumField());
-        assertEquals(new Integer(0), new Integer(c.getJavaEnumFields().getJavaEnumField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(c.getJavaEnumFields().getJavaEnumField().size()));
         assertNotNull(c.getJavaFields());
         assertNotNull(c.getJavaFields().getJavaField());
-        assertEquals(new Integer(6), new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(Integer.valueOf(6), Integer.valueOf(c.getJavaFields().getJavaField().size()));
 
         for (JavaField f : c.getJavaFields().getJavaField()) {
             switch (f.getName()) {

@@ -15,14 +15,15 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasInternalSession;
@@ -73,19 +74,25 @@ public class ConstantModuleTest {
         module.processPostSourceExecution(null);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testProcessPreTargetExecution() throws AtlasException {
-        module.processPreTargetExecution(null);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            module.processPreTargetExecution(null);
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testProcessTargetFieldMapping() throws AtlasException {
-        module.writeTargetValue(null);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            module.writeTargetValue(null);
+        });
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testProcessPostTargetExecution() throws AtlasException {
-        module.processPostTargetExecution(null);
+        assertThrows(UnsupportedOperationException.class, () -> {
+            module.processPostTargetExecution(null);
+        });
     }
 
     @Test

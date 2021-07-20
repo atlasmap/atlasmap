@@ -15,14 +15,14 @@
  */
 package io.atlasmap.itests.reference.xml_to_xml;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -42,7 +42,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -60,7 +60,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -78,7 +78,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -96,7 +96,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -114,7 +114,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -134,7 +134,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -154,13 +154,14 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
-        assertEquals(object.toString(),
+        assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><XmlFPA booleanField=\"false\" boxedBooleanField=\"false\" boxedByteField=\"99\" boxedCharField=\"a\" boxedDoubleField=\"50000000.0\" boxedFloatField=\"40000000.0\" boxedIntField=\"2\" boxedLongField=\"30000\" boxedStringField=\"foobar\" byteField=\"99\" charField=\"a\" doubleField=\"50000000.0\" floatField=\"40000000.0\" intField=\"2\" longField=\"30000\" shortField=\"1\"/>",
-                object);
+                object,
+                object.toString());
     }
 
     @Test
@@ -174,7 +175,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -194,7 +195,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -214,7 +215,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -232,7 +233,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);
@@ -252,7 +253,7 @@ public class XmlXmlFlatMappingTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceXml);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertTrue(object instanceof String);

@@ -15,9 +15,9 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -27,13 +27,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 import io.atlasmap.itests.core.BaseClass.SomeNestedClass;
-import io.atlasmap.v2.AtlasMapping;
 
 public class ExpressionTest {
 
@@ -53,7 +52,7 @@ public class ExpressionTest {
         session.setSourceDocument("SourceClass", source);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -73,7 +72,7 @@ public class ExpressionTest {
         session.setSourceDocument("json-source", sourceJson);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -93,7 +92,7 @@ public class ExpressionTest {
         session.setSourceDocument("xml-source", sourceXml);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -114,7 +113,7 @@ public class ExpressionTest {
         session.setSourceDocument("SourceClass", source);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -135,7 +134,7 @@ public class ExpressionTest {
         session.setSourceDocument("SourceClass", source);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -155,7 +154,7 @@ public class ExpressionTest {
         session.setSourceDocument("SourceClass", source);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);

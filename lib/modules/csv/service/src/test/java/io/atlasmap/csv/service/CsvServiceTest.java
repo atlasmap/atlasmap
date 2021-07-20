@@ -15,9 +15,7 @@
  */
 package io.atlasmap.csv.service;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -25,9 +23,9 @@ import java.util.List;
 
 import javax.ws.rs.core.Response;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.csv.v2.CsvComplexType;
 import io.atlasmap.csv.v2.CsvField;
@@ -38,12 +36,12 @@ public class CsvServiceTest {
 
     private CsvService csvService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         csvService = new CsvService();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         csvService = null;
     }
@@ -66,9 +64,9 @@ public class CsvServiceTest {
         CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
         CsvComplexType complexType = (CsvComplexType) csvInspectionResponse.getCsvDocument().getFields().getField().get(0);
         List<CsvField> fields = complexType.getCsvFields().getCsvField();
-        assertThat(fields.get(0).getName(), is("header1"));
-        assertThat(fields.get(1).getName(), is("header2"));
-        assertThat(fields.get(2).getName(), is("header3"));
+        assertEquals("header1", fields.get(0).getName());
+        assertEquals("header2", fields.get(1).getName());
+        assertEquals("header3", fields.get(2).getName());
     }
 
     @Test
@@ -88,9 +86,9 @@ public class CsvServiceTest {
         CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
         CsvComplexType complexType = (CsvComplexType) csvInspectionResponse.getCsvDocument().getFields().getField().get(0);
         List<CsvField> fields = complexType.getCsvFields().getCsvField();
-        assertThat(fields.get(0).getName(), is("0"));
-        assertThat(fields.get(1).getName(), is("1"));
-        assertThat(fields.get(2).getName(), is("2"));
+        assertEquals("0", fields.get(0).getName());
+        assertEquals("1", fields.get(1).getName());
+        assertEquals("2", fields.get(2).getName());
     }
 
 }

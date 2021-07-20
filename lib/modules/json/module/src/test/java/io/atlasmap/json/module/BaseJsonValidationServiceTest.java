@@ -17,8 +17,8 @@ package io.atlasmap.json.module;
 
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public abstract class BaseJsonValidationServiceTest {
     protected List<Validation> validations = null;
     protected AtlasModuleDetail moduleDetail = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
@@ -67,7 +67,7 @@ public abstract class BaseJsonValidationServiceTest {
         validations = validationHelper.getValidation();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         mappingUtil = null;
         sourceValidationService = null;

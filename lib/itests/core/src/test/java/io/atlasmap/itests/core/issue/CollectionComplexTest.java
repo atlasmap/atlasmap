@@ -15,12 +15,12 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.net.URL;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -42,7 +42,7 @@ public class CollectionComplexTest {
         session.setSourceDocument("SourceJson", "{\"sourceList\":[\"json1\", \"json2\", \"json3\"]}");
         session.setSourceDocument("SourceXml", "<root><sourceList><name>xml1</name></sourceList><sourceList><name>xml2</name></sourceList><sourceList><name>xml3</name></sourceList></root>");
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object targetJava = session.getTargetDocument("TargetClass");
         assertEquals(TargetClass.class, targetJava.getClass());
         TargetClass targetClass = (TargetClass)targetJava;

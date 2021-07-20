@@ -15,22 +15,22 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.spi.AtlasModule;
 
 public class DefaultAtlasModuleInfoRegistryTest {
     private static DefaultAtlasModuleInfoRegistry atlasModuleInfoRegistry;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
         factory.setObjectName();

@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.reference.java_to_xml;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -33,7 +33,7 @@ import io.atlasmap.v2.AtlasMapping;
 public class JavaToXMLJSONMarshallingTest {
     public ObjectMapper mapper = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, true);
@@ -42,7 +42,7 @@ public class JavaToXMLJSONMarshallingTest {
         mapper.setSerializationInclusion(Include.NON_NULL);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         mapper = null;
     }

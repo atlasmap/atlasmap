@@ -15,15 +15,15 @@
  */
 package io.atlasmap.converters;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LocalDateConverterTest {
 

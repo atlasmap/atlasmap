@@ -15,10 +15,10 @@
  */
 package io.atlasmap.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -29,27 +29,25 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 public abstract class BaseMarshallerTest {
 
     public boolean deleteTestFolders = true;
+    protected String testMethodName;
 
-    @Rule
-    public TestName testName = new TestName();
-
-    @Before
-    public void setUp() throws Exception {
-        Files.createDirectories(Paths.get("target/junit/" + testName.getMethodName()));
+    @BeforeEach
+    public void setUp(TestInfo testInfo) throws Exception {
+        testMethodName = testInfo.getTestMethod().get().getName();
+        Files.createDirectories(Paths.get("target/junit/" + testMethodName));
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterEach
+    public void tearDown(TestInfo testInfo) throws Exception {
         if (deleteTestFolders) {
-            Path directory = Paths.get("target/junit/" + testName.getMethodName());
+            Path directory = Paths.get("target/junit/" + testMethodName);
             Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {

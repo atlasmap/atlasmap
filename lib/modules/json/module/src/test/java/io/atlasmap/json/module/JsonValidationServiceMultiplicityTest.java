@@ -15,12 +15,12 @@
  */
 package io.atlasmap.json.module;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.json.v2.JsonField;
 import io.atlasmap.v2.AtlasMapping;
@@ -31,7 +31,7 @@ import io.atlasmap.v2.Mapping;
 
 public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationServiceTest {
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         sourceValidationService.setDocId("source");
@@ -44,9 +44,9 @@ public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationSer
         assertNotNull(mapping);
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasErrors());
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasWarnings());
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasInfos());
+        assertFalse(validationHelper.hasErrors(), validationHelper.allValidationsToString());
+        assertFalse(validationHelper.hasWarnings(), validationHelper.allValidationsToString());
+        assertFalse(validationHelper.hasInfos(), validationHelper.allValidationsToString());
     }
 
     @Test
@@ -65,9 +65,9 @@ public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationSer
         }
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasErrors());
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasWarnings());
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasInfos());
+        assertFalse(validationHelper.hasErrors(), validationHelper.allValidationsToString());
+        assertFalse(validationHelper.hasWarnings(), validationHelper.allValidationsToString());
+        assertFalse(validationHelper.hasInfos(), validationHelper.allValidationsToString());
         assertEquals(0, validationHelper.getCount());
     }
 
@@ -87,9 +87,9 @@ public class JsonValidationServiceMultiplicityTest extends BaseJsonValidationSer
         }
         validations.addAll(sourceValidationService.validateMapping(mapping));
         validations.addAll(targetValidationService.validateMapping(mapping));
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasErrors());
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasWarnings());
-        assertFalse(validationHelper.allValidationsToString(), validationHelper.hasInfos());
+        assertFalse(validationHelper.hasErrors(), validationHelper.allValidationsToString());
+        assertFalse(validationHelper.hasWarnings(), validationHelper.allValidationsToString());
+        assertFalse(validationHelper.hasInfos(), validationHelper.allValidationsToString());
         assertEquals(0, validationHelper.getCount());
     }
 

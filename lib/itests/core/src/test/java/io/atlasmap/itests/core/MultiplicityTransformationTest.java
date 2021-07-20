@@ -15,12 +15,9 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.net.URL;
 import java.nio.file.Files;
@@ -28,8 +25,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hamcrest.FeatureMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +39,6 @@ import io.atlasmap.itests.core.issue.TargetClass;
 import io.atlasmap.java.test.SourceFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetTestClass;
-import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 
 public class MultiplicityTransformationTest {
@@ -67,8 +62,8 @@ public class MultiplicityTransformationTest {
                 Thread.currentThread().getContextClassLoader().getResource("data/json-source-collection.json").toURI())));
         session.setSourceDocument("SourceJson", sourceJson);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertTrue("split(STRING) => INTEGER/DOUBLE mapping should get warnings", session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertTrue(session.hasWarns(), "split(STRING) => INTEGER/DOUBLE mapping should get warnings");
         assertEquals(12, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
@@ -79,17 +74,15 @@ public class MultiplicityTransformationTest {
 
         // Concatenate(',', Capitalize(SourceStringList<>), SourceName) -> targetFullName
         assertEquals("One,Nakahama", target.getTargetFullName());
-        assertThat(session.getAudits().getAudit(), hasItem(new FeatureMatcher<Audit, String>(
-            is("Using only the first element of the collection since a single value is expected in " +
-                "a multi-field selection."), "message", "message") {
-            @Override
-            protected String featureValueOf(Audit actual) {
-                return actual.getMessage();
-            }
+        assertTrue(session.getAudits().getAudit().stream().anyMatch(audit -> {
+            return ("Using only the first element of the collection since a single value is expected in " +
+                    "a multi-field selection.")
+                    .equals(audit.getMessage());
         }));
 
+
         assertEquals("one,two,three", target.getTargetString());
-        assertEquals(new Integer(314), target.getTargetStreetNumber());
+        assertEquals(Integer.valueOf(314), target.getTargetStreetNumber());
         assertEquals("Littleton", target.getTargetStreetName1());
         assertEquals("Rd", target.getTargetStreetName2());
         List<String> list = target.getTargetStringList();
@@ -99,10 +92,10 @@ public class MultiplicityTransformationTest {
         assertEquals("three", list.get(2));
         List<Integer> intList = target.getTargetIntegerList();
         assertEquals(4, intList.size());
-        assertEquals(new Integer(1), intList.get(0));
-        assertEquals(new Integer(20), intList.get(1));
-        assertEquals(new Integer(300), intList.get(2));
-        assertEquals(new Integer(4000), intList.get(3));
+        assertEquals(Integer.valueOf(1), intList.get(0));
+        assertEquals(Integer.valueOf(20), intList.get(1));
+        assertEquals(Integer.valueOf(300), intList.get(2));
+        assertEquals(Integer.valueOf(4000), intList.get(3));
         assertEquals(Double.valueOf(128.965), target.getTargetWeightDouble());
         assertEquals("kg", target.getTargetWeightUnit());
 
@@ -128,20 +121,20 @@ public class MultiplicityTransformationTest {
         primitives.setLongField(2L);
         primitives.setShortField((short)2);
         primitives.setDoubleField(3.1d);
-        primitives.setBoxedCharField(new Character('c'));
-        primitives.setBoxedIntField(new Integer(1));
-        primitives.setBoxedFloatField(new Float(1.3f));
-        primitives.setBoxedLongField(new Long(2L));
-        primitives.setBoxedShortField(new Short((short)2));
-        primitives.setBoxedDoubleField(new Double(3.1d));
+        primitives.setBoxedCharField(Character.valueOf('c'));
+        primitives.setBoxedIntField(Integer.valueOf(1));
+        primitives.setBoxedFloatField(Float.valueOf(1.3f));
+        primitives.setBoxedLongField(Long.valueOf(2L));
+        primitives.setBoxedShortField(Short.valueOf((short)2));
+        primitives.setBoxedDoubleField(Double.valueOf(3.1d));
         source.setPrimitives(primitives);
         session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.java.test.TargetTestClass");
         assertEquals(TargetTestClass.class, output.getClass());
         TargetTestClass target = TargetTestClass.class.cast(output);
-        assertEquals("[" + target.getFullAddress() + "]", 14, target.getFullAddress().split(" ").length);
+        assertEquals(14, target.getFullAddress().split(" ").length, "[" + target.getFullAddress() + "]");
     }
 
     @Test
@@ -152,8 +145,8 @@ public class MultiplicityTransformationTest {
         SourceClass source = new SourceClass().setSourceStringList(Arrays.asList(new String[] {"one", "two", "three"}));
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -173,8 +166,8 @@ public class MultiplicityTransformationTest {
                                 .setSourceInteger2(-123);
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -191,8 +184,8 @@ public class MultiplicityTransformationTest {
                     .setSourceInteger2(790);
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         target = TargetClass.class.cast(output);
@@ -211,8 +204,8 @@ public class MultiplicityTransformationTest {
             .setSourceStringList(Arrays.asList("bob", "john", "andrea"));
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -229,8 +222,8 @@ public class MultiplicityTransformationTest {
         source.setSourceString(",");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -248,8 +241,8 @@ public class MultiplicityTransformationTest {
         source.setSourceString(",");
         session.setSourceDocument("io.atlasmap.itests.core.issue.SourceClass", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -264,8 +257,8 @@ public class MultiplicityTransformationTest {
         session.setSourceDocument("io.atlasmap.itests.core.SourceCsv", "givenName,familyName\n" +
             "Bob,Smith\nAnthony,Hopkins\nTimothy,Anders");
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.itests.core.TargetCsv");
         assertEquals("allGivenNames,name\r\n" +
             "\"Bob,Anthony,Timothy\",\"Bob,Anthony,Timothy,Smith,Hopkins,Anders\"\r\n", output);
@@ -288,12 +281,12 @@ public class MultiplicityTransformationTest {
         sourceJava.setBoxedIntListField(Arrays.asList(new Integer[] {2, 4, 6, 8}));
         session.setSourceDocument("java-source", sourceJava);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getTargetDocument("io.atlasmap.java.test.TargetFlatPrimitiveClass");
         assertEquals(TargetFlatPrimitiveClass.class, output.getClass());
         TargetFlatPrimitiveClass target = TargetFlatPrimitiveClass.class.cast(output);
-        assertEquals(new Float((1+3+5+7)).floatValue(), target.getFloatField(), 1e-15);
-        assertEquals(new Double((1+3+5+7)).doubleValue(), target.getDoubleField(), 1e-15);
+        assertEquals(Float.valueOf((1+3+5+7)).floatValue(), target.getFloatField(), 1e-15);
+        assertEquals(Double.valueOf((1+3+5+7)).doubleValue(), target.getDoubleField(), 1e-15);
         assertEquals(1+3+5+7, target.getLongField());
         assertEquals(2+4+6+8, target.getIntField());
     }
@@ -308,7 +301,7 @@ public class MultiplicityTransformationTest {
          session.setSourceDocument("json-source-repeat", sourceJson);
 
          context.process(session);
-         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         assertFalse(session.hasErrors(), TestHelper.printAudit(session));
          Object output = session.getTargetDocument("json-target");
          assertEquals("[{\"targetField\":\"simpleFieldValue\"}]", output);
     }
@@ -323,7 +316,7 @@ public class MultiplicityTransformationTest {
          session.setSourceDocument("json-source-repeat", sourceJson);
 
          context.process(session);
-         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         assertFalse(session.hasErrors(), TestHelper.printAudit(session));
          Object output = session.getTargetDocument("json-target");
          assertEquals("[{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"}]", output);
     }
@@ -338,7 +331,7 @@ public class MultiplicityTransformationTest {
          session.setSourceDocument("json-source-repeat", sourceJson);
 
          context.process(session);
-         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         assertFalse(session.hasErrors(), TestHelper.printAudit(session));
          Object output = session.getTargetDocument("json-target");
          assertEquals("[]", output);
     }
@@ -353,7 +346,7 @@ public class MultiplicityTransformationTest {
          session.setSourceDocument("json-source-repeat", sourceJson);
 
          context.process(session);
-         assertFalse(TestHelper.printAudit(session), session.hasErrors());
+         assertFalse(session.hasErrors(), TestHelper.printAudit(session));
          Object output = session.getTargetDocument("json-target");
          assertEquals("[{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"},{\"targetField\":\"simpleFieldValue\"}]", output);
     }

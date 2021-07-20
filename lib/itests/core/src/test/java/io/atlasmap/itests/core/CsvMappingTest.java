@@ -15,16 +15,15 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
@@ -48,7 +47,7 @@ public class CsvMappingTest {
 
         assertFalse(session.hasErrors());
         Object csv = session.getTargetDocument("target-csv");
-        assertThat(csv, CoreMatchers.is("first,last\r\nBob,Johnson\r\nAndrew,Smith\r\n"));
+        assertEquals("first,last\r\nBob,Johnson\r\nAndrew,Smith\r\n", csv);
     }
 
     @Test
@@ -60,7 +59,7 @@ public class CsvMappingTest {
 
         assertFalse(session.hasErrors());
         Object csv = session.getTargetDocument("target-csv");
-        assertThat(csv, CoreMatchers.is("last\r\nJohnson\r\nSmith\r\n"));
+        assertEquals("last\r\nJohnson\r\nSmith\r\n", csv);
     }
 
     @Test
@@ -72,7 +71,7 @@ public class CsvMappingTest {
 
         assertFalse(session.hasErrors());
         Object csv = session.getTargetDocument("target-csv");
-        assertThat(csv, CoreMatchers.is("first\r\nBob\r\nAndrew\r\n"));
+        assertEquals("first\r\nBob\r\nAndrew\r\n", csv);
     }
 
     @Test
@@ -86,8 +85,8 @@ public class CsvMappingTest {
         assertFalse(session.hasErrors());
         Object json = session.getTargetDocument("jsonTarget");
         Object csv = session.getTargetDocument("csvTarget");
-        assertThat(csv, CoreMatchers.is(""));
-        assertThat(json, CoreMatchers.is("{\"first_name\":\"Tom\"}"));
+        assertEquals("", csv);
+        assertEquals("{\"first_name\":\"Tom\"}", json);
     }
 
     public AtlasContext createContext(String file, String... mappingIds) throws Exception {

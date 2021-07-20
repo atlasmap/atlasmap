@@ -15,18 +15,19 @@
  */
 package io.atlasmap.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,13 +54,13 @@ public class DefaultAtlasFieldActionsServiceTest {
 
     private DefaultAtlasFieldActionService fieldActionsService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         fieldActionsService = DefaultAtlasFieldActionService.getInstance();
         fieldActionsService.init();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         fieldActionsService = null;
     }
@@ -115,7 +116,7 @@ public class DefaultAtlasFieldActionsServiceTest {
         assertNotNull(actionDetail);
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void testProcessActionsActionsFieldAtlasConversionException() throws AtlasException {
         SimpleField field = new SimpleField();
         Object value = new Object();
@@ -124,7 +125,9 @@ public class DefaultAtlasFieldActionsServiceTest {
         ArrayList<Action> actions = new ArrayList<Action>();
         actions.add(new Add());
         field.setActions(actions);
-        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
+        assertThrows(AtlasConversionException.class, () -> {
+            fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
+        });
     }
 
     @Test
@@ -139,7 +142,7 @@ public class DefaultAtlasFieldActionsServiceTest {
         field.setFieldType(FieldType.INTEGER);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        field.setValue(new Integer(0));
+        field.setValue(Integer.valueOf(0));
         field.setFieldType(FieldType.INTEGER);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
@@ -154,13 +157,13 @@ public class DefaultAtlasFieldActionsServiceTest {
         field.setFieldType(FieldType.STRING);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
-        field.setValue(new Integer(8));
+        field.setValue(Integer.valueOf(8));
         field.setFieldType(FieldType.NUMBER);
         fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
 
     }
 
-    @Test(expected = AtlasConversionException.class)
+    @Test
     public void testprocessActionsActionsObjectFieldTypeAtlasConversionException() throws AtlasException {
         SimpleField field = new SimpleField();
         Object value = new Object();
@@ -169,7 +172,9 @@ public class DefaultAtlasFieldActionsServiceTest {
         ArrayList<Action> actions = new ArrayList<Action>();
         actions.add(new Add());
         field.setActions(actions);
-        fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
+        assertThrows(AtlasConversionException.class, () -> {
+            fieldActionsService.processActions(mock(AtlasInternalSession.class), field);
+        });
     }
 
     @Test
@@ -188,7 +193,7 @@ public class DefaultAtlasFieldActionsServiceTest {
     @Test
     public void testProcessActionWithActionActionDetailObjectAssignableType() throws AtlasException {
         Action action = new AbsoluteValue();
-        Object sourceObject = new Integer("1");
+        Object sourceObject = Integer.valueOf("1");
         ActionProcessor processor = fieldActionsService.findActionProcessor(action, FieldType.STRING);
         assertEquals(1L, processor.process(action, sourceObject));
     }

@@ -15,9 +15,9 @@
  */
 package io.atlasmap.validators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
@@ -38,14 +38,14 @@ public class NotEmptyValidatorTest extends BaseValidatorTest {
     private NotEmptyValidator validator;
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         validator = new NotEmptyValidator(ValidationScope.MAPPING, "Collection should not be empty");
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         super.setUp();
         validator = null;

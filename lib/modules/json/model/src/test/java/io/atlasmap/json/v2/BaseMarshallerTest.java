@@ -15,8 +15,8 @@
  */
 package io.atlasmap.json.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -27,10 +27,9 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.rules.TestName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
@@ -61,18 +60,18 @@ public abstract class BaseMarshallerTest {
 
     public boolean deleteTestFolders = true;
 
-    @Rule
-    public TestName testName = new TestName();
+    protected String testMethodName;
 
-    @Before
-    public void setUp() throws Exception {
-        Files.createDirectories(Paths.get("target/junit/" + testName.getMethodName()));
+    @BeforeEach
+    public void setUp(TestInfo testInfo) throws Exception {
+        testMethodName = testInfo.getTestMethod().get().getName();
+        Files.createDirectories(Paths.get("target/junit/" + testMethodName));
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         if (deleteTestFolders) {
-            Path directory = Paths.get("target/junit/" + testName.getMethodName());
+            Path directory = Paths.get("target/junit/" + testMethodName);
             Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
                 @Override
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
@@ -236,7 +235,7 @@ public abstract class BaseMarshallerTest {
         validateLookupTable(mapping.getLookupTables().getLookupTable().get(0));
 
         assertNotNull(mapping.getMappings());
-        assertEquals(new Integer(1), new Integer(mapping.getMappings().getMapping().size()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(mapping.getMappings().getMapping().size()));
         validateMapping((Mapping) mapping.getMappings().getMapping().get(0));
 
         assertNotNull(mapping.getProperties());

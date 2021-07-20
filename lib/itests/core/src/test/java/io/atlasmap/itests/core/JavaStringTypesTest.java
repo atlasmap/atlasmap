@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.net.URL;
 import java.nio.CharBuffer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -44,7 +44,7 @@ public class JavaStringTypesTest {
         session.setDefaultSourceDocument(source);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object output = session.getDefaultTargetDocument();
         assertEquals(StringTestClass.class, output.getClass());
         StringTestClass target = StringTestClass.class.cast(output);

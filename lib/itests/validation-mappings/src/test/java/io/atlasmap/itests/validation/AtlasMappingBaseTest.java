@@ -15,8 +15,9 @@
  */
 package io.atlasmap.itests.validation;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasContextFactory;
@@ -24,13 +25,15 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 public abstract class AtlasMappingBaseTest {
 
     protected AtlasContextFactory atlasContextFactory = null;
+    protected String testMethodName;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    public void setUp(TestInfo testInfo) {
+        testMethodName = testInfo.getTestMethod().get().getName();
         atlasContextFactory = DefaultAtlasContextFactory.getInstance();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         atlasContextFactory = null;
     }

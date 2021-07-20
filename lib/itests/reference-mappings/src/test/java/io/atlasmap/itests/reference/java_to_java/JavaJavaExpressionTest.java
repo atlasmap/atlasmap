@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.reference.java_to_java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -48,7 +48,7 @@ public class JavaJavaExpressionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("addr", sourceAddress);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         Object object = session.getDefaultTargetDocument();
         assertNotNull(object);
         assertEquals(TargetContact.class.getName(), object.getClass().getName());

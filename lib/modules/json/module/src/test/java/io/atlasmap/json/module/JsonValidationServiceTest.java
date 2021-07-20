@@ -15,17 +15,15 @@
  */
 package io.atlasmap.json.module;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -113,7 +111,7 @@ public class JsonValidationServiceTest extends BaseJsonValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -168,7 +166,7 @@ public class JsonValidationServiceTest extends BaseJsonValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -222,7 +220,7 @@ public class JsonValidationServiceTest extends BaseJsonValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
+        assertEquals(1, validationHelper.getCount());
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
@@ -250,7 +248,7 @@ public class JsonValidationServiceTest extends BaseJsonValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(3, is(validationHelper.getCount()));
+        assertEquals(3, validationHelper.getCount());
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));

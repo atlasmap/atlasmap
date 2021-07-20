@@ -15,10 +15,10 @@
  */
 package io.atlasmap.xml.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AtlasXmlModelFactoryTest {
 
@@ -28,7 +28,7 @@ public class AtlasXmlModelFactoryTest {
         assertNotNull(xmlDoc);
         assertNotNull(xmlDoc.getFields());
         assertNotNull(xmlDoc.getFields().getField());
-        assertEquals(new Integer(0), new Integer(xmlDoc.getFields().getField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(xmlDoc.getFields().getField().size()));
     }
 
 }

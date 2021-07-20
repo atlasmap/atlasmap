@@ -15,12 +15,12 @@
  */
 package io.atlasmap.xml.inspect;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;

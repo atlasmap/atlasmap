@@ -15,15 +15,15 @@
  */
 package io.atlasmap.itests.core.issue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,7 +52,7 @@ public class ENTESB16270Test {
         String source = new String(Files.readAllBytes(Paths.get(in.toURI())));
         session.setSourceDocument("-MYipd8jDixHjPa9gjIU", source);
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object target = session.getTargetDocument("-MYipkI9DixHjPa9gjIU");
         assertNotNull(target);
         LOG.info(target.toString());

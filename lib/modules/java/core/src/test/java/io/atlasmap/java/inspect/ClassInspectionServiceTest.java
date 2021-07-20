@@ -15,19 +15,19 @@
  */
 package io.atlasmap.java.inspect;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.v2.JavaClass;
@@ -40,13 +40,13 @@ public class ClassInspectionServiceTest {
 
     private ClassInspectionService classInspectionService = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         classInspectionService = new ClassInspectionService();
         classInspectionService.setConversionService(DefaultAtlasConversionService.getInstance());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         classInspectionService = null;
     }
@@ -54,16 +54,16 @@ public class ClassInspectionServiceTest {
     @Test
     public void testDetectArrayDimensions() {
 
-        assertNull(null, classInspectionService.inspectClass(String.class, CollectionType.NONE, null).getArrayDimensions());
-        assertEquals(new Integer(1), classInspectionService.inspectClass(int[].class, CollectionType.ARRAY, null).getArrayDimensions());
-        assertEquals(new Integer(2), classInspectionService.inspectClass(String[][].class, CollectionType.ARRAY, null).getArrayDimensions());
-        assertEquals(new Integer(3), classInspectionService.inspectClass(List[][][].class, CollectionType.ARRAY, null).getArrayDimensions());
-        assertEquals(new Integer(4), classInspectionService.inspectClass(Map[][][][].class, CollectionType.ARRAY, null).getArrayDimensions());
-        assertEquals(new Integer(64), classInspectionService.inspectClass(
+        assertNull(classInspectionService.inspectClass(String.class, CollectionType.NONE, null).getArrayDimensions());
+        assertEquals(Integer.valueOf(1), classInspectionService.inspectClass(int[].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(Integer.valueOf(2), classInspectionService.inspectClass(String[][].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(Integer.valueOf(3), classInspectionService.inspectClass(List[][][].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(Integer.valueOf(4), classInspectionService.inspectClass(Map[][][][].class, CollectionType.ARRAY, null).getArrayDimensions());
+        assertEquals(Integer.valueOf(64), classInspectionService.inspectClass(
                 int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class, CollectionType.ARRAY, null)
                 .getArrayDimensions());
         // MAX_DIM_LIMIT NOTE: 255 is the JVM Spec limit
-        assertEquals(new Integer(255), classInspectionService.inspectClass(
+        assertEquals(Integer.valueOf(255), classInspectionService.inspectClass(
                 int[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][].class, CollectionType.ARRAY, null)
                 .getArrayDimensions());
     }

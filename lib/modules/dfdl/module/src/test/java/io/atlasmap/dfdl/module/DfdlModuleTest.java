@@ -15,12 +15,12 @@
  */
 package io.atlasmap.dfdl.module;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.PropertyField;
@@ -31,12 +31,12 @@ public class DfdlModuleTest {
 
     private DfdlModule module = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         module = new DfdlModule();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         module = null;
     }

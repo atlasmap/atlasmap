@@ -15,12 +15,12 @@
  */
 package io.atlasmap.json.v2;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -35,7 +35,7 @@ public class AtlasJsonModelFactoryTest {
         assertNotNull(jsonDoc);
         assertNotNull(jsonDoc.getFields());
         assertNotNull(jsonDoc.getFields().getField());
-        assertEquals(new Integer(0), new Integer(jsonDoc.getFields().getField().size()));
+        assertEquals(Integer.valueOf(0), Integer.valueOf(jsonDoc.getFields().getField().size()));
     }
 
     @Test

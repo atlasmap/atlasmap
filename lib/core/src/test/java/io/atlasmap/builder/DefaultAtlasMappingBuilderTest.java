@@ -17,9 +17,9 @@ package io.atlasmap.builder;
 
 import static io.atlasmap.api.AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID;
 import static io.atlasmap.api.AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.BaseDefaultAtlasContextTest;
 import io.atlasmap.v2.FieldType;
@@ -44,7 +44,7 @@ public class DefaultAtlasMappingBuilderTest extends BaseDefaultAtlasContextTest 
         populateProperty(DEFAULT_SOURCE_DOCUMENT_ID, "p5", "p5value");
         builder.setAtlasSession(session);
         builder.processMapping();
-        assertEquals(printAudit(session), 0, session.getAudits().getAudit().size());
+        assertEquals(0, session.getAudits().getAudit().size(), printAudit(session));
         assertEquals("f1value", getTargetFieldValue("/f2"));
         assertEquals("c3value", session.getTargetProperties().get("p4"));
         assertEquals("p5value", getTargetFieldValue("/f6"));

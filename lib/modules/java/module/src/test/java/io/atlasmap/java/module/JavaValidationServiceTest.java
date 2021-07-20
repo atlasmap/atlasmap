@@ -15,21 +15,19 @@
  */
 package io.atlasmap.java.module;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +63,7 @@ public class JavaValidationServiceTest {
     protected List<Validation> validations = null;
     protected AtlasModuleDetail moduleDetail = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mappingUtil = new AtlasMappingUtil();
         moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
@@ -82,7 +80,7 @@ public class JavaValidationServiceTest {
         validations = validationHelper.getValidation();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         mappingUtil = null;
         sourceValidationService = null;
@@ -242,7 +240,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -299,7 +297,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
 
-        assertEquals(new Integer(1), new Integer(validationHelper.getCount()));
+        assertEquals(Integer.valueOf(1), Integer.valueOf(validationHelper.getCount()));
 
         Validation validation = validations.get(0);
         assertNotNull(validation);
@@ -331,34 +329,6 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasInfos());
     }
 
-    @Ignore("https://github.com/atlasmap/atlasmap/issues/1817 - COMPLEX source field is allowed for conditional mapping... validation have to look if it's conditional or not")
-    @Test
-    public void testValidateAtlasMappingFileConversionRequired() throws Exception {
-        AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
-        assertNotNull(mapping);
-
-        Mapping fieldMapping = (Mapping) mapping.getMappings().getMapping().get(0);
-
-        JavaField in = (JavaField) fieldMapping.getInputField().get(0);
-        in.setFieldType(FieldType.COMPLEX);
-        in.setClassName("io.atlasmap.java.module.MockJavaClass");
-
-        JavaField out = (JavaField) fieldMapping.getOutputField().get(0);
-        out.setFieldType(FieldType.STRING);
-
-        validations.addAll(sourceValidationService.validateMapping(mapping));
-        validations.addAll(targetValidationService.validateMapping(mapping));
-
-        assertTrue(validationHelper.hasErrors());
-        assertFalse(validationHelper.hasWarnings());
-        assertFalse(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
-        Validation v = validations.get(0);
-        assertEquals(ValidationScope.MAPPING, v.getScope());
-        assertEquals("map.firstName.firstName", v.getId());
-        assertEquals(ValidationStatus.ERROR, v.getStatus());
-    }
-
     @Test
     public void testValidateMappingSourceToTargetCustomUsingClassNames() throws Exception {
         AtlasMapping mapping = mappingUtil.loadMapping("src/test/resources/mappings/HappyPathMapping.json");
@@ -383,7 +353,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertFalse(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(validationHelper.getCount(), is(0));
+        assertEquals(0, validationHelper.getCount());
     }
 
     @Test
@@ -410,7 +380,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(1, is(validationHelper.getCount()));
+        assertEquals(1, validationHelper.getCount());
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
@@ -440,7 +410,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(3, is(validationHelper.getCount()));
+        assertEquals(3, validationHelper.getCount());
 
         assertTrue(
                 validations.stream().anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("range")));
@@ -474,7 +444,7 @@ public class JavaValidationServiceTest {
         assertFalse(validationHelper.hasErrors());
         assertTrue(validationHelper.hasWarnings());
         assertFalse(validationHelper.hasInfos());
-        assertThat(validationHelper.getCount(), is(1));
+        assertEquals(1, validationHelper.getCount());
 
         assertTrue(validations.stream()
                 .anyMatch(atlasMappingError -> atlasMappingError.getMessage().contains("out of range")));

@@ -15,14 +15,14 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,7 +43,7 @@ public class JsonBigIntegerTest {
         session.setSourceDocument("json-source", sourceJson);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         String output = (String) session.getTargetDocument("json-target");
         JsonNode root = new ObjectMapper().readTree(output);
         JsonNode field = root.get("field");

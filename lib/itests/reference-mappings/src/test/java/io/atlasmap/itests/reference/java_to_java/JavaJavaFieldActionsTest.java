@@ -15,7 +15,7 @@
  */
 package io.atlasmap.itests.reference.java_to_java;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.itests.reference.AtlasBaseActionsTest;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;

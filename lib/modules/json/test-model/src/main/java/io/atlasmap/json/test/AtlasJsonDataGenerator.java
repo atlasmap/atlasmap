@@ -17,9 +17,9 @@ package io.atlasmap.json.test;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -30,7 +30,7 @@ public class AtlasJsonDataGenerator {
 
     private ObjectMapper mapper = null;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -40,7 +40,7 @@ public class AtlasJsonDataGenerator {
         mapper.setSerializationInclusion(Include.NON_NULL);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         mapper = null;
     }

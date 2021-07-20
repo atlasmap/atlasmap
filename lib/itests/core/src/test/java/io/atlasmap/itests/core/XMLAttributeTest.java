@@ -15,13 +15,13 @@
  */
 package io.atlasmap.itests.core;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.net.URL;
 import java.util.HashMap;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.assertj.XmlAssert;
 
 import io.atlasmap.api.AtlasContext;
@@ -41,10 +41,10 @@ public class XMLAttributeTest {
         session.setSourceDocument("po-example-schema-f81424a0-8871-4483-abaf-059cc432ea78", xmlSource);
 
         context.process(session);
-        assertFalse(TestHelper.printAudit(session), session.hasErrors());
-        assertFalse(TestHelper.printAudit(session), session.hasWarns());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
+        assertFalse(session.hasWarns(), TestHelper.printAudit(session));
         Object target = session.getTargetDocument("po-example-schema-b12bc688-7bf3-4626-97a2-d8c3981ecd3a");
-        assertNotNull("target XML is null", target);
+        assertNotNull(target, "target XML is null");
         HashMap<String, String> namespaces = new HashMap<>();
         namespaces.put("ns1", "http://tempuri.org/po.xsd");
         XmlAssert.assertThat(target).withNamespaceContext(namespaces)

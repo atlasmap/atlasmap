@@ -15,10 +15,10 @@
  */
 package io.atlasmap.itests.reference.java_to_java;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasSession;
@@ -57,7 +57,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(20, object.getContactList().size());
@@ -81,7 +81,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(sourceOrder);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
         assertEquals(20, object.getContactArray().length);
@@ -109,7 +109,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(5, object.getContactList().size());
         for (int i = 0; i < 5; i++) {
@@ -131,7 +131,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(5, object.getContactList().size());
         for (int i = 0; i < 5; i++) {
@@ -153,7 +153,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertNull(object.getContactArray());
         assertNull(object.getContactList());
@@ -173,7 +173,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(1, object.getContactList().size());
         assertEquals("first name", object.getContactList().get(0).getFirstName());
@@ -191,7 +191,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setDefaultSourceDocument(source);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetFlatPrimitiveClass target = (TargetFlatPrimitiveClass) session.getDefaultTargetDocument();
         assertEquals("fuga", target.getBoxedStringField());
         assertEquals(1, target.getBoxedStringArrayField().length);
@@ -238,7 +238,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("sfpc4", sfpc4);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetCollectionsClass targetCollections = (TargetCollectionsClass) session.getTargetDocument("TargetCollectionsClass");
         list = targetCollections.getList();
         assertEquals(4, list.size());
@@ -294,7 +294,7 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         session.setSourceDocument("SourceCollectionsClass", source);
         context.process(session);
 
-        assertFalse(printAudit(session), session.hasErrors());
+        assertFalse(session.hasErrors(), printAudit(session));
         TargetCollectionsClass targetCollections = (TargetCollectionsClass) session.getTargetDocument("TargetCollectionsClass");
         ArrayList<String> result = targetCollections.getArrayList();
         assertEquals(1, result.size());

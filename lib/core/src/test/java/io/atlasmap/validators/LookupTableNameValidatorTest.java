@@ -15,14 +15,14 @@
  */
 package io.atlasmap.validators;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.LookupTables;
@@ -31,14 +31,14 @@ import io.atlasmap.v2.ValidationScope;
 public class LookupTableNameValidatorTest extends BaseValidatorTest {
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         validator = new LookupTableNameValidator("LookupTables contain duplicated LookupTable names.");
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDown();
         validator = null;

@@ -15,7 +15,9 @@
  */
 package io.atlasmap.json.core;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,11 +28,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.hamcrest.core.Is;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -55,14 +55,16 @@ public class JsonFieldWriterTest {
     private static JsonFieldReader reader = new JsonFieldReader(DefaultAtlasConversionService.getInstance());
     private JsonFieldWriter writer = null;
 
-    @Before
+    @BeforeEach
     public void setupWriter() {
         this.writer = new JsonFieldWriter();
     }
 
-    @Test(expected = AtlasException.class)
+    @Test
     public void testWriteNullField() throws Exception {
-        write(null);
+        assertThrows(AtlasException.class, () -> {
+            write(null);
+        });
     }
 
     @Test
@@ -73,15 +75,15 @@ public class JsonFieldWriterTest {
         field.setFieldType(FieldType.STRING);
 
         write(field);
-        Assert.assertNotNull(writer.getRootNode());
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"brand\":\"Mercedes\"}"));
+        assertNotNull(writer.getRootNode());
+        assertEquals("{\"brand\":\"Mercedes\"}", writer.getRootNode().toString());
 
         JsonField field2 = AtlasJsonModelFactory.createJsonField();
         field2.setPath("/doors");
         field2.setValue(5);
         field2.setFieldType(FieldType.INTEGER);
         write(field2);
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"brand\":\"Mercedes\",\"doors\":5}"));
+        assertEquals("{\"brand\":\"Mercedes\",\"doors\":5}", writer.getRootNode().toString());
     }
 
     @Test
@@ -98,7 +100,7 @@ public class JsonFieldWriterTest {
         field2.setFieldType(FieldType.INTEGER);
         write(field2);
 
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("{\"car\":{\"brand\":\"Mercedes\",\"doors\":5}}"));
+        assertEquals("{\"car\":{\"brand\":\"Mercedes\",\"doors\":5}}", writer.getRootNode().toString());
     }
 
     @Test
@@ -111,7 +113,7 @@ public class JsonFieldWriterTest {
         booleanField.setStatus(FieldStatus.SUPPORTED);
 
         write(booleanField);
-        Assert.assertNotNull(writer.getRootNode());
+        assertNotNull(writer.getRootNode());
 
         JsonField charField = AtlasJsonModelFactory.createJsonField();
         charField.setFieldType(FieldType.CHAR);
@@ -162,8 +164,9 @@ public class JsonFieldWriterTest {
         longField.setStatus(FieldStatus.SUPPORTED);
         write(longField);
 
-        Assert.assertThat(writer.getRootNode().toString(), Is.is(
-                "{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"numberField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}"));
+        assertEquals(
+                "{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"numberField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}",
+                writer.getRootNode().toString());
     }
 
     @Test
@@ -224,16 +227,17 @@ public class JsonFieldWriterTest {
         longField.setStatus(FieldStatus.SUPPORTED);
         write(longField);
 
-        Assert.assertThat(writer.getRootNode().toString(), Is.is(
-                "{\"SourceFlatPrimitive\":{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}}"));
+        assertEquals(
+                "{\"SourceFlatPrimitive\":{\"booleanField\":false,\"charField\":\"a\",\"doubleField\":-27152745.3422,\"floatField\":-63988281,\"intField\":8281,\"shortField\":81,\"longField\":3988281}}",
+                writer.getRootNode().toString());
     }
 
     @Test
     public void testSimpleRepeated() throws Exception {
         writeString("/orders[0]/orderid", "orderid1");
         writeString("/orders[1]/orderid", "orderid2");
-        Assert.assertThat(writer.getRootNode().toString(),
-                Is.is("{\"orders\":[{\"orderid\":\"orderid1\"},{\"orderid\":\"orderid2\"}]}"));
+        assertEquals("{\"orders\":[{\"orderid\":\"orderid1\"},{\"orderid\":\"orderid2\"}]}",
+                writer.getRootNode().toString());
     }
 
     public void writeString(String path, String value) throws Exception {
@@ -257,8 +261,9 @@ public class JsonFieldWriterTest {
     @Test
     public void testWriteComplexObjectUnrooted() throws Exception {
         writeComplexTestData("", "");
-        Assert.assertThat(writer.getRootNode().toString(), Is.is(
-                "{\"address\":{\"addressLine1\":\"123 Main St\",\"addressLine2\":\"Suite 42b\",\"city\":\"Anytown\",\"state\":\"NY\",\"zipCode\":\"90210\"},\"contact\":{\"firstName\":\"Ozzie\",\"lastName\":\"Smith\",\"phoneNumber\":\"5551212\",\"zipCode\":\"81111\"},\"orderId\":9}"));
+        assertEquals(
+                "{\"address\":{\"addressLine1\":\"123 Main St\",\"addressLine2\":\"Suite 42b\",\"city\":\"Anytown\",\"state\":\"NY\",\"zipCode\":\"90210\"},\"contact\":{\"firstName\":\"Ozzie\",\"lastName\":\"Smith\",\"phoneNumber\":\"5551212\",\"zipCode\":\"81111\"},\"orderId\":9}",
+                writer.getRootNode().toString());
     }
 
     @Test
@@ -267,9 +272,9 @@ public class JsonFieldWriterTest {
 
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/complex-rooted-result.json")));
-        Assert.assertNotNull(instance);
+        assertNotNull(instance);
 
-        Assert.assertThat(prettyPrintJson(writer.getRootNode().toString()), Is.is(prettyPrintJson(instance)));
+        assertEquals(prettyPrintJson(instance), prettyPrintJson(writer.getRootNode().toString()));
     }
 
     public void writeComplexTestData(String prefix, String valueSuffix) throws Exception {
@@ -300,14 +305,12 @@ public class JsonFieldWriterTest {
 
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/complex-repeated-result.json")));
-        Assert.assertNotNull(instance);
-        Assert.assertThat(prettyPrintJson(writer.getRootNode().toString()), Is.is(prettyPrintJson(instance)));
+        assertNotNull(instance);
+        assertEquals(prettyPrintJson(instance), prettyPrintJson(writer.getRootNode().toString()));
     }
 
     @Test
-    @Ignore
-    // TODO this needs more fleshing out. Currently we cannot handle nested objects
-    // with nested arrays.
+    @Disabled("https://github.com/atlasmap/atlasmap/issues/3128")
     public void testWriteHighlyComplexObject() throws Exception {
 
         JsonComplexType items = JsonComplexTypeFactory.createJsonComlexField();
@@ -685,7 +688,7 @@ public class JsonFieldWriterTest {
 
     @Test
     public void testJsonFieldChar() throws Exception {
-        testValue("test-write-field-char.json", "/primitiveValue", new Character((char) 127), FieldType.CHAR);
+        testValue("test-write-field-char.json", "/primitiveValue", Character.valueOf((char) 127), FieldType.CHAR);
     }
 
     @Test
@@ -918,8 +921,8 @@ public class JsonFieldWriterTest {
         field.setFieldType(FieldType.INTEGER);
         write(field);
 
-        Assert.assertNotNull(writer.getRootNode());
-        Assert.assertThat(writer.getRootNode().toString(), Is.is("[null,300,null,500]"));
+        assertNotNull(writer.getRootNode());
+        assertEquals("[null,300,null,500]", writer.getRootNode().toString());
     }
 
     @Test
@@ -945,9 +948,10 @@ public class JsonFieldWriterTest {
         field.setFieldType(FieldType.STRING);
         write(field);
 
-        Assert.assertNotNull(writer.getRootNode());
-        Assert.assertThat(writer.getRootNode().toString(),
-                Is.is("[{},{\"color\":\"red\"},{\"value\":\"foobar\"},{},{},{\"color\":\"black\",\"value\":\"123\"}]"));
+        assertNotNull(writer.getRootNode());
+        assertEquals(
+                "[{},{\"color\":\"red\"},{\"value\":\"foobar\"},{},{},{\"color\":\"black\",\"value\":\"123\"}]",
+                writer.getRootNode().toString());
         
     }
 
