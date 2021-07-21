@@ -115,14 +115,6 @@ public class JavaFieldReader implements AtlasFieldReader {
 
         JavaChildAccessor childAccessor = getAccessorForSegment(session, source, field, path, segmentContext);
         if (childAccessor == null || childAccessor.getRawValue() == null) {
-            if (path.getLastSegment() != segmentContext) {
-                //add audit only if not the last segment on the path
-                AtlasUtil.addAudit(session, field, String.format(
-                    "Assigning null value for path path=%s docId=%s due to null parent", field.getPath(), field.getDocId()),
-                    AuditStatus.WARN, null);
-                Field newField = AtlasJavaModelFactory.cloneJavaField(field, false);
-                fields.add(newField);
-            }
             return fields;
         }
 

@@ -118,20 +118,18 @@ public class NestedCollectionJavaTest {
     public void testAsymmetricPaths1stAnd2ndAnd3rdLevelNestedCollectionToSingleCollection() throws Exception {
         TargetClass target = processNestedJavaCollection(Arrays.asList("3-1"));
 
-        assertEquals(6, target.getSomeArray().length);
+        assertEquals(5, target.getSomeArray().length);
         assertEquals("array000", target.getSomeArray()[0].getSomeField());
         assertEquals("array001", target.getSomeArray()[1].getSomeField());
         assertEquals("array002", target.getSomeArray()[2].getSomeField());
-        assertNull(target.getSomeArray()[3].getSomeField()); //array01.someArray is null, thus adding null for a null parent
-        assertEquals("array100", target.getSomeArray()[4].getSomeField());
-        assertEquals("array101", target.getSomeArray()[5].getSomeField());
+        assertEquals("array100", target.getSomeArray()[3].getSomeField());
+        assertEquals("array101", target.getSomeArray()[4].getSomeField());
         assertNull(target.getSomeField());
         assertNull(target.getSomeArray()[0].getSomeArray());
         assertNull(target.getSomeArray()[1].getSomeArray());
         assertNull(target.getSomeArray()[2].getSomeArray());
         assertNull(target.getSomeArray()[3].getSomeArray());
         assertNull(target.getSomeArray()[4].getSomeArray());
-        assertNull(target.getSomeArray()[5].getSomeArray());
     }
 
     @Test
@@ -151,11 +149,10 @@ public class NestedCollectionJavaTest {
         TargetClass target = processNestedJavaCollection(Arrays.asList("3-2"));
 
         assertEquals(2, target.getSomeArray().length);
-        assertEquals(4, target.getSomeArray()[0].getSomeArray().length);
+        assertEquals(3, target.getSomeArray()[0].getSomeArray().length);
         assertEquals("array000", target.getSomeArray()[0].getSomeArray()[0].getSomeField());
         assertEquals("array001", target.getSomeArray()[0].getSomeArray()[1].getSomeField());
         assertEquals("array002", target.getSomeArray()[0].getSomeArray()[2].getSomeField());
-        assertNull(target.getSomeArray()[0].getSomeArray()[3].getSomeField());
         assertEquals(2, target.getSomeArray()[1].getSomeArray().length);
         assertEquals("array100", target.getSomeArray()[1].getSomeArray()[0].getSomeField());
         assertEquals("array101", target.getSomeArray()[1].getSomeArray()[1].getSomeField());
@@ -166,11 +163,7 @@ public class NestedCollectionJavaTest {
         TargetClass target = processNestedJavaCollection(Arrays.asList("4-2"));
 
         assertEquals(2, target.getSomeArray().length);
-        assertEquals(4, target.getSomeArray()[0].getSomeArray().length);
-        assertNull(target.getSomeArray()[0].getSomeArray()[0].getSomeField());
-        assertNull(target.getSomeArray()[0].getSomeArray()[1].getSomeField());
-        assertNull(target.getSomeArray()[0].getSomeArray()[2].getSomeField());
-        assertNull(target.getSomeArray()[0].getSomeArray()[3].getSomeField());
+        assertNull(target.getSomeArray()[0]);
         assertEquals(3, target.getSomeArray()[1].getSomeArray().length);
         assertEquals("array1000", target.getSomeArray()[1].getSomeArray()[0].getSomeField());
         assertEquals("array1001", target.getSomeArray()[1].getSomeArray()[1].getSomeField());

@@ -72,6 +72,21 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
     }
 
     @Test
+    public void testProcessCollectionListEmpty() throws Exception {
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-list-empty.json").toURI());
+        AtlasSession session = context.createSession();
+        TargetTestClass source = new TargetTestClass();
+        session.setDefaultSourceDocument(source);
+        context.process(session);
+
+        assertFalse(session.hasErrors(), printAudit(session));
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
+        assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
+        assertEquals(0, object.getContactList().size());
+    }
+
+    @Test
     public void testProcessCollectionArray() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-collection-array.json").toURI());
