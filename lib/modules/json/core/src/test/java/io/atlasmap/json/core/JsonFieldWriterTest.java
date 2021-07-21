@@ -240,7 +240,7 @@ public class JsonFieldWriterTest {
                 writer.getRootNode().toString());
     }
 
-    public void writeString(String path, String value) throws Exception {
+    protected void writeString(String path, String value) throws Exception {
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setValue(value);
         field.setStatus(FieldStatus.SUPPORTED);
@@ -249,7 +249,7 @@ public class JsonFieldWriterTest {
         write(field);
     }
 
-    public void writeInteger(String path, Integer value) throws Exception {
+    protected void writeInteger(String path, Integer value) throws Exception {
         JsonField field = AtlasJsonModelFactory.createJsonField();
         field.setValue(value);
         field.setStatus(FieldStatus.SUPPORTED);
@@ -277,7 +277,7 @@ public class JsonFieldWriterTest {
         assertEquals(prettyPrintJson(instance), prettyPrintJson(writer.getRootNode().toString()));
     }
 
-    public void writeComplexTestData(String prefix, String valueSuffix) throws Exception {
+    protected void writeComplexTestData(String prefix, String valueSuffix) throws Exception {
         System.out.println("\nNow writing with prefix: " + prefix + ", suffix: " + valueSuffix);
         writeString(prefix + "/address/addressLine1", "123 Main St" + valueSuffix);
         writeString(prefix + "/address/addressLine2", "Suite 42b" + valueSuffix);
@@ -310,7 +310,6 @@ public class JsonFieldWriterTest {
     }
 
     @Test
-    @Disabled("https://github.com/atlasmap/atlasmap/issues/3128")
     public void testWriteHighlyComplexObject() throws Exception {
 
         JsonComplexType items = JsonComplexTypeFactory.createJsonComlexField();
@@ -443,7 +442,7 @@ public class JsonFieldWriterTest {
         write(topping);
 
         JsonField topping1Id = new JsonField();
-        topping1Id.setPath("/items/item/topping/id");
+        topping1Id.setPath("/items/item/topping/id[0]");
         topping1Id.setValue("5001");
         topping1Id.setFieldType(FieldType.STRING);
         topping1Id.setStatus(FieldStatus.SUPPORTED);
@@ -451,7 +450,7 @@ public class JsonFieldWriterTest {
         write(topping1Id);
 
         JsonField topping1Type = new JsonField();
-        topping1Type.setPath("/items/item/topping/type");
+        topping1Type.setPath("/items/item/topping/type[0]");
         topping1Type.setValue("None");
         topping1Type.setFieldType(FieldType.STRING);
         topping1Type.setStatus(FieldStatus.SUPPORTED);
@@ -609,24 +608,21 @@ public class JsonFieldWriterTest {
         batters1.getJsonFields().getJsonField().add(batter1);
         write(batter1);
 
-        // FIXME this writes to the items/item/batters/batter and not at
-        // items/item[1]/batters/batter
+        JsonField batter1_1_id = new JsonField();
+        batter1_1_id.setPath("/items/item[1]/batters/batter/id");
+        batter1_1_id.setValue("1001");
+        batter1_1_id.setFieldType(FieldType.STRING);
+        batter1_1_id.setStatus(FieldStatus.SUPPORTED);
+        batter1.getJsonFields().getJsonField().add(batter1_1_id);
+        write(batter1_1_id);
 
-        // JsonField batter1_1_id = new JsonField();
-        // batter1_1_id.setPath("/items/item[1]/batters/batter/id");
-        // batter1_1_id.setValue("1001");
-        // batter1_1_id.setFieldType(FieldType.STRING);
-        // batter1_1_id.setStatus(FieldStatus.SUPPORTED);
-        // batter1.getJsonFields().getJsonField().add(batter1_1_id);
-        // writer.write(batter1_1_id, root);
-        //
-        // JsonField batter1_1_type = new JsonField();
-        // batter1_1_type.setPath("/items/item[1]/batters/batter/type");
-        // batter1_1_type.setValue("Regular");
-        // batter1_1_type.setFieldType(FieldType.STRING);
-        // batter1_1_type.setStatus(FieldStatus.SUPPORTED);
-        // batter1.getJsonFields().getJsonField().add(batter1_1_type);
-        // writer.write(batter1_1_type, root);
+        JsonField batter1_1_type = new JsonField();
+        batter1_1_type.setPath("/items/item[1]/batters/batter/type");
+        batter1_1_type.setValue("Regular");
+        batter1_1_type.setFieldType(FieldType.STRING);
+        batter1_1_type.setStatus(FieldStatus.SUPPORTED);
+        batter1.getJsonFields().getJsonField().add(batter1_1_type);
+        write(batter1_1_type);
 
         System.out.println(prettyPrintJson(writer.getRootNode().toString()));
     }
