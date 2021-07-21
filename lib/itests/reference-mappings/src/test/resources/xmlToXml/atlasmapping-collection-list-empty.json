@@ -1,0 +1,54 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id": "XmlSource",
+      "uri" : "atlas:xml:XmlSource",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id": "XmlTarget",
+      "uri" : "atlas:xml:XmlTarget",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId": "XmlSource",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/contactList<>/firstName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId": "XmlTarget",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/contactList<>/firstName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId": "XmlSource",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/orderId"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId": "XmlTarget",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/orderId"
+        } ]
+      }]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "XmlXmlCollectionListEmpty"
+  }
+}

@@ -30,6 +30,10 @@ public class AtlasModelFactory {
     private AtlasModelFactory() {
     }
 
+    public static <T extends BaseMapping> T createMapping() {
+        return createMapping(MappingType.MAP);
+    }
+
     @SuppressWarnings("unchecked")
     public static <T extends BaseMapping> T createMapping(MappingType type) {
         T fm = null;

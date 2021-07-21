@@ -35,7 +35,6 @@ import io.atlasmap.java.test.TargetOrder;
 import io.atlasmap.java.test.TargetOrderArray;
 import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.java.v2.JavaField;
-import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
@@ -71,10 +70,7 @@ public class JavaFieldReaderTest extends BaseJavaFieldReaderTest {
         reader.setDocument(source);
         read("/address/addressLine1", FieldType.STRING);
         assertNull(field.getValue());
-        assertEquals(1, audits.size());
-        Audit audit = audits.get(0);
-        assertEquals(AuditStatus.WARN, audit.getStatus());
-        assertEquals("/address/addressLine1", audit.getPath());
+        assertEquals(0, audits.size());
     }
 
     @Test
@@ -139,11 +135,9 @@ public class JavaFieldReaderTest extends BaseJavaFieldReaderTest {
         assertEquals(0, audits.size());
         readGroup("/[]/address/addressLine1", FieldType.STRING);
         assertNotNull(fieldGroup);
-        assertEquals(2, fieldGroup.getField().size());
+        assertEquals(1, fieldGroup.getField().size());
         assertEquals("123 any street", fieldGroup.getField().get(0).getValue());
-        assertEquals(1, audits.size());
-        assertEquals(AuditStatus.WARN, audits.get(0).getStatus());
-        assertEquals("/[1]/address/addressLine1", audits.get(0).getPath());
+        assertEquals(0, audits.size());
     }
 
     @Test
@@ -157,12 +151,9 @@ public class JavaFieldReaderTest extends BaseJavaFieldReaderTest {
         assertEquals(0, audits.size());
         readGroup("/<>/address/addressLine1", FieldType.STRING);
         assertNotNull(fieldGroup);
-        assertEquals(2, fieldGroup.getField().size());
+        assertEquals(1, fieldGroup.getField().size());
         assertEquals("123 any street", fieldGroup.getField().get(0).getValue());
-        assertNull(fieldGroup.getField().get(1).getValue());
-        assertEquals(1, audits.size());
-        assertEquals(AuditStatus.WARN, audits.get(0).getStatus());
-        assertEquals("/<1>/address/addressLine1", audits.get(0).getPath());
+        assertEquals(0, audits.size());
     }
 
     @Test
