@@ -246,7 +246,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 <span class="nc" id="L246">                                ? method.invoke(null, action) : method.invoke(null, action, convertedSourceObject);</span>
                         }
                     } else {
-<span class="nc" id="L249">                        Object object = clazz.newInstance();</span>
+<span class="nc" id="L249">                        Object object = clazz.getDeclaredConstructor().newInstance();</span>
 <span class="nc bnc" id="L250" title="All 4 branches missed.">                        if (det.isCustom() != null &amp;&amp; det.isCustom()) {</span>
 <span class="nc bnc" id="L251" title="All 2 branches missed.">                            targetObject = det.getMultiplicity() == Multiplicity.ZERO_TO_ONE</span>
 <span class="nc" id="L252">                                ? method.invoke(object) : method.invoke(object, convertedSourceObject);</span>
@@ -345,7 +345,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
 <span class="fc" id="L346">        Object o = null;</span>
         try {
-<span class="pc bpc" id="L348" title="1 of 2 branches missed.">            o = Modifier.isStatic(method.getModifiers()) ? clazz.newInstance() : null;</span>
+<span class="pc bpc" id="L348" title="1 of 2 branches missed.">            o = Modifier.isStatic(method.getModifiers()) ? clazz.getDeclaredConstructor().newInstance() : null;</span>
 <span class="nc" id="L349">        } catch (Throwable e) {</span>
 <span class="nc" id="L350">            LOG.error(String.format(&quot;Error creating object instance for action=%s msg=%s&quot;, det.getName(), e.getMessage()), e);</span>
 <span class="fc" id="L351">        }</span>
@@ -674,7 +674,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
 <span class="fc" id="L675">        FieldType valueType = determineFieldType(flattenedValues);</span>
         try {
-<span class="fc" id="L677">            Action action = actionProcessor.getActionClass().newInstance();</span>
+<span class="fc" id="L677">            Action action = actionProcessor.getActionClass().getDeclaredConstructor().newInstance();</span>
 <span class="fc bfc" id="L678" title="All 2 branches covered.">            for (Map.Entry&lt;String, Object&gt; property : actionParameters.entrySet()) {</span>
 <span class="fc" id="L679">                String setter = &quot;set&quot; + property.getKey().substring(0, 1).toUpperCase() + property.getKey().substring(1);</span>
 <span class="fc" id="L680">                action.getClass().getMethod(setter, property.getValue().getClass()).invoke(action, property.getValue());</span>

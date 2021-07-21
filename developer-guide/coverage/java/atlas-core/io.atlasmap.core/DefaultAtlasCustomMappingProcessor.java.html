@@ -44,7 +44,7 @@ import io.atlasmap.v2.CustomMapping;
         AtlasMappingBuilder builder;
         try {
 <span class="fc" id="L46">            Class&lt;?&gt; clazz = factory.getClassLoader().loadClass(className);</span>
-<span class="fc" id="L47">            builder = AtlasMappingBuilder.class.cast(clazz.newInstance());</span>
+<span class="fc" id="L47">            builder = AtlasMappingBuilder.class.cast(clazz.getDeclaredConstructor().newInstance());</span>
 <span class="nc" id="L48">        } catch (Exception e) {</span>
 <span class="nc" id="L49">            AtlasUtil.addAudit(session, className, String.format(</span>
                     &quot;Custom mapping class '%s' could not be loaded: %s&quot;,

@@ -26,7 +26,6 @@ io.atlasmap.dfdl.v2
 io.atlasmap.expression
 io.atlasmap.expression.internal
 io.atlasmap.functions
-io.atlasmap.itests.fieldactionoverride
 io.atlasmap.java.core
 io.atlasmap.java.core.accessor
 io.atlasmap.java.inspect
