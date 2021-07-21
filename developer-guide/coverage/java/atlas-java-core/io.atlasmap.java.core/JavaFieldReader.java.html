@@ -115,164 +115,156 @@ import io.atlasmap.v2.FieldType;
 
 <span class="fc" id="L116">        JavaChildAccessor childAccessor = getAccessorForSegment(session, source, field, path, segmentContext);</span>
 <span class="pc bpc" id="L117" title="1 of 4 branches missed.">        if (childAccessor == null || childAccessor.getRawValue() == null) {</span>
-<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (path.getLastSegment() != segmentContext) {</span>
-                //add audit only if not the last segment on the path
-<span class="fc" id="L120">                AtlasUtil.addAudit(session, field, String.format(</span>
-<span class="fc" id="L121">                    &quot;Assigning null value for path path=%s docId=%s due to null parent&quot;, field.getPath(), field.getDocId()),</span>
-                    AuditStatus.WARN, null);
-<span class="fc" id="L123">                Field newField = AtlasJavaModelFactory.cloneJavaField(field, false);</span>
-<span class="fc" id="L124">                fields.add(newField);</span>
-            }
-<span class="fc" id="L126">            return fields;</span>
+<span class="fc" id="L118">            return fields;</span>
         }
 
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L130">            List&lt;Field&gt; childFields = getFieldsForPath(session, childAccessor.getValue(), field, path, depth + 1);</span>
-<span class="fc" id="L131">            fields.addAll(childFields);</span>
-<span class="fc" id="L132">            return fields;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L122">            List&lt;Field&gt; childFields = getFieldsForPath(session, childAccessor.getValue(), field, path, depth + 1);</span>
+<span class="fc" id="L123">            fields.addAll(childFields);</span>
+<span class="fc" id="L124">            return fields;</span>
         }
 
         // collection
-<span class="fc bfc" id="L136" title="All 2 branches covered.">        if (segmentContext.getCollectionIndex() != null) {</span>
-<span class="fc" id="L137">            Object indexItem = childAccessor.getValueAt(segmentContext.getCollectionIndex());</span>
-<span class="fc" id="L138">            List&lt;Field&gt; childFields = getFieldsForPath(session, indexItem, field, path, depth + 1);</span>
-<span class="fc" id="L139">            fields.addAll(childFields);</span>
-<span class="fc" id="L140">        } else {</span>
-<span class="fc" id="L141">            List&lt;?&gt; items = childAccessor.getCollectionValues();</span>
-<span class="fc bfc" id="L142" title="All 2 branches covered.">            for (int i = 0; i &lt; items.size(); i++) {</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (segmentContext.getCollectionIndex() != null) {</span>
+<span class="fc" id="L129">            Object indexItem = childAccessor.getValueAt(segmentContext.getCollectionIndex());</span>
+<span class="fc" id="L130">            List&lt;Field&gt; childFields = getFieldsForPath(session, indexItem, field, path, depth + 1);</span>
+<span class="fc" id="L131">            fields.addAll(childFields);</span>
+<span class="fc" id="L132">        } else {</span>
+<span class="fc" id="L133">            List&lt;?&gt; items = childAccessor.getCollectionValues();</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">            for (int i = 0; i &lt; items.size(); i++) {</span>
                 //include the array index within the path
                 Field itemField;
-<span class="fc bfc" id="L145" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L146">                    itemField = AtlasJavaModelFactory.cloneFieldGroup((FieldGroup)field);</span>
-<span class="fc" id="L147">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L138">                    itemField = AtlasJavaModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="fc" id="L139">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);</span>
                 } else {
-<span class="fc" id="L149">                    itemField = AtlasJavaModelFactory.cloneJavaField(field, false);</span>
-<span class="fc" id="L150">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
-<span class="fc" id="L151">                    itemPath.setCollectionIndex(depth, i);</span>
-<span class="fc" id="L152">                    itemField.setPath(itemPath.toString());</span>
+<span class="fc" id="L141">                    itemField = AtlasJavaModelFactory.cloneJavaField(field, false);</span>
+<span class="fc" id="L142">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L143">                    itemPath.setCollectionIndex(depth, i);</span>
+<span class="fc" id="L144">                    itemField.setPath(itemPath.toString());</span>
                 }
-<span class="fc" id="L154">                List&lt;Field&gt; arrayFields = getFieldsForPath(</span>
-<span class="fc" id="L155">                    session, items.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);</span>
-<span class="fc" id="L156">                fields.addAll(arrayFields);</span>
+<span class="fc" id="L146">                List&lt;Field&gt; arrayFields = getFieldsForPath(</span>
+<span class="fc" id="L147">                    session, items.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);</span>
+<span class="fc" id="L148">                fields.addAll(arrayFields);</span>
             }
         }
-<span class="fc" id="L159">        return fields;</span>
+<span class="fc" id="L151">        return fields;</span>
     }
 
     private JavaChildAccessor getAccessorForSegment(AtlasInternalSession session, Object source, Field field, AtlasPath path, SegmentContext segmentContext) throws AtlasException {
-<span class="fc" id="L163">        JavaChildAccessor accessor = null;</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (segmentContext.isRoot()) {</span>
-<span class="fc" id="L165">            accessor = new RootAccessor(source);</span>
+<span class="fc" id="L155">        JavaChildAccessor accessor = null;</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (segmentContext.isRoot()) {</span>
+<span class="fc" id="L157">            accessor = new RootAccessor(source);</span>
         } else {
-<span class="fc" id="L167">            accessor = ClassHelper.lookupAccessor(source, segmentContext.getName());</span>
+<span class="fc" id="L159">            accessor = ClassHelper.lookupAccessor(source, segmentContext.getName());</span>
         }
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (accessor == null) {</span>
-<span class="nc" id="L170">            AtlasUtil.addAudit(session, field, String.format(</span>
-<span class="nc" id="L171">                &quot;Field '%s' not found on object '%s'&quot;, segmentContext.getName(), source),</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (accessor == null) {</span>
+<span class="nc" id="L162">            AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="nc" id="L163">                &quot;Field '%s' not found on object '%s'&quot;, segmentContext.getName(), source),</span>
                 AuditStatus.ERROR, null);
-<span class="nc" id="L173">            return null;</span>
+<span class="nc" id="L165">            return null;</span>
         }
 
         try {
-<span class="fc" id="L177">            accessor.getValue();</span>
-<span class="nc" id="L178">        } catch (Exception e) {</span>
-<span class="nc" id="L179">            AtlasUtil.addAudit(session, field, String.format(</span>
-<span class="nc" id="L180">                &quot;Cannot access field '%s' on object '%s': %s&quot;, segmentContext.getName(), source, e.getMessage()),</span>
+<span class="fc" id="L169">            accessor.getValue();</span>
+<span class="nc" id="L170">        } catch (Exception e) {</span>
+<span class="nc" id="L171">            AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="nc" id="L172">                &quot;Cannot access field '%s' on object '%s': %s&quot;, segmentContext.getName(), source, e.getMessage()),</span>
                 AuditStatus.ERROR, null);
-<span class="nc bnc" id="L182" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L183">                LOG.error(&quot;&quot;, e);</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L175">                LOG.error(&quot;&quot;, e);</span>
             }
-<span class="nc" id="L185">            return null;</span>
-<span class="fc" id="L186">        }</span>
+<span class="nc" id="L177">            return null;</span>
+<span class="fc" id="L178">        }</span>
 
-<span class="pc bpc" id="L188" title="3 of 8 branches missed.">        if (path.getLastSegment() == segmentContext &amp;&amp; field.getFieldType() == null</span>
+<span class="pc bpc" id="L180" title="3 of 8 branches missed.">        if (path.getLastSegment() == segmentContext &amp;&amp; field.getFieldType() == null</span>
             &amp;&amp; (field instanceof JavaField || field instanceof JavaEnumField)) {
-<span class="fc" id="L190">            detectFieldType(session, accessor, field);</span>
+<span class="fc" id="L182">            detectFieldType(session, accessor, field);</span>
         }
-<span class="fc" id="L192">        return accessor;</span>
+<span class="fc" id="L184">        return accessor;</span>
     }
 
     private void detectFieldType(AtlasInternalSession session, JavaChildAccessor accessor, Field field) throws AtlasException {
-<span class="fc" id="L196">        Class&lt;?&gt; returnType = null;</span>
+<span class="fc" id="L188">        Class&lt;?&gt; returnType = null;</span>
         try {
-<span class="fc" id="L198">            returnType = accessor.getRawClass();</span>
-<span class="nc" id="L199">        } catch (Exception e) {</span>
-<span class="nc" id="L200">            AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="fc" id="L190">            returnType = accessor.getRawClass();</span>
+<span class="nc" id="L191">        } catch (Exception e) {</span>
+<span class="nc" id="L192">            AtlasUtil.addAudit(session, field, String.format(</span>
                 &quot;Cannot access the type of field '%s' on object '%s': %s&quot;,
-<span class="nc" id="L202">                    accessor.getName(), accessor.getRawValue(), e.getMessage()),</span>
+<span class="nc" id="L194">                    accessor.getName(), accessor.getRawValue(), e.getMessage()),</span>
                 AuditStatus.ERROR, null);
-<span class="nc bnc" id="L204" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L205">                LOG.error(&quot;&quot;, e);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L197">                LOG.error(&quot;&quot;, e);</span>
             }
-<span class="fc" id="L207">        }</span>
+<span class="fc" id="L199">        }</span>
 
-<span class="pc bpc" id="L209" title="1 of 2 branches missed.">        if (returnType != null) {</span>
-<span class="fc" id="L210">            field.setFieldType(conversionService.fieldTypeFromClass(returnType));</span>
-<span class="pc bpc" id="L211" title="1 of 2 branches missed.">            if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L212">                LOG.trace(&quot;Auto-detected sourceField type p=&quot; + field.getPath() + &quot; t=&quot;</span>
-<span class="nc" id="L213">                    + field.getFieldType());</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (returnType != null) {</span>
+<span class="fc" id="L202">            field.setFieldType(conversionService.fieldTypeFromClass(returnType));</span>
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">            if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L204">                LOG.trace(&quot;Auto-detected sourceField type p=&quot; + field.getPath() + &quot; t=&quot;</span>
+<span class="nc" id="L205">                    + field.getFieldType());</span>
             }
         } else {
-<span class="nc" id="L216">            AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="nc" id="L208">            AtlasUtil.addAudit(session, field, String.format(</span>
                 &quot;Unable to auto-detect sourceField type path=%s docId=%s&quot;,
-<span class="nc" id="L218">                field.getPath(), field.getDocId()),</span>
+<span class="nc" id="L210">                field.getPath(), field.getDocId()),</span>
                 AuditStatus.WARN, null);
         }
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L213">    }</span>
 
     private void populateChildFields(Object source, FieldGroup fieldGroup, AtlasPath path) throws AtlasException {
-<span class="fc" id="L224">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L225" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
-<span class="fc" id="L226">            AtlasPath childPath = new AtlasPath(child.getPath());</span>
-<span class="fc" id="L227">            JavaChildAccessor accessor = ClassHelper.lookupAccessor(source, childPath.getLastSegment().getName());</span>
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
-<span class="nc" id="L229">                FieldGroup childGroup = populateCollectionItems(accessor, child);</span>
-<span class="nc" id="L230">                newChildren.add(childGroup);</span>
-<span class="nc" id="L231">            } else {</span>
-<span class="pc bpc" id="L232" title="1 of 2 branches missed.">                if (child instanceof FieldGroup) {</span>
-<span class="nc" id="L233">                    populateChildFields(accessor.getValue(), (FieldGroup)child, childPath);</span>
+<span class="fc" id="L216">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
+<span class="fc" id="L218">            AtlasPath childPath = new AtlasPath(child.getPath());</span>
+<span class="fc" id="L219">            JavaChildAccessor accessor = ClassHelper.lookupAccessor(source, childPath.getLastSegment().getName());</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
+<span class="nc" id="L221">                FieldGroup childGroup = populateCollectionItems(accessor, child);</span>
+<span class="nc" id="L222">                newChildren.add(childGroup);</span>
+<span class="nc" id="L223">            } else {</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">                if (child instanceof FieldGroup) {</span>
+<span class="nc" id="L225">                    populateChildFields(accessor.getValue(), (FieldGroup)child, childPath);</span>
                 } else {
-<span class="fc" id="L235">                    child.setValue(accessor.getValue());</span>
+<span class="fc" id="L227">                    child.setValue(accessor.getValue());</span>
                 }
-<span class="fc" id="L237">                newChildren.add(child);</span>
+<span class="fc" id="L229">                newChildren.add(child);</span>
             }
-<span class="fc" id="L239">        }</span>
-<span class="fc" id="L240">        fieldGroup.getField().clear();</span>
-<span class="fc" id="L241">        fieldGroup.getField().addAll(newChildren);</span>
-<span class="fc" id="L242">    }</span>
+<span class="fc" id="L231">        }</span>
+<span class="fc" id="L232">        fieldGroup.getField().clear();</span>
+<span class="fc" id="L233">        fieldGroup.getField().addAll(newChildren);</span>
+<span class="fc" id="L234">    }</span>
 
     private FieldGroup populateCollectionItems(JavaChildAccessor accessor, Field field) throws AtlasException {
-<span class="nc bnc" id="L245" title="All 4 branches missed.">        if (accessor == null || accessor.getCollectionType() == CollectionType.NONE) {</span>
-<span class="nc" id="L246">            throw new AtlasException(String.format(&quot;Couldn't find a collection object for field %s:%s&quot;,</span>
-<span class="nc" id="L247">                field.getDocId(), field.getPath()));</span>
+<span class="nc bnc" id="L237" title="All 4 branches missed.">        if (accessor == null || accessor.getCollectionType() == CollectionType.NONE) {</span>
+<span class="nc" id="L238">            throw new AtlasException(String.format(&quot;Couldn't find a collection object for field %s:%s&quot;,</span>
+<span class="nc" id="L239">                field.getDocId(), field.getPath()));</span>
         }
-<span class="nc bnc" id="L249" title="All 2 branches missed.">        FieldGroup group = field instanceof FieldGroup ?</span>
-<span class="nc" id="L250">         (FieldGroup)field : AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="nc bnc" id="L251" title="All 2 branches missed.">        for (int i=0; i&lt;accessor.getCollectionValues().size(); i++) {</span>
-<span class="nc" id="L252">            AtlasPath itemPath = new AtlasPath(group.getPath());</span>
-<span class="nc" id="L253">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
-<span class="nc" id="L254">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
-<span class="nc bnc" id="L255" title="All 2 branches missed.">            if (field instanceof FieldGroup) {</span>
-<span class="nc" id="L256">                FieldGroup itemGroup = AtlasJavaModelFactory.cloneFieldGroup((FieldGroup)field);</span>
-<span class="nc" id="L257">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);</span>
-<span class="nc" id="L258">                populateChildFields(accessor.getValueAt(i), itemGroup, itemPath);</span>
-<span class="nc" id="L259">                group.getField().add(itemGroup);</span>
-<span class="nc" id="L260">            } else {</span>
-<span class="nc" id="L261">                Field itemField = AtlasJavaModelFactory.cloneJavaField(field, false);</span>
-<span class="nc" id="L262">                itemField.setPath(itemPath.toString());</span>
-<span class="nc" id="L263">                itemField.setValue(accessor.getValueAt(i));</span>
-<span class="nc" id="L264">                group.getField().add(itemField);</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        FieldGroup group = field instanceof FieldGroup ?</span>
+<span class="nc" id="L242">         (FieldGroup)field : AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        for (int i=0; i&lt;accessor.getCollectionValues().size(); i++) {</span>
+<span class="nc" id="L244">            AtlasPath itemPath = new AtlasPath(group.getPath());</span>
+<span class="nc" id="L245">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
+<span class="nc" id="L246">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">            if (field instanceof FieldGroup) {</span>
+<span class="nc" id="L248">                FieldGroup itemGroup = AtlasJavaModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="nc" id="L249">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);</span>
+<span class="nc" id="L250">                populateChildFields(accessor.getValueAt(i), itemGroup, itemPath);</span>
+<span class="nc" id="L251">                group.getField().add(itemGroup);</span>
+<span class="nc" id="L252">            } else {</span>
+<span class="nc" id="L253">                Field itemField = AtlasJavaModelFactory.cloneJavaField(field, false);</span>
+<span class="nc" id="L254">                itemField.setPath(itemPath.toString());</span>
+<span class="nc" id="L255">                itemField.setValue(accessor.getValueAt(i));</span>
+<span class="nc" id="L256">                group.getField().add(itemField);</span>
             }
         }
-<span class="nc" id="L267">        return group;</span>
+<span class="nc" id="L259">        return group;</span>
     }
 
     public void setDocument(Object sourceDocument) {
-<span class="fc" id="L271">        this.sourceDocument = sourceDocument;</span>
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L263">        this.sourceDocument = sourceDocument;</span>
+<span class="fc" id="L264">    }</span>
 
     public void setConversionService(AtlasConversionService conversionService) {
-<span class="fc" id="L275">        this.conversionService = conversionService;</span>
-<span class="fc" id="L276">    }</span>
+<span class="fc" id="L267">        this.conversionService = conversionService;</span>
+<span class="fc" id="L268">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
