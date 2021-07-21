@@ -93,7 +93,7 @@ public class E2ETest {
     @Test
     public void test() throws Exception {
         driver.get("http://127.0.0.1:" + port);
-        WebDriverWait waitForLoad = new WebDriverWait(driver, 5);
+        WebDriverWait waitForLoad = new WebDriverWait(driver, 30);
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='Properties']")));
         WebElement atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
         atlasmapMenuBtn.click();
