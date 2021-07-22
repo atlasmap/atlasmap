@@ -32,7 +32,6 @@ import {
 import {
   ColumnBody,
   Document,
-  DocumentFieldPreview,
   DocumentFieldPreviewResults,
   DocumentFooter,
   IDragAndDropField,
@@ -113,22 +112,17 @@ export const TargetsColumn: FunctionComponent<
   onRemoveFromSelectedMapping,
   canStartMapping,
   onStartMapping,
-  onFieldPreviewChange,
   shouldShowMappingPreviewForField,
   targets,
   showTypes,
   targetProperties,
 }) => {
-  const renderPreview = useCallback(
+  const renderPreviewResult = useCallback(
     (field: IAtlasmapField) =>
       shouldShowMappingPreviewForField(field) && (
-        <DocumentFieldPreview
-          id={field.id}
-          value={field.value}
-          onChange={(value) => onFieldPreviewChange(field, value)}
-        />
+        <DocumentFieldPreviewResults id={field.id} value={field.value} />
       ),
-    [onFieldPreviewChange, shouldShowMappingPreviewForField],
+    [shouldShowMappingPreviewForField],
   );
   return (
     <>
@@ -209,7 +203,7 @@ export const TargetsColumn: FunctionComponent<
                       onStartMapping={onStartMapping}
                       fields={targetProperties.fields}
                       showTypes={showTypes}
-                      renderPreview={renderPreview}
+                      renderPreview={renderPreviewResult}
                     />
                   ) : (
                     'No target properties'
@@ -316,14 +310,7 @@ export const TargetsColumn: FunctionComponent<
                               onStartMapping: () => onStartMapping(field),
                             })
                           }
-                          renderPreview={(field) =>
-                            shouldShowMappingPreviewForField(field) && (
-                              <DocumentFieldPreviewResults
-                                id={field.id}
-                                value={field.value}
-                              />
-                            )
-                          }
+                          renderPreview={renderPreviewResult}
                         />
                       </Tree>
                     </Document>
