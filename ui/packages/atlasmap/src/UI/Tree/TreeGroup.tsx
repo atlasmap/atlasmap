@@ -119,6 +119,7 @@ export const TreeGroup = forwardRef<
         <AccordionToggle
           isExpanded={isExpanded}
           id={`${id}-toggle`}
+          data-testid={`${id}-toggle`}
           className={styles.button}
           tabIndex={-1}
           component={Component}

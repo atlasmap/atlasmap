@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { CanvasProvider, Column } from '../../UI';
+import { CanvasProvider, Column, FieldsDndProvider } from '../../UI';
 import { SourceTargetLinks, SourcesColumn, TargetsColumn } from '../../Views';
 import { boolean, text } from '@storybook/addon-knobs';
 import {
@@ -35,76 +35,82 @@ const obj = {
 export default obj;
 
 export const sourcesColumn = () => (
-  <CanvasProvider>
-    <Column data-testid={'column-source-area'} totalColumns={1}>
-      <SourcesColumn
-        onCreateConstant={action('onCreateConstant')}
-        onEditConstant={action('onEditConstant')}
-        onDeleteConstant={action('onDeleteConstant')}
-        onCreateProperty={action('onCreateProperty')}
-        onEditProperty={action('onEditProperty')}
-        onDeleteProperty={action('onDeleteProperty')}
-        onDeleteDocument={action('onDeleteDocument')}
-        onImportDocument={action('onImportDocument')}
-        onCustomClassSearch={action('onCustomClassSearch')}
-        onShowMappingDetails={action('onShowMappingDetails')}
-        canAddToSelectedMapping={() => true}
-        canAddFieldToSelectedMapping={() => true}
-        onAddToSelectedMapping={action('onAddToSelectedMapping')}
-        canRemoveFromSelectedMapping={() => true}
-        onRemoveFromSelectedMapping={action('onRemoveFromSelectedMapping')}
-        canStartMapping={() => true}
-        onStartMapping={action('onStartMapping')}
-        shouldShowMappingPreviewForField={() => true}
-        onFieldPreviewChange={action('onFieldPreviewChange')}
-        canDrop={() => true}
-        onDrop={action('onDrop')}
-        onSearch={action('onSearch')}
-        showTypes={boolean('Show types', true)}
-        sourceProperties={properties}
-        constants={constants}
-        sources={sources}
-        isSource={true}
-        acceptDropType={'target'}
-        draggableType={'source'}
-      />
-    </Column>
-  </CanvasProvider>
+  <FieldsDndProvider>
+    <CanvasProvider>
+      <Column data-testid={'column-source-area'} totalColumns={1}>
+        <SourcesColumn
+          onCreateConstant={action('onCreateConstant')}
+          onEditConstant={action('onEditConstant')}
+          onDeleteConstant={action('onDeleteConstant')}
+          onCreateProperty={action('onCreateProperty')}
+          onEditProperty={action('onEditProperty')}
+          onDeleteProperty={action('onDeleteProperty')}
+          onDeleteDocument={action('onDeleteDocument')}
+          onImportDocument={action('onImportDocument')}
+          onCustomClassSearch={action('onCustomClassSearch')}
+          onShowMappingDetails={action('onShowMappingDetails')}
+          canAddToSelectedMapping={() => true}
+          canAddFieldToSelectedMapping={() => true}
+          onAddToSelectedMapping={action('onAddToSelectedMapping')}
+          canRemoveFromSelectedMapping={() => true}
+          onRemoveFromSelectedMapping={action('onRemoveFromSelectedMapping')}
+          canStartMapping={() => true}
+          onStartMapping={action('onStartMapping')}
+          shouldShowMappingPreviewForField={() => true}
+          onFieldPreviewChange={action('onFieldPreviewChange')}
+          canDrop={() => true}
+          onDrop={action('onDrop')}
+          onSearch={action('onSearch')}
+          showTypes={boolean('Show types', true)}
+          sourceProperties={properties}
+          constants={constants}
+          sources={sources}
+          isSource={true}
+          acceptDropType={'target'}
+          draggableType={'source'}
+          onEditCSVParams={action('onEditCSVParams')}
+        />
+      </Column>
+    </CanvasProvider>
+  </FieldsDndProvider>
 );
 
 export const targetsColumn = () => (
-  <CanvasProvider>
-    <Column data-testid={'column-target-area'} totalColumns={1}>
-      <TargetsColumn
-        onCreateProperty={action('onCreateProperty')}
-        onEditProperty={action('onEditProperty')}
-        onDeleteProperty={action('onDeleteProperty')}
-        onFieldPreviewChange={action('onFieldPreviewChange')}
-        onDeleteDocument={action('onDeleteDocument')}
-        onImportDocument={action('onImportDocument')}
-        onSearch={action('onSearch')}
-        onCustomClassSearch={action('onCustomClassSearch')}
-        onDrop={action('onDrop')}
-        canDrop={() => true}
-        onShowMappingDetails={action('onShowMappingDetails')}
-        canAddToSelectedMapping={() => true}
-        canAddFieldToSelectedMapping={() => true}
-        onAddToSelectedMapping={action('onAddToSelectedMapping')}
-        canRemoveFromSelectedMapping={() => true}
-        onRemoveFromSelectedMapping={action('onRemoveFromSelectedMapping')}
-        canStartMapping={() => true}
-        onStartMapping={action('onStartMapping')}
-        shouldShowMappingPreviewForField={() => true}
-        showMappingPreview={boolean('Show mapping preview', false)}
-        showTypes={boolean('Show types', true)}
-        targetProperties={properties}
-        targets={targets}
-        isSource={false}
-        acceptDropType={'source'}
-        draggableType={'target'}
-      />
-    </Column>
-  </CanvasProvider>
+  <FieldsDndProvider>
+    <CanvasProvider>
+      <Column data-testid={'column-target-area'} totalColumns={1}>
+        <TargetsColumn
+          onCreateProperty={action('onCreateProperty')}
+          onEditProperty={action('onEditProperty')}
+          onDeleteProperty={action('onDeleteProperty')}
+          onFieldPreviewChange={action('onFieldPreviewChange')}
+          onDeleteDocument={action('onDeleteDocument')}
+          onImportDocument={action('onImportDocument')}
+          onSearch={action('onSearch')}
+          onCustomClassSearch={action('onCustomClassSearch')}
+          onDrop={action('onDrop')}
+          canDrop={() => true}
+          onShowMappingDetails={action('onShowMappingDetails')}
+          canAddToSelectedMapping={() => true}
+          canAddFieldToSelectedMapping={() => true}
+          onAddToSelectedMapping={action('onAddToSelectedMapping')}
+          canRemoveFromSelectedMapping={() => true}
+          onRemoveFromSelectedMapping={action('onRemoveFromSelectedMapping')}
+          canStartMapping={() => true}
+          onStartMapping={action('onStartMapping')}
+          shouldShowMappingPreviewForField={() => true}
+          showMappingPreview={boolean('Show mapping preview', false)}
+          showTypes={boolean('Show types', true)}
+          targetProperties={properties}
+          targets={targets}
+          isSource={false}
+          acceptDropType={'source'}
+          draggableType={'target'}
+          onEditCSVParams={action('onEditCSVParams')}
+        />
+      </Column>
+    </CanvasProvider>
+  </FieldsDndProvider>
 );
 
 export const sourceTargetLinks = () => (
