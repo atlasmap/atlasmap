@@ -188,6 +188,12 @@
               <className>twitter4j.Status</className>
             </inspection>
             <inspection>
+              <artifacts>
+		      <artifact>io.atlasmap:atlas-java-test-model:${project.version}</artifact>
+              </artifacts>
+              <className>io.atlasmap.java.test.TargetTestClass</className>
+            </inspection>
+            <inspection>
                 <fileName>${project.basedir}/test-resources/json/schema</fileName>
                 <inspectionType>SCHEMA</inspectionType>
             </inspection>
