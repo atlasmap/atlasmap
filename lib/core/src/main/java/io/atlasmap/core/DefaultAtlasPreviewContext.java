@@ -289,7 +289,8 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         @Override
         public void readSourceValue(AtlasInternalSession session) throws AtlasException {
             Field sourceField = session.head().getSourceField();
-            FieldGroup sourceFieldGroup = originalMapping.getInputFieldGroup();
+            Mapping mapping = session.head().getMapping();
+            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
             if (sourceFieldGroup != null) {
                 if (matches(sourceField, sourceFieldGroup)) {
                     session.head().setSourceField(sourceFieldGroup);
@@ -299,7 +300,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                  session.head().setSourceField(f);
                  return;
             }
-            for (Field f : originalMapping.getInputField()) {
+            for (Field f : mapping.getInputField()) {
                 if (matches(sourceField, f)) {
                     session.head().setSourceField(f);
                     return;

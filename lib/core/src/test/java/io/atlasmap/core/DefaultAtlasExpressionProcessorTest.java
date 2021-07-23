@@ -190,5 +190,40 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         assertEquals("doc1propdoc2propcurrentprop", field.getValue());
     }
 
+    @Test
+    public void testBoolean() throws AtlasException {
+        Field source = populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.BOOLEAN, true);
+        String expression = String.format("IF (${%s:/testPathtrue}, 'YES', 'NO')", AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        recreateSession();
+        session.head().setSourceField(source);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertEquals("YES", session.head().getSourceField().getValue());
+
+        source = populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.BOOLEAN, true);
+        expression = String.format("IF (${%s:/testPathtrue} == true, 'YES', 'NO')", AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        recreateSession();
+        session.head().setSourceField(source);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertEquals("YES", session.head().getSourceField().getValue());
+
+        source = populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.BOOLEAN, Boolean.valueOf(true));
+        expression = String.format("IF (${%s:/testPathtrue}, 'YES', 'NO')", AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        recreateSession();
+        session.head().setSourceField(source);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertEquals("YES", session.head().getSourceField().getValue());
+
+        source = populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.BOOLEAN, Boolean.valueOf(true));
+        expression = String.format("IF (${%s:/testPathtrue} == true, 'YES', 'NO')", AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        recreateSession();
+        session.head().setSourceField(source);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertEquals("YES", session.head().getSourceField().getValue());
+    }
+
 }
 

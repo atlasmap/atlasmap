@@ -251,6 +251,26 @@ public class JavaJavaFlatMappingTest extends AtlasMappingBaseTest {
         validateFlatPrimitiveClassBoxedPrimitiveFields((TargetFlatPrimitiveClass) object);
     }
 
+    @Test
+    public void testProcessJavaJavaFlatExpression() throws Exception {
+        AtlasContext context = atlasContextFactory
+                .createContext(new File("src/test/resources/javaToJava/atlasmapping-flatprimitive-expression.json").toURI());
+        AtlasSession session = context.createSession();
+        BaseFlatPrimitiveClass sourceClass = generateFlatPrimitiveClassBoxedPrimitiveFieldsBoxedValues(
+                SourceFlatPrimitiveClass.class);
+        sourceClass.setBooleanField(true);
+        session.setSourceDocument("SourceDoc", sourceClass);
+        context.process(session);
+
+        assertEquals(0, session.getAudits().getAudit().size(), printAudit(session));
+        Object object = session.getTargetDocument("TargetDoc");
+        assertNotNull(object);
+        assertTrue(object instanceof TargetFlatPrimitiveClass);
+        TargetFlatPrimitiveClass target = (TargetFlatPrimitiveClass)object;
+        assertEquals("YES", target.getBoxedStringArrayField()[0]);
+        assertEquals("YES", target.getBoxedStringArrayField()[1]);
+    }
+
     protected void printValidation(Validation v) {
         // System.out.println("Validation n=" + v.getName() + " f=" + v.getField() + "
         // g=" + v.getGroup() + " v=" + v.getValue() + " s=" + v.getStatus() + " msg=" +

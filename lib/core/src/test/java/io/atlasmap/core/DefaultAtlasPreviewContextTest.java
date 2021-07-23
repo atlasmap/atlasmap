@@ -464,4 +464,40 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         assertEquals("testVal", targetGroup.getField().get(0).getValue());
         
     }
+
+    @Test
+    public void testProcessPreviewExpressionBoolean() throws AtlasException {
+        Mapping m = new Mapping();
+        Field source = new SimpleField();
+        source.setDocId("source");
+        source.setFieldType(FieldType.BOOLEAN);
+        source.setPath("/sourceBoolean");
+        source.setValue("true");
+        m.getInputField().add(source);
+        m.setExpression("IF(${source:/sourceBoolean}, 'YES', 'NO')");
+        Field target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        Audits audits = previewContext.processPreview(m);
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
+        target = m.getOutputField().get(0);
+        assertEquals("YES", target.getValue());
+
+        m = new Mapping();
+        source = new SimpleField();
+        source.setDocId("source");
+        source.setFieldType(FieldType.BOOLEAN);
+        source.setPath("/sourceBoolean");
+        source.setValue("true");
+        m.getInputField().add(source);
+        m.setExpression("IF (${source:/sourceBoolean} == true, 'YES', 'NO')");
+        target = new SimpleField();
+        target.setFieldType(FieldType.STRING);
+        m.getOutputField().add(target);
+        audits = previewContext.processPreview(m);
+        assertEquals(0, audits.getAudit().size(), printAudit(audits));
+        target = m.getOutputField().get(0);
+        assertEquals("YES", target.getValue());
+    }
+
 }
