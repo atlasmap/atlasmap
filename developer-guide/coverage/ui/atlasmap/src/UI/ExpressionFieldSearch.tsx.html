@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">9.68% </span>
+                <span class="strong">10.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/62</span>
+                <span class='fraction'>6/56</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10.17% </span>
+                <span class="strong">11.76% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/59</span>
+                <span class='fraction'>6/51</span>
             </div>
         
             
@@ -234,13 +234,7 @@
 <a name='L176'></a><a href='#L176'>176</a>
 <a name='L177'></a><a href='#L177'>177</a>
 <a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L179'></a><a href='#L179'>179</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -270,18 +264,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -289,7 +276,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -303,7 +289,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -334,7 +320,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -352,7 +338,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,7 +375,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -451,30 +439,22 @@ import { useToggle } from '../impl/utils';
 &nbsp;
 export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) =&gt; void;
-  fieldCandidateIndex: (fieldStr: string) =&gt; number;
-  insertSelectedField: (index: number) =&gt; void;
+  insertSelectedField: (docId: string, fieldStr: string) =&gt; void;
   mappedFieldCandidates: string[][];
 }
-let selectValue = '';
+let selectedField = '';
 &nbsp;
 export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchProps&gt; =
-<span class="fstat-no" title="function not covered" >  ({</span>
-    clearSearchMode<span class="cstat-no" title="statement not covered" >,</span>
-    fieldCandidateIndex<span class="cstat-no" title="statement not covered" >,</span>
-    insertSelectedField<span class="cstat-no" title="statement not covered" >,</span>
-    mappedFieldCandidates<span class="cstat-no" title="statement not covered" >,</span>
-  }) =&gt; {
+<span class="fstat-no" title="function not covered" >  ({</span> clearSearchMode<span class="cstat-no" title="statement not covered" >, i</span>nsertSelectedField<span class="cstat-no" title="statement not covered" >, m</span>appedFieldCandidates<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
     function <span class="fstat-no" title="function not covered" >onToggleFieldSearch(</span>toggled: boolean): any {
 <span class="cstat-no" title="statement not covered" >      if (!toggled) {</span>
 <span class="cstat-no" title="statement not covered" >        mappedFieldCandidates = [];</span>
 <span class="cstat-no" title="statement not covered" >        clearSearchMode(true);</span>
 <span class="cstat-no" title="statement not covered" >        candidateSrcElement = null;</span>
-<span class="cstat-no" title="statement not covered" >        candidateIndex = 0;</span>
       }
     }
 &nbsp;
-    const id = <span class="cstat-no" title="statement not covered" >`expr-field-search-${selectValue}`;</span>
-    let candidateIndex = <span class="cstat-no" title="statement not covered" >0;</span>
+    const id = <span class="cstat-no" title="statement not covered" >`expr-field-search-${selectedField}`;</span>
     let candidateSrcElement: any;
     const { state<span class="cstat-no" title="statement not covered" >, t</span>oggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(true, onToggleFieldSearch);</span>
 &nbsp;
@@ -487,8 +467,8 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
      */
     function <span class="fstat-no" title="function not covered" >trackSelection(</span>event: any): void {
 <span class="cstat-no" title="statement not covered" >      if (event.srcElement) {</span>
+        // const docId = event.target.getAttribute('label');
 <span class="cstat-no" title="statement not covered" >        candidateSrcElement = event.srcElement;</span>
-<span class="cstat-no" title="statement not covered" >        candidateIndex = fieldCandidateIndex(candidateSrcElement);</span>
       }
     }
 &nbsp;
@@ -518,7 +498,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
 <span class="cstat-no" title="statement not covered" >      if ('Enter' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
-<span class="cstat-no" title="statement not covered" >          insertSelectedField(candidateIndex);</span>
+          // insertSelectedField(candidateIndex);
         }
       } else <span class="cstat-no" title="statement not covered" >if ('ArrowDown' === event.key) {</span>
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
@@ -536,7 +516,6 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
 <span class="cstat-no" title="statement not covered" >        if (!candidateSrcElement &amp;&amp; event.srcElement) {</span>
 <span class="cstat-no" title="statement not covered" >          candidateSrcElement =</span>
             event.srcElement.nextElementSibling.firstElementChild;
-<span class="cstat-no" title="statement not covered" >          candidateIndex = 0;</span>
 <span class="cstat-no" title="statement not covered" >          candidateSrcElement.style.backgroundColor = 'lightblue';</span>
         } else <span class="cstat-no" title="statement not covered" >if (</span>
           candidateSrcElement &amp;&amp;
@@ -549,14 +528,14 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
     }
 &nbsp;
     function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
-      _event: any,
+      event: any,
       value: string | SelectOptionObject,
-      _isPlaceholder?: boolean | undefined,
+      isPlaceholder?: boolean | undefined,
     ): void {
-<span class="cstat-no" title="statement not covered" >      selectValue = value as string;</span>
-      const fieldIndex = <span class="cstat-no" title="statement not covered" >fieldCandidateIndex(selectValue);</span>
-<span class="cstat-no" title="statement not covered" >      if (fieldIndex &gt;= 0) {</span>
-<span class="cstat-no" title="statement not covered" >        insertSelectedField(fieldIndex);</span>
+<span class="cstat-no" title="statement not covered" >      if (!isPlaceholder) {</span>
+        const docId = <span class="cstat-no" title="statement not covered" >event.target.getAttribute('label');</span>
+<span class="cstat-no" title="statement not covered" >        selectedField = value as string;</span>
+<span class="cstat-no" title="statement not covered" >        insertSelectedField(docId, selectedField);</span>
       }
 <span class="cstat-no" title="statement not covered" >      onToggleFieldSearch(false);</span>
 <span class="cstat-no" title="statement not covered" >      toggleOff();</span>
@@ -564,22 +543,25 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
 &nbsp;
     function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string[], idx: number): any {
       // Use the display name for documents and field path for fields.
-<span class="cstat-no" title="statement not covered" >      if (selectField[1].length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      if (selectField[1][0] !== '/') {</span>
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;SelectOption
             label={selectField[0]}
             value={selectField[0]}
             key={idx}
+            index={idx}
             className={styles.document}
+            isPlaceholder={true}
           /&gt;
         );
       } else {
 <span class="cstat-no" title="statement not covered" >        return (</span>
           &lt;SelectOption
-            label={selectField[1]}
+            label={selectField[0]}
             value={selectField[1]}
             key={idx}
             keyHandler={onKeyHandler}
+            index={idx}
             className={styles.field}
           /&gt;
         );
@@ -595,7 +577,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
         &lt;Select
           onToggle={toggle}
           isOpen={state}
-          value={selectValue}
+          value={selectedField}
           id={id}
           onKeyDown={onKeyDown}
           onSelect={selectionChanged}
@@ -615,7 +597,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Jul 23 2021 11:42:09 GMT+0000 (Coordinated Universal Time)
+                at Fri Jul 23 2021 14:23:34 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
