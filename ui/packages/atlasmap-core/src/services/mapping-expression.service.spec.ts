@@ -13,8 +13,14 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { ConfigModel } from '../models/config.model';
+import {
+  ConfigModel,
+  DocumentInitializationModel,
+} from '../models/config.model';
+import { DocumentType, InspectionType } from '../contracts/common';
+
 import { DocumentDefinition } from '../models/document-definition.model';
+import { ExpressionNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
@@ -167,5 +173,54 @@ describe('MappingExpressionService', () => {
     TestUtils.createMockMappings(cfg);
     const mapping1 = cfg.mappings!.mappings[1];
     expect(service.createMappingExpression(mapping1)).toContain('Concatenate');
+  });
+
+  test('test adding a field to an expression makes it into the mapping', () => {
+    TestUtils.createMockMappings(cfg);
+    const mapping = cfg.mappings!.mappings[1];
+
+    const docDef = new DocumentInitializationModel();
+    docDef.type = DocumentType.JSON;
+    docDef.inspectionType = InspectionType.SCHEMA;
+    docDef.name = 'JSONSchemaSource';
+    docDef.isSource = true;
+    docDef.id = 'JSONSchemaSource';
+    docDef.description = 'random desc';
+    const jsonSchemaSource = cfg.addDocument(docDef);
+
+    const source = new Field();
+    source.isPrimitive = true;
+    source.path = '/addressList<>/city';
+    source.docDef = jsonSchemaSource;
+    source.parentField = new Field();
+    source.parentField.isCollection = true;
+    source.parentField.parentField = new Field();
+    source.parentField.parentField.isCollection = true;
+    jsonSchemaSource.addField(source);
+
+    expect(mapping).toBeDefined();
+    cfg.mappingService.selectMapping(mapping);
+
+    const textNode: ExpressionNode = {
+      uuid: '0',
+      str: 'mockstr',
+      getUuid: () => '',
+      toText: () => '',
+      toHTML: () => '',
+    };
+    service.addFieldToExpression(
+      mapping,
+      source.docDef.id,
+      source.path,
+      textNode,
+      0,
+      true
+    );
+    const mappedField = mapping.getMappedFieldByPath(
+      source.path,
+      true,
+      source.docDef.id
+    );
+    expect(mappedField?.field?.path).toEqual(source.path);
   });
 });

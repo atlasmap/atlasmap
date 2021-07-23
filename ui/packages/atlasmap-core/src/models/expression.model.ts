@@ -17,7 +17,7 @@ import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from './error.model';
 import { MappedField, MappingModel } from './mapping.model';
 
 import { ConfigModel } from './config.model';
-import { IExpressionNode } from 'src/contracts/expression';
+import { IExpressionNode } from '../contracts/expression';
 import { Subject } from 'rxjs';
 
 export class ExpressionUpdatedEvent {
@@ -93,7 +93,10 @@ export class FieldNode extends ExpressionNode {
           )!;
         }
         if (!this.mappedField) {
-          this.mappedField = mapping.getReferenceField(fieldParts[1]);
+          this.mappedField = mapping.getReferenceField(
+            fieldParts[0],
+            fieldParts[1]
+          );
         }
       } else {
         this.mappedField = mapping.getMappedFieldForIndex(
