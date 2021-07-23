@@ -25,30 +25,22 @@ import { useToggle } from '../impl/utils';
 
 export interface IExpressionFieldSearchProps {
   clearSearchMode: (clearAtSign: boolean) => void;
-  fieldCandidateIndex: (fieldStr: string) => number;
-  insertSelectedField: (index: number) => void;
+  insertSelectedField: (docId: string, fieldStr: string) => void;
   mappedFieldCandidates: string[][];
 }
-let selectValue = '';
+let selectedField = '';
 
 export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProps> =
-  ({
-    clearSearchMode,
-    fieldCandidateIndex,
-    insertSelectedField,
-    mappedFieldCandidates,
-  }) => {
+  ({ clearSearchMode, insertSelectedField, mappedFieldCandidates }) => {
     function onToggleFieldSearch(toggled: boolean): any {
       if (!toggled) {
         mappedFieldCandidates = [];
         clearSearchMode(true);
         candidateSrcElement = null;
-        candidateIndex = 0;
       }
     }
 
-    const id = `expr-field-search-${selectValue}`;
-    let candidateIndex = 0;
+    const id = `expr-field-search-${selectedField}`;
     let candidateSrcElement: any;
     const { state, toggle, toggleOff } = useToggle(true, onToggleFieldSearch);
 
@@ -61,8 +53,8 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
      */
     function trackSelection(event: any): void {
       if (event.srcElement) {
+        // const docId = event.target.getAttribute('label');
         candidateSrcElement = event.srcElement;
-        candidateIndex = fieldCandidateIndex(candidateSrcElement);
       }
     }
 
@@ -92,7 +84,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
       if ('Enter' === event.key) {
         event.preventDefault();
         if (candidateSrcElement) {
-          insertSelectedField(candidateIndex);
+          // insertSelectedField(candidateIndex);
         }
       } else if ('ArrowDown' === event.key) {
         event.preventDefault();
@@ -110,7 +102,6 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
         if (!candidateSrcElement && event.srcElement) {
           candidateSrcElement =
             event.srcElement.nextElementSibling.firstElementChild;
-          candidateIndex = 0;
           candidateSrcElement.style.backgroundColor = 'lightblue';
         } else if (
           candidateSrcElement &&
@@ -123,14 +114,14 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
     }
 
     function selectionChanged(
-      _event: any,
+      event: any,
       value: string | SelectOptionObject,
-      _isPlaceholder?: boolean | undefined,
+      isPlaceholder?: boolean | undefined,
     ): void {
-      selectValue = value as string;
-      const fieldIndex = fieldCandidateIndex(selectValue);
-      if (fieldIndex >= 0) {
-        insertSelectedField(fieldIndex);
+      if (!isPlaceholder) {
+        const docId = event.target.getAttribute('label');
+        selectedField = value as string;
+        insertSelectedField(docId, selectedField);
       }
       onToggleFieldSearch(false);
       toggleOff();
@@ -138,22 +129,25 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
 
     function createSelectOption(selectField: string[], idx: number): any {
       // Use the display name for documents and field path for fields.
-      if (selectField[1].length === 0) {
+      if (selectField[1][0] !== '/') {
         return (
           <SelectOption
             label={selectField[0]}
             value={selectField[0]}
             key={idx}
+            index={idx}
             className={styles.document}
+            isPlaceholder={true}
           />
         );
       } else {
         return (
           <SelectOption
-            label={selectField[1]}
+            label={selectField[0]}
             value={selectField[1]}
             key={idx}
             keyHandler={onKeyHandler}
+            index={idx}
             className={styles.field}
           />
         );
@@ -169,7 +163,7 @@ export const ExpressionFieldSearch: FunctionComponent<IExpressionFieldSearchProp
         <Select
           onToggle={toggle}
           isOpen={state}
-          value={selectValue}
+          value={selectedField}
           id={id}
           onKeyDown={onKeyDown}
           onSelect={selectionChanged}

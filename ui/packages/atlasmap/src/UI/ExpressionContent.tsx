@@ -62,6 +62,7 @@ export interface IExpressionContentProps {
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   getFieldEnums: (nodeId: string) => EnumValue[];
   mappingExpressionAddField: (
+    selectedDocId: string,
     selectedField: string,
     newTextNode: IExpressionNode,
     atIndex: number,
@@ -186,9 +187,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   onToggle,
   setSelectedEnumValue,
 }) => {
-  let selectedField: string;
-
   let addFieldToExpression: (
+    selectedDocId: string,
     selectedField: string,
     newTextNode: IExpressionNode,
     atIndex: number,
@@ -312,15 +312,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     }
   }
 
-  function fieldCandidateIndex(fieldStr: string): number {
-    for (let i = 0; i < mappedFieldCandidates.length; i++) {
-      if (mappedFieldCandidates[i][1] === fieldStr) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
   /**
    * Handle key down events.
    *
@@ -418,22 +409,26 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * The user has selected a field from the search select menu.  Extract
    * the field name and the scope if it is present.
    *
-   * @param index - mapped field candidate array index
+   * @param selectedDocId
+   * @param selectedField
+   * @returns
    */
-  function insertSelectedField(index: number): void {
-    if (index >= mappedFieldCandidates.length) {
-      return;
-    }
-    selectedField = mappedFieldCandidates[index][1];
-    if (!selectedField) {
-      return;
-    }
+  function insertSelectedField(
+    selectedDocId: string,
+    selectedField: string,
+  ): void {
     const newTextNode = clearAtText(getCaretPositionNodeId(atContainer));
     if (newTextNode === null) {
       return;
     }
     const isTrailer = getCaretPositionNodeId(atContainer) === trailerID;
-    addFieldToExpression(selectedField, newTextNode, atIndex, isTrailer);
+    addFieldToExpression(
+      selectedDocId,
+      selectedField,
+      newTextNode,
+      atIndex,
+      isTrailer,
+    );
     clearSearchMode(false);
     markup!.focus();
   }
@@ -610,7 +605,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           <span>
             <ExpressionFieldSearch
               clearSearchMode={clearSearchMode}
-              fieldCandidateIndex={fieldCandidateIndex}
               insertSelectedField={insertSelectedField}
               mappedFieldCandidates={mappedFieldCandidates}
             />

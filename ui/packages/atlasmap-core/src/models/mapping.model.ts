@@ -13,11 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { FieldType, IField } from '../contracts/common';
+
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from './config.model';
 import { Field } from './field.model';
 import { FieldAction } from './field-action.model';
-import { IField } from 'src/contracts/common';
 import { PaddingField } from './document-definition.model';
 import { TransitionModel } from './transition.model';
 
@@ -255,13 +256,14 @@ export class MappingModel {
     );
   }
 
-  getField(fieldPath: string): Field | null {
+  getField(docId: string, fieldPath: string): Field | null {
+    let docDef = this.cfg.getDocForIdentifier(docId, true);
+    if (!docDef) {
+      docDef = this.cfg.getDocForIdentifier(docId, false);
+    }
     let field: Field | null = null;
-    for (const doc of this.cfg.getDocs(true)) {
-      field = Field.getField(fieldPath, doc.getAllFields());
-      if (field) {
-        break;
-      }
+    if (docDef) {
+      field = Field.getField(fieldPath, docDef.getAllFields());
     }
     return field;
   }
@@ -302,18 +304,23 @@ export class MappingModel {
   }
 
   /**
-   * Return true if a reference field exists in this mapping with the specified field
-   * path, false otherwise.
+   * Return true if a reference field exists in this mapping with the specified
+   * document ID and field path, false otherwise.
    *
+   * @param docId
    * @param fieldPath
    */
-  referenceFieldExists(fieldPath: string): boolean {
-    if (!fieldPath) {
+  referenceFieldExists(docId: string, fieldPath: string): boolean {
+    if (!docId || !fieldPath) {
       return false;
     }
     const referenceFields = this.getReferenceMappedFields();
     for (let referenceField of referenceFields) {
-      if (referenceField.field?.path === fieldPath) {
+      if (
+        referenceField.field &&
+        referenceField.field.docDef.id === docId &&
+        referenceField.field.path === fieldPath
+      ) {
         return true;
       }
     }
@@ -326,21 +333,26 @@ export class MappingModel {
    * typically used as a parameter to conditional functions/ constructs. If the
    * field already exists return it otherwise create it.
    *
+   * @param docId
    * @param fieldPath
    */
-  getReferenceField(fieldPath: string): MappedField | null {
-    if (!fieldPath) {
+  getReferenceField(docId: string, fieldPath: string): MappedField | null {
+    if (!docId || !fieldPath) {
       return null;
     }
-    this.transition.expression.hasComplexField = true;
     const referenceFields = this.getReferenceMappedFields();
     for (let referenceField of referenceFields) {
-      if (referenceField.field?.path === fieldPath) {
+      if (
+        referenceField.field &&
+        referenceField.field.docDef.id === docId &&
+        referenceField.field.path === fieldPath
+      ) {
         return referenceField;
       }
     }
-    const field = this.getField(fieldPath);
-    if (field) {
+    const field = this.getField(docId, fieldPath);
+    if (field?.type === FieldType.COMPLEX) {
+      this.transition.expression.hasComplexField = true;
       return this.createReferenceField(field);
     }
     return null;

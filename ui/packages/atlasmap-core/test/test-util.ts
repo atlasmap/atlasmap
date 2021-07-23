@@ -25,13 +25,18 @@ export class TestUtils {
   /**
    * Deep diff of JSON objects.  Return true if they match, false otherwise.
    */
-  static isEqualJSON = function (eObj: any, gObj: any): boolean {
+  static isEqualJSON = function (
+    testName: string,
+    eObj: any,
+    gObj: any
+  ): boolean {
     const expected = Object.keys(eObj);
     const generated = Object.keys(gObj);
 
     if (expected.length !== generated.length) {
       console.error(
-        'JSON object key length error.  Expected: ' +
+        testName +
+          ': JSON object key length error.  Expected: ' +
           expected.length +
           ', Generated: ' +
           generated.length
@@ -45,8 +50,8 @@ export class TestUtils {
           typeof eObj[objKey] === 'object' &&
           typeof gObj[objKey] === 'object'
         ) {
-          if (!TestUtils.isEqualJSON(eObj[objKey], gObj[objKey])) {
-            console.error(`${objKey} is different`);
+          if (!TestUtils.isEqualJSON(testName, eObj[objKey], gObj[objKey])) {
+            console.error(testName + `: ${objKey} is different`);
             console.info('Expected: ', eObj[objKey]);
             console.error('Generated: ', gObj[objKey]);
             return false;

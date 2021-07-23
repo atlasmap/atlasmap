@@ -791,7 +791,12 @@ export class MappingSerializer {
       if (isSource && field.isInCollection()) {
         const collectionParentField = field.getCollectionParentField();
 
-        if (!mapping.referenceFieldExists(collectionParentField.path)) {
+        if (
+          !mapping.referenceFieldExists(
+            collectionParentField.docDef.id,
+            collectionParentField.path
+          )
+        ) {
           if (!ignoreValue) {
             MappingSerializer.processCollectionPreview(
               field,

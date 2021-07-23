@@ -331,17 +331,19 @@ export function getField(fieldPath: string, isSource: boolean): Field | null {
 }
 
 export function mappingExpressionAddField(
+  selectedDocId: string,
   selectedField: string,
   newTextNode: any,
   atIndex: number,
   isTrailer: boolean,
 ) {
   const mapping = initializationService.cfg.mappings!.activeMapping;
-  if (!mapping || !selectedField) {
+  if (!mapping || !selectedDocId || !selectedField) {
     return;
   }
-  configModel.expressionService.addField(
+  configModel.expressionService.addFieldToExpression(
     mapping,
+    selectedDocId,
     selectedField,
     newTextNode,
     atIndex,

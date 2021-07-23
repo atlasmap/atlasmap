@@ -18,4 +18,5 @@ export * from './error-handler.service';
 export * from './field-action.service';
 export * from './file-management.service';
 export * from './initialization.service';
+export * from './mapping-expression.service';
 export * from './mapping-management.service';

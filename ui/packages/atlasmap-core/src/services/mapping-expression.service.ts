@@ -27,6 +27,7 @@ import { ConfigModel } from '../models/config.model';
 import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { FieldActionArgumentValue } from '../models/field-action.model';
+import { FieldType } from '../contracts/common';
 import { IExpressionNode } from '../contracts/expression';
 import { MappingUtil } from '../utils/mapping-util';
 import { Multiplicity } from '../contracts/field-action';
@@ -127,49 +128,53 @@ export class MappingExpressionService {
     );
   }
 
-  addField(
+  /**
+   * Add the specified document ID/field path to the specified mapping/ expression.
+   *
+   * @param mapping
+   * @param docId
+   * @param fieldPath
+   * @param newTextNode
+   * @param atIndex
+   * @param isTrailer
+   */
+  addFieldToExpression(
     mapping: MappingModel,
+    docId: string,
     fieldPath: string,
     newTextNode: IExpressionNode,
     atIndex: number,
     isTrailer: boolean
   ) {
-    let mappedField = mapping.getMappedFieldByPath(fieldPath, true);
+    let mappedField = mapping.getMappedFieldByPath(fieldPath, true, docId);
 
     if (!mappedField) {
       // If the selected field was not part of the original mapping
       // and is complex then add it as a reference node.
-      mappedField = mapping.getReferenceField(fieldPath);
-
-      if (mappedField) {
-        mapping.transition!.expression!.addConditionalExpressionNode(
-          mappedField,
-          newTextNode.getUuid(),
-          isTrailer ? newTextNode.str.length : atIndex
-        );
-      }
-      // Try adding the selected field to the active mapping.
-      let field: Field | null = null;
-      for (const doc of this.cfg.getDocs(true)) {
-        field = Field.getField(fieldPath, doc.getAllFields());
+      mappedField = mapping.getReferenceField(docId, fieldPath);
+      if (!mappedField) {
+        // Try adding the selected field to the active mapping.
+        const docDef = this.cfg.getDocForIdentifier(docId, true);
+        const field = Field.getField(fieldPath, docDef?.getAllFields()!);
         if (field) {
-          break;
+          this.updateExpression(
+            mapping,
+            newTextNode.getUuid(),
+            isTrailer ? newTextNode.toText().length : atIndex
+          );
+          this.cfg.mappingService.addFieldToActiveMapping(field);
+        }
+        mappedField = mapping.getMappedFieldByPath(fieldPath, true, docId);
+        if (!mappedField) {
+          return;
         }
       }
-      if (field) {
-        this.updateExpression(
-          mapping,
-          newTextNode.getUuid(),
-          isTrailer ? newTextNode.toText().length : atIndex
-        );
-      }
-    } else {
-      mapping.transition!.expression!.addConditionalExpressionNode(
-        mappedField,
-        newTextNode.getUuid(),
-        isTrailer ? newTextNode.str.length : atIndex
-      );
     }
+    mapping.transition!.expression?.addConditionalExpressionNode(
+      mappedField,
+      newTextNode.getUuid(),
+      isTrailer ? newTextNode.str.length : atIndex
+    );
   }
 
   /**
@@ -186,54 +191,60 @@ export class MappingExpressionService {
     filter: string,
     isSource: boolean
   ): string[][] {
-    const activeMapping = configModel.mappings!.activeMapping!; // TODO: check this non null operator
+    const activeMapping = configModel.mappings!.activeMapping;
+    if (!activeMapping) {
+      return [];
+    }
     const formattedFields: string[][] = [];
     let fields: Field[] = [];
     for (const docDef of configModel.getDocs(isSource)) {
-      fields = fields.concat(docDef.getTerminalFields());
+      fields = docDef.getTerminalFields();
       fields = fields.concat(docDef.getComplexFields());
-    }
-    Field.alphabetizeFields(fields);
-    let documentName = '';
-    let fieldCount = -1;
+      Field.alphabetizeFields(fields);
+      let documentName = '';
+      let fieldCount = -1;
 
-    for (const field of fields) {
-      const formattedField: string[] = [''];
-      let displayName =
-        field == null ? '' : field.getFieldLabel(configModel.showTypes, true);
+      for (const field of fields) {
+        const formattedField: string[] = [''];
+        let displayName =
+          field == null ? '' : field.getFieldLabel(configModel.showTypes, true);
 
-      if (
-        filter == null ||
-        filter === '' ||
-        displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
-      ) {
         if (
-          !configModel.mappingService.isFieldSelectable(activeMapping, field) &&
-          field.type !== 'COMPLEX'
+          filter == null ||
+          filter === '' ||
+          displayName.toLowerCase().indexOf(filter.toLowerCase()) !== -1
         ) {
-          continue;
-        }
-        if (documentName !== field.docDef.name) {
-          if (fieldCount === 0) {
-            formattedFields.pop();
+          if (
+            !configModel.mappingService.isFieldSelectable(
+              activeMapping,
+              field
+            ) &&
+            field.type !== FieldType.COMPLEX
+          ) {
             continue;
-          } else {
-            const documentField = [''];
-            documentName = field.docDef.name;
-            documentField[0] = documentName;
-            documentField[1] = '';
-            fieldCount = 0;
-            formattedFields.push(documentField);
           }
+          if (documentName !== field.docDef.name) {
+            if (fieldCount === 0) {
+              formattedFields.pop();
+              continue;
+            } else {
+              const documentField = [''];
+              documentName = field.docDef.name;
+              documentField[0] = documentName;
+              documentField[1] = field.docDef.id;
+              fieldCount = 0;
+              formattedFields.push(documentField);
+            }
+          }
+          displayName = CommonUtil.extractDisplayPath(field.path, 100);
+          formattedField[0] = field.docDef.id;
+          formattedField[1] = field.path;
+          fieldCount++;
+          formattedFields.push(formattedField);
         }
-        displayName = CommonUtil.extractDisplayPath(field.path, 100);
-        formattedField[0] = displayName;
-        formattedField[1] = field.path;
-        fieldCount++;
-        formattedFields.push(formattedField);
-      }
-      if (formattedFields.length > 19) {
-        break;
+        if (formattedFields.length > 19) {
+          break;
+        }
       }
     }
     return formattedFields;
@@ -325,7 +336,7 @@ export class MappingExpressionService {
     if (mappedField.field?.path !== null) {
       return (
         '${' +
-        mappedField.field?.docDef.id +
+        mappedField.field?.docDef?.id +
         ':' +
         mappedField.field?.path +
         '}'

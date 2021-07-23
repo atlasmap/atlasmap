@@ -102,11 +102,13 @@ function createSomeJsonSourceSourceDoc() {
   jsonSource.description = 'random desc';
   const js0 = new Field();
   js0.name = 'js0';
+  js0.docDef = jsonSource;
   js0.path = '/js0';
   js0.type = FieldType.STRING;
   jsonSource.addField(js0);
   const js1 = new Field();
   js1.name = 'js1';
+  js1.docDef = jsonSource;
   js1.path = '/js1';
   js1.type = FieldType.STRING;
   jsonSource.addField(js1);
@@ -133,6 +135,7 @@ function createJSONSchemaSourceSourceDoc() {
   jsonSchemaSource.description = 'random desc';
   const jc0 = new Field();
   jc0.name = 'addressList';
+  jc0.docDef = jsonSchemaSource;
   jc0.path = '/addressList<>';
   jc0.type = FieldType.COMPLEX;
   jc0.isCollection = true;
@@ -140,6 +143,7 @@ function createJSONSchemaSourceSourceDoc() {
   jsonSchemaSource.addField(jc0);
   const jcc0 = new Field();
   jcc0.name = 'city';
+  jcc0.docDef = jsonSchemaSource;
   jcc0.path = '/addressList<>/city';
   jcc0.type = FieldType.STRING;
   jcc0.isPrimitive = true;
@@ -148,6 +152,7 @@ function createJSONSchemaSourceSourceDoc() {
   jsonSchemaSource.addField(jcc0);
   const jcc1 = new Field();
   jcc1.name = 'state';
+  jcc1.docDef = jsonSchemaSource;
   jcc1.path = '/addressList<>/state';
   jcc1.type = FieldType.STRING;
   jcc1.isPrimitive = true;
@@ -156,6 +161,7 @@ function createJSONSchemaSourceSourceDoc() {
   jsonSchemaSource.addField(jcc1);
   const jcc2 = new Field();
   jcc2.name = 'street';
+  jcc2.docDef = jsonSchemaSource;
   jcc2.path = '/addressList<>/street';
   jcc2.type = FieldType.STRING;
   jcc2.isPrimitive = true;
@@ -164,6 +170,7 @@ function createJSONSchemaSourceSourceDoc() {
   jsonSchemaSource.addField(jcc2);
   const jcc3 = new Field();
   jcc3.name = 'zip';
+  jcc3.docDef = jsonSchemaSource;
   jcc3.path = '/addressList<>/zip';
   jcc3.type = FieldType.STRING;
   jcc3.isPrimitive = true;
@@ -174,6 +181,7 @@ function createJSONSchemaSourceSourceDoc() {
   jsonSchemaSource.addField(primitives);
   const stringPrimitive = new Field();
   stringPrimitive.name = 'stringPrimitive';
+  stringPrimitive.docDef = jsonSchemaSource;
   stringPrimitive.path = '/primitives/stringPrimitive';
   stringPrimitive.type = FieldType.STRING;
   stringPrimitive.isPrimitive = true;
@@ -194,11 +202,13 @@ function createSomeXmlSourceSourceDoc() {
   xmlSource.description = 'random desc';
   const xs0 = new Field();
   xs0.name = 'xs0';
+  xs0.docDef = xmlSource;
   xs0.path = '/xs0';
   xs0.type = FieldType.STRING;
   xmlSource.addField(xs0);
   const xs1 = new Field();
   xs1.name = 'xs1';
+  xs1.docDef = xmlSource;
   xs1.path = '/xs1';
   xs1.type = FieldType.STRING;
   xmlSource.addField(xs1);
@@ -216,21 +226,25 @@ function createSalesforceContactTargetDoc() {
   contact.description = 'random desc';
   const desc = new Field();
   desc.name = 'Description';
+  desc.docDef = contact;
   desc.path = '/Description';
   desc.type = FieldType.STRING;
   contact.addField(desc);
   const title = new Field();
   title.name = 'Title';
+  title.docDef = contact;
   title.path = '/Title';
   title.type = FieldType.STRING;
   contact.addField(title);
   const firstName = new Field();
   firstName.name = 'FirstName';
+  firstName.docDef = contact;
   firstName.path = '/FirstName';
   firstName.type = FieldType.STRING;
   contact.addField(firstName);
   const lastName = new Field();
   lastName.name = 'LastName';
+  lastName.docDef = contact;
   lastName.path = '/LastName';
   lastName.type = FieldType.STRING;
   contact.addField(lastName);
@@ -248,11 +262,13 @@ function createSomeJsonTargetTargetDoc() {
   jsonTarget.description = 'random desc';
   const jt0 = new Field();
   jt0.name = 'jt0';
+  jt0.docDef = jsonTarget;
   jt0.path = '/jt0';
   jt0.type = FieldType.STRING;
   jsonTarget.addField(jt0);
   const jt1 = new Field();
   jt1.name = 'jt1';
+  jt1.docDef = jsonTarget;
   jt1.path = '/jt1';
   jt1.type = FieldType.STRING;
   jsonTarget.addField(jt1);
@@ -270,6 +286,7 @@ function createJSONSchemaSourceTargetDoc() {
   jsonSchemaSource.description = 'random desc';
   const jtc0 = new Field();
   jtc0.name = 'addressList';
+  jtc0.docDef = jsonSchemaSource;
   jtc0.path = '/addressList<>';
   jtc0.type = FieldType.COMPLEX;
   jtc0.isCollection = true;
@@ -277,6 +294,7 @@ function createJSONSchemaSourceTargetDoc() {
   jsonSchemaSource.addField(jtc0);
   const jtcc0 = new Field();
   jtcc0.name = 'city';
+  jtcc0.docDef = jsonSchemaSource;
   jtcc0.path = '/addressList<>/city';
   jtcc0.type = FieldType.STRING;
   jtcc0.isPrimitive = true;
@@ -285,6 +303,7 @@ function createJSONSchemaSourceTargetDoc() {
   jsonSchemaSource.addField(jtcc0);
   const jtcc1 = new Field();
   jtcc1.name = 'zip';
+  jtcc1.docDef = jsonSchemaSource;
   jtcc1.path = '/addressList<>/zip';
   jtcc1.type = FieldType.STRING;
   jtcc1.isPrimitive = true;
@@ -293,12 +312,14 @@ function createJSONSchemaSourceTargetDoc() {
   jsonSchemaSource.addField(jtcc1);
   const tprimitives = new Field();
   tprimitives.name = 'primitives';
+  tprimitives.docDef = jsonSchemaSource;
   tprimitives.path = '/primitives';
   tprimitives.type = FieldType.COMPLEX;
   tprimitives.documentField.status = FieldStatus.SUPPORTED;
   jsonSchemaSource.addField(tprimitives);
   const tstringPrimitive = new Field();
   tstringPrimitive.name = 'stringPrimitive';
+  tstringPrimitive.docDef = jsonSchemaSource;
   tstringPrimitive.path = '/primitives/stringPrimitive';
   tstringPrimitive.type = FieldType.STRING;
   tstringPrimitive.isPrimitive = true;
@@ -363,6 +384,7 @@ function createAllDocs(cfg: ConfigModel) {
 
 describe('MappingSerializer', () => {
   let cfg: ConfigModel;
+  let tName = '';
   beforeEach(() => {
     const init = new InitializationService(ky);
     init.initialize();
@@ -370,7 +392,8 @@ describe('MappingSerializer', () => {
     cfg.mappings = new MappingDefinition();
   });
 
-  test('deserialize & serialize mapping definition', (done) => {
+  tName = 'deserialize & serialize mapping definition';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -398,7 +421,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('deserialize & serialize conditional expression mapping definitions', (done) => {
+  tName = 'deserialize & serialize conditional expression mapping definitions';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -456,7 +480,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('serialize many-to-one action', (done) => {
+  tName = 'serialize many-to-one action';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -518,7 +543,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('serialize one-to-many action', (done) => {
+  tName = 'serialize one-to-many action';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -559,7 +585,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('serialize expression action', (done) => {
+  tName = 'serialize expression action';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -612,7 +639,9 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('serialize/ preview collection expression: repeat(count(city), const-str)', (done) => {
+  tName =
+    'serialize/ preview collection expression: repeat(count(city), const-str)';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -673,6 +702,7 @@ describe('MappingSerializer', () => {
         // Verify mapping.
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingCollExprMapping,
             serialized // ignoreValue defaults to true
           )
@@ -685,6 +715,7 @@ describe('MappingSerializer', () => {
         // ).replace(/\.[0-9]*/g, '.');
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingCollExprPreview,
             MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
           )
@@ -697,7 +728,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('serialize/ preview reference collection expression', (done) => {
+  tName = 'serialize/ preview reference collection expression';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -763,6 +795,7 @@ describe('MappingSerializer', () => {
         testField!.value = 'Bosto';
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingCollRefExprPreview,
             MappingSerializer.serializeMappings(cfg, false)
           )
@@ -775,7 +808,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('collection many-to-one deserialize/serialize', (done) => {
+  tName = 'collection many-to-one deserialize/serialize';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -798,6 +832,7 @@ describe('MappingSerializer', () => {
         expect(mapping).toBeDefined();
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingCollExprMapping,
             MappingSerializer.serializeMappings(cfg) // ignoreValue defaults to true
           )
@@ -810,7 +845,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('collection one-to-many deserialize/serialize', (done) => {
+  tName = 'collection one-to-many deserialize/serialize';
+  test(tName, (done) => {
     cfg.sourceDocs.push(createJSONSchemaSourceSourceDoc());
     cfg.targetDocs.push(createJSONSchemaSourceTargetDoc());
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
@@ -828,6 +864,7 @@ describe('MappingSerializer', () => {
         expect(mapping).toBeDefined();
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingSplitJson,
             MappingSerializer.serializeMappings(cfg)
           )
@@ -840,7 +877,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('collection one-to-many collapse deserialize/serialize', (done) => {
+  tName = 'collection one-to-many collapse deserialize/serialize';
+  test(tName, (done) => {
     cfg.sourceDocs.push(createJSONSchemaSourceSourceDoc());
     cfg.targetDocs.push(createJSONSchemaSourceTargetDoc());
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
@@ -859,6 +897,7 @@ describe('MappingSerializer', () => {
         expect(mapping).toBeDefined();
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingSplitCollapseJson,
             MappingSerializer.serializeMappings(cfg)
           )
@@ -871,7 +910,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('remove a field node from a conditional expression', (done) => {
+  tName = 'remove a field node from a conditional expression';
+  test(tName, (done) => {
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
@@ -917,7 +957,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('map enumeration values through a lookup table', (done) => {
+  tName = 'map enumeration values through a lookup table';
+  test(tName, (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -984,6 +1025,7 @@ describe('MappingSerializer', () => {
         MappingUtil.updateMappingsFromDocuments(cfg);
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingEnumLookupTableMapping,
             MappingSerializer.serializeMappings(cfg)
           )
@@ -1049,7 +1091,8 @@ describe('MappingSerializer', () => {
       });
   });
 
-  test('process a CSV mapping', (done) => {
+  tName = 'process a CSV mapping';
+  test(tName, (done) => {
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -1137,6 +1180,7 @@ describe('MappingSerializer', () => {
         MappingUtil.updateMappingsFromDocuments(cfg);
         expect(
           TestUtils.isEqualJSON(
+            tName,
             atlasMappingCSV,
             MappingSerializer.serializeMappings(cfg)
           )
