@@ -27,6 +27,7 @@ import { Input } from 'ky';
 import { TestUtils } from '../../test/test-util';
 import atlasmapInspectionComplexObjectRootedJson from '../../../../test-resources/inspected/atlasmap-inspection-complex-object-rooted.json';
 import atlasmapInspectionPoExampleSchemaJson from '../../../../test-resources/inspected/atlasmap-inspection-po-example-schema.json';
+import atlasmapInspectionTargetTestClassJson from '../../../../test-resources/inspected/atlasmap-inspection-io.atlasmap.java.test.TargetTestClass.json';
 import atlasmapInspectionTwitter4jStatusJson from '../../../../test-resources/inspected/atlasmap-inspection-twitter4j.Status.json';
 import fs from 'fs';
 import ky from 'ky/umd';
@@ -99,6 +100,56 @@ describe('DocumentManagementService', () => {
         const urlParent = url?.parentField;
         expect(urlParent?.name).toBe('place');
         expect(screenName[0]?.children.length).toBe(0);
+        done();
+      },
+      error: (error) => {
+        fail(error);
+      },
+    });
+  });
+
+  test('inspectDocuments() parse Java inspection TargetTestClass', (done) => {
+    const docDef = new DocumentInitializationModel();
+    docDef.type = DocumentType.JAVA;
+    docDef.inspectionResult = JSON.stringify(
+      atlasmapInspectionTargetTestClassJson
+    );
+    cfg.addDocument(docDef);
+    service.inspectDocuments().subscribe({
+      next: (answer: DocumentDefinition) => {
+        const contact = answer.getField('/contact');
+        expect(contact).toBeTruthy();
+        expect(contact?.type).toBe('COMPLEX');
+        expect(contact?.name).toBe('contact');
+        expect(contact?.path).toBe('/contact');
+        expect(contact?.isCollection).toBeFalsy();
+        const contactFirstName = answer.getField('/contact/firstName');
+        expect(contactFirstName).toBeTruthy();
+        expect(contactFirstName?.type).toBe('STRING');
+        expect(contactFirstName?.name).toBe('firstName');
+        expect(contactFirstName?.path).toBe('/contact/firstName');
+        const list = answer.getField('/contactList<>');
+        expect(list).toBeTruthy();
+        expect(list?.type).toBe('COMPLEX');
+        expect(list?.name).toBe('contactList');
+        expect(list?.path).toBe('/contactList<>');
+        expect(list?.isCollection).toBeTruthy();
+        const listFirstName = answer.getField('/contactList<>/firstName');
+        expect(listFirstName).toBeTruthy();
+        expect(listFirstName?.type).toBe('STRING');
+        expect(listFirstName?.name).toBe('firstName');
+        expect(listFirstName?.path).toBe('/contactList<>/firstName');
+        const array = answer.getField('/contactArray[]');
+        expect(array).toBeTruthy();
+        expect(array?.type).toBe('COMPLEX');
+        expect(array?.name).toBe('contactArray');
+        expect(array?.path).toBe('/contactArray[]');
+        expect(array?.isCollection).toBeTruthy();
+        const arrayFirstName = answer.getField('/contactArray[]/firstName');
+        expect(arrayFirstName).toBeTruthy();
+        expect(arrayFirstName?.type).toBe('STRING');
+        expect(arrayFirstName?.name).toBe('firstName');
+        expect(arrayFirstName?.path).toBe('/contactArray[]/firstName');
         done();
       },
       error: (error) => {

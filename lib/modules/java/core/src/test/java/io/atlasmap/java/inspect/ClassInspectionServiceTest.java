@@ -30,10 +30,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
+import io.atlasmap.java.test.TargetTestClass;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.java.v2.Modifier;
 import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 public class ClassInspectionServiceTest {
@@ -389,5 +391,30 @@ public class ClassInspectionServiceTest {
         JavaField f = javaClass.getJavaFields().getJavaField().get(0);
         assertEquals(FieldType.STRING, f.getFieldType());
         assertEquals("/someInnerString", f.getPath());
+    }
+
+    @Test
+    public void testTargetTestClass() {
+        JavaClass javaClass = classInspectionService.inspectClass(TargetTestClass.class, CollectionType.NONE, null);
+        assertEquals(TargetTestClass.class.getName(), javaClass.getClassName());
+        assertEquals(FieldType.COMPLEX, javaClass.getFieldType());
+        JavaField orderArray = javaClass.getJavaFields().getJavaField().get(6);
+        assertEquals(FieldType.COMPLEX, orderArray.getFieldType());
+        assertEquals("/orderArray", orderArray.getPath());
+        JavaField orderArrayOrders = ((JavaClass)orderArray).getJavaFields().getJavaField().get(0);
+        assertEquals(CollectionType.ARRAY, orderArrayOrders.getCollectionType());
+        assertEquals("/orderArray/orders[]", orderArrayOrders.getPath());
+        JavaField listOrders = javaClass.getJavaFields().getJavaField().get(7);
+        assertEquals(FieldType.COMPLEX, listOrders.getFieldType());
+        assertEquals("/listOrders", listOrders.getPath());
+        JavaField listOrdersOrders = ((JavaClass)listOrders).getJavaFields().getJavaField().get(0);
+        assertEquals(CollectionType.LIST, listOrdersOrders.getCollectionType());
+        assertEquals("/listOrders/orders<>", listOrdersOrders.getPath());
+        JavaField contactList = javaClass.getJavaFields().getJavaField().get(12);
+        assertEquals(CollectionType.LIST, contactList.getCollectionType());
+        assertEquals("/contactList<>", contactList.getPath());
+        JavaField contactArray = javaClass.getJavaFields().getJavaField().get(13);
+        assertEquals(CollectionType.ARRAY, contactArray.getCollectionType());
+        assertEquals("/contactArray[]", contactArray.getPath());
     }
 }

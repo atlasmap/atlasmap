@@ -311,11 +311,12 @@ export class DocumentDefinition {
       return false;
     }
 
-    // copy cached field children
+    // copy cached field contents
     cachedField = cachedField.copy();
     for (let childField of cachedField.children) {
       childField = childField.copy();
       childField.parentField = field;
+      this.rewriteFieldPath(childField);
       this.populateFieldData(childField);
       field.children.push(childField);
     }
@@ -325,6 +326,15 @@ export class DocumentDefinition {
       return true;
     } else {
       return false;
+    }
+  }
+
+  private rewriteFieldPath(field: Field) {
+    const parent = field.parentField;
+    const pathSegments = field.path.split(FIELD_PATH_SEPARATOR);
+    field.path = parent.path + FIELD_PATH_SEPARATOR + pathSegments.slice(-1)[0];
+    for (let child of field.children) {
+      this.rewriteFieldPath(child);
     }
   }
 
