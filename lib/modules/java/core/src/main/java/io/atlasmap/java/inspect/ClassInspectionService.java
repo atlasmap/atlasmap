@@ -327,10 +327,12 @@ public class ClassInspectionService {
         if (returnType.isArray()) {
             field.setCollectionType(CollectionType.ARRAY);
             field.setArrayDimensions(detectArrayDimensions(returnType));
+            field.setPath(field.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);
             returnType = detectArrayClass(returnType);
         } else if (Collection.class.isAssignableFrom(returnType)) {
             field.setCollectionType(CollectionType.LIST);
             field.setCollectionClassName(returnType.getName());
+            field.setPath(field.getPath() + AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END);
             returnType = detectListClassFromMethodReturn(m);
         }
 
@@ -406,10 +408,12 @@ public class ClassInspectionService {
         if (paramType.isArray()) {
             field.setCollectionType(CollectionType.ARRAY);
             field.setArrayDimensions(detectArrayDimensions(paramType));
+            field.setPath(field.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);
             paramType = detectArrayClass(paramType);
         } else if (Collection.class.isAssignableFrom(paramType)) {
             field.setCollectionType(CollectionType.LIST);
             field.setCollectionClassName(paramType.getName());
+            field.setPath(field.getPath() + AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END);
             paramType = detectListClassFromMethodParameter(m);
         }
 
@@ -467,15 +471,18 @@ public class ClassInspectionService {
 
         if (isFieldMap(clazz.getName())) {
             s.setCollectionType(CollectionType.MAP);
+            s.setPath(s.getPath() + AtlasPath.PATH_MAP_START + AtlasPath.PATH_MAP_END);
         }
 
         if (clazz.isArray()) {
             s.setCollectionType(CollectionType.ARRAY);
             s.setArrayDimensions(detectArrayDimensions(clazz));
+            s.setPath(s.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);
             clazz = detectArrayClass(clazz);
         } else if (Collection.class.isAssignableFrom(clazz)) {
             s.setCollectionType(CollectionType.LIST);
             s.setCollectionClassName(clazz.getName());
+            s.setPath(s.getPath() + AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END);
             try {
                 clazz = detectListClass(classLoader, f);
                 if (clazz == null) {
