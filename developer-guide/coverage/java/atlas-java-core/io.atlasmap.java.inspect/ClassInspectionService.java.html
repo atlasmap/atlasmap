@@ -327,547 +327,554 @@ import io.atlasmap.v2.StringList;
 <span class="fc bfc" id="L327" title="All 2 branches covered.">        if (returnType.isArray()) {</span>
 <span class="fc" id="L328">            field.setCollectionType(CollectionType.ARRAY);</span>
 <span class="fc" id="L329">            field.setArrayDimensions(detectArrayDimensions(returnType));</span>
-<span class="fc" id="L330">            returnType = detectArrayClass(returnType);</span>
-<span class="fc bfc" id="L331" title="All 2 branches covered.">        } else if (Collection.class.isAssignableFrom(returnType)) {</span>
-<span class="fc" id="L332">            field.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L333">            field.setCollectionClassName(returnType.getName());</span>
-<span class="fc" id="L334">            returnType = detectListClassFromMethodReturn(m);</span>
+<span class="fc" id="L330">            field.setPath(field.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);</span>
+<span class="fc" id="L331">            returnType = detectArrayClass(returnType);</span>
+<span class="fc bfc" id="L332" title="All 2 branches covered.">        } else if (Collection.class.isAssignableFrom(returnType)) {</span>
+<span class="fc" id="L333">            field.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L334">            field.setCollectionClassName(returnType.getName());</span>
+<span class="fc" id="L335">            field.setPath(field.getPath() + AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END);</span>
+<span class="fc" id="L336">            returnType = detectListClassFromMethodReturn(m);</span>
         }
 
-<span class="fc" id="L337">        field.setClassName(returnType.getName());</span>
-<span class="fc" id="L338">        field.setCanonicalClassName(returnType.getCanonicalName());</span>
-<span class="fc" id="L339">        field.setGetMethod(m.getName());</span>
-<span class="fc" id="L340">        field.setFieldType(getConversionService().fieldTypeFromClass(returnType));</span>
-<span class="fc bfc" id="L341" title="All 4 branches covered.">        if (getConversionService().isPrimitive(returnType) || getConversionService().isBoxedPrimitive(returnType)) {</span>
-<span class="fc" id="L342">            field.setPrimitive(true);</span>
-<span class="fc" id="L343">            field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc bfc" id="L344" title="All 2 branches covered.">        } else if (field.getFieldType() != FieldType.COMPLEX) {</span>
-<span class="fc" id="L345">            field.setPrimitive(false);</span>
-<span class="fc" id="L346">            field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L339">        field.setClassName(returnType.getName());</span>
+<span class="fc" id="L340">        field.setCanonicalClassName(returnType.getCanonicalName());</span>
+<span class="fc" id="L341">        field.setGetMethod(m.getName());</span>
+<span class="fc" id="L342">        field.setFieldType(getConversionService().fieldTypeFromClass(returnType));</span>
+<span class="fc bfc" id="L343" title="All 4 branches covered.">        if (getConversionService().isPrimitive(returnType) || getConversionService().isBoxedPrimitive(returnType)) {</span>
+<span class="fc" id="L344">            field.setPrimitive(true);</span>
+<span class="fc" id="L345">            field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">        } else if (field.getFieldType() != FieldType.COMPLEX) {</span>
+<span class="fc" id="L347">            field.setPrimitive(false);</span>
+<span class="fc" id="L348">            field.setStatus(FieldStatus.SUPPORTED);</span>
         } else {
-<span class="fc" id="L348">            field.setPrimitive(false);</span>
+<span class="fc" id="L350">            field.setPrimitive(false);</span>
 
-<span class="fc" id="L350">            Class&lt;?&gt; complexClazz = null;</span>
-<span class="fc" id="L351">            JavaClass tmpField = convertJavaFieldToJavaClass(field);</span>
-<span class="fc" id="L352">            field = tmpField;</span>
+<span class="fc" id="L352">            Class&lt;?&gt; complexClazz = null;</span>
+<span class="fc" id="L353">            JavaClass tmpField = convertJavaFieldToJavaClass(field);</span>
+<span class="fc" id="L354">            field = tmpField;</span>
 
-<span class="pc bpc" id="L354" title="1 of 2 branches missed.">            if (returnType.getName() == null) {</span>
-<span class="nc" id="L355">                field.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="fc bfc" id="L356" title="All 2 branches covered.">            } else if (!cachedClasses.contains(returnType.getName())) {</span>
+<span class="pc bpc" id="L356" title="1 of 2 branches missed.">            if (returnType.getName() == null) {</span>
+<span class="nc" id="L357">                field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc bfc" id="L358" title="All 2 branches covered.">            } else if (!cachedClasses.contains(returnType.getName())) {</span>
                 try {
-<span class="fc" id="L358">                    complexClazz = classLoader.loadClass(returnType.getName());</span>
-<span class="fc" id="L359">                    cachedClasses.add(returnType.getName());</span>
-<span class="fc" id="L360">                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());</span>
-<span class="pc bpc" id="L361" title="1 of 2 branches missed.">                    if (tmpField.getStatus() == null) {</span>
-<span class="fc" id="L362">                        field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L360">                    complexClazz = classLoader.loadClass(returnType.getName());</span>
+<span class="fc" id="L361">                    cachedClasses.add(returnType.getName());</span>
+<span class="fc" id="L362">                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">                    if (tmpField.getStatus() == null) {</span>
+<span class="fc" id="L364">                        field.setStatus(FieldStatus.SUPPORTED);</span>
                     }
-<span class="nc" id="L364">                } catch (ClassNotFoundException cnfe) {</span>
-<span class="nc" id="L365">                    field.setStatus(FieldStatus.NOT_FOUND);</span>
-<span class="pc" id="L366">                }</span>
+<span class="nc" id="L366">                } catch (ClassNotFoundException cnfe) {</span>
+<span class="nc" id="L367">                    field.setStatus(FieldStatus.NOT_FOUND);</span>
+<span class="pc" id="L368">                }</span>
             } else {
-<span class="fc" id="L368">                field.setStatus(FieldStatus.CACHED);</span>
+<span class="fc" id="L370">                field.setStatus(FieldStatus.CACHED);</span>
             }
         }
 
-<span class="fc" id="L372">        return field;</span>
+<span class="fc" id="L374">        return field;</span>
     }
 
     private JavaField inspectSetMethod(ClassLoader classLoader, Method m, JavaField s, Set&lt;String&gt; cachedClasses,
             String pathPrefix) {
-<span class="fc" id="L377">        JavaField field = s;</span>
+<span class="fc" id="L379">        JavaField field = s;</span>
 
-<span class="fc" id="L379">        field.setName(StringUtil.getFieldNameFromSetter(m.getName()));</span>
+<span class="fc" id="L381">        field.setName(StringUtil.getFieldNameFromSetter(m.getName()));</span>
 
-<span class="pc bpc" id="L381" title="2 of 4 branches missed.">        if (pathPrefix != null &amp;&amp; pathPrefix.length() &gt; 0) {</span>
-<span class="fc" id="L382">            field.setPath(pathPrefix</span>
-<span class="fc bfc" id="L383" title="All 2 branches covered.">                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? &quot;&quot; : AtlasPath.PATH_SEPARATOR)</span>
-<span class="fc" id="L384">                    + StringUtil.getFieldNameFromSetter(m.getName()));</span>
+<span class="pc bpc" id="L383" title="2 of 4 branches missed.">        if (pathPrefix != null &amp;&amp; pathPrefix.length() &gt; 0) {</span>
+<span class="fc" id="L384">            field.setPath(pathPrefix</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? &quot;&quot; : AtlasPath.PATH_SEPARATOR)</span>
+<span class="fc" id="L386">                    + StringUtil.getFieldNameFromSetter(m.getName()));</span>
         } else {
-<span class="nc" id="L386">            field.setPath(StringUtil.getFieldNameFromSetter(m.getName()));</span>
+<span class="nc" id="L388">            field.setPath(StringUtil.getFieldNameFromSetter(m.getName()));</span>
         }
 
-<span class="fc bfc" id="L389" title="All 2 branches covered.">        if (m.getParameterCount() != 1) {</span>
-<span class="fc" id="L390">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="fc" id="L391">            return field;</span>
+<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (m.getParameterCount() != 1) {</span>
+<span class="fc" id="L392">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc" id="L393">            return field;</span>
         }
 
-<span class="pc bpc" id="L394" title="1 of 2 branches missed.">        if (!m.getReturnType().equals(Void.TYPE)) {</span>
-<span class="nc" id="L395">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="nc" id="L396">            return field;</span>
+<span class="pc bpc" id="L396" title="1 of 2 branches missed.">        if (!m.getReturnType().equals(Void.TYPE)) {</span>
+<span class="nc" id="L397">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="nc" id="L398">            return field;</span>
         }
 
-<span class="fc" id="L399">        Class&lt;?&gt;[] params = m.getParameterTypes();</span>
-<span class="pc bpc" id="L400" title="2 of 4 branches missed.">        if (params == null || params.length != 1) {</span>
-<span class="nc" id="L401">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="nc" id="L402">            return field;</span>
+<span class="fc" id="L401">        Class&lt;?&gt;[] params = m.getParameterTypes();</span>
+<span class="pc bpc" id="L402" title="2 of 4 branches missed.">        if (params == null || params.length != 1) {</span>
+<span class="nc" id="L403">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="nc" id="L404">            return field;</span>
         }
 
-<span class="fc" id="L405">        Class&lt;?&gt; paramType = params[0];</span>
-<span class="fc bfc" id="L406" title="All 2 branches covered.">        if (paramType.isArray()) {</span>
-<span class="fc" id="L407">            field.setCollectionType(CollectionType.ARRAY);</span>
-<span class="fc" id="L408">            field.setArrayDimensions(detectArrayDimensions(paramType));</span>
-<span class="fc" id="L409">            paramType = detectArrayClass(paramType);</span>
-<span class="fc bfc" id="L410" title="All 2 branches covered.">        } else if (Collection.class.isAssignableFrom(paramType)) {</span>
-<span class="fc" id="L411">            field.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L412">            field.setCollectionClassName(paramType.getName());</span>
-<span class="fc" id="L413">            paramType = detectListClassFromMethodParameter(m);</span>
+<span class="fc" id="L407">        Class&lt;?&gt; paramType = params[0];</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        if (paramType.isArray()) {</span>
+<span class="fc" id="L409">            field.setCollectionType(CollectionType.ARRAY);</span>
+<span class="fc" id="L410">            field.setArrayDimensions(detectArrayDimensions(paramType));</span>
+<span class="fc" id="L411">            field.setPath(field.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);</span>
+<span class="fc" id="L412">            paramType = detectArrayClass(paramType);</span>
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        } else if (Collection.class.isAssignableFrom(paramType)) {</span>
+<span class="fc" id="L414">            field.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L415">            field.setCollectionClassName(paramType.getName());</span>
+<span class="fc" id="L416">            field.setPath(field.getPath() + AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END);</span>
+<span class="fc" id="L417">            paramType = detectListClassFromMethodParameter(m);</span>
         }
 
-<span class="fc" id="L416">        field.setClassName(paramType.getName());</span>
-<span class="fc" id="L417">        field.setCanonicalClassName(paramType.getCanonicalName());</span>
-<span class="fc" id="L418">        field.setSetMethod(m.getName());</span>
-<span class="fc" id="L419">        field.setFieldType(getConversionService().fieldTypeFromClass(paramType));</span>
-<span class="fc bfc" id="L420" title="All 4 branches covered.">        if (getConversionService().isPrimitive(paramType) || getConversionService().isBoxedPrimitive(paramType)) {</span>
-<span class="fc" id="L421">            field.setPrimitive(true);</span>
-<span class="fc" id="L422">            field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc bfc" id="L423" title="All 2 branches covered.">        } else if (field.getFieldType() != FieldType.COMPLEX) {</span>
-<span class="fc" id="L424">            field.setPrimitive(false);</span>
-<span class="fc" id="L425">            field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L420">        field.setClassName(paramType.getName());</span>
+<span class="fc" id="L421">        field.setCanonicalClassName(paramType.getCanonicalName());</span>
+<span class="fc" id="L422">        field.setSetMethod(m.getName());</span>
+<span class="fc" id="L423">        field.setFieldType(getConversionService().fieldTypeFromClass(paramType));</span>
+<span class="fc bfc" id="L424" title="All 4 branches covered.">        if (getConversionService().isPrimitive(paramType) || getConversionService().isBoxedPrimitive(paramType)) {</span>
+<span class="fc" id="L425">            field.setPrimitive(true);</span>
+<span class="fc" id="L426">            field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">        } else if (field.getFieldType() != FieldType.COMPLEX) {</span>
+<span class="fc" id="L428">            field.setPrimitive(false);</span>
+<span class="fc" id="L429">            field.setStatus(FieldStatus.SUPPORTED);</span>
         } else {
-<span class="fc" id="L427">            field.setPrimitive(false);</span>
+<span class="fc" id="L431">            field.setPrimitive(false);</span>
 
-<span class="fc" id="L429">            Class&lt;?&gt; complexClazz = null;</span>
-<span class="fc" id="L430">            JavaClass tmpField = convertJavaFieldToJavaClass(field);</span>
-<span class="fc" id="L431">            field = tmpField;</span>
+<span class="fc" id="L433">            Class&lt;?&gt; complexClazz = null;</span>
+<span class="fc" id="L434">            JavaClass tmpField = convertJavaFieldToJavaClass(field);</span>
+<span class="fc" id="L435">            field = tmpField;</span>
 
-<span class="pc bpc" id="L433" title="1 of 2 branches missed.">            if (paramType.getName() == null) {</span>
-<span class="nc" id="L434">                field.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="fc bfc" id="L435" title="All 2 branches covered.">            } else if (!cachedClasses.contains(paramType.getName())) {</span>
+<span class="pc bpc" id="L437" title="1 of 2 branches missed.">            if (paramType.getName() == null) {</span>
+<span class="nc" id="L438">                field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc bfc" id="L439" title="All 2 branches covered.">            } else if (!cachedClasses.contains(paramType.getName())) {</span>
                 try {
-<span class="fc" id="L437">                    complexClazz = classLoader.loadClass(paramType.getName());</span>
-<span class="fc" id="L438">                    cachedClasses.add(paramType.getName());</span>
-<span class="fc" id="L439">                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());</span>
-<span class="pc bpc" id="L440" title="1 of 2 branches missed.">                    if (tmpField.getStatus() == null) {</span>
-<span class="fc" id="L441">                        field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L441">                    complexClazz = classLoader.loadClass(paramType.getName());</span>
+<span class="fc" id="L442">                    cachedClasses.add(paramType.getName());</span>
+<span class="fc" id="L443">                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, field.getPath());</span>
+<span class="pc bpc" id="L444" title="1 of 2 branches missed.">                    if (tmpField.getStatus() == null) {</span>
+<span class="fc" id="L445">                        field.setStatus(FieldStatus.SUPPORTED);</span>
                     }
-<span class="nc" id="L443">                } catch (ClassNotFoundException cnfe) {</span>
-<span class="nc" id="L444">                    field.setStatus(FieldStatus.NOT_FOUND);</span>
-<span class="pc" id="L445">                }</span>
+<span class="nc" id="L447">                } catch (ClassNotFoundException cnfe) {</span>
+<span class="nc" id="L448">                    field.setStatus(FieldStatus.NOT_FOUND);</span>
+<span class="pc" id="L449">                }</span>
             } else {
-<span class="fc" id="L447">                field.setStatus(FieldStatus.CACHED);</span>
+<span class="fc" id="L451">                field.setStatus(FieldStatus.CACHED);</span>
             }
         }
 
-<span class="fc" id="L451">        return field;</span>
+<span class="fc" id="L455">        return field;</span>
     }
 
     private JavaField inspectField(ClassLoader classLoader, Field f, Set&lt;String&gt; cachedClasses, String pathPrefix) {
 
-<span class="fc" id="L456">        JavaField s = AtlasJavaModelFactory.createJavaField();</span>
-<span class="fc" id="L457">        Class&lt;?&gt; clazz = f.getType();</span>
-<span class="fc" id="L458">        s.setName(f.getName());</span>
+<span class="fc" id="L460">        JavaField s = AtlasJavaModelFactory.createJavaField();</span>
+<span class="fc" id="L461">        Class&lt;?&gt; clazz = f.getType();</span>
+<span class="fc" id="L462">        s.setName(f.getName());</span>
 
-<span class="pc bpc" id="L460" title="2 of 4 branches missed.">        if (pathPrefix != null &amp;&amp; pathPrefix.length() &gt; 0) {</span>
-<span class="fc" id="L461">            s.setPath(pathPrefix</span>
-<span class="fc bfc" id="L462" title="All 2 branches covered.">                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? &quot;&quot; : AtlasPath.PATH_SEPARATOR)</span>
-<span class="fc" id="L463">                    + f.getName());</span>
+<span class="pc bpc" id="L464" title="2 of 4 branches missed.">        if (pathPrefix != null &amp;&amp; pathPrefix.length() &gt; 0) {</span>
+<span class="fc" id="L465">            s.setPath(pathPrefix</span>
+<span class="fc bfc" id="L466" title="All 2 branches covered.">                    + (pathPrefix.endsWith(AtlasPath.PATH_SEPARATOR) ? &quot;&quot; : AtlasPath.PATH_SEPARATOR)</span>
+<span class="fc" id="L467">                    + f.getName());</span>
         } else {
-<span class="nc" id="L465">            s.setPath(f.getName());</span>
+<span class="nc" id="L469">            s.setPath(f.getName());</span>
         }
 
-<span class="fc bfc" id="L468" title="All 2 branches covered.">        if (isFieldMap(clazz.getName())) {</span>
-<span class="fc" id="L469">            s.setCollectionType(CollectionType.MAP);</span>
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        if (isFieldMap(clazz.getName())) {</span>
+<span class="fc" id="L473">            s.setCollectionType(CollectionType.MAP);</span>
+<span class="fc" id="L474">            s.setPath(s.getPath() + AtlasPath.PATH_MAP_START + AtlasPath.PATH_MAP_END);</span>
         }
 
-<span class="fc bfc" id="L472" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
-<span class="fc" id="L473">            s.setCollectionType(CollectionType.ARRAY);</span>
-<span class="fc" id="L474">            s.setArrayDimensions(detectArrayDimensions(clazz));</span>
-<span class="fc" id="L475">            clazz = detectArrayClass(clazz);</span>
-<span class="fc bfc" id="L476" title="All 2 branches covered.">        } else if (Collection.class.isAssignableFrom(clazz)) {</span>
-<span class="fc" id="L477">            s.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L478">            s.setCollectionClassName(clazz.getName());</span>
+<span class="fc bfc" id="L477" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
+<span class="fc" id="L478">            s.setCollectionType(CollectionType.ARRAY);</span>
+<span class="fc" id="L479">            s.setArrayDimensions(detectArrayDimensions(clazz));</span>
+<span class="fc" id="L480">            s.setPath(s.getPath() + AtlasPath.PATH_ARRAY_START + AtlasPath.PATH_ARRAY_END);</span>
+<span class="fc" id="L481">            clazz = detectArrayClass(clazz);</span>
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        } else if (Collection.class.isAssignableFrom(clazz)) {</span>
+<span class="fc" id="L483">            s.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L484">            s.setCollectionClassName(clazz.getName());</span>
+<span class="fc" id="L485">            s.setPath(s.getPath() + AtlasPath.PATH_LIST_START + AtlasPath.PATH_LIST_END);</span>
             try {
-<span class="fc" id="L480">                clazz = detectListClass(classLoader, f);</span>
-<span class="pc bpc" id="L481" title="1 of 2 branches missed.">                if (clazz == null) {</span>
-<span class="nc" id="L482">                    s.setStatus(FieldStatus.ERROR);</span>
-<span class="nc" id="L483">                    return s;</span>
+<span class="fc" id="L487">                clazz = detectListClass(classLoader, f);</span>
+<span class="pc bpc" id="L488" title="1 of 2 branches missed.">                if (clazz == null) {</span>
+<span class="nc" id="L489">                    s.setStatus(FieldStatus.ERROR);</span>
+<span class="nc" id="L490">                    return s;</span>
                 }
-<span class="nc" id="L485">            } catch (ClassCastException | ClassNotFoundException cce) {</span>
-<span class="nc" id="L486">                LOG.debug(&quot;Error detecting inner listClass: &quot; + cce.getMessage() + &quot; for field: &quot; + f.getName(), cce);</span>
-<span class="nc" id="L487">                s.setStatus(FieldStatus.ERROR);</span>
-<span class="nc" id="L488">                return s;</span>
-<span class="fc" id="L489">            }</span>
+<span class="nc" id="L492">            } catch (ClassCastException | ClassNotFoundException cce) {</span>
+<span class="nc" id="L493">                LOG.debug(&quot;Error detecting inner listClass: &quot; + cce.getMessage() + &quot; for field: &quot; + f.getName(), cce);</span>
+<span class="nc" id="L494">                s.setStatus(FieldStatus.ERROR);</span>
+<span class="nc" id="L495">                return s;</span>
+<span class="fc" id="L496">            }</span>
         }
 
-<span class="fc" id="L492">        s.setFieldType(getConversionService().fieldTypeFromClass(clazz));</span>
-<span class="fc bfc" id="L493" title="All 4 branches covered.">        if (getConversionService().isPrimitive(clazz) || getConversionService().isBoxedPrimitive(clazz)) {</span>
-<span class="fc" id="L494">            s.setPrimitive(true);</span>
-<span class="fc" id="L495">            s.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc bfc" id="L496" title="All 2 branches covered.">        } else if (s.getFieldType() != FieldType.COMPLEX) {</span>
-<span class="fc" id="L497">            s.setPrimitive(false);</span>
-<span class="fc" id="L498">            s.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L499">        s.setFieldType(getConversionService().fieldTypeFromClass(clazz));</span>
+<span class="fc bfc" id="L500" title="All 4 branches covered.">        if (getConversionService().isPrimitive(clazz) || getConversionService().isBoxedPrimitive(clazz)) {</span>
+<span class="fc" id="L501">            s.setPrimitive(true);</span>
+<span class="fc" id="L502">            s.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc bfc" id="L503" title="All 2 branches covered.">        } else if (s.getFieldType() != FieldType.COMPLEX) {</span>
+<span class="fc" id="L504">            s.setPrimitive(false);</span>
+<span class="fc" id="L505">            s.setStatus(FieldStatus.SUPPORTED);</span>
         } else {
-<span class="fc" id="L500">            s.setPrimitive(false);</span>
+<span class="fc" id="L507">            s.setPrimitive(false);</span>
 
-<span class="fc" id="L502">            Class&lt;?&gt; complexClazz = null;</span>
-<span class="fc" id="L503">            JavaClass tmpField = convertJavaFieldToJavaClass(s);</span>
-<span class="fc" id="L504">            s = tmpField;</span>
+<span class="fc" id="L509">            Class&lt;?&gt; complexClazz = null;</span>
+<span class="fc" id="L510">            JavaClass tmpField = convertJavaFieldToJavaClass(s);</span>
+<span class="fc" id="L511">            s = tmpField;</span>
 
-<span class="pc bpc" id="L506" title="1 of 2 branches missed.">            if (clazz.getName() == null) {</span>
-<span class="nc" id="L507">                s.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="fc bfc" id="L508" title="All 2 branches covered.">            } else if (!cachedClasses.contains(clazz.getName())) {</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">            if (clazz.getName() == null) {</span>
+<span class="nc" id="L514">                s.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc bfc" id="L515" title="All 2 branches covered.">            } else if (!cachedClasses.contains(clazz.getName())) {</span>
                 try {
-<span class="fc" id="L510">                    complexClazz = classLoader.loadClass(clazz.getName());</span>
-<span class="fc" id="L511">                    cachedClasses.add(clazz.getName());</span>
-<span class="fc" id="L512">                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, s.getPath());</span>
-<span class="pc bpc" id="L513" title="1 of 2 branches missed.">                    if (tmpField.getStatus() == null) {</span>
-<span class="fc" id="L514">                        s.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L517">                    complexClazz = classLoader.loadClass(clazz.getName());</span>
+<span class="fc" id="L518">                    cachedClasses.add(clazz.getName());</span>
+<span class="fc" id="L519">                    inspectClass(classLoader, complexClazz, tmpField, cachedClasses, s.getPath());</span>
+<span class="pc bpc" id="L520" title="1 of 2 branches missed.">                    if (tmpField.getStatus() == null) {</span>
+<span class="fc" id="L521">                        s.setStatus(FieldStatus.SUPPORTED);</span>
                     }
-<span class="nc" id="L516">                } catch (ClassNotFoundException cnfe) {</span>
-<span class="nc" id="L517">                    s.setStatus(FieldStatus.NOT_FOUND);</span>
-<span class="pc" id="L518">                }</span>
+<span class="nc" id="L523">                } catch (ClassNotFoundException cnfe) {</span>
+<span class="nc" id="L524">                    s.setStatus(FieldStatus.NOT_FOUND);</span>
+<span class="pc" id="L525">                }</span>
             } else {
-<span class="fc" id="L520">                s.setStatus(FieldStatus.CACHED);</span>
+<span class="fc" id="L527">                s.setStatus(FieldStatus.CACHED);</span>
             }
         }
 
-<span class="fc" id="L524">        s.setClassName(clazz.getName());</span>
-<span class="fc" id="L525">        s.setCanonicalClassName(clazz.getCanonicalName());</span>
-<span class="fc" id="L526">        s.setSynthetic(f.isSynthetic());</span>
+<span class="fc" id="L531">        s.setClassName(clazz.getName());</span>
+<span class="fc" id="L532">        s.setCanonicalClassName(clazz.getCanonicalName());</span>
+<span class="fc" id="L533">        s.setSynthetic(f.isSynthetic());</span>
 
-<span class="fc" id="L528">        Annotation[] annotations = f.getAnnotations();</span>
-<span class="pc bpc" id="L529" title="1 of 2 branches missed.">        if (annotations != null) {</span>
-<span class="fc bfc" id="L530" title="All 2 branches covered.">            for (Annotation a : annotations) {</span>
-<span class="pc bpc" id="L531" title="1 of 2 branches missed.">                if (s.getAnnotations() == null) {</span>
-<span class="fc" id="L532">                    s.setAnnotations(new StringList());</span>
+<span class="fc" id="L535">        Annotation[] annotations = f.getAnnotations();</span>
+<span class="pc bpc" id="L536" title="1 of 2 branches missed.">        if (annotations != null) {</span>
+<span class="fc bfc" id="L537" title="All 2 branches covered.">            for (Annotation a : annotations) {</span>
+<span class="pc bpc" id="L538" title="1 of 2 branches missed.">                if (s.getAnnotations() == null) {</span>
+<span class="fc" id="L539">                    s.setAnnotations(new StringList());</span>
                 }
-<span class="fc" id="L534">                s.getAnnotations().getString().add(a.annotationType().getName());</span>
+<span class="fc" id="L541">                s.getAnnotations().getString().add(a.annotationType().getName());</span>
             }
         }
 
-<span class="pc bpc" id="L538" title="1 of 2 branches missed.">        if (s.getModifiers() == null) {</span>
-<span class="nc" id="L539">            s.setModifiers(new ModifierList());</span>
+<span class="pc bpc" id="L545" title="1 of 2 branches missed.">        if (s.getModifiers() == null) {</span>
+<span class="nc" id="L546">            s.setModifiers(new ModifierList());</span>
         }
-<span class="fc" id="L541">        s.getModifiers().getModifier().addAll(detectModifiers(f.getModifiers()));</span>
+<span class="fc" id="L548">        s.getModifiers().getModifier().addAll(detectModifiers(f.getModifiers()));</span>
 
-<span class="fc" id="L543">        List&lt;String&gt; pTypes = detectParameterizedTypes(f, false);</span>
-<span class="fc bfc" id="L544" title="All 2 branches covered.">        if (pTypes != null) {</span>
-<span class="pc bpc" id="L545" title="1 of 2 branches missed.">            if (s.getParameterizedTypes() == null) {</span>
-<span class="fc" id="L546">                s.setParameterizedTypes(new StringList());</span>
+<span class="fc" id="L550">        List&lt;String&gt; pTypes = detectParameterizedTypes(f, false);</span>
+<span class="fc bfc" id="L551" title="All 2 branches covered.">        if (pTypes != null) {</span>
+<span class="pc bpc" id="L552" title="1 of 2 branches missed.">            if (s.getParameterizedTypes() == null) {</span>
+<span class="fc" id="L553">                s.setParameterizedTypes(new StringList());</span>
             }
-<span class="fc" id="L548">            s.getParameterizedTypes().getString().addAll(pTypes);</span>
+<span class="fc" id="L555">            s.getParameterizedTypes().getString().addAll(pTypes);</span>
         }
 
-<span class="fc" id="L551">        populateGetterSetter(clazz, f, s);</span>
-<span class="fc" id="L552">        return s;</span>
+<span class="fc" id="L558">        populateGetterSetter(clazz, f, s);</span>
+<span class="fc" id="L559">        return s;</span>
     }
 
     private void populateGetterSetter(Class&lt;?&gt; clazz, Field reflectionField, JavaField atlasField) {
         try {
-<span class="fc" id="L557">            String getterName = &quot;get&quot; + StringUtil.capitalizeFirstLetter(reflectionField.getName());</span>
-<span class="fc" id="L558">            reflectionField.getDeclaringClass().getMethod(getterName);</span>
-<span class="fc" id="L559">            atlasField.setGetMethod(getterName);</span>
-<span class="fc" id="L560">        } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L561" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L562">                LOG.debug(&quot;No 'get' method for field named: &quot; + reflectionField.getName() + &quot; in class: &quot;</span>
-<span class="nc" id="L563">                        + reflectionField.getDeclaringClass().getName());</span>
+<span class="fc" id="L564">            String getterName = &quot;get&quot; + StringUtil.capitalizeFirstLetter(reflectionField.getName());</span>
+<span class="fc" id="L565">            reflectionField.getDeclaringClass().getMethod(getterName);</span>
+<span class="fc" id="L566">            atlasField.setGetMethod(getterName);</span>
+<span class="fc" id="L567">        } catch (NoSuchMethodException e) {</span>
+<span class="pc bpc" id="L568" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L569">                LOG.debug(&quot;No 'get' method for field named: &quot; + reflectionField.getName() + &quot; in class: &quot;</span>
+<span class="nc" id="L570">                        + reflectionField.getDeclaringClass().getName());</span>
             }
-<span class="fc" id="L565">        }</span>
-<span class="fc bfc" id="L566" title="All 4 branches covered.">        if (atlasField.getGetMethod() == null &amp;&amp; (&quot;boolean&quot;.equals(atlasField.getClassName())</span>
-<span class="fc bfc" id="L567" title="All 2 branches covered.">                || &quot;java.lang.Boolean&quot;.equals(atlasField.getClassName()))) {</span>
+<span class="fc" id="L572">        }</span>
+<span class="fc bfc" id="L573" title="All 4 branches covered.">        if (atlasField.getGetMethod() == null &amp;&amp; (&quot;boolean&quot;.equals(atlasField.getClassName())</span>
+<span class="fc bfc" id="L574" title="All 2 branches covered.">                || &quot;java.lang.Boolean&quot;.equals(atlasField.getClassName()))) {</span>
             try {
-<span class="fc" id="L569">                String getterName = &quot;is&quot; + StringUtil.capitalizeFirstLetter(reflectionField.getName());</span>
-<span class="fc" id="L570">                reflectionField.getDeclaringClass().getMethod(getterName);</span>
-<span class="fc" id="L571">                atlasField.setGetMethod(getterName);</span>
-<span class="fc" id="L572">            } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L573" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L574">                    LOG.debug(&quot;No 'is' method for field named: &quot; + reflectionField.getName() + &quot; in class: &quot;</span>
-<span class="nc" id="L575">                            + reflectionField.getDeclaringClass().getName());</span>
+<span class="fc" id="L576">                String getterName = &quot;is&quot; + StringUtil.capitalizeFirstLetter(reflectionField.getName());</span>
+<span class="fc" id="L577">                reflectionField.getDeclaringClass().getMethod(getterName);</span>
+<span class="fc" id="L578">                atlasField.setGetMethod(getterName);</span>
+<span class="fc" id="L579">            } catch (NoSuchMethodException e) {</span>
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L581">                    LOG.debug(&quot;No 'is' method for field named: &quot; + reflectionField.getName() + &quot; in class: &quot;</span>
+<span class="nc" id="L582">                            + reflectionField.getDeclaringClass().getName());</span>
                 }
-<span class="fc" id="L577">            }</span>
+<span class="fc" id="L584">            }</span>
         }
         try {
-<span class="fc" id="L580">            String setterName = &quot;set&quot; + StringUtil.capitalizeFirstLetter(reflectionField.getName());</span>
-<span class="fc" id="L581">            reflectionField.getDeclaringClass().getMethod(setterName, clazz);</span>
-<span class="fc" id="L582">            atlasField.setSetMethod(setterName);</span>
-<span class="fc" id="L583">        } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L584" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L585">                LOG.debug(&quot;No 'set' method for field named: &quot; + reflectionField.getName() + &quot; in class: &quot;</span>
-<span class="nc" id="L586">                        + reflectionField.getDeclaringClass().getName());</span>
+<span class="fc" id="L587">            String setterName = &quot;set&quot; + StringUtil.capitalizeFirstLetter(reflectionField.getName());</span>
+<span class="fc" id="L588">            reflectionField.getDeclaringClass().getMethod(setterName, clazz);</span>
+<span class="fc" id="L589">            atlasField.setSetMethod(setterName);</span>
+<span class="fc" id="L590">        } catch (NoSuchMethodException e) {</span>
+<span class="pc bpc" id="L591" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L592">                LOG.debug(&quot;No 'set' method for field named: &quot; + reflectionField.getName() + &quot; in class: &quot;</span>
+<span class="nc" id="L593">                        + reflectionField.getDeclaringClass().getName());</span>
             }
-<span class="fc" id="L588">        }</span>
-<span class="fc" id="L589">    }</span>
+<span class="fc" id="L595">        }</span>
+<span class="fc" id="L596">    }</span>
 
     private void inspectClassFields(ClassLoader classLoader, Class&lt;?&gt; clazz, JavaClass javaClass,
             Set&lt;String&gt; cachedClasses, String pathPrefix) {
-<span class="fc" id="L593">        Field[] fields = clazz.getDeclaredFields();</span>
-<span class="pc bpc" id="L594" title="1 of 4 branches missed.">        if (fields != null &amp;&amp; !javaClass.isEnumeration()) {</span>
-<span class="fc bfc" id="L595" title="All 2 branches covered.">            for (Field f : fields) {</span>
-<span class="fc" id="L596">                JavaField s = inspectField(classLoader, f, cachedClasses, pathPrefix);</span>
+<span class="fc" id="L600">        Field[] fields = clazz.getDeclaredFields();</span>
+<span class="pc bpc" id="L601" title="1 of 4 branches missed.">        if (fields != null &amp;&amp; !javaClass.isEnumeration()) {</span>
+<span class="fc bfc" id="L602" title="All 2 branches covered.">            for (Field f : fields) {</span>
+<span class="fc" id="L603">                JavaField s = inspectField(classLoader, f, cachedClasses, pathPrefix);</span>
 
-<span class="fc bfc" id="L598" title="All 2 branches covered.">                if (getFieldExclusions().contains(f.getName())) {</span>
-<span class="fc" id="L599">                    s.setStatus(FieldStatus.EXCLUDED);</span>
+<span class="fc bfc" id="L605" title="All 2 branches covered.">                if (getFieldExclusions().contains(f.getName())) {</span>
+<span class="fc" id="L606">                    s.setStatus(FieldStatus.EXCLUDED);</span>
                 }
 
                 // skip synthetic members
-<span class="pc bpc" id="L603" title="1 of 4 branches missed.">                if (s.isSynthetic() != null &amp;&amp; s.isSynthetic()) {</span>
-<span class="pc bpc" id="L604" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L605">                        LOG.debug(&quot;Synthetic field class detected: &quot; + s.getName());</span>
+<span class="pc bpc" id="L610" title="1 of 4 branches missed.">                if (s.isSynthetic() != null &amp;&amp; s.isSynthetic()) {</span>
+<span class="pc bpc" id="L611" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L612">                        LOG.debug(&quot;Synthetic field class detected: &quot; + s.getName());</span>
                     }
                     continue;
                 }
 
-<span class="pc bpc" id="L610" title="1 of 4 branches missed.">                if (s.getGetMethod() == null &amp;&amp; s.getSetMethod() == null) {</span>
-<span class="fc bfc" id="L611" title="All 2 branches covered.">                    if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PRIVATE)</span>
-<span class="pc bpc" id="L612" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePrivateOnlyFields()) {</span>
-<span class="fc" id="L613">                        javaClass.getJavaFields().getJavaField().add(s);</span>
-<span class="pc bpc" id="L614" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PROTECTED)</span>
-<span class="nc bnc" id="L615" title="All 2 branches missed.">                            &amp;&amp; !getDisableProtectedOnlyFields()) {</span>
-<span class="nc" id="L616">                        javaClass.getJavaFields().getJavaField().add(s);</span>
-<span class="fc bfc" id="L617" title="All 2 branches covered.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PUBLIC)</span>
-<span class="pc bpc" id="L618" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePublicOnlyFields()) {</span>
-<span class="fc" id="L619">                        javaClass.getJavaFields().getJavaField().add(s);</span>
-<span class="pc bpc" id="L620" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE)</span>
-<span class="pc bpc" id="L621" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePackagePrivateOnlyFields()) {</span>
-<span class="fc" id="L622">                        javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="pc bpc" id="L617" title="1 of 4 branches missed.">                if (s.getGetMethod() == null &amp;&amp; s.getSetMethod() == null) {</span>
+<span class="fc bfc" id="L618" title="All 2 branches covered.">                    if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PRIVATE)</span>
+<span class="pc bpc" id="L619" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePrivateOnlyFields()) {</span>
+<span class="fc" id="L620">                        javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="pc bpc" id="L621" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PROTECTED)</span>
+<span class="nc bnc" id="L622" title="All 2 branches missed.">                            &amp;&amp; !getDisableProtectedOnlyFields()) {</span>
+<span class="nc" id="L623">                        javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="fc bfc" id="L624" title="All 2 branches covered.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PUBLIC)</span>
+<span class="pc bpc" id="L625" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePublicOnlyFields()) {</span>
+<span class="fc" id="L626">                        javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="pc bpc" id="L627" title="1 of 2 branches missed.">                    } else if (s.getModifiers().getModifier().contains(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE)</span>
+<span class="pc bpc" id="L628" title="1 of 2 branches missed.">                            &amp;&amp; !getDisablePackagePrivateOnlyFields()) {</span>
+<span class="fc" id="L629">                        javaClass.getJavaFields().getJavaField().add(s);</span>
                     }
-<span class="pc bpc" id="L624" title="1 of 2 branches missed.">                } else if (!getDisablePublicGetterSetterFields()) {</span>
-<span class="fc" id="L625">                    javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="pc bpc" id="L631" title="1 of 2 branches missed.">                } else if (!getDisablePublicGetterSetterFields()) {</span>
+<span class="fc" id="L632">                    javaClass.getJavaFields().getJavaField().add(s);</span>
                 }
             }
         }
-<span class="fc" id="L629">    }</span>
+<span class="fc" id="L636">    }</span>
 
     private void inspectClassMethods(ClassLoader classLoader, Class&lt;?&gt; clazz, JavaClass javaClass,
             Set&lt;String&gt; cachedClasses, String pathPrefix) {
-<span class="fc" id="L633">        Method[] methods = clazz.getDeclaredMethods();</span>
-<span class="pc bpc" id="L634" title="1 of 4 branches missed.">        if (methods != null &amp;&amp; !javaClass.isEnumeration()) {</span>
-<span class="fc bfc" id="L635" title="All 2 branches covered.">            for (Method m : methods) {</span>
-<span class="fc" id="L636">                JavaField s = AtlasJavaModelFactory.createJavaField();</span>
-<span class="fc" id="L637">                s.setName(m.getName());</span>
-<span class="fc" id="L638">                s.setSynthetic(m.isSynthetic());</span>
-
-<span class="pc bpc" id="L640" title="2 of 8 branches missed.">                if (m.isVarArgs() || m.isBridge() || m.isSynthetic() || m.isDefault()) {</span>
-<span class="fc" id="L641">                    s.setStatus(FieldStatus.UNSUPPORTED);</span>
-<span class="fc" id="L642">                    LOG.warn(&quot;VarArg, Bridge, Synthetic or Default method &quot; + m.getName() + &quot; detected&quot;);</span>
-<span class="fc" id="L643">                    continue;</span>
-                }
+<span class="fc" id="L640">        Method[] methods = clazz.getDeclaredMethods();</span>
+<span class="pc bpc" id="L641" title="1 of 4 branches missed.">        if (methods != null &amp;&amp; !javaClass.isEnumeration()) {</span>
+<span class="fc bfc" id="L642" title="All 2 branches covered.">            for (Method m : methods) {</span>
+<span class="fc" id="L643">                JavaField s = AtlasJavaModelFactory.createJavaField();</span>
+<span class="fc" id="L644">                s.setName(m.getName());</span>
 <span class="fc" id="L645">                s.setSynthetic(m.isSynthetic());</span>
 
-<span class="fc bfc" id="L647" title="All 4 branches covered.">                if (m.getName().startsWith(&quot;get&quot;) || m.getName().startsWith(&quot;is&quot;)) {</span>
-<span class="fc" id="L648">                    s = inspectGetMethod(classLoader, m, s, cachedClasses, pathPrefix);</span>
+<span class="pc bpc" id="L647" title="2 of 8 branches missed.">                if (m.isVarArgs() || m.isBridge() || m.isSynthetic() || m.isDefault()) {</span>
+<span class="fc" id="L648">                    s.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc" id="L649">                    LOG.warn(&quot;VarArg, Bridge, Synthetic or Default method &quot; + m.getName() + &quot; detected&quot;);</span>
+<span class="fc" id="L650">                    continue;</span>
+                }
+<span class="fc" id="L652">                s.setSynthetic(m.isSynthetic());</span>
+
+<span class="fc bfc" id="L654" title="All 4 branches covered.">                if (m.getName().startsWith(&quot;get&quot;) || m.getName().startsWith(&quot;is&quot;)) {</span>
+<span class="fc" id="L655">                    s = inspectGetMethod(classLoader, m, s, cachedClasses, pathPrefix);</span>
                 }
 
-<span class="fc bfc" id="L651" title="All 2 branches covered.">                if (m.getName().startsWith(&quot;set&quot;)) {</span>
-<span class="fc" id="L652">                    s = inspectSetMethod(classLoader, m, s, cachedClasses, pathPrefix);</span>
+<span class="fc bfc" id="L658" title="All 2 branches covered.">                if (m.getName().startsWith(&quot;set&quot;)) {</span>
+<span class="fc" id="L659">                    s = inspectSetMethod(classLoader, m, s, cachedClasses, pathPrefix);</span>
                 }
 
-<span class="fc" id="L655">                boolean found = false;</span>
-<span class="fc bfc" id="L656" title="All 2 branches covered.">                for (int i = 0; i &lt; javaClass.getJavaFields().getJavaField().size(); i++) {</span>
-<span class="fc" id="L657">                    JavaField exists = javaClass.getJavaFields().getJavaField().get(i);</span>
-<span class="fc bfc" id="L658" title="All 2 branches covered.">                    if (s.getName().equals(exists.getName())) {</span>
-<span class="fc" id="L659">                        found = true;</span>
+<span class="fc" id="L662">                boolean found = false;</span>
+<span class="fc bfc" id="L663" title="All 2 branches covered.">                for (int i = 0; i &lt; javaClass.getJavaFields().getJavaField().size(); i++) {</span>
+<span class="fc" id="L664">                    JavaField exists = javaClass.getJavaFields().getJavaField().get(i);</span>
+<span class="fc bfc" id="L665" title="All 2 branches covered.">                    if (s.getName().equals(exists.getName())) {</span>
+<span class="fc" id="L666">                        found = true;</span>
 
                         // Merge get/set method info for interfaces that don't
                         // have fields
-<span class="pc bpc" id="L663" title="1 of 4 branches missed.">                        if (exists.getGetMethod() == null &amp;&amp; s.getGetMethod() != null) {</span>
-<span class="fc" id="L664">                            exists.setGetMethod(s.getGetMethod());</span>
+<span class="pc bpc" id="L670" title="1 of 4 branches missed.">                        if (exists.getGetMethod() == null &amp;&amp; s.getGetMethod() != null) {</span>
+<span class="fc" id="L671">                            exists.setGetMethod(s.getGetMethod());</span>
                         }
-<span class="fc bfc" id="L666" title="All 4 branches covered.">                        if (exists.getSetMethod() == null &amp;&amp; s.getSetMethod() != null) {</span>
-<span class="fc" id="L667">                            exists.setSetMethod(s.getSetMethod());</span>
+<span class="fc bfc" id="L673" title="All 4 branches covered.">                        if (exists.getSetMethod() == null &amp;&amp; s.getSetMethod() != null) {</span>
+<span class="fc" id="L674">                            exists.setSetMethod(s.getSetMethod());</span>
                         }
                     }
                 }
 
-<span class="fc bfc" id="L672" title="All 2 branches covered.">                if (found) {</span>
-<span class="pc bpc" id="L673" title="1 of 2 branches missed.">                    if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L674">                        LOG.trace(&quot;Field already defined for method: &quot; + m.getName() + &quot; class: &quot; + clazz.getName());</span>
+<span class="fc bfc" id="L679" title="All 2 branches covered.">                if (found) {</span>
+<span class="pc bpc" id="L680" title="1 of 2 branches missed.">                    if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L681">                        LOG.trace(&quot;Field already defined for method: &quot; + m.getName() + &quot; class: &quot; + clazz.getName());</span>
                     }
-<span class="fc bfc" id="L676" title="All 4 branches covered.">                } else if (s.getGetMethod() != null || s.getSetMethod() != null) {</span>
-<span class="fc" id="L677">                    javaClass.getJavaFields().getJavaField().add(s);</span>
+<span class="fc bfc" id="L683" title="All 4 branches covered.">                } else if (s.getGetMethod() != null || s.getSetMethod() != null) {</span>
+<span class="fc" id="L684">                    javaClass.getJavaFields().getJavaField().add(s);</span>
                 } else {
-<span class="pc bpc" id="L679" title="1 of 2 branches missed.">                    if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L680">                        LOG.trace(&quot;Ignoring non-field method: &quot; + m.getName() + &quot; class: &quot; + clazz.getName());</span>
+<span class="pc bpc" id="L686" title="1 of 2 branches missed.">                    if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L687">                        LOG.trace(&quot;Ignoring non-field method: &quot; + m.getName() + &quot; class: &quot; + clazz.getName());</span>
                     }
                 }
             }
         }
-<span class="fc" id="L685">    }</span>
+<span class="fc" id="L692">    }</span>
 
     protected boolean isFieldMap(String fieldType) {
-<span class="fc" id="L688">        return getMapClasses().contains(fieldType);</span>
+<span class="fc" id="L695">        return getMapClasses().contains(fieldType);</span>
     }
 
     private Integer detectArrayDimensions(Class&lt;?&gt; clazz) {
-<span class="fc" id="L692">        Integer arrayDim = Integer.valueOf(0);</span>
-<span class="pc bpc" id="L693" title="1 of 2 branches missed.">        if (clazz == null) {</span>
-<span class="nc" id="L694">            return null;</span>
+<span class="fc" id="L699">        Integer arrayDim = Integer.valueOf(0);</span>
+<span class="pc bpc" id="L700" title="1 of 2 branches missed.">        if (clazz == null) {</span>
+<span class="nc" id="L701">            return null;</span>
         }
 
-<span class="pc bpc" id="L697" title="1 of 2 branches missed.">        if (!clazz.isArray()) {</span>
-<span class="nc" id="L698">            return arrayDim;</span>
+<span class="pc bpc" id="L704" title="1 of 2 branches missed.">        if (!clazz.isArray()) {</span>
+<span class="nc" id="L705">            return arrayDim;</span>
         }
-<span class="fc" id="L700">        arrayDim++;</span>
+<span class="fc" id="L707">        arrayDim++;</span>
 
-<span class="fc" id="L702">        Class&lt;?&gt; tmpClazz = clazz.getComponentType();</span>
-<span class="pc bpc" id="L703" title="2 of 6 branches missed.">        while (tmpClazz != null &amp;&amp; tmpClazz.isArray() &amp;&amp; arrayDim &lt; MAX_ARRAY_DIM_LIMIT) {</span>
-<span class="fc" id="L704">            arrayDim++;</span>
-<span class="fc" id="L705">            tmpClazz = tmpClazz.getComponentType();</span>
+<span class="fc" id="L709">        Class&lt;?&gt; tmpClazz = clazz.getComponentType();</span>
+<span class="pc bpc" id="L710" title="2 of 6 branches missed.">        while (tmpClazz != null &amp;&amp; tmpClazz.isArray() &amp;&amp; arrayDim &lt; MAX_ARRAY_DIM_LIMIT) {</span>
+<span class="fc" id="L711">            arrayDim++;</span>
+<span class="fc" id="L712">            tmpClazz = tmpClazz.getComponentType();</span>
         }
-<span class="fc" id="L707">        return arrayDim;</span>
+<span class="fc" id="L714">        return arrayDim;</span>
     }
 
     private List&lt;io.atlasmap.java.v2.Modifier&gt; detectModifiers(int m) {
-<span class="fc" id="L711">        List&lt;io.atlasmap.java.v2.Modifier&gt; modifiers = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L712" title="All 2 branches covered.">        if (Modifier.isAbstract(m)) {</span>
-<span class="fc" id="L713">            modifiers.add(io.atlasmap.java.v2.Modifier.ABSTRACT);</span>
+<span class="fc" id="L718">        List&lt;io.atlasmap.java.v2.Modifier&gt; modifiers = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L719" title="All 2 branches covered.">        if (Modifier.isAbstract(m)) {</span>
+<span class="fc" id="L720">            modifiers.add(io.atlasmap.java.v2.Modifier.ABSTRACT);</span>
         }
-<span class="fc bfc" id="L715" title="All 2 branches covered.">        if (Modifier.isFinal(m)) {</span>
-<span class="fc" id="L716">            modifiers.add(io.atlasmap.java.v2.Modifier.FINAL);</span>
+<span class="fc bfc" id="L722" title="All 2 branches covered.">        if (Modifier.isFinal(m)) {</span>
+<span class="fc" id="L723">            modifiers.add(io.atlasmap.java.v2.Modifier.FINAL);</span>
         }
-<span class="fc bfc" id="L718" title="All 2 branches covered.">        if (Modifier.isInterface(m)) {</span>
-<span class="fc" id="L719">            modifiers.add(io.atlasmap.java.v2.Modifier.INTERFACE);</span>
+<span class="fc bfc" id="L725" title="All 2 branches covered.">        if (Modifier.isInterface(m)) {</span>
+<span class="fc" id="L726">            modifiers.add(io.atlasmap.java.v2.Modifier.INTERFACE);</span>
         }
-<span class="pc bpc" id="L721" title="1 of 2 branches missed.">        if (Modifier.isNative(m)) {</span>
-<span class="nc" id="L722">            modifiers.add(io.atlasmap.java.v2.Modifier.NATIVE);</span>
+<span class="pc bpc" id="L728" title="1 of 2 branches missed.">        if (Modifier.isNative(m)) {</span>
+<span class="nc" id="L729">            modifiers.add(io.atlasmap.java.v2.Modifier.NATIVE);</span>
         }
-<span class="fc bfc" id="L724" title="All 2 branches covered.">        if (Modifier.isPrivate(m)) {</span>
-<span class="fc" id="L725">            modifiers.add(io.atlasmap.java.v2.Modifier.PRIVATE);</span>
+<span class="fc bfc" id="L731" title="All 2 branches covered.">        if (Modifier.isPrivate(m)) {</span>
+<span class="fc" id="L732">            modifiers.add(io.atlasmap.java.v2.Modifier.PRIVATE);</span>
         }
-<span class="fc bfc" id="L727" title="All 2 branches covered.">        if (Modifier.isProtected(m)) {</span>
-<span class="fc" id="L728">            modifiers.add(io.atlasmap.java.v2.Modifier.PROTECTED);</span>
+<span class="fc bfc" id="L734" title="All 2 branches covered.">        if (Modifier.isProtected(m)) {</span>
+<span class="fc" id="L735">            modifiers.add(io.atlasmap.java.v2.Modifier.PROTECTED);</span>
         }
-<span class="fc bfc" id="L730" title="All 2 branches covered.">        if (Modifier.isPublic(m)) {</span>
-<span class="fc" id="L731">            modifiers.add(io.atlasmap.java.v2.Modifier.PUBLIC);</span>
+<span class="fc bfc" id="L737" title="All 2 branches covered.">        if (Modifier.isPublic(m)) {</span>
+<span class="fc" id="L738">            modifiers.add(io.atlasmap.java.v2.Modifier.PUBLIC);</span>
         }
-<span class="fc bfc" id="L733" title="All 6 branches covered.">        if (!Modifier.isPrivate(m) &amp;&amp; !Modifier.isProtected(m) &amp;&amp; !Modifier.isPublic(m)) {</span>
-<span class="fc" id="L734">            modifiers.add(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE);</span>
+<span class="fc bfc" id="L740" title="All 6 branches covered.">        if (!Modifier.isPrivate(m) &amp;&amp; !Modifier.isProtected(m) &amp;&amp; !Modifier.isPublic(m)) {</span>
+<span class="fc" id="L741">            modifiers.add(io.atlasmap.java.v2.Modifier.PACKAGE_PRIVATE);</span>
         }
-<span class="fc bfc" id="L736" title="All 2 branches covered.">        if (Modifier.isStatic(m)) {</span>
-<span class="fc" id="L737">            modifiers.add(io.atlasmap.java.v2.Modifier.STATIC);</span>
+<span class="fc bfc" id="L743" title="All 2 branches covered.">        if (Modifier.isStatic(m)) {</span>
+<span class="fc" id="L744">            modifiers.add(io.atlasmap.java.v2.Modifier.STATIC);</span>
         }
-<span class="pc bpc" id="L739" title="1 of 2 branches missed.">        if (Modifier.isStrict(m)) {</span>
-<span class="nc" id="L740">            modifiers.add(io.atlasmap.java.v2.Modifier.STRICT);</span>
+<span class="pc bpc" id="L746" title="1 of 2 branches missed.">        if (Modifier.isStrict(m)) {</span>
+<span class="nc" id="L747">            modifiers.add(io.atlasmap.java.v2.Modifier.STRICT);</span>
         }
-<span class="pc bpc" id="L742" title="1 of 2 branches missed.">        if (Modifier.isSynchronized(m)) {</span>
-<span class="nc" id="L743">            modifiers.add(io.atlasmap.java.v2.Modifier.SYNCHRONIZED);</span>
+<span class="pc bpc" id="L749" title="1 of 2 branches missed.">        if (Modifier.isSynchronized(m)) {</span>
+<span class="nc" id="L750">            modifiers.add(io.atlasmap.java.v2.Modifier.SYNCHRONIZED);</span>
         }
-<span class="fc bfc" id="L745" title="All 2 branches covered.">        if (Modifier.isTransient(m)) {</span>
-<span class="fc" id="L746">            modifiers.add(io.atlasmap.java.v2.Modifier.TRANSIENT);</span>
+<span class="fc bfc" id="L752" title="All 2 branches covered.">        if (Modifier.isTransient(m)) {</span>
+<span class="fc" id="L753">            modifiers.add(io.atlasmap.java.v2.Modifier.TRANSIENT);</span>
         }
-<span class="pc bpc" id="L748" title="1 of 2 branches missed.">        if (Modifier.isVolatile(m)) {</span>
-<span class="nc" id="L749">            modifiers.add(io.atlasmap.java.v2.Modifier.VOLATILE);</span>
+<span class="pc bpc" id="L755" title="1 of 2 branches missed.">        if (Modifier.isVolatile(m)) {</span>
+<span class="nc" id="L756">            modifiers.add(io.atlasmap.java.v2.Modifier.VOLATILE);</span>
         }
-<span class="fc" id="L751">        return modifiers;</span>
+<span class="fc" id="L758">        return modifiers;</span>
     }
 
     private Class&lt;?&gt; detectListClass(ClassLoader classLoader, Field field) throws ClassNotFoundException {
-<span class="fc" id="L755">        List&lt;String&gt; types = detectParameterizedTypes(field, true);</span>
-<span class="pc bpc" id="L756" title="2 of 4 branches missed.">        if (types != null &amp;&amp; !types.isEmpty()) {</span>
-<span class="fc" id="L757">            return classLoader.loadClass(types.get(0));</span>
+<span class="fc" id="L762">        List&lt;String&gt; types = detectParameterizedTypes(field, true);</span>
+<span class="pc bpc" id="L763" title="2 of 4 branches missed.">        if (types != null &amp;&amp; !types.isEmpty()) {</span>
+<span class="fc" id="L764">            return classLoader.loadClass(types.get(0));</span>
         }
-<span class="nc" id="L759">        return null;</span>
+<span class="nc" id="L766">        return null;</span>
     }
 
     private Class&lt;?&gt; detectListClassFromMethodReturn(Method m) {
-<span class="fc" id="L763">        return ClassHelper.detectClassFromTypeArgument(m.getGenericReturnType());</span>
+<span class="fc" id="L770">        return ClassHelper.detectClassFromTypeArgument(m.getGenericReturnType());</span>
     }
 
     private Class&lt;?&gt; detectListClassFromMethodParameter(Method m) {
-<span class="fc" id="L767">        return ClassHelper.detectClassFromTypeArgument(m.getGenericParameterTypes()[0]);</span>
+<span class="fc" id="L774">        return ClassHelper.detectClassFromTypeArgument(m.getGenericParameterTypes()[0]);</span>
     }
 
     private Class&lt;?&gt; detectArrayClass(Class&lt;?&gt; clazz) {
-<span class="fc" id="L771">        Integer arrayDim = new Integer(0);</span>
-<span class="pc bpc" id="L772" title="1 of 2 branches missed.">        if (clazz == null) {</span>
-<span class="nc" id="L773">            return null;</span>
+<span class="fc" id="L778">        Integer arrayDim = new Integer(0);</span>
+<span class="pc bpc" id="L779" title="1 of 2 branches missed.">        if (clazz == null) {</span>
+<span class="nc" id="L780">            return null;</span>
         }
 
-<span class="pc bpc" id="L776" title="1 of 2 branches missed.">        if (!clazz.isArray()) {</span>
-<span class="nc" id="L777">            return clazz;</span>
+<span class="pc bpc" id="L783" title="1 of 2 branches missed.">        if (!clazz.isArray()) {</span>
+<span class="nc" id="L784">            return clazz;</span>
         }
-<span class="fc" id="L779">        arrayDim++;</span>
+<span class="fc" id="L786">        arrayDim++;</span>
 
-<span class="fc" id="L781">        Class&lt;?&gt; tmpClazz = clazz.getComponentType();</span>
-<span class="pc bpc" id="L782" title="2 of 6 branches missed.">        while (tmpClazz != null &amp;&amp; tmpClazz.isArray() &amp;&amp; arrayDim &lt; MAX_ARRAY_DIM_LIMIT) {</span>
-<span class="fc" id="L783">            arrayDim++;</span>
-<span class="fc" id="L784">            tmpClazz = tmpClazz.getComponentType();</span>
+<span class="fc" id="L788">        Class&lt;?&gt; tmpClazz = clazz.getComponentType();</span>
+<span class="pc bpc" id="L789" title="2 of 6 branches missed.">        while (tmpClazz != null &amp;&amp; tmpClazz.isArray() &amp;&amp; arrayDim &lt; MAX_ARRAY_DIM_LIMIT) {</span>
+<span class="fc" id="L790">            arrayDim++;</span>
+<span class="fc" id="L791">            tmpClazz = tmpClazz.getComponentType();</span>
         }
-<span class="fc" id="L786">        return tmpClazz;</span>
+<span class="fc" id="L793">        return tmpClazz;</span>
     }
 
     private List&lt;String&gt; detectParameterizedTypes(Field field, boolean onlyClasses) {
-<span class="fc" id="L790">        List&lt;String&gt; pTypes = null;</span>
+<span class="fc" id="L797">        List&lt;String&gt; pTypes = null;</span>
 
-<span class="pc bpc" id="L792" title="2 of 6 branches missed.">        if (field == null || field.getGenericType() == null || !(field.getGenericType() instanceof ParameterizedType)) {</span>
-<span class="fc" id="L793">            return null;</span>
+<span class="pc bpc" id="L799" title="2 of 6 branches missed.">        if (field == null || field.getGenericType() == null || !(field.getGenericType() instanceof ParameterizedType)) {</span>
+<span class="fc" id="L800">            return null;</span>
         }
-<span class="fc" id="L795">        Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();</span>
-<span class="pc bpc" id="L796" title="1 of 2 branches missed.">        if (types.length == 0) {</span>
-<span class="nc" id="L797">            return null;</span>
+<span class="fc" id="L802">        Type[] types = ((ParameterizedType) field.getGenericType()).getActualTypeArguments();</span>
+<span class="pc bpc" id="L803" title="1 of 2 branches missed.">        if (types.length == 0) {</span>
+<span class="nc" id="L804">            return null;</span>
         }
 
-<span class="fc bfc" id="L800" title="All 2 branches covered.">        for (Type t : types) {</span>
-<span class="fc bfc" id="L801" title="All 2 branches covered.">            if (pTypes == null) {</span>
-<span class="fc" id="L802">                pTypes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L807" title="All 2 branches covered.">        for (Type t : types) {</span>
+<span class="fc bfc" id="L808" title="All 2 branches covered.">            if (pTypes == null) {</span>
+<span class="fc" id="L809">                pTypes = new ArrayList&lt;&gt;();</span>
             }
 
-<span class="pc bpc" id="L805" title="1 of 4 branches missed.">            if (!onlyClasses &amp;&amp; t instanceof TypeVariable) {</span>
-<span class="nc" id="L806">                TypeVariable&lt;?&gt; tv = (TypeVariable&lt;?&gt;) t;</span>
+<span class="pc bpc" id="L812" title="1 of 4 branches missed.">            if (!onlyClasses &amp;&amp; t instanceof TypeVariable) {</span>
+<span class="nc" id="L813">                TypeVariable&lt;?&gt; tv = (TypeVariable&lt;?&gt;) t;</span>
                 // TODO: no current need, but we may want to have treatment for 'T'
                 // tv.getTypeName()
-<span class="nc" id="L809">                Type type = tv.getAnnotatedBounds()[0].getType();</span>
-<span class="nc bnc" id="L810" title="All 2 branches missed.">                if (type instanceof Class) {</span>
-<span class="nc" id="L811">                    pTypes.add(((Class&lt;?&gt;) type).getName());</span>
+<span class="nc" id="L816">                Type type = tv.getAnnotatedBounds()[0].getType();</span>
+<span class="nc bnc" id="L817" title="All 2 branches missed.">                if (type instanceof Class) {</span>
+<span class="nc" id="L818">                    pTypes.add(((Class&lt;?&gt;) type).getName());</span>
                 } else {
-<span class="nc" id="L813">                    pTypes.add(type.getTypeName());</span>
+<span class="nc" id="L820">                    pTypes.add(type.getTypeName());</span>
                 }
             }
 
-<span class="pc bpc" id="L817" title="1 of 4 branches missed.">            if (!onlyClasses &amp;&amp; t instanceof WildcardType) {</span>
-<span class="nc" id="L818">                WildcardType wc = (WildcardType) t;</span>
-<span class="nc" id="L819">                Type[] upperBounds = wc.getUpperBounds();</span>
-<span class="nc" id="L820">                Type[] lowerBounds = wc.getLowerBounds();</span>
+<span class="pc bpc" id="L824" title="1 of 4 branches missed.">            if (!onlyClasses &amp;&amp; t instanceof WildcardType) {</span>
+<span class="nc" id="L825">                WildcardType wc = (WildcardType) t;</span>
+<span class="nc" id="L826">                Type[] upperBounds = wc.getUpperBounds();</span>
+<span class="nc" id="L827">                Type[] lowerBounds = wc.getLowerBounds();</span>
                 // TODO: No current need, but we may want to have treatment for '?'
                 // wc.getTypeName()
-<span class="nc bnc" id="L823" title="All 4 branches missed.">                if (upperBounds != null &amp;&amp; upperBounds.length &gt; 0) {</span>
-<span class="nc" id="L824">                    pTypes.add(wc.getUpperBounds()[0].getClass().getName());</span>
-<span class="nc bnc" id="L825" title="All 4 branches missed.">                } else if (lowerBounds != null &amp;&amp; lowerBounds.length &gt; 0) {</span>
-<span class="nc" id="L826">                    pTypes.add(wc.getLowerBounds()[0].getClass().getName());</span>
+<span class="nc bnc" id="L830" title="All 4 branches missed.">                if (upperBounds != null &amp;&amp; upperBounds.length &gt; 0) {</span>
+<span class="nc" id="L831">                    pTypes.add(wc.getUpperBounds()[0].getClass().getName());</span>
+<span class="nc bnc" id="L832" title="All 4 branches missed.">                } else if (lowerBounds != null &amp;&amp; lowerBounds.length &gt; 0) {</span>
+<span class="nc" id="L833">                    pTypes.add(wc.getLowerBounds()[0].getClass().getName());</span>
                 }
             }
 
-<span class="pc bpc" id="L830" title="1 of 2 branches missed.">            if (t instanceof Class) {</span>
-<span class="fc" id="L831">                pTypes.add(((Class&lt;?&gt;) t).getName());</span>
+<span class="pc bpc" id="L837" title="1 of 2 branches missed.">            if (t instanceof Class) {</span>
+<span class="fc" id="L838">                pTypes.add(((Class&lt;?&gt;) t).getName());</span>
             }
         }
-<span class="fc" id="L834">        return pTypes;</span>
+<span class="fc" id="L841">        return pTypes;</span>
     }
 
     private JavaClass convertJavaFieldToJavaClass(JavaField javaField) {
-<span class="fc" id="L838">        JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();</span>
-<span class="fc" id="L839">        javaClass.setArrayDimensions(javaField.getArrayDimensions());</span>
-<span class="fc" id="L840">        javaClass.setArraySize(javaField.getArraySize());</span>
-<span class="fc" id="L841">        javaClass.setCollectionClassName(javaField.getCollectionClassName());</span>
-<span class="fc" id="L842">        javaClass.setCollectionType(javaField.getCollectionType());</span>
-<span class="fc" id="L843">        javaClass.setDocId(javaField.getDocId());</span>
-<span class="fc" id="L844">        javaClass.setPrimitive(javaField.isPrimitive());</span>
-<span class="fc" id="L845">        javaClass.setSynthetic(javaField.isSynthetic());</span>
-<span class="fc" id="L846">        javaClass.setClassName(javaField.getClassName());</span>
-<span class="fc" id="L847">        javaClass.setGetMethod(javaField.getGetMethod());</span>
-<span class="fc" id="L848">        javaClass.setName(javaField.getName());</span>
-<span class="fc" id="L849">        javaClass.setPath(javaField.getPath());</span>
-<span class="fc" id="L850">        javaClass.setRequired(javaField.isRequired());</span>
-<span class="fc" id="L851">        javaClass.setSetMethod(javaField.getSetMethod());</span>
-<span class="fc" id="L852">        javaClass.setStatus(javaField.getStatus());</span>
-<span class="fc" id="L853">        javaClass.setFieldType(javaField.getFieldType());</span>
-<span class="fc bfc" id="L854" title="All 2 branches covered.">        if (javaField.getClassName() != null) {</span>
-<span class="fc" id="L855">            javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, AtlasUtil.escapeForUri(javaField.getClassName())));</span>
+<span class="fc" id="L845">        JavaClass javaClass = AtlasJavaModelFactory.createJavaClass();</span>
+<span class="fc" id="L846">        javaClass.setArrayDimensions(javaField.getArrayDimensions());</span>
+<span class="fc" id="L847">        javaClass.setArraySize(javaField.getArraySize());</span>
+<span class="fc" id="L848">        javaClass.setCollectionClassName(javaField.getCollectionClassName());</span>
+<span class="fc" id="L849">        javaClass.setCollectionType(javaField.getCollectionType());</span>
+<span class="fc" id="L850">        javaClass.setDocId(javaField.getDocId());</span>
+<span class="fc" id="L851">        javaClass.setPrimitive(javaField.isPrimitive());</span>
+<span class="fc" id="L852">        javaClass.setSynthetic(javaField.isSynthetic());</span>
+<span class="fc" id="L853">        javaClass.setClassName(javaField.getClassName());</span>
+<span class="fc" id="L854">        javaClass.setGetMethod(javaField.getGetMethod());</span>
+<span class="fc" id="L855">        javaClass.setName(javaField.getName());</span>
+<span class="fc" id="L856">        javaClass.setPath(javaField.getPath());</span>
+<span class="fc" id="L857">        javaClass.setRequired(javaField.isRequired());</span>
+<span class="fc" id="L858">        javaClass.setSetMethod(javaField.getSetMethod());</span>
+<span class="fc" id="L859">        javaClass.setStatus(javaField.getStatus());</span>
+<span class="fc" id="L860">        javaClass.setFieldType(javaField.getFieldType());</span>
+<span class="fc bfc" id="L861" title="All 2 branches covered.">        if (javaField.getClassName() != null) {</span>
+<span class="fc" id="L862">            javaClass.setUri(String.format(AtlasJavaModelFactory.URI_FORMAT, AtlasUtil.escapeForUri(javaField.getClassName())));</span>
         }
-<span class="fc" id="L857">        javaClass.setValue(javaField.getValue());</span>
-<span class="fc" id="L858">        javaClass.setAnnotations(javaField.getAnnotations());</span>
-<span class="fc" id="L859">        javaClass.setModifiers(javaField.getModifiers());</span>
-<span class="fc" id="L860">        javaClass.setParameterizedTypes(javaField.getParameterizedTypes());</span>
-<span class="fc" id="L861">        return javaClass;</span>
+<span class="fc" id="L864">        javaClass.setValue(javaField.getValue());</span>
+<span class="fc" id="L865">        javaClass.setAnnotations(javaField.getAnnotations());</span>
+<span class="fc" id="L866">        javaClass.setModifiers(javaField.getModifiers());</span>
+<span class="fc" id="L867">        javaClass.setParameterizedTypes(javaField.getParameterizedTypes());</span>
+<span class="fc" id="L868">        return javaClass;</span>
     }
 
     private AtlasConversionService getConversionService() {
-<span class="fc" id="L865">        return atlasConversionService;</span>
+<span class="fc" id="L872">        return atlasConversionService;</span>
     }
 
     public void setConversionService(AtlasConversionService atlasConversionService) {
-<span class="fc" id="L869">        this.atlasConversionService = atlasConversionService;</span>
-<span class="fc" id="L870">    }</span>
+<span class="fc" id="L876">        this.atlasConversionService = atlasConversionService;</span>
+<span class="fc" id="L877">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
