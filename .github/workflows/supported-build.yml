@@ -57,37 +57,3 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       working-directory: docs
       run: mvn -f pom-javadoc.xml -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
-  build_yarn:
-    if: ${{ github.repository == 'atlasmap/atlasmap' }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [ '12', '14' ]
-    name: node${{ matrix.node }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup node versions
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node }}
-    - name: yarn install
-      working-directory: ui
-      run: yarn install
-    - name: --FIXME lerna build
-      continue-on-error: true
-      working-directory: ui
-      run: yarn build
-    - name: --FIXME yarn build @atlasmap/core
-      continue-on-error: true
-      working-directory: ui/packages/atlasmap-core
-      run: yarn build
-    - name: yarn build @atlasmap/atlasmap
-      working-directory: ui/packages/atlasmap
-      run: yarn build
-    - name: yarn build:storybook @atlasmap/atlasmap
-      working-directory: ui/packages/atlasmap
-      run: yarn build:storybook
-    - name: yarn build @atlasmap/atlasmap-standalone
-      working-directory: ui/packages/atlasmap-standalone
-      run: yarn build

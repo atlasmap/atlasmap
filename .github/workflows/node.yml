@@ -1,0 +1,52 @@
+name: Node
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build_yarn:
+    if: ${{ github.repository == 'atlasmap/atlasmap' }}
+    continue-on-error: true
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node: [ '12', '14', '16' ]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: ${{ matrix.os }}/node${{ matrix.node }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup node versions
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node }}
+    - name: Cache node_modules
+      uses: actions/cache@v2
+      with:
+        path: |
+          ui/node_modules
+          ui/packages/*/node_modules
+        key: ${{ runner.os }}-${{ matrix.node }}-${{ hashFiles('ui/yarn.lock') }}
+    - name: yarn install
+      working-directory: ui
+      run: yarn install
+      continue-on-error: true
+    - name: FIXME lerna build
+      working-directory: ui
+      run: yarn build
+      continue-on-error: true
+    - name: FIXME yarn build @atlasmap/core
+      working-directory: ui/packages/atlasmap-core
+      run: yarn build
+      continue-on-error: true
+    - name: yarn build @atlasmap/atlasmap
+      working-directory: ui/packages/atlasmap
+      run: yarn build
+    - name: yarn build:storybook @atlasmap/atlasmap
+      working-directory: ui/packages/atlasmap
+      run: yarn build:storybook
+    - name: yarn build @atlasmap/atlasmap-standalone
+      working-directory: ui/packages/atlasmap-standalone
+      run: yarn build
