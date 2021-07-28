@@ -32,13 +32,6 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - name: Cache node_modules
-      uses: actions/cache@v2
-      with:
-        path: |
-          ui/node_modules
-          ui/packages/*/node_modules
-        key: ${{ runner.os }}-${{ hashFiles('ui/yarn.lock') }}
     - name: Build from root with Maven
       continue-on-error: true
       run: mvn --batch-mode -Pcoverage -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install

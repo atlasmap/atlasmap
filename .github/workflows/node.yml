@@ -22,13 +22,6 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node }}
-    - name: Cache node_modules
-      uses: actions/cache@v2
-      with:
-        path: |
-          ui/node_modules
-          ui/packages/*/node_modules
-        key: ${{ runner.os }}-${{ matrix.node }}-${{ hashFiles('ui/yarn.lock') }}
     - name: yarn install
       working-directory: ui
       run: yarn install
