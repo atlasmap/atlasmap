@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
-      fail-fast: false
       matrix:
         java: [ '13', '15' ]
     name: Java ${{ matrix.Java }} build
@@ -55,42 +54,3 @@ jobs:
       continue-on-error: true
       working-directory: docs
       run: mvn -f pom-javadoc.xml  -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
-  build_yarn:
-    if: ${{ github.repository == 'atlasmap/atlasmap' }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [ '16' ]
-    name: node ${{ matrix.node }}
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup node versions
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node }}
-    - name: yarn install
-      continue-on-error: true
-      working-directory: ui
-      run: yarn install
-    - name: --FIXME lerna build
-      continue-on-error: true
-      working-directory: ui
-      run: yarn build
-    - name: --FIXME yarn build @atlasmap/core
-      continue-on-error: true
-      working-directory: ui/packages/atlasmap-core
-      run: yarn build
-    - name: yarn build @atlasmap/atlasmap
-      continue-on-error: true
-      working-directory: ui/packages/atlasmap
-      run: yarn build
-    - name: yarn build:storybook @atlasmap/atlasmap
-      continue-on-error: true
-      working-directory: ui/packages/atlasmap
-      run: yarn build:storybook
-    - name: yarn build @atlasmap/atlasmap-standalone
-      continue-on-error: true
-      working-directory: ui/packages/atlasmap-standalone
-      run: yarn build
-      
