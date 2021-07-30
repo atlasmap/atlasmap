@@ -23,7 +23,10 @@ import io.atlasmap.api.AtlasMappingBuilder;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.DefaultAtlasSession;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.SimpleField;
 
 /**
  * A base {@code AtlasMappingBuilder} with some common utility methods.
@@ -34,6 +37,8 @@ public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder 
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasMappingBuilder.class);
     private DefaultAtlasSession session;
+    private AtlasConversionService conversionService;
+    private AtlasFieldActionService fieldActionService;
 
     public AtlasField read(String docId, String path) throws AtlasException {
         return new AtlasField(session).read(docId, path);
@@ -45,6 +50,15 @@ public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder 
 
     public AtlasField readProperty(String scope, String name) throws AtlasException {
         return new AtlasField(session).readProperty(scope, name);
+    }
+
+    public void write(String docId, String path, Object value) throws AtlasException {
+        SimpleField source = new SimpleField();
+        if (value != null) {
+            source.setValue(value);
+            source.setFieldType(this.conversionService.fieldTypeFromClass(value.getClass()));
+        }
+        new AtlasField(session).setRawField(source).write(docId, path);
     }
 
     @Override
@@ -65,13 +79,15 @@ public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder 
     public abstract void processMapping() throws Exception;
 
     @Override
-    public void setAtlasSession(AtlasSession session) {
+    public void setAtlasSession(AtlasSession session) throws AtlasException {
         if (!(session instanceof DefaultAtlasSession)) {
             throw new IllegalArgumentException(String.format(
                     "This version of MappingBuilder doesn't support %s",
                     session.getClass().getName()));
         }
         this.session = (DefaultAtlasSession) session;
+        this.conversionService = session.getAtlasContext().getContextFactory().getConversionService();
+        this.fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();
     };
 
     /**
