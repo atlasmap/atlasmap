@@ -23,38 +23,52 @@ import io.atlasmap.api.AtlasMappingBuilder;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.core.DefaultAtlasSession;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.SimpleField;
 
 /**
  * A base {@code AtlasMappingBuilder} with some common utility methods.
  * In most cases user can extend this class and just implement {@link #processMapping()}.
  * @see AtlasField
  */
-<span class="fc" id="L33">public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder {</span>
+<span class="fc" id="L36">public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder {</span>
 
-<span class="fc" id="L35">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasMappingBuilder.class);</span>
+<span class="fc" id="L38">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasMappingBuilder.class);</span>
     private DefaultAtlasSession session;
+    private AtlasConversionService conversionService;
+    private AtlasFieldActionService fieldActionService;
 
     public AtlasField read(String docId, String path) throws AtlasException {
-<span class="fc" id="L39">        return new AtlasField(session).read(docId, path);</span>
+<span class="fc" id="L44">        return new AtlasField(session).read(docId, path);</span>
     }
 
     public AtlasField readConstant(String name) throws AtlasException {
-<span class="fc" id="L43">        return new AtlasField(session).readConstant(name);</span>
+<span class="fc" id="L48">        return new AtlasField(session).readConstant(name);</span>
     }
 
     public AtlasField readProperty(String scope, String name) throws AtlasException {
-<span class="fc" id="L47">        return new AtlasField(session).readProperty(scope, name);</span>
+<span class="fc" id="L52">        return new AtlasField(session).readProperty(scope, name);</span>
     }
+
+    public void write(String docId, String path, Object value) throws AtlasException {
+<span class="fc" id="L56">        SimpleField source = new SimpleField();</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (value != null) {</span>
+<span class="fc" id="L58">            source.setValue(value);</span>
+<span class="fc" id="L59">            source.setFieldType(this.conversionService.fieldTypeFromClass(value.getClass()));</span>
+        }
+<span class="fc" id="L61">        new AtlasField(session).setRawField(source).write(docId, path);</span>
+<span class="fc" id="L62">    }</span>
 
     @Override
     public void process() {
         try {
-<span class="fc" id="L53">            processMapping();</span>
-<span class="nc" id="L54">        } catch (Exception e) {</span>
-<span class="nc" id="L55">            addAudit(e);</span>
-<span class="fc" id="L56">        }</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L67">            processMapping();</span>
+<span class="nc" id="L68">        } catch (Exception e) {</span>
+<span class="nc" id="L69">            addAudit(e);</span>
+<span class="fc" id="L70">        }</span>
+<span class="fc" id="L71">    }</span>
 
     /**
      * Define custom mapping logic. User can extend this class and implement
@@ -65,30 +79,32 @@ import io.atlasmap.v2.AuditStatus;
     public abstract void processMapping() throws Exception;
 
     @Override
-    public void setAtlasSession(AtlasSession session) {
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (!(session instanceof DefaultAtlasSession)) {</span>
-<span class="nc" id="L70">            throw new IllegalArgumentException(String.format(</span>
+    public void setAtlasSession(AtlasSession session) throws AtlasException {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (!(session instanceof DefaultAtlasSession)) {</span>
+<span class="nc" id="L84">            throw new IllegalArgumentException(String.format(</span>
                     &quot;This version of MappingBuilder doesn't support %s&quot;,
-<span class="nc" id="L72">                    session.getClass().getName()));</span>
+<span class="nc" id="L86">                    session.getClass().getName()));</span>
         }
-<span class="fc" id="L74">        this.session = (DefaultAtlasSession) session;</span>
-<span class="fc" id="L75">    };</span>
+<span class="fc" id="L88">        this.session = (DefaultAtlasSession) session;</span>
+<span class="fc" id="L89">        this.conversionService = session.getAtlasContext().getContextFactory().getConversionService();</span>
+<span class="fc" id="L90">        this.fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();</span>
+<span class="fc" id="L91">    };</span>
 
     /**
      * Get {@code DefaultAtlasSession}.
      * @return {@code AtlasSession}.
      */
     public AtlasSession getAtlasSession() {
-<span class="nc" id="L82">        return this.session;</span>
+<span class="nc" id="L98">        return this.session;</span>
     };
 
     public void addAudit(Exception e) {
-<span class="nc" id="L86">        AtlasUtil.addAudit(this.session, this.getClass().getName(),</span>
-<span class="nc" id="L87">                e.getMessage(), AuditStatus.ERROR, null);</span>
-<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L89">            LOG.error(&quot;&quot;, e);</span>
+<span class="nc" id="L102">        AtlasUtil.addAudit(this.session, this.getClass().getName(),</span>
+<span class="nc" id="L103">                e.getMessage(), AuditStatus.ERROR, null);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L105">            LOG.error(&quot;&quot;, e);</span>
         }
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L107">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -13,7 +13,7 @@ Unit Test Coverage Report/atlas-api,io.atlasmap.api,AtlasUnsupportedException,12
 Unit Test Coverage Report/atlas-api,io.atlasmap.api,AtlasContextFactory.Format,0,24,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-api,io.atlasmap.api,AtlasValidationException,16,0,0,0,8,0,4,0,4,0
 Unit Test Coverage Report/atlas-core,io.atlasmap.builder,AtlasField,94,227,11,7,11,58,10,8,1,8
-Unit Test Coverage Report/atlas-core,io.atlasmap.builder,DefaultAtlasMappingBuilder,39,45,3,1,10,11,4,7,2,7
+Unit Test Coverage Report/atlas-core,io.atlasmap.builder,DefaultAtlasMappingBuilder,39,84,4,2,10,19,5,8,2,8
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasSession,0,596,2,82,0,132,2,83,0,43
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasSeparateStrategy,0,78,0,8,0,19,0,13,0,9
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCollectionHelper,12,310,3,49,5,87,4,30,1,7
