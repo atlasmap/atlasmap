@@ -37,6 +37,7 @@ public class DefaultAtlasMappingBuilderTest extends BaseDefaultAtlasContextTest 
                     .writeProperty(DEFAULT_TARGET_DOCUMENT_ID, "p4");
                 readProperty(DEFAULT_SOURCE_DOCUMENT_ID, "p5")
                     .write(DEFAULT_TARGET_DOCUMENT_ID, "/f6");
+                write(DEFAULT_TARGET_DOCUMENT_ID, "/f7", "f7value");
             }
         };
         populateConstant("c3", "c3value");
@@ -48,5 +49,6 @@ public class DefaultAtlasMappingBuilderTest extends BaseDefaultAtlasContextTest 
         assertEquals("f1value", getTargetFieldValue("/f2"));
         assertEquals("c3value", session.getTargetProperties().get("p4"));
         assertEquals("p5value", getTargetFieldValue("/f6"));
+        assertEquals("f7value", getTargetFieldValue("/f7"));
     }
 }

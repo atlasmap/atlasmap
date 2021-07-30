@@ -133,11 +133,11 @@ public class AtlasField {
         return this;
     }
 
-    private Field getRawField() {
+    public Field getRawField() {
         return this.rawField;
     }
 
-    private AtlasField setRawField(Field f) {
+    public AtlasField setRawField(Field f) {
         this.rawField = f;
         return this;
     }
