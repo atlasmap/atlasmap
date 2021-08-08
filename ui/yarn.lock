@@ -2752,14 +2752,19 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.12.9.tgz#122d92efe1f5545195961129db18a81eb27cf47b"
   integrity sha512-9bf3v4Wt+j70DppkptAJfJqpztd2MFH/VzrBqzPjL4OBtyWNenRKcLeJhdZGRuT7ZGKLfd7z3s5/5ApK1bGGzQ==
 
+"@patternfly/react-tokens@^4.12.9":
+  version "4.12.9"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.12.9.tgz#122d92efe1f5545195961129db18a81eb27cf47b"
+  integrity sha512-9bf3v4Wt+j70DppkptAJfJqpztd2MFH/VzrBqzPjL4OBtyWNenRKcLeJhdZGRuT7ZGKLfd7z3s5/5ApK1bGGzQ==
+
 "@patternfly/react-topology@^4.8.72":
-  version "4.9.6"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.6.tgz#b6b9a16dc15cba8a0e30fc04152a65e226d48a4b"
-  integrity sha512-0wFsYDBHfmsDe9UbJOQ7Z6r1mxRYf+peu7HmuwWhLw9Edprje8gY7I2cqlEkp6RyB8HyG5PQyPUrDpht6issrA==
+  version "4.9.42"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.42.tgz#b784c38875c4b2f0e0c278102d31b3a055c39fc6"
+  integrity sha512-ggvmdhdpfaB+o7k02xcCCtQr7fOWpE8BWVkMg9U7VRBuBqVcP7uIVH8+a2yK6qr+ChkB5Sk6+621ZaAsDNZ7dA==
   dependencies:
-    "@patternfly/react-core" "^4.135.0"
-    "@patternfly/react-icons" "^4.11.0"
-    "@patternfly/react-styles" "^4.11.0"
+    "@patternfly/react-core" "^4.147.0"
+    "@patternfly/react-icons" "^4.11.8"
+    "@patternfly/react-styles" "^4.11.8"
     "@types/d3" "^5.7.2"
     "@types/d3-force" "^1.2.1"
     "@types/dagre" "0.7.42"
