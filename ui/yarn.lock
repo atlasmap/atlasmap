@@ -2757,6 +2757,11 @@
   resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.12.9.tgz#122d92efe1f5545195961129db18a81eb27cf47b"
   integrity sha512-9bf3v4Wt+j70DppkptAJfJqpztd2MFH/VzrBqzPjL4OBtyWNenRKcLeJhdZGRuT7ZGKLfd7z3s5/5ApK1bGGzQ==
 
+"@patternfly/react-tokens@^4.12.9":
+  version "4.12.9"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.12.9.tgz#122d92efe1f5545195961129db18a81eb27cf47b"
+  integrity sha512-9bf3v4Wt+j70DppkptAJfJqpztd2MFH/VzrBqzPjL4OBtyWNenRKcLeJhdZGRuT7ZGKLfd7z3s5/5ApK1bGGzQ==
+
 "@patternfly/react-topology@^4.8.72":
   version "4.9.42"
   resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.42.tgz#b784c38875c4b2f0e0c278102d31b3a055c39fc6"
