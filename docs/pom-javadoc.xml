@@ -37,6 +37,7 @@
     <module>../lib</module>
     <module>../atlasmap-maven-plugin</module>
     <module>../camel</module>
+    <module>../kafka-smt</module>
     <module>../standalone</module>
   </modules>
 

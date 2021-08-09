@@ -1,0 +1,9 @@
+<foo>
+  <val>one</val>
+  <bar>
+    <val>two</val>
+    <baz>
+      <val>three</val>
+    </baz>
+  </bar>
+</foo>
