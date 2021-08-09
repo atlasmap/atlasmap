@@ -38,7 +38,6 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.atlasmap.api.AtlasContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasValidationService;
@@ -186,7 +185,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
-    public AtlasContext createContext(File atlasMappingFile) throws AtlasException {
+    public DefaultAtlasContext createContext(File atlasMappingFile) throws AtlasException {
         if (atlasMappingFile == null) {
             throw new AtlasException("AtlasMappingFile must be specified");
         }
@@ -195,7 +194,7 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     }
 
     @Override
-    public AtlasContext createContext(URI atlasMappingUri) throws AtlasException {
+    public DefaultAtlasContext createContext(URI atlasMappingUri) throws AtlasException {
         if (atlasMappingUri == null) {
             throw new AtlasException("AtlasMappingUri must be specified");
         }
@@ -203,13 +202,13 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return context;
     }
 
-    public AtlasContext createContext(AtlasMapping mapping) throws AtlasException {
+    public DefaultAtlasContext createContext(AtlasMapping mapping) throws AtlasException {
         DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);
         return context;
     }
 
     @Override
-    public AtlasContext createContext(Format format, InputStream stream) throws AtlasException {
+    public DefaultAtlasContext createContext(Format format, InputStream stream) throws AtlasException {
         DefaultAtlasContext context = new DefaultAtlasContext(this, format, stream);
         return context;
     }

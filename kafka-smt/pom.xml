@@ -1,0 +1,92 @@
+<!--
+
+    Copyright (C) 2017 Red Hat, Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+            http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>io.atlasmap</groupId>
+    <artifactId>atlas-parent</artifactId>
+    <version>2.3.0-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
+  </parent>
+  <artifactId>atlasmap-kafka-smt</artifactId>
+  <name>Kafka Connect Single Message Transformation</name>
+  <description>A Kafka Connect Single Message Transformation to process data mapping with AtlasMap</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-json-module</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-xml-module</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>connect-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>connect-transforms</artifactId>
+    </dependency>
+    <dependency>
+       <groupId>org.slf4j</groupId>
+       <artifactId>slf4j-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.kafka</groupId>
+      <artifactId>connect-file</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.mguenther.kafka</groupId>
+      <artifactId>kafka-junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-assertj</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-matchers</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>

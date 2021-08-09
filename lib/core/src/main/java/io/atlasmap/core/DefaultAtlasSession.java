@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.atlasmap.api.AtlasConstants;
@@ -53,6 +54,8 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private Map<String, AtlasFieldReader> fieldReaderMap;
     private Map<String, AtlasFieldWriter> fieldWriterMap;
     private Head head = new HeadImpl(this);
+    private String defaultSourceDocumentId;
+    private String defaultTargetDocumentId;
 
     public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {
         this.atlasContext = context;
@@ -114,7 +117,18 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 
     @Override
     public Object getDefaultSourceDocument() {
-        return sourceMap.get(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        return sourceMap.get(getDefaultSourceDocumentId());
+    }
+
+    private String getDefaultSourceDocumentId() {
+        if (this.defaultSourceDocumentId == null) {
+            Optional<String> found = this.atlasContext.getSourceModules().keySet().stream().filter((key) ->
+                !AtlasConstants.CONSTANTS_DOCUMENT_ID.equals(key)
+                && !AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID.equals(key))
+                .findFirst();
+            this.defaultSourceDocumentId = found.isPresent() ? found.get() : AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID;
+        }
+        return this.defaultSourceDocumentId;
     }
 
     @Override
@@ -150,7 +164,17 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 
     @Override
     public Object getDefaultTargetDocument() {
-        return targetMap.get(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);
+        return targetMap.get(getDefaultTargetDocumentId());
+    }
+
+    private String getDefaultTargetDocumentId() {
+        if (this.defaultTargetDocumentId == null) {
+            Optional<String> found = this.atlasContext.getTargetModules().keySet().stream().filter((key) ->
+                !AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID.equals(key))
+                .findFirst();
+            this.defaultTargetDocumentId = found.isPresent() ? found.get() : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;
+        }
+        return this.defaultTargetDocumentId;
     }
 
     @Override
@@ -186,7 +210,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 
     @Override
     public void setDefaultSourceDocument(Object sourceDoc) {
-        this.sourceMap.put(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, sourceDoc);
+        this.sourceMap.put(getDefaultSourceDocumentId(), sourceDoc);
     }
 
     @Override
@@ -204,7 +228,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
 
     @Override
     public void setDefaultTargetDocument(Object targetDoc) {
-        this.targetMap.put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, targetDoc);
+        this.targetMap.put(getDefaultTargetDocumentId(), targetDoc);
     }
 
     @Override
