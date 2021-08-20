@@ -17,13 +17,14 @@ import {
   ConfigModel,
   DocumentInitializationModel,
 } from '../models/config.model';
-import { DocumentType, InspectionType } from '../contracts/common';
+import { DocumentType, FieldType, InspectionType } from '../contracts/common';
 
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
 import { Input } from 'ky';
+import { MappingDefinition } from '../models/mapping-definition.model';
 import { TestUtils } from '../../test/test-util';
 import atlasmapInspectionComplexObjectRootedJson from '../../../../test-resources/inspected/atlasmap-inspection-complex-object-rooted.json';
 import atlasmapInspectionPoExampleSchemaJson from '../../../../test-resources/inspected/atlasmap-inspection-po-example-schema.json';
@@ -334,5 +335,73 @@ describe('DocumentManagementService', () => {
       .catch((error) => {
         fail(error);
       });
+  });
+
+  test('Constant field', () => {
+    cfg.mappings = new MappingDefinition();
+    expect(cfg.constantDoc.fields.length).toBe(0);
+    service.createConstant('testConst', 'testConstVal', 'STRING', false);
+    expect(cfg.constantDoc.fields.length).toBe(1);
+    const f = cfg.constantDoc.getField('/testConst');
+    expect(f).toBeTruthy();
+    expect(f!.name).toBe('testConst');
+    expect(f!.path).toBe('/testConst');
+    expect(f!.type).toBe(FieldType.STRING);
+    expect(f!.value).toBe('testConstVal');
+    expect(service.getConstantType('testConst')).toBe(FieldType.STRING);
+    expect(service.getConstantTypeIndex('testConst')).toBe(0);
+    service.editConstant(
+      'testConstMod',
+      'testConstValMod',
+      'STRING',
+      'testConst'
+    );
+    expect(cfg.constantDoc.fields.length).toBe(1);
+    const fm = cfg.constantDoc.getField('/testConstMod');
+    expect(fm).toBeTruthy();
+    expect(fm!.name).toBe('testConstMod');
+    expect(fm!.path).toBe('/testConstMod');
+    expect(fm!.type).toBe(FieldType.STRING);
+    expect(fm!.value).toBe('testConstValMod');
+    service.deleteConstant('testConstMod');
+    expect(cfg.constantDoc.fields.length).toBe(0);
+  });
+
+  test('Property field', () => {
+    cfg.mappings = new MappingDefinition();
+    expect(cfg.sourcePropertyDoc.fields.length).toBe(0);
+    expect(cfg.targetPropertyDoc.fields.length).toBe(0);
+    service.createProperty('testProp', 'STRING', 'current', true, false);
+    expect(cfg.sourcePropertyDoc.fields.length).toBe(1);
+    expect(cfg.targetPropertyDoc.fields.length).toBe(0);
+    const f = cfg.sourcePropertyDoc.getField('/current/testProp');
+    expect(f).toBeTruthy();
+    expect(f!.name).toBe('testProp');
+    expect(f!.scope).toBe('current');
+    expect(f!.path).toBe('/current/testProp');
+    expect(f!.type).toBe(FieldType.STRING);
+    expect(service.getPropertyType('testProp', 'current', true)).toBe(
+      FieldType.STRING
+    );
+    expect(service.getPropertyTypeIndex('testProp', 'current', true)).toBe(0);
+    service.editProperty(
+      'testProp',
+      'STRING',
+      'current',
+      true,
+      'testPropMod',
+      'currentMod'
+    );
+    expect(cfg.sourcePropertyDoc.fields.length).toBe(1);
+    expect(cfg.targetPropertyDoc.fields.length).toBe(0);
+    const fm = cfg.sourcePropertyDoc.getField('/currentMod/testPropMod');
+    expect(fm).toBeTruthy();
+    expect(fm!.name).toBe('testPropMod');
+    expect(fm!.scope).toBe('currentMod');
+    expect(fm!.path).toBe('/currentMod/testPropMod');
+    expect(fm!.type).toBe(FieldType.STRING);
+    service.deleteProperty('testPropMod', 'currentMod', true);
+    expect(cfg.sourcePropertyDoc.fields.length).toBe(0);
+    expect(cfg.targetPropertyDoc.fields.length).toBe(0);
   });
 });
