@@ -43,11 +43,12 @@ export function createConstant(
   addToActiveMapping?: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let field = cfg.constantDoc.getField(constName);
+  let field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
   if (!field) {
     field = new Field();
   }
   field.name = constName;
+  field.path = FIELD_PATH_SEPARATOR + constName;
   field.value = constValue;
   field.type = FieldType[constType as keyof typeof FieldType];
   field.docDef = cfg.constantDoc;
