@@ -19,13 +19,9 @@ import {
   ErrorLevel,
   ErrorScope,
   ErrorType,
-  FIELD_PATH_SEPARATOR,
   Field,
-  FieldType,
   MappedField,
   MappingModel,
-  constantTypes,
-  propertyTypes,
 } from '@atlasmap/core';
 
 import { LookupTableData } from '../../UI';
@@ -43,37 +39,17 @@ export function createConstant(
   addToActiveMapping?: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
-  if (!field) {
-    field = new Field();
-  }
-  field.name = constName;
-  field.path = FIELD_PATH_SEPARATOR + constName;
-  field.value = constValue;
-  field.type = FieldType[constType as keyof typeof FieldType];
-  field.docDef = cfg.constantDoc;
-  field.userCreated = true;
-  cfg.constantDoc.addField(field);
-  if (addToActiveMapping) {
-    addToCurrentMapping(field);
-  }
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.documentService.createConstant(
+    constName,
+    constValue,
+    constType,
+    addToActiveMapping,
+  );
 }
 
 export function deleteConstant(constName: string): void {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
-  if (!field) {
-    return;
-  }
-  cfg.mappingService.removeFieldFromAllMappings(field);
-  cfg.constantDoc.removeField(field);
-  const activeMapping = cfg.mappings?.activeMapping;
-  const expression = activeMapping?.transition?.expression;
-  if (activeMapping && expression) {
-    expression.updateFieldReference(activeMapping);
-  }
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.documentService.deleteConstant(constName);
 }
 
 export function editConstant(
@@ -83,45 +59,17 @@ export function editConstant(
   origName?: string,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let constFieldName = origName ? origName : constName;
-  let field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constFieldName);
-  if (!field) {
-    return;
-  }
-  if (constType.length > 0) {
-    field.type = FieldType[constType as keyof typeof FieldType];
-  }
-  if (constValue.length > 0) {
-    field.value = constValue;
-  }
-  if (origName && origName !== constName) {
-    field.name = constName;
-    cfg.constantDoc.updateField(field, FIELD_PATH_SEPARATOR + constName);
-  }
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.documentService.editConstant(constName, constValue, constType, origName);
 }
 
 export function getConstantType(constName: string): string {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
-  if (!field) {
-    return '';
-  }
-  return field.type;
+  return cfg.documentService.getConstantType(constName);
 }
 
 export function getConstantTypeIndex(constName: string): number {
   const cfg = ConfigModel.getConfig();
-  const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
-  if (!field) {
-    return 0;
-  }
-  for (let i = 0; i < constantTypes.length; i++) {
-    if (constantTypes[i].includes(field.type)) {
-      return i;
-    }
-  }
-  return 0;
+  return cfg.documentService.getConstantTypeIndex(constName);
 }
 
 export function createProperty(
@@ -132,30 +80,13 @@ export function createProperty(
   addToActiveMapping?: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  const path = cfg.documentService.getPropertyPath(propScope, propName);
-  let field = isSource
-    ? cfg.sourcePropertyDoc.getField(path)
-    : cfg.targetPropertyDoc.getField(path);
-  if (!field) {
-    field = new Field();
-  }
-  field.name = propName;
-  field.type = FieldType[propType as keyof typeof FieldType];
-  field.scope = propScope;
-  field.path = path;
-  field.userCreated = true;
-
-  if (isSource) {
-    field.docDef = cfg.sourcePropertyDoc;
-    cfg.sourcePropertyDoc.addField(field);
-  } else {
-    field.docDef = cfg.targetPropertyDoc;
-    cfg.targetPropertyDoc.addField(field);
-  }
-  if (addToActiveMapping) {
-    addToCurrentMapping(field);
-  }
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.documentService.createProperty(
+    propName,
+    propType,
+    propScope,
+    isSource,
+    addToActiveMapping,
+  );
 }
 
 export function deleteProperty(
@@ -164,38 +95,9 @@ export function deleteProperty(
   isSource: boolean,
 ): void {
   const cfg = ConfigModel.getConfig();
-  const path = cfg.documentService.getPropertyPath(propScope, propName);
-  const field = isSource
-    ? cfg.sourcePropertyDoc.getField(path)
-    : cfg.targetPropertyDoc.getField(path);
-  if (!field) {
-    return;
-  }
-  cfg.mappingService.removeFieldFromAllMappings(field);
-  if (isSource) {
-    cfg.sourcePropertyDoc.removeField(field);
-  } else {
-    cfg.targetPropertyDoc.removeField(field);
-  }
-  const activeMapping = cfg.mappings?.activeMapping;
-  const expression = activeMapping?.transition?.expression;
-  if (activeMapping && expression) {
-    expression.updateFieldReference(activeMapping);
-  }
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.documentService.deleteProperty(propName, propScope, isSource);
 }
 
-/**
- * When editing a property, the propName/propScope is needed to fetch the
- * existing field.  The newName and newScope may or may not be specified.
- *
- * @param propName
- * @param propType
- * @param propScope
- * @param isSource
- * @param newName
- * @param newScope
- */
 export function editProperty(
   propName: string,
   propType: string,
@@ -205,28 +107,14 @@ export function editProperty(
   newScope?: string,
 ): void {
   const cfg = ConfigModel.getConfig();
-  let oldPath = cfg.documentService.getPropertyPath(propScope, propName);
-  let field = isSource
-    ? cfg.sourcePropertyDoc.getField(oldPath)
-    : cfg.targetPropertyDoc.getField(oldPath);
-  if (!field) {
-    return;
-  }
-  if (newName) {
-    field.name = newName;
-  }
-  if (newScope) {
-    field.scope = newScope;
-  }
-  field.type = FieldType[propType as keyof typeof FieldType];
-  field.path = cfg.documentService.getPropertyPath(field.scope, field.name!);
-
-  if (isSource) {
-    cfg.sourcePropertyDoc.updateField(field, oldPath);
-  } else {
-    cfg.targetPropertyDoc.updateField(field, oldPath);
-  }
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.documentService.editProperty(
+    propName,
+    propType,
+    propScope,
+    isSource,
+    newName,
+    newScope,
+  );
 }
 
 export function getPropertyType(
@@ -235,17 +123,7 @@ export function getPropertyType(
   isSource: boolean,
 ): string {
   const cfg = ConfigModel.getConfig();
-  const field = isSource
-    ? cfg.sourcePropertyDoc.getField(
-        cfg.documentService.getPropertyPath(propScope, propName),
-      )
-    : cfg.targetPropertyDoc.getField(
-        cfg.documentService.getPropertyPath(propScope, propName),
-      );
-  if (!field) {
-    return '';
-  }
-  return field.type;
+  return cfg.documentService.getPropertyType(propName, propScope, isSource);
 }
 
 export function getPropertyTypeIndex(
@@ -254,22 +132,11 @@ export function getPropertyTypeIndex(
   isSource: boolean,
 ): number {
   const cfg = ConfigModel.getConfig();
-  const field = isSource
-    ? cfg.sourcePropertyDoc.getField(
-        cfg.documentService.getPropertyPath(propScope, propName),
-      )
-    : cfg.targetPropertyDoc.getField(
-        cfg.documentService.getPropertyPath(propScope, propName),
-      );
-  if (!field) {
-    return 0;
-  }
-  for (let i = 0; i < propertyTypes.length; i++) {
-    if (propertyTypes[i].includes(field.type)) {
-      return i;
-    }
-  }
-  return 0;
+  return cfg.documentService.getPropertyTypeIndex(
+    propName,
+    propScope,
+    isSource,
+  );
 }
 
 /**

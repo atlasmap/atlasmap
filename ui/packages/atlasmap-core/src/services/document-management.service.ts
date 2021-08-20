@@ -17,6 +17,7 @@ import {
   CollectionType,
   DocumentType,
   FIELD_PATH_SEPARATOR,
+  FieldType,
   InspectionType,
 } from '../contracts/common';
 import {
@@ -25,6 +26,11 @@ import {
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
+import {
+  HTTP_STATUS_NO_CONTENT,
+  constantTypes,
+  propertyTypes,
+} from '../common/config.types';
 import { Observable, Subscription } from 'rxjs';
 
 import { CommonUtil } from '../utils/common-util';
@@ -34,7 +40,6 @@ import { DocumentInspectionModel } from '../models/inspect/document-inspection.m
 import { DocumentInspectionUtil } from '../utils/document-inspection-util';
 import { Field } from '../models/field.model';
 import { Guid } from '../utils';
-import { HTTP_STATUS_NO_CONTENT } from '../common/config.types';
 import ky from 'ky';
 
 /**
@@ -515,15 +520,6 @@ export class DocumentManagementService {
     cfg.mappingService.notifyLineRefresh();
   }
 
-  getPropertyPath(scope: string | undefined | null, name: string) {
-    let answer = FIELD_PATH_SEPARATOR;
-    if (scope && scope.length > 0) {
-      answer += scope + FIELD_PATH_SEPARATOR;
-    }
-    answer += name;
-    return answer;
-  }
-
   private markChildrenVisible(field: Field): void {
     field.visibleInCurrentDocumentSearch = true;
     field.collapsed = false;
@@ -534,5 +530,299 @@ export class DocumentManagementService {
     for (const childField of field.children) {
       this.markChildrenVisible(childField);
     }
+  }
+
+  /**
+   * Create a constant field.
+   * @param constName
+   * @param constValue
+   * @param constType
+   * @param addToActiveMapping
+   */
+  createConstant(
+    constName: string,
+    constValue: string,
+    constType: string,
+    addToActiveMapping?: boolean
+  ): void {
+    let field = this.cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
+    if (!field) {
+      field = new Field();
+    }
+    field.name = constName;
+    field.path = FIELD_PATH_SEPARATOR + constName;
+    field.value = constValue;
+    field.type = FieldType[constType as keyof typeof FieldType];
+    field.docDef = this.cfg.constantDoc;
+    field.userCreated = true;
+    this.cfg.constantDoc.addField(field);
+    if (addToActiveMapping) {
+      this.cfg.mappingService.addFieldToActiveMapping(field);
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * Delete a constant field.
+   * @param constName
+   */
+  deleteConstant(constName: string): void {
+    const field = this.cfg.constantDoc.getField(
+      FIELD_PATH_SEPARATOR + constName
+    );
+    if (!field) {
+      return;
+    }
+    this.cfg.mappingService.removeFieldFromAllMappings(field);
+    this.cfg.constantDoc.removeField(field);
+    const activeMapping = this.cfg.mappings?.activeMapping;
+    const expression = activeMapping?.transition?.expression;
+    if (activeMapping && expression) {
+      expression.updateFieldReference(activeMapping);
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * Edit a constant field. Look for an existing constant field with the specified name
+   * and update the properties. If {@link origName} is specified and different from
+   * {@link constName}, the name of the constant field will be changed.
+   * @param constName
+   * @param constValue
+   * @param constType
+   * @param origName
+   */
+  editConstant(
+    constName: string,
+    constValue: string,
+    constType: string,
+    origName?: string
+  ): void {
+    let constFieldName = origName ? origName : constName;
+    let field = this.cfg.constantDoc.getField(
+      FIELD_PATH_SEPARATOR + constFieldName
+    );
+    if (!field) {
+      return;
+    }
+    if (constType.length > 0) {
+      field.type = FieldType[constType as keyof typeof FieldType];
+    }
+    if (constValue.length > 0) {
+      field.value = constValue;
+    }
+    if (origName && origName !== constName) {
+      field.name = constName;
+      field.path = FIELD_PATH_SEPARATOR + constName;
+      this.cfg.constantDoc.updateField(field, FIELD_PATH_SEPARATOR + constName);
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * Get a {@link FieldType} of the constant field.
+   * @param constName
+   */
+  getConstantType(constName: string): FieldType {
+    const cfg = ConfigModel.getConfig();
+    const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
+    if (!field) {
+      return FieldType.NONE;
+    }
+    return field.type;
+  }
+
+  /**
+   * Get an index of the constant field type.
+   * @param constName
+   */
+  getConstantTypeIndex(constName: string): number {
+    const cfg = ConfigModel.getConfig();
+    const field = cfg.constantDoc.getField(FIELD_PATH_SEPARATOR + constName);
+    if (!field) {
+      return 0;
+    }
+    for (let i = 0; i < constantTypes.length; i++) {
+      if (constantTypes[i].includes(field.type)) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  /**
+   * Create a property field.
+   * @param propName
+   * @param propType
+   * @param propScope
+   * @param isSource
+   * @param addToActiveMapping
+   */
+  createProperty(
+    propName: string,
+    propType: string,
+    propScope: string,
+    isSource: boolean,
+    addToActiveMapping?: boolean
+  ): void {
+    const cfg = ConfigModel.getConfig();
+    const path = this.getPropertyPath(propScope, propName);
+    let field = isSource
+      ? cfg.sourcePropertyDoc.getField(path)
+      : cfg.targetPropertyDoc.getField(path);
+    if (!field) {
+      field = new Field();
+    }
+    field.name = propName;
+    field.type = FieldType[propType as keyof typeof FieldType];
+    field.scope = propScope;
+    field.path = path;
+    field.userCreated = true;
+
+    if (isSource) {
+      field.docDef = cfg.sourcePropertyDoc;
+      cfg.sourcePropertyDoc.addField(field);
+    } else {
+      field.docDef = cfg.targetPropertyDoc;
+      cfg.targetPropertyDoc.addField(field);
+    }
+    if (addToActiveMapping) {
+      this.cfg.mappingService.addFieldToActiveMapping(field);
+    }
+    cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * Delete a property field.
+   * @param propName
+   * @param propScope
+   * @param isSource
+   */
+  deleteProperty(propName: string, propScope: string, isSource: boolean): void {
+    const path = this.getPropertyPath(propScope, propName);
+    const field = isSource
+      ? this.cfg.sourcePropertyDoc.getField(path)
+      : this.cfg.targetPropertyDoc.getField(path);
+    if (!field) {
+      return;
+    }
+    this.cfg.mappingService.removeFieldFromAllMappings(field);
+    if (isSource) {
+      this.cfg.sourcePropertyDoc.removeField(field);
+    } else {
+      this.cfg.targetPropertyDoc.removeField(field);
+    }
+    const activeMapping = this.cfg.mappings?.activeMapping;
+    const expression = activeMapping?.transition?.expression;
+    if (activeMapping && expression) {
+      expression.updateFieldReference(activeMapping);
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * Edit a property field. When editing a property, the propName/propScope
+   * is needed to fetch the existing field.  The newName and newScope may or
+   * may not be specified.
+   *
+   * @param propName
+   * @param propType
+   * @param propScope
+   * @param isSource
+   * @param newName
+   * @param newScope
+   */
+  editProperty(
+    propName: string,
+    propType: string,
+    propScope: string,
+    isSource: boolean,
+    newName?: string,
+    newScope?: string
+  ): void {
+    let oldPath = this.getPropertyPath(propScope, propName);
+    let field = isSource
+      ? this.cfg.sourcePropertyDoc.getField(oldPath)
+      : this.cfg.targetPropertyDoc.getField(oldPath);
+    if (!field) {
+      return;
+    }
+    if (newName) {
+      field.name = newName;
+    }
+    if (newScope) {
+      field.scope = newScope;
+    }
+    field.type = FieldType[propType as keyof typeof FieldType];
+    field.path = this.getPropertyPath(field.scope, field.name!);
+
+    if (isSource) {
+      this.cfg.sourcePropertyDoc.updateField(field, oldPath);
+    } else {
+      this.cfg.targetPropertyDoc.updateField(field, oldPath);
+    }
+    this.cfg.mappingService.notifyMappingUpdated();
+  }
+
+  /**
+   * Get a {@link FieldType} of the property field.
+   * @param propName
+   * @param propScope
+   * @param isSource
+   */
+  getPropertyType(
+    propName: string,
+    propScope: string,
+    isSource: boolean
+  ): FieldType {
+    const field = isSource
+      ? this.cfg.sourcePropertyDoc.getField(
+          this.getPropertyPath(propScope, propName)
+        )
+      : this.cfg.targetPropertyDoc.getField(
+          this.getPropertyPath(propScope, propName)
+        );
+    if (!field) {
+      return FieldType.NONE;
+    }
+    return field.type;
+  }
+
+  /**
+   * Get an index of the property field type.
+   * @param propName
+   * @param propScope
+   * @param isSource
+   */
+  getPropertyTypeIndex(
+    propName: string,
+    propScope: string,
+    isSource: boolean
+  ): number {
+    const field = isSource
+      ? this.cfg.sourcePropertyDoc.getField(
+          this.getPropertyPath(propScope, propName)
+        )
+      : this.cfg.targetPropertyDoc.getField(
+          this.getPropertyPath(propScope, propName)
+        );
+    if (!field) {
+      return 0;
+    }
+    for (let i = 0; i < propertyTypes.length; i++) {
+      if (propertyTypes[i].includes(field.type)) {
+        return i;
+      }
+    }
+    return 0;
+  }
+
+  getPropertyPath(scope: string | undefined | null, name: string) {
+    let answer = FIELD_PATH_SEPARATOR;
+    if (scope && scope.length > 0) {
+      answer += scope + FIELD_PATH_SEPARATOR;
+    }
+    answer += name;
+    return answer;
   }
 }
