@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
 
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.test.TargetTestClass;
+import io.atlasmap.java.test.TargetTestClassExtended;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.java.v2.JavaField;
 import io.atlasmap.java.v2.Modifier;
@@ -416,5 +417,17 @@ public class ClassInspectionServiceTest {
         JavaField contactArray = javaClass.getJavaFields().getJavaField().get(13);
         assertEquals(CollectionType.ARRAY, contactArray.getCollectionType());
         assertEquals("/contactArray[]", contactArray.getPath());
+    }
+
+    @Test
+    public void testDuplicatedField() {
+        JavaClass parent = classInspectionService.inspectClass(TargetTestClass.class, CollectionType.NONE, null);
+        JavaClass extended = classInspectionService.inspectClass(TargetTestClassExtended.class, CollectionType.NONE, null);
+        assertEquals(TargetTestClass.class.getName(), parent.getClassName());
+        assertEquals(TargetTestClassExtended.class.getName(), extended.getClassName());
+        assertEquals(
+            parent.getJavaFields().getJavaField().size(),
+            extended.getJavaFields().getJavaField().size()
+        );
     }
 }

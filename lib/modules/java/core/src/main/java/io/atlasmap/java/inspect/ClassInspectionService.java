@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -597,11 +598,17 @@ public class ClassInspectionService {
 
     private void inspectClassFields(ClassLoader classLoader, Class<?> clazz, JavaClass javaClass,
             Set<String> cachedClasses, String pathPrefix) {
+        Set<String> existing = javaClass.getJavaFields().getJavaField().stream()
+            .map(JavaField::getName).collect(Collectors.toSet());
         Field[] fields = clazz.getDeclaredFields();
         if (fields != null && !javaClass.isEnumeration()) {
             for (Field f : fields) {
                 JavaField s = inspectField(classLoader, f, cachedClasses, pathPrefix);
 
+                if (existing.contains(f.getName())) {
+                    LOG.warn("Ignoring hidden Java field: " + s.getName());
+                    continue;
+                }
                 if (getFieldExclusions().contains(f.getName())) {
                     s.setStatus(FieldStatus.EXCLUDED);
                 }

@@ -111,8 +111,7 @@ public class ComplexClassInspectTest {
         assertNotNull(c.getUri());
         assertNull(c.getValue());
 
-        // Two serialVersionUID fields due to inheritance
-        assertEquals(new Integer(7), new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(Integer.valueOf(6), Integer.valueOf(c.getJavaFields().getJavaField().size()));
 
         Integer validated = 0;
         for (JavaField f : c.getJavaFields().getJavaField()) {
@@ -149,7 +148,7 @@ public class ComplexClassInspectTest {
             }
         }
 
-        assertEquals(validated, new Integer(c.getJavaFields().getJavaField().size()));
+        assertEquals(validated, Integer.valueOf(c.getJavaFields().getJavaField().size()));
     }
 
 }
