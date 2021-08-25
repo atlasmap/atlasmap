@@ -196,7 +196,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             }
 
             try {
-<span class="fc" id="L199">                AtlasModule module = moduleInfo.getModuleClass().newInstance();</span>
+<span class="fc" id="L199">                AtlasModule module = moduleInfo.getModuleClass().getDeclaredConstructor().newInstance();</span>
 <span class="fc" id="L200">                module.setClassLoader(factory.getClassLoader());</span>
 <span class="fc" id="L201">                module.setConversionService(factory.getConversionService());</span>
 <span class="fc" id="L202">                module.setFieldActionService(factory.getFieldActionService());</span>

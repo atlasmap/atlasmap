@@ -39,6 +39,7 @@ io.atlasmap.json.module
 io.atlasmap.json.service
 io.atlasmap.json.test
 io.atlasmap.json.v2
+io.atlasmap.kafka.smt
 io.atlasmap.maven
 io.atlasmap.mxbean
 io.atlasmap.service

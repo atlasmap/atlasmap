@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.atlasmap.api.AtlasConstants;
@@ -52,325 +53,348 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private Map&lt;String, Object&gt; targetMap;
     private Map&lt;String, AtlasFieldReader&gt; fieldReaderMap;
     private Map&lt;String, AtlasFieldWriter&gt; fieldWriterMap;
-<span class="fc" id="L55">    private Head head = new HeadImpl(this);</span>
+<span class="fc" id="L56">    private Head head = new HeadImpl(this);</span>
+    private String defaultSourceDocumentId;
+    private String defaultTargetDocumentId;
 
-<span class="fc" id="L57">    public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {</span>
-<span class="fc" id="L58">        this.atlasContext = context;</span>
-<span class="fc" id="L59">        initialize();</span>
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (context.getMapping() == null) {</span>
-<span class="fc" id="L61">            this.mapping = null;</span>
-<span class="fc" id="L62">            return;</span>
+<span class="fc" id="L60">    public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {</span>
+<span class="fc" id="L61">        this.atlasContext = context;</span>
+<span class="fc" id="L62">        initialize();</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (context.getMapping() == null) {</span>
+<span class="fc" id="L64">            this.mapping = null;</span>
+<span class="fc" id="L65">            return;</span>
         }
-<span class="fc" id="L64">        this.mapping = context.getADMArchiveHandler().cloneMappingDefinition();</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L67">        this.mapping = context.getADMArchiveHandler().cloneMappingDefinition();</span>
+<span class="fc" id="L68">    }</span>
 
     protected void initialize() {
-<span class="fc" id="L68">        sourceProperties = new ConcurrentHashMap&lt;String, Object&gt;();</span>
-<span class="fc" id="L69">        targetProperties = new ConcurrentHashMap&lt;String, Object&gt;();</span>
-<span class="fc" id="L70">        validations = new Validations();</span>
-<span class="fc" id="L71">        audits = new Audits();</span>
-<span class="fc" id="L72">        sourceMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L73">        targetMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L74">        fieldReaderMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L75">        fieldWriterMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L76">        head.unset();</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L71">        sourceProperties = new ConcurrentHashMap&lt;String, Object&gt;();</span>
+<span class="fc" id="L72">        targetProperties = new ConcurrentHashMap&lt;String, Object&gt;();</span>
+<span class="fc" id="L73">        validations = new Validations();</span>
+<span class="fc" id="L74">        audits = new Audits();</span>
+<span class="fc" id="L75">        sourceMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L76">        targetMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L77">        fieldReaderMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L78">        fieldWriterMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L79">        head.unset();</span>
+<span class="fc" id="L80">    }</span>
 
     @Override
     public DefaultAtlasContext getAtlasContext() {
-<span class="fc" id="L81">        return atlasContext;</span>
+<span class="fc" id="L84">        return atlasContext;</span>
     }
 
     @Override
     public void setAtlasContext(AtlasContext atlasContext) {
-<span class="fc" id="L86">        this.atlasContext = (DefaultAtlasContext) atlasContext;</span>
-<span class="fc" id="L87">        head.unset();</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L89">        this.atlasContext = (DefaultAtlasContext) atlasContext;</span>
+<span class="fc" id="L90">        head.unset();</span>
+<span class="fc" id="L91">    }</span>
 
     @Override
     public AtlasMapping getMapping() {
-<span class="fc" id="L92">        return mapping;</span>
+<span class="fc" id="L95">        return mapping;</span>
     }
 
     @Override
     public Validations getValidations() {
-<span class="fc" id="L97">        return this.validations;</span>
+<span class="fc" id="L100">        return this.validations;</span>
     }
 
     @Override
     public void setValidations(Validations validations) {
-<span class="fc" id="L102">        this.validations = validations;</span>
-<span class="fc" id="L103">    }</span>
+<span class="fc" id="L105">        this.validations = validations;</span>
+<span class="fc" id="L106">    }</span>
 
     @Override
     public Audits getAudits() {
-<span class="fc" id="L107">        return this.audits;</span>
+<span class="fc" id="L110">        return this.audits;</span>
     }
 
     @Override
     public void setAudits(Audits audits) {
-<span class="fc" id="L112">        this.audits = audits;</span>
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L115">        this.audits = audits;</span>
+<span class="fc" id="L116">    }</span>
 
     @Override
     public Object getDefaultSourceDocument() {
-<span class="fc" id="L117">        return sourceMap.get(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
+<span class="fc" id="L120">        return sourceMap.get(getDefaultSourceDocumentId());</span>
+    }
+
+    private String getDefaultSourceDocumentId() {
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (this.defaultSourceDocumentId == null) {</span>
+<span class="fc" id="L125">            Optional&lt;String&gt; found = this.atlasContext.getSourceModules().keySet().stream().filter((key) -&gt;</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">                !AtlasConstants.CONSTANTS_DOCUMENT_ID.equals(key)</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                &amp;&amp; !AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID.equals(key))</span>
+<span class="fc" id="L128">                .findFirst();</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            this.defaultSourceDocumentId = found.isPresent() ? found.get() : AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID;</span>
+        }
+<span class="fc" id="L131">        return this.defaultSourceDocumentId;</span>
     }
 
     @Override
     public Object getSourceDocument(String docId) {
-<span class="fc bfc" id="L122" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L123">            return getDefaultSourceDocument();</span>
+<span class="fc bfc" id="L136" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L137">            return getDefaultSourceDocument();</span>
         }
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (sourceMap.containsKey(docId)) {</span>
-<span class="fc" id="L126">            return sourceMap.get(docId);</span>
-<span class="pc bpc" id="L127" title="1 of 4 branches missed.">        } else if (sourceMap.size() == 1 &amp;&amp; sourceMap.containsKey(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID)) {</span>
-<span class="fc" id="L128">            AtlasUtil.addAudit(this, docId, String.format(</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (sourceMap.containsKey(docId)) {</span>
+<span class="fc" id="L140">            return sourceMap.get(docId);</span>
+<span class="fc bfc" id="L141" title="All 4 branches covered.">        } else if (sourceMap.size() == 1 &amp;&amp; sourceMap.containsKey(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID)) {</span>
+<span class="fc" id="L142">            AtlasUtil.addAudit(this, docId, String.format(</span>
                     &quot;There's no source document with docId='%s', returning default&quot;, docId),
                     AuditStatus.WARN, null);
-<span class="fc" id="L131">            return getDefaultSourceDocument();</span>
+<span class="fc" id="L145">            return getDefaultSourceDocument();</span>
         }
-<span class="fc" id="L133">        AtlasUtil.addAudit(this, docId, String.format(</span>
+<span class="fc" id="L147">        AtlasUtil.addAudit(this, docId, String.format(</span>
                 &quot;There's no source document with docId='%s'&quot;, docId), AuditStatus.WARN, null);
-<span class="fc" id="L135">        return null;</span>
+<span class="fc" id="L149">        return null;</span>
     }
 
     @Override
     public boolean hasSourceDocument(String docId) {
-<span class="fc bfc" id="L140" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L141">            return sourceMap.containsKey(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L154" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L155">            return sourceMap.containsKey(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
         }
-<span class="fc" id="L143">        return sourceMap.containsKey(docId);</span>
+<span class="fc" id="L157">        return sourceMap.containsKey(docId);</span>
     }
 
     @Override
     public Map&lt;String, Object&gt; getSourceDocumentMap() {
-<span class="fc" id="L148">        return Collections.unmodifiableMap(sourceMap);</span>
+<span class="fc" id="L162">        return Collections.unmodifiableMap(sourceMap);</span>
     }
 
     @Override
     public Object getDefaultTargetDocument() {
-<span class="fc" id="L153">        return targetMap.get(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
+<span class="fc" id="L167">        return targetMap.get(getDefaultTargetDocumentId());</span>
+    }
+
+    private String getDefaultTargetDocumentId() {
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (this.defaultTargetDocumentId == null) {</span>
+<span class="fc" id="L172">            Optional&lt;String&gt; found = this.atlasContext.getTargetModules().keySet().stream().filter((key) -&gt;</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">                !AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID.equals(key))</span>
+<span class="fc" id="L174">                .findFirst();</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">            this.defaultTargetDocumentId = found.isPresent() ? found.get() : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
+        }
+<span class="fc" id="L177">        return this.defaultTargetDocumentId;</span>
     }
 
     @Override
     public Object getTargetDocument(String docId) {
-<span class="fc bfc" id="L158" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L159">            return getDefaultTargetDocument();</span>
+<span class="fc bfc" id="L182" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L183">            return getDefaultTargetDocument();</span>
         }
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (targetMap.containsKey(docId)) {</span>
-<span class="fc" id="L162">            return targetMap.get(docId);</span>
-<span class="pc bpc" id="L163" title="1 of 4 branches missed.">        } else if (targetMap.size() == 1 &amp;&amp; targetMap.containsKey(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID)) {</span>
-<span class="fc" id="L164">            AtlasUtil.addAudit(this, docId, String.format(</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (targetMap.containsKey(docId)) {</span>
+<span class="fc" id="L186">            return targetMap.get(docId);</span>
+<span class="pc bpc" id="L187" title="1 of 4 branches missed.">        } else if (targetMap.size() == 1 &amp;&amp; targetMap.containsKey(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID)) {</span>
+<span class="fc" id="L188">            AtlasUtil.addAudit(this, docId, String.format(</span>
                     &quot;There's no target document with docId='%s', returning default&quot;, docId),
                     AuditStatus.WARN, null);
-<span class="fc" id="L167">            return getDefaultTargetDocument();</span>
+<span class="fc" id="L191">            return getDefaultTargetDocument();</span>
         }
-<span class="fc" id="L169">        AtlasUtil.addAudit(this, docId, String.format(</span>
+<span class="fc" id="L193">        AtlasUtil.addAudit(this, docId, String.format(</span>
                 &quot;There's no target document with docId='%s'&quot;, docId), AuditStatus.WARN, null);
-<span class="fc" id="L171">        return null;</span>
+<span class="fc" id="L195">        return null;</span>
     }
 
     @Override
     public boolean hasTargetDocument(String docId) {
-<span class="fc bfc" id="L176" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L177">            return targetMap.containsKey(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L200" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L201">            return targetMap.containsKey(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
         }
-<span class="fc" id="L179">        return targetMap.containsKey(docId);</span>
+<span class="fc" id="L203">        return targetMap.containsKey(docId);</span>
     }
 
     @Override
     public Map&lt;String, Object&gt; getTargetDocumentMap() {
-<span class="fc" id="L184">        return Collections.unmodifiableMap(targetMap);</span>
+<span class="fc" id="L208">        return Collections.unmodifiableMap(targetMap);</span>
     }
 
     @Override
     public void setDefaultSourceDocument(Object sourceDoc) {
-<span class="fc" id="L189">        this.sourceMap.put(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, sourceDoc);</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L213">        this.sourceMap.put(getDefaultSourceDocumentId(), sourceDoc);</span>
+<span class="fc" id="L214">    }</span>
 
     @Override
     public void setSourceDocument(String docId, Object sourceDoc) {
-<span class="fc bfc" id="L194" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L195">            setDefaultSourceDocument(sourceDoc);</span>
+<span class="fc bfc" id="L218" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L219">            setDefaultSourceDocument(sourceDoc);</span>
         } else {
             // first document is mapped to 'default' as well
-<span class="fc bfc" id="L198" title="All 2 branches covered.">            if (this.sourceMap.isEmpty()) {</span>
-<span class="fc" id="L199">                setDefaultSourceDocument(sourceDoc);</span>
+<span class="fc bfc" id="L222" title="All 2 branches covered.">            if (this.sourceMap.isEmpty()) {</span>
+<span class="fc" id="L223">                setDefaultSourceDocument(sourceDoc);</span>
             }
-<span class="fc" id="L201">            this.sourceMap.put(docId, sourceDoc);</span>
+<span class="fc" id="L225">            this.sourceMap.put(docId, sourceDoc);</span>
         }
-<span class="fc" id="L203">    }</span>
+<span class="fc" id="L227">    }</span>
 
     @Override
     public void setDefaultTargetDocument(Object targetDoc) {
-<span class="fc" id="L207">        this.targetMap.put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, targetDoc);</span>
-<span class="fc" id="L208">    }</span>
+<span class="fc" id="L231">        this.targetMap.put(getDefaultTargetDocumentId(), targetDoc);</span>
+<span class="fc" id="L232">    }</span>
 
     @Override
     public void setTargetDocument(String docId, Object targetDoc) {
-<span class="fc bfc" id="L212" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L213">            setDefaultTargetDocument(targetDoc);</span>
+<span class="fc bfc" id="L236" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L237">            setDefaultTargetDocument(targetDoc);</span>
         } else {
             // first document is mapped to 'default' as well
-<span class="fc bfc" id="L216" title="All 2 branches covered.">            if (this.targetMap.isEmpty()) {</span>
-<span class="fc" id="L217">                setDefaultTargetDocument(targetDoc);</span>
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if (this.targetMap.isEmpty()) {</span>
+<span class="fc" id="L241">                setDefaultTargetDocument(targetDoc);</span>
             }
-<span class="fc" id="L219">            this.targetMap.put(docId, targetDoc);</span>
+<span class="fc" id="L243">            this.targetMap.put(docId, targetDoc);</span>
         }
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L245">    }</span>
 
     @Override
     public AtlasFieldReader getFieldReader(String docId) {
-<span class="fc bfc" id="L225" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L226">            return this.fieldReaderMap.get(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L249" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L250">            return this.fieldReaderMap.get(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
         }
-<span class="fc" id="L228">        return this.fieldReaderMap.get(docId);</span>
+<span class="fc" id="L252">        return this.fieldReaderMap.get(docId);</span>
     }
 
     @Override
     public &lt;T extends AtlasFieldReader&gt; T getFieldReader(String docId, Class&lt;T&gt; clazz) {
-<span class="fc" id="L233">        return clazz.cast(getFieldReader(docId));</span>
+<span class="fc" id="L257">        return clazz.cast(getFieldReader(docId));</span>
     }
 
     @Override
     public void setFieldReader(String docId, AtlasFieldReader reader) {
-<span class="fc bfc" id="L238" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L239">            this.fieldReaderMap.put(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);</span>
+<span class="fc bfc" id="L262" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L263">            this.fieldReaderMap.put(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, reader);</span>
         } else {
-<span class="fc" id="L241">            this.fieldReaderMap.put(docId, reader);</span>
+<span class="fc" id="L265">            this.fieldReaderMap.put(docId, reader);</span>
         }
-<span class="fc" id="L243">    }</span>
+<span class="fc" id="L267">    }</span>
 
     @Override
     public AtlasFieldReader removeFieldReader(String docId) {
-<span class="fc bfc" id="L247" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L248">            return this.fieldReaderMap.remove(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L271" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L272">            return this.fieldReaderMap.remove(AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);</span>
         }
-<span class="fc" id="L250">        return fieldReaderMap.remove(docId);</span>
+<span class="fc" id="L274">        return fieldReaderMap.remove(docId);</span>
     }
 
     @Override
     public AtlasFieldWriter getFieldWriter(String docId) {
-<span class="fc bfc" id="L255" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L256">            return this.fieldWriterMap.get(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L279" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L280">            return this.fieldWriterMap.get(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
         }
-<span class="fc" id="L258">        return this.fieldWriterMap.get(docId);</span>
+<span class="fc" id="L282">        return this.fieldWriterMap.get(docId);</span>
     }
 
     @Override
     public &lt;T extends AtlasFieldWriter&gt; T getFieldWriter(String docId, Class&lt;T&gt; clazz) {
-<span class="fc" id="L263">        return clazz.cast(getFieldWriter(docId));</span>
+<span class="fc" id="L287">        return clazz.cast(getFieldWriter(docId));</span>
     }
 
     @Override
     public void setFieldWriter(String docId, AtlasFieldWriter writer) {
-<span class="fc bfc" id="L268" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L269">            this.fieldWriterMap.put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);</span>
+<span class="fc bfc" id="L292" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L293">            this.fieldWriterMap.put(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID, writer);</span>
         }
-<span class="fc" id="L271">        this.fieldWriterMap.put(docId, writer);</span>
-<span class="fc" id="L272">    }</span>
+<span class="fc" id="L295">        this.fieldWriterMap.put(docId, writer);</span>
+<span class="fc" id="L296">    }</span>
 
     @Override
     public AtlasFieldWriter removeFieldWriter(String docId) {
-<span class="fc bfc" id="L276" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc" id="L277">            return this.fieldWriterMap.remove(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L300" title="All 4 branches covered.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc" id="L301">            return this.fieldWriterMap.remove(AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID);</span>
         }
-<span class="fc" id="L279">        return this.fieldWriterMap.remove(docId);</span>
+<span class="fc" id="L303">        return this.fieldWriterMap.remove(docId);</span>
     }
 
     @Override
     public Head head() {
-<span class="fc" id="L284">        return this.head;</span>
+<span class="fc" id="L308">        return this.head;</span>
     }
 
     @Override
     @Deprecated
     public Map&lt;String, Object&gt; getProperties() {
-<span class="fc" id="L290">        return getSourceProperties();</span>
+<span class="fc" id="L314">        return getSourceProperties();</span>
     }
 
     @Override
     public Map&lt;String, Object&gt; getSourceProperties() {
-<span class="fc" id="L295">        return this.sourceProperties;</span>
+<span class="fc" id="L319">        return this.sourceProperties;</span>
     }
 
     @Override
     public Map&lt;String, Object&gt; getTargetProperties() {
-<span class="fc" id="L300">        return this.targetProperties;</span>
+<span class="fc" id="L324">        return this.targetProperties;</span>
     }
 
     @Override
     public AtlasPropertyStrategy getAtlasPropertyStrategy() {
-<span class="fc" id="L305">        return this.propertyStrategy;</span>
+<span class="fc" id="L329">        return this.propertyStrategy;</span>
     }
     @Override
     public void setAtlasPropertyStrategy(AtlasPropertyStrategy strategy) {
-<span class="fc" id="L309">        this.propertyStrategy = strategy;</span>
-<span class="fc" id="L310">    }</span>
+<span class="fc" id="L333">        this.propertyStrategy = strategy;</span>
+<span class="fc" id="L334">    }</span>
 
     @Override
     public Integer errorCount() {
-<span class="fc" id="L314">        int e = 0;</span>
-<span class="fc bfc" id="L315" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
-<span class="fc bfc" id="L316" title="All 2 branches covered.">            if (AuditStatus.ERROR.equals(audit.getStatus())) {</span>
-<span class="fc" id="L317">                e++;</span>
+<span class="fc" id="L338">        int e = 0;</span>
+<span class="fc bfc" id="L339" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
+<span class="fc bfc" id="L340" title="All 2 branches covered.">            if (AuditStatus.ERROR.equals(audit.getStatus())) {</span>
+<span class="fc" id="L341">                e++;</span>
             }
-<span class="fc" id="L319">        }</span>
-<span class="fc" id="L320">        return e;</span>
+<span class="fc" id="L343">        }</span>
+<span class="fc" id="L344">        return e;</span>
     }
 
     @Override
     public boolean hasErrors() {
-<span class="fc bfc" id="L325" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
-<span class="fc bfc" id="L326" title="All 2 branches covered.">            if (AuditStatus.ERROR.equals(audit.getStatus())) {</span>
-<span class="fc" id="L327">                return true;</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
+<span class="fc bfc" id="L350" title="All 2 branches covered.">            if (AuditStatus.ERROR.equals(audit.getStatus())) {</span>
+<span class="fc" id="L351">                return true;</span>
             }
-<span class="fc" id="L329">        }</span>
-<span class="fc" id="L330">        return false;</span>
+<span class="fc" id="L353">        }</span>
+<span class="fc" id="L354">        return false;</span>
     }
 
     @Override
     public boolean hasWarns() {
-<span class="fc bfc" id="L335" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
-<span class="fc bfc" id="L336" title="All 2 branches covered.">            if (AuditStatus.WARN.equals(audit.getStatus())) {</span>
-<span class="fc" id="L337">                return true;</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">            if (AuditStatus.WARN.equals(audit.getStatus())) {</span>
+<span class="fc" id="L361">                return true;</span>
             }
-<span class="fc" id="L339">        }</span>
-<span class="fc" id="L340">        return false;</span>
+<span class="fc" id="L363">        }</span>
+<span class="fc" id="L364">        return false;</span>
     }
 
     @Override
     public Integer warnCount() {
-<span class="fc" id="L345">        int w = 0;</span>
-<span class="fc bfc" id="L346" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
-<span class="fc bfc" id="L347" title="All 2 branches covered.">            if (AuditStatus.WARN.equals(audit.getStatus())) {</span>
-<span class="fc" id="L348">                w++;</span>
+<span class="fc" id="L369">        int w = 0;</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">        for (Audit audit : getAudits().getAudit()) {</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">            if (AuditStatus.WARN.equals(audit.getStatus())) {</span>
+<span class="fc" id="L372">                w++;</span>
             }
-<span class="fc" id="L350">        }</span>
-<span class="fc" id="L351">        return w;</span>
+<span class="fc" id="L374">        }</span>
+<span class="fc" id="L375">        return w;</span>
     }
 
     @Override
     public AtlasModule resolveModule(String docId) {
         // Assuming Document ID is unique across source and target
-<span class="fc" id="L357">        AtlasModule answer = this.getAtlasContext().getSourceModules().get(docId);</span>
-<span class="fc bfc" id="L358" title="All 2 branches covered.">        if (answer == null) {</span>
-<span class="fc" id="L359">            answer = this.getAtlasContext().getTargetModules().get(docId);</span>
+<span class="fc" id="L381">        AtlasModule answer = this.getAtlasContext().getSourceModules().get(docId);</span>
+<span class="fc bfc" id="L382" title="All 2 branches covered.">        if (answer == null) {</span>
+<span class="fc" id="L383">            answer = this.getAtlasContext().getTargetModules().get(docId);</span>
         }
-<span class="fc" id="L361">        return answer;</span>
+<span class="fc" id="L385">        return answer;</span>
     }
 
     public ConstantModule getConstantModule() {
-<span class="fc" id="L365">        return (ConstantModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
+<span class="fc" id="L389">        return (ConstantModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
     }
 
     public PropertyModule getSourcePropertyModule() {
-<span class="fc" id="L369">        return (PropertyModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);</span>
+<span class="fc" id="L393">        return (PropertyModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);</span>
     }
 
     public PropertyModule getTargetPropertyModule() {
-<span class="fc" id="L373">        return (PropertyModule) this.getAtlasContext().getTargetModules().get(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);</span>
+<span class="fc" id="L397">        return (PropertyModule) this.getAtlasContext().getTargetModules().get(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);</span>
     }
 
     private class HeadImpl implements Head {
@@ -379,88 +403,88 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         private LookupTable lookupTable;
         private Field sourceField;
         private Field targetField;
-<span class="fc" id="L382">        private List&lt;Audit&gt; audits = new LinkedList&lt;Audit&gt;();</span>
+<span class="fc" id="L406">        private List&lt;Audit&gt; audits = new LinkedList&lt;Audit&gt;();</span>
 
-<span class="fc" id="L384">        public HeadImpl(DefaultAtlasSession session) {</span>
-<span class="fc" id="L385">            this.session = session;</span>
-<span class="fc" id="L386">        }</span>
+<span class="fc" id="L408">        public HeadImpl(DefaultAtlasSession session) {</span>
+<span class="fc" id="L409">            this.session = session;</span>
+<span class="fc" id="L410">        }</span>
 
         @Override
         public Mapping getMapping() {
-<span class="fc" id="L390">            return this.mapping;</span>
+<span class="fc" id="L414">            return this.mapping;</span>
         }
 
         @Override
         public LookupTable getLookupTable() {
-<span class="fc" id="L395">            return this.lookupTable;</span>
+<span class="fc" id="L419">            return this.lookupTable;</span>
         }
 
         @Override
         public Field getSourceField() {
-<span class="fc" id="L400">            return this.sourceField;</span>
+<span class="fc" id="L424">            return this.sourceField;</span>
         }
 
         @Override
         public Field getTargetField() {
-<span class="fc" id="L405">            return this.targetField;</span>
+<span class="fc" id="L429">            return this.targetField;</span>
         }
 
         @Override
         public Head setMapping(Mapping mapping) {
-<span class="fc" id="L410">            this.mapping = mapping;</span>
-<span class="fc" id="L411">            return this;</span>
+<span class="fc" id="L434">            this.mapping = mapping;</span>
+<span class="fc" id="L435">            return this;</span>
         }
 
         @Override
         public Head setLookupTable(LookupTable table) {
-<span class="fc" id="L416">            this.lookupTable = table;</span>
-<span class="fc" id="L417">            return this;</span>
+<span class="fc" id="L440">            this.lookupTable = table;</span>
+<span class="fc" id="L441">            return this;</span>
         }
 
         @Override
         public Head setSourceField(Field sourceField) {
-<span class="fc" id="L422">            this.sourceField = sourceField;</span>
-<span class="fc" id="L423">            return this;</span>
+<span class="fc" id="L446">            this.sourceField = sourceField;</span>
+<span class="fc" id="L447">            return this;</span>
         }
 
         @Override
         public Head setTargetField(Field targetField) {
-<span class="fc" id="L428">            this.targetField = targetField;</span>
-<span class="fc" id="L429">            return this;</span>
+<span class="fc" id="L452">            this.targetField = targetField;</span>
+<span class="fc" id="L453">            return this;</span>
         }
 
         @Override
         public Head unset() {
-<span class="fc" id="L434">            this.mapping = null;</span>
-<span class="fc" id="L435">            this.lookupTable = null;</span>
-<span class="fc" id="L436">            this.sourceField = null;</span>
-<span class="fc" id="L437">            this.targetField = null;</span>
-<span class="fc" id="L438">            return this;</span>
+<span class="fc" id="L458">            this.mapping = null;</span>
+<span class="fc" id="L459">            this.lookupTable = null;</span>
+<span class="fc" id="L460">            this.sourceField = null;</span>
+<span class="fc" id="L461">            this.targetField = null;</span>
+<span class="fc" id="L462">            return this;</span>
         }
 
         @Override
         public boolean hasError() {
-<span class="pc bpc" id="L443" title="1 of 2 branches missed.">            for(Audit audit : audits) {</span>
-<span class="nc bnc" id="L444" title="All 2 branches missed.">                if (audit.getStatus() == AuditStatus.ERROR) {</span>
-<span class="nc" id="L445">                    return true;</span>
+<span class="pc bpc" id="L467" title="1 of 2 branches missed.">            for(Audit audit : audits) {</span>
+<span class="nc bnc" id="L468" title="All 2 branches missed.">                if (audit.getStatus() == AuditStatus.ERROR) {</span>
+<span class="nc" id="L469">                    return true;</span>
                 }
-<span class="nc" id="L447">            }</span>
-<span class="fc" id="L448">            return false;</span>
+<span class="nc" id="L471">            }</span>
+<span class="fc" id="L472">            return false;</span>
         }
 
         @Override
         public Head addAudit(AuditStatus status, Field field, String message) {
-<span class="nc bnc" id="L453" title="All 2 branches missed.">            String docId = field != null ? field.getDocId() : null;</span>
-<span class="nc" id="L454">            String docName = AtlasUtil.getDocumentNameById(session, docId);</span>
-<span class="nc bnc" id="L455" title="All 2 branches missed.">            String path = field != null ? field.getPath() : null;</span>
-<span class="nc" id="L456">            Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);</span>
-<span class="nc" id="L457">            this.audits.add(audit);</span>
-<span class="nc" id="L458">            return this;</span>
+<span class="nc bnc" id="L477" title="All 2 branches missed.">            String docId = field != null ? field.getDocId() : null;</span>
+<span class="nc" id="L478">            String docName = AtlasUtil.getDocumentNameById(session, docId);</span>
+<span class="nc bnc" id="L479" title="All 2 branches missed.">            String path = field != null ? field.getPath() : null;</span>
+<span class="nc" id="L480">            Audit audit = AtlasUtil.createAudit(status, docId, docName, path, null, message);</span>
+<span class="nc" id="L481">            this.audits.add(audit);</span>
+<span class="nc" id="L482">            return this;</span>
         }
 
         @Override
         public List&lt;Audit&gt; getAudits() {
-<span class="fc" id="L463">            return this.audits;</span>
+<span class="fc" id="L487">            return this.audits;</span>
         }
 
     }

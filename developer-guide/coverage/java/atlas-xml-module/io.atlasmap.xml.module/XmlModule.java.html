@@ -166,7 +166,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L166">        }</span>
 
 <span class="fc" id="L168">        Map&lt;String, String&gt; nsMap = new HashMap&lt;String, String&gt;();</span>
-<span class="pc bpc" id="L169" title="2 of 6 branches missed.">        if (xmlNs != null &amp;&amp; xmlNs.getXmlNamespace() != null &amp;&amp; !xmlNs.getXmlNamespace().isEmpty()) {</span>
+<span class="pc bpc" id="L169" title="1 of 6 branches missed.">        if (xmlNs != null &amp;&amp; xmlNs.getXmlNamespace() != null &amp;&amp; !xmlNs.getXmlNamespace().isEmpty()) {</span>
 <span class="fc bfc" id="L170" title="All 2 branches covered.">            for (XmlNamespace ns : xmlNs.getXmlNamespace()) {</span>
 <span class="fc" id="L171">                nsMap.put(ns.getAlias(), ns.getUri());</span>
 <span class="fc" id="L172">            }</span>
@@ -359,7 +359,7 @@ import io.atlasmap.xml.v2.XmlNamespaces;
     }
 
     private Document enforceSchema(Document doc) {
-<span class="pc bpc" id="L362" title="1 of 4 branches missed.">        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA</span>
+<span class="fc bfc" id="L362" title="All 4 branches covered.">        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA</span>
 <span class="pc bpc" id="L363" title="2 of 4 branches missed.">            || getDataSourceMetadata().getSpecification() == null || getDataSourceMetadata().getSpecification().length == 0) {</span>
 <span class="fc" id="L364">            return doc;</span>
         }
