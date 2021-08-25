@@ -2,7 +2,7 @@
   "name": "@atlasmap/atlasmap",
   "description": "AtlasMap UI presentation layer consists of React components",
   "version": "2.3.0-SNAPSHOT",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
   },
