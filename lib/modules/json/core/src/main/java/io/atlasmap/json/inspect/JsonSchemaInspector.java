@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
-import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -248,7 +247,7 @@ public class JsonSchemaInspector implements JsonInspector {
         public JsonField build() {
             JsonField answer;
             if (type == FieldType.COMPLEX) {
-                JsonComplexType complex = JsonComplexTypeFactory.createJsonComlexField();
+                JsonComplexType complex = AtlasJsonModelFactory.createJsonComlexField();
                 complex.setJsonFields(subFields);
                 complex.setJsonEnumFields(enumFields);
                 if (!enumFields.getJsonEnumField().isEmpty()) {

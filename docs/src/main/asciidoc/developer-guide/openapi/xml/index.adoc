@@ -361,6 +361,84 @@ endif::internal-generation[]
 |===
 | Field Name| Required| Type| Description| Format
 
+| actions
+| 
+| List  of <<Action>>
+| 
+|  
+
+| value
+| 
+| Object 
+| 
+|  
+
+| arrayDimensions
+| 
+| Integer 
+| 
+| int32 
+
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId
+| 
+| String 
+| 
+|  
+
+| index
+| 
+| Integer 
+| 
+| int32 
+
+| path
+| 
+| String 
+| 
+|  
+
+| required
+| 
+| Boolean 
+| 
+|  
+
+| status
+| 
+| String 
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
+
+| fieldType
+| 
+| String 
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format
+| 
+| String 
+| 
+|  
+
+| name
+| 
+| String 
+| 
+|  
+
 | fields
 | 
 | Fields 

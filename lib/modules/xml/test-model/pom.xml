@@ -31,7 +31,7 @@
   <name>Atlas :: XML Test Model</name>
 
   <properties>
-    <osgi.export.pkg>io.atlasmap.xml.test.v2</osgi.export.pkg>
+    <osgi.export.pkg>io.atlasmap.xml.test</osgi.export.pkg>
   </properties>
 
   <dependencies>

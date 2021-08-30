@@ -1,0 +1,121 @@
+{
+  "type": "record",
+  "name": "root",
+  "fields": [
+    {
+      "name": "f1",
+      "type": "boolean"
+    },
+    {
+      "name": "f2",
+      "type": "string"
+    },
+    {
+      "name": "record",
+      "type": {
+        "type": "record",
+        "name": "subrecordtype1",
+        "fields": [
+          {
+            "name": "recordf1",
+            "type": "long"
+          },
+          {
+            "name": "recordf2",
+            "type": "double"
+          }
+        ]
+      }
+    },
+    {
+      "name": "enum",
+      "type": {
+        "name": "enumType",
+        "type": "enum",
+        "symbols": [
+          "ONE",
+          "TWO",
+          "THREE"
+        ]
+      }
+    },
+    {
+      "name": "sarray",
+      "type": {
+        "name": "sarrayType",
+        "type": "array",
+        "items": "string"
+      }
+    },
+    {
+      "name": "rarray",
+      "type": {
+        "name": "rarrayType",
+        "type": "array",
+        "items": {
+          "name": "arrayrecordtype1",
+          "type": "record",
+          "fields": [
+            {
+              "name": "recordf3",
+              "type": "int"
+            },
+            {
+              "name": "recordf4",
+              "type": "float"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "map",
+      "type": {
+        "name": "maptype",
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "union",
+      "type": [
+        {
+          "name": "unionrecordtype1",
+          "type": "record",
+          "fields": [
+            {
+              "name": "recordf5",
+              "type": "string"
+            },
+            {
+              "name": "recordf6",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "name": "unionrecordtype2",
+          "type": "record",
+          "fields": [
+            {
+              "name": "recordf7",
+              "type": "string"
+            },
+            {
+              "name": "recordf8",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fixed",
+      "type": {
+        "name": "fixedtype",
+        "type": "fixed",
+        "size": 1024
+      }
+    }
+  ]
+}

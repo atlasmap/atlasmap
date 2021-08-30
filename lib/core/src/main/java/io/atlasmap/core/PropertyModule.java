@@ -22,6 +22,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.PropertyField;
 
@@ -32,6 +33,9 @@ public class PropertyModule extends BaseAtlasModule {
 
     public PropertyModule(AtlasPropertyStrategy propertyStrategy) {
         this.defaultStrategy = propertyStrategy;
+        DataSource ds = new DataSource();
+        ds.setName("Properties");
+        setDataSource(ds);
     }
 
     @Override
@@ -115,11 +119,6 @@ public class PropertyModule extends BaseAtlasModule {
 
     @Override
     public void setDocName(String docName) {
-    }
-
-    @Override
-    public String getDocName() {
-        return "Properties";
     }
 
     @Override

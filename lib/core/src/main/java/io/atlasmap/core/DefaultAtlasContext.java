@@ -200,16 +200,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 module.setClassLoader(factory.getClassLoader());
                 module.setConversionService(factory.getConversionService());
                 module.setFieldActionService(factory.getFieldActionService());
-                module.setUri(ds.getUri());
+                module.setDataSource(ds);
                 if (ds.getDataSourceType() == DataSourceType.SOURCE) {
-                    module.setMode(AtlasModuleMode.SOURCE);
                     getSourceModules().put(docId, module);
                 } else if (ds.getDataSourceType() == DataSourceType.TARGET) {
-                    module.setMode(AtlasModuleMode.TARGET);
                     getTargetModules().put(docId, module);
                 }
-                module.setDocId(docId);
-                module.setDocName(ds.getName());
                 if (this.dataSourceMetadataMap != null) {
                     DataSourceKey dskey = new DataSourceKey(ds.getDataSourceType() == DataSourceType.SOURCE, docId);
                     DataSourceMetadata meta = this.dataSourceMetadataMap.get(dskey);

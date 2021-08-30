@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 
@@ -73,8 +74,17 @@ public interface AtlasModule {
 
     void processPostValidation(AtlasInternalSession session) throws AtlasException;
 
+    DataSource getDataSource();
+
+    void setDataSource(DataSource ds);
+
     AtlasModuleMode getMode();
 
+    /**
+     * @param atlasModuleMode
+     * @deprecated use {@link #setDataSource(DataSource)} instead.
+     **/
+    @Deprecated
     void setMode(AtlasModuleMode atlasModuleMode);
 
     AtlasConversionService getConversionService();
@@ -91,14 +101,29 @@ public interface AtlasModule {
 
     String getDocId();
 
+    /**
+     * @param docId
+     * @deprecated use {@link #setDataSource(DataSource)} instead.
+     **/
+    @Deprecated
     void setDocId(String docId);
 
     String getDocName();
 
+    /**
+     * @param docName
+     * @deprecated use {@link #setDataSource(DataSource)} instead.
+     **/
+    @Deprecated
     void setDocName(String docName);
 
     String getUri();
 
+    /**
+     * @param uri
+     * @deprecated use {@link #setDataSource(DataSource)} instead.
+     **/
+    @Deprecated
     void setUri(String uri);
 
     String getUriDataType();

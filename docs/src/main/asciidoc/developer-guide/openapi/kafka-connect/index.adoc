@@ -1,0 +1,700 @@
+= AtlasMap Design Time Service API :: Kafka Connect
+atlasmap@googlegroups.com
+2.4.0-SNAPSHOT
+:toc: left
+:numbered:
+:toclevels: 3
+:source-highlighter: highlightjs
+:keywords: openapi, rest, AtlasMap Design Time Service API :: Kafka Connect
+:specDir: 
+:snippetDir: 
+:generator-template: v1 2019-12-20
+:info-url: https://www.atlasmap.io/
+:app-name: AtlasMap Design Time Service API :: Kafka Connect
+
+[abstract]
+.Abstract
+Kafka Connect Service provides Kafka Connect inspection service which generate an AtlasMap Document object from Kafka Connect schema document. 
+
+
+// markup not found, no include::{specDir}intro.adoc[opts=optional]
+
+
+
+== Endpoints
+
+
+[.Default]
+=== Default
+
+
+[.inspect]
+==== inspect
+
+`POST /kafkaconnect/inspect`
+
+Inspect Kafka Connect Schema
+
+===== Description
+
+Inspect a Kafka Connect schema and return a Document object
+
+
+// markup not found, no include::{specDir}kafkaconnect/inspect/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+====== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| KafkaConnectInspectionRequest
+| KafkaConnectInspectionRequest object <<KafkaConnectInspectionRequest>>
+| -
+| 
+| 
+
+|===
+
+
+
+
+
+===== Return Type
+
+<<KafkaConnectInspectionResponse>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Return a Document object represented by KafkaConnectDocument
+|  <<KafkaConnectInspectionResponse>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}kafkaconnect/inspect/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}kafkaconnect/inspect/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :kafkaconnect/inspect/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}kafkaconnect/inspect/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.simpleHelloWorld]
+==== simpleHelloWorld
+
+`GET /kafkaconnect/simple`
+
+Simple
+
+===== Description
+
+Simple hello service
+
+
+// markup not found, no include::{specDir}kafkaconnect/simple/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+====== Query Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| from
+|  
+| -
+| null
+| 
+
+|===
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* text/plain
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Return a response
+|  <<String>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}kafkaconnect/simple/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}kafkaconnect/simple/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :kafkaconnect/simple/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}kafkaconnect/simple/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[#models]
+== Models
+
+
+[#Action]
+=== _Action_ 
+
+
+
+[.fields-Action]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| @type
+| 
+| String 
+| 
+|  
+
+|===
+
+
+[#Field]
+=== _Field_ 
+
+
+
+[.fields-Field]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| actions
+| 
+| List  of <<Action>>
+| 
+|  
+
+| value
+| 
+| Object 
+| 
+|  
+
+| arrayDimensions
+| 
+| Integer 
+| 
+| int32 
+
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId
+| 
+| String 
+| 
+|  
+
+| index
+| 
+| Integer 
+| 
+| int32 
+
+| path
+| 
+| String 
+| 
+|  
+
+| required
+| 
+| Boolean 
+| 
+|  
+
+| status
+| 
+| String 
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
+
+| fieldType
+| 
+| String 
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format
+| 
+| String 
+| 
+|  
+
+| name
+| 
+| String 
+| 
+|  
+
+| jsonType
+| X
+| String 
+| 
+|  
+
+|===
+
+
+[#Fields]
+=== _Fields_ 
+
+
+
+[.fields-Fields]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| field
+| 
+| List  of <<Field>>
+| 
+|  
+
+|===
+
+
+[#KafkaConnectDocument]
+=== _KafkaConnectDocument_ 
+
+
+
+[.fields-KafkaConnectDocument]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| actions
+| 
+| List  of <<Action>>
+| 
+|  
+
+| value
+| 
+| Object 
+| 
+|  
+
+| arrayDimensions
+| 
+| Integer 
+| 
+| int32 
+
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId
+| 
+| String 
+| 
+|  
+
+| index
+| 
+| Integer 
+| 
+| int32 
+
+| path
+| 
+| String 
+| 
+|  
+
+| required
+| 
+| Boolean 
+| 
+|  
+
+| status
+| 
+| String 
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
+
+| fieldType
+| 
+| String 
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format
+| 
+| String 
+| 
+|  
+
+| name
+| 
+| String 
+| 
+|  
+
+| fields
+| 
+| Fields 
+| 
+|  
+
+| rootSchemaType
+| 
+| String 
+| 
+|  _Enum:_ INT8, INT16, INT32, INT64, FLOAT32, FLOAT64, BOOLEAN, STRING, BYTES, ARRAY, MAP, STRUCT, 
+
+| enumeration
+| 
+| Boolean 
+| 
+|  
+
+| enumFields
+| 
+| KafkaConnectEnumFields 
+| 
+|  
+
+| jsonType
+| X
+| String 
+| 
+|  
+
+|===
+
+
+[#KafkaConnectEnumField]
+=== _KafkaConnectEnumField_ 
+
+
+
+[.fields-KafkaConnectEnumField]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| actions
+| 
+| List  of <<Action>>
+| 
+|  
+
+| value
+| 
+| Object 
+| 
+|  
+
+| arrayDimensions
+| 
+| Integer 
+| 
+| int32 
+
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
+| 
+|  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
+
+| docId
+| 
+| String 
+| 
+|  
+
+| index
+| 
+| Integer 
+| 
+| int32 
+
+| path
+| 
+| String 
+| 
+|  
+
+| required
+| 
+| Boolean 
+| 
+|  
+
+| status
+| 
+| String 
+| 
+|  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
+
+| fieldType
+| 
+| String 
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| format
+| 
+| String 
+| 
+|  
+
+| name
+| 
+| String 
+| 
+|  
+
+| ordinal
+| 
+| Integer 
+| 
+| int32 
+
+| typeName
+| 
+| String 
+| 
+|  
+
+| userCreated
+| 
+| Boolean 
+| 
+|  
+
+| jsonType
+| X
+| String 
+| 
+|  
+
+|===
+
+
+[#KafkaConnectEnumFields]
+=== _KafkaConnectEnumFields_ 
+
+
+
+[.fields-KafkaConnectEnumFields]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| kafkaConnectEnumField
+| 
+| List  of <<KafkaConnectEnumField>>
+| 
+|  
+
+|===
+
+
+[#KafkaConnectInspectionRequest]
+=== _KafkaConnectInspectionRequest_ 
+
+
+
+[.fields-KafkaConnectInspectionRequest]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| fieldNameExclusions
+| 
+| StringList 
+| 
+|  
+
+| typeNameExclusions
+| 
+| StringList 
+| 
+|  
+
+| namespaceExclusions
+| 
+| StringList 
+| 
+|  
+
+| uri
+| 
+| String 
+| 
+|  
+
+| schemaData
+| 
+| String 
+| 
+|  
+
+| options
+| 
+| Map  of <<string>>
+| 
+|  
+
+| jsonType
+| X
+| String 
+| 
+|  
+
+|===
+
+
+[#KafkaConnectInspectionResponse]
+=== _KafkaConnectInspectionResponse_ 
+
+
+
+[.fields-KafkaConnectInspectionResponse]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| kafkaConnectDocument
+| 
+| KafkaConnectDocument 
+| 
+|  
+
+| errorMessage
+| 
+| String 
+| 
+|  
+
+| executionTime
+| 
+| Long 
+| 
+| int64 
+
+| jsonType
+| X
+| String 
+| 
+|  
+
+|===
+
+
+[#StringList]
+=== _StringList_ 
+
+
+
+[.fields-StringList]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| string
+| 
+| List  of <<string>>
+| 
+|  
+
+|===
+
+

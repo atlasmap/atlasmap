@@ -177,7 +177,7 @@ public class AtlasPath implements Cloneable {
     public AtlasPath clone() {
         return new AtlasPath(this.toString());
     }
-    
+
     public List<SegmentContext> getSegments(boolean includeRoot) {
         if (includeRoot) {
             return Collections.unmodifiableList(this.segmentContexts);
@@ -255,16 +255,18 @@ public class AtlasPath implements Cloneable {
     }
 
     public boolean isIndexedCollection() {
-        boolean hasIndexedCollection = false;
+        boolean collection = false;
+        boolean isIndexedCollection = true;
         for (SegmentContext sc : this.segmentContexts) {
             if (sc.getCollectionType() != CollectionType.NONE) {
-                if (sc.getCollectionIndex() != null) {
-                    hasIndexedCollection = true;
+                collection = true;
+                if (sc.getCollectionIndex() == null) {
+                    isIndexedCollection = false;
                 }
 
             }
         }
-        return hasIndexedCollection;
+        return collection && isIndexedCollection;
     }
 
     public SegmentContext setCollectionIndex(int segmentIndex, Integer collectionIndex) {
@@ -369,7 +371,9 @@ public class AtlasPath implements Cloneable {
             answer = answer.replaceAll("//", "/");
         }
         if (answer.endsWith("/")) {
-            LOG.warn("Sanitizing trailing slash (/) in the path '{}'", answer);
+            if (answer.length() > 1) {
+                LOG.warn("Sanitizing trailing slash (/) in the path '{}'", answer);
+            }
             answer = answer.substring(0, answer.length()-1);
 
         }

@@ -32,6 +32,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+    <apicurio-registry.version>2.1.4.Final</apicurio-registry.version>
     <asciidoctor-maven-plugin.version>2.2.1</asciidoctor-maven-plugin.version>
     <asciidoctorj.version>2.5.2</asciidoctorj.version>
     <asciidoctorj-pdf.version>1.6.0</asciidoctorj-pdf.version>
@@ -171,6 +172,11 @@
         <artifactId>okhttp</artifactId>
         <version>${okhttp.version}</version>
         <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.apicurio</groupId>
+        <artifactId>apicurio-registry-utils-converter</artifactId>
+        <version>${apicurio-registry.version}</version>
       </dependency>
       <dependency>
         <groupId>net.mguenther.kafka</groupId>
@@ -357,6 +363,12 @@
       </dependency>
       <dependency>
         <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-json-core</artifactId>
+        <classifier>tests</classifier>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
         <artifactId>atlas-json-model</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -373,6 +385,31 @@
       <dependency>
         <groupId>io.atlasmap</groupId>
         <artifactId>atlas-json-test-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-kafka-connect-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-kafka-connect-model</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-kafka-connect-module</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-kafka-connect-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.atlasmap</groupId>
+        <artifactId>atlas-kafka-connect-test-model</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

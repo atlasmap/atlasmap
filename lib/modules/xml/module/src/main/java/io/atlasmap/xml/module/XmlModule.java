@@ -43,7 +43,6 @@ import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.InspectionType;
@@ -157,12 +156,10 @@ public class XmlModule extends BaseAtlasModule {
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
         XmlNamespaces xmlNs = null;
         String template = null;
-        for (DataSource ds : session.getMapping().getDataSource()) {
-            if (DataSourceType.TARGET.equals(ds.getDataSourceType()) && ds instanceof XmlDataSource
-                    && (ds.getId() == null || ds.getId().equals(getDocId()))) {
-                xmlNs = ((XmlDataSource) ds).getXmlNamespaces();
-                template = ((XmlDataSource) ds).getTemplate();
-            }
+        DataSource ds = getDataSource();
+        if (ds instanceof XmlDataSource) {
+            xmlNs = ((XmlDataSource) ds).getXmlNamespaces();
+            template = ((XmlDataSource) ds).getTemplate();
         }
 
         Map<String, String> nsMap = new HashMap<String, String>();

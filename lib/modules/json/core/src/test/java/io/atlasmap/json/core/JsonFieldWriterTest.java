@@ -312,12 +312,12 @@ public class JsonFieldWriterTest {
     @Test
     public void testWriteHighlyComplexObject() throws Exception {
 
-        JsonComplexType items = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType items = AtlasJsonModelFactory.createJsonComlexField();
         items.setPath("/items");
         items.setJsonFields(new JsonFields());
         write(items);
 
-        JsonComplexType item = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType item = AtlasJsonModelFactory.createJsonComlexField();
         item.setJsonFields(new JsonFields());
         item.setPath("/items/item");
         item.setCollectionType(CollectionType.LIST);
@@ -356,13 +356,13 @@ public class JsonFieldWriterTest {
         item.getJsonFields().getJsonField().add(ppu);
         write(ppu);
 
-        JsonComplexType batters = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType batters = AtlasJsonModelFactory.createJsonComlexField();
         batters.setJsonFields(new JsonFields());
         batters.setPath("/items/item/batters");
         items.getJsonFields().getJsonField().add(batters);
         write(batters);
 
-        JsonComplexType batter = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType batter = AtlasJsonModelFactory.createJsonComlexField();
         batter.setPath("/items/item/batters/batter");
         batter.setJsonFields(new JsonFields());
         batter.setStatus(FieldStatus.SUPPORTED);
@@ -434,7 +434,7 @@ public class JsonFieldWriterTest {
         batter.getJsonFields().getJsonField().add(batter4Type);
         write(batter4Type);
 
-        JsonComplexType topping = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType topping = AtlasJsonModelFactory.createJsonComlexField();
         topping.setJsonFields(new JsonFields());
         topping.setPath("/items/item/topping");
         topping.setCollectionType(CollectionType.ARRAY);
@@ -555,7 +555,7 @@ public class JsonFieldWriterTest {
 
         // repeat complex
 
-        JsonComplexType item1 = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType item1 = AtlasJsonModelFactory.createJsonComlexField();
         item1.setJsonFields(new JsonFields());
         item1.setPath("/items/item[1]");
         item1.setCollectionType(CollectionType.LIST);
@@ -594,13 +594,13 @@ public class JsonFieldWriterTest {
         item.getJsonFields().getJsonField().add(ppu2);
         write(ppu2);
 
-        JsonComplexType batters1 = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType batters1 = AtlasJsonModelFactory.createJsonComlexField();
         batters1.setJsonFields(new JsonFields());
         batters1.setPath("/items/item[1]/batters");
         items.getJsonFields().getJsonField().add(batters1);
         write(batters1);
 
-        JsonComplexType batter1 = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType batter1 = AtlasJsonModelFactory.createJsonComlexField();
         batter1.setPath("/items/item[1]/batters/batter");
         batter1.setJsonFields(new JsonFields());
         batter1.setStatus(FieldStatus.SUPPORTED);

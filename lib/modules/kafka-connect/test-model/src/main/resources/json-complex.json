@@ -1,0 +1,14 @@
+{
+  "type": "struct",
+  "name": "struct",
+  "fields": [
+    {
+      "field": "field1",
+      "type": "boolean"
+    },
+    {
+      "field": "field2",
+      "type": "string"
+    }
+  ]
+}

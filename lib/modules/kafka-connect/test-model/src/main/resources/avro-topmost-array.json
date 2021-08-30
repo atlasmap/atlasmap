@@ -1,0 +1,5 @@
+{
+  "type": "array",
+  "name": "arr",
+  "items": "string"
+}
