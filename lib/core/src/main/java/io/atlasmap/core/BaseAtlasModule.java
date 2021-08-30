@@ -17,7 +17,6 @@ package io.atlasmap.core;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +36,9 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -52,13 +53,8 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private AtlasConversionService atlasConversionService = null;
     private AtlasFieldActionService atlasFieldActionService = null;
     private AtlasCollectionHelper collectionHelper = null;
-    private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;
-    private String docId;
-    private String docName;
-    private String uri;
-    private String uriDataType;
-    private Map<String,String> uriParameters = new HashMap<>();
     private ClassLoader classLoader;
+    private DataSource dataSource;
     private DataSourceMetadata dataSourceMetadata;
 
     @Override
@@ -165,13 +161,28 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     }
 
     @Override
+    public DataSource getDataSource() {
+        return this.dataSource;
+    }
+
+    @Override
+    public void setDataSource(DataSource ds) {
+        this.dataSource = ds;
+    }
+
+    @Override
     public AtlasModuleMode getMode() {
-        return this.atlasModuleMode;
+         if (this.dataSource.getDataSourceType() == DataSourceType.SOURCE) {
+             return AtlasModuleMode.SOURCE;
+        } else if (this.dataSource.getDataSourceType() == DataSourceType.TARGET) {
+            return AtlasModuleMode.TARGET;
+        } else {
+            return AtlasModuleMode.UNSET;
+        }
     }
 
     @Override
     public void setMode(AtlasModuleMode atlasModuleMode) {
-        this.atlasModuleMode = atlasModuleMode;
     }
 
     @Override
@@ -201,34 +212,30 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
 
     @Override
     public String getDocId() {
-        return docId;
+        return this.dataSource.getId();
     }
 
     @Override
     public void setDocId(String docId) {
-        this.docId = docId;
     }
 
     @Override
     public String getUri() {
-        return uri;
+        return this.dataSource.getUri();
     }
 
     @Override
     public void setUri(String uri) {
-        this.uri = uri;
-        this.uriDataType = AtlasUtil.getUriDataType(uri);
-        this.uriParameters = AtlasUtil.getUriParameters(uri);
     }
 
     @Override
     public String getUriDataType() {
-        return this.uriDataType;
+        return AtlasUtil.getUriDataType(getUri());
     }
 
     @Override
     public Map<String, String> getUriParameters() {
-        return Collections.unmodifiableMap(uriParameters);
+        return Collections.unmodifiableMap(AtlasUtil.getUriParameters(getUri()));
     }
 
     @Override
@@ -276,12 +283,11 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
 
     @Override
     public void setDocName(String docName) {
-        this.docName = docName;
     }
 
     @Override
     public String getDocName() {
-        return this.docName;
+        return this.dataSource.getName();
     }
 
     //-----------------------------------------
@@ -310,7 +316,7 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
 
     @Override
     public String getModeName() {
-        return this.atlasModuleMode.name();
+        return this.getMode().name();
     }
 
     @Override

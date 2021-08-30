@@ -67,6 +67,14 @@
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-csv-model</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-kafka-connect-service</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-kafka-connect-model</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -195,6 +203,21 @@
               <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-csv.yaml</configurationFilePath>
             </configuration>
           </execution>
+          <execution>
+            <id>openapi-kafka-connect</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>resolve</goal>
+            </goals>
+            <configuration>
+              <contextId>openapi-kafka-connect</contextId>
+              <outputFormat>JSON</outputFormat>
+              <prettyPrint>true</prettyPrint>
+              <outputPath>${project.build.directory}/generated-sources/openapi</outputPath>
+              <outputFileName>atlasmap-api-kafka-connect</outputFileName>
+              <configurationFilePath>${project.build.outputDirectory}/openapi-configuration-kafka-connect.yaml</configurationFilePath>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -271,6 +294,18 @@
               <generatorName>asciidoc</generatorName>
               <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-csv.json</inputSpec>
               <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/csv</output>
+            </configuration>
+          </execution>
+          <execution>
+            <id>openapi-asciidoc-kafka-connect</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <generatorName>asciidoc</generatorName>
+              <inputSpec>${project.build.directory}/generated-sources/openapi/atlasmap-api-kafka-connect.json</inputSpec>
+              <output>${project.basedir}/src/main/asciidoc/developer-guide/openapi/kafka-connect</output>
             </configuration>
           </execution>
         </executions>

@@ -31,7 +31,7 @@
   <name>Atlas :: DFDL Test Model</name>
 
   <properties>
-    <osgi.export.pkg>io.atlasmap.dfdl.test.v2</osgi.export.pkg>
+    <osgi.export.pkg>io.atlasmap.dfdl.test</osgi.export.pkg>
   </properties>
 
   <dependencies>

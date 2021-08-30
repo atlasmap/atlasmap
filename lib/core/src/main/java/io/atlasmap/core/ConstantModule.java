@@ -31,6 +31,7 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
@@ -233,6 +234,16 @@ public class ConstantModule implements AtlasModule {
     @Override
     public ConstantField createField() {
         return new ConstantField();
+    }
+
+    @Override
+    public DataSource getDataSource() {
+        return null;
+    }
+
+    @Override
+    public void setDataSource(DataSource ds) {
+        // no-op
     }
 
 }

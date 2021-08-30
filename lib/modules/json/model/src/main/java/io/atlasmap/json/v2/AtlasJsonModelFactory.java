@@ -21,6 +21,7 @@ import java.util.List;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
 public class AtlasJsonModelFactory {
@@ -36,6 +37,12 @@ public class AtlasJsonModelFactory {
     public static JsonField createJsonField() {
         JsonField jsonField = new JsonField();
         return jsonField;
+    }
+
+    public static JsonComplexType createJsonComlexField() {
+        JsonComplexType jsonComplexField = new JsonComplexType();
+        jsonComplexField.setFieldType(FieldType.COMPLEX);
+        return jsonComplexField;
     }
 
     public static String toString(JsonField f) {

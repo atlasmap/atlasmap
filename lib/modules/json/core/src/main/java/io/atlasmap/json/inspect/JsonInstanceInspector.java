@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 
-import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -137,7 +136,7 @@ public class JsonInstanceInspector implements JsonInspector {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Creating JSON complex type (array:{}): {}", isArray, key);
         }
-        JsonComplexType jsonComplexType = JsonComplexTypeFactory.createJsonComlexField();
+        JsonComplexType jsonComplexType = AtlasJsonModelFactory.createJsonComlexField();
         jsonComplexType.setJsonFields(new JsonFields());
         jsonComplexType.setName(key);
         jsonComplexType.setStatus(FieldStatus.SUPPORTED);

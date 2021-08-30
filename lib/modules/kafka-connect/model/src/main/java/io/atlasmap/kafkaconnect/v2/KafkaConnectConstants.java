@@ -13,16 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.json.core;
+package io.atlasmap.kafkaconnect.v2;
 
-import io.atlasmap.json.v2.JsonComplexType;
-import io.atlasmap.v2.FieldType;
+public final class KafkaConnectConstants {
 
-public class JsonComplexTypeFactory {
-    public static JsonComplexType createJsonComlexField() {
-        JsonComplexType jsonComplexField = new JsonComplexType();
-        jsonComplexField.setFieldType(FieldType.COMPLEX);
-        return jsonComplexField;
-    }
+    public static final String OPTIONS_SCHEMA_TYPE = "schemaType";
+    public static final String OPTIONS_IS_KEY = "isKey";
+    public static final Object OPTIONS_SCHEMA_CACHE_SIZE = "schemaCacheSize";
 
 }

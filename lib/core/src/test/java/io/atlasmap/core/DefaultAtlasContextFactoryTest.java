@@ -46,6 +46,7 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.SimpleField;
@@ -510,6 +511,15 @@ public class DefaultAtlasContextFactoryTest {
         @Override
         public Field createField() {
             return new SimpleField();
+        }
+
+        @Override
+        public DataSource getDataSource() {
+            return null;
+        }
+
+        @Override
+        public void setDataSource(DataSource ds) {
         }
     }
 }

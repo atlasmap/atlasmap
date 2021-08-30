@@ -72,6 +72,10 @@
       <artifactId>atlas-dfdl-module</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-kafka-connect-module</artifactId>
+    </dependency>
     <!-- for testing -->
     <dependency>
       <groupId>io.atlasmap</groupId>

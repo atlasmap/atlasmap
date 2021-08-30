@@ -41,6 +41,7 @@
     <module>modules/xml</module>
     <module>modules/dfdl</module>
     <module>modules/csv</module>
+    <module>modules/kafka-connect</module>
     <module>itests</module>
     <module>dist</module>
   </modules>
