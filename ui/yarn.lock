@@ -2712,7 +2712,7 @@
   dependencies:
     "@octokit/openapi-types" "^7.0.0"
 
-"@patternfly/react-core@^4.147.0":
+"@patternfly/react-core@^4.147.0", "@patternfly/react-core@^4.152.4":
   version "4.152.4"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.152.4.tgz#fa008d155ab0c4161aab27bb67ad88fb8689dee2"
   integrity sha512-saMnAoF3KnYB5k6K04Y6NtO61bXYl71yzGPYSrM/DjyWDlIGLqPPhMe4kbWafLTpSgJdkxPoODgVMDp2ZIJ0Jw==
@@ -2753,13 +2753,13 @@
   integrity sha512-lRW0qxGjuFEPMweBSQFHNRNoxavx5uR8b28f0lPN0Jlz4QsaCFVTmHM2XqflOHDpjE8SPJW/hJMSsyUrqnM5dw==
 
 "@patternfly/react-topology@^4.9.42":
-  version "4.9.42"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.42.tgz#b784c38875c4b2f0e0c278102d31b3a055c39fc6"
-  integrity sha512-ggvmdhdpfaB+o7k02xcCCtQr7fOWpE8BWVkMg9U7VRBuBqVcP7uIVH8+a2yK6qr+ChkB5Sk6+621ZaAsDNZ7dA==
+  version "4.9.62"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.62.tgz#32316b22e97771c3e2f6d92d09a95caa00340369"
+  integrity sha512-0UoIfyldWwLmCHIb+F+a5vsjVKWVGMEFFbDHq6u/tO3WG8/wsbaf8o0JY3G6+/jKSkFEv7wK/ljHLchFvJbWYQ==
   dependencies:
-    "@patternfly/react-core" "^4.147.0"
-    "@patternfly/react-icons" "^4.11.8"
-    "@patternfly/react-styles" "^4.11.8"
+    "@patternfly/react-core" "^4.152.4"
+    "@patternfly/react-icons" "^4.11.14"
+    "@patternfly/react-styles" "^4.11.13"
     "@types/d3" "^5.7.2"
     "@types/d3-force" "^1.2.1"
     "@types/dagre" "0.7.42"
@@ -2773,7 +2773,7 @@
     point-in-svg-path "^1.0.1"
     popper.js "^1.16.1"
     react-measure "^2.3.0"
-    tslib "1.13.0"
+    tslib "^2.0.0"
     webcola "3.4.0"
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.4.3":
