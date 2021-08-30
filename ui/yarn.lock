@@ -2713,24 +2713,24 @@
     "@octokit/openapi-types" "^7.0.0"
 
 "@patternfly/react-core@^4.147.0":
-  version "4.147.0"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.147.0.tgz#da1f1772a0411ff5c3e9d9e5dca397adb89c98ff"
-  integrity sha512-t0GQvmN7vjSJHW9+kiQW2UOLKitNzvr9umNGG3H+gxO/XjgqqH2JmhitN+556gM1+tUYY78yam4wCTTg5P5jOA==
+  version "4.152.4"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.152.4.tgz#fa008d155ab0c4161aab27bb67ad88fb8689dee2"
+  integrity sha512-saMnAoF3KnYB5k6K04Y6NtO61bXYl71yzGPYSrM/DjyWDlIGLqPPhMe4kbWafLTpSgJdkxPoODgVMDp2ZIJ0Jw==
   dependencies:
-    "@patternfly/react-icons" "^4.11.8"
-    "@patternfly/react-styles" "^4.11.8"
-    "@patternfly/react-tokens" "^4.12.9"
+    "@patternfly/react-icons" "^4.11.14"
+    "@patternfly/react-styles" "^4.11.13"
+    "@patternfly/react-tokens" "^4.12.15"
     focus-trap "6.2.2"
     react-dropzone "9.0.0"
     tippy.js "5.1.2"
-    tslib "1.13.0"
+    tslib "^2.0.0"
 
-"@patternfly/react-icons@^4.11.8":
+"@patternfly/react-icons@^4.11.14", "@patternfly/react-icons@^4.11.8":
   version "4.11.14"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.11.14.tgz#ef7a2de3f78d5bd83715afb9651a185a89901c22"
   integrity sha512-SBwID1p+UaQ9BSmzIRFr+BJEhYgx1rWHlm2HIZzhoz7BG3Q7byaQ8ZNfZLm0D+ZGVJQ+fq0zUHGE1nzxDPFqNQ==
 
-"@patternfly/react-styles@^4.11.8":
+"@patternfly/react-styles@^4.11.13", "@patternfly/react-styles@^4.11.8":
   version "4.11.13"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.11.13.tgz#6595adc5ff40585add0128d27d420322b65b86a9"
   integrity sha512-svhnWIqZwJt1cOxwYjvz6lVYeL+c9D17xpKqlkJapXRxJL3ppTfIqwBrT3o9+02ElaXUTKt4xjMkSnEVjw4qxA==
@@ -2747,10 +2747,10 @@
     lodash "^4.17.19"
     tslib "1.13.0"
 
-"@patternfly/react-tokens@^4.12.9":
-  version "4.12.9"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.12.9.tgz#122d92efe1f5545195961129db18a81eb27cf47b"
-  integrity sha512-9bf3v4Wt+j70DppkptAJfJqpztd2MFH/VzrBqzPjL4OBtyWNenRKcLeJhdZGRuT7ZGKLfd7z3s5/5ApK1bGGzQ==
+"@patternfly/react-tokens@^4.12.15", "@patternfly/react-tokens@^4.12.9":
+  version "4.12.15"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-tokens/-/react-tokens-4.12.15.tgz#af760a1b378edce85fd2f7394553911b6ee3c4f0"
+  integrity sha512-lRW0qxGjuFEPMweBSQFHNRNoxavx5uR8b28f0lPN0Jlz4QsaCFVTmHM2XqflOHDpjE8SPJW/hJMSsyUrqnM5dw==
 
 "@patternfly/react-topology@^4.9.42":
   version "4.9.42"
@@ -4548,14 +4548,6 @@
     "@typescript-eslint/typescript-estree" "4.29.3"
     debug "^4.3.1"
 
-"@typescript-eslint/scope-manager@4.29.2":
-  version "4.29.2"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.29.2.tgz#442b0f029d981fa402942715b1718ac7fcd5aa1b"
-  integrity sha512-mfHmvlQxmfkU8D55CkZO2sQOueTxLqGvzV+mG6S/6fIunDiD2ouwsAoiYCZYDDK73QCibYjIZmGhpvKwAB5BOA==
-  dependencies:
-    "@typescript-eslint/types" "4.29.2"
-    "@typescript-eslint/visitor-keys" "4.29.2"
-
 "@typescript-eslint/scope-manager@4.29.3":
   version "4.29.3"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.29.3.tgz#497dec66f3a22e459f6e306cf14021e40ec86e19"
@@ -4563,11 +4555,6 @@
   dependencies:
     "@typescript-eslint/types" "4.29.3"
     "@typescript-eslint/visitor-keys" "4.29.3"
-
-"@typescript-eslint/types@4.29.2":
-  version "4.29.2"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.29.2.tgz#fc0489c6b89773f99109fb0aa0aaddff21f52fcd"
-  integrity sha512-K6ApnEXId+WTGxqnda8z4LhNMa/pZmbTFkDxEBLQAbhLZL50DjeY0VIDCml/0Y3FlcbqXZrABqrcKxq+n0LwzQ==
 
 "@typescript-eslint/types@4.29.3":
   version "4.29.3"
@@ -4587,19 +4574,6 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/typescript-estree@4.29.2":
-  version "4.29.2"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-4.29.2.tgz#a0ea8b98b274adbb2577100ba545ddf8bf7dc219"
-  integrity sha512-TJ0/hEnYxapYn9SGn3dCnETO0r+MjaxtlWZ2xU+EvytF0g4CqTpZL48SqSNn2hXsPolnewF30pdzR9a5Lj3DNg==
-  dependencies:
-    "@typescript-eslint/types" "4.29.2"
-    "@typescript-eslint/visitor-keys" "4.29.2"
-    debug "^4.3.1"
-    globby "^11.0.3"
-    is-glob "^4.0.1"
-    semver "^7.3.5"
-    tsutils "^3.21.0"
-
 "@typescript-eslint/typescript-estree@4.29.3":
   version "4.29.3"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-4.29.3.tgz#1bafad610015c4ded35c85a70b6222faad598b40"
@@ -4612,14 +4586,6 @@
     is-glob "^4.0.1"
     semver "^7.3.5"
     tsutils "^3.21.0"
-
-"@typescript-eslint/visitor-keys@4.29.2":
-  version "4.29.2"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-4.29.2.tgz#d2da7341f3519486f50655159f4e5ecdcb2cd1df"
-  integrity sha512-bDgJLQ86oWHJoZ1ai4TZdgXzJxsea3Ee9u9wsTAvjChdj2WLcVsgWYAPeY7RQMn16tKrlQaBnpKv7KBfs4EQag==
-  dependencies:
-    "@typescript-eslint/types" "4.29.2"
-    eslint-visitor-keys "^2.0.0"
 
 "@typescript-eslint/visitor-keys@4.29.3":
   version "4.29.3"
