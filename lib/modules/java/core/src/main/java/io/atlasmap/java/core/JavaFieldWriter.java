@@ -163,7 +163,8 @@ public class JavaFieldWriter implements AtlasFieldWriter {
                 }
 
                 if (lastSegment.getCollectionType() == CollectionType.NONE) {
-                    if (targetField.getFieldType() == FieldType.COMPLEX && targetField.getValue() == null) {
+                    // Don't handle null for JavaEnumField complex type using complex child object
+                    if (targetField.getFieldType() == FieldType.COMPLEX && !(targetField instanceof JavaEnumField) && targetField.getValue() == null) {
                         if (targetClassName != null && !targetClassName.isEmpty()) {
                             writerUtil.createComplexChildObject(parentObject, lastSegment, writerUtil.loadClass(targetClassName));
                         } else {
