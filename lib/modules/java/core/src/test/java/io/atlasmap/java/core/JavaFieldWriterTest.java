@@ -411,6 +411,10 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
         ensureNotNullAndClass(o.getPrimitives().getBoxedStringArrayField()[10], String.class);
         assertEquals("boxedString", o.getPrimitives().getBoxedStringArrayField()[10]);
 
+        // test writing null enum values
+        write("/statesLong", (StateEnumClassLong)null);
+        assertNull(o.getStatesLong());
+
         // test writing enum values
         write("/statesLong", StateEnumClassLong.Massachusetts);
         assertNotNull(o.getStatesLong());
