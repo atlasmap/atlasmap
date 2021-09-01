@@ -18,7 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-        if: steps.changed-ui.outputs.changed == 'true'
         with:
           fetch-depth: 0
       - uses: marceloprado/has-changed-path@v1
