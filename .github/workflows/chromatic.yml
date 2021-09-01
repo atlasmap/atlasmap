@@ -17,14 +17,14 @@ jobs:
       && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: marceloprado/has-changed-path@v1
-        id: changed-ui
-        with:
-          paths: ui
       - uses: actions/checkout@v2
         if: steps.changed-ui.outputs.changed == 'true'
         with:
           fetch-depth: 0
+      - uses: marceloprado/has-changed-path@v1
+        id: changed-ui
+        with:
+          paths: ui
       - name: Install dependencies
         if: steps.changed-ui.outputs.changed == 'true'
         run: yarn install
