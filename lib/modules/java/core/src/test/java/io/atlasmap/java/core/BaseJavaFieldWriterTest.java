@@ -114,9 +114,9 @@ public abstract class BaseJavaFieldWriterTest {
     public JavaEnumField createEnumField(String path, Enum<?> value) {
         JavaEnumField f = new JavaEnumField();
         f.setPath(path);
-        f.setName(value.name());
-        f.setOrdinal(value.ordinal());
-        f.setFieldType(FieldType.NONE);
+        f.setName(null == value ? null : value.name());
+        f.setOrdinal(null == value ? null : value.ordinal());
+        f.setFieldType(FieldType.COMPLEX);
         f.setValue(value);
         return f;
     }
