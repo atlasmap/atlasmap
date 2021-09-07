@@ -50,3 +50,38 @@ jobs:
       if: ${{ runner.os == 'Linux' }}
       working-directory: docs
       run: mvn -f pom-javadoc.xml -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
+  chromatic:
+    needs: build_maven
+    if: |
+      github.repository == 'atlasmap/atlasmap'
+      && github.actor != 'dependabot[bot]'
+      && github.actor != 'dependabot'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: marceloprado/has-changed-path@v1
+        id: changed-ui
+        with:
+          paths: ui
+      - name: Install dependencies
+        if: steps.changed-ui.outputs.changed == 'true'
+        run: yarn install
+        working-directory: ui
+      - name: build @atlasmap/core
+        if: steps.changed-ui.outputs.changed == 'true'
+        run: yarn build:module
+        working-directory: ui/packages/atlasmap-core
+      - name: prebuild
+        if: steps.changed-ui.outputs.changed == 'true'
+        run: yarn prebuild
+        working-directory: ui/packages/atlasmap
+      - name: Publish to Chromatic
+        if: steps.changed-ui.outputs.changed == 'true'
+        uses: chromaui/action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          projectToken: adaaa25c3df8
+          workingDir: ui/packages/atlasmap
+          buildScriptName: build:storybook
