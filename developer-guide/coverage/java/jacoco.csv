@@ -36,7 +36,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,TemplateCombineStrategy,11
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService.ConverterMethodHolder,0,21,0,0,0,7,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasValidationService.Validators,0,428,0,0,0,53,0,26,0,26
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseAtlasModule,172,275,20,24,42,82,41,39,26,32
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,551,2089,73,223,115,449,67,130,2,47
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,570,2070,74,222,120,444,67,130,2,47
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCombineStrategy,14,212,4,34,6,57,7,28,3,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService,152,1054,34,191,26,235,35,123,2,25
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCompoundClassLoader,28,96,2,10,8,22,2,10,0,6
@@ -246,11 +246,11 @@ Unit Test Coverage Report/atlas-service,io.atlasmap.service,AtlasLibraryLoader.n
 Unit Test Coverage Report/atlas-service,io.atlasmap.service,AtlasLibraryLoader,205,432,31,49,45,90,29,27,3,13
 Unit Test Coverage Report/atlas-service,io.atlasmap.service,AtlasService.new AtlasLibraryLoader.AtlasLibraryLoaderListener() {...},0,27,0,0,0,6,0,2,0,2
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldReader,319,405,29,49,49,95,22,27,1,9
-Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldWriterUtil,815,1088,77,119,100,251,63,58,1,22
+Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldWriterUtil,851,1052,78,118,106,245,63,58,1,22
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,StringUtil,31,122,5,19,9,21,7,11,2,4
-Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldWriter,129,404,20,54,24,101,17,32,1,11
+Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldWriter,129,407,20,56,24,101,17,33,1,11
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JdkPackages,13,931,4,8,4,14,5,7,1,5
-Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,TargetValueConverter,177,393,21,59,26,95,19,28,1,6
+Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,TargetValueConverter,194,376,19,61,28,93,18,29,1,6
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,ClassHelper,224,365,44,42,55,67,35,24,7,9
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,JarClassLoader,113,0,12,0,23,0,12,0,6,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ConstructInvalidException,16,0,0,0,8,0,4,0,4,0

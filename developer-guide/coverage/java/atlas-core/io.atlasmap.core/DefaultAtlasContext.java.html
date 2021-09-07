@@ -606,15 +606,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc" id="L606">                session.head().setTargetField(processed);</span>
                 try {
 <span class="fc" id="L608">                    module.writeTargetValue(session);</span>
-<span class="fc" id="L609">                } catch (Exception e) {</span>
-<span class="fc" id="L610">                    AtlasUtil.addAudit(session, targetField,</span>
-<span class="fc" id="L611">                            &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
+<span class="nc" id="L609">                } catch (Exception e) {</span>
+<span class="nc" id="L610">                    AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L611">                            &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
                             AuditStatus.ERROR, null);
-<span class="pc bpc" id="L613" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L613" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L614">                        LOG.error(String.format(&quot;writeTargetValue()() failed for %s:%s&quot;,</span>
 <span class="nc" id="L615">                                targetField.getDocId(), targetField.getPath()), e);</span>
                     }
-<span class="fc" id="L617">                    return;</span>
+<span class="nc" id="L617">                    return;</span>
 <span class="fc" id="L618">                }</span>
 <span class="fc" id="L619">            }</span>
 <span class="fc" id="L620">            return;</span>

@@ -182,11 +182,11 @@ public class TargetValueConverter {
 
     @SuppressWarnings(&quot;unchecked&quot;)
     private Object populateEnumValue(AtlasInternalSession session, LookupTable lookupTable, JavaEnumField sourceField, JavaEnumField targetField) {
-<span class="pc bpc" id="L185" title="2 of 4 branches missed.">        if (sourceField == null || sourceField.getValue() == null) {</span>
-<span class="nc bnc" id="L186" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="pc bpc" id="L185" title="1 of 4 branches missed.">        if (sourceField == null || sourceField.getValue() == null) {</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
 <span class="nc" id="L187">                LOG.debug(&quot;Input enum field or value is null, field: &quot; + sourceField);</span>
             }
-<span class="nc" id="L189">            return null;</span>
+<span class="fc" id="L189">            return null;</span>
         }
 
 <span class="fc" id="L192">        String sourceValue = ((Enum&lt;?&gt;) sourceField.getValue()).name();</span>
@@ -212,11 +212,11 @@ public class TargetValueConverter {
 <span class="fc" id="L212">        Class enumClass = null;</span>
         try {
 <span class="fc" id="L214">            enumClass = this.classLoader.loadClass(targetField.getClassName());</span>
-<span class="fc" id="L215">        } catch (Exception e) {</span>
-<span class="fc" id="L216">            AtlasUtil.addAudit(session, targetField,</span>
-<span class="fc" id="L217">                    String.format(&quot;Could not find class for output field class '%s': %s&quot;, targetField.getClassName(), e.getMessage()),</span>
+<span class="nc" id="L215">        } catch (Exception e) {</span>
+<span class="nc" id="L216">            AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L217">                    String.format(&quot;Could not find class for output field class '%s': %s&quot;, targetField.getClassName(), e.getMessage()),</span>
                     AuditStatus.ERROR, targetValue);
-<span class="fc" id="L219">            return null;</span>
+<span class="nc" id="L219">            return null;</span>
 <span class="fc" id="L220">        }</span>
 
         try {

@@ -182,7 +182,7 @@ import io.atlasmap.v2.Field;
 <span class="fc" id="L182">            currentHashCode = (currentHashCode* 31);</span>
             String theName;
 <span class="fc" id="L184">            theName = this.getName();</span>
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">            if (this.name!= null) {</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">            if (this.name!= null) {</span>
 <span class="fc" id="L186">                currentHashCode += theName.hashCode();</span>
             }
         }
@@ -198,7 +198,7 @@ import io.atlasmap.v2.Field;
 <span class="fc" id="L198">            currentHashCode = (currentHashCode* 31);</span>
             String theClassName;
 <span class="fc" id="L200">            theClassName = this.getClassName();</span>
-<span class="fc bfc" id="L201" title="All 2 branches covered.">            if (this.className!= null) {</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            if (this.className!= null) {</span>
 <span class="fc" id="L202">                currentHashCode += theClassName.hashCode();</span>
             }
         }

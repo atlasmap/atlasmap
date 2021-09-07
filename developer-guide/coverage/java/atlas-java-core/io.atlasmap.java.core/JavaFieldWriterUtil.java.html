@@ -198,16 +198,16 @@ public class JavaFieldWriterUtil {
 <span class="fc" id="L198">            setterMethod.setAccessible(true);</span>
 <span class="fc" id="L199">            setterMethod.invoke(parentObject, targetObject);</span>
 <span class="fc" id="L200">            return targetObject;</span>
-<span class="fc" id="L201">        } catch (Exception e) {</span>
+<span class="nc" id="L201">        } catch (Exception e) {</span>
             try {
-<span class="fc" id="L203">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
-<span class="fc" id="L204">                field.setAccessible(true);</span>
+<span class="nc" id="L203">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
+<span class="nc" id="L204">                field.setAccessible(true);</span>
 <span class="nc" id="L205">                Object targetObject = instantiateObject(clazz);</span>
 <span class="nc" id="L206">                field.set(parentObject, targetObject);</span>
 <span class="nc" id="L207">                return targetObject;</span>
-<span class="fc" id="L208">            } catch (Exception e2) {</span>
-<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="fc" id="L210">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
+<span class="nc" id="L208">            } catch (Exception e2) {</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="nc" id="L210">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
                         + parentClassName, e2);
             }
         }
