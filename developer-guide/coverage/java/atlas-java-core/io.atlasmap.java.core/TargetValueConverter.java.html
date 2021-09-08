@@ -103,12 +103,12 @@ public class TargetValueConverter {
 
 <span class="fc" id="L104">        JavaField javaTargetField = (JavaField) targetField;</span>
 <span class="fc bfc" id="L105" title="All 2 branches covered.">        if (sourceValue == null) {</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (targetField.getFieldType() != FieldType.COMPLEX) {</span>
-<span class="fc" id="L107">                AtlasUtil.addAudit(session, targetField, String.format(</span>
-<span class="fc" id="L108">                        &quot;Null sourceValue for targetDocId=%s, targetPath=%s&quot;, targetField.getDocId(), targetField.getPath()),</span>
-<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
-<span class="fc" id="L110">                targetField.setValue(null);</span>
-<span class="fc" id="L111">                return;</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            if (targetField.getFieldType() != FieldType.COMPLEX) {</span>
+<span class="nc" id="L107">                AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="nc" id="L108">                        &quot;Null sourceValue for targetDocId=%s, targetPath=%s&quot;, targetField.getDocId(), targetField.getPath()),</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
+<span class="nc" id="L110">                targetField.setValue(null);</span>
+<span class="nc" id="L111">                return;</span>
             }
 <span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (javaTargetField.getClassName() != null) {</span>
 <span class="fc" id="L114">                Object created = writerUtil.instantiateObject(writerUtil.loadClass(javaTargetField.getClassName()));</span>
