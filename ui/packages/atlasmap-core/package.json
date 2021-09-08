@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/core",
   "description": "AtlasMap UI core library",
-  "version": "2.3.0-SNAPSHOT",
+  "version": "2.3.0-M.1",
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
@@ -21,7 +21,6 @@
     "lint": "tsdx lint src test",
     "format": "yarn lint --fix"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@testing-library/jest-dom": "^5.7.0",
