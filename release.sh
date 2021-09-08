@@ -135,7 +135,7 @@ EOF
 
 "${MAVEN_CMD}" $MAVEN_PARAMETERS -DskipTests install
 git add atlasmap-maven-plugin docs
-git diff-index --quiet HEAD || git commit -m "chore: cleanup after release ${RELEASE_VERSION}"
+git diff --quiet HEAD || git commit -m "chore: cleanup after release ${RELEASE_VERSION}"
 
 # tag the major/minor version and docker push it
 echo "=========================================================="
