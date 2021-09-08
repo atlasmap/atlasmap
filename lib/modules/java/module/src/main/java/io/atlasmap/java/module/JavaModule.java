@@ -40,6 +40,7 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Validation;
 
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
@@ -202,7 +203,14 @@ public class JavaModule extends BaseAtlasModule {
                 }
                 session.head().setSourceField(sourceField);
             }
-            Object parentObject = writer.prepareParentObject(session);
+            /* Lazy parent instantiation, unless specific mapping defined for a complex type (Example json -> java)
+                Only instantiate the parent if there is a child value to avoid null src class -> empty dst class mapping
+                This will ensure null src class maps to null destination class
+            */
+            Object parentObject = null;
+            if (null != sourceField.getValue() || (null == sourceField.getValue() && targetField.getFieldType() == FieldType.COMPLEX && !(targetField instanceof JavaEnumField))) {
+                parentObject = writer.prepareParentObject(session);
+            }
             if (parentObject != null) {
                 writer.populateTargetFieldValue(session, parentObject);
                 writer.enqueueFieldAndParent(targetField, parentObject);

@@ -89,8 +89,8 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
         assertFalse(session.hasErrors(), printAudit(session));
         TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
         assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
-        assertEquals(TargetContact.class.getName(), object.getContact().getClass().getName());
-        assertNull(object.getContact().getFirstName());
+        // Lazy instantiation will not istantiate target class if source class is null (Java to Java)
+        assertNull(object.getContact());
     }
 
     @Test
