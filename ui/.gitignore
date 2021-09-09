@@ -1,6 +1,6 @@
 node
 _netlify
-
+dist
 # compiled output
 test-resources/inspected
 test-resources/fieldActions
