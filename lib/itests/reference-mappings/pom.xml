@@ -55,6 +55,10 @@
       </dependency>
     <dependency>
       <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-csv-module</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-test-model</artifactId>
       </dependency>
     <dependency>

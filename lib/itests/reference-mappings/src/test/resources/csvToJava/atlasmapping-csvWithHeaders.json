@@ -1,0 +1,56 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "sourceCsv-c7982b9e-90b4-44ed-8b52-283e6f1e853c",
+      "name" : "sourceCsv",
+      "description" : "Source document sourceCsv type: CSV",
+      "uri" : "atlas:csv:sourceCsv-c7982b9e-90b4-44ed-8b52-283e6f1e853c?firstRecordAsHeader=true",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "name" : "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "description" : "Java document class io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "uri" : "atlas:java:io.atlasmap.java.test.TargetFlatPrimitiveClass?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.csv.v2.CsvField",
+            "docId" : "sourceCsv-c7982b9e-90b4-44ed-8b52-283e6f1e853c",
+            "path" : "/<>/sourceCsvString",
+            "fieldType" : "STRING",
+            "name" : "sourceCsvString"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+          "path" : "/boxedStringArrayField<>",
+          "fieldType" : "STRING",
+          "name" : "boxedStringArrayField"
+        } ],
+        "id" : "mapping.50044"
+      }]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}
