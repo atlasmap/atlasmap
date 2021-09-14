@@ -83,6 +83,10 @@ export class CsvInspectionModel extends DocumentInspectionModel {
     if (!this.doc.name) {
       this.doc.name = this.doc.id;
     }
+    if (this.doc.inspectionParameters) {
+      const params = new URLSearchParams(this.doc.inspectionParameters);
+      this.doc.uri = this.doc.uri + '?' + params;
+    }
 
     for (const field of csvDocument.fields.field) {
       this.parseCSVFieldFromDocument(field as ICsvField, null);
