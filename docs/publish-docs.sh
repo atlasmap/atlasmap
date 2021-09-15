@@ -29,8 +29,8 @@ for dir in `ls --color=never ../ui/packages`; do
   cp -a ../ui/packages/${dir}/coverage/lcov-report/* target/generated-docs/html/developer-guide/coverage/ui/${dir}/ 2>/dev/null || :
 done
 git clone -b gh-pages https://github.com/atlasmap/atlasmap.git gh-pages
-git config --global user.email "travis@atlasmap.io"
-git config --global user.name "Travis"
+git config --global user.email "atlasmap-dev@redhat.com"
+git config --global user.name "AtlasMap"
 cd gh-pages
 git rm -r *
 cd ..
