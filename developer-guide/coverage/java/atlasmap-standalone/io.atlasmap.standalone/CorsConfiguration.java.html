@@ -27,12 +27,12 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(&quot;cors&quot;)
-<span class="fc" id="L30">public class CorsConfiguration {</span>
+<span class="nc" id="L30">public class CorsConfiguration {</span>
 
-<span class="fc" id="L32">    private List&lt;String&gt; allowedOrigins = Arrays.asList(org.springframework.web.cors.CorsConfiguration.ALL);</span>
+<span class="nc" id="L32">    private List&lt;String&gt; allowedOrigins = Arrays.asList(org.springframework.web.cors.CorsConfiguration.ALL);</span>
     @Bean
     public CorsFilter corsFilter() {
-<span class="fc" id="L35">        return new CorsFilter(request -&gt; {</span>
+<span class="nc" id="L35">        return new CorsFilter(request -&gt; {</span>
 
             // in case you want to allow access to some resource From any origin:
 //            String pathInfo = request.getPathInfo();
@@ -42,21 +42,21 @@ import org.springframework.web.filter.CorsFilter;
 //                return new org.springframework.web.cors.CorsConfiguration().applyPermitDefaultValues();
 //            }
 
-<span class="fc" id="L45">            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();</span>
-<span class="fc" id="L46">            config.setAllowedOrigins(allowedOrigins);</span>
-<span class="fc" id="L47">            config.setAllowedMethods(Arrays.asList(&quot;HEAD&quot;, &quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;PATCH&quot;));</span>
-<span class="fc" id="L48">            config.applyPermitDefaultValues();</span>
-<span class="fc" id="L49">            return config;</span>
+<span class="nc" id="L45">            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();</span>
+<span class="nc" id="L46">            config.setAllowedOrigins(allowedOrigins);</span>
+<span class="nc" id="L47">            config.setAllowedMethods(Arrays.asList(&quot;HEAD&quot;, &quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;PATCH&quot;));</span>
+<span class="nc" id="L48">            config.applyPermitDefaultValues();</span>
+<span class="nc" id="L49">            return config;</span>
         });
     }
 
     public List&lt;String&gt; getAllowedOrigins() {
-<span class="fc" id="L54">        return allowedOrigins;</span>
+<span class="nc" id="L54">        return allowedOrigins;</span>
     }
 
     public void setAllowedOrigins(List&lt;String&gt; allowedOrigins) {
-<span class="fc" id="L58">        this.allowedOrigins = allowedOrigins;</span>
-<span class="fc" id="L59">    }</span>
+<span class="nc" id="L58">        this.allowedOrigins = allowedOrigins;</span>
+<span class="nc" id="L59">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
