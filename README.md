@@ -26,7 +26,7 @@ The AtlasMap is a data mapping solution with interactive web based user interfac
 
 1. Download AtlasMap standalone jar
 ```
-$ wget http://central.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
+$ wget http://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
 ```
 
 2. Run
