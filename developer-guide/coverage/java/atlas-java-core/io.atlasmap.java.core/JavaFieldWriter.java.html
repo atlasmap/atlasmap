@@ -17,7 +17,6 @@ package io.atlasmap.java.core;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +29,7 @@ import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
 
@@ -39,7 +39,7 @@ public class JavaFieldWriter implements AtlasFieldWriter {
 <span class="fc" id="L39">    private Object rootObject = null;</span>
     private JavaFieldWriterUtil writerUtil;
     private TargetValueConverter converter;
-<span class="fc" id="L42">    private Map&lt;Field, Object&gt; fieldParentQueue = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L42">    private Map&lt;String, Object&gt; pathParentQueue = new LinkedHashMap&lt;&gt;();</span>
 <span class="fc" id="L43">    private Class&lt;?&gt; collectionItemClass = null;</span>
 
 <span class="fc" id="L45">    public JavaFieldWriter(JavaFieldWriterUtil util) {</span>
@@ -65,9 +65,9 @@ public class JavaFieldWriter implements AtlasFieldWriter {
 <span class="fc" id="L65">            Object parentObject = this.rootObject;</span>
 <span class="fc bfc" id="L66" title="All 2 branches covered.">            if (rootSegment.getCollectionType() != CollectionType.NONE) {</span>
 <span class="pc bpc" id="L67" title="1 of 2 branches missed.">                if (collectionItemClass == null) {</span>
-<span class="nc" id="L68">                    throw new AtlasException(String.format(</span>
-                        &quot;Collection item class must be specified to handle topmost collection, path=&quot;,
-<span class="nc" id="L70">                         path.toString()));</span>
+<span class="nc" id="L68">                    throw new AtlasException(</span>
+<span class="nc" id="L69">                            String.format(&quot;Collection item class must be specified to handle topmost collection, path=&quot;,</span>
+<span class="nc" id="L70">                                    path.toString()));</span>
                 }
 <span class="pc bpc" id="L72" title="1 of 2 branches missed.">                if (rootSegment.getCollectionIndex() == null) {</span>
                     // Cannot proceed from collection segment without index
@@ -76,171 +76,201 @@ public class JavaFieldWriter implements AtlasFieldWriter {
 <span class="fc" id="L76">                parentObject = writerUtil.getCollectionItem(rootObject, rootSegment);</span>
 <span class="fc bfc" id="L77" title="All 2 branches covered.">                if (parentObject == null) {</span>
 <span class="fc" id="L78">                    this.rootObject = writerUtil.adjustCollectionSize(this.rootObject, rootSegment);</span>
-<span class="fc" id="L79">                    parentObject = writerUtil.createComplexCollectionItem(this.rootObject, collectionItemClass, rootSegment);</span>
+<span class="fc" id="L79">                    parentObject = writerUtil.createComplexCollectionItem(this.rootObject, collectionItemClass,</span>
+                            rootSegment);
                 }
             }
 
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">            for (SegmentContext segmentContext : path.getSegments(false)) {</span>
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L85">                    LOG.debug(&quot;Now processing segment: &quot; + segmentContext);</span>
-<span class="nc" id="L86">                    LOG.debug(&quot;Parent object is currently: &quot; + writeDocumentToString(false, parentObject));</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            for (SegmentContext segmentContext : path.getSegments(false)) {</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L86">                    LOG.debug(&quot;Now processing segment: &quot; + segmentContext);</span>
+<span class="nc" id="L87">                    LOG.debug(&quot;Parent object is currently: &quot; + writeDocumentToString(false, parentObject));</span>
                 }
 
-<span class="fc bfc" id="L89" title="All 2 branches covered.">                if (segmentContext == path.getLastSegment()) {</span>
-<span class="fc" id="L90">                    return parentObject;</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">                if (segmentContext == path.getLastSegment()) {</span>
+<span class="fc" id="L91">                    return parentObject;</span>
                 }
 
-<span class="fc" id="L93">                Object childObject = writerUtil.getChildObject(parentObject, segmentContext);</span>
-<span class="fc bfc" id="L94" title="All 2 branches covered.">                if (childObject == null) {</span>
-<span class="fc" id="L95">                    childObject = writerUtil.createComplexChildObject(parentObject, segmentContext);</span>
+<span class="fc" id="L94">                Object childObject = writerUtil.getChildObject(parentObject, segmentContext);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">                if (childObject == null) {</span>
+<span class="fc" id="L96">                    childObject = writerUtil.createComplexChildObject(parentObject, segmentContext);</span>
                 }
-<span class="fc bfc" id="L97" title="All 2 branches covered.">                if (segmentContext.getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">                    if (segmentContext.getCollectionIndex() == null) {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                if (segmentContext.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                    if (segmentContext.getCollectionIndex() == null) {</span>
                         // Cannot proceed from collection segment without index
-<span class="fc" id="L100">                        return null;</span>
+<span class="fc" id="L101">                        return null;</span>
                     }
-<span class="fc" id="L102">                    Object item = writerUtil.getCollectionItem(childObject, segmentContext);</span>
-<span class="fc bfc" id="L103" title="All 2 branches covered.">                    if (item == null) {</span>
-<span class="fc" id="L104">                        Object adjusted = writerUtil.adjustCollectionSize(childObject, segmentContext);</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">                        if (adjusted != childObject) {</span>
-<span class="fc" id="L106">                            writerUtil.setChildObject(parentObject, adjusted, segmentContext);</span>
+<span class="fc" id="L103">                    Object item = writerUtil.getCollectionItem(childObject, segmentContext);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">                    if (item == null) {</span>
+<span class="fc" id="L105">                        Object adjusted = writerUtil.adjustCollectionSize(childObject, segmentContext);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">                        if (adjusted != childObject) {</span>
+<span class="fc" id="L107">                            writerUtil.setChildObject(parentObject, adjusted, segmentContext);</span>
                         }
-<span class="fc" id="L108">                        item = writerUtil.createComplexCollectionItem(parentObject, adjusted, segmentContext);</span>
+<span class="fc" id="L109">                        item = writerUtil.createComplexCollectionItem(parentObject, adjusted, segmentContext);</span>
                     }
-<span class="fc" id="L110">                    childObject = item;</span>
+<span class="fc" id="L111">                    childObject = item;</span>
                 }
-<span class="fc" id="L112">                parentObject = childObject;</span>
-<span class="fc" id="L113">            }</span>
-<span class="nc" id="L114">            return null;</span>
-<span class="fc" id="L115">        } catch (Throwable t) {</span>
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L117">                LOG.debug(&quot;Error occured while preparing parent object for: &quot; + targetField.getPath(), t);</span>
+<span class="fc" id="L113">                parentObject = childObject;</span>
+<span class="fc" id="L114">            }</span>
+<span class="nc" id="L115">            return null;</span>
+<span class="fc" id="L116">        } catch (Throwable t) {</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L118">                LOG.debug(&quot;Error occured while preparing parent object for: &quot; + targetField.getPath(), t);</span>
             }
-<span class="pc bpc" id="L119" title="1 of 2 branches missed.">            if (t instanceof AtlasException) {</span>
-<span class="fc" id="L120">                throw (AtlasException) t;</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">            if (t instanceof AtlasException) {</span>
+<span class="fc" id="L121">                throw (AtlasException) t;</span>
             }
-<span class="nc" id="L122">            throw new AtlasException(t);</span>
+<span class="nc" id="L123">            throw new AtlasException(t);</span>
         }
     }
 
     public void populateTargetFieldValue(AtlasInternalSession session, Object parentObject) throws AtlasException {
-<span class="fc" id="L127">        Field sourceField = session.head().getSourceField();</span>
-<span class="fc" id="L128">        Field targetField = session.head().getTargetField();</span>
-<span class="fc" id="L129">        LookupTable lookupTable = session.head().getLookupTable();</span>
-<span class="fc" id="L130">        converter.populateTargetField(session, lookupTable, sourceField, parentObject, targetField);</span>
-<span class="fc" id="L131">    }</span>
+<span class="fc" id="L128">        Field sourceField = session.head().getSourceField();</span>
+<span class="fc" id="L129">        Field targetField = session.head().getTargetField();</span>
+<span class="fc" id="L130">        LookupTable lookupTable = session.head().getLookupTable();</span>
+<span class="fc" id="L131">        converter.populateTargetField(session, lookupTable, sourceField, parentObject, targetField);</span>
+<span class="fc" id="L132">    }</span>
 
     public void enqueueFieldAndParent(Field field, Object parentObject) {
-<span class="fc" id="L134">        this.fieldParentQueue.put(field, parentObject);</span>
-<span class="fc" id="L135">    }</span>
+<span class="fc" id="L135">        this.pathParentQueue.put(field.getPath(), parentObject);</span>
+<span class="fc" id="L136">    }</span>
 
     public void commitWriting(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L139">        Field targetField = session.head().getTargetField();</span>
         try {
-<span class="fc bfc" id="L139" title="All 2 branches covered.">            for (Entry&lt;Field, Object&gt; e : this.fieldParentQueue.entrySet()) {</span>
-<span class="fc" id="L140">                Object parentObject = e.getValue();</span>
-<span class="fc" id="L141">                Field targetField = e.getKey();</span>
-<span class="fc" id="L142">                AtlasPath path = new AtlasPath(targetField.getPath());</span>
-<span class="fc" id="L143">                converter.convertTargetValue(session, parentObject, targetField);</span>
-<span class="fc" id="L144">                SegmentContext lastSegment = path.getLastSegment();</span>
-<span class="fc bfc" id="L145" title="All 2 branches covered.">                if (path.isRoot()) {</span>
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">                    if (lastSegment.getCollectionType() == CollectionType.NONE) {</span>
-<span class="nc" id="L147">                        this.rootObject = targetField.getValue();</span>
-                    } else {
-<span class="fc" id="L149">                        Object adjusted = writerUtil.adjustCollectionSize(this.rootObject, lastSegment);</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">                        if (adjusted != this.rootObject) {</span>
-<span class="fc" id="L151">                            this.rootObject = adjusted;</span>
-                        }
-<span class="fc" id="L153">                        writerUtil.setCollectionItem(adjusted, targetField.getValue(), lastSegment);</span>
-                    }
-<span class="fc" id="L155">                    continue;</span>
-                }
-
-<span class="fc" id="L158">                String targetClassName = null;</span>
-<span class="fc bfc" id="L159" title="All 2 branches covered.">                if (targetField instanceof JavaField) {</span>
-<span class="fc" id="L160">                    targetClassName = ((JavaField)targetField).getClassName();</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">                } else if (targetField instanceof JavaEnumField) {</span>
-<span class="fc" id="L162">                    targetClassName = ((JavaEnumField)targetField).getClassName();</span>
-                }
-
-<span class="fc bfc" id="L165" title="All 2 branches covered.">                if (lastSegment.getCollectionType() == CollectionType.NONE) {</span>
-                    // Don't handle null for JavaEnumField complex type using complex child object
-<span class="fc bfc" id="L167" title="All 6 branches covered.">                    if (targetField.getFieldType() == FieldType.COMPLEX &amp;&amp; !(targetField instanceof JavaEnumField) &amp;&amp; targetField.getValue() == null) {</span>
-<span class="pc bpc" id="L168" title="2 of 4 branches missed.">                        if (targetClassName != null &amp;&amp; !targetClassName.isEmpty()) {</span>
-<span class="fc" id="L169">                            writerUtil.createComplexChildObject(parentObject, lastSegment, writerUtil.loadClass(targetClassName));</span>
-                        } else {
-<span class="nc" id="L171">                            writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
-                        }
-                    } else {
-<span class="fc" id="L174">                        writerUtil.setChildObject(parentObject, targetField.getValue(), lastSegment);</span>
-                    }
+<span class="fc bfc" id="L141" title="All 2 branches covered.">            if (targetField instanceof FieldGroup) {</span>
+<span class="fc" id="L142">               FieldGroup targetFieldGroup = (FieldGroup) targetField;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">                if (targetFieldGroup.getField().size() &gt; 0) {</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">                    for (Field f : targetFieldGroup.getField()) {</span>
+<span class="fc" id="L145">                        session.head().setTargetField(f);</span>
+<span class="fc" id="L146">                        doCommitWriting(session);</span>
+<span class="fc" id="L147">                    }</span>
                 } else {
-<span class="fc" id="L177">                    Object collection = writerUtil.getChildObject(parentObject, lastSegment);</span>
-<span class="fc bfc" id="L178" title="All 2 branches covered.">                    if (collection == null) {</span>
-<span class="fc" id="L179">                        collection = writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
-                    }
-<span class="fc bfc" id="L181" title="All 2 branches covered.">                    if (lastSegment.getCollectionIndex() == null) {</span>
-                        // Collection field without index - just create collection object and keep it empty
-<span class="fc" id="L183">                        continue;</span>
-                    }
-<span class="fc" id="L185">                    Object adjusted = writerUtil.adjustCollectionSize(collection, lastSegment);</span>
-<span class="fc bfc" id="L186" title="All 2 branches covered.">                    if (adjusted != collection) {</span>
-<span class="fc" id="L187">                        writerUtil.setChildObject(parentObject, adjusted, lastSegment);</span>
-                    }
-<span class="pc bpc" id="L189" title="1 of 4 branches missed.">                    if (targetField.getFieldType() == FieldType.COMPLEX &amp;&amp; targetField.getValue() == null) {</span>
-<span class="nc bnc" id="L190" title="All 4 branches missed.">                        if (targetClassName != null &amp;&amp; !targetClassName.isEmpty()) {</span>
-<span class="nc" id="L191">                            writerUtil.createComplexChildObject(parentObject, lastSegment, writerUtil.loadClass(targetClassName));</span>
-                        } else {
-<span class="nc" id="L193">                            writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
-                        }
-                    } else {
-<span class="fc" id="L196">                        writerUtil.setCollectionItem(adjusted, targetField.getValue(), lastSegment);</span>
+<span class="fc" id="L149">                    AtlasPath path = new AtlasPath(targetField.getPath());</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">                    if (path.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
+                        // create an empty collection
+<span class="fc" id="L152">                        doCommitWriting(session);</span>
                     }
                 }
-<span class="fc" id="L199">            }</span>
+<span class="fc" id="L155">                return;</span>
+            }
+<span class="fc" id="L157">            doCommitWriting(session);</span>
         } finally {
-<span class="fc" id="L201">            this.fieldParentQueue.clear();</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">            if (!this.pathParentQueue.isEmpty()) {</span>
+<span class="nc" id="L160">                LOG.warn(&quot;Discarding uncommitted entry in the queue: {}&quot;, this.pathParentQueue);</span>
+<span class="nc" id="L161">                this.pathParentQueue.clear();</span>
+            }
         }
-<span class="fc" id="L203">    }</span>
+<span class="fc" id="L164">    }</span>
+
+    private void doCommitWriting(AtlasInternalSession session) throws AtlasException {
+<span class="fc" id="L167">        Field targetField = session.head().getTargetField();</span>
+<span class="fc" id="L168">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
+<span class="fc" id="L169">        Object parentObject = this.pathParentQueue.get(targetField.getPath());</span>
+<span class="fc" id="L170">        this.pathParentQueue.remove(targetField.getPath());</span>
+<span class="fc" id="L171">        converter.convertTargetValue(session, parentObject, targetField);</span>
+<span class="fc" id="L172">        SegmentContext lastSegment = path.getLastSegment();</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (path.isRoot()) {</span>
+<span class="pc bpc" id="L174" title="1 of 2 branches missed.">            if (lastSegment.getCollectionType() == CollectionType.NONE) {</span>
+<span class="nc" id="L175">                this.rootObject = targetField.getValue();</span>
+            } else {
+<span class="fc" id="L177">                Object adjusted = writerUtil.adjustCollectionSize(this.rootObject, lastSegment);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">                if (adjusted != this.rootObject) {</span>
+<span class="fc" id="L179">                    this.rootObject = adjusted;</span>
+                }
+<span class="fc" id="L181">                writerUtil.setCollectionItem(adjusted, targetField.getValue(), lastSegment);</span>
+            }
+<span class="fc" id="L183">            return;</span>
+        }
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (parentObject == null) {</span>
+<span class="fc" id="L186">            return;</span>
+        }
+
+<span class="fc" id="L189">        String targetClassName = null;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (targetField instanceof JavaField) {</span>
+<span class="fc" id="L191">            targetClassName = ((JavaField) targetField).getClassName();</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        } else if (targetField instanceof JavaEnumField) {</span>
+<span class="fc" id="L193">            targetClassName = ((JavaEnumField) targetField).getClassName();</span>
+        }
+
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (lastSegment.getCollectionType() == CollectionType.NONE) {</span>
+            // Don't handle null for JavaEnumField complex type using complex child object
+<span class="fc bfc" id="L198" title="All 4 branches covered.">            if (targetField.getFieldType() == FieldType.COMPLEX &amp;&amp; !(targetField instanceof JavaEnumField)</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">                    &amp;&amp; targetField.getValue() == null) {</span>
+<span class="pc bpc" id="L200" title="2 of 4 branches missed.">                if (targetClassName != null &amp;&amp; !targetClassName.isEmpty()) {</span>
+<span class="fc" id="L201">                    writerUtil.createComplexChildObject(parentObject, lastSegment,</span>
+<span class="fc" id="L202">                            writerUtil.loadClass(targetClassName));</span>
+                } else {
+<span class="nc" id="L204">                    writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
+                }
+            } else {
+<span class="fc" id="L207">                writerUtil.setChildObject(parentObject, targetField.getValue(), lastSegment);</span>
+            }
+        } else {
+<span class="fc" id="L210">            Object collection = writerUtil.getChildObject(parentObject, lastSegment);</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">            if (collection == null) {</span>
+<span class="fc" id="L212">                collection = writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
+            }
+<span class="fc bfc" id="L214" title="All 2 branches covered.">            if (lastSegment.getCollectionIndex() == null) {</span>
+                // Collection field without index - just create collection object and keep it empty
+<span class="fc" id="L216">                return;</span>
+            }
+<span class="fc" id="L218">            Object adjusted = writerUtil.adjustCollectionSize(collection, lastSegment);</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">            if (adjusted != collection) {</span>
+<span class="fc" id="L220">                writerUtil.setChildObject(parentObject, adjusted, lastSegment);</span>
+            }
+<span class="pc bpc" id="L222" title="1 of 4 branches missed.">            if (targetField.getFieldType() == FieldType.COMPLEX &amp;&amp; targetField.getValue() == null) {</span>
+<span class="nc bnc" id="L223" title="All 4 branches missed.">                if (targetClassName != null &amp;&amp; !targetClassName.isEmpty()) {</span>
+<span class="nc" id="L224">                    writerUtil.createComplexChildObject(parentObject, lastSegment,</span>
+<span class="nc" id="L225">                            writerUtil.loadClass(targetClassName));</span>
+                } else {
+<span class="nc" id="L227">                    writerUtil.createComplexChildObject(parentObject, lastSegment);</span>
+                }
+            } else {
+<span class="fc" id="L230">                writerUtil.setCollectionItem(adjusted, targetField.getValue(), lastSegment);</span>
+            }
+        }
+<span class="fc" id="L233">    }</span>
 
     public void write(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L206">        Object parentObject = prepareParentObject(session);</span>
-<span class="fc" id="L207">        populateTargetFieldValue(session, parentObject);</span>
-<span class="fc" id="L208">        Field targetField = session.head().getTargetField();</span>
-<span class="fc" id="L209">        enqueueFieldAndParent(targetField, parentObject);</span>
-<span class="fc" id="L210">        commitWriting(session);</span>
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L236">        Object parentObject = prepareParentObject(session);</span>
+<span class="fc" id="L237">        populateTargetFieldValue(session, parentObject);</span>
+<span class="fc" id="L238">        Field targetField = session.head().getTargetField();</span>
+<span class="fc" id="L239">        enqueueFieldAndParent(targetField, parentObject);</span>
+<span class="fc" id="L240">        commitWriting(session);</span>
+<span class="fc" id="L241">    }</span>
 
     public Object getRootObject() {
-<span class="fc" id="L214">        return rootObject;</span>
+<span class="fc" id="L244">        return rootObject;</span>
     }
 
     public void setRootObject(Object rootObject) {
-<span class="fc" id="L218">        this.rootObject = rootObject;</span>
-<span class="fc" id="L219">    }</span>
+<span class="fc" id="L248">        this.rootObject = rootObject;</span>
+<span class="fc" id="L249">    }</span>
 
     public void setTargetValueConverter(TargetValueConverter converter) {
-<span class="fc" id="L222">        this.converter = converter;</span>
-<span class="fc" id="L223">    }</span>
+<span class="fc" id="L252">        this.converter = converter;</span>
+<span class="fc" id="L253">    }</span>
 
     public void setCollectionItemClass(Class&lt;?&gt; clazz) {
-<span class="fc" id="L226">        this.collectionItemClass = clazz;</span>
-<span class="fc" id="L227">    }</span>
+<span class="fc" id="L256">        this.collectionItemClass = clazz;</span>
+<span class="fc" id="L257">    }</span>
 
     private String writeDocumentToString(boolean stripSpaces, Object object) throws AtlasException {
         try {
-<span class="nc bnc" id="L231" title="All 2 branches missed.">            if (object == null) {</span>
-<span class="nc" id="L232">                return &quot;&quot;;</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            if (object == null) {</span>
+<span class="nc" id="L262">                return &quot;&quot;;</span>
             }
 
-<span class="nc" id="L235">            String result = object.toString();</span>
+<span class="nc" id="L265">            String result = object.toString();</span>
 
-<span class="nc bnc" id="L237" title="All 2 branches missed.">            if (stripSpaces) {</span>
-<span class="nc" id="L238">                result = result.replaceAll(&quot;\n|\r&quot;, &quot;&quot;);</span>
-<span class="nc" id="L239">                result = result.replaceAll(&quot;&gt; *?&lt;&quot;, &quot;&gt;&lt;&quot;);</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">            if (stripSpaces) {</span>
+<span class="nc" id="L268">                result = result.replaceAll(&quot;\n|\r&quot;, &quot;&quot;);</span>
+<span class="nc" id="L269">                result = result.replaceAll(&quot;&gt; *?&lt;&quot;, &quot;&gt;&lt;&quot;);</span>
             }
-<span class="nc" id="L241">            return result;</span>
-<span class="nc" id="L242">        } catch (Exception e) {</span>
-<span class="nc" id="L243">            throw new AtlasException(e);</span>
+<span class="nc" id="L271">            return result;</span>
+<span class="nc" id="L272">        } catch (Exception e) {</span>
+<span class="nc" id="L273">            throw new AtlasException(e);</span>
         }
     }
 

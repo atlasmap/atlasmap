@@ -511,97 +511,97 @@ import io.atlasmap.v2.StringList;
     }
 
     public int hashCode() {
-<span class="fc" id="L514">        int currentHashCode = 1;</span>
-<span class="fc" id="L515">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L514">        int currentHashCode = 1;</span>
+<span class="nc" id="L515">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="fc" id="L517">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L517">            currentHashCode = (currentHashCode* 31);</span>
             StringList theAnnotations;
-<span class="fc" id="L519">            theAnnotations = this.getAnnotations();</span>
-<span class="pc bpc" id="L520" title="1 of 2 branches missed.">            if (this.annotations!= null) {</span>
+<span class="nc" id="L519">            theAnnotations = this.getAnnotations();</span>
+<span class="nc bnc" id="L520" title="All 2 branches missed.">            if (this.annotations!= null) {</span>
 <span class="nc" id="L521">                currentHashCode += theAnnotations.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L525">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L525">            currentHashCode = (currentHashCode* 31);</span>
             ModifierList theModifiers;
-<span class="fc" id="L527">            theModifiers = this.getModifiers();</span>
-<span class="pc bpc" id="L528" title="1 of 2 branches missed.">            if (this.modifiers!= null) {</span>
+<span class="nc" id="L527">            theModifiers = this.getModifiers();</span>
+<span class="nc bnc" id="L528" title="All 2 branches missed.">            if (this.modifiers!= null) {</span>
 <span class="nc" id="L529">                currentHashCode += theModifiers.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L533">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L533">            currentHashCode = (currentHashCode* 31);</span>
             StringList theParameterizedTypes;
-<span class="fc" id="L535">            theParameterizedTypes = this.getParameterizedTypes();</span>
-<span class="pc bpc" id="L536" title="1 of 2 branches missed.">            if (this.parameterizedTypes!= null) {</span>
+<span class="nc" id="L535">            theParameterizedTypes = this.getParameterizedTypes();</span>
+<span class="nc bnc" id="L536" title="All 2 branches missed.">            if (this.parameterizedTypes!= null) {</span>
 <span class="nc" id="L537">                currentHashCode += theParameterizedTypes.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L541">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L541">            currentHashCode = (currentHashCode* 31);</span>
             String theName;
-<span class="fc" id="L543">            theName = this.getName();</span>
-<span class="fc bfc" id="L544" title="All 2 branches covered.">            if (this.name!= null) {</span>
-<span class="fc" id="L545">                currentHashCode += theName.hashCode();</span>
+<span class="nc" id="L543">            theName = this.getName();</span>
+<span class="nc bnc" id="L544" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc" id="L545">                currentHashCode += theName.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L549">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L549">            currentHashCode = (currentHashCode* 31);</span>
             String theClassName;
-<span class="fc" id="L551">            theClassName = this.getClassName();</span>
-<span class="fc bfc" id="L552" title="All 2 branches covered.">            if (this.className!= null) {</span>
-<span class="fc" id="L553">                currentHashCode += theClassName.hashCode();</span>
+<span class="nc" id="L551">            theClassName = this.getClassName();</span>
+<span class="nc bnc" id="L552" title="All 2 branches missed.">            if (this.className!= null) {</span>
+<span class="nc" id="L553">                currentHashCode += theClassName.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L557">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L557">            currentHashCode = (currentHashCode* 31);</span>
             String theCanonicalClassName;
-<span class="fc" id="L559">            theCanonicalClassName = this.getCanonicalClassName();</span>
-<span class="pc bpc" id="L560" title="1 of 2 branches missed.">            if (this.canonicalClassName!= null) {</span>
+<span class="nc" id="L559">            theCanonicalClassName = this.getCanonicalClassName();</span>
+<span class="nc bnc" id="L560" title="All 2 branches missed.">            if (this.canonicalClassName!= null) {</span>
 <span class="nc" id="L561">                currentHashCode += theCanonicalClassName.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L565">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L565">            currentHashCode = (currentHashCode* 31);</span>
             String theCollectionClassName;
-<span class="fc" id="L567">            theCollectionClassName = this.getCollectionClassName();</span>
-<span class="pc bpc" id="L568" title="1 of 2 branches missed.">            if (this.collectionClassName!= null) {</span>
+<span class="nc" id="L567">            theCollectionClassName = this.getCollectionClassName();</span>
+<span class="nc bnc" id="L568" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
 <span class="nc" id="L569">                currentHashCode += theCollectionClassName.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L573">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L573">            currentHashCode = (currentHashCode* 31);</span>
             String theGetMethod;
-<span class="fc" id="L575">            theGetMethod = this.getGetMethod();</span>
-<span class="pc bpc" id="L576" title="1 of 2 branches missed.">            if (this.getMethod!= null) {</span>
+<span class="nc" id="L575">            theGetMethod = this.getGetMethod();</span>
+<span class="nc bnc" id="L576" title="All 2 branches missed.">            if (this.getMethod!= null) {</span>
 <span class="nc" id="L577">                currentHashCode += theGetMethod.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L581">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L581">            currentHashCode = (currentHashCode* 31);</span>
             String theSetMethod;
-<span class="fc" id="L583">            theSetMethod = this.getSetMethod();</span>
-<span class="fc bfc" id="L584" title="All 2 branches covered.">            if (this.setMethod!= null) {</span>
-<span class="fc" id="L585">                currentHashCode += theSetMethod.hashCode();</span>
+<span class="nc" id="L583">            theSetMethod = this.getSetMethod();</span>
+<span class="nc bnc" id="L584" title="All 2 branches missed.">            if (this.setMethod!= null) {</span>
+<span class="nc" id="L585">                currentHashCode += theSetMethod.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L589">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L589">            currentHashCode = (currentHashCode* 31);</span>
             Boolean thePrimitive;
-<span class="fc" id="L591">            thePrimitive = this.isPrimitive();</span>
-<span class="pc bpc" id="L592" title="1 of 2 branches missed.">            if (this.primitive!= null) {</span>
+<span class="nc" id="L591">            thePrimitive = this.isPrimitive();</span>
+<span class="nc bnc" id="L592" title="All 2 branches missed.">            if (this.primitive!= null) {</span>
 <span class="nc" id="L593">                currentHashCode += thePrimitive.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L597">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L597">            currentHashCode = (currentHashCode* 31);</span>
             Boolean theSynthetic;
-<span class="fc" id="L599">            theSynthetic = this.isSynthetic();</span>
-<span class="pc bpc" id="L600" title="1 of 2 branches missed.">            if (this.synthetic!= null) {</span>
+<span class="nc" id="L599">            theSynthetic = this.isSynthetic();</span>
+<span class="nc bnc" id="L600" title="All 2 branches missed.">            if (this.synthetic!= null) {</span>
 <span class="nc" id="L601">                currentHashCode += theSynthetic.hashCode();</span>
             }
         }
-<span class="fc" id="L604">        return currentHashCode;</span>
+<span class="nc" id="L604">        return currentHashCode;</span>
     }
 
 }

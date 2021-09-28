@@ -176,33 +176,33 @@ import io.atlasmap.v2.Field;
     }
 
     public int hashCode() {
-<span class="fc" id="L179">        int currentHashCode = 1;</span>
-<span class="fc" id="L180">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L179">        int currentHashCode = 1;</span>
+<span class="nc" id="L180">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="fc" id="L182">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L182">            currentHashCode = (currentHashCode* 31);</span>
             String theName;
-<span class="fc" id="L184">            theName = this.getName();</span>
-<span class="fc bfc" id="L185" title="All 2 branches covered.">            if (this.name!= null) {</span>
-<span class="fc" id="L186">                currentHashCode += theName.hashCode();</span>
+<span class="nc" id="L184">            theName = this.getName();</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc" id="L186">                currentHashCode += theName.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L190">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L190">            currentHashCode = (currentHashCode* 31);</span>
             Integer theOrdinal;
-<span class="fc" id="L192">            theOrdinal = this.getOrdinal();</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">            if (this.ordinal!= null) {</span>
-<span class="fc" id="L194">                currentHashCode += theOrdinal.hashCode();</span>
+<span class="nc" id="L192">            theOrdinal = this.getOrdinal();</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            if (this.ordinal!= null) {</span>
+<span class="nc" id="L194">                currentHashCode += theOrdinal.hashCode();</span>
             }
         }
         {
-<span class="fc" id="L198">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L198">            currentHashCode = (currentHashCode* 31);</span>
             String theClassName;
-<span class="fc" id="L200">            theClassName = this.getClassName();</span>
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">            if (this.className!= null) {</span>
-<span class="fc" id="L202">                currentHashCode += theClassName.hashCode();</span>
+<span class="nc" id="L200">            theClassName = this.getClassName();</span>
+<span class="nc bnc" id="L201" title="All 2 branches missed.">            if (this.className!= null) {</span>
+<span class="nc" id="L202">                currentHashCode += theClassName.hashCode();</span>
             }
         }
-<span class="fc" id="L205">        return currentHashCode;</span>
+<span class="nc" id="L205">        return currentHashCode;</span>
     }
 
 }
