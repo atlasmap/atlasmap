@@ -40,6 +40,101 @@
             } ]
           } ]
         }
+      },
+      {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceCollectionsClass",
+            "path" : "/addressList<>/city",
+            "fieldType" : "STRING",
+            "name" : "city"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/addressList<>/city",
+          "fieldType" : "STRING",
+          "name" : "city"
+        } ],
+        "id" : "mapping.219436"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "actions" : [ {
+              "@type" : "Uppercase"
+            } ],
+            "docId" : "SourceCollectionsClass",
+            "path" : "/addressList<>/state",
+            "fieldType" : "STRING",
+            "name" : "state"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/addressList<>/state",
+          "fieldType" : "STRING",
+          "name" : "state"
+        } ],
+        "id" : "mapping.370316"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceCollectionsClass",
+            "path" : "/contactList<>/firstName",
+            "fieldType" : "STRING",
+            "name" : "firstName"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "actions" : [ {
+            "@type" : "Capitalize"
+          } ],
+          "docId" : "TargetCollectionsClass",
+          "path" : "/contactList<>/firstName",
+          "fieldType" : "STRING",
+          "name" : "firstName"
+        } ],
+        "id" : "mapping.217823"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "docId" : "SourceCollectionsClass",
+            "path" : "/contactList<>/lastName",
+            "fieldType" : "STRING",
+            "name" : "lastName"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "TargetCollectionsClass",
+          "path" : "/contactList<>/lastName",
+          "fieldType" : "STRING",
+          "name" : "lastName"
+        } ],
+        "id" : "mapping.797532"
       } ]
     },
     "name" : "JavaJavaFlatMapping"

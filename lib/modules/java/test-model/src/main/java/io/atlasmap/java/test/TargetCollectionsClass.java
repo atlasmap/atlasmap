@@ -15,8 +15,38 @@
  */
 package io.atlasmap.java.test;
 
+import java.util.List;
+
 public class TargetCollectionsClass extends BaseCollectionsClass {
 
     private static final long serialVersionUID = 4700965723489983082L;
+
+    private List<TargetContact> contactList;
+    private List<TargetAddress> addressList;
+    private List<TargetOrder> orderList;
+
+    public List<TargetContact> getContactList() {
+        return contactList;
+    }
+
+    public void setContactList(List<TargetContact> contactList) {
+        this.contactList = contactList;
+    }
+
+    public List<TargetAddress> getAddressList() {
+        return addressList;
+    }
+
+    public void setAddressList(List<TargetAddress> addressList) {
+        this.addressList = addressList;
+    }
+
+    public List<TargetOrder> getOrderList() {
+        return orderList;
+    }
+
+    public void setOrderList(List<TargetOrder> orderList) {
+        this.orderList = orderList;
+    }
 
 }

@@ -611,7 +611,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                             "Failed to write field value into target document: " + e.getMessage(),
                             AuditStatus.ERROR, null);
                     if (LOG.isDebugEnabled()) {
-                        LOG.error(String.format("writeTargetValue()() failed for %s:%s",
+                        LOG.error(String.format("writeTargetValue() failed for %s:%s",
                                 targetField.getDocId(), targetField.getPath()), e);
                     }
                     return;

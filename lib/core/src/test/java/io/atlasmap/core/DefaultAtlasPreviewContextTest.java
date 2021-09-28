@@ -210,6 +210,7 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         Mapping m = new Mapping();
         Field source = new SimpleField();
         source.setFieldType(FieldType.STRING);
+        source.setPath("/source");
         source.setValue("one two three four");
         source.setActions(new ArrayList<>());
         Split action = new Split();
@@ -217,14 +218,17 @@ public class DefaultAtlasPreviewContextTest extends BaseDefaultAtlasContextTest 
         source.getActions().add(action);
         m.getInputField().add(source);
         Field target1 = new SimpleField();
+        target1.setPath("/target1");
         target1.setIndex(0);
         target1.setFieldType(FieldType.STRING);
         m.getOutputField().add(target1);
         Field target2 = new SimpleField();
+        target2.setPath("/target2");
         target2.setIndex(1);
         target2.setFieldType(FieldType.STRING);
         m.getOutputField().add(target2);
         Field target3 = new SimpleField();
+        target3.setPath("/target3");
         target3.setIndex(3);
         target3.setFieldType(FieldType.STRING);
         m.getOutputField().add(target3);
