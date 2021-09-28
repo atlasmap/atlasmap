@@ -635,24 +635,6 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return processors.get(0);
     }
 
-    private Object flattenList(Object value) {
-        if (value instanceof Iterable) {
-            List<Object> extractedValues = new ArrayList<>();
-            for (Object argument : (Iterable) value) {
-                if (argument instanceof Iterable) {
-                    for (Object item : (Iterable) argument) {
-                        extractedValues.add(item);
-                    }
-                } else {
-                    extractedValues.add(argument);
-                }
-            }
-            return extractedValues;
-        } else {
-            return value;
-        }
-    }
-
     public Object buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, List<Field> fields) {
         List<Object> flattenedValues = new ArrayList<>();
         for (Field item : fields) {
@@ -749,14 +731,23 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, false);
 
             // Make sure fieldGroup is of a collection type
-            if (fieldGroup.getCollectionType() == null || CollectionType.NONE.equals(fieldGroup.getCollectionType())) {
+            AtlasPath groupPath = new AtlasPath(fieldGroup.getPath());
+            if (!groupPath.hasCollection() || groupPath.isIndexedCollection()) {
                 fieldGroup.setCollectionType(CollectionType.ARRAY);
-                fieldGroup.setPath(fieldGroup.getPath() + "[]");
+                groupPath = new AtlasPath(groupPath.toString() + AtlasPath.PATH_ARRAY_SUFFIX);
+                fieldGroup.setPath(groupPath.toString());
+            } else if (fieldGroup.getCollectionType() == null || CollectionType.NONE.equals(fieldGroup.getCollectionType())) {
+                fieldGroup.setCollectionType(groupPath.getLastCollectionSegment().getCollectionType());
             }
 
-            for (Object subValue : (List<?>) tmpSourceObject) {
+            List<?> tmpSourceList = (List<?>)tmpSourceObject;
+            for (int i=0; i<tmpSourceList.size(); i++) {
+                Object subValue = tmpSourceList.get(i);
                 Field subField = new SimpleField();
+                AtlasPath subPath = groupPath.clone();
+                subPath.setVacantCollectionIndex(i);
                 AtlasModelFactory.copyField(fieldGroup, subField, false);
+                subField.setPath(subPath.toString());
                 subField.setIndex(null);
                 subField.setValue(subValue);
                 subField.setFieldType(currentType);

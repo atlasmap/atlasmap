@@ -27,17 +27,20 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
-public class AtlasPath {
+public class AtlasPath implements Cloneable {
 
     public static final String PATH_SEPARATOR = "/";
     public static final char PATH_SEPARATOR_CHAR = '/';
     public static final String PATH_SEPARATOR_ESCAPED = "/";
     public static final String PATH_ARRAY_START = "[";
     public static final String PATH_ARRAY_END = "]";
+    public static final String PATH_ARRAY_SUFFIX = PATH_ARRAY_START + PATH_ARRAY_END;
     public static final String PATH_LIST_START = "<";
     public static final String PATH_LIST_END = ">";
+    public static final String PATH_LIST_SUFFIX = PATH_LIST_START + PATH_LIST_END;
     public static final String PATH_MAP_START = "{";
     public static final String PATH_MAP_END = "}";
+    public static final String PATH_MAP_SUFFIX = PATH_MAP_START + PATH_MAP_END;
     public static final String PATH_ATTRIBUTE_PREFIX = "@";
     public static final String PATH_NAMESPACE_SEPARATOR = ":";
 
@@ -170,6 +173,11 @@ public class AtlasPath {
         return this;
     }
 
+    @Override
+    public AtlasPath clone() {
+        return new AtlasPath(this.toString());
+    }
+    
     public List<SegmentContext> getSegments(boolean includeRoot) {
         if (includeRoot) {
             return Collections.unmodifiableList(this.segmentContexts);

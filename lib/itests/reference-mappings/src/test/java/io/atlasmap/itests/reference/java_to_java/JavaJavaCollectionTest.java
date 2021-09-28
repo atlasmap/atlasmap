@@ -44,6 +44,7 @@ import io.atlasmap.java.test.TargetCollectionsClass;
 import io.atlasmap.java.test.TargetContact;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
 import io.atlasmap.java.test.TargetTestClass;
+import io.atlasmap.java.test.TargetAddress;
 
 public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
 
@@ -305,6 +306,22 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         LinkedList<String> list = new LinkedList<>();
         list.addAll(Arrays.asList(new String[] {"linkedList0", "linkedList1", "linkedList2"}));
         source.setLinkedList(list);
+        ArrayList<SourceAddress> addressList = new ArrayList<>();
+        for (int i=0; i<3; i++) {
+            SourceAddress addr = new SourceAddress();
+            addr.setCity("city" + i);
+            addr.setState("state" + i);
+            addressList.add(addr);
+        }
+        source.setAddressList(addressList);
+        ArrayList<SourceContact> contactList = new ArrayList<>();
+        for (int i=0; i<3; i++) {
+            SourceContact ct = new SourceContact();
+            ct.setFirstName("first" + i);
+            ct.setLastName("last" + i);
+            contactList.add(ct);
+        }
+        source.setContactList(contactList);
         AtlasSession session = context.createSession();
         session.setSourceDocument("SourceCollectionsClass", source);
         context.process(session);
@@ -314,5 +331,20 @@ public class JavaJavaCollectionTest extends AtlasMappingBaseTest {
         ArrayList<String> result = targetCollections.getArrayList();
         assertEquals(1, result.size());
         assertEquals("linkedList0#linkedList1#linkedList2", result.get(0));
+
+        List<TargetAddress> targetAddrList = targetCollections.getAddressList();
+        assertEquals(3, targetAddrList.size());
+        for (int i=0; i<3; i++) {
+            TargetAddress addr = targetAddrList.get(i);
+            assertEquals("city" + i, addr.getCity());
+            assertEquals("STATE" + i, addr.getState());
+        }
+        List<TargetContact> targetContactList = targetCollections.getContactList();
+        assertEquals(3, targetContactList.size());
+        for (int i=0; i<3; i++) {
+            TargetContact contact = targetContactList.get(i);
+            assertEquals("First" + i, contact.getFirstName());
+            assertEquals("last" + i, contact.getLastName());
+        }
     }
 }
