@@ -75,7 +75,9 @@ class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
 
     @Override
     public synchronized void addAlternativeLoader(ClassLoader cl) {
-        delegates.add(cl);
+        if (cl != null) {
+            delegates.add(cl);
+        }
     }
 
 }
