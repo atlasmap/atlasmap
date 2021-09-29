@@ -31,19 +31,93 @@ import io.atlasmap.itests.reference.AtlasTestUtil;
 public class XmlXmlCollectionTest extends AtlasMappingBaseTest {
 
     @Test
-    public void testProcessCollectionListEmpty() throws Exception {
+    public void testProcessCollectionComplex() throws Exception {
         AtlasContext context = DefaultAtlasContextFactory.getInstance()
-                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-list-empty.json").toURI());
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-complex.json").toURI());
         AtlasSession session = context.createSession();
         String source = AtlasTestUtil
-                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-collection-list-empty.xml");
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-collection-complex.xml");
         session.setSourceDocument("XmlSource", source);
         context.process(session);
 
         assertFalse(session.hasErrors(), printAudit(session));
         String string = (String) session.getDefaultTargetDocument();
         assertThat(string).hasXPath("//XmlOE");
-        assertThat(string).doesNotHaveXPath("//XmlOE/XmlOE/contactList");
+        assertThat(string).valueByXPath("count(//XmlOE/contactList)").isEqualTo(3);
+        for (int i=0; i<3; i++) {
+            assertThat(string).valueByXPath("//XmlOE/contactList[" + (i+1) + "]/firstName").isEqualTo("first" + (i+1));
+            assertThat(string).doesNotHaveXPath("//XmlOE/contactList[" + (i+1) + "]/lastName");
+        }
+        assertThat(string).valueByXPath("count(//XmlOE/contactSAList)").isEqualTo(3);
+        for (int i=0; i<3; i++) {
+            assertThat(string).valueByXPath("//XmlOE/contactSAList[" + (i+1) + "]/firstName").isEqualTo("FIRSTSA" + (i+1));
+            assertThat(string).doesNotHaveXPath("//XmlOE/contactSAList[" + (i+1) + "]/lastName");
+        }
+        assertThat(string).valueByXPath("count(//XmlOE/contactTAList)").isEqualTo(3);
+        for (int i=0; i<3; i++) {
+            assertThat(string).valueByXPath("//XmlOE/contactTAList[" + (i+1) + "]/firstName").isEqualTo("FIRSTTA" + (i+1));
+            assertThat(string).doesNotHaveXPath("//XmlOE/contactTAList[" + (i+1) + "]/lastName");
+        }
+    }
+
+    @Test
+    public void testProcessCollectionComplexEmpty() throws Exception {
+        AtlasContext context = DefaultAtlasContextFactory.getInstance()
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-complex.json").toURI());
+        AtlasSession session = context.createSession();
+        String source = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-collection-complex-empty.xml");
+        session.setSourceDocument("XmlSource", source);
+        context.process(session);
+
+        assertFalse(session.hasErrors(), printAudit(session));
+        String string = (String) session.getDefaultTargetDocument();
+        assertThat(string).hasXPath("//XmlOE");
+        assertThat(string).doesNotHaveXPath("//XmlOE/contactList");
+        assertThat(string).doesNotHaveXPath("//XmlOE/contactSAList");
+        assertThat(string).doesNotHaveXPath("//XmlOE/contactTAList");
+    }
+
+    @Test
+    public void testProcessCollectionComplexEmptyItem() throws Exception {
+        AtlasContext context = DefaultAtlasContextFactory.getInstance()
+                .createContext(new File("src/test/resources/xmlToXml/atlasmapping-collection-complex.json").toURI());
+        AtlasSession session = context.createSession();
+        String source = AtlasTestUtil
+                .loadFileAsString("src/test/resources/xmlToXml/atlas-xml-collection-complex-empty-item.xml");
+        session.setSourceDocument("XmlSource", source);
+        context.process(session);
+
+        assertFalse(session.hasErrors(), printAudit(session));
+        String string = (String) session.getDefaultTargetDocument();
+        assertThat(string).hasXPath("//XmlOE");
+        assertThat(string).valueByXPath("count(//XmlOE/contactList)").isEqualTo(3);
+        for (int i=0; i<3; i++) {
+            if (i==1) {
+                assertThat(string).doesNotHaveXPath("//XmlOE/contactList[" + (i+1) + "]/firstName");
+            } else {
+                assertThat(string).valueByXPath("//XmlOE/contactList[" + (i+1) + "]/firstName").isEqualTo("first" + (i+1));
+            }
+            assertThat(string).doesNotHaveXPath("//XmlOE/contactList[" + (i+1) + "]/lastName");
+        }
+        assertThat(string).valueByXPath("count(//XmlOE/contactList)").isEqualTo(3);
+        for (int i=0; i<3; i++) {
+            if (i==1) {
+                assertThat(string).doesNotHaveXPath("//XmlOE/contactSAList[" + (i+1) + "]/firstName");
+            } else {
+                assertThat(string).valueByXPath("//XmlOE/contactSAList[" + (i+1) + "]/firstName").isEqualTo("FIRSTSA" + (i+1));
+            }
+            assertThat(string).doesNotHaveXPath("//XmlOE/contactSAList[" + (i+1) + "]/lastName");
+        }
+        assertThat(string).valueByXPath("count(//XmlOE/contactTAList)").isEqualTo(3);
+        for (int i=0; i<3; i++) {
+            if (i==1) {
+                assertThat(string).doesNotHaveXPath("//XmlOE/contactTAList[" + (i+1) + "]/firstName");
+            } else {
+                assertThat(string).valueByXPath("//XmlOE/contactTAList[" + (i+1) + "]/firstName").isEqualTo("FIRSTTA" + (i+1));
+            }
+            assertThat(string).doesNotHaveXPath("//XmlOE/contactTAList[" + (i+1) + "]/lastName");
+        }
     }
 
 }

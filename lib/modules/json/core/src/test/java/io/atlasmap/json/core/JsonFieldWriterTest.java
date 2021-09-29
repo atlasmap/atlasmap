@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -236,7 +235,8 @@ public class JsonFieldWriterTest {
     public void testSimpleRepeated() throws Exception {
         writeString("/orders[0]/orderid", "orderid1");
         writeString("/orders[1]/orderid", "orderid2");
-        assertEquals("{\"orders\":[{\"orderid\":\"orderid1\"},{\"orderid\":\"orderid2\"}]}",
+        writeString("/orders[3]/orderid", "orderid4");
+        assertEquals("{\"orders\":[{\"orderid\":\"orderid1\"},{\"orderid\":\"orderid2\"},{},{\"orderid\":\"orderid4\"}]}",
                 writer.getRootNode().toString());
     }
 

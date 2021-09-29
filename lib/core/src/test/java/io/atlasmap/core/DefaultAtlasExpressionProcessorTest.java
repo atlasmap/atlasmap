@@ -17,6 +17,7 @@ package io.atlasmap.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
@@ -223,6 +224,38 @@ public class DefaultAtlasExpressionProcessorTest extends BaseDefaultAtlasContext
         DefaultAtlasExpressionProcessor.processExpression(session, expression);
         assertFalse(session.hasErrors(), printAudit(session));
         assertEquals("YES", session.head().getSourceField().getValue());
+    }
+
+    @Test
+    public void testRepeatCount() throws Exception {
+        Field source = populateSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, FieldType.STRING, "foo");
+        populateComplexCollectionSourceField(null, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, "count");
+        String expression = String.format(
+            "REPEAT(COUNT(${%s:/testPathcount<>/value}), ${%s:/testPathfoo})",
+            AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID, AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID);
+        recreateSession();
+        FieldGroup wrapper = new FieldGroup();
+        wrapper.getField().add((Field)reader.sources.get("/testPathcount<>/value"));
+        wrapper.getField().add(source);
+        session.head().setSourceField(wrapper);
+        DefaultAtlasExpressionProcessor.processExpression(session, expression);
+        assertFalse(session.hasErrors(), printAudit(session));
+        assertEquals(FieldGroup.class, session.head().getSourceField().getClass());
+        FieldGroup fieldGroup = (FieldGroup) session.head().getSourceField();
+        assertEquals("/testPathfoo<>", fieldGroup.getPath());
+        assertEquals(10, fieldGroup.getField().size());
+        Field child = fieldGroup.getField().get(0);
+        assertEquals("/testPathfoo<0>", child.getPath());
+        assertNull(child.getIndex());
+        assertEquals("foo", child.getValue());
+        child = fieldGroup.getField().get(1);
+        assertEquals("/testPathfoo<1>", child.getPath());
+        assertNull(child.getIndex());
+        assertEquals("foo", child.getValue());
+        child = fieldGroup.getField().get(9);
+        assertEquals("/testPathfoo<9>", child.getPath());
+        assertNull(child.getIndex());
+        assertEquals("foo", child.getValue());
     }
 
 }

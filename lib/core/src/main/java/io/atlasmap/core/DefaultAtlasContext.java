@@ -447,6 +447,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             session.head().setSourceField(sourceField);
             if (sourceField instanceof FieldGroup) {
                 processSourceFields(session, ((FieldGroup)sourceField).getField());
+                Field processed = applyFieldActions(session, sourceField);
+                session.head().setSourceField(processed);
                 continue;
             }
 

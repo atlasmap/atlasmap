@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XmlOE>
+  <orderId>1</orderId>
+  <contactList>
+    <firstName>first1</firstName>
+    <lastName>last1</lastName>
+  </contactList>
+  <contactList/>
+  <contactList>
+    <firstName>first3</firstName>
+    <lastName>last3</lastName>
+  </contactList>
+
+  <contactSAList>
+    <firstName>firstsa1</firstName>
+    <lastName>lastsa1</lastName>
+  </contactSAList>
+  <contactSAList/>
+  <contactSAList>
+    <firstName>firstsa3</firstName>
+    <lastName>lastsa3</lastName>
+  </contactSAList>
+
+  <contactTAList>
+    <firstName>firstta1</firstName>
+    <lastName>lastta1</lastName>
+  </contactTAList>
+  <contactTAList/>
+  <contactTAList>
+    <firstName>firstta3</firstName>
+    <lastName>lastta3</lastName>
+  </contactTAList>
+</XmlOE>

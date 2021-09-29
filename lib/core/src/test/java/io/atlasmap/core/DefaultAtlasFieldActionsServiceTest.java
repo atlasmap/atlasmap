@@ -22,7 +22,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -40,6 +43,11 @@ import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.Add;
+import io.atlasmap.v2.AddDays;
+import io.atlasmap.v2.Capitalize;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Concatenate;
+import io.atlasmap.v2.Expression;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -206,26 +214,217 @@ public class DefaultAtlasFieldActionsServiceTest {
     }
 
     @Test
+    public void testProcessActionAddDays() throws Exception {
+        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
+        Field field = new SimpleField();
+        field.setFieldType(FieldType.DATE_TIME);
+        field.setPath("/date");
+        ZonedDateTime now = ZonedDateTime.now();
+        field.setValue(now);
+        field.setActions(new ArrayList<Action>());
+        AddDays action = new AddDays();
+        action.setDays(32);
+        field.getActions().add(action);
+        Field answer = fieldActionsService.processActions(session, field);
+        ZonedDateTime expected = now.plusDays(32);
+        assertEquals(ZonedDateTime.class, answer.getValue().getClass());
+        ZonedDateTime actual = (ZonedDateTime) answer.getValue();
+        assertEquals(expected.getYear(), actual.getYear());
+        assertEquals(expected.getMonth(), actual.getMonth());
+        assertEquals(expected.getDayOfMonth(), actual.getDayOfMonth());
+    }
+
+    @Test
     public void testProcessActionForEachCollectionItem() throws Exception {
         DefaultAtlasSession session = mock(DefaultAtlasSession.class);
         FieldGroup fieldGroup = new FieldGroup();
         Field field1 = new SimpleField();
+        field1.setPath("/fields<0>");
         field1.setValue("one");
         fieldGroup.getField().add(field1);
         Field field2 = new SimpleField();
+        field2.setPath("/fields<1>");
         field2.setValue("two");
         fieldGroup.getField().add(field2);
-        Field field3 = new SimpleField();
-        field3.setValue("three");
-        fieldGroup.getField().add(field3);
+        Field field4 = new SimpleField();
+        field4.setPath("/fields<3>");
+        field4.setValue("four");
+        fieldGroup.getField().add(field4);
         Action action = new Uppercase();
         fieldGroup.setActions(new ArrayList<Action>());
         fieldGroup.getActions().add(action);
         Field answer = fieldActionsService.processActions(session, fieldGroup);
         assertEquals(FieldGroup.class, answer.getClass());
         FieldGroup answerGroup = (FieldGroup)answer;
-        assertEquals("ONE", answerGroup.getField().get(0).getValue());
-        assertEquals("TWO", answerGroup.getField().get(1).getValue());
-        assertEquals("THREE", answerGroup.getField().get(2).getValue());
+        assertEquals(3, answerGroup.getField().size());
+        Field f = answerGroup.getField().get(0);
+        assertEquals("/fields<0>", f.getPath());
+        assertEquals("ONE", f.getValue());
+        f = answerGroup.getField().get(1);
+        assertEquals("/fields<1>", f.getPath());
+        assertEquals("TWO", f.getValue());
+        f = answerGroup.getField().get(2);
+        assertEquals("/fields<3>", f.getPath());
+        assertEquals("FOUR", f.getValue());
+    }
+
+    @Test
+    public void testProcessOldExpressionActionWithRoot() throws Exception {
+        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
+        FieldGroup root = new FieldGroup();
+        FieldGroup fieldGroup = new FieldGroup();
+        root.getField().add(fieldGroup);
+        fieldGroup.setPath("/fields<>");
+        fieldGroup.setCollectionType(CollectionType.LIST);
+        Field field1 = new SimpleField();
+        field1.setPath("/fields<0>");
+        field1.setValue("one");
+        fieldGroup.getField().add(field1);
+        Field field2 = new SimpleField();
+        field2.setPath("/fields<1>");
+        field2.setValue("two");
+        fieldGroup.getField().add(field2);
+        Field field3 = new SimpleField();
+        field3.setPath("/fields<3>");
+        field3.setValue("four");
+        fieldGroup.getField().add(field3);
+        Expression action = new Expression();
+        action.setExpression("capitalize(${0})");
+        root.setActions(new ArrayList<Action>());
+        root.getActions().add(action);
+        Field answer = fieldActionsService.processActions(session, root);
+        assertEquals(FieldGroup.class, answer.getClass());
+        FieldGroup answerGroup = (FieldGroup)answer;
+        assertEquals(3, answerGroup.getField().size());
+        Field f = answerGroup.getField().get(0);
+        assertEquals("/$ATLASMAP<0>", f.getPath());
+        assertEquals("One", f.getValue());
+        f = answerGroup.getField().get(1);
+        assertEquals("/$ATLASMAP<1>", f.getPath());
+        assertEquals("Two", f.getValue());
+        f = answerGroup.getField().get(2);
+        assertEquals("/$ATLASMAP<2>", f.getPath());
+        assertEquals("Four", f.getValue());
+    }
+
+    @Test
+    public void testProcessOldExpressionActionWithoutRoot() throws Exception {
+        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
+        FieldGroup fieldGroup = new FieldGroup();
+        fieldGroup.setPath("/fields<>");
+        fieldGroup.setCollectionType(CollectionType.LIST);
+        Field field1 = new SimpleField();
+        field1.setPath("/fields<0>");
+        field1.setValue("one");
+        fieldGroup.getField().add(field1);
+        Field field2 = new SimpleField();
+        field2.setPath("/fields<1>");
+        field2.setValue("two");
+        fieldGroup.getField().add(field2);
+        Field field3 = new SimpleField();
+        field3.setPath("/fields<3>");
+        field3.setValue("four");
+        fieldGroup.getField().add(field3);
+        Expression action = new Expression();
+        action.setExpression("capitalize(${0})");
+        fieldGroup.setActions(new ArrayList<Action>());
+        fieldGroup.getActions().add(action);
+        Field answer = fieldActionsService.processActions(session, fieldGroup);
+        assertEquals(FieldGroup.class, answer.getClass());
+        FieldGroup answerGroup = (FieldGroup)answer;
+        assertEquals(3, answerGroup.getField().size());
+        Field f = answerGroup.getField().get(0);
+        assertEquals("/$ATLASMAP<0>", f.getPath());
+        assertEquals("One", f.getValue());
+        f = answerGroup.getField().get(1);
+        assertEquals("/$ATLASMAP<1>", f.getPath());
+        assertEquals("Two", f.getValue());
+        f = answerGroup.getField().get(2);
+        assertEquals("/$ATLASMAP<2>", f.getPath());
+        assertEquals("Four", f.getValue());
+    }
+
+    @Test
+    public void testProcessOldExpressionActionConcatenateCollection() throws Exception {
+        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
+        Field delimiter = new SimpleField();
+        delimiter.setPath("/delim");
+        delimiter.setValue("-");
+        FieldGroup list = new FieldGroup();
+        list.setPath("/fields<>");
+        list.setCollectionType(CollectionType.LIST);
+        Field field1 = new SimpleField();
+        field1.setPath("/fields<0>");
+        field1.setValue("one");
+        list.getField().add(field1);
+        Field field2 = new SimpleField();
+        field2.setPath("/fields<1>");
+        field2.setValue("two");
+        list.getField().add(field2);
+        Field field3 = new SimpleField();
+        field3.setPath("/fields<2>");
+        field3.setValue("three");
+        list.getField().add(field3);
+        FieldGroup fieldGroup = new FieldGroup();
+        fieldGroup.getField().add(delimiter);
+        fieldGroup.getField().add(list);
+        Expression action = new Expression();
+        action.setExpression("concatenate(${0}, true, capitalize(${1}))");
+        fieldGroup.setActions(new ArrayList<Action>());
+        fieldGroup.getActions().add(action);
+
+        Field answer = fieldActionsService.processActions(session, fieldGroup);
+        assertEquals("$ATLASMAP", answer.getPath());
+        assertEquals("One-Two-Three", answer.getValue());
+    }
+
+    @Test
+    public void testProcessOldExpressionActionConcatenateTwoCollections() throws Exception {
+        DefaultAtlasSession session = mock(DefaultAtlasSession.class);
+        Field delimiter = new SimpleField();
+        delimiter.setPath("/delim");
+        delimiter.setValue("-");
+        FieldGroup list = new FieldGroup();
+        list.setPath("/fields<>");
+        list.setCollectionType(CollectionType.LIST);
+        Field field1 = new SimpleField();
+        field1.setPath("/fields<0>");
+        field1.setValue("one");
+        list.getField().add(field1);
+        Field field2 = new SimpleField();
+        field2.setPath("/fields<1>");
+        field2.setValue("two");
+        list.getField().add(field2);
+        Field field3 = new SimpleField();
+        field3.setPath("/fields<2>");
+        field3.setValue("three");
+        list.getField().add(field3);
+        FieldGroup list2 = new FieldGroup();
+        list2.setPath("/fields2<>");
+        list2.setCollectionType(CollectionType.LIST);
+        Field field21 = new SimpleField();
+        field21.setPath("/fields2<0>");
+        field21.setValue("one");
+        list2.getField().add(field21);
+        Field field22 = new SimpleField();
+        field22.setPath("/fields2<1>");
+        field22.setValue("two");
+        list2.getField().add(field22);
+        Field field23 = new SimpleField();
+        field23.setPath("/fields2<2>");
+        field23.setValue("three");
+        list2.getField().add(field23);
+        FieldGroup fieldGroup = new FieldGroup();
+        fieldGroup.getField().add(delimiter);
+        fieldGroup.getField().add(list);
+        fieldGroup.getField().add(list2);
+        Expression action = new Expression();
+        action.setExpression("concatenate(${0}, true, ${1}, ${2})");
+        fieldGroup.setActions(new ArrayList<Action>());
+        fieldGroup.getActions().add(action);
+
+        Field answer = fieldActionsService.processActions(session, fieldGroup);
+        assertEquals("$ATLASMAP", answer.getPath());
+        assertEquals("one-two-three-one-two-three", answer.getValue());
     }
 }

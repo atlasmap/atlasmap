@@ -83,6 +83,9 @@ public class JavaFieldReader implements AtlasFieldReader {
     private List<Field> getFieldsForPath(AtlasInternalSession session, Object source, Field field, AtlasPath path, int depth) throws AtlasException {
         List<Field> fields = new ArrayList<>();
         List<SegmentContext> segments = path.getSegments(true);
+        if (source == null) {
+            return fields;
+        }
 
         if (segments.size() < depth) {
             throw new AtlasException(String.format("depth '%s' exceeds segment size '%s'", depth, segments.size()));

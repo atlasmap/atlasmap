@@ -271,9 +271,14 @@ public class XmlFieldWriterTest {
         namespaces.put("tns", "http://www.example.com/tns");
 
         writeValue("/tns:orders/tns:order[1]/tns:id", "1111");
+        writeValue("/tns:orders/tns:order[4]/tns:id", "4444");
 
         String expected = "<tns:orders xmlns:tns=\"http://www.example.com/tns\">"
-                + "<tns:order/><tns:order><tns:id>1111</tns:id></tns:order></tns:orders>";
+                + "<tns:order/>"
+                + "<tns:order><tns:id>1111</tns:id></tns:order>"
+                + "<tns:order/><tns:order/>"
+                + "<tns:order><tns:id>4444</tns:id></tns:order>"
+                + "</tns:orders>";
         checkResult(expected);
     }
 

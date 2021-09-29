@@ -28,8 +28,8 @@ import io.atlasmap.spi.ActionProcessor;
 import io.atlasmap.spi.FunctionFactory;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
-import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 
 public class DefaultAtlasFunctionResolver implements FunctionResolver {
 
@@ -96,8 +96,9 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
                         throw new IllegalArgumentException(String.format("The transformation '%s' expects more arguments", name));
                     }
 
-                    Object answer = fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, arguments);
-                    return AtlasModelFactory.wrapWithField(answer);
+                    FieldGroup fields = new FieldGroup();
+                    fields.getField().addAll(arguments);
+                    return fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, fields);
                 } else {
                     throw new IllegalArgumentException(String.format("The expression function or transformation '%s' was not found", name));
                 }

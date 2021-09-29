@@ -31,6 +31,40 @@
         "jsonType" : "io.atlasmap.v2.Mapping",
         "inputField" : [ {
           "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "actions" : [ {
+            "@type" : "Uppercase"
+          } ],
+          "docId": "XmlSource",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/contactSAList<>/firstName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId": "XmlTarget",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/contactSAList<>/firstName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId": "XmlSource",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/contactTAList<>/firstName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "actions" : [ {
+            "@type" : "Uppercase"
+          } ],
+          "docId": "XmlTarget",
+          "fieldType": "STRING",
+          "path" : "/XmlOE/contactTAList<>/firstName"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
           "docId": "XmlSource",
           "fieldType": "STRING",
           "path" : "/XmlOE/orderId"
