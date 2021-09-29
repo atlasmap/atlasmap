@@ -37,6 +37,7 @@ import javax.ws.rs.core.UriInfo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,11 +62,16 @@ public class AtlasServiceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasServiceTest.class);
 
+    @TempDir
+    File tmpDir;
+    
     private AtlasService service = null;
     private ObjectMapper mapper = null;
+    private String initialValueOfWorkspace;
 
     @BeforeEach
     public void setUp() throws Exception {
+        initialValueOfWorkspace = System.getProperty(AtlasService.ATLASMAP_WORKSPACE);
         service = new AtlasService();
         mapper = Json.mapper();
     }
@@ -74,6 +80,11 @@ public class AtlasServiceTest {
     public void tearDown() {
         service = null;
         mapper = null;
+        if(initialValueOfWorkspace != null) {
+            System.setProperty(AtlasService.ATLASMAP_WORKSPACE, initialValueOfWorkspace);
+        } else {
+            System.clearProperty(AtlasService.ATLASMAP_WORKSPACE);
+        }
     }
 
     @Test
@@ -121,6 +132,8 @@ public class AtlasServiceTest {
 
     @Test
     public void testJarUpload() throws Exception {
+        File workspaceFolderWithSpace = new File(tmpDir, "with space");
+        System.setProperty(AtlasService.ATLASMAP_WORKSPACE, workspaceFolderWithSpace.getAbsolutePath());
         new File("target/tmp").mkdirs();
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         int answer = compiler.run(System.in, System.out, System.err,
