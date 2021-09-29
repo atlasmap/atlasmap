@@ -647,10 +647,6 @@ public class XmlFieldReaderTest {
         orders.setDocId("xml");
         orders.setPath("/orders/order[]");
         orders.setCollectionType(CollectionType.ARRAY);
-        XmlField orderId = AtlasXmlModelFactory.createXmlField();
-        orderId.setFieldType(FieldType.INTEGER);
-        orderId.setDocId("xml");
-        orderId.setPath("/orders/order[]/orderId");
         FieldGroup address = new FieldGroup();
         address.setFieldType(FieldType.COMPLEX);
         address.setDocId("xml");
@@ -669,22 +665,30 @@ public class XmlFieldReaderTest {
         assertEquals(FieldGroup.class, readField.getClass());
         FieldGroup readGroup = FieldGroup.class.cast(readField);
         assertEquals(5, readGroup.getField().size());
-        FieldGroup address0 = (FieldGroup) readGroup.getField().get(0);
-        assertEquals("/orders/order[0]/address", address0.getPath());
-        assertEquals(1, address0.getField().size());
-        Field addressLine0 = (Field) address0.getField().get(0);
-        assertEquals("/orders/order[0]/address/addressLine1", addressLine0.getPath());
-        assertEquals("123 Main St (1)", addressLine0.getValue());
+        for (int i=0; i<5; i++) {
+            FieldGroup addr = (FieldGroup) readGroup.getField().get(i);
+            assertEquals("/orders/order[" + i + "]/address", addr.getPath());
+            assertEquals(1, addr.getField().size());
+            Field addressLine = (Field) addr.getField().get(0);
+            assertEquals("/orders/order[" + i + "]/address/addressLine1", addressLine.getPath());
+            assertEquals("123 Main St (" + (i+1) + ")", addressLine.getValue());
+        }
     }
 
     @Test
-    public void testReadParentCollectionsChildren() throws Exception {
-        final Document document = getDocumentFromFile("src/test/resources/complex-repeated.xml", false);
+    public void testReadParentCollectionEmpty() throws Exception {
+        final Document document = getDocumentFromFile("src/test/resources/complex-repeated-empty.xml", false);
         reader.setDocument(document);
+        FieldGroup orders = new FieldGroup();
+        orders.setFieldType(FieldType.COMPLEX);
+        orders.setDocId("xml");
+        orders.setPath("/orders/order[]");
+        orders.setCollectionType(CollectionType.ARRAY);
         FieldGroup address = new FieldGroup();
         address.setFieldType(FieldType.COMPLEX);
         address.setDocId("xml");
         address.setPath("/orders/order[]/address");
+        orders.getField().add(address);
         XmlField addressLine1 = AtlasXmlModelFactory.createXmlField();
         addressLine1.setFieldType(FieldType.STRING);
         addressLine1.setDocId("xml");
@@ -697,13 +701,48 @@ public class XmlFieldReaderTest {
         assertNotNull(readField);
         assertEquals(FieldGroup.class, readField.getClass());
         FieldGroup readGroup = FieldGroup.class.cast(readField);
-        assertEquals(5, readGroup.getField().size());
-        FieldGroup readAddress0 = (FieldGroup) readGroup.getField().get(0);
-        assertEquals("/orders/order[0]/address", readAddress0.getPath());
-        assertEquals(1, readAddress0.getField().size());
-        Field readAddressLine0 = (Field) readAddress0.getField().get(0);
-        assertEquals("/orders/order[0]/address/addressLine1", readAddressLine0.getPath());
-        assertEquals("123 Main St (1)", readAddressLine0.getValue());
+        assertEquals(0, readGroup.getField().size());
+    }
+
+    @Test
+    public void testReadParentCollectionEmptyItem() throws Exception {
+        final Document document = getDocumentFromFile("src/test/resources/complex-repeated-empty-item.xml", false);
+        reader.setDocument(document);
+        FieldGroup orders = new FieldGroup();
+        orders.setFieldType(FieldType.COMPLEX);
+        orders.setDocId("xml");
+        orders.setPath("/orders/order[]");
+        orders.setCollectionType(CollectionType.ARRAY);
+        FieldGroup address = new FieldGroup();
+        address.setFieldType(FieldType.COMPLEX);
+        address.setDocId("xml");
+        address.setPath("/orders/order[]/address");
+        orders.getField().add(address);
+        XmlField addressLine1 = AtlasXmlModelFactory.createXmlField();
+        addressLine1.setFieldType(FieldType.STRING);
+        addressLine1.setDocId("xml");
+        addressLine1.setPath("/orders/order[]/address/addressLine1");
+        address.getField().add(addressLine1);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(address);
+        Field readField = reader.read(session);
+        assertNotNull(readField);
+        assertEquals(FieldGroup.class, readField.getClass());
+        FieldGroup readGroup = FieldGroup.class.cast(readField);
+        assertEquals(2, readGroup.getField().size());
+        FieldGroup address0 = (FieldGroup) readGroup.getField().get(0);
+        assertEquals("/orders/order[0]/address", address0.getPath());
+        assertEquals(1, address0.getField().size());
+        Field addressLine0 = (Field) address0.getField().get(0);
+        assertEquals("/orders/order[0]/address/addressLine1", addressLine0.getPath());
+        assertEquals("123 Main St (1)", addressLine0.getValue());
+        FieldGroup address2 = (FieldGroup) readGroup.getField().get(1);
+        assertEquals("/orders/order[2]/address", address2.getPath());
+        assertEquals(1, address2.getField().size());
+        Field addressLine2 = (Field) address2.getField().get(0);
+        assertEquals("/orders/order[2]/address/addressLine1", addressLine2.getPath());
+        assertEquals("123 Main St (3)", addressLine2.getValue());
     }
 
     private Document getDocumentFromFile(String uri, boolean namespaced) throws Exception {

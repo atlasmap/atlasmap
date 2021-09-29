@@ -1,0 +1,74 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id": "JsonSource",
+      "uri" : "atlas:json:JsonSource",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id": "JsonTarget",
+      "uri" : "atlas:json:JsonTarget",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId": "JsonSource",
+          "path" : "/contactList<>/firstName",
+          "fieldType": "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId": "JsonTarget",
+          "path" : "/contactList<>/firstName",
+          "fieldType": "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "actions" : [ {
+            "@type" : "Uppercase"
+          } ],
+          "docId": "JsonSource",
+          "path" : "/contactSAList<>/firstName",
+          "fieldType": "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId": "JsonTarget",
+          "path" : "/contactSAList<>/firstName",
+          "fieldType": "STRING"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId": "JsonSource",
+          "path" : "/contactTAList<>/firstName",
+          "fieldType": "STRING"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "actions" : [ {
+            "@type" : "Uppercase"
+          } ],
+          "docId": "JsonTarget",
+          "path" : "/contactTAList<>/firstName",
+          "fieldType": "STRING"
+        } ]
+      }]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "JsonJsonCollectionListEmpty"
+  }
+}

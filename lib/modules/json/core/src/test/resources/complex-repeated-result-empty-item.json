@@ -1,0 +1,41 @@
+{
+  "SourceOrderList": {
+    "orders": [
+      {
+        "address": {
+          "addressLine1": "123 Main St (1)",
+          "addressLine2": "Suite 42b (1)",
+          "city": "Anytown (1)",
+          "state": "NY (1)",
+          "zipCode": "90210 (1)"
+        },
+        "contact": {
+          "firstName": "Ozzie (1)",
+          "lastName": "Smith (1)",
+          "phoneNumber": "5551212 (1)",
+          "zipCode": "81111 (1)"
+        },
+        "orderId": 1
+      },
+      {},
+      {
+        "address": {
+          "addressLine1": "123 Main St (3)",
+          "addressLine2": "Suite 42b (3)",
+          "city": "Anytown (3)",
+          "state": "NY (3)",
+          "zipCode": "90210 (3)"
+        },
+        "contact": {
+          "firstName": "Ozzie (3)",
+          "lastName": "Smith (3)",
+          "phoneNumber": "5551212 (3)",
+          "zipCode": "81111 (3)"
+        },
+        "orderId": 3
+      }
+    ],
+    "orderBatchNumber": 4123562,
+    "numberOfOrders": 3
+  }
+}

@@ -64,7 +64,7 @@ public class MultiplicityTransformationTest {
         context.process(session);
         assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         assertTrue(session.hasWarns(), "split(STRING) => INTEGER/DOUBLE mapping should get warnings");
-        assertEquals(12, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
+        assertEquals(11, session.getAudits().getAudit().stream().filter(a -> a.getStatus() == AuditStatus.WARN).count());
         Object output = session.getTargetDocument("io.atlasmap.itests.core.issue.TargetClass");
         assertEquals(TargetClass.class, output.getClass());
         TargetClass target = TargetClass.class.cast(output);
@@ -73,13 +73,7 @@ public class MultiplicityTransformationTest {
         assertEquals("Manjiro,Nakahama", target.getTargetName());
 
         // Concatenate(',', Capitalize(SourceStringList<>), SourceName) -> targetFullName
-        assertEquals("One,Nakahama", target.getTargetFullName());
-        assertTrue(session.getAudits().getAudit().stream().anyMatch(audit -> {
-            return ("Using only the first element of the collection since a single value is expected in " +
-                    "a multi-field selection.")
-                    .equals(audit.getMessage());
-        }));
-
+        assertEquals("One,Two,Three,Nakahama", target.getTargetFullName());
 
         assertEquals("one,two,three", target.getTargetString());
         assertEquals(Integer.valueOf(314), target.getTargetStreetNumber());

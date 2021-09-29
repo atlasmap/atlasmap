@@ -515,4 +515,18 @@ public class JavaFieldWriterTest extends BaseJavaFieldWriterTest {
         assertEquals("zero", o.get(0).getAddress().getAddressLine1());
         assertEquals("one", o.get(1).getAddress().getAddressLine1());
     }
+
+    @Test
+    public void testListComplexSkipIndexedPath() throws Exception {
+        writer.setRootObject(new TargetCollectionsClass());
+        writeComplex("/contactList<0>", new TargetContact());
+        write("/contactList<0>/firstName", "first0");
+        writeComplex("/contactList<2>", new TargetContact());
+        write("/contactList<2>/firstName", "first2");
+        TargetCollectionsClass o = (TargetCollectionsClass)writer.getRootObject();
+        assertEquals(3, o.getContactList().size());
+        assertEquals("first0", o.getContactList().get(0).getFirstName());
+        assertNull(o.getContactList().get(1));
+        assertEquals("first2", o.getContactList().get(2).getFirstName());
+    }
 }

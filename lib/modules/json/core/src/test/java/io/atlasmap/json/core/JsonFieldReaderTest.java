@@ -1161,20 +1161,10 @@ public class JsonFieldReaderTest {
         final String document = new String(Files.readAllBytes(Paths.get(
             getClass().getClassLoader().getResource("complex-repeated-result.json").toURI())));
         reader.setDocument(document);
-        FieldGroup orders = new FieldGroup();
-        orders.setFieldType(FieldType.COMPLEX);
-        orders.setDocId("json");
-        orders.setPath("orders[]");
-        orders.setCollectionType(CollectionType.ARRAY);
-        JsonField orderId = AtlasJsonModelFactory.createJsonField();
-        orderId.setFieldType(FieldType.INTEGER);
-        orderId.setDocId("json");
-        orderId.setPath("/orders[]/orderId");
         FieldGroup address = new FieldGroup();
         address.setFieldType(FieldType.COMPLEX);
         address.setDocId("json");
         address.setPath("/orders[]/address");
-        orders.getField().add(address);
         JsonField addressLine1 = AtlasJsonModelFactory.createJsonField();
         addressLine1.setFieldType(FieldType.STRING);
         addressLine1.setDocId("json");
@@ -1188,18 +1178,20 @@ public class JsonFieldReaderTest {
         assertEquals(FieldGroup.class, readField.getClass());
         FieldGroup readGroup = FieldGroup.class.cast(readField);
         assertEquals(5, readGroup.getField().size());
-        FieldGroup address0 = (FieldGroup) readGroup.getField().get(0);
-        assertEquals("/orders[0]/address", address0.getPath());
-        assertEquals(1, address0.getField().size());
-        Field addressLine0 = (Field) address0.getField().get(0);
-        assertEquals("/orders[0]/address/addressLine1", addressLine0.getPath());
-        assertEquals("123 Main St (1)", addressLine0.getValue());
+        for (int i=0; i<5; i++) {
+            FieldGroup readAddress = (FieldGroup) readGroup.getField().get(i);
+            assertEquals("/orders[" + i + "]/address", readAddress.getPath());
+            assertEquals(1, readAddress.getField().size());
+            Field readAddressLine = (Field) readAddress.getField().get(0);
+            assertEquals("/orders[" + i + "]/address/addressLine1", readAddressLine.getPath());
+            assertEquals("123 Main St (" + (i+1) + ")", readAddressLine.getValue());
+        }
     }
 
     @Test
-    public void testReadParentCollectionsChildren() throws Exception {
+    public void testReadParentCollectionEmpty() throws Exception {
         final String document = new String(Files.readAllBytes(Paths.get(
-            getClass().getClassLoader().getResource("complex-repeated-result.json").toURI())));
+            getClass().getClassLoader().getResource("complex-repeated-result-empty.json").toURI())));
         reader.setDocument(document);
         FieldGroup address = new FieldGroup();
         address.setFieldType(FieldType.COMPLEX);
@@ -1217,13 +1209,42 @@ public class JsonFieldReaderTest {
         assertNotNull(readField);
         assertEquals(FieldGroup.class, readField.getClass());
         FieldGroup readGroup = FieldGroup.class.cast(readField);
-        assertEquals(5, readGroup.getField().size());
-        FieldGroup readAddress0 = (FieldGroup) readGroup.getField().get(0);
-        assertEquals("/orders[0]/address", readAddress0.getPath());
-        assertEquals(1, readAddress0.getField().size());
-        Field readAddressLine0 = (Field) readAddress0.getField().get(0);
-        assertEquals("/orders[0]/address/addressLine1", readAddressLine0.getPath());
-        assertEquals("123 Main St (1)", readAddressLine0.getValue());
+        assertEquals(0, readGroup.getField().size());
     }
 
+    @Test
+    public void testReadParentCollectionEmptyItem() throws Exception {
+        final String document = new String(Files.readAllBytes(Paths.get(
+            getClass().getClassLoader().getResource("complex-repeated-result-empty-item.json").toURI())));
+        reader.setDocument(document);
+        FieldGroup address = new FieldGroup();
+        address.setFieldType(FieldType.COMPLEX);
+        address.setDocId("json");
+        address.setPath("/orders[]/address");
+        JsonField addressLine1 = AtlasJsonModelFactory.createJsonField();
+        addressLine1.setFieldType(FieldType.STRING);
+        addressLine1.setDocId("json");
+        addressLine1.setPath("/orders[]/address/addressLine1");
+        address.getField().add(addressLine1);
+        AtlasInternalSession session = mock(AtlasInternalSession.class);
+        when(session.head()).thenReturn(mock(Head.class));
+        when(session.head().getSourceField()).thenReturn(address);
+        Field readField = reader.read(session);
+        assertNotNull(readField);
+        assertEquals(FieldGroup.class, readField.getClass());
+        FieldGroup readGroup = FieldGroup.class.cast(readField);
+        assertEquals(2, readGroup.getField().size());
+        FieldGroup readAddress = (FieldGroup) readGroup.getField().get(0);
+        assertEquals("/orders[0]/address", readAddress.getPath());
+        assertEquals(1, readAddress.getField().size());
+        Field readAddressLine = (Field) readAddress.getField().get(0);
+        assertEquals("/orders[0]/address/addressLine1", readAddressLine.getPath());
+        assertEquals("123 Main St (1)", readAddressLine.getValue());
+        readAddress = (FieldGroup) readGroup.getField().get(1);
+        assertEquals("/orders[2]/address", readAddress.getPath());
+        assertEquals(1, readAddress.getField().size());
+        readAddressLine = (Field) readAddress.getField().get(0);
+        assertEquals("/orders[2]/address/addressLine1", readAddressLine.getPath());
+        assertEquals("123 Main St (3)", readAddressLine.getValue());
+    }
 }

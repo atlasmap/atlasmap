@@ -17,7 +17,6 @@ package io.atlasmap.itests.core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -69,7 +68,7 @@ public class CsvMappingTest {
         session.setSourceDocument("source", "first_name,last_name\r\nbob,johnson\r\nandrew,smith\r\n");
         context.process(session);
 
-        assertFalse(session.hasErrors());
+        assertFalse(session.hasErrors(), TestHelper.printAudit(session));
         Object csv = session.getTargetDocument("target-csv");
         assertEquals("first\r\nBob\r\nAndrew\r\n", csv);
     }

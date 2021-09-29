@@ -15,11 +15,14 @@
  */
 package io.atlasmap.v2;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class Expression extends Action implements Serializable {
+/** 
+ * @deprecated Expression field action is deprecated. {@link Mapping} level
+ * expression has to be used instead.
+ **/
+@Deprecated
+public class Expression extends Action {
 
     private static final long serialVersionUID = 1L;
 

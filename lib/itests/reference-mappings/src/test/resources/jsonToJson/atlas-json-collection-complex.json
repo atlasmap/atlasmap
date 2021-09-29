@@ -1,0 +1,44 @@
+{
+  "contactList": [
+    {
+      "firstName": "first1",
+      "lastName": "last1"
+    },
+    {
+      "firstName": "first2",
+      "lastName": "last2"
+    },
+    {
+      "firstName": "first3",
+      "lastName": "last3"
+    }
+  ],
+  "contactSAList": [
+    {
+      "firstName": "firstSA1",
+      "lastName": "lastSA1"
+    },
+    {
+      "firstName": "firstSA2",
+      "lastName": "lastSA2"
+    },
+    {
+      "firstName": "firstSA3",
+      "lastName": "lastSA3"
+    }
+  ],
+  "contactTAList": [
+    {
+      "firstName": "firstTA1",
+      "lastName": "lastTA1"
+    },
+    {
+      "firstName": "firstTA2",
+      "lastName": "lastTA2"
+    },
+    {
+      "firstName": "firstTA3",
+      "lastName": "lastTA3"
+    }
+  ]
+}
