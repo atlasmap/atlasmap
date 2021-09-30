@@ -39,7 +39,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseAtlasModule,172,275,20
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,570,2070,74,222,120,444,67,130,2,47
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCombineStrategy,14,212,4,34,6,57,7,28,3,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService,152,1054,34,191,26,235,35,123,2,25
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCompoundClassLoader,28,98,3,11,8,23,3,10,0,6
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCompoundClassLoader,28,123,5,15,8,28,5,12,0,7
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCustomMappingProcessor,34,50,5,3,8,14,4,4,0,4
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseFunctionFactory,0,7,0,0,0,2,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasValidationService,57,652,19,66,10,130,19,43,0,19
