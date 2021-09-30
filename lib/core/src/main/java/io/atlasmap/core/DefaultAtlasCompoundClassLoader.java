@@ -19,8 +19,6 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -33,7 +31,7 @@ class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        for (ClassLoader cl : delegates) {
+        for (ClassLoader cl : classLoaders()) {
             try {
                 return cl.loadClass(name);
             } catch (Throwable t) {
@@ -44,9 +42,18 @@ class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
         throw new ClassNotFoundException(name);
     }
 
+    private Set<ClassLoader> classLoaders() {
+        Set<ClassLoader> answer = new LinkedHashSet<>(delegates);
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        if (tccl != null && !tccl.equals(this)) {
+            answer.add(tccl);
+        }
+        return answer;
+    }
+
     @Override
     public URL getResource(String name) {
-        for (ClassLoader cl : delegates) {
+        for (ClassLoader cl : classLoaders()) {
             URL url = cl.getResource(name);
             if (url != null) {
                 return url;
@@ -58,8 +65,8 @@ class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
 
     @Override
     public Enumeration<URL> getResources(String name) {
-        List<URL> answer = new LinkedList<>();
-        for (ClassLoader cl : delegates) {
+        Set<URL> answer = new LinkedHashSet<>();
+        for (ClassLoader cl : classLoaders()) {
             try {
                 Enumeration<URL> urls = cl.getResources(name);
                 while (urls != null && urls.hasMoreElements()) {
@@ -75,7 +82,7 @@ class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
 
     @Override
     public synchronized void addAlternativeLoader(ClassLoader cl) {
-        if (cl != null) {
+        if (cl != null && !this.equals(cl)) {
             delegates.add(cl);
         }
     }
