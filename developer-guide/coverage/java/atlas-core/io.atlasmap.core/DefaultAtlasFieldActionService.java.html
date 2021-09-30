@@ -799,7 +799,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 // Collection field
 <span class="fc" id="L800">                List&lt;Field&gt; fields = ((FieldGroup) subField).getField();</span>
 <span class="pc bpc" id="L801" title="2 of 4 branches missed.">                if (fields != null &amp;&amp; !fields.isEmpty()) {</span>
-<span class="pc bpc" id="L802" title="3 of 6 branches missed.">                    if (fieldGroup.getField().size() == 1 &amp;&amp; (index == 0 || index == null)) {</span>
+<span class="pc bpc" id="L802" title="1 of 6 branches missed.">                    if (fieldGroup.getField().size() == 1 &amp;&amp; (index == null || index == 0)) {</span>
                         //For backwards compatibility treat as a collection in a SimpleField
 <span class="fc bfc" id="L804" title="All 2 branches covered.">                        for (Field field: fields) {</span>
 <span class="fc" id="L805">                            values.add(field.getValue());</span>
