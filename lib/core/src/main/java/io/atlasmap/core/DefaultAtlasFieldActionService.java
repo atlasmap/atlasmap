@@ -799,7 +799,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
                 // Collection field
                 List<Field> fields = ((FieldGroup) subField).getField();
                 if (fields != null && !fields.isEmpty()) {
-                    if (fieldGroup.getField().size() == 1 && (index == 0 || index == null)) {
+                    if (fieldGroup.getField().size() == 1 && (index == null || index == 0)) {
                         //For backwards compatibility treat as a collection in a SimpleField
                         for (Field field: fields) {
                             values.add(field.getValue());

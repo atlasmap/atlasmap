@@ -1,0 +1,90 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "-MkqPBsPav60JEAxwZ2K",
+      "name" : "1 - SQL Result",
+      "description" : "Result of SQL [select * from todo limit 1]",
+      "uri" : "atlas:json:-MkqPBsPav60JEAxwZ2K",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "-MkqPH7Gav60JEAxwZ2K",
+      "name" : "2 - SQL Result",
+      "description" : "Result of SQL [select company as comp from contact limit 1;]",
+      "uri" : "atlas:json:-MkqPH7Gav60JEAxwZ2K",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "-MkqPFJhav60JEAxwZ2K",
+      "name" : "3 - SQL Parameter",
+      "description" : "Parameters of SQL [insert into todo (task,column2) values (:#task, :#column2)]",
+      "uri" : "atlas:json:-MkqPFJhav60JEAxwZ2K",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "mapping.285311",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "delimiter" : " ",
+            "delimitingEmptyValues" : "true",
+            "@type" : "Concatenate"
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "name" : "task",
+            "path" : "/<>/task",
+            "fieldType" : "STRING",
+            "docId" : "-MkqPBsPav60JEAxwZ2K"
+          } ]
+        },
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "name" : "column2",
+          "path" : "/column2",
+          "fieldType" : "STRING",
+          "docId" : "-MkqPFJhav60JEAxwZ2K"
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id" : "mapping.605832",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ {
+            "delimiter" : " ",
+            "delimitingEmptyValues" : "true",
+            "@type" : "Concatenate"
+          } ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "name" : "comp",
+            "path" : "/<>/comp",
+            "fieldType" : "STRING",
+            "docId" : "-MkqPH7Gav60JEAxwZ2K"
+          } ]
+        },
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "name" : "task",
+          "path" : "/task",
+          "fieldType" : "STRING",
+          "docId" : "-MkqPFJhav60JEAxwZ2K"
+        } ]
+      } ]
+    },
+    "name" : "UI.0",
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    }
+  }
+}
