@@ -70,6 +70,7 @@
     <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-dfdl-module</artifactId>
+      <scope>provided</scope>
     </dependency>
     <!-- for testing -->
     <dependency>
