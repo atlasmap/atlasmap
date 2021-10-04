@@ -49,6 +49,8 @@ export const sourceTargetView = () =>
         <CanvasProvider>
           <SourceTargetView
             sourceEvents={{
+              onCaptureDocumentID: action('onCapthreDocumentID'),
+              onChangeDocumentName: action('onChangeDocumentName'),
               onCreateConstant: action('onCreateConstant'),
               onEditConstant: action('onEditConstant'),
               onDeleteConstant: action('onDeleteConstant'),
@@ -84,6 +86,8 @@ export const sourceTargetView = () =>
               onEditCSVParams: action('onEditCSVParams'),
             }}
             targetEvents={{
+              onCaptureDocumentID: action('onCapthreDocumentID'),
+              onChangeDocumentName: action('onChangeDocumentName'),
               onCreateProperty: action('onCreateProperty'),
               onEditProperty: action('onEditProperty'),
               onDeleteProperty: action('onDeleteProperty'),

@@ -206,7 +206,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, true)
         : undefined,
-      onCaptureDocumentName: (id) => handlers.onCaptureDocumentName(id),
+      onCaptureDocumentID: (id) => handlers.onCaptureDocumentID(id),
       onChangeDocumentName: (id, name) =>
         handlers.onChangeDocumentName({
           id: id,
@@ -289,7 +289,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onDeleteDocument: allowDelete
         ? (id) => handlers.onDeleteDocument(id, false)
         : undefined,
-      onCaptureDocumentName: (id) => handlers.onCaptureDocumentName(id),
+      onCaptureDocumentID: (id) => handlers.onCaptureDocumentID(id),
       onChangeDocumentName: (id, name) =>
         handlers.onChangeDocumentName({
           id: id,

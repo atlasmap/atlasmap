@@ -22,7 +22,7 @@ import {
 } from '../../models';
 import { Button, Tooltip } from '@patternfly/react-core';
 import {
-  CaptureDocumentNameAction,
+  CaptureDocumentIDAction,
   ChangeDocumentNameAction,
   DeleteDocumentAction,
   EditCSVParamsAction,
@@ -65,7 +65,7 @@ export interface ISourceColumnCallbacks
   onCreateConstant: () => void;
   onCreateProperty: (isSource: boolean) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
-  onCaptureDocumentName?: (id: string) => void;
+  onCaptureDocumentID?: (id: string) => void;
   onChangeDocumentName?: (id: string, name: string) => void;
   onImportDocument?: (selectedFile: File) => void;
   onDeleteDocument?: (id: GroupId) => void;
@@ -107,7 +107,7 @@ export const SourcesColumn: FunctionComponent<
   onDeleteProperty,
   onImportDocument,
   onDeleteDocument,
-  onCaptureDocumentName,
+  onCaptureDocumentID,
   onChangeDocumentName,
   onEditCSVParams,
   onSearch,
@@ -301,11 +301,11 @@ export const SourcesColumn: FunctionComponent<
                       actions={
                         s.type === DocumentType.CSV
                           ? [
-                              onCaptureDocumentName && (
-                                <CaptureDocumentNameAction
+                              onCaptureDocumentID && (
+                                <CaptureDocumentIDAction
                                   id={documentId}
-                                  onClick={() => onCaptureDocumentName(s.id)}
-                                  key={'capture-document-name'}
+                                  onClick={() => onCaptureDocumentID(s.id)}
+                                  key={'capture-document-id'}
                                 />
                               ),
                               onEditCSVParams && (
@@ -324,11 +324,11 @@ export const SourcesColumn: FunctionComponent<
                               ),
                             ]
                           : [
-                              onCaptureDocumentName && (
-                                <CaptureDocumentNameAction
+                              onCaptureDocumentID && (
+                                <CaptureDocumentIDAction
                                   id={documentId}
-                                  onClick={() => onCaptureDocumentName(s.id)}
-                                  key={'capture-document-name'}
+                                  onClick={() => onCaptureDocumentID(s.id)}
+                                  key={'capture-document-id'}
                                 />
                               ),
                               onChangeDocumentName && (
