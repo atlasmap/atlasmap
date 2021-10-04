@@ -24,7 +24,7 @@ import {
 } from './utils';
 import {
   useAboutDialog,
-  useCaptureDocumentNameToast,
+  useCaptureDocumentIDToast,
   useChangeDocumentNameDialog,
   useConstantDialog,
   useCustomClassDialog,
@@ -162,8 +162,8 @@ export function useAtlasmapDialogs({
   //#region document dialogs
   const [importDocumentDialog, onImportDocument] = useImportDocumentDialog();
   const [deleteDocumentDialog, onDeleteDocument] = useDeleteDocumentDialog();
-  const [captureDocumentNameToast, onCaptureDocumentName] =
-    useCaptureDocumentNameToast();
+  const [captureDocumentNameToast, onCaptureDocumentID] =
+    useCaptureDocumentIDToast();
 
   const [changeDocumentNameDialog, openChangeDocumentNameDialog] =
     useChangeDocumentNameDialog();
@@ -371,7 +371,7 @@ export function useAtlasmapDialogs({
       onImportDocument,
       onDeleteDocument,
       onSpecifyInstanceSchema,
-      onCaptureDocumentName,
+      onCaptureDocumentID,
       onChangeDocumentName,
       onRemoveMappedField,
       onDeleteMapping,

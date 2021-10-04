@@ -55,18 +55,17 @@ function useCreateToast(): [ReactElement, (cb: () => void) => void] {
   return [toastElement, openToast];
 }
 
-export function useCaptureDocumentNameToast(): [
+export function useCaptureDocumentIDToast(): [
   ReactElement,
   (documentId: string) => void,
 ] {
-  const [captureDocumentNameToast, openCaptureDocumentNameToast] =
-    useCreateToast();
-  const onCaptureDocumentName = useCallback(
+  const [captureDocumentIDToast, openCaptureDocumentIDToast] = useCreateToast();
+  const onCaptureDocumentID = useCallback(
     (documentId: string) => {
       docId = documentId;
-      openCaptureDocumentNameToast(() => copyToClipboard(documentId));
+      openCaptureDocumentIDToast(() => copyToClipboard(documentId));
     },
-    [openCaptureDocumentNameToast],
+    [openCaptureDocumentIDToast],
   );
-  return [captureDocumentNameToast, onCaptureDocumentName];
+  return [captureDocumentIDToast, onCaptureDocumentID];
 }

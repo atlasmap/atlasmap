@@ -39,6 +39,8 @@ export const sourcesColumn = () => (
     <CanvasProvider>
       <Column data-testid={'column-source-area'} totalColumns={1}>
         <SourcesColumn
+          onCaptureDocumentID={action('onCaptureDocumentID')}
+          onChangeDocumentName={action('onChangeDocumentName')}
           onCreateConstant={action('onCreateConstant')}
           onEditConstant={action('onEditConstant')}
           onDeleteConstant={action('onDeleteConstant')}
@@ -80,6 +82,8 @@ export const targetsColumn = () => (
     <CanvasProvider>
       <Column data-testid={'column-target-area'} totalColumns={1}>
         <TargetsColumn
+          onCaptureDocumentID={action('onCaptureDocumentID')}
+          onChangeDocumentName={action('onChangeDocumentName')}
           onCreateProperty={action('onCreateProperty')}
           onEditProperty={action('onEditProperty')}
           onDeleteProperty={action('onDeleteProperty')}
