@@ -474,12 +474,12 @@ public class ADMArchiveHandler {
             throw new AtlasException(String.format("Directory must not be Null"));
         }
         File dirf = dir.toFile();
-        if (!dirf.isDirectory()) {
+        if (dirf.exists() && !dirf.isDirectory()) {
             throw new AtlasException(String.format("File '%s' is not a directory", dirf.getAbsolutePath()));
-        }
-        if (!dirf.exists()) {
+        } else if (!dirf.exists()) {
             dirf.mkdirs();
         }
+
         return true;
     }
 
