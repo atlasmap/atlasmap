@@ -94,6 +94,7 @@ public class AtlasService {
 
     public AtlasService() throws AtlasException {
         String atlasmapWorkspace = System.getProperty(ATLASMAP_WORKSPACE);
+        LOG.debug("AtlasMap backend Working directory: {}", atlasmapWorkspace);
         if (atlasmapWorkspace != null && atlasmapWorkspace.length() > 0) {
             baseFolder = atlasmapWorkspace;
         }
@@ -120,6 +121,7 @@ public class AtlasService {
 
         String atlasmapAdmPath = System.getProperty(ATLASMAP_ADM_PATH);
         if (atlasmapAdmPath != null && atlasmapAdmPath.length() > 0) {
+            LOG.debug("Loading initial ADM file: {}", atlasmapAdmPath);
             this.libraryLoader.clearLibaries();
             ADMArchiveHandler admHandler = new ADMArchiveHandler(this.libraryLoader);
             java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(0));
