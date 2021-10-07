@@ -15,11 +15,14 @@
  */
 package io.atlasmap.v2;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-<span class="fc" id="L22">public class Expression extends Action implements Serializable {</span>
+/** 
+ * @deprecated Expression field action is deprecated. {@link Mapping} level
+ * expression has to be used instead.
+ **/
+@Deprecated
+<span class="fc" id="L25">public class Expression extends Action {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -34,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getExpression() {
-<span class="fc" id="L37">        return expression;</span>
+<span class="fc" id="L40">        return expression;</span>
     }
 
     /**
@@ -48,8 +51,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The expression string to evaluate&quot;)
     @AtlasActionProperty(title = &quot;Expression&quot;, type = FieldType.STRING)
     public void setExpression(String expression) {
-<span class="fc" id="L51">        this.expression = expression;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L54">        this.expression = expression;</span>
+<span class="fc" id="L55">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

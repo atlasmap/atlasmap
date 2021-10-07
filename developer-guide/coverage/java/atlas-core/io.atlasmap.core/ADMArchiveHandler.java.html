@@ -474,12 +474,12 @@ public class ADMArchiveHandler {
 <span class="nc" id="L474">            throw new AtlasException(String.format(&quot;Directory must not be Null&quot;));</span>
         }
 <span class="fc" id="L476">        File dirf = dir.toFile();</span>
-<span class="pc bpc" id="L477" title="1 of 2 branches missed.">        if (!dirf.isDirectory()) {</span>
+<span class="pc bpc" id="L477" title="2 of 4 branches missed.">        if (dirf.exists() &amp;&amp; !dirf.isDirectory()) {</span>
 <span class="nc" id="L478">            throw new AtlasException(String.format(&quot;File '%s' is not a directory&quot;, dirf.getAbsolutePath()));</span>
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">        } else if (!dirf.exists()) {</span>
+<span class="nc" id="L480">            dirf.mkdirs();</span>
         }
-<span class="pc bpc" id="L480" title="1 of 2 branches missed.">        if (!dirf.exists()) {</span>
-<span class="nc" id="L481">            dirf.mkdirs();</span>
-        }
+
 <span class="fc" id="L483">        return true;</span>
     }
 

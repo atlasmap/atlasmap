@@ -28,8 +28,8 @@ import io.atlasmap.spi.ActionProcessor;
 import io.atlasmap.spi.FunctionFactory;
 import io.atlasmap.v2.ActionParameter;
 import io.atlasmap.v2.ActionParameters;
-import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 
 <span class="fc" id="L34">public class DefaultAtlasFunctionResolver implements FunctionResolver {</span>
 
@@ -96,10 +96,11 @@ import io.atlasmap.v2.Field;
 <span class="fc" id="L96">                        throw new IllegalArgumentException(String.format(&quot;The transformation '%s' expects more arguments&quot;, name));</span>
                     }
 
-<span class="fc" id="L99">                    Object answer = fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, arguments);</span>
-<span class="fc" id="L100">                    return AtlasModelFactory.wrapWithField(answer);</span>
+<span class="fc" id="L99">                    FieldGroup fields = new FieldGroup();</span>
+<span class="fc" id="L100">                    fields.getField().addAll(arguments);</span>
+<span class="fc" id="L101">                    return fieldActionService.buildAndProcessAction(actionProcessor, actionParameters, fields);</span>
                 } else {
-<span class="nc" id="L102">                    throw new IllegalArgumentException(String.format(&quot;The expression function or transformation '%s' was not found&quot;, name));</span>
+<span class="nc" id="L103">                    throw new IllegalArgumentException(String.format(&quot;The expression function or transformation '%s' was not found&quot;, name));</span>
                 }
             };
         }

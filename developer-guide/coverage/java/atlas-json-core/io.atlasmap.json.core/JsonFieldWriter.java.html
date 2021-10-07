@@ -317,7 +317,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 <span class="pc bpc" id="L317" title="1 of 2 branches missed.">        } else if (FieldType.BIG_INTEGER.equals(type)) {</span>
 <span class="fc" id="L318">            valueNode = rootNode.numberNode(new BigInteger(String.valueOf(value)));</span>
         } else {
-<span class="nc" id="L320">            valueNode = rootNode.nullNode();</span>
+<span class="nc" id="L320">            valueNode = rootNode.textNode(String.valueOf(value));</span>
         }
 <span class="pc bpc" id="L322" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
 <span class="nc bnc" id="L323" title="All 2 branches missed.">            String valueClass = value == null ? &quot;null&quot; : value.getClass().getName();</span>
