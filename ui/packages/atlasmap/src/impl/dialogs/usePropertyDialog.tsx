@@ -56,18 +56,19 @@ export function usePropertyDialog(
     [onPropertyCb, toggleOff],
   );
   function onValidation(name: string, scope: string): boolean {
+    let fieldNameExists = false;
     if (properties) {
       // Ensure proerty name/scope combination is unique
       const fields = properties.fields.filter(
         (fieldOrGroup) =>
           fieldOrGroup.name === name && fieldOrGroup.amField.scope === scope,
       );
-      return (
-        (name === initialProperty?.name && scope === initialProperty.scope) ||
-        fields.length === 0
-      );
+      fieldNameExists = fields.length > 0;
     }
-    return true;
+    return (
+      (name === initialProperty?.name && scope === initialProperty.scope) ||
+      !fieldNameExists
+    );
   }
   const dialog = (
     <PropertyDialog

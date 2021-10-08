@@ -71,19 +71,19 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   const [name, setName] = useState(initialName);
   const [valueType, setValueType] = useState(initialValueType);
   const [scope, setScope] = useState(initialScope);
-  const [isPropertyValid, setPropertyValid] = useState(true);
+  const [isPropertyValid, setPropertyValid] = useState(false);
   const [isPropertyNameValid, setPropertyNameValid] = useState(
     ValidatedOptions.default,
   );
-  const [isNameAndScopeUnique, setNameAndScopeUnique] = useState(true);
+  const [isNameAndScopeUnique, setNameAndScopeUnique] = useState(false);
 
   const reset = useCallback(() => {
     setName(initialName);
     setValueType(initialValueType);
     setScope(initialScope);
-    setPropertyValid(true);
+    setPropertyValid(false);
     setPropertyNameValid(ValidatedOptions.default);
-    setNameAndScopeUnique(true);
+    setNameAndScopeUnique(false);
   }, [initialName, initialValueType, initialScope]);
 
   const handleOnConfirm = useCallback(() => {
