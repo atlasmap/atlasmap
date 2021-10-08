@@ -70,8 +70,8 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   const [name, setName] = useState(initialName);
   const [value, setValue] = useState(initialValue);
   const [valueType, setValueType] = useState(initialValueType);
-  const [isConstantNameUnique, setConstantNameUnique] = useState(true);
-  const [isConstantValid, setConstantValid] = useState(true);
+  const [isConstantNameUnique, setConstantNameUnique] = useState(false);
+  const [isConstantValid, setConstantValid] = useState(false);
   const [isConstantNameValid, setConstantNameValid] = useState(
     ValidatedOptions.default,
   );
@@ -80,9 +80,9 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
     setName(initialName);
     setValue(initialValue);
     setValueType(initialValueType);
-    setConstantValid(true);
+    setConstantValid(false);
     setConstantNameValid(ValidatedOptions.default);
-    setConstantNameUnique(true);
+    setConstantNameUnique(false);
   }, [initialName, initialValue, initialValueType]);
 
   const handleOnConfirm = useCallback(() => {

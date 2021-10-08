@@ -56,14 +56,15 @@ export function useConstantDialog(
     [initialConstant, onConstantCb, toggleOff],
   );
   function onValidation(name: string): boolean {
+    let fieldNameExists = false;
     if (constantsDoc) {
       // Ensure constant name is unique
       const fields = constantsDoc.fields.filter(
         (fieldOrGroup) => fieldOrGroup.name === name,
       );
-      return name === initialConstant?.name || fields.length === 0;
+      fieldNameExists = fields.length > 0;
     }
-    return true;
+    return name === initialConstant?.name || !fieldNameExists;
   }
   const dialog = (
     <ConstantDialog
