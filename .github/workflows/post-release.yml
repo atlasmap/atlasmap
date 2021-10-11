@@ -31,7 +31,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           ATLASMAP_IMAGE="atlasmap/atlasmap"
-          RELEASE_VERSION=$(echo GITHUB_REF | cut -c 20-)
+          RELEASE_VERSION=$(echo $GITHUB_REF | cut -c 20-)
           JKUBE_OPTION="-Pdocker -Djkube.docker.username=${DOCKER_USER}"
           JKUBE_OPTION="${JKUBE_OPTION} -Djkube.docker.password=${DOCKER_PASSWORD}"
           JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.primary=${RELEASE_VERSION}"
