@@ -1,0 +1,44 @@
+name: 'Post Release'
+
+on:
+  push:
+    tags: [ atlasmap-*.*.* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java versions
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: 'adopt'
+      - name: Cache Maven repo
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build
+        run: mvn -DskipTests install
+      - name: Docker Push
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          ATLASMAP_IMAGE="atlasmap/atlasmap"
+          RELEASE_VERSION=$(echo GITHUB_REF | cut -c 20-)
+          JKUBE_OPTION="-Pdocker -Djkube.docker.username=${DOCKER_USER}"
+          JKUBE_OPTION="${JKUBE_OPTION} -Djkube.docker.password=${DOCKER_PASSWORD}"
+          JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.primary=${RELEASE_VERSION}"
+          if [ $RELEASE_VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]; then
+            MAJOR_MINOR_VERSION=$(echo $RELEASE_VERSION | cut -f1,2 -d'.')
+            JKUBE_OPTION="${JKUBE_OPTION} -Dimage.tag.secondary=${MAJOR_MINOR_VERSION}"
+          fi
+          JKUBE_OPTION="${JKUBE_OPTION} k8s:build k8s:push"
+          cd standalone
+          mvn --batch-mode $JKUBE_OPTION
