@@ -35,7 +35,7 @@ public class Application extends SpringBootServletInitializer {
         String version = DefaultAtlasContextFactory.getInstance().getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);
         LOG.info("### AtlasMap Data Mapper UI {} started at port: {} ###",
                 version,
-                context.getEnvironment().getProperty("server.port"));
+                context.getEnvironment().getProperty("local.server.port"));
     }
 
 }
