@@ -120,6 +120,6 @@ export class CsvInspectionRequestModel extends DocumentInspectionRequestModel {
 }
 
 export class CsvInspectionRequestOptions extends DocumentInspectionRequestOptions {
-  json = this.doc.inspectionSource;
+  body = this.doc.inspectionSource;
   searchParams: { [key: string]: string } = this.doc.inspectionParameters;
 }

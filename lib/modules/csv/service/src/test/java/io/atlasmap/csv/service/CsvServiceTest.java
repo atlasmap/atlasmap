@@ -91,4 +91,23 @@ public class CsvServiceTest {
         assertEquals("2", fields.get(2).getName());
     }
 
+    @Test
+    public void testSchemaFile() throws Exception {
+        InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("test.csv");
+
+        Response res = csvService.inspect(inputStream, null, ",", true, null, null,
+            null, null, null, null, null, null,
+            null, null, null);
+        Object entity = res.getEntity();
+        assertEquals(byte[].class, entity.getClass());
+        CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
+        CsvComplexType complexType = (CsvComplexType) csvInspectionResponse.getCsvDocument().getFields().getField().get(0);
+        List<CsvField> fields = complexType.getCsvFields().getCsvField();
+        assertEquals(5, fields.size());
+        assertEquals("sourceCsvString", fields.get(0).getName());
+        assertEquals("sourceCsvNumber", fields.get(1).getName());
+        assertEquals("sourceCsvDecimal", fields.get(2).getName());
+        assertEquals("sourceCsvDate", fields.get(3).getName());
+        assertEquals("sourceCsvBoolean", fields.get(4).getName());
+    }
 }

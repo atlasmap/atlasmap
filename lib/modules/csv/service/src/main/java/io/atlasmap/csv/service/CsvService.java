@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
@@ -97,6 +98,9 @@ public class CsvService {
 
         CsvInspectionResponse response = new CsvInspectionResponse();
         try {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Options: delimiter={}, firstRecordAsHeader={}", delimiter, firstRecordAsHeader);
+            }
             CsvConfig csvConfig = new CsvConfig(format);
             if (delimiter != null) {
                 csvConfig.setDelimiter(delimiter.charAt(0));
@@ -134,6 +138,9 @@ public class CsvService {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(("Response: {}" + new ObjectMapper().writeValueAsString(response)));
+        }
         return Response.ok().entity(toJson(response)).build();
     }
 }
