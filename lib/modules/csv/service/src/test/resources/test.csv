@@ -1,0 +1,7 @@
+sourceCsvString,sourceCsvNumber,sourceCsvDecimal,sourceCsvDate,sourceCsvBoolean
+csv0,0,0.0,1989-05-05,true
+csv1,10,10.0,1989-05-05,true
+csv2,20,20.0,1989-05-05,true
+csv3,30,30.0,1989-05-05,false
+csv4,40,40.0,1989-05-05,false
+
