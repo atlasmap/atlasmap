@@ -24,7 +24,6 @@ const obj = {
   component: ConstantDialog,
 };
 export default obj;
-const emptyOptions = [{ label: '', value: '' }];
 const options = [
   { label: 'Foo', value: 'foo' },
   { label: 'Bar', value: 'bar' },
@@ -47,22 +46,5 @@ export const constantDialog = () => (
     )}
     valueTypeOptions={options}
     onValidation={() => boolean('Confirm', true)}
-  />
-);
-
-export const constantDialogEmpty = () => (
-  <ConstantDialog
-    title={text('Title', 'Constant dialog title')}
-    isOpen={boolean('Is open', true)}
-    onCancel={action('onCancel')}
-    onConfirm={action('onConfirm')}
-    value={text('Initial name', '')}
-    valueType={select(
-      'Initial valueType',
-      valueTypeOptions,
-      valueTypeOptions[0],
-    )}
-    valueTypeOptions={emptyOptions}
-    onValidation={() => boolean('Confirm', false)}
   />
 );
