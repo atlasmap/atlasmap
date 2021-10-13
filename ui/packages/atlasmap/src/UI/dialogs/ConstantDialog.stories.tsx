@@ -33,7 +33,7 @@ const options = [
 
 const valueTypeOptions = options.map((o) => o.value);
 
-export const propertyDialog = () => (
+export const constantDialog = () => (
   <ConstantDialog
     title={text('Title', 'Constant dialog title')}
     isOpen={boolean('Is open', true)}
@@ -46,11 +46,11 @@ export const propertyDialog = () => (
       valueTypeOptions[0],
     )}
     valueTypeOptions={options}
-    onValidation={() => true}
+    onValidation={() => boolean('Confirm', true)}
   />
 );
 
-export const propertyDialogEmpty = () => (
+export const constantDialogEmpty = () => (
   <ConstantDialog
     title={text('Title', 'Constant dialog title')}
     isOpen={boolean('Is open', true)}
@@ -63,6 +63,6 @@ export const propertyDialogEmpty = () => (
       valueTypeOptions[0],
     )}
     valueTypeOptions={emptyOptions}
-    onValidation={() => false}
+    onValidation={() => boolean('Confirm', false)}
   />
 );
