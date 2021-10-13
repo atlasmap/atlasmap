@@ -110,6 +110,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   function validateProperty(name: string, scope: string): boolean {
     if (!name || name.length === 0) {
       setPropertyNameValid(ValidatedOptions.default);
+      setPropertyValid(false);
       return false;
     }
     const nameRegex = /^[a-zA-Z0-9_@]+$/;
