@@ -70,7 +70,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   const [name, setName] = useState(initialName);
   const [value, setValue] = useState(initialValue);
   const [valueType, setValueType] = useState(initialValueType);
-  const [isConstantNameUnique, setConstantNameUnique] = useState(false);
+  const [isConstantNameUnique, setConstantNameUnique] = useState(true);
   const [isConstantValid, setConstantValid] = useState(false);
   const [isConstantNameValid, setConstantNameValid] = useState(
     ValidatedOptions.default,
@@ -82,7 +82,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
     setValueType(initialValueType);
     setConstantValid(false);
     setConstantNameValid(ValidatedOptions.default);
-    setConstantNameUnique(false);
+    setConstantNameUnique(true);
   }, [initialName, initialValue, initialValueType]);
 
   const handleOnConfirm = useCallback(() => {
@@ -108,6 +108,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   function validateConstant(name: string, value: string): boolean {
     if (!name || name.length === 0) {
       setConstantNameValid(ValidatedOptions.default);
+      setConstantValid(false);
       return false;
     }
     const nameRegex = /^[a-zA-Z0-9_@-]+$/;

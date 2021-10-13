@@ -24,7 +24,6 @@ const obj = {
   component: ConstantDialog,
 };
 export default obj;
-
 const options = [
   { label: 'Foo', value: 'foo' },
   { label: 'Bar', value: 'bar' },
@@ -33,7 +32,7 @@ const options = [
 
 const valueTypeOptions = options.map((o) => o.value);
 
-export const propertyDialog = () => (
+export const constantDialog = () => (
   <ConstantDialog
     title={text('Title', 'Constant dialog title')}
     isOpen={boolean('Is open', true)}
@@ -46,6 +45,6 @@ export const propertyDialog = () => (
       valueTypeOptions[0],
     )}
     valueTypeOptions={options}
-    onValidation={() => true}
+    onValidation={() => boolean('Confirm', true)}
   />
 );
