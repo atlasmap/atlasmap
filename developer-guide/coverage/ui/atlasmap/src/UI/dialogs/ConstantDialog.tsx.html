@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.88% </span>
+                <span class="strong">5.8% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/68</span>
+                <span class='fraction'>4/69</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.84% </span>
+                <span class="strong">7.69% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/51</span>
+                <span class='fraction'>4/52</span>
             </div>
         
             
@@ -246,7 +246,8 @@
 <a name='L188'></a><a href='#L188'>188</a>
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -354,6 +355,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -508,7 +510,7 @@ export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <sp
   const [name<span class="cstat-no" title="statement not covered" >, s</span>etName<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialName);</span>
   const [value<span class="cstat-no" title="statement not covered" >, s</span>etValue<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialValue);</span>
   const [valueType<span class="cstat-no" title="statement not covered" >, s</span>etValueType<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialValueType);</span>
-  const [isConstantNameUnique<span class="cstat-no" title="statement not covered" >, s</span>etConstantNameUnique<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(false);</span>
+  const [isConstantNameUnique<span class="cstat-no" title="statement not covered" >, s</span>etConstantNameUnique<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(true);</span>
   const [isConstantValid<span class="cstat-no" title="statement not covered" >, s</span>etConstantValid<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(false);</span>
   const [isConstantNameValid<span class="cstat-no" title="statement not covered" >, s</span>etConstantNameValid<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(</span>
     ValidatedOptions.default,
@@ -520,7 +522,7 @@ export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <sp
 <span class="cstat-no" title="statement not covered" >    setValueType(initialValueType);</span>
 <span class="cstat-no" title="statement not covered" >    setConstantValid(false);</span>
 <span class="cstat-no" title="statement not covered" >    setConstantNameValid(ValidatedOptions.default);</span>
-<span class="cstat-no" title="statement not covered" >    setConstantNameUnique(false);</span>
+<span class="cstat-no" title="statement not covered" >    setConstantNameUnique(true);</span>
   }, [initialName, initialValue, initialValueType]);
 &nbsp;
   const handleOnConfirm = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
@@ -546,6 +548,7 @@ export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <sp
   function <span class="fstat-no" title="function not covered" >validateConstant(</span>name: string, value: string): boolean {
 <span class="cstat-no" title="statement not covered" >    if (!name || name.length === 0) {</span>
 <span class="cstat-no" title="statement not covered" >      setConstantNameValid(ValidatedOptions.default);</span>
+<span class="cstat-no" title="statement not covered" >      setConstantValid(false);</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
     }
     const nameRegex = <span class="cstat-no" title="statement not covered" >/^[a-zA-Z0-9_@-]+$/;</span>
@@ -633,7 +636,7 @@ export const ConstantDialog: FunctionComponent&lt;IConstantDialogProps&gt; = <sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Oct 13 2021 12:17:18 GMT+0000 (Coordinated Universal Time)
+                at Wed Oct 13 2021 17:32:20 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
