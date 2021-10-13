@@ -351,7 +351,7 @@ Unit Test Coverage Report/atlas-csv-model,io.atlasmap.csv.v2,CsvDataSource,80,6,
 Unit Test Coverage Report/atlas-csv-model,io.atlasmap.csv.v2,CsvInspectionResponse,4,20,0,0,2,8,1,6,1,6
 Unit Test Coverage Report/atlas-csv-module,io.atlasmap.csv.module,CsvModule,115,156,14,14,17,42,15,11,2,10
 Unit Test Coverage Report/atlas-csv-module,io.atlasmap.csv.module,CsvValidationService,26,0,2,0,7,0,6,0,5,0
-Unit Test Coverage Report/atlas-csv-service,io.atlasmap.csv.service,CsvService,51,93,3,5,9,28,4,5,1,4
+Unit Test Coverage Report/atlas-csv-service,io.atlasmap.csv.service,CsvService,70,99,5,7,11,30,6,5,1,4
 Unit Test Coverage Report/atlas-dfdl-core,io.atlasmap.dfdl.core.schema,CsvDfdlSchemaGenerator.NamespaceResolver,57,35,8,0,11,7,6,2,2,2
 Unit Test Coverage Report/atlas-dfdl-core,io.atlasmap.dfdl.core.schema,CsvDfdlSchemaGenerator,47,165,6,14,5,32,9,8,3,4
 Unit Test Coverage Report/atlas-dfdl-core,io.atlasmap.dfdl.core.schema,CsvDfdlSchemaGenerator.Options,0,48,0,0,0,8,0,3,0,3
