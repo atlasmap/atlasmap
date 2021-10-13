@@ -108,6 +108,7 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
   function validateConstant(name: string, value: string): boolean {
     if (!name || name.length === 0) {
       setConstantNameValid(ValidatedOptions.default);
+      setConstantValid(false);
       return false;
     }
     const nameRegex = /^[a-zA-Z0-9_@-]+$/;
