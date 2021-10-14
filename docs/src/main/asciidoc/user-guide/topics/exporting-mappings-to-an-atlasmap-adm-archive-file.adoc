@@ -1,8 +1,8 @@
-[id='exporting-mappings-to-an-atlasmap-catalog-file']
-= Exporting mappings to an AtlasMap catalog file
+[id='exporting-mappings-to-an-adm-archive-file']
+= Exporting mappings to an ADM archive file
 
 After all mappings are defined, save the mappings by exporting
-them to an AtlasMap `.adm` catalog file:
+them to an ADM archive file:
 
 . Click the *AtlasMap* menu and select *Export the current mappings and support files into a catalog (.adm)*
 +
