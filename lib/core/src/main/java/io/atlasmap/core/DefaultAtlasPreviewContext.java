@@ -135,6 +135,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                             AtlasUtil.addAudit(session, targetField,
                                     "It's not yet supported to have a collection field as a part of multiple target fields in a same mapping",
                                     AuditStatus.ERROR, null);
+                            session.getAudits().getAudit().addAll(session.head().getAudits());
                             return session.getAudits();
                         }
                         if (index != null) {
@@ -153,6 +154,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                             collectionHelper.copyCollectionIndexes(sourceFieldGroup, subSourceField, subTargetField, previousTargetField);
                             previousTargetField = subTargetField;
                             if (!convertSourceToTarget(session, subSourceField, subTargetField)) {
+                                session.getAudits().getAudit().addAll(session.head().getAudits());
                                 return session.getAudits();
                             };
                             Field processed = subTargetField;
@@ -177,9 +179,11 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                     }
                 }
                 if (session.hasErrors()) {
+                    session.getAudits().getAudit().addAll(session.head().getAudits());
                     return session.getAudits();
                 }
                 if (!convertSourceToTarget(session, session.head().getSourceField(), targetField)) {
+                    session.getAudits().getAudit().addAll(session.head().getAudits());
                     return session.getAudits();
                 }
                 Field processed = targetField;
@@ -193,6 +197,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
             targetField = targetFields.get(0);
             Field combined = processCombineField(session, cloned, sourceFields, targetField);
             if (!convertSourceToTarget(session, combined, targetField)) {
+                session.getAudits().getAudit().addAll(session.head().getAudits());
                 return session.getAudits();
             }
             applyFieldActions(session, targetField);
@@ -208,9 +213,11 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
                 if (LOG.isDebugEnabled()) {
                     LOG.error("", e);
                 }
+                session.getAudits().getAudit().addAll(session.head().getAudits());
                 return session.getAudits();
             }
             if (separatedFields == null) {
+                session.getAudits().getAudit().addAll(session.head().getAudits());
                 return session.getAudits();
             }
             for (Field f : targetFields) {
@@ -241,6 +248,7 @@ class DefaultAtlasPreviewContext extends DefaultAtlasContext implements AtlasPre
         }
         mapping.getOutputField().clear();
         mapping.getOutputField().addAll(cloned.getOutputField());
+        session.getAudits().getAudit().addAll(session.head().getAudits());
         return session.getAudits();
     }
 

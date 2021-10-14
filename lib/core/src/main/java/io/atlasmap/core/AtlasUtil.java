@@ -477,6 +477,11 @@ public class AtlasUtil {
                   .replaceAll("%5D", "]");
     }
 
+    /**
+     * Delete specified directory and the contents in it.
+     * @see #deleteDirectoryContents
+     * @param targetDir
+     */
     public static void deleteDirectory(File targetDir) {
         File[] allContents = targetDir.listFiles();
         if (allContents != null) {
@@ -492,6 +497,12 @@ public class AtlasUtil {
         return;
     }
 
+    /**
+     * Delete all contents in the specified directory.
+     * 
+     * @see #deleteDirectory
+     * @param targetDir
+     */
     public static void deleteDirectoryContents(File targetDir) {
         File[] allContents = targetDir.listFiles();
         if (allContents != null) {
