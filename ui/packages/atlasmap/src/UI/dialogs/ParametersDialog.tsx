@@ -38,7 +38,8 @@ import { IParameter } from '@atlasmap/core';
 
 export interface IParametersDialogProps {
   title: string;
-  parameters: IParameter[];
+  readonly parameters: IParameter[];
+  readonly initialParameters: IParameter[];
   isOpen: IConfirmationDialogProps['isOpen'];
   onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (parameters: IParameter[]) => void;
@@ -46,23 +47,25 @@ export interface IParametersDialogProps {
 
 export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   title,
-  parameters: initialParameters = [],
+  parameters: totalAvailableParameters = [],
+  initialParameters,
   isOpen,
   onCancel,
   onConfirm,
 }) => {
+  // Defined parameters are the current working set of user-selected parameters.
   const [definedParameters, setDefinedParameters] = useState<IParameter[]>([]);
 
-  const availableParameters: IParameter[] = initialParameters.filter(
+  // Available parameters are: (total-available-parameters - defined-parameters).
+  const availableParameters: IParameter[] = totalAvailableParameters.filter(
     (param) => !definedParameters.map((p) => p.name).includes(param.name),
   );
 
   const reset = useCallback(() => {
-    setDefinedParameters(
-      initialParameters.filter((p) => p.required || p.enabled),
-    );
+    setDefinedParameters(initialParameters);
   }, [initialParameters]);
 
+  // Callback to actually set the list of user-selected (defined) parameters.
   const handleOnConfirm = useCallback(() => {
     onConfirm(definedParameters);
   }, [definedParameters, onConfirm]);
