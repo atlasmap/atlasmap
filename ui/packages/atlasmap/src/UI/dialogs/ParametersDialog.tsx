@@ -131,7 +131,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
     <ConfirmationDialog
       title={title}
       onCancel={handleOnCancel}
-      onConfirm={definedParameters.length > 0 ? handleOnConfirm : undefined}
+      onConfirm={definedParameters?.length > 0 ? handleOnConfirm : undefined}
       isOpen={isOpen}
     >
       <Form isHorizontal style={formLabelColumnWidth}>
@@ -229,7 +229,9 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
               marginTop: '1.0rem',
               width: '40',
             }}
-            isDisabled={availableParameters.length === 0}
+            isDisabled={
+              !availableParameters || availableParameters.length === 0
+            }
             onClick={handleAddParameter}
             variant="link"
             icon={<PlusIcon />}
