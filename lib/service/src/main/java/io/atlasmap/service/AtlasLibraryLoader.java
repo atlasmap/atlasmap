@@ -24,6 +24,7 @@ import java.lang.reflect.Modifier;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -85,13 +86,26 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         reload();
     }
 
-    public void clearLibaries() {
+    public void clearLibraries() {
+        if (this.urlClassLoader != null) {
+            try {
+                this.urlClassLoader.close();
+            } catch (Exception e) {
+                LOG.warn("Ignoring an error while closing an old URLClassLoader: {}", e.getMessage());
+            }
+            this.urlClassLoader = null;
+        }
+
         File[] files = saveDir.listFiles();
         if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {
             return;
         }
         for (File f : saveDir.listFiles()) {
-            f.delete();
+            try {
+                Files.delete(f.toPath());
+             } catch (Exception e) {
+                LOG.warn("Failed to remove jar file: '{}'", e.getMessage());
+            };
         }
         reload();
     }

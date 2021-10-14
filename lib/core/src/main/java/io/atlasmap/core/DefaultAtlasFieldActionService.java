@@ -659,6 +659,12 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         FieldType currentType = determineFieldType(field);
         for (Action action : actions) {
             ActionProcessor processor = findActionProcessor(action, currentType);
+            if (processor == null) {
+                AtlasUtil.addAudit(session, field, String.format(
+                    "Couldn't find metadata for a FieldAction '%s', please make sure it's in the classpath, and also have a service declaration under META-INF/services. Ignoring...", action.getDisplayName()),
+                    AuditStatus.WARN, null);
+                continue;
+            }
             ActionDetail detail = processor.getActionDetail();
             if (detail == null) {
                 AtlasUtil.addAudit(session, field, String.format(
