@@ -47,6 +47,7 @@ export function useParametersDialog(
       onCancel={toggleOff}
       onConfirm={onConfirm}
       parameters={parameters}
+      initialParameters={parameters.filter((p) => p.required || p.enabled)}
     />
   );
   const onOpenParametersDialog = useCallback(

@@ -13,11 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { boolean, text } from '@storybook/addon-knobs';
 
+import { boolean, text } from '@storybook/addon-knobs';
 import { ParametersDialog } from './ParametersDialog';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
+import { getCsvParameterOptions } from '@atlasmap/core';
 
 const obj = {
   title: 'UI|Dialogs',
@@ -25,7 +26,7 @@ const obj = {
 };
 export default obj;
 
-const parameters = [
+const initialParameters = [
   {
     name: 'format',
     label: 'CSV File Format',
@@ -127,6 +128,7 @@ const parameters = [
   { name: 'quote', label: 'Quote', value: '', required: false, enabled: false },
 ];
 
+const parameters = getCsvParameterOptions();
 /**
  * The 'Select' parameters dialog doesn't specify predefined parameters, the
  * 'Edit' dialog does.
@@ -139,6 +141,8 @@ export const parametersSelectDialog = () => (
     isOpen={boolean('Is open', true)}
     onCancel={action('onCancel')}
     onConfirm={action('onConfirm')}
+    parameters={parameters}
+    initialParameters={[]}
   />
 );
 
@@ -149,5 +153,6 @@ export const parametersEditDialog = () => (
     onCancel={action('onCancel')}
     onConfirm={action('onConfirm')}
     parameters={parameters}
+    initialParameters={initialParameters}
   />
 );
