@@ -62,7 +62,11 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   );
 
   const reset = useCallback(() => {
-    setDefinedParameters(initialParameters);
+    if (initialParameters) {
+      setDefinedParameters(initialParameters);
+    } else {
+      setDefinedParameters([]);
+    }
   }, [initialParameters]);
 
   // Callback to actually set the list of user-selected (defined) parameters.
