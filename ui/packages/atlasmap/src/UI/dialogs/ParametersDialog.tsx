@@ -38,7 +38,8 @@ import { IParameter } from '@atlasmap/core';
 
 export interface IParametersDialogProps {
   title: string;
-  parameters: IParameter[];
+  readonly parameters: IParameter[];
+  readonly initialParameters: IParameter[];
   isOpen: IConfirmationDialogProps['isOpen'];
   onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (parameters: IParameter[]) => void;
@@ -46,23 +47,29 @@ export interface IParametersDialogProps {
 
 export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
   title,
-  parameters: initialParameters = [],
+  parameters: totalAvailableParameters = [],
+  initialParameters,
   isOpen,
   onCancel,
   onConfirm,
 }) => {
+  // Defined parameters are the current working set of user-selected parameters.
   const [definedParameters, setDefinedParameters] = useState<IParameter[]>([]);
 
-  const availableParameters: IParameter[] = initialParameters.filter(
+  // Available parameters are: (total-available-parameters - defined-parameters).
+  const availableParameters: IParameter[] = totalAvailableParameters.filter(
     (param) => !definedParameters.map((p) => p.name).includes(param.name),
   );
 
   const reset = useCallback(() => {
-    setDefinedParameters(
-      initialParameters.filter((p) => p.required || p.enabled),
-    );
+    if (initialParameters) {
+      setDefinedParameters(initialParameters);
+    } else {
+      setDefinedParameters([]);
+    }
   }, [initialParameters]);
 
+  // Callback to actually set the list of user-selected (defined) parameters.
   const handleOnConfirm = useCallback(() => {
     onConfirm(definedParameters);
   }, [definedParameters, onConfirm]);
@@ -128,7 +135,7 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
     <ConfirmationDialog
       title={title}
       onCancel={handleOnCancel}
-      onConfirm={definedParameters.length > 0 ? handleOnConfirm : undefined}
+      onConfirm={definedParameters?.length > 0 ? handleOnConfirm : undefined}
       isOpen={isOpen}
     >
       <Form isHorizontal style={formLabelColumnWidth}>
@@ -226,7 +233,9 @@ export const ParametersDialog: FunctionComponent<IParametersDialogProps> = ({
               marginTop: '1.0rem',
               width: '40',
             }}
-            isDisabled={availableParameters.length === 0}
+            isDisabled={
+              !availableParameters || availableParameters.length === 0
+            }
             onClick={handleAddParameter}
             variant="link"
             icon={<PlusIcon />}
