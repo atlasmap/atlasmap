@@ -465,28 +465,79 @@ and the user-specified concur parameter.
 Implement the <code>AtlasFieldAction</code> class as follows:</p>
 </div>
 <div class="listingblock">
+<div class="title">src/main/java/io/atlasmap/maven/test/PaulsFieldActions.java</div>
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.service.my;
+<pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.maven.test;
 
-import java.io.Serializable;
-import io.atlasmap.v2.*
-import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
+import io.atlasmap.spi.AtlasFieldAction;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    public static class Concur extends Action implements Serializable {
-        @AtlasActionProperty(title = "Pauls Concur Param", type = FieldType.STRING)
-        public String concurarg = "-paul-";
-
-    }
-
     @AtlasActionProcessor
-    public static String concur(Concur action, String userInput) {
-        return "concur-" + action.concurarg + userInput;
+    public static String myCustomFieldAction(PaulsFieldActionsModel myCustomFieldAction, String input) {
+        return "Paul's custom field action: " + myCustomFieldAction.getPaulsParam() + " payload: " + input;
     }
 
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And also implement a model class <code>PaulsFieldActionsModel</code> - model class can declare transformation parameters as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">src/main/java/io/atlasmap/maven/test/PaulsFieldActionsModel.java</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.maven.test;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.AtlasActionProperty;
+import io.atlasmap.v2.FieldType;
+
+public class PaulsFieldActionsModel extends Action implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private String paulsParam = "";
+    /**
+     * Example of a custom field action with a string parameter.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String}
+     *
+     */
+    @JsonPropertyDescription("Paul's custom field action parameter to display")
+    @AtlasActionProperty(title = "Paul's custom field action string parameter", type = FieldType.STRING)
+    public void setPaulsParam(String value) {
+        paulsParam = value;
+    }
+
+    public String getPaulsParam() {
+        return paulsParam;
+    }
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Declare for Java service loader</p>
+<div class="paragraph">
+<p>Then both class needs to be declared in <code>META-INF/services</code> to get them registered through Java service loader.</p>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/META-INF/services/io.atlasmap.v2.Action</div>
+<div class="content">
+<pre>io.atlasmap.maven.test.PaulsFieldActionsModel</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/META-INF/services/io.atlasmap.spi.AtlasFieldAction</div>
+<div class="content">
+<pre>io.atlasmap.maven.test.PaulsFieldActions</pre>
 </div>
 </div>
 </li>
@@ -553,7 +604,7 @@ type a string, for example, <code>bat</code>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-10-13 17:20:12 UTC
+Last updated 2021-10-14 16:23:55 UTC
 </div>
 </div>
 </body>

@@ -445,7 +445,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
 <span id="revnumber">version 2.4.0-SNAPSHOT,</span>
-<span id="revdate">2021-10-13</span>
+<span id="revdate">2021-10-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap User Guide</div>
@@ -484,30 +484,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#creating-a-custom-transformation">4.11. Creating a custom transformation</a></li>
 </ul>
 </li>
-<li><a href="#exporting-mappings-to-an-atlasmap-catalog-file">5. Exporting mappings to an AtlasMap catalog file</a></li>
-<li><a href="#resetting-data-files-in-atlasmap">6. Resetting data files in AtlasMap</a></li>
-<li><a href="#running-atlasmap-with-apache-camel">7. Running AtlasMap with Apache Camel</a></li>
-<li><a href="#atlasmap-runtime-examples">8. AtlasMap Runtime Examples</a>
+<li><a href="#resetting-data-files-in-atlasmap">5. Resetting data files in AtlasMap</a></li>
+<li><a href="#running-atlasmap-with-apache-camel">6. Running AtlasMap with Apache Camel</a></li>
+<li><a href="#atlasmap-runtime-examples">7. AtlasMap Runtime Examples</a>
 <ul class="sectlevel2">
-<li><a href="#using-atlasmap-api">8.1. Using AtlasMap API</a>
+<li><a href="#using-atlasmap-api">7.1. Using AtlasMap API</a>
 <ul class="sectlevel3">
-<li><a href="#atlasmap-runtime-api-example">8.1.1. AtlasMap runtime API example</a></li>
-<li><a href="#atlasmap-runtime-api-with-adm-archive-file-example">8.1.2. AtlasMap runtime API with ADM archive file example</a></li>
+<li><a href="#atlasmap-runtime-api-example">7.1.1. AtlasMap runtime API example</a></li>
+<li><a href="#atlasmap-runtime-api-with-adm-archive-file-example">7.1.2. AtlasMap runtime API with ADM archive file example</a></li>
 </ul>
 </li>
-<li><a href="#running-with-apache-camel-2-x">8.2. Running with Apache Camel 2.x</a>
+<li><a href="#running-with-apache-camel-2-x">7.2. Running with Apache Camel 2.x</a>
 <ul class="sectlevel3">
-<li><a href="#atlasmap-running-with-apache-camel2">8.2.1. AtlasMap running with Apache Camel2</a></li>
-<li><a href="#atlasmap-running-with-apache-camel2-blueprint-xml">8.2.2. AtlasMap running with Apache Camel2 :: Blueprint XML</a></li>
-<li><a href="#atlasmap-running-with-apache-camel2-message-map">8.2.3. AtlasMap running with Apache Camel2 :: Message Map</a></li>
-<li><a href="#atlasmap-running-with-apache-camel-multiple-source-documents">8.2.4. AtlasMap running with Apache Camel :: Multiple source Documents</a></li>
+<li><a href="#atlasmap-running-with-apache-camel2">7.2.1. AtlasMap running with Apache Camel2</a></li>
+<li><a href="#atlasmap-running-with-apache-camel2-blueprint-xml">7.2.2. AtlasMap running with Apache Camel2 :: Blueprint XML</a></li>
+<li><a href="#atlasmap-running-with-apache-camel2-message-map">7.2.3. AtlasMap running with Apache Camel2 :: Message Map</a></li>
+<li><a href="#atlasmap-running-with-apache-camel-multiple-source-documents">7.2.4. AtlasMap running with Apache Camel :: Multiple source Documents</a></li>
 </ul>
 </li>
-<li><a href="#running-with-apache-camel-3-x">8.3. Running with Apache Camel 3.x</a>
+<li><a href="#running-with-apache-camel-3-x">7.3. Running with Apache Camel 3.x</a>
 <ul class="sectlevel3">
-<li><a href="#atlasmap-running-with-apache-camel-3">8.3.1. AtlasMap running with Apache Camel 3</a></li>
-<li><a href="#atlasmap-running-with-apache-camel3-message-map">8.3.2. AtlasMap running with Apache Camel3 :: Message Map</a></li>
-<li><a href="#atlasmap-running-with-apache-camel3-multiple-source-documents">8.3.3. AtlasMap running with Apache Camel3 :: Multiple source Documents</a></li>
+<li><a href="#atlasmap-running-with-apache-camel-3">7.3.1. AtlasMap running with Apache Camel 3</a></li>
+<li><a href="#atlasmap-running-with-apache-camel3-message-map">7.3.2. AtlasMap running with Apache Camel3 :: Message Map</a></li>
+<li><a href="#atlasmap-running-with-apache-camel3-multiple-source-documents">7.3.3. AtlasMap running with Apache Camel3 :: Multiple source Documents</a></li>
 </ul>
 </li>
 </ul>
@@ -592,7 +591,7 @@ AtlasMap mapping definition and processes data mappings as a part of a Camel rou
 <p><a href="#mapping-fields-in-atlasmap">Mapping fields in AtlasMap</a></p>
 </li>
 <li>
-<p><a href="#exporting-mappings-to-an-atlasmap-catalog-file">Exporting mappings to an AtlasMap catalog file</a></p>
+<p><a href="#exporting-mappings-to-an-atlasmap-catalog-file">[exporting-mappings-to-an-atlasmap-catalog-file]</a></p>
 </li>
 <li>
 <p><a href="#resetting-data-files-in-atlasmap">Resetting data files in AtlasMap</a></p>
@@ -2798,28 +2797,79 @@ and the user-specified concur parameter.
 Implement the <code>AtlasFieldAction</code> class as follows:</p>
 </div>
 <div class="listingblock">
+<div class="title">src/main/java/io/atlasmap/maven/test/PaulsFieldActions.java</div>
 <div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.service.my;
+<pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.maven.test;
 
-import java.io.Serializable;
-import io.atlasmap.v2.*
-import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.spi.AtlasActionProcessor;
+import io.atlasmap.spi.AtlasFieldAction;
 
 public class PaulsFieldActions implements AtlasFieldAction {
 
-    public static class Concur extends Action implements Serializable {
-        @AtlasActionProperty(title = "Pauls Concur Param", type = FieldType.STRING)
-        public String concurarg = "-paul-";
-
-    }
-
     @AtlasActionProcessor
-    public static String concur(Concur action, String userInput) {
-        return "concur-" + action.concurarg + userInput;
+    public static String myCustomFieldAction(PaulsFieldActionsModel myCustomFieldAction, String input) {
+        return "Paul's custom field action: " + myCustomFieldAction.getPaulsParam() + " payload: " + input;
     }
 
 }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And also implement a model class <code>PaulsFieldActionsModel</code> - model class can declare transformation parameters as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">src/main/java/io/atlasmap/maven/test/PaulsFieldActionsModel.java</div>
+<div class="content">
+<pre class="highlight"><code class="language-java" data-lang="java">package io.atlasmap.maven.test;
+
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
+import io.atlasmap.v2.Action;
+import io.atlasmap.v2.AtlasActionProperty;
+import io.atlasmap.v2.FieldType;
+
+public class PaulsFieldActionsModel extends Action implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+    private String paulsParam = "";
+    /**
+     * Example of a custom field action with a string parameter.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String}
+     *
+     */
+    @JsonPropertyDescription("Paul's custom field action parameter to display")
+    @AtlasActionProperty(title = "Paul's custom field action string parameter", type = FieldType.STRING)
+    public void setPaulsParam(String value) {
+        paulsParam = value;
+    }
+
+    public String getPaulsParam() {
+        return paulsParam;
+    }
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Declare for Java service loader</p>
+<div class="paragraph">
+<p>Then both class needs to be declared in <code>META-INF/services</code> to get them registered through Java service loader.</p>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/META-INF/services/io.atlasmap.v2.Action</div>
+<div class="content">
+<pre>io.atlasmap.maven.test.PaulsFieldActionsModel</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">src/main/resources/META-INF/services/io.atlasmap.spi.AtlasFieldAction</div>
+<div class="content">
+<pre>io.atlasmap.maven.test.PaulsFieldActions</pre>
 </div>
 </div>
 </li>
@@ -2881,43 +2931,14 @@ type a string, for example, <code>bat</code>.</p>
 </li>
 </ol>
 </div>
+<div class="paragraph">
+<p>Unresolved directive in index.adoc - include::topics/exporting-mappings-to-an-atlasmap-catalog-file.adoc[leveloffset=+1]</p>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="exporting-mappings-to-an-atlasmap-catalog-file">5. Exporting mappings to an AtlasMap catalog file</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>After all mappings are defined, save the mappings by exporting
-them to an AtlasMap <code>.adm</code> catalog file:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Click the <strong>AtlasMap</strong> menu and select <strong>Export the current mappings and support files into a catalog (.adm)</strong></p>
-<div class="paragraph">
-<p><span class="image"><img src="images/AtlasMapMenu.png" alt="AtlasMap menu"></span>.</p>
-</div>
-</li>
-<li>
-<p>In the <strong>Export mappings</strong> field, accept the default name or enter
-a name for the exported <code>.adm</code> file. The default name is <code>atlasmap-mapping.adm</code>.</p>
-</li>
-<li>
-<p>Click <strong>OK</strong>.</p>
-<div class="paragraph">
-<p>The catalog will be saved in your <strong>Downloads</strong> folder.</p>
-</div>
-</li>
-<li>
-<p>Note, you can later import the .adm file by using the <strong>AtlasMap</strong> menu.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="resetting-data-files-in-atlasmap">6. Resetting data files in AtlasMap</h2>
+<h2 id="resetting-data-files-in-atlasmap">5. Resetting data files in AtlasMap</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Initially, AtlasMap displays a blank canvas. You must import at least
@@ -2953,7 +2974,7 @@ canvas by clicking the trash icon, as in the following image:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="running-atlasmap-with-apache-camel">7. Running AtlasMap with Apache Camel</h2>
+<h2 id="running-atlasmap-with-apache-camel">6. Running AtlasMap with Apache Camel</h2>
 <div class="sectionbody">
 <div class="admonitionblock note">
 <table>
@@ -3025,12 +3046,12 @@ document payload.</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="atlasmap-runtime-examples">8. AtlasMap Runtime Examples</h2>
+<h2 id="atlasmap-runtime-examples">7. AtlasMap Runtime Examples</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="using-atlasmap-api">8.1. Using AtlasMap API</h3>
+<h3 id="using-atlasmap-api">7.1. Using AtlasMap API</h3>
 <div class="sect3">
-<h4 id="atlasmap-runtime-api-example">8.1.1. AtlasMap runtime API example</h4>
+<h4 id="atlasmap-runtime-api-example">7.1.1. AtlasMap runtime API example</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api</a></p>
 </div>
@@ -3073,7 +3094,7 @@ console.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="atlasmap-runtime-api-with-adm-archive-file-example">8.1.2. AtlasMap runtime API with ADM archive file example</h4>
+<h4 id="atlasmap-runtime-api-with-adm-archive-file-example">7.1.2. AtlasMap runtime API with ADM archive file example</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api-adm" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api-adm</a></p>
 </div>
@@ -3118,9 +3139,9 @@ console.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="running-with-apache-camel-2-x">8.2. Running with Apache Camel 2.x</h3>
+<h3 id="running-with-apache-camel-2-x">7.2. Running with Apache Camel 2.x</h3>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel2">8.2.1. AtlasMap running with Apache Camel2</h4>
+<h4 id="atlasmap-running-with-apache-camel2">7.2.1. AtlasMap running with Apache Camel2</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap</a></p>
 </div>
@@ -3158,7 +3179,7 @@ part of Camel route.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel2-blueprint-xml">8.2.2. AtlasMap running with Apache Camel2 :: Blueprint XML</h4>
+<h4 id="atlasmap-running-with-apache-camel2-blueprint-xml">7.2.2. AtlasMap running with Apache Camel2 :: Blueprint XML</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap-blueprint" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap-blueprint</a></p>
 </div>
@@ -3229,7 +3250,7 @@ configuration lives in <code>src/main/resources/OSGI-INF/blueprint</code></p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel2-message-map">8.2.3. AtlasMap running with Apache Camel2 :: Message Map</h4>
+<h4 id="atlasmap-running-with-apache-camel2-message-map">7.2.3. AtlasMap running with Apache Camel2 :: Message Map</h4>
 <div class="sect4">
 <h5 id="introduction-4">Introduction</h5>
 <div class="paragraph">
@@ -3271,7 +3292,7 @@ does that part of managing Message Map.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel-multiple-source-documents">8.2.4. AtlasMap running with Apache Camel :: Multiple source Documents</h4>
+<h4 id="atlasmap-running-with-apache-camel-multiple-source-documents">7.2.4. AtlasMap running with Apache Camel :: Multiple source Documents</h4>
 <div class="sect4">
 <h5 id="introduction-5">Introduction</h5>
 <div class="paragraph">
@@ -3308,9 +3329,9 @@ route.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="running-with-apache-camel-3-x">8.3. Running with Apache Camel 3.x</h3>
+<h3 id="running-with-apache-camel-3-x">7.3. Running with Apache Camel 3.x</h3>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel-3">8.3.1. AtlasMap running with Apache Camel 3</h4>
+<h4 id="atlasmap-running-with-apache-camel-3">7.3.1. AtlasMap running with Apache Camel 3</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap</a></p>
 </div>
@@ -3348,7 +3369,7 @@ part of Camel route.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel3-message-map">8.3.2. AtlasMap running with Apache Camel3 :: Message Map</h4>
+<h4 id="atlasmap-running-with-apache-camel3-message-map">7.3.2. AtlasMap running with Apache Camel3 :: Message Map</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-msgmap" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-msgmap</a></p>
 </div>
@@ -3393,7 +3414,7 @@ does that part of managing Message Map.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="atlasmap-running-with-apache-camel3-multiple-source-documents">8.3.3. AtlasMap running with Apache Camel3 :: Multiple source Documents</h4>
+<h4 id="atlasmap-running-with-apache-camel3-multiple-source-documents">7.3.3. AtlasMap running with Apache Camel3 :: Multiple source Documents</h4>
 <div class="paragraph">
 <p><a href="https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-multidoc" class="bare">https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-multidoc</a></p>
 </div>
@@ -3438,7 +3459,7 @@ route.</p>
 <div id="footer">
 <div id="footer-text">
 Version 2.4.0-SNAPSHOT<br>
-Last updated 2021-10-13 17:20:12 UTC
+Last updated 2021-10-14 16:23:55 UTC
 </div>
 </div>
 </body>
