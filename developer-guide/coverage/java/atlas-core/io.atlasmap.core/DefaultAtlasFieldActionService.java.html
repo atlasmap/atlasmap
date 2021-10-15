@@ -659,331 +659,337 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 <span class="fc" id="L659">        FieldType currentType = determineFieldType(field);</span>
 <span class="fc bfc" id="L660" title="All 2 branches covered.">        for (Action action : actions) {</span>
 <span class="fc" id="L661">            ActionProcessor processor = findActionProcessor(action, currentType);</span>
-<span class="fc" id="L662">            ActionDetail detail = processor.getActionDetail();</span>
-<span class="pc bpc" id="L663" title="1 of 2 branches missed.">            if (detail == null) {</span>
-<span class="nc" id="L664">                AtlasUtil.addAudit(session, field, String.format(</span>
-<span class="nc" id="L665">                    &quot;Couldn't find metadata for a FieldAction '%s', ignoring...&quot;, action.getDisplayName()),</span>
+<span class="fc bfc" id="L662" title="All 2 branches covered.">            if (processor == null) {</span>
+<span class="fc" id="L663">                AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="fc" id="L664">                    &quot;Couldn't find metadata for a FieldAction '%s', please make sure it's in the classpath, and also have a service declaration under META-INF/services. Ignoring...&quot;, action.getDisplayName()),</span>
                     AuditStatus.WARN, null);
-<span class="nc" id="L667">                continue;</span>
+<span class="fc" id="L666">                continue;</span>
+            }
+<span class="fc" id="L668">            ActionDetail detail = processor.getActionDetail();</span>
+<span class="pc bpc" id="L669" title="1 of 2 branches missed.">            if (detail == null) {</span>
+<span class="nc" id="L670">                AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="nc" id="L671">                    &quot;Couldn't find metadata for a FieldAction '%s', ignoring...&quot;, action.getDisplayName()),</span>
+                    AuditStatus.WARN, null);
+<span class="nc" id="L673">                continue;</span>
             }
 
-<span class="fc" id="L670">            tmpSourceField = processAction(action, processor, currentType, tmpSourceField);</span>
-<span class="fc" id="L671">            currentType = determineFieldType(tmpSourceField);</span>
-<span class="fc" id="L672">        }</span>
+<span class="fc" id="L676">            tmpSourceField = processAction(action, processor, currentType, tmpSourceField);</span>
+<span class="fc" id="L677">            currentType = determineFieldType(tmpSourceField);</span>
+<span class="fc" id="L678">        }</span>
 
-<span class="fc" id="L674">        return tmpSourceField;</span>
+<span class="fc" id="L680">        return tmpSourceField;</span>
     }
 
     private FieldType determineFieldType(Field field) {
-<span class="pc bpc" id="L678" title="1 of 2 branches missed.">        if (field == null) {</span>
-<span class="nc" id="L679">            return null;</span>
+<span class="pc bpc" id="L684" title="1 of 2 branches missed.">        if (field == null) {</span>
+<span class="nc" id="L685">            return null;</span>
         }
-<span class="fc bfc" id="L681" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
-<span class="fc bfc" id="L682" title="All 2 branches covered.">            for (Field f : FieldGroup.class.cast(field).getField()) {</span>
-<span class="fc" id="L683">                FieldType type = determineFieldType(f);</span>
-<span class="pc bpc" id="L684" title="1 of 2 branches missed.">                if (type != null) {</span>
-<span class="fc" id="L685">                    return type;</span>
+<span class="fc bfc" id="L687" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L688" title="All 2 branches covered.">            for (Field f : FieldGroup.class.cast(field).getField()) {</span>
+<span class="fc" id="L689">                FieldType type = determineFieldType(f);</span>
+<span class="pc bpc" id="L690" title="1 of 2 branches missed.">                if (type != null) {</span>
+<span class="fc" id="L691">                    return type;</span>
                 }
-<span class="nc" id="L687">            }</span>
-<span class="fc" id="L688">            return FieldType.NONE;</span>
+<span class="nc" id="L693">            }</span>
+<span class="fc" id="L694">            return FieldType.NONE;</span>
         }
-<span class="fc bfc" id="L690" title="All 2 branches covered.">        if (field.getFieldType() != null) {</span>
-<span class="fc" id="L691">            return field.getFieldType();</span>
-<span class="pc bpc" id="L692" title="1 of 2 branches missed.">        } else if (field.getValue() != null) {</span>
-<span class="fc" id="L693">            return getConversionService().fieldTypeFromClass(field.getValue().getClass());</span>
+<span class="fc bfc" id="L696" title="All 2 branches covered.">        if (field.getFieldType() != null) {</span>
+<span class="fc" id="L697">            return field.getFieldType();</span>
+<span class="pc bpc" id="L698" title="1 of 2 branches missed.">        } else if (field.getValue() != null) {</span>
+<span class="fc" id="L699">            return getConversionService().fieldTypeFromClass(field.getValue().getClass());</span>
         }
-<span class="nc" id="L695">        return FieldType.NONE;</span>
+<span class="nc" id="L701">        return FieldType.NONE;</span>
     }
 
     private Field processAction(Action action, ActionProcessor processor, FieldType sourceType, Field field) throws AtlasException {
-<span class="fc" id="L699">        ActionDetail detail = processor.getActionDetail();</span>
-<span class="pc bpc" id="L700" title="1 of 2 branches missed.">        Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;</span>
+<span class="fc" id="L705">        ActionDetail detail = processor.getActionDetail();</span>
+<span class="pc bpc" id="L706" title="1 of 2 branches missed.">        Multiplicity multiplicity = detail.getMultiplicity()!= null ? detail.getMultiplicity() : Multiplicity.ONE_TO_ONE;</span>
 
-<span class="fc bfc" id="L702" title="All 2 branches covered.">        if (multiplicity == Multiplicity.MANY_TO_ONE) {</span>
-<span class="fc" id="L703">            return processManyToOne(action, processor, sourceType, field);</span>
+<span class="fc bfc" id="L708" title="All 2 branches covered.">        if (multiplicity == Multiplicity.MANY_TO_ONE) {</span>
+<span class="fc" id="L709">            return processManyToOne(action, processor, sourceType, field);</span>
         }
 
-<span class="fc bfc" id="L706" title="All 2 branches covered.">        if (multiplicity == Multiplicity.ONE_TO_MANY) {</span>
-<span class="fc bfc" id="L707" title="All 2 branches covered.">            if (field instanceof FieldGroup) {</span>
-<span class="fc bfc" id="L708" title="All 2 branches covered.">                while (field instanceof FieldGroup) {</span>
-<span class="fc" id="L709">                    field = ((FieldGroup)field).getField().get(0);</span>
+<span class="fc bfc" id="L712" title="All 2 branches covered.">        if (multiplicity == Multiplicity.ONE_TO_MANY) {</span>
+<span class="fc bfc" id="L713" title="All 2 branches covered.">            if (field instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L714" title="All 2 branches covered.">                while (field instanceof FieldGroup) {</span>
+<span class="fc" id="L715">                    field = ((FieldGroup)field).getField().get(0);</span>
                 }
             }
-<span class="fc" id="L712">            return processOneToMany(action, processor, sourceType, field);</span>
+<span class="fc" id="L718">            return processOneToMany(action, processor, sourceType, field);</span>
         }
         
-<span class="fc bfc" id="L715" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L716">            return processActionForEachCollectionItem(action, processor, sourceType, (FieldGroup)field);</span>
+<span class="fc bfc" id="L721" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L722">            return processActionForEachCollectionItem(action, processor, sourceType, (FieldGroup)field);</span>
         }
         
-<span class="fc" id="L719">        Object value = field.getValue();</span>
-<span class="pc bpc" id="L720" title="1 of 4 branches missed.">        if (value != null &amp;&amp; !isAssignableFieldType(detail.getSourceType(), sourceType)) {</span>
-<span class="fc" id="L721">            value = getConversionService().convertType(value, sourceType, detail.getSourceType());</span>
+<span class="fc" id="L725">        Object value = field.getValue();</span>
+<span class="pc bpc" id="L726" title="1 of 4 branches missed.">        if (value != null &amp;&amp; !isAssignableFieldType(detail.getSourceType(), sourceType)) {</span>
+<span class="fc" id="L727">            value = getConversionService().convertType(value, sourceType, detail.getSourceType());</span>
         }
-<span class="fc" id="L723">        value = processor.process(action, value);</span>
-<span class="fc" id="L724">        field.setFieldType(processor.getActionDetail().getTargetType());</span>
-<span class="fc" id="L725">        field.setValue(value);</span>
-<span class="fc" id="L726">        return field;</span>
+<span class="fc" id="L729">        value = processor.process(action, value);</span>
+<span class="fc" id="L730">        field.setFieldType(processor.getActionDetail().getTargetType());</span>
+<span class="fc" id="L731">        field.setValue(value);</span>
+<span class="fc" id="L732">        return field;</span>
     }
 
     private Field processManyToOne(Action action, ActionProcessor processor, FieldType sourceType, Field field)
     throws AtlasException {
-<span class="fc" id="L731">        ActionDetail detail = processor.getActionDetail();</span>
-<span class="fc" id="L732">        List&lt;Object&gt; values = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L733" title="All 2 branches covered.">        if (action instanceof Expression) {</span>
-<span class="fc" id="L734">            this.extractNestedListValuesForExpressionAction(field, values);//preserve top level list of parameters and arguments</span>
-<span class="fc" id="L735">            convertCollectionValues(values, detail.getSourceType());</span>
-<span class="fc" id="L736">            Object out = processor.process(action, values);</span>
-<span class="fc" id="L737">            return packExpressionActionOutcomeIntoField(out, field);</span>
+<span class="fc" id="L737">        ActionDetail detail = processor.getActionDetail();</span>
+<span class="fc" id="L738">        List&lt;Object&gt; values = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L739" title="All 2 branches covered.">        if (action instanceof Expression) {</span>
+<span class="fc" id="L740">            this.extractNestedListValuesForExpressionAction(field, values);//preserve top level list of parameters and arguments</span>
+<span class="fc" id="L741">            convertCollectionValues(values, detail.getSourceType());</span>
+<span class="fc" id="L742">            Object out = processor.process(action, values);</span>
+<span class="fc" id="L743">            return packExpressionActionOutcomeIntoField(out, field);</span>
         }
 
-<span class="fc bfc" id="L740" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L741">            extractFlatListValuesFromFieldGroup((FieldGroup)field, values);</span>
+<span class="fc bfc" id="L746" title="All 2 branches covered.">        if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L747">            extractFlatListValuesFromFieldGroup((FieldGroup)field, values);</span>
         } else {
-<span class="fc" id="L743">            Object value = field.getValue();</span>
-<span class="pc bpc" id="L744" title="2 of 4 branches missed.">            if (value != null &amp;&amp; getConversionService().isAssignableFieldType(detail.getSourceType(), sourceType)) {</span>
-<span class="nc" id="L745">                value = getConversionService().convertType(value, sourceType, detail.getSourceType());</span>
+<span class="fc" id="L749">            Object value = field.getValue();</span>
+<span class="pc bpc" id="L750" title="2 of 4 branches missed.">            if (value != null &amp;&amp; getConversionService().isAssignableFieldType(detail.getSourceType(), sourceType)) {</span>
+<span class="nc" id="L751">                value = getConversionService().convertType(value, sourceType, detail.getSourceType());</span>
             }
-<span class="fc" id="L747">            values.add(value);</span>
+<span class="fc" id="L753">            values.add(value);</span>
         }
-<span class="fc" id="L749">        convertCollectionValues(values, detail.getSourceType());</span>
-<span class="fc" id="L750">        Object out = processor.process(action, values);</span>
-<span class="fc" id="L751">        field = AtlasModelFactory.cloneFieldToSimpleField(field);</span>
-<span class="pc bpc" id="L752" title="1 of 2 branches missed.">        if (out != null) {</span>
-<span class="fc" id="L753">            field.setFieldType(getConversionService().fieldTypeFromClass(out.getClass()));</span>
-<span class="fc" id="L754">            field.setValue(out);</span>
+<span class="fc" id="L755">        convertCollectionValues(values, detail.getSourceType());</span>
+<span class="fc" id="L756">        Object out = processor.process(action, values);</span>
+<span class="fc" id="L757">        field = AtlasModelFactory.cloneFieldToSimpleField(field);</span>
+<span class="pc bpc" id="L758" title="1 of 2 branches missed.">        if (out != null) {</span>
+<span class="fc" id="L759">            field.setFieldType(getConversionService().fieldTypeFromClass(out.getClass()));</span>
+<span class="fc" id="L760">            field.setValue(out);</span>
         }
-<span class="fc" id="L756">        return field;</span>
+<span class="fc" id="L762">        return field;</span>
     }
 
     private void extractNestedListValuesForExpressionAction(Field field, List&lt;Object&gt; fieldValues) {
-<span class="pc bpc" id="L760" title="1 of 2 branches missed.">        if (!(field instanceof FieldGroup)) {</span>
-<span class="nc" id="L761">            fieldValues.add(field.getValue());</span>
-<span class="nc" id="L762">            return;</span>
+<span class="pc bpc" id="L766" title="1 of 2 branches missed.">        if (!(field instanceof FieldGroup)) {</span>
+<span class="nc" id="L767">            fieldValues.add(field.getValue());</span>
+<span class="nc" id="L768">            return;</span>
         }
-<span class="fc" id="L764">        FieldGroup fieldGroup = (FieldGroup)field;</span>
-<span class="pc bpc" id="L765" title="3 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
-<span class="nc" id="L766">            return;</span>
+<span class="fc" id="L770">        FieldGroup fieldGroup = (FieldGroup)field;</span>
+<span class="pc bpc" id="L771" title="3 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
+<span class="nc" id="L772">            return;</span>
         }
-<span class="fc" id="L768">        List&lt;Field&gt; fields = null;</span>
+<span class="fc" id="L774">        List&lt;Field&gt; fields = null;</span>
         // Peeling off anonymous wrapper FieldGroup.
         // The size of extracted List &quot;fieldValues&quot; should reflect the number of Fields
         // passed in to Expression.
-<span class="pc bpc" id="L772" title="1 of 4 branches missed.">        while (fieldGroup.getPath() == null || fieldGroup.getPath().isEmpty()) {</span>
-<span class="fc bfc" id="L773" title="All 4 branches covered.">            if (fieldGroup.getField().size() == 1 &amp;&amp; (fieldGroup.getField().get(0) instanceof FieldGroup)) {</span>
-<span class="fc" id="L774">                fieldGroup = (FieldGroup)fieldGroup.getField().get(0);</span>
+<span class="pc bpc" id="L778" title="1 of 4 branches missed.">        while (fieldGroup.getPath() == null || fieldGroup.getPath().isEmpty()) {</span>
+<span class="fc bfc" id="L779" title="All 4 branches covered.">            if (fieldGroup.getField().size() == 1 &amp;&amp; (fieldGroup.getField().get(0) instanceof FieldGroup)) {</span>
+<span class="fc" id="L780">                fieldGroup = (FieldGroup)fieldGroup.getField().get(0);</span>
             } else {
-<span class="fc" id="L776">                fields = fieldGroup.getField();</span>
-<span class="fc" id="L777">                break;</span>
+<span class="fc" id="L782">                fields = fieldGroup.getField();</span>
+<span class="fc" id="L783">                break;</span>
             }
         }
-<span class="fc bfc" id="L780" title="All 2 branches covered.">        if (fields == null) {</span>
-<span class="fc" id="L781">            fields = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L782">            fields.add(fieldGroup);</span>
+<span class="fc bfc" id="L786" title="All 2 branches covered.">        if (fields == null) {</span>
+<span class="fc" id="L787">            fields = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L788">            fields.add(fieldGroup);</span>
         }
-<span class="fc" id="L784">        doExtractValuesForExpressionAction(fields, fieldValues);</span>
-<span class="fc" id="L785">    }</span>
+<span class="fc" id="L790">        doExtractValuesForExpressionAction(fields, fieldValues);</span>
+<span class="fc" id="L791">    }</span>
 
     private void doExtractValuesForExpressionAction(List&lt;Field&gt; fields, List&lt;Object&gt; values) {
-<span class="fc bfc" id="L788" title="All 2 branches covered.">        for (Field subField : fields) {</span>
-<span class="fc" id="L789">            Object subValue = null;</span>
-<span class="fc bfc" id="L790" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
-<span class="fc" id="L791">                List&lt;Object&gt; subValues = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L792">                doExtractValuesForExpressionAction(((FieldGroup)subField).getField(), subValues);</span>
-<span class="fc" id="L793">                subValue = subValues;</span>
-<span class="fc" id="L794">            } else {</span>
-<span class="fc" id="L795">                subValue = subField.getValue();</span>
+<span class="fc bfc" id="L794" title="All 2 branches covered.">        for (Field subField : fields) {</span>
+<span class="fc" id="L795">            Object subValue = null;</span>
+<span class="fc bfc" id="L796" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
+<span class="fc" id="L797">                List&lt;Object&gt; subValues = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L798">                doExtractValuesForExpressionAction(((FieldGroup)subField).getField(), subValues);</span>
+<span class="fc" id="L799">                subValue = subValues;</span>
+<span class="fc" id="L800">            } else {</span>
+<span class="fc" id="L801">                subValue = subField.getValue();</span>
             }
-<span class="fc" id="L797">            Integer index = subField.getIndex();</span>
-<span class="fc bfc" id="L798" title="All 2 branches covered.">            if (index != null) {</span>
-<span class="fc bfc" id="L799" title="All 2 branches covered.">                while (index &gt;= values.size()) {</span>
-<span class="fc" id="L800">                    values.add(null);</span>
+<span class="fc" id="L803">            Integer index = subField.getIndex();</span>
+<span class="fc bfc" id="L804" title="All 2 branches covered.">            if (index != null) {</span>
+<span class="fc bfc" id="L805" title="All 2 branches covered.">                while (index &gt;= values.size()) {</span>
+<span class="fc" id="L806">                    values.add(null);</span>
                 }
-<span class="fc" id="L802">                values.set(index, subValue);</span>
+<span class="fc" id="L808">                values.set(index, subValue);</span>
             } else {
-<span class="fc" id="L804">                values.add(subValue);</span>
+<span class="fc" id="L810">                values.add(subValue);</span>
             }
-<span class="fc" id="L806">        }</span>
-<span class="fc" id="L807">    }</span>
+<span class="fc" id="L812">        }</span>
+<span class="fc" id="L813">    }</span>
 
     private Field packExpressionActionOutcomeIntoField(Object values, Field field) {
-<span class="fc bfc" id="L810" title="All 2 branches covered.">        if (values instanceof List) {</span>
+<span class="fc bfc" id="L816" title="All 2 branches covered.">        if (values instanceof List) {</span>
             // n -&gt; n and 1 -&gt; n - create new FieldGroup
-<span class="fc" id="L812">            FieldGroup fieldGroup = new FieldGroup();</span>
+<span class="fc" id="L818">            FieldGroup fieldGroup = new FieldGroup();</span>
 
             // Make sure fieldGroup is of a collection type
-<span class="fc" id="L815">            AtlasPath groupPath = new AtlasPath(AtlasModelFactory.GENERATED_PATH);</span>
-<span class="fc" id="L816">            fieldGroup.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L817">            groupPath = new AtlasPath(groupPath.toString() + AtlasPath.PATH_LIST_SUFFIX);</span>
-<span class="fc" id="L818">            fieldGroup.setPath(groupPath.toString());</span>
+<span class="fc" id="L821">            AtlasPath groupPath = new AtlasPath(AtlasModelFactory.GENERATED_PATH);</span>
+<span class="fc" id="L822">            fieldGroup.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L823">            groupPath = new AtlasPath(groupPath.toString() + AtlasPath.PATH_LIST_SUFFIX);</span>
+<span class="fc" id="L824">            fieldGroup.setPath(groupPath.toString());</span>
 
-<span class="fc" id="L820">            List&lt;?&gt; tmpSourceList = (List&lt;?&gt;)values;</span>
-<span class="pc bpc" id="L821" title="1 of 4 branches missed.">            while (tmpSourceList.size() == 1 &amp;&amp; (tmpSourceList.get(0) instanceof List)) {</span>
-<span class="fc" id="L822">                tmpSourceList = (List&lt;Object&gt;)tmpSourceList.get(0);</span>
+<span class="fc" id="L826">            List&lt;?&gt; tmpSourceList = (List&lt;?&gt;)values;</span>
+<span class="pc bpc" id="L827" title="1 of 4 branches missed.">            while (tmpSourceList.size() == 1 &amp;&amp; (tmpSourceList.get(0) instanceof List)) {</span>
+<span class="fc" id="L828">                tmpSourceList = (List&lt;Object&gt;)tmpSourceList.get(0);</span>
             }
-<span class="fc" id="L824">            FieldType type = null;</span>
-<span class="fc bfc" id="L825" title="All 2 branches covered.">            for (int i=0; i&lt;tmpSourceList.size(); i++) {</span>
-<span class="fc" id="L826">                Object subValue = tmpSourceList.get(i);</span>
-<span class="pc bpc" id="L827" title="1 of 4 branches missed.">                if (type == null &amp;&amp; subValue != null) {</span>
-<span class="fc" id="L828">                    type = getConversionService().fieldTypeFromClass(subValue.getClass());</span>
+<span class="fc" id="L830">            FieldType type = null;</span>
+<span class="fc bfc" id="L831" title="All 2 branches covered.">            for (int i=0; i&lt;tmpSourceList.size(); i++) {</span>
+<span class="fc" id="L832">                Object subValue = tmpSourceList.get(i);</span>
+<span class="pc bpc" id="L833" title="1 of 4 branches missed.">                if (type == null &amp;&amp; subValue != null) {</span>
+<span class="fc" id="L834">                    type = getConversionService().fieldTypeFromClass(subValue.getClass());</span>
                 }
-<span class="fc" id="L830">                Field subField = new SimpleField();</span>
-<span class="fc" id="L831">                AtlasPath subPath = groupPath.clone();</span>
-<span class="fc" id="L832">                subPath.setVacantCollectionIndex(i);</span>
-<span class="fc" id="L833">                AtlasModelFactory.copyField(fieldGroup, subField, false);</span>
-<span class="fc" id="L834">                subField.setPath(subPath.toString());</span>
-<span class="fc" id="L835">                subField.setIndex(null);</span>
-<span class="fc" id="L836">                subField.setValue(subValue);</span>
-<span class="fc" id="L837">                subField.setFieldType(type);</span>
-<span class="fc" id="L838">                subField.setCollectionType(CollectionType.NONE);</span>
-<span class="fc" id="L839">                fieldGroup.getField().add(subField);</span>
+<span class="fc" id="L836">                Field subField = new SimpleField();</span>
+<span class="fc" id="L837">                AtlasPath subPath = groupPath.clone();</span>
+<span class="fc" id="L838">                subPath.setVacantCollectionIndex(i);</span>
+<span class="fc" id="L839">                AtlasModelFactory.copyField(fieldGroup, subField, false);</span>
+<span class="fc" id="L840">                subField.setPath(subPath.toString());</span>
+<span class="fc" id="L841">                subField.setIndex(null);</span>
+<span class="fc" id="L842">                subField.setValue(subValue);</span>
+<span class="fc" id="L843">                subField.setFieldType(type);</span>
+<span class="fc" id="L844">                subField.setCollectionType(CollectionType.NONE);</span>
+<span class="fc" id="L845">                fieldGroup.getField().add(subField);</span>
             }
-<span class="fc" id="L841">            return fieldGroup;</span>
+<span class="fc" id="L847">            return fieldGroup;</span>
         }
-<span class="pc bpc" id="L843" title="1 of 2 branches missed.">        if (values != null) {</span>
-<span class="fc" id="L844">            field = new SimpleField();</span>
-<span class="fc" id="L845">            field.setPath(AtlasModelFactory.GENERATED_PATH);</span>
-<span class="fc" id="L846">            field.setValue(values);</span>
-<span class="fc" id="L847">            field.setFieldType(getConversionService().fieldTypeFromClass(values.getClass()));</span>
+<span class="pc bpc" id="L849" title="1 of 2 branches missed.">        if (values != null) {</span>
+<span class="fc" id="L850">            field = new SimpleField();</span>
+<span class="fc" id="L851">            field.setPath(AtlasModelFactory.GENERATED_PATH);</span>
+<span class="fc" id="L852">            field.setValue(values);</span>
+<span class="fc" id="L853">            field.setFieldType(getConversionService().fieldTypeFromClass(values.getClass()));</span>
         }
-<span class="fc" id="L849">        return field;</span>
+<span class="fc" id="L855">        return field;</span>
     }
 
     private void extractFlatListValuesFromFieldGroup(FieldGroup fieldGroup, List&lt;Object&gt; values) {
-<span class="pc bpc" id="L853" title="2 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
-<span class="fc" id="L854">            return;</span>
+<span class="pc bpc" id="L859" title="2 of 6 branches missed.">        if (fieldGroup == null || fieldGroup.getField() == null || fieldGroup.getField().isEmpty()) {</span>
+<span class="fc" id="L860">            return;</span>
         }
-<span class="pc bpc" id="L856" title="1 of 4 branches missed.">        while ((fieldGroup.getPath() == null || fieldGroup.getPath().isEmpty())</span>
-<span class="pc bpc" id="L857" title="1 of 4 branches missed.">            &amp;&amp; fieldGroup.getField().size() == 1 &amp;&amp; (fieldGroup.getField().get(0) instanceof FieldGroup)) {</span>
-<span class="fc" id="L858">            fieldGroup = (FieldGroup)fieldGroup.getField().get(0);</span>
+<span class="pc bpc" id="L862" title="1 of 4 branches missed.">        while ((fieldGroup.getPath() == null || fieldGroup.getPath().isEmpty())</span>
+<span class="pc bpc" id="L863" title="1 of 4 branches missed.">            &amp;&amp; fieldGroup.getField().size() == 1 &amp;&amp; (fieldGroup.getField().get(0) instanceof FieldGroup)) {</span>
+<span class="fc" id="L864">            fieldGroup = (FieldGroup)fieldGroup.getField().get(0);</span>
         }
-<span class="fc" id="L860">        List&lt;Object&gt; tmpValues = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L861" title="All 2 branches covered.">        for (int i=0; i&lt;fieldGroup.getField().size(); i++) {</span>
-<span class="fc" id="L862">            Field subField = fieldGroup.getField().get(i);</span>
-<span class="fc" id="L863">            Object value = null;</span>
-<span class="fc bfc" id="L864" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
-<span class="fc" id="L865">                List&lt;Object&gt; subValues = new LinkedList&lt;&gt;();</span>
-<span class="fc" id="L866">                extractFlatListValuesFromFieldGroup((FieldGroup)subField, subValues);</span>
-<span class="fc" id="L867">                value = subValues;</span>
-<span class="fc" id="L868">            } else {</span>
-<span class="fc" id="L869">                value = subField.getValue();</span>
+<span class="fc" id="L866">        List&lt;Object&gt; tmpValues = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L867" title="All 2 branches covered.">        for (int i=0; i&lt;fieldGroup.getField().size(); i++) {</span>
+<span class="fc" id="L868">            Field subField = fieldGroup.getField().get(i);</span>
+<span class="fc" id="L869">            Object value = null;</span>
+<span class="fc bfc" id="L870" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
+<span class="fc" id="L871">                List&lt;Object&gt; subValues = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L872">                extractFlatListValuesFromFieldGroup((FieldGroup)subField, subValues);</span>
+<span class="fc" id="L873">                value = subValues;</span>
+<span class="fc" id="L874">            } else {</span>
+<span class="fc" id="L875">                value = subField.getValue();</span>
             }
-<span class="fc" id="L871">            Integer index = subField.getIndex();</span>
-<span class="fc bfc" id="L872" title="All 2 branches covered.">            if (index != null) {</span>
-<span class="fc bfc" id="L873" title="All 2 branches covered.">                while (index &gt;= tmpValues.size()) {</span>
-<span class="fc" id="L874">                    tmpValues.add(null);</span>
+<span class="fc" id="L877">            Integer index = subField.getIndex();</span>
+<span class="fc bfc" id="L878" title="All 2 branches covered.">            if (index != null) {</span>
+<span class="fc bfc" id="L879" title="All 2 branches covered.">                while (index &gt;= tmpValues.size()) {</span>
+<span class="fc" id="L880">                    tmpValues.add(null);</span>
                 }
-<span class="fc" id="L876">                tmpValues.set(index, value);</span>
+<span class="fc" id="L882">                tmpValues.set(index, value);</span>
             } else {
-<span class="fc" id="L878">                tmpValues.add(value);</span>
+<span class="fc" id="L884">                tmpValues.add(value);</span>
             }
         }
-<span class="fc" id="L881">        values.addAll(flatten(tmpValues));</span>
-<span class="fc" id="L882">    }</span>
+<span class="fc" id="L887">        values.addAll(flatten(tmpValues));</span>
+<span class="fc" id="L888">    }</span>
 
     private List&lt;Object&gt; flatten(List&lt;Object&gt; values) {
-<span class="fc" id="L885">        List&lt;Object&gt; answer = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L886" title="All 2 branches covered.">        for (Object o : values) {</span>
-<span class="fc bfc" id="L887" title="All 2 branches covered.">            if (o instanceof List) {</span>
-<span class="fc" id="L888">                answer.addAll(flatten((List&lt;Object&gt;)o));</span>
+<span class="fc" id="L891">        List&lt;Object&gt; answer = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L892" title="All 2 branches covered.">        for (Object o : values) {</span>
+<span class="fc bfc" id="L893" title="All 2 branches covered.">            if (o instanceof List) {</span>
+<span class="fc" id="L894">                answer.addAll(flatten((List&lt;Object&gt;)o));</span>
             } else {
-<span class="fc" id="L890">                answer.add(o);</span>
+<span class="fc" id="L896">                answer.add(o);</span>
             }
-<span class="fc" id="L892">        }</span>
-<span class="fc" id="L893">        return answer;</span>
+<span class="fc" id="L898">        }</span>
+<span class="fc" id="L899">        return answer;</span>
     }
 
     private Field processOneToMany(Action action, ActionProcessor processor, FieldType sourceType, Field field)
             throws AtlasException {
-<span class="fc" id="L898">        Object value = field.getValue();</span>
-<span class="pc bpc" id="L899" title="2 of 4 branches missed.">        if (value != null &amp;&amp; isAssignableFieldType(processor.getActionDetail().getSourceType(), sourceType)) {</span>
-<span class="fc" id="L900">            value = getConversionService().convertType(value, sourceType, processor.getActionDetail().getSourceType());</span>
+<span class="fc" id="L904">        Object value = field.getValue();</span>
+<span class="pc bpc" id="L905" title="2 of 4 branches missed.">        if (value != null &amp;&amp; isAssignableFieldType(processor.getActionDetail().getSourceType(), sourceType)) {</span>
+<span class="fc" id="L906">            value = getConversionService().convertType(value, sourceType, processor.getActionDetail().getSourceType());</span>
         }
-<span class="fc" id="L902">        value = processor.process(action, value);</span>
-<span class="fc" id="L903">        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(field, false);</span>
-<span class="fc" id="L904">        AtlasPath path = new AtlasPath(answer.getPath() + AtlasPath.PATH_LIST_SUFFIX);</span>
-<span class="fc" id="L905">        answer.setPath(path.toString());</span>
-<span class="fc" id="L906">        answer.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L907">        answer.setFieldType(processor.getActionDetail().getTargetType());</span>
+<span class="fc" id="L908">        value = processor.process(action, value);</span>
+<span class="fc" id="L909">        FieldGroup answer = AtlasModelFactory.createFieldGroupFrom(field, false);</span>
+<span class="fc" id="L910">        AtlasPath path = new AtlasPath(answer.getPath() + AtlasPath.PATH_LIST_SUFFIX);</span>
+<span class="fc" id="L911">        answer.setPath(path.toString());</span>
+<span class="fc" id="L912">        answer.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L913">        answer.setFieldType(processor.getActionDetail().getTargetType());</span>
         List&lt;Object&gt; values;
-<span class="pc bpc" id="L909" title="2 of 4 branches missed.">        if (value != null &amp;&amp; value.getClass().isArray()) {</span>
-<span class="fc" id="L910">            values = Arrays.asList((Object[]) value);</span>
-<span class="nc bnc" id="L911" title="All 4 branches missed.">        } else if ((value instanceof Collection) &amp;&amp; !(value instanceof List)) {</span>
-<span class="nc" id="L912">            values = Arrays.asList(((Collection&lt;?&gt;) value).toArray());</span>
+<span class="pc bpc" id="L915" title="2 of 4 branches missed.">        if (value != null &amp;&amp; value.getClass().isArray()) {</span>
+<span class="fc" id="L916">            values = Arrays.asList((Object[]) value);</span>
+<span class="nc bnc" id="L917" title="All 4 branches missed.">        } else if ((value instanceof Collection) &amp;&amp; !(value instanceof List)) {</span>
+<span class="nc" id="L918">            values = Arrays.asList(((Collection&lt;?&gt;) value).toArray());</span>
         } else {
-<span class="nc" id="L914">            values = new LinkedList&lt;&gt;();</span>
-<span class="nc bnc" id="L915" title="All 2 branches missed.">            if (value != null) {</span>
-<span class="nc" id="L916">                values.add(value);</span>
+<span class="nc" id="L920">            values = new LinkedList&lt;&gt;();</span>
+<span class="nc bnc" id="L921" title="All 2 branches missed.">            if (value != null) {</span>
+<span class="nc" id="L922">                values.add(value);</span>
             }
         }
-<span class="fc bfc" id="L919" title="All 2 branches covered.">        for (int i=0; i&lt;values.size(); i++) {</span>
-<span class="fc" id="L920">            Field subField = AtlasModelFactory.cloneFieldToSimpleField(answer);</span>
-<span class="fc" id="L921">            AtlasPath subPath = new AtlasPath(answer.getPath());</span>
-<span class="fc" id="L922">            subPath.setVacantCollectionIndex(i);</span>
-<span class="fc" id="L923">            subField.setPath(subPath.toString());</span>
-<span class="fc" id="L924">            subField.setCollectionType(CollectionType.NONE);</span>
-<span class="fc" id="L925">            subField.setIndex(null);</span>
-<span class="fc" id="L926">            subField.setValue(values.get(i));</span>
-<span class="fc" id="L927">            answer.getField().add(subField);</span>
+<span class="fc bfc" id="L925" title="All 2 branches covered.">        for (int i=0; i&lt;values.size(); i++) {</span>
+<span class="fc" id="L926">            Field subField = AtlasModelFactory.cloneFieldToSimpleField(answer);</span>
+<span class="fc" id="L927">            AtlasPath subPath = new AtlasPath(answer.getPath());</span>
+<span class="fc" id="L928">            subPath.setVacantCollectionIndex(i);</span>
+<span class="fc" id="L929">            subField.setPath(subPath.toString());</span>
+<span class="fc" id="L930">            subField.setCollectionType(CollectionType.NONE);</span>
+<span class="fc" id="L931">            subField.setIndex(null);</span>
+<span class="fc" id="L932">            subField.setValue(values.get(i));</span>
+<span class="fc" id="L933">            answer.getField().add(subField);</span>
         }
-<span class="fc" id="L929">        return answer;</span>
+<span class="fc" id="L935">        return answer;</span>
     }
 
     private FieldGroup processActionForEachCollectionItem(Action action, ActionProcessor processor, FieldType sourceType, FieldGroup fieldGroup)
      throws AtlasException {
-<span class="fc bfc" id="L934" title="All 2 branches covered.">        for (Field subField : fieldGroup.getField()) {</span>
-<span class="fc bfc" id="L935" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
-<span class="fc" id="L936">                processActionForEachCollectionItem(action, processor, sourceType, (FieldGroup)subField);</span>
-<span class="fc" id="L937">                continue;</span>
+<span class="fc bfc" id="L940" title="All 2 branches covered.">        for (Field subField : fieldGroup.getField()) {</span>
+<span class="fc bfc" id="L941" title="All 2 branches covered.">            if (subField instanceof FieldGroup) {</span>
+<span class="fc" id="L942">                processActionForEachCollectionItem(action, processor, sourceType, (FieldGroup)subField);</span>
+<span class="fc" id="L943">                continue;</span>
             }
-<span class="fc" id="L939">            Object value = subField.getValue();</span>
-<span class="pc bpc" id="L940" title="2 of 4 branches missed.">            if (value != null &amp;&amp; isAssignableFieldType(processor.getActionDetail().getSourceType(), sourceType)) {</span>
-<span class="fc" id="L941">                value = getConversionService().convertType(value, sourceType, processor.getActionDetail().getSourceType());</span>
+<span class="fc" id="L945">            Object value = subField.getValue();</span>
+<span class="pc bpc" id="L946" title="2 of 4 branches missed.">            if (value != null &amp;&amp; isAssignableFieldType(processor.getActionDetail().getSourceType(), sourceType)) {</span>
+<span class="fc" id="L947">                value = getConversionService().convertType(value, sourceType, processor.getActionDetail().getSourceType());</span>
             }
-<span class="fc" id="L943">            value = processor.process(action, value);</span>
-<span class="fc" id="L944">            subField.setValue(value);</span>
-<span class="fc" id="L945">        }</span>
-<span class="fc" id="L946">        return fieldGroup;</span>
+<span class="fc" id="L949">            value = processor.process(action, value);</span>
+<span class="fc" id="L950">            subField.setValue(value);</span>
+<span class="fc" id="L951">        }</span>
+<span class="fc" id="L952">        return fieldGroup;</span>
     }
 
     private void convertCollectionValues(List&lt;Object&gt; sourceList, FieldType type) throws AtlasConversionException {
-<span class="fc bfc" id="L950" title="All 2 branches covered.">        for (int i = 0; i &lt; sourceList.size(); i++) {</span>
-<span class="fc" id="L951">            Object subValue = sourceList.get(i);</span>
-<span class="fc bfc" id="L952" title="All 2 branches covered.">            if (subValue instanceof List) {</span>
-<span class="fc" id="L953">                convertCollectionValues((List&lt;Object&gt;) subValue, type);</span>
-<span class="fc" id="L954">                continue;</span>
+<span class="fc bfc" id="L956" title="All 2 branches covered.">        for (int i = 0; i &lt; sourceList.size(); i++) {</span>
+<span class="fc" id="L957">            Object subValue = sourceList.get(i);</span>
+<span class="fc bfc" id="L958" title="All 2 branches covered.">            if (subValue instanceof List) {</span>
+<span class="fc" id="L959">                convertCollectionValues((List&lt;Object&gt;) subValue, type);</span>
+<span class="fc" id="L960">                continue;</span>
             }
-<span class="fc bfc" id="L956" title="All 2 branches covered.">            FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);</span>
-<span class="fc bfc" id="L957" title="All 4 branches covered.">            if (subValue != null &amp;&amp; !isAssignableFieldType(type, subType)) {</span>
-<span class="fc" id="L958">                subValue = getConversionService().convertType(subValue, subType, type);</span>
-<span class="fc" id="L959">                sourceList.set(i, subValue);</span>
+<span class="fc bfc" id="L962" title="All 2 branches covered.">            FieldType subType = (subValue != null ? getConversionService().fieldTypeFromClass(subValue.getClass()) : FieldType.NONE);</span>
+<span class="fc bfc" id="L963" title="All 4 branches covered.">            if (subValue != null &amp;&amp; !isAssignableFieldType(type, subType)) {</span>
+<span class="fc" id="L964">                subValue = getConversionService().convertType(subValue, subType, type);</span>
+<span class="fc" id="L965">                sourceList.set(i, subValue);</span>
             }
         }
-<span class="fc" id="L962">    }</span>
+<span class="fc" id="L968">    }</span>
 
     private boolean isAssignableFieldType(FieldType expected, FieldType actual) {
-<span class="fc bfc" id="L965" title="All 2 branches covered.">        if (FieldType.ANY.equals(expected)) {</span>
-<span class="fc" id="L966">            return true;</span>
+<span class="fc bfc" id="L971" title="All 2 branches covered.">        if (FieldType.ANY.equals(expected)) {</span>
+<span class="fc" id="L972">            return true;</span>
         }
-<span class="fc bfc" id="L968" title="All 2 branches covered.">        if (FieldType.ANY_DATE.equals(expected)) {</span>
-<span class="pc bpc" id="L969" title="2 of 4 branches missed.">            return FieldType.DATE.equals(actual) || FieldType.TIME.equals(actual)</span>
-<span class="pc bpc" id="L970" title="3 of 4 branches missed.">                || FieldType.DATE_TIME.equals(actual) || FieldType.DATE_TIME_TZ.equals(actual)</span>
-<span class="pc bnc" id="L971" title="All 4 branches missed.">                || FieldType.DATE_TZ.equals(actual) || FieldType.TIME_TZ.equals(actual);</span>
+<span class="fc bfc" id="L974" title="All 2 branches covered.">        if (FieldType.ANY_DATE.equals(expected)) {</span>
+<span class="pc bpc" id="L975" title="2 of 4 branches missed.">            return FieldType.DATE.equals(actual) || FieldType.TIME.equals(actual)</span>
+<span class="pc bpc" id="L976" title="3 of 4 branches missed.">                || FieldType.DATE_TIME.equals(actual) || FieldType.DATE_TIME_TZ.equals(actual)</span>
+<span class="pc bnc" id="L977" title="All 4 branches missed.">                || FieldType.DATE_TZ.equals(actual) || FieldType.TIME_TZ.equals(actual);</span>
         }
-<span class="fc" id="L973">        return expected.equals(actual);</span>
+<span class="fc" id="L979">        return expected.equals(actual);</span>
     }
 
     public AtlasConversionService getConversionService() {
-<span class="fc" id="L977">        return this.conversionService;</span>
+<span class="fc" id="L983">        return this.conversionService;</span>
     }
 
     private String camelize(String parameter) {
-<span class="pc bpc" id="L981" title="2 of 4 branches missed.">        if (parameter == null || parameter.length() == 0) {</span>
-<span class="nc" id="L982">            return parameter;</span>
+<span class="pc bpc" id="L987" title="2 of 4 branches missed.">        if (parameter == null || parameter.length() == 0) {</span>
+<span class="nc" id="L988">            return parameter;</span>
         }
-<span class="fc" id="L984">        char c[] = parameter.toCharArray();</span>
-<span class="fc" id="L985">        c[0] = Character.toLowerCase(c[0]);</span>
-<span class="fc" id="L986">        return new String(c);</span>
+<span class="fc" id="L990">        char c[] = parameter.toCharArray();</span>
+<span class="fc" id="L991">        c[0] = Character.toLowerCase(c[0]);</span>
+<span class="fc" id="L992">        return new String(c);</span>
     }
 
 }

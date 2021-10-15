@@ -384,12 +384,12 @@ public class ADMArchiveHandler {
 <span class="fc" id="L384">        setPersistDirectory(dir.toPath());</span>
 <span class="fc" id="L385">        this.mappingDefinitionId = dir.getName();</span>
 <span class="fc" id="L386">        File mappingDefinitionFile = dir.toPath().resolve(getMappingDefinitionFileName()).toFile();</span>
-<span class="pc bpc" id="L387" title="1 of 4 branches missed.">        if (mappingDefinitionFile.exists() &amp;&amp; mappingDefinitionFile.isFile()) {</span>
-<span class="fc" id="L388">            try (InputStream mappingdefis = new FileInputStream(mappingDefinitionFile)) {</span>
-<span class="fc" id="L389">                this.mappingDefinitionBytes = readIntoByteArray(mappingdefis);</span>
+<span class="pc bpc" id="L387" title="3 of 4 branches missed.">        if (mappingDefinitionFile.exists() &amp;&amp; mappingDefinitionFile.isFile()) {</span>
+<span class="nc" id="L388">            try (InputStream mappingdefis = new FileInputStream(mappingDefinitionFile)) {</span>
+<span class="nc" id="L389">                this.mappingDefinitionBytes = readIntoByteArray(mappingdefis);</span>
 <span class="nc" id="L390">            } catch (Exception e) {</span>
 <span class="nc" id="L391">                throw new AtlasException(&quot;Failed to read mapping definition file&quot;, e);</span>
-<span class="fc" id="L392">            }</span>
+<span class="nc" id="L392">            }</span>
         }
 
 <span class="fc" id="L395">        File digestFile = dir.toPath().resolve(getGzippedADMDigestFileName()).toFile();</span>

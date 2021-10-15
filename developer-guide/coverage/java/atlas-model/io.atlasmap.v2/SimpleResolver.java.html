@@ -77,8 +77,8 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
     @Override
     public String idFromValueAndType(Object value, Class&lt;?&gt; aClass) {
 <span class="fc" id="L79">        String rc = typeToId.get(aClass);</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (rc == null) {</span>
-<span class="nc" id="L81">            throw new IllegalArgumentException(&quot;Invalid type: &quot; + aClass);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (rc == null) {</span>
+<span class="fc" id="L81">            throw new IllegalArgumentException(&quot;Invalid type: &quot; + aClass);</span>
         }
 <span class="fc" id="L83">        return rc;</span>
     }

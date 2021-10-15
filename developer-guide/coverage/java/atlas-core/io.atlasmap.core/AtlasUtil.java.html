@@ -477,64 +477,75 @@ import io.atlasmap.v2.ValidationStatus;
 <span class="fc" id="L477">                  .replaceAll(&quot;%5D&quot;, &quot;]&quot;);</span>
     }
 
+    /**
+     * Delete specified directory and the contents in it.
+     * @see #deleteDirectoryContents
+     * @param targetDir
+     */
     public static void deleteDirectory(File targetDir) {
-<span class="fc" id="L481">        File[] allContents = targetDir.listFiles();</span>
-<span class="pc bpc" id="L482" title="1 of 2 branches missed.">        if (allContents != null) {</span>
-<span class="nc bnc" id="L483" title="All 2 branches missed.">            for (File file : allContents) {</span>
-<span class="nc bnc" id="L484" title="All 2 branches missed.">                if (!file.isDirectory()) {</span>
-<span class="nc" id="L485">                    file.delete();</span>
+<span class="fc" id="L486">        File[] allContents = targetDir.listFiles();</span>
+<span class="fc bfc" id="L487" title="All 2 branches covered.">        if (allContents != null) {</span>
+<span class="fc bfc" id="L488" title="All 2 branches covered.">            for (File file : allContents) {</span>
+<span class="fc bfc" id="L489" title="All 2 branches covered.">                if (!file.isDirectory()) {</span>
+<span class="fc" id="L490">                    file.delete();</span>
                 } else {
-<span class="nc" id="L487">                    deleteDirectory(file);</span>
+<span class="fc" id="L492">                    deleteDirectory(file);</span>
                 }
             }
         }
-<span class="fc" id="L491">        targetDir.delete();</span>
-<span class="fc" id="L492">        return;</span>
+<span class="fc" id="L496">        targetDir.delete();</span>
+<span class="fc" id="L497">        return;</span>
     }
 
+    /**
+     * Delete all contents in the specified directory.
+     * 
+     * @see #deleteDirectory
+     * @param targetDir
+     */
     public static void deleteDirectoryContents(File targetDir) {
-<span class="nc" id="L496">        File[] allContents = targetDir.listFiles();</span>
-<span class="nc bnc" id="L497" title="All 2 branches missed.">        if (allContents != null) {</span>
-<span class="nc bnc" id="L498" title="All 2 branches missed.">            for (File element : allContents) {</span>
-<span class="nc bnc" id="L499" title="All 2 branches missed.">                if (element.isFile()) {</span>
-<span class="nc" id="L500">                    element.delete();</span>
-<span class="nc bnc" id="L501" title="All 2 branches missed.">                } else if (element.isDirectory()) {</span>
-<span class="nc" id="L502">                    deleteDirectory(element);</span>
+<span class="fc" id="L507">        File[] allContents = targetDir.listFiles();</span>
+<span class="pc bpc" id="L508" title="1 of 2 branches missed.">        if (allContents != null) {</span>
+<span class="fc bfc" id="L509" title="All 2 branches covered.">            for (File element : allContents) {</span>
+<span class="pc bpc" id="L510" title="1 of 2 branches missed.">                if (element.isFile()) {</span>
+<span class="nc" id="L511">                    element.delete();</span>
+<span class="pc bpc" id="L512" title="1 of 2 branches missed.">                } else if (element.isDirectory()) {</span>
+<span class="fc" id="L513">                    deleteDirectory(element);</span>
                 }
             }
         }
-<span class="nc" id="L506">        return;</span>
+<span class="fc" id="L517">        return;</span>
     }
 
     public static void copyFile(Path sourcePath, Path destPath) throws IOException {
-<span class="nc" id="L510">        File source = new File(sourcePath.toString());</span>
-<span class="nc" id="L511">        File dest = new File(destPath.toString());</span>
+<span class="nc" id="L521">        File source = new File(sourcePath.toString());</span>
+<span class="nc" id="L522">        File dest = new File(destPath.toString());</span>
 
-<span class="nc bnc" id="L513" title="All 2 branches missed.">        if (!dest.exists()) {</span>
-<span class="nc" id="L514">            dest.createNewFile();</span>
+<span class="nc bnc" id="L524" title="All 2 branches missed.">        if (!dest.exists()) {</span>
+<span class="nc" id="L525">            dest.createNewFile();</span>
         }
-<span class="nc" id="L516">        InputStream in = null;</span>
-<span class="nc" id="L517">        OutputStream out = null;</span>
+<span class="nc" id="L527">        InputStream in = null;</span>
+<span class="nc" id="L528">        OutputStream out = null;</span>
         try {
-<span class="nc" id="L519">            in = new FileInputStream(source);</span>
-<span class="nc" id="L520">            out = new FileOutputStream(dest);</span>
+<span class="nc" id="L530">            in = new FileInputStream(source);</span>
+<span class="nc" id="L531">            out = new FileOutputStream(dest);</span>
 
             // Transfer bytes from in to out
-<span class="nc" id="L523">            byte[] buf = new byte[1024];</span>
+<span class="nc" id="L534">            byte[] buf = new byte[1024];</span>
             int len;
-<span class="nc bnc" id="L525" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
-<span class="nc" id="L526">                out.write(buf, 0, len);</span>
+<span class="nc bnc" id="L536" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
+<span class="nc" id="L537">                out.write(buf, 0, len);</span>
             }
         }
         finally {
-<span class="nc bnc" id="L530" title="All 2 branches missed.">            if (in != null) {</span>
-<span class="nc" id="L531">                in.close();</span>
+<span class="nc bnc" id="L541" title="All 2 branches missed.">            if (in != null) {</span>
+<span class="nc" id="L542">                in.close();</span>
             }
-<span class="nc bnc" id="L533" title="All 2 branches missed.">            if (out != null) {</span>
-<span class="nc" id="L534">                out.close();</span>
+<span class="nc bnc" id="L544" title="All 2 branches missed.">            if (out != null) {</span>
+<span class="nc" id="L545">                out.close();</span>
             }
         }
-<span class="nc" id="L537">    }</span>
+<span class="nc" id="L548">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
