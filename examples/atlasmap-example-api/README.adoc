@@ -1,5 +1,5 @@
 == AtlasMap runtime API example
-https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api
+https://github.com/atlasmap/atlasmap/tree/main/examples/atlasmap-example-api
 
 This is a small example of running AtlasMap mapping by interacting with
 runtime API directly. It consumes `order.json` JSON file, process

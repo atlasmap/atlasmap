@@ -1,5 +1,5 @@
 == AtlasMap running with Apache Camel3 :: Message Map
-https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-msgmap
+https://github.com/atlasmap/atlasmap/tree/main/examples/camel3/camel-example-atlasmap-msgmap
 
 === Introduction
 

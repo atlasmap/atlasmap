@@ -1,11 +1,11 @@
-name: 'Master'
+name: 'Main'
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
-  build-master:
+  build-main:
     if: ${{ github.repository == 'atlasmap/atlasmap' }}
     runs-on: ubuntu-latest
     env:

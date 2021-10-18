@@ -1,5 +1,5 @@
 == AtlasMap running with Apache Camel3 :: Multiple source Documents
-https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap-multidoc
+https://github.com/atlasmap/atlasmap/tree/main/examples/camel3/camel-example-atlasmap-multidoc
 
 === Introduction
 

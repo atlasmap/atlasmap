@@ -2,7 +2,7 @@
 
 [![Runtime @ Maven Central](https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/badge.svg?style=flat-square)](https://maven-badges.herokuapp.com/maven-central/io.atlasmap/atlas-parent/)
 [![UI @ NPM](https://badge.fury.io/js/%40atlasmap%2Fatlasmap.svg)](https://badge.fury.io/js/%40atlasmap%2Fatlasmap)
-[![Master](https://github.com/atlasmap/atlasmap/actions/workflows/master.yml/badge.svg)](https://github.com/atlasmap/atlasmap/actions/workflows/master.yml)
+[![Main](https://github.com/atlasmap/atlasmap/actions/workflows/main.yml/badge.svg)](https://github.com/atlasmap/atlasmap/actions/workflows/main.yml)
 [![Supported](https://github.com/atlasmap/atlasmap/actions/workflows/supported-build.yml/badge.svg)](https://github.com/atlasmap/atlasmap/actions/workflows/supported-build.yml)
 [![Codacy Grade](https://app.codacy.com/project/badge/Grade/57f3935eba6b4438976295efea04ac0c)](https://www.codacy.com/gh/atlasmap/atlasmap/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade)
 [![Codacy Coverage](https://app.codacy.com/project/badge/Coverage/57f3935eba6b4438976295efea04ac0c)](https://www.codacy.com/gh/atlasmap/atlasmap/dashboard?utm_source=github.com&utm_medium=referral&utm_content=atlasmap/atlasmap&utm_campaign=Badge_Coverage)

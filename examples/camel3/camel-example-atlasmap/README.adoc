@@ -1,5 +1,5 @@
 == AtlasMap running with Apache Camel 3
-https://github.com/atlasmap/atlasmap/tree/master/examples/camel3/camel-example-atlasmap
+https://github.com/atlasmap/atlasmap/tree/main/examples/camel3/camel-example-atlasmap
 
 === Introduction
 

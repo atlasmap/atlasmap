@@ -1,5 +1,5 @@
 == AtlasMap running with Apache Camel2 :: Blueprint XML
-https://github.com/atlasmap/atlasmap/tree/master/examples/camel-example-atlasmap-blueprint
+https://github.com/atlasmap/atlasmap/tree/main/examples/camel-example-atlasmap-blueprint
 
 === Introduction
 

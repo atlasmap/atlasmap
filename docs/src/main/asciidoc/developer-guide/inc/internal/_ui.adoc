@@ -3,13 +3,13 @@
 
 The AtlasMap Data Mapper UI is a web based user interface to define a data mapping, built with https://reactjs.org/[React].
 
-- https://github.com/atlasmap/atlasmap/blob/master/ui/
+- https://github.com/atlasmap/atlasmap/blob/main/ui/
 
 It consists of 3 sub-packages:
 
-- https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-core[@atlasmap/core] - UI side business logic which is used by the presentation layer, `@atlasmap/atlasmap`. Published in NPM repoisitory - https://www.npmjs.com/package/@atlasmap/core
-- https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap[@atlasmap/atlasmap] - The presentation layer of AtlasMap Data Mapper UI built with React. `<AtlasmapProvider>` is meant to be placed in any React Web application. Published in NPM repository - https://www.npmjs.com/package/@atlasmap/atlasmap
-- https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-standalone[@atlasmap/standalone] - A thin React bootstrapping component to spin up AtlasMap Data Mapper UI in standalone mode.
+- https://github.com/atlasmap/atlasmap/tree/main/ui/packages/atlasmap-core[@atlasmap/core] - UI side business logic which is used by the presentation layer, `@atlasmap/atlasmap`. Published in NPM repoisitory - https://www.npmjs.com/package/@atlasmap/core
+- https://github.com/atlasmap/atlasmap/tree/main/ui/packages/atlasmap[@atlasmap/atlasmap] - The presentation layer of AtlasMap Data Mapper UI built with React. `<AtlasmapProvider>` is meant to be placed in any React Web application. Published in NPM repository - https://www.npmjs.com/package/@atlasmap/atlasmap
+- https://github.com/atlasmap/atlasmap/tree/main/ui/packages/atlasmap-standalone[@atlasmap/standalone] - A thin React bootstrapping component to spin up AtlasMap Data Mapper UI in standalone mode.
 
 === @atlasmap/core  
 ==== MODEL
@@ -28,7 +28,7 @@ A single MappingDefinition model in the ConfigModel object stores information ab
 
 ==== SERVICE
 
-When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts[MappingManagementService]) and document service (https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts[DocumentManagementService]). 
+When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (https://github.com/atlasmap/atlasmap/blob/main/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts[MappingManagementService]) and document service (https://github.com/atlasmap/atlasmap/blob/main/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts[DocumentManagementService]). 
 
 The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel's inputDoc and outputDoc DocumentDefinition models.
 

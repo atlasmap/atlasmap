@@ -1,5 +1,5 @@
 == AtlasMap runtime API with ADM archive file example
-https://github.com/atlasmap/atlasmap/tree/master/examples/atlasmap-example-api-adm
+https://github.com/atlasmap/atlasmap/tree/main/examples/atlasmap-example-api-adm
 
 This is a small example of running AtlasMap mapping by interacting with
 runtime API directly. This example uses an ADM archive file to load a
