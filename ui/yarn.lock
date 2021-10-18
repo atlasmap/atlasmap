@@ -2723,7 +2723,7 @@
   dependencies:
     "@octokit/openapi-types" "^7.0.0"
 
-"@patternfly/react-core@^4.147.0", "@patternfly/react-core@^4.157.3", "@patternfly/react-core@^4.162.3":
+"@patternfly/react-core@^4.147.0", "@patternfly/react-core@^4.162.3":
   version "4.162.3"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.162.3.tgz#0b52d87c73e9509dc41445b5d8eb1a38c88374e0"
   integrity sha512-bui04jdn0XNN6R39a0rMSUBJW0C4fsttRVb0VcEXfC4AJHRqmO+0aRQ9VSYWpcmEQCr3GTuGTInPYR2rYf6KLg==
@@ -2736,12 +2736,12 @@
     tippy.js "5.1.2"
     tslib "^2.0.0"
 
-"@patternfly/react-icons@^4.11.17", "@patternfly/react-icons@^4.11.8", "@patternfly/react-icons@^4.13.1":
+"@patternfly/react-icons@^4.11.8", "@patternfly/react-icons@^4.13.1":
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.13.1.tgz#eee1b206a0e1c5f2c559148878e008a4cb0a0822"
   integrity sha512-1cAvcVQcjYqW7bBmz7v7hDvYc43xAftV543AAHEC07VNaLWDTDnS1R1m8B/N/U8j6Xkj3AvtgrKNDCUdpQIT1g==
 
-"@patternfly/react-styles@^4.11.16", "@patternfly/react-styles@^4.11.8", "@patternfly/react-styles@^4.12.5":
+"@patternfly/react-styles@^4.11.8", "@patternfly/react-styles@^4.12.5":
   version "4.12.5"
   resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.12.5.tgz#d1b30ba06be16b231ac1ad714c0e067cdfa43da1"
   integrity sha512-+vgnjVvrY2MUe+TbKLv2UxGaxlWoLaS62acjhT2w73EMquMUALkdy7nLxC4owVZzSrKPD8qRhdyZW0V1nB1wNA==
@@ -2764,13 +2764,13 @@
   integrity sha512-ck/XJx0raw+xpN0R5a5hXHDV1Os5Z6EMcCphInfKB8dc+R7Ed31onYoVno1ZBXH2Zvtq+mNDf0xTgTk/lPIagg==
 
 "@patternfly/react-topology@^4.9.42":
-  version "4.9.80"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.80.tgz#5155293a2d017a5964a0b3c9459f320827a2bafe"
-  integrity sha512-j+8aAKqrxu7ebIUyWdecFydQKRduh1orWV82uXqNSBX2r88GKaR6tos800gal1UO8tgOL6aIPJqCfQIoJostjg==
+  version "4.9.104"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.9.104.tgz#fd0612d1e7b4458bee34d29510fc4c92c3bd1966"
+  integrity sha512-g01TzG85UIUg7xoQ12qxlnSGoPZMXN8d5useEwNv80XwaCM+u1BsixXLtYq0O0bJb5Uc4V5UXQbNC+2TuKoxwA==
   dependencies:
-    "@patternfly/react-core" "^4.157.3"
-    "@patternfly/react-icons" "^4.11.17"
-    "@patternfly/react-styles" "^4.11.16"
+    "@patternfly/react-core" "^4.162.3"
+    "@patternfly/react-icons" "^4.13.1"
+    "@patternfly/react-styles" "^4.12.5"
     "@types/d3" "^5.7.2"
     "@types/d3-force" "^1.2.1"
     "@types/dagre" "0.7.42"
