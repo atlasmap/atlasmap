@@ -75,7 +75,12 @@ export class ErrorHandlerService {
       }
       const store =
         ErrorScope.FORM === error.scope ? this.formErrors : this.errors;
-      if (store.find((e) => e.message === error.message)) {
+
+      // Remove identical error/warning messages - not info messages.
+      if (
+        store.find((e) => e.message === error.message) &&
+        error.level !== ErrorLevel.INFO
+      ) {
         return;
       }
       store.unshift(error);

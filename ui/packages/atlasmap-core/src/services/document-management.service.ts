@@ -257,14 +257,6 @@ export class DocumentManagementService {
           resolve(false);
           return;
         }
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: `${selectedFile.name} ${userFileSuffix} import complete.`,
-            level: ErrorLevel.INFO,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.USER,
-          })
-        );
         resolve(true);
       });
     });
