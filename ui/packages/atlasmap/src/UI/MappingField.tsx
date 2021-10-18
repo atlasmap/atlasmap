@@ -25,7 +25,7 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { DraggableField, FieldDropTarget } from './dnd';
-import React, { Children, FunctionComponent, KeyboardEvent } from 'react';
+import React, { Children, FunctionComponent } from 'react';
 
 import { IAtlasmapField } from '../../src/Views/models';
 import { NodeRef } from './Canvas/NodeRef';
@@ -48,10 +48,6 @@ export interface IMappingFieldProps {
 const formTransInputGroup = {
   '--pf-c-form-control--FontSize': 'small',
 } as React.CSSProperties;
-
-function onKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-  event.preventDefault();
-}
 
 export const MappingField: FunctionComponent<IMappingFieldProps> = ({
   field,
@@ -139,7 +135,6 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                               type={'number'}
                               value={index}
                               id={'index'}
-                              onKeyDown={onKeyDown}
                               onChange={onIndexChange}
                               data-testid={`change-${name}-input-index`}
                               isDisabled={!onIndexChange}
