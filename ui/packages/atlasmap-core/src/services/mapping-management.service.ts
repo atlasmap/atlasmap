@@ -615,6 +615,10 @@ export class MappingManagementService {
           'delimiter',
           ' '
         );
+        mapping.transition.transitionFieldAction.setArgumentValue(
+          'collapseRepeatingDelimiters',
+          'false'
+        );
       }
       return;
     }
