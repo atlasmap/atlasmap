@@ -32,6 +32,7 @@ import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { FieldAction } from '../models/field-action.model';
+import { FieldType } from '../contracts/common';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
@@ -273,6 +274,9 @@ export class MappingManagementService {
     return;
   }
 
+  /**
+   * @FIXME Migrate with isFieldAddableToActiveMapping() - https://github.com/atlasmap/atlasmap/issues/3442
+   */
   getFieldSelectionExclusionReason(
     mapping: MappingModel,
     field: Field
@@ -320,8 +324,116 @@ export class MappingManagementService {
     return null;
   }
 
+  /**
+   * @FIXME Migrate with isFieldAddableToActiveMapping() - https://github.com/atlasmap/atlasmap/issues/3442
+   */
   isFieldSelectable(mapping: MappingModel, field: Field): boolean {
     return this.getFieldSelectionExclusionReason(mapping, field) == null;
+  }
+
+  /**
+   * Return true if it's possible to add a source or target field to the active
+   * mapping, false otherwise.
+   * @param isSource true if it's source field, or false
+   * @returns
+   */
+  canAddToActiveMapping(isSource: boolean): boolean {
+    const selectedMapping = this.cfg.mappings?.activeMapping;
+    if (
+      !selectedMapping ||
+      (selectedMapping.transition.mode === TransitionMode.ENUM &&
+        selectedMapping.sourceFields.length > 0 &&
+        selectedMapping.targetFields.length > 0)
+    ) {
+      return false;
+    }
+    if (
+      selectedMapping.sourceFields.length <= 1 &&
+      selectedMapping.targetFields.length <= 1
+    ) {
+      return true;
+    } else if (
+      isSource &&
+      (selectedMapping.targetFields.length <= 1 ||
+        selectedMapping.sourceFields.length === 0)
+    ) {
+      return true;
+    } else if (
+      !isSource &&
+      (selectedMapping.sourceFields.length <= 1 ||
+        selectedMapping.targetFields.length === 0)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Return true if it's possible to add the specified source field to the
+   * active mapping, false otherwise.
+   * @param field field
+   * @param dropTarget a destination field to drop if it's drag & drop
+   */
+  isFieldAddableToActiveMapping(field: Field, dropTarget?: Field): boolean {
+    let selectedMapping = this.cfg.mappings?.activeMapping;
+    if (
+      !field ||
+      !field.isTerminal() ||
+      dropTarget?.type === FieldType.UNSUPPORTED ||
+      (selectedMapping &&
+        selectedMapping.transition.mode === TransitionMode.ENUM &&
+        selectedMapping.sourceFields.length > 0 &&
+        selectedMapping.targetFields.length > 0)
+    ) {
+      return false;
+    }
+
+    if (
+      !selectedMapping ||
+      (dropTarget && !this.cfg.mappings?.findMappingsForField(dropTarget))
+    ) {
+      return true;
+    }
+    if (selectedMapping.transition.mode === TransitionMode.EXPRESSION) {
+      return field.isSource() || selectedMapping.targetFields.length === 0;
+    }
+    // skip if already in the mapping
+    if (
+      (field.isSource() &&
+        selectedMapping.sourceFields.find((f) => f.field === field)) ||
+      (!field.isSource() &&
+        selectedMapping.targetFields.find((f) => f.field === field))
+    ) {
+      return false;
+    }
+    // adding a collection field
+    if (field.isCollection || field.isInCollection()) {
+      return field.isSource()
+        ? selectedMapping.sourceFields.length === 0
+        : selectedMapping.targetFields.length === 0;
+    }
+
+    if (field.isSource()) {
+      // adding a source non-collection field
+      if (selectedMapping.sourceFields.length === 0) {
+        return true;
+      }
+      return (
+        !selectedMapping.sourceFields.find(
+          (f) => f.field?.isCollection || f.field?.isInCollection()
+        ) && selectedMapping.targetFields.length <= 1
+      );
+    } else {
+      // adding a target non-collection field
+      if (selectedMapping.targetFields.length === 0) {
+        return true;
+      }
+      return (
+        !selectedMapping.targetFields.find(
+          (f) => f.field?.isCollection || f.field?.isInCollection()
+        ) && selectedMapping.sourceFields.length <= 1
+      );
+    }
   }
 
   /**
