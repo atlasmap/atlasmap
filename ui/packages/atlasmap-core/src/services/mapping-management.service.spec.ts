@@ -217,6 +217,244 @@ describe('MappingManagementService', () => {
     expect(spy.calls.count()).toBe(1);
   });
 
+  test('isFieldAddableToActiveMapping() - one-to-one/one-to-many', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcF = srcDoc.getField('/sourceField');
+    service.addNewMapping(srcF!, false);
+    const srcCF = srcDoc.getField('/sourceCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    const tgtF = tgtDoc.getField('/targetField');
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtF!);
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    const srcF2 = srcDoc.getField('/sourceField2');
+    expect(service.isFieldAddableToActiveMapping(srcF2!)).toBeTruthy();
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    const tgtF2 = tgtDoc.getField('/targetField2');
+    expect(service.isFieldAddableToActiveMapping(tgtF2!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtF2!);
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF2!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtF2!)).toBeFalsy();
+    const tgtF3 = tgtDoc.getField('/targetField3');
+    expect(service.isFieldAddableToActiveMapping(tgtF3!)).toBeTruthy();
+  });
+
+  test('isFieldAddableToActiveMapping() - one-to-collection', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcF = srcDoc.getField('/sourceField');
+    service.addNewMapping(srcF!, false);
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    service.addFieldToActiveMapping(tgtCF!);
+    const srcCF = srcDoc.getField('/sourceCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    const tgtF = tgtDoc.getField('/targetField');
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+    const tgtCF2 = tgtDoc.getField('/targetCollectionField2<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF2!)).toBeFalsy();
+  });
+
+  test('isFieldAddableToActiveMapping() - many-to-one', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcF = srcDoc.getField('/sourceField');
+    service.addNewMapping(srcF!, false);
+    const srcF2 = srcDoc.getField('/sourceField2');
+    service.addFieldToActiveMapping(srcF2!);
+    const srcCF = srcDoc.getField('/sourceCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF2!)).toBeFalsy();
+    const srcF3 = srcDoc.getField('/sourceField3');
+    expect(service.isFieldAddableToActiveMapping(srcF3!)).toBeTruthy();
+    const tgtF = tgtDoc.getField('/targetField');
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeTruthy();
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtF!);
+    expect(service.isFieldAddableToActiveMapping(srcF3!)).toBeTruthy();
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+    const tgtF2 = tgtDoc.getField('/targetField2<>');
+    expect(service.isFieldAddableToActiveMapping(tgtF2!)).toBeFalsy();
+  });
+
+  test('isFieldAddableToActiveMapping() - collection-to-one', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcCF = srcDoc.getField('/sourceCollectionField<>');
+    service.addNewMapping(srcCF!, false);
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    const srcF = srcDoc.getField('/sourceField');
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    const srcCF2 = srcDoc.getField('/sourceCollectionField2<>');
+    expect(service.isFieldAddableToActiveMapping(srcCF2!)).toBeFalsy();
+    const tgtF = tgtDoc.getField('/targetField');
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeTruthy();
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtF!);
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcCF2!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+  });
+
+  test('isFieldAddableToActiveMapping() - for-each', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcCF = srcDoc.getField('/sourceCollectionField<>');
+    service.addNewMapping(srcCF!, false);
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    const srcF = srcDoc.getField('/sourceField');
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    const srcCF2 = srcDoc.getField('/sourceCollectionField2<>');
+    expect(service.isFieldAddableToActiveMapping(srcCF2!)).toBeFalsy();
+    const tgtF = tgtDoc.getField('/targetField');
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeTruthy();
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtCF!);
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcCF2!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeFalsy();
+    const tgtCF2 = tgtDoc.getField('/targetCollectionField2<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF2!)).toBeFalsy();
+  });
+
+  test('isFieldAddableToActiveMapping() - for-each - many-to-collection', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcF = srcDoc.getField('/sourceField');
+    service.addNewMapping(srcF!, false);
+    const srcF2 = srcDoc.getField('/sourceField2');
+    expect(service.isFieldAddableToActiveMapping(srcF!)).toBeFalsy();
+    expect(service.isFieldAddableToActiveMapping(srcF2!)).toBeTruthy();
+    service.addFieldToActiveMapping(srcF2!);
+    const srcF3 = srcDoc.getField('/sourceField3');
+    expect(service.isFieldAddableToActiveMapping(srcF3!)).toBeTruthy();
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtCF!);
+    expect(service.isFieldAddableToActiveMapping(srcF3!)).toBeTruthy();
+  });
+
+  test('isFieldAddableToActiveMapping() - for-each - collection-to-many', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcCF = srcDoc.getField('/sourceCollectionField<>');
+    service.addNewMapping(srcCF!, false);
+    expect(service.isFieldAddableToActiveMapping(srcCF!)).toBeFalsy();
+    const tgtF = tgtDoc.getField('/targetField');
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtF!);
+    const tgtF2 = tgtDoc.getField('/targetField2');
+    expect(service.isFieldAddableToActiveMapping(tgtF2!)).toBeTruthy();
+    service.addFieldToActiveMapping(tgtF2!);
+    const tgtF3 = tgtDoc.getField('/targetField3');
+    expect(service.isFieldAddableToActiveMapping(tgtF3!)).toBeTruthy();
+  });
+
   test('addNewMapping()', () => {
     spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
       return new (class {

@@ -27,7 +27,6 @@ import {
   DocumentType,
   InspectionType,
   MappingSerializer,
-  TransitionMode,
 } from '@atlasmap/core';
 import { IAtlasmapDocument, IAtlasmapField } from '../Views';
 import React, {
@@ -532,36 +531,9 @@ export function useAtlasmap() {
    */
   const canAddToSelectedMapping = useCallback(
     (isSource: boolean): boolean => {
-      const { selectedMapping } = context;
-      if (
-        !selectedMapping ||
-        (selectedMapping.mapping.transition.mode === TransitionMode.ENUM &&
-          selectedMapping.sourceFields.length > 0 &&
-          selectedMapping.targetFields.length > 0)
-      ) {
-        return false;
-      }
-      if (
-        selectedMapping.sourceFields.length <= 1 &&
-        selectedMapping.targetFields.length <= 1
-      ) {
-        return true;
-      } else if (
-        isSource &&
-        (selectedMapping.targetFields.length <= 1 ||
-          selectedMapping.sourceFields.length === 0)
-      ) {
-        return true;
-      } else if (
-        !isSource &&
-        (selectedMapping.sourceFields.length <= 1 ||
-          selectedMapping.targetFields.length === 0)
-      ) {
-        return true;
-      }
-      return false;
+      return configModel.mappingService.canAddToActiveMapping(isSource);
     },
-    [context],
+    [configModel],
   );
 
   /**
@@ -570,64 +542,16 @@ export function useAtlasmap() {
    */
   const isFieldAddableToSelection = useCallback(
     (
-      documentType: 'source' | 'target',
+      _documentType: 'source' | 'target',
       field: IAtlasmapField,
       dropTarget?: IAtlasmapField,
     ): boolean => {
-      const { selectedMapping } = context;
-      const isSource = documentType === 'source';
-      if (
-        !field ||
-        !field.amField.isTerminal() ||
-        dropTarget?.type === 'UNSUPPORTED' ||
-        (selectedMapping &&
-          selectedMapping.mapping.transition.mode === TransitionMode.ENUM &&
-          selectedMapping.sourceFields.length > 0 &&
-          selectedMapping.targetFields.length > 0)
-      ) {
-        return false;
-      }
-      if (!selectedMapping || (dropTarget && !dropTarget.isConnected)) {
-        return true;
-      }
-      if (
-        selectedMapping.sourceFields.length <= 1 &&
-        selectedMapping.targetFields.length <= 1
-      ) {
-        if (
-          isSource &&
-          !selectedMapping.sourceFields.find((f) => f.id === field.id)
-        ) {
-          return true;
-        } else if (
-          field.isCollection ||
-          field.isInCollection ||
-          (!field.isConnected &&
-            !selectedMapping.targetFields.find((f) => f.id === field.id))
-        ) {
-          return true;
-        }
-      } else if (
-        isSource &&
-        (selectedMapping.targetFields.length <= 1 ||
-          selectedMapping.sourceFields.length === 0) &&
-        !selectedMapping.sourceFields.find((f) => f.id === field.id)
-      ) {
-        return true;
-      } else if (
-        !isSource &&
-        (field.isCollection ||
-          field.isInCollection ||
-          (!field.isConnected &&
-            (selectedMapping.sourceFields.length <= 1 ||
-              selectedMapping.targetFields.length === 0) &&
-            !selectedMapping.targetFields.find((f) => f.id === field.id)))
-      ) {
-        return true;
-      }
-      return false;
+      return configModel.mappingService.isFieldAddableToActiveMapping(
+        field.amField,
+        dropTarget?.amField,
+      );
     },
-    [context],
+    [configModel],
   );
 
   const isFieldRemovableFromSelection = useCallback(
