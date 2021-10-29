@@ -29,17 +29,15 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
     executeFieldSearch,
     getFieldEnums,
     mappingExpressionAddField,
-    mappingExpressionClearText,
     isMappingExpressionEmpty,
     mappingExpressionInit,
     mappingExpressionInsertText,
-    mappingExpressionObservable,
     mappingExpressionRemoveField,
     mappingExpression,
-    trailerId,
     disabled,
     onToggle,
     setSelectedEnumValue,
+    getAtlasmapLanguage,
   }) => {
     return (
       <ToolbarGroup
@@ -53,16 +51,14 @@ export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressio
             executeFieldSearch={executeFieldSearch}
             getFieldEnums={getFieldEnums}
             mappingExpressionAddField={mappingExpressionAddField}
-            mappingExpressionClearText={mappingExpressionClearText}
             isMappingExpressionEmpty={isMappingExpressionEmpty}
             mappingExpressionInit={mappingExpressionInit}
             mappingExpressionInsertText={mappingExpressionInsertText}
-            mappingExpressionObservable={mappingExpressionObservable}
             mappingExpressionRemoveField={mappingExpressionRemoveField}
             mappingExpression={mappingExpression}
-            trailerId={trailerId}
             onToggle={onToggle}
             setSelectedEnumValue={setSelectedEnumValue}
+            getAtlasmapLanguage={getAtlasmapLanguage}
           />
         </ToolbarItem>
       </ToolbarGroup>

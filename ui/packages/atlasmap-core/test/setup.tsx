@@ -14,6 +14,10 @@
     limitations under the License.
 */
 import '@testing-library/jest-dom/extend-expect';
+import MatchMediaMock from 'jest-matchmedia-mock';
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+var matchMedia = new MatchMediaMock();
 
 // re-export everything
 export * from '@testing-library/react';

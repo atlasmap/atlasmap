@@ -85,6 +85,8 @@
     "d3-shape": "^2.1.0",
     "he": "^1.2.0",
     "ky": "~0.17.0",
+    "monaco-editor": "^0.28.0",
+    "monaco-editor-webpack-plugin": "^4.1.2",
     "react": "^17.0.2",
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
@@ -121,7 +123,8 @@
     ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "ky": "ky/umd"
+      "ky": "ky/umd",
+      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.d.ts"
     },
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "transform": {
@@ -129,7 +132,8 @@
       "^.+\\.(css)$": "jest-css-modules-transform"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky)/)"
+      "<rootDir>/node_modules/(?!(ky)/)",
+      "<rootDir>/node_modules\/(?!(monaco-editor)\/)"
     ]
   },
   "eslintConfig": {

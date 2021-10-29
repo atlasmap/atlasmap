@@ -70,7 +70,7 @@ export class TransitionModel {
   delimiter: TransitionDelimiter = TransitionDelimiter.SPACE;
   userDelimiter = '';
   lookupTableName: string | null = null;
-  expression!: ExpressionModel;
+  expression: ExpressionModel | null = null;
   enableExpression = false;
   transitionFieldAction: FieldAction | null = null;
 

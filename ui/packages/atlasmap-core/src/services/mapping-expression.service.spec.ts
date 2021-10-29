@@ -18,9 +18,9 @@ import {
   DocumentInitializationModel,
 } from '../models/config.model';
 import { DocumentType, InspectionType } from '../contracts/common';
+import { IPosition, Position } from 'monaco-editor';
 
 import { DocumentDefinition } from '../models/document-definition.model';
-import { ExpressionNode } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
@@ -200,21 +200,12 @@ describe('MappingExpressionService', () => {
 
     expect(mapping).toBeDefined();
     cfg.mappingService.selectMapping(mapping);
-
-    const textNode: ExpressionNode = {
-      uuid: '0',
-      str: 'mockstr',
-      getUuid: () => '',
-      toText: () => '',
-      toHTML: () => '',
-    };
+    const pos: IPosition = { lineNumber: 1, column: 1 };
     service.addFieldToExpression(
       mapping,
       source.docDef.id,
       source.path,
-      textNode,
-      0,
-      true
+      pos as Position
     );
     const mappedField = mapping.getMappedFieldByPath(
       source.path,

@@ -30,6 +30,7 @@ import { MappingDefinition } from './mapping-definition.model';
 import { MappingExpressionService } from '../services/mapping-expression.service';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingPreviewService } from '../services/mapping-preview.service';
+import { editor } from 'monaco-editor';
 
 export class DataMapperInitializationModel {
   dataMapperVersion = '0.9.2017.07.28';
@@ -93,7 +94,8 @@ export class DocumentInitializationModel {
  */
 export class ConfigModel {
   private static cfg: ConfigModel = new ConfigModel();
-
+  atlasmapLanguageID = 'atlasmapLanguage';
+  monacoEditor: editor.IStandaloneCodeEditor | undefined;
   initCfg: DataMapperInitializationModel = new DataMapperInitializationModel();
 
   /* current ui state config */

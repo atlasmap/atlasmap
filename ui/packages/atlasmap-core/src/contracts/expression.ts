@@ -13,6 +13,18 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { ConfigModel } from '../models/config.model';
+import { MappingModel } from '../models/mapping.model';
+import { Position } from 'monaco-editor';
+
+export interface IExpressionModel {
+  simpleExpression: string;
+
+  generateInitialExpression(): void;
+  setConfigModel(cfg: ConfigModel): void;
+  toText(): string;
+  updateFieldReference(mapping: MappingModel, insertPosition?: Position): void;
+}
 
 export interface IExpressionNode {
   uuid: string;

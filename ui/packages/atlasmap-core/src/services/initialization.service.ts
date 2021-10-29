@@ -102,6 +102,7 @@ export class InitializationService {
       this.cfg.fieldActionService.isInitialized = false;
       this.cfg.initCfg.initialized = false;
       this.cfg.initCfg.mappingInitialized = false;
+      this.expressionService.initialize();
 
       if (this.cfg.mappingService == null) {
         this.cfg.errorService.addError(

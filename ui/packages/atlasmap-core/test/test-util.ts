@@ -41,6 +41,7 @@ export class TestUtils {
           ', Generated: ' +
           generated.length
       );
+      console.error(new Error().stack);
       return false;
     }
 
@@ -52,6 +53,7 @@ export class TestUtils {
         ) {
           if (!TestUtils.isEqualJSON(testName, eObj[objKey], gObj[objKey])) {
             console.error(testName + `: ${objKey} is different`);
+            console.error(new Error().stack);
             console.info('Expected: ', eObj[objKey]);
             console.error('Generated: ', gObj[objKey]);
             return false;

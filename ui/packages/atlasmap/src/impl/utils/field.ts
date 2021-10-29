@@ -20,12 +20,14 @@ import {
   ErrorScope,
   ErrorType,
   Field,
+  IExpressionModel,
   MappedField,
   MappingModel,
 } from '@atlasmap/core';
 
 import { LookupTableData } from '../../UI';
 import { initializationService } from './ui';
+import { languages } from 'monaco-editor';
 
 export type EnumValue = {
   name: string;
@@ -302,7 +304,7 @@ export function getEnumerationValues(): LookupTableData[] {
  */
 export function getFieldEnums(nodeId: string): EnumValue[] {
   const uuidNode =
-    initializationService.cfg.mappings!.activeMapping!.transition.expression!.getNode(
+    initializationService.cfg.mappings!.activeMapping!.transition.expression?.getNode(
       nodeId,
     );
   if (uuidNode && uuidNode.mappedField?.field.enumeration) {
@@ -329,7 +331,9 @@ export function setSelectedEnumValue(
       uuidNode.mappedField.field,
       selectedEnumValueIndex,
     );
-    mapping.transition.expression.updateFieldReference(mapping);
+    (mapping.transition.expression as IExpressionModel).updateFieldReference(
+      mapping,
+    );
     initializationService.cfg.mappingService.notifyMappingUpdated();
   }
 }
@@ -354,4 +358,10 @@ export function isEnumerationMapping(): boolean {
   return initializationService.cfg.mappingService.isEnumerationMapping(
     cfg.mappings?.activeMapping!,
   );
+}
+
+export function getAtlasmapLanguage(): languages.ILanguageExtensionPoint & {
+  [key: string]: any | undefined;
+} {
+  return ConfigModel.getConfig().expressionService.atlasmapLanguage;
 }

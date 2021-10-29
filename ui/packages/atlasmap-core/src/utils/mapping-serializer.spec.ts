@@ -673,7 +673,7 @@ describe('MappingSerializer', () => {
         if (!mapping || !mapping.transition.enableExpression) {
           fail();
         }
-        expect(mapping.transition.expression.toText()).toEqual(expressionStr);
+        expect(mapping.transition.expression!.toText()).toEqual(expressionStr);
 
         const mfields = mapping.getMappedFields(true);
         let i = 0;
@@ -761,7 +761,7 @@ describe('MappingSerializer', () => {
         if (!mapping || !mapping.transition.enableExpression) {
           fail();
         }
-        expect(mapping.transition.expression.toText()).toEqual(expressionStr);
+        expect(mapping.transition.expression!.toText()).toEqual(expressionStr);
 
         const mfields = mapping.getMappedFields(true);
         let i = 0;
@@ -938,14 +938,14 @@ describe('MappingSerializer', () => {
         const mapping = cfg.mappings?.mappings[expressionIndex];
         expect(mapping).toBeDefined();
 
-        let cityField = mapping?.transition.expression.nodes.find(
+        let cityField = mapping?.transition.expression!.nodes.find(
           (n) => n.toText() === `\${/city}`
         );
         expect(cityField).toBeDefined();
 
         // Remove the 'city' field from the expression.
-        mapping?.transition.expression.removeToken(cityField?.getUuid());
-        cityField = mapping?.transition.expression.nodes.find(
+        mapping?.transition.expression!.removeToken(cityField?.getPosition());
+        cityField = mapping?.transition.expression!.nodes.find(
           (n) => n.toText() === `\${/city}`
         );
         expect(cityField).toBeUndefined();
