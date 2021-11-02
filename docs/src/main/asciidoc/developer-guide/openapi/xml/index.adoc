@@ -5,7 +5,7 @@ atlasmap@googlegroups.com
 :numbered:
 :toclevels: 3
 :source-highlighter: highlightjs
-:keywords: openapi, rest, AtlasMap Design Time Service API :: XML 
+:keywords: openapi, rest, AtlasMap Design Time Service API :: XML
 :specDir: 
 :snippetDir: 
 :generator-template: v1 2019-12-20
@@ -30,12 +30,12 @@ XML Service provides XML inspection service which generate an AtlasMap Document 
 
 [.inspect]
 ==== inspect
-    
+
 `POST /xml/inspect`
 
 Inspect XML
 
-===== Description 
+===== Description
 
 Inspect a XML schema or instance and return a Document object
 
@@ -50,16 +50,16 @@ Inspect a XML schema or instance and return a Document object
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| XmlInspectionRequest 
-| XmlInspectionRequest object <<XmlInspectionRequest>> 
-| - 
-|  
-|  
+| XmlInspectionRequest
+| XmlInspectionRequest object <<XmlInspectionRequest>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -78,15 +78,15 @@ Inspect a XML schema or instance and return a Document object
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a Document object represented by XmlDocument
 |  <<XmlInspectionResponse>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -112,12 +112,12 @@ endif::internal-generation[]
 
 [.simpleHelloWorld]
 ==== simpleHelloWorld
-    
+
 `GET /xml/simple`
 
 Simple
 
-===== Description 
+===== Description
 
 Simple hello service
 
@@ -135,16 +135,16 @@ Simple hello service
 ====== Query Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| from 
-|   
-| - 
-| null 
+| from
 |  
+| -
+| null
+| 
 
-|===         
+|===
 
 
 ===== Return Type
@@ -161,15 +161,15 @@ Simple hello service
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a response
 |  <<String>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -204,12 +204,12 @@ endif::internal-generation[]
 
 [.fields-Action]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| @type 
-|  
-| String  
+| @type
+| 
+| String 
 | 
 |  
 
@@ -223,90 +223,90 @@ endif::internal-generation[]
 
 [.fields-Field]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| actions 
-|  
-| List  of <<Action>> 
+| actions
+| 
+| List  of <<Action>>
 | 
 |  
 
-| value 
-|  
-| Object  
+| value
+| 
+| Object 
 | 
 |  
 
-| arrayDimensions 
-|  
-| Integer  
+| arrayDimensions
 | 
-| int32 
-
-| arraySize 
-|  
-| Integer  
+| Integer 
 | 
 | int32 
 
-| collectionType 
-|  
-| String  
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
 | 
 |  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
 
-| docId 
-|  
-| String  
+| docId
+| 
+| String 
 | 
 |  
 
-| index 
-|  
-| Integer  
+| index
+| 
+| Integer 
 | 
 | int32 
 
-| path 
-|  
-| String  
+| path
+| 
+| String 
 | 
 |  
 
-| required 
-|  
-| Boolean  
+| required
+| 
+| Boolean 
 | 
 |  
 
-| status 
-|  
-| String  
+| status
+| 
+| String 
 | 
 |  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
 
-| fieldType 
-|  
-| String  
+| fieldType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
-| format 
-|  
-| String  
+| format
+| 
+| String 
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -320,12 +320,12 @@ endif::internal-generation[]
 
 [.fields-Fields]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| field 
-|  
-| List  of <<Field>> 
+| field
+| 
+| List  of <<Field>>
 | 
 |  
 
@@ -339,12 +339,12 @@ endif::internal-generation[]
 
 [.fields-StringList]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| string 
-|  
-| List  of <<string>> 
+| string
+| 
+| List  of <<string>>
 | 
 |  
 
@@ -358,24 +358,24 @@ endif::internal-generation[]
 
 [.fields-XmlDocument]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| fields 
-|  
-| Fields  
+| fields
+| 
+| Fields 
 | 
 |  
 
-| xmlNamespaces 
-|  
-| XmlNamespaces  
+| xmlNamespaces
+| 
+| XmlNamespaces 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -389,48 +389,48 @@ endif::internal-generation[]
 
 [.fields-XmlInspectionRequest]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| fieldNameExclusions 
-|  
-| StringList  
+| fieldNameExclusions
+| 
+| StringList 
 | 
 |  
 
-| typeNameExclusions 
-|  
-| StringList  
+| typeNameExclusions
+| 
+| StringList 
 | 
 |  
 
-| namespaceExclusions 
-|  
-| StringList  
+| namespaceExclusions
+| 
+| StringList 
 | 
 |  
 
-| xmlData 
-|  
-| String  
+| xmlData
+| 
+| String 
 | 
 |  
 
-| uri 
-|  
-| String  
+| uri
+| 
+| String 
 | 
 |  
 
-| type 
-|  
-| String  
+| type
+| 
+| String 
 | 
 |  _Enum:_ ALL, INSTANCE, SCHEMA, NONE, 
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -444,30 +444,30 @@ endif::internal-generation[]
 
 [.fields-XmlInspectionResponse]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| xmlDocument 
-|  
-| XmlDocument  
+| xmlDocument
+| 
+| XmlDocument 
 | 
 |  
 
-| errorMessage 
-|  
-| String  
+| errorMessage
+| 
+| String 
 | 
 |  
 
-| executionTime 
-|  
-| Long  
+| executionTime
+| 
+| Long 
 | 
 | int64 
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -481,30 +481,30 @@ endif::internal-generation[]
 
 [.fields-XmlNamespace]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| alias 
-|  
-| String  
+| alias
+| 
+| String 
 | 
 |  
 
-| uri 
-|  
-| String  
+| uri
+| 
+| String 
 | 
 |  
 
-| locationUri 
-|  
-| String  
+| locationUri
+| 
+| String 
 | 
 |  
 
-| targetNamespace 
-|  
-| Boolean  
+| targetNamespace
+| 
+| Boolean 
 | 
 |  
 
@@ -518,12 +518,12 @@ endif::internal-generation[]
 
 [.fields-XmlNamespaces]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| xmlNamespace 
-|  
-| List  of <<XmlNamespace>> 
+| xmlNamespace
+| 
+| List  of <<XmlNamespace>>
 | 
 |  
 

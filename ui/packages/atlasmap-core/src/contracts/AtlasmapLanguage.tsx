@@ -19,6 +19,11 @@ export const atlasmapLanguageID = 'atlasmapLanguage';
 export const atlasmapWordPattern =
   /[a-zA-Z0-9_\-*)|([^`~!@#%^&*()\-=+[{\]}\\|;:'",.<>/?\s]+/g;
 
+/*
+  Consider moving this and all Atlasmap language parsing logic to the backend
+  and access it through a language server protocol.
+  ref: https://github.com/atlasmap/atlasmap/issues/3138
+*/
 export const atlasmapLanguageConfig = {
   wordPattern: /(-?\d*\.\d\w*)|([^`~!@#%^&*()=+[{\]}\\|;:'",.<>/?\s]+)/g,
   comments: {

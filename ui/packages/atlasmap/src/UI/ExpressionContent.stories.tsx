@@ -13,9 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { EnumValue, getAtlasmapLanguage } from '../impl/utils';
 import { boolean, text } from '@storybook/addon-knobs';
-
-import { EnumValue } from '../impl/utils';
 import { ExpressionContent } from './ExpressionContent';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
@@ -52,12 +51,12 @@ export const disabled = () => (
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
-    mappingExpressionObservable={() => null}
     mappingExpressionRemoveField={action('mappingExpressionRemoveField')}
     mappingExpression={text('Mapping expression', '')}
     disabled={boolean('Disabled', true)}
     onToggle={action('onToggle')}
     setSelectedEnumValue={setSelectedEnumValue}
+    getAtlasmapLanguage={getAtlasmapLanguage}
   />
 );
 
@@ -69,7 +68,6 @@ export const enabledWithExpression = () => (
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
-    mappingExpressionObservable={() => null}
     mappingExpressionRemoveField={action('mappingExpressionRemoveField')}
     mappingExpression={text(
       'Mapping expression',
@@ -78,6 +76,7 @@ export const enabledWithExpression = () => (
     disabled={boolean('Disabled', false)}
     onToggle={action('onToggle')}
     setSelectedEnumValue={setSelectedEnumValue}
+    getAtlasmapLanguage={getAtlasmapLanguage}
   />
 );
 
@@ -89,11 +88,11 @@ export const enabledWithoutExpression = () => (
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
-    mappingExpressionObservable={() => null}
     mappingExpressionRemoveField={action('mappingExpressionRemoveField')}
     mappingExpression={text('Mapping expression', '')}
     disabled={boolean('Disabled', false)}
     onToggle={action('onToggle')}
     setSelectedEnumValue={setSelectedEnumValue}
+    getAtlasmapLanguage={getAtlasmapLanguage}
   />
 );

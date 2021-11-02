@@ -1,5 +1,6 @@
 const path = require('path')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+// const MonacoEditorPlugin = require('monaco-editor-webpack-plugin')
 const excludePaths = [/node_modules/, /dist/]
 
 module.exports = ({ config }) => {
@@ -11,6 +12,8 @@ module.exports = ({ config }) => {
       configFile: path.resolve(__dirname, "../tsconfig.json")
     })
   )
+
+  // config.resolve.plugins.push(new MonacoEditorPlugin())
 
   // Use real file paths for symlinked dependencies do avoid including them multiple times
   config.resolve.symlinks = true
