@@ -352,7 +352,7 @@ export class MappingModel {
     }
     const field = this.getField(docId, fieldPath);
     if (field?.type === FieldType.COMPLEX) {
-      this.transition.expression.hasComplexField = true;
+      this.transition.expression!.hasComplexField = true;
       return this.createReferenceField(field);
     }
     return null;

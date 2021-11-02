@@ -25,6 +25,7 @@ import {
   Field,
   FieldAction,
   FieldActionDefinition,
+  IExpressionModel,
   InitializationService,
   MappedField,
   MappingDefinition,
@@ -44,8 +45,7 @@ import {
   INotification,
 } from '../../Views';
 import { ITransformationArgument, ITransformationSelectOption } from '../../UI';
-
-import { Observable } from 'rxjs';
+import { Position } from 'monaco-editor';
 import ky from 'ky';
 
 const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
@@ -333,9 +333,7 @@ export function getField(fieldPath: string, isSource: boolean): Field | null {
 export function mappingExpressionAddField(
   selectedDocId: string,
   selectedField: string,
-  newTextNode: any,
-  atIndex: number,
-  isTrailer: boolean,
+  position: Position | null,
 ) {
   const mapping = initializationService.cfg.mappings!.activeMapping;
   if (!mapping || !selectedDocId || !selectedField) {
@@ -345,9 +343,7 @@ export function mappingExpressionAddField(
     mapping,
     selectedDocId,
     selectedField,
-    newTextNode,
-    atIndex,
-    isTrailer,
+    position!,
   );
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
@@ -372,57 +368,36 @@ export function mappingExpressionInit() {
       mapping,
       initializationService.cfg,
     );
-    mapping.transition.expression.generateInitialExpression();
+    (
+      mapping.transition.expression as IExpressionModel
+    ).generateInitialExpression();
   } else {
-    mapping.transition.expression.setConfigModel(initializationService.cfg);
-  }
-  mapping.transition.expression.updateFieldReference(mapping);
-}
-export function mappingExpressionClearText(
-  nodeId?: string,
-  startOffset?: number,
-  endOffset?: number,
-) {
-  const uuidNode =
-    initializationService.cfg.mappings!.activeMapping!.transition.expression!.clearText(
-      nodeId!,
-      startOffset,
-      endOffset,
+    (mapping.transition.expression as IExpressionModel).setConfigModel(
+      initializationService.cfg,
     );
-  initializationService.cfg.mappingService.notifyMappingUpdated();
-  return uuidNode;
-}
-export function mappingExpressionInsertText(
-  str: string,
-  nodeId?: string,
-  offset?: number,
-) {
-  initializationService.cfg.mappings!.activeMapping!.transition.expression!.insertText(
-    str,
-    nodeId,
-    offset,
-  );
-  initializationService.cfg.mappingService.notifyMappingUpdated();
-}
-export function mappingExpressionObservable(): Observable<any> | null {
-  if (
-    !initializationService.cfg.mappings?.activeMapping?.transition?.expression
-  ) {
-    return null;
   }
-  return initializationService.cfg.mappings.activeMapping.transition.expression
-    .expressionUpdated$;
-}
-export function mappingExpressionRemoveField(
-  tokenPosition?: string,
-  offset?: number,
-  removeNext?: boolean,
-) {
-  initializationService.cfg.mappings!.activeMapping!.transition.expression!.removeToken(
-    tokenPosition,
-    offset,
-    removeNext,
+  (mapping.transition.expression as IExpressionModel).updateFieldReference(
+    mapping,
   );
+}
+export async function mappingExpressionInsertText(str: string) {
+  if (
+    initializationService.cfg.mappings!.activeMapping?.transition.expression
+  ) {
+    await initializationService.cfg.mappings!.activeMapping!.transition.expression!.insertText(
+      str,
+    );
+    initializationService.cfg.mappingService.notifyMappingUpdated();
+  }
+}
+export async function mappingExpressionRemoveField(idPosition?: Position) {
+  if (
+    initializationService.cfg.mappings!.activeMapping?.transition.expression
+  ) {
+    await initializationService.cfg.mappings!.activeMapping!.transition.expression!.removeToken(
+      idPosition,
+    );
+  }
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 export function onFieldPreviewChange(field: IAtlasmapField, value: string) {
@@ -702,6 +677,9 @@ export function handleMultiplicityArgumentChange(
 
 export function selectMapping(mapping: IAtlasmapMapping) {
   initializationService.cfg.mappingService.selectMapping(mapping.mapping);
+  if (!mapping.mapping.transition?.expression) {
+    mappingExpressionInit();
+  }
 }
 
 export function deselectMapping() {

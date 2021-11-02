@@ -28,8 +28,11 @@
     "@types/jest": "^24.9.1",
     "@types/text-encoding": "^0.0.36",
     "babel-jest": "^24.9.0",
+    "canvas": "^2.8.0",
     "eslint-plugin-header": "^3.1.1",
     "husky": "^4.2.3",
+    "jest-esm-transformer": "^1.0.0",
+    "jest-matchmedia-mock": "^1.1.0",
     "text-encoding": "^0.7.0",
     "ts-jest": "^24.3.0",
     "tsdx": "^0.13.1",
@@ -41,6 +44,7 @@
     "file-saver": "^2.0.5",
     "ky": "~0.17.0",
     "loglevel": "^1.7.1",
+    "monaco-editor": "^0.28.0",
     "pako": "^2.0.3",
     "rxjs": "^6.6.7"
   },
@@ -68,16 +72,21 @@
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
       "ky": "ky/umd",
+      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js",
       "@src": "<rootDir>/src/index.ts",
       "@src/(.*)": "<rootDir>/src/$1",
       "@test/(.*)": "<rootDir>/test/$1"
     },
+    "setupFilesAfterEnv": [
+      "<rootDir>/test/setup.tsx"
+    ],
     "testEnvironment": "jsdom",
     "transform": {
+      "monaco-editor": "jest-esm-transformer",
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky)/)"
+      "/node_modules/(?!(ky|monaco-editor)/)"
     ]
   },
   "eslintConfig": {

@@ -150,6 +150,7 @@ export class MappingManagementService {
       } else {
         this.deselectMapping();
       }
+      this.cfg.mappings!.activeMapping = null;
       resolve(true);
     });
   }

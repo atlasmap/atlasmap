@@ -33,6 +33,8 @@
     "http-proxy-middleware": "^1.3.1",
     "ky": "~0.17.0",
     "lodash.clamp": "^4.0.3",
+    "monaco-editor": "^0.28.0",
+    "monaco-editor-webpack-plugin": "^4.1.2",
     "pako": "^2.0.3",
     "react": "^17.0.2",
     "react-dnd": "^14.0.2",
@@ -92,13 +94,15 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "ky": "ky/umd"
+      "ky": "ky/umd",
+      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js"
     },
     "transform": {
+      "monaco-editor": "jest-esm-transformer",
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles)/)"
+      "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles|monaco-editor)/)"
     ]
   }
 }

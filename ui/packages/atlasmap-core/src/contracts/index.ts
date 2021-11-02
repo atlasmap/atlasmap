@@ -14,6 +14,7 @@
     limitations under the License.
 */
 export * from './adm-digest';
+export * from './AtlasmapLanguage';
 export * from './common';
 export * from './documents';
 export * from './expression';

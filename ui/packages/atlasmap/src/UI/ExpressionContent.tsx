@@ -18,45 +18,53 @@ import {
   Form,
   FormGroup,
   InputGroup,
-  TextInput,
   Tooltip,
 } from '@patternfly/react-core';
 import { EnumValue, useToggle } from '../impl/utils';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Environment,
+  IKeyboardEvent,
+  KeyCode,
+  KeyMod,
+  Position,
+  Range,
+  Token,
+  editor,
+  languages,
+} from 'monaco-editor';
 import React, {
   FunctionComponent,
-  KeyboardEvent,
-  MouseEvent,
   useCallback,
   useEffect,
+  useState,
 } from 'react';
-
 import { ExpressionEnumSelect } from './ExpressionEnumSelect';
 import { ExpressionFieldSearch } from './ExpressionFieldSearch';
-import { IExpressionNode } from '@atlasmap/core';
+import { atlasmapLanguageID } from '@atlasmap/core';
 import { css } from '@patternfly/react-styles';
-import styles from '@patternfly/react-styles/css/components/FormControl/form-control';
+import monacoEditorStyle from './ExpressionContent.module.css';
 
-let atIndex = -1;
-let atContainer: Node | undefined;
+// Establish a Monaco environment.
+declare global {
+  interface Window {
+    MonacoEnvironment: Environment;
+  }
+}
+window.MonacoEnvironment = {
+  // TODO: Need to provide a worker function to avoid console warning:
+  // You must define a function MonacoEnvironment.getWorkerUrl or MonacoEnvironment.getWorker
+  getWorker: function (_workerId: string, _label: string): Worker {
+    return null as unknown as Worker;
+  },
+};
+
+let insertPosition: Position | null = null;
 let enumCandidates: EnumValue[] = [];
-let expressionUpdatedSubscription: Subscription | null;
-let lastUpdatedEvent: IExpressionUpdatedEvent | null = null;
 let mappedFieldCandidates: string[][] = [];
-let markup: HTMLDivElement | null = null;
 let searchFilter = '';
 let searchMode = false;
 let selectedNodeId: string = '';
-let trailerHTML = '';
-let trailerID = '';
-let getMappingExpression: () => string;
 let mappingExprInit: () => void;
-let mappingExprObservable: () => Observable<IExpressionUpdatedEvent> | null;
-
-interface IExpressionUpdatedEvent {
-  node: IExpressionNode;
-  offset: number;
-}
 
 export interface IExpressionContentProps {
   executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
@@ -64,142 +72,49 @@ export interface IExpressionContentProps {
   mappingExpressionAddField: (
     selectedDocId: string,
     selectedField: string,
-    newTextNode: IExpressionNode,
-    atIndex: number,
-    isTrailer: boolean,
+    position: Position | null,
   ) => void;
-  mappingExpressionClearText: (
-    nodeId?: string,
-    startOffset?: number,
-    endOffset?: number,
-  ) => IExpressionNode | null;
   isMappingExpressionEmpty: boolean;
   mappingExpressionInit: () => void;
-  mappingExpressionInsertText: (
-    str: string,
-    nodeId?: string | undefined,
-    offset?: number | undefined,
-  ) => void;
-  mappingExpressionObservable: () => Observable<IExpressionUpdatedEvent> | null;
-  mappingExpressionRemoveField: (
-    tokenPosition?: string,
-    offset?: number,
-    removeNext?: boolean,
-  ) => void;
+  mappingExpressionInsertText: (str: string) => void;
+  mappingExpressionRemoveField: (idPosition?: Position) => void;
   mappingExpression?: string;
-  trailerId: string;
   disabled: boolean;
   onToggle: () => void;
   setSelectedEnumValue: (
     selectedEnum: string,
     selectedEnumValueIndex: number,
   ) => void;
-}
-
-function updateExpressionMarkup(reset?: boolean) {
-  if (!markup) {
-    return;
-  }
-  if (reset) {
-    markup.innerHTML = trailerHTML;
-  } else {
-    const currentExpression = getMappingExpression();
-    markup.innerHTML = currentExpression + trailerHTML;
-  }
-}
-
-function moveCaretToEnd() {
-  if (!markup || trailerID.length === 0) {
-    return;
-  }
-  const trailerNode = markup.querySelector('#' + trailerID);
-  if (!trailerNode) {
-    return;
-  }
-  let range;
-  if (window.getSelection()!.rangeCount > 0) {
-    range = window.getSelection()!.getRangeAt(0);
-  } else {
-    range = document.createRange();
-    window.getSelection()!.addRange(range);
-  }
-  range.selectNode(trailerNode.childNodes[0]);
-  range.setStart(trailerNode.childNodes[0], 0);
-  range.collapse(true);
-}
-
-function restoreCaretPosition(event: IExpressionUpdatedEvent) {
-  if (!markup || !event || !event.node) {
-    return;
-  }
-
-  for (let i = 0; i < markup.childNodes.length; i++) {
-    const target: any = markup.childNodes[i];
-    if (target.id === event.node.uuid) {
-      const selection = window.getSelection();
-      if (selection && selection.rangeCount) {
-        const range = selection.getRangeAt(0);
-        const actualNode = target.childNodes[0] ? target.childNodes[0] : target;
-        range.selectNode(actualNode);
-        if (event.offset <= actualNode.length) {
-          range.setStart(actualNode, event.offset);
-        }
-        range.collapse(true);
-      }
-      return;
-    }
-  }
-  moveCaretToEnd();
-}
-
-export function initializeMappingExpression() {
-  mappingExprInit();
-  const mappingExprObs = mappingExprObservable();
-  if (mappingExprObs) {
-    expressionUpdatedSubscription = mappingExprObs.subscribe(
-      (updatedEvent: IExpressionUpdatedEvent) => {
-        lastUpdatedEvent = updatedEvent;
-      },
-    );
-  }
-  updateExpressionMarkup();
-  if (!lastUpdatedEvent) {
-    moveCaretToEnd();
-  } else {
-    restoreCaretPosition(lastUpdatedEvent);
-    lastUpdatedEvent = null;
-  }
+  getAtlasmapLanguage: () =>
+    | (languages.ILanguageExtensionPoint & {
+        [key: string]: any;
+      })
+    | undefined;
 }
 
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   executeFieldSearch,
   getFieldEnums,
   mappingExpressionAddField,
-  mappingExpressionClearText,
   isMappingExpressionEmpty,
   mappingExpressionInit,
   mappingExpressionInsertText,
-  mappingExpressionObservable,
   mappingExpressionRemoveField,
   mappingExpression,
-  trailerId,
   disabled,
   onToggle,
   setSelectedEnumValue,
+  getAtlasmapLanguage,
 }) => {
+  const [editorInitPhase, setEditorInitPhase] = useState(false);
+  const [insertField, setInsertField] = useState<boolean>();
+  const [insertedField, setInsertedField] = useState<boolean>(false);
+
   let addFieldToExpression: (
     selectedDocId: string,
     selectedField: string,
-    newTextNode: IExpressionNode,
-    atIndex: number,
-    isTrailer: boolean,
+    position: Position | null,
   ) => void;
-  let clearText: (
-    nodeId?: string,
-    startOffset?: number,
-    endOffset?: number,
-  ) => IExpressionNode | null;
-  let fieldSearch: (searchFilter: string, isSource: boolean) => string[][];
   let getEnums: (enumFieldName: string) => EnumValue[];
   let setSelEnumValue: (
     selectedEnumNodeId: string,
@@ -211,6 +126,13 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     toggleOn: toggleEnumSelOn,
     toggleOff: toggleEnumSelOff,
   } = useToggle(false);
+
+  let [condExprEditor, setCondExprEditor] = useState<
+    editor.IStandaloneCodeEditor | undefined
+  >();
+
+  getEnums = getFieldEnums;
+  setSelEnumValue = setSelectedEnumValue;
 
   /**
    * An enumeration value has been selected for the specified selected field node ID.
@@ -226,185 +148,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     clearEnumSelect();
   }
 
-  function insertTextAtCaretPosition(key: string) {
-    const range = window.getSelection()!.getRangeAt(0);
-    const startContainer = range.startContainer;
-    const startOffset = range.startOffset;
-
-    // On initial caret positioning before the first field node, the markup
-    // and start container are the same.
-    if (markup && startContainer === markup) {
-      if (startOffset === 0) {
-        const initialElement = startContainer.childNodes[0] as Element;
-        mappingExpressionInsertText(key, initialElement.getAttribute('id')!, 0);
-      } else {
-        mappingExpressionInsertText(key);
-      }
-      return;
-    }
-    const nodeId = getCaretPositionNodeId();
-
-    if (nodeId === trailerID) {
-      mappingExpressionInsertText(key);
-    } else {
-      mappingExpressionInsertText(key, nodeId, startOffset);
-    }
-  }
-
-  function removeTokenAtCaretPosition(before: boolean) {
-    const selection = window.getSelection();
-    let removeNext: boolean = false;
-    if (!selection || !markup) {
-      return;
-    }
-    if (!selection.rangeCount) {
-      if (getCaretPositionNodeId() === trailerID) {
-        if (before) {
-          mappingExpressionRemoveField();
-          moveCaretToEnd();
-        }
-      }
-      return;
-    }
-    // The window selection node will be the text node if the cursor lies
-    // at the boundary between the text node and a field node.  In that
-    // case remove the next node.
-    removeNext =
-      !before &&
-      selection.focusNode &&
-      selection.focusNode.nodeType === selection.focusNode.TEXT_NODE &&
-      selection.focusOffset === selection.focusNode.textContent?.length
-        ? true
-        : false;
-    const range = selection.getRangeAt(0);
-    const startContainer = range.startContainer;
-    const startOffset = range.startOffset;
-
-    if (startContainer === markup) {
-      if (startOffset === 0) {
-        // head of expression
-        if (!before && !isMappingExpressionEmpty) {
-          mappingExpressionRemoveField(getCaretPositionNodeId(), 0);
-        }
-        return;
-      }
-      // end of expression
-      if (before && !isMappingExpressionEmpty) {
-        mappingExpressionRemoveField();
-      }
-      return;
-    }
-
-    if (getCaretPositionNodeId(startContainer) === trailerID) {
-      if (before) {
-        mappingExpressionRemoveField();
-      }
-      moveCaretToEnd();
-      return;
-    }
-    mappingExpressionRemoveField(
-      getCaretPositionNodeId(),
-      before ? startOffset - 1 : startOffset,
-      removeNext,
-    );
-    if (getCaretPositionNodeId() === trailerID) {
-      moveCaretToEnd();
-    }
-  }
-
-  /**
-   * Handle key down events.
-   *
-   * @param event - expression keyboard event
-   */
-  function onKeyDown(event: KeyboardEvent<HTMLDivElement>): void {
-    if ('Backspace' === event.key) {
-      // TODO handle cursor position
-      event.preventDefault();
-      removeTokenAtCaretPosition(true);
-      if (searchMode) {
-        updateSearchMode();
-      }
-    } else if ('Delete' === event.key) {
-      event.preventDefault();
-      removeTokenAtCaretPosition(false);
-      if (searchMode) {
-        updateSearchMode();
-      }
-    }
-  }
-
-  /**
-   * A mouse click has occurred within the expression box.
-   *
-   * @param event - mouse event
-   */
-  function onExprClick(event: MouseEvent<HTMLElement>) {
-    selectedNodeId = getCaretPositionNodeId();
-
-    // Check for clicking on an enumeration field node.
-    enumCandidates = getEnums(selectedNodeId);
-    if (enumCandidates.length > 0) {
-      event.preventDefault();
-      toggleEnumSelOn();
-    }
-  }
-
-  function onKeyPress(event: KeyboardEvent<HTMLDivElement>) {
-    if (event.ctrlKey || event.metaKey || event.altKey) {
-      return;
-    }
-    if (event.key.length > 1) {
-      return;
-    }
-    event.preventDefault();
-
-    if (isMappingExpressionEmpty) {
-      initializeMappingExpression();
-    }
-    if (searchMode) {
-      if (event.key.match(/[a-z0-9]/i)) {
-        searchFilter += event.key;
-        mappedFieldCandidates = fieldSearch(searchFilter, true);
-      }
-    } else {
-      searchMode = event.key === '@' ? true : false;
-      if (searchMode) {
-        atContainer = window.getSelection()!.getRangeAt(0).startContainer;
-        atIndex = window.getSelection()!.getRangeAt(0).startOffset;
-        searchFilter = '';
-        mappedFieldCandidates = fieldSearch(searchFilter, true);
-      }
-    }
-    insertTextAtCaretPosition(event.key);
-  }
-
-  function onChange(_event: React.FormEvent<HTMLDivElement>) {
-    if (isMappingExpressionEmpty) {
-      initMappingExpression();
-    }
-    if (expressionUpdatedSubscription) {
-      expressionUpdatedSubscription.unsubscribe();
-    }
-    expressionUpdatedSubscription = mappingExprObservable()!.subscribe(
-      (updatedEvent: IExpressionUpdatedEvent) => {
-        updateExpressionMarkup();
-        restoreCaretPosition(updatedEvent);
-      },
-    );
-    updateExpressionMarkup();
-  }
-
-  function onPaste(event: React.ClipboardEvent<HTMLDivElement>) {
-    if (!event || !event.clipboardData) {
-      return;
-    }
-    event.preventDefault();
-    const pasted = event.clipboardData.getData('text/plain');
-    // TODO handle cursor position... for now just append to the end
-    mappingExpressionInsertText(pasted);
-  }
-
   /**
    * The user has selected a field from the search select menu.  Extract
    * the field name and the scope if it is present.
@@ -417,87 +160,20 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     selectedDocId: string,
     selectedField: string,
   ): void {
-    const newTextNode = clearAtText(getCaretPositionNodeId(atContainer));
-    if (newTextNode === null) {
-      return;
-    }
-    const isTrailer = getCaretPositionNodeId(atContainer) === trailerID;
-    addFieldToExpression(
-      selectedDocId,
-      selectedField,
-      newTextNode,
-      atIndex,
-      isTrailer,
-    );
-    clearSearchMode(false);
-    markup!.focus();
-  }
-
-  /**
-   * Clear user input from the selected range offset within the TextNode at
-   * the specified node ID.  The input will become a FieldNode so we don't
-   * need the text.  Return the new UUID position indicator.
-   */
-  function clearAtText(nodeId: string): IExpressionNode | null {
-    if (atIndex === -1) {
-      return null;
-    }
-    const startOffset = atIndex;
-    const endOffset = startOffset + searchFilter.length + 1;
-    let updatedTextNode = null;
-
-    if (nodeId === trailerID) {
-      updatedTextNode = clearText();
-    } else {
-      updatedTextNode = clearText(nodeId, startOffset, endOffset);
-    }
-    return updatedTextNode;
-  }
-
-  /**
-   * Return the UUID string representing the caret position as defined
-   * by the user-specified starting container.  If no container is
-   * specified then return the current caret position node ID value.
-   *
-   * @param startContainer
-   */
-  function getCaretPositionNodeId(startContainer?: Node): string {
-    const selection = window.getSelection();
-    if (!startContainer) {
-      if (!selection || selection.rangeCount === 0) {
-        return trailerID;
-      }
-      startContainer = selection!.getRangeAt(0).startContainer;
-    }
-    if (startContainer.nodeType === selection?.focusNode?.TEXT_NODE) {
-      return startContainer.parentElement!.getAttribute('id')!;
-    } else {
-      return (startContainer.firstChild! as HTMLElement)?.getAttribute('id')!;
-    }
+    addFieldToExpression(selectedDocId, selectedField, insertPosition);
+    clearSearchMode();
+    condExprEditor!.focus();
+    setInsertedField(true);
   }
 
   /**
    * Clear elements associated with mapped-field searching.
    */
-  function clearSearchMode(clearAtSign: boolean): void {
-    if (clearAtSign) {
-      clearAtText(getCaretPositionNodeId(atContainer));
-    }
-    atIndex = -1;
-    atContainer = undefined;
+  function clearSearchMode(): void {
+    insertPosition = null;
     searchMode = false;
     searchFilter = '';
     mappedFieldCandidates = [];
-  }
-
-  function updateSearchMode(): void {
-    if (searchFilter.length === 0) {
-      mappedFieldCandidates = [];
-      searchMode = false;
-    } else {
-      searchFilter = searchFilter.substr(0, searchFilter.length - 1);
-      mappedFieldCandidates = fieldSearch(searchFilter, true);
-    }
   }
 
   function clearEnumSelect() {
@@ -506,36 +182,379 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     toggleEnumSelOff();
   }
 
-  const initMappingExpression = useCallback(() => {
-    initializeMappingExpression();
+  /**
+   * Establish mapped field candidates for the field search menu.
+   *
+   * @returns
+   */
+  function insertFieldReference(): boolean {
+    searchMode = true;
+    insertPosition = condExprEditor?.getPosition()!;
+    searchFilter = '';
+    mappedFieldCandidates = executeFieldSearch(searchFilter, true);
+    setInsertField(false);
+    return true;
+  }
+
+  async function insertFieldCb() {
+    setInsertField(true);
+    setInsertedField(false);
+  }
+
+  /**
+   * The monaco editor cannot be established without a monaco-container HTML element
+   * (conditional editor DOM).  This element only exists if the conditional expression
+   * box is enabled (either through the f(x) button or from a previous state - ref
+   * 'disabled' property).
+   */
+  const establishEditor = useCallback((): void => {
+    const atlasmapLanguage = getAtlasmapLanguage();
+    languages.register({ id: atlasmapLanguageID });
+
+    languages.onLanguage(atlasmapLanguage!.id, () => {
+      atlasmapLanguage!.loader().then((module: any) => {
+        // Register a tokens provider for the Atlasmap language.
+        languages.setMonarchTokensProvider(
+          atlasmapLanguage!.id,
+          module.language,
+        );
+
+        // Register a language configuration for the Atlasmap language.
+        languages.setLanguageConfiguration(
+          atlasmapLanguage!.id,
+          module.languageConfiguration,
+        );
+      });
+    });
+
+    // Establish a unique Atlasmap theme.
+    editor.defineTheme('atlasmapTheme', {
+      base: 'vs',
+      inherit: true,
+      rules: [
+        { token: 'identifier', foreground: '0b3c0b', fontStyle: 'bold' },
+        { token: 'action', foreground: '641564', fontStyle: 'italic' },
+        { token: 'number', foreground: '0f2386', fontStyle: 'none' },
+        { token: 'number.float', foreground: '0f2386', fontStyle: 'none' },
+      ],
+      colors: {
+        'editor.foreground': '#000000',
+        'editor.background': '#EDF9FA',
+        'editorCursor.foreground': '#8B0000',
+        'editor.lineHighlightBackground': '#0000FF20',
+        'editor.selectionBackground': '#88000030',
+        'editor.inactiveSelectionBackground': '#88000015',
+      },
+    });
+
+    const condEditorDOM = document.getElementById('monaco-container');
+    const condExpressionEditor = editor.create(condEditorDOM!, {
+      ariaLabel: 'atlasmapEditor',
+      automaticLayout: true,
+      cursorWidth: 2,
+      find: {
+        addExtraSpaceOnTop: false,
+        autoFindInSelection: 'never',
+        seedSearchStringFromSelection: 'never',
+      },
+      folding: false,
+      glyphMargin: false,
+      hideCursorInOverviewRuler: true,
+      language: atlasmapLanguageID,
+      lineDecorationsWidth: 0,
+      lineNumbers: 'off',
+      lineNumbersMinChars: 0,
+      minimap: { enabled: false },
+      overviewRulerLanes: 0,
+      overviewRulerBorder: false,
+      value: mappingExpression,
+      scrollBeyondLastColumn: 0,
+      scrollbar: {
+        horizontal: 'hidden',
+        horizontalHasArrows: false,
+        vertical: 'auto',
+        verticalHasArrows: false,
+      },
+      tabCompletion: 'off',
+      theme: 'atlasmapTheme',
+      wordWrap: 'on',
+    });
+    /*
+      Custom command override:
+      condExpressionEditor.addCommand(
+        monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_Z,
+        function () {
+          console.log('Custom undo');
+          condExprEditor?.trigger('keyboard', 'undo', null);
+        },
+      );
+    */
+    const addFieldRef: editor.IActionDescriptor = {
+      id: 'insert-field-reference',
+      label: 'Insert AtlasMap Field Reference',
+      contextMenuOrder: 0, // choose the order
+      contextMenuGroupId: 'operation', // create a new grouping
+      keybindings: [
+        // eslint-disable-next-line no-bitwise
+        KeyMod.CtrlCmd | KeyCode.Enter,
+      ],
+      run: insertFieldCb,
+    };
+
+    condExpressionEditor.addAction(addFieldRef);
+    setCondExprEditor(condExpressionEditor);
+  }, [getAtlasmapLanguage, mappingExpression]);
+
+  const initializeMappingExpression = useCallback(() => {
+    mappingExprInit();
   }, []);
 
-  addFieldToExpression = mappingExpressionAddField;
-  clearText = mappingExpressionClearText;
-  fieldSearch = executeFieldSearch;
-  getEnums = getFieldEnums;
-  setSelEnumValue = setSelectedEnumValue;
+  /**
+   * A mouse click has occurred within the expression box.
+   *
+   * @param event - mouse event
+   */
+  const onExprClick = useCallback(
+    (_event: editor.ICursorPositionChangedEvent) => {
+      // Check for clicking on an enumeration field node.
+      enumCandidates = getEnums(selectedNodeId);
+      if (enumCandidates.length > 0) {
+        toggleEnumSelOn();
+      }
+    },
+    [getEnums, toggleEnumSelOn],
+  );
 
-  getMappingExpression = () => mappingExpression || '';
-  mappingExprInit = mappingExpressionInit;
-  mappingExprObservable = mappingExpressionObservable;
-  trailerID = trailerId;
-  trailerHTML = `<span id="${trailerID}">&nbsp;</span>`;
+  /**
+   * Monaco editor model content change callback.
+   */
+  const onChange = useCallback(
+    (_event: editor.IModelContentChangedEvent) => {
+      if (isMappingExpressionEmpty) {
+        initializeMappingExpression();
+        return;
+      }
+      mappingExpressionInsertText(condExprEditor!.getValue());
+    },
+    [
+      condExprEditor,
+      initializeMappingExpression,
+      isMappingExpressionEmpty,
+      mappingExpressionInsertText,
+    ],
+  );
 
-  const uninitializeMappingExpression = () => {
-    if (expressionUpdatedSubscription) {
-      expressionUpdatedSubscription.unsubscribe();
+  const onPaste = useCallback(
+    (event: editor.IPasteEvent) => {
+      if (!condExprEditor || !event) {
+        return;
+      }
+      mappingExpressionInsertText(condExprEditor.getValue());
+      condExprEditor!.focus();
+    },
+    [condExprEditor, mappingExpressionInsertText],
+  );
+
+  const updateSearchMode = useCallback(() => {
+    if (searchFilter.length === 0) {
+      mappedFieldCandidates = [];
+      searchMode = false;
+    } else {
+      searchFilter = searchFilter.substr(0, searchFilter.length - 1);
+      mappedFieldCandidates = executeFieldSearch(searchFilter, true);
     }
-  };
+  }, [executeFieldSearch]);
+
+  /**
+   * Lexically tokenize the specified expression text source line.
+   */
+  const lexExpression = useCallback(
+    (editBuffer: string): Token[] | undefined => {
+      const tokens = editor.tokenize(editBuffer, atlasmapLanguageID);
+      return tokens.shift();
+    },
+    [],
+  );
+
+  /**
+   * Remove the token at the current cursor position or remove the entire
+   * identifier string if the cursor points anywhere within it.
+   *
+   * @param before - delete before or after the current position (bs/del)
+   * @returns
+   */
+  const removeTokenAtCaretPosition = useCallback(
+    (before: boolean) => {
+      let textLine = condExprEditor!.getValue();
+      const currentPos = condExprEditor!.getPosition();
+      if (!currentPos) {
+        return;
+      }
+      const adjustedColumn = before ? currentPos.column - 1 : currentPos.column;
+      const lines = textLine.split('\n');
+      const lineText = lines[currentPos.lineNumber - 1];
+      const expTokens = lexExpression(lineText);
+      let targetToken = null;
+      let deletionRange = null;
+      const keyword = condExprEditor?.getModel()!.getWordAtPosition(currentPos);
+      let targetColumn = 1;
+
+      for (let tokenIndex = 0; tokenIndex < expTokens!.length; tokenIndex++) {
+        let t: Token = expTokens![tokenIndex];
+        if (t.type === 'identifier') {
+          if (
+            adjustedColumn >= t.offset + 1 &&
+            adjustedColumn <= t.offset + keyword?.word.length!
+          ) {
+            targetColumn = before ? t.offset + 2 : t.offset + 1;
+            deletionRange = new Range(
+              currentPos.lineNumber,
+              targetColumn,
+              currentPos.lineNumber,
+              targetColumn + keyword?.word.length! - 1,
+            );
+            targetToken = t;
+            break;
+          }
+        }
+      }
+
+      // Remove the identifier.
+      if (targetToken) {
+        const op = {
+          identifier: 'expression-text-1',
+          range: deletionRange!,
+          text: '',
+          forceMoveMarkers: true,
+        };
+        condExprEditor!.executeEdits('expression', [op]);
+        mappingExpressionRemoveField(
+          new Position(
+            currentPos.lineNumber,
+            before ? targetColumn - 1 : targetColumn,
+          ),
+        );
+      }
+    },
+    [condExprEditor, lexExpression, mappingExpressionRemoveField],
+  );
+
+  /**
+   * Handle key down events.
+   *
+   * @param event - expression keyboard event
+   */
+  const onKeyDown = useCallback(
+    (event: IKeyboardEvent) => {
+      if (
+        event.metaKey ||
+        event.altKey ||
+        event.ctrlKey ||
+        event.browserEvent.key === 'Enter'
+      ) {
+        return;
+      }
+      if (isMappingExpressionEmpty) {
+        initializeMappingExpression();
+      }
+      if (searchMode) {
+        if (event.browserEvent.key.match(/[a-z0-9]/i)) {
+          searchFilter += event.browserEvent.key;
+          mappedFieldCandidates = executeFieldSearch(searchFilter, true);
+        }
+      }
+
+      if ('Backspace' === event.browserEvent.key) {
+        removeTokenAtCaretPosition(true);
+        if (searchMode) {
+          updateSearchMode();
+        }
+      } else if ('Delete' === event.browserEvent.key) {
+        removeTokenAtCaretPosition(false);
+        if (searchMode) {
+          updateSearchMode();
+        }
+      }
+    },
+    [
+      executeFieldSearch,
+      initializeMappingExpression,
+      isMappingExpressionEmpty,
+      removeTokenAtCaretPosition,
+      updateSearchMode,
+    ],
+  );
+
+  /**
+   * Toggle the conditional expression monaco editor and expression JSON.
+   */
+  const toggleExpression = useCallback(() => {
+    if (condExprEditor) {
+      setCondExprEditor(undefined);
+      setEditorInitPhase(false);
+    } else {
+      setEditorInitPhase(true);
+      initializeMappingExpression();
+    }
+    onToggle();
+  }, [condExprEditor, initializeMappingExpression, onToggle]);
+
+  addFieldToExpression = mappingExpressionAddField;
+  mappingExprInit = mappingExpressionInit;
+
+  if (insertField) {
+    insertFieldReference();
+    condExprEditor!.setValue(mappingExpression!);
+  }
 
   useEffect(() => {
-    if (mappingExpression !== undefined) {
-      initMappingExpression();
-      return () => uninitializeMappingExpression();
+    if (disabled) {
+      return;
+    }
+
+    // The editor initialization phase is required to allow for the async creation
+    // of the monaco editor container DOM.
+    if (editorInitPhase) {
+      if (!condExprEditor) {
+        establishEditor();
+      } else {
+        const eventListener = document.getElementById('monaco-container');
+        if (eventListener) {
+          eventListener.addEventListener('cut', (_event) => {
+            mappingExpressionInsertText(condExprEditor!.getValue());
+          });
+          condExprEditor.onDidChangeCursorPosition(onExprClick);
+          condExprEditor.onDidChangeModelContent(onChange);
+          condExprEditor.onDidPaste(onPaste);
+          condExprEditor.onKeyDown(onKeyDown);
+        }
+        setEditorInitPhase(false); // Monaco editor initialization phase complete.
+      }
+    } else if (mappingExpression !== undefined && !condExprEditor) {
+      setEditorInitPhase(true); // Initiate Monaco editor initialization phase.
+    } else if (insertedField) {
+      condExprEditor!.setValue(mappingExpression!);
+      setInsertedField(false);
     }
     return;
-  }, [mappingExpression, initMappingExpression]);
-
+  }, [
+    condExprEditor,
+    disabled,
+    editorInitPhase,
+    establishEditor,
+    executeFieldSearch,
+    lexExpression,
+    initializeMappingExpression,
+    insertedField,
+    isMappingExpressionEmpty,
+    onChange,
+    onExprClick,
+    onKeyDown,
+    onPaste,
+    mappingExpression,
+    mappingExpressionInsertText,
+    mappingExpressionRemoveField,
+  ]);
   return (
     <>
       <Form>
@@ -552,7 +571,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
                 variant={'control'}
                 aria-label="Enable/ Disable conditional mapping expression"
                 tabIndex={-1}
-                onClick={onToggle}
+                onClick={toggleExpression}
                 data-testid={
                   'enable-disable-conditional-mapping-expression-button'
                 }
@@ -566,36 +585,29 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
                 </i>
               </Button>
             </Tooltip>
-            {!disabled && mappingExpression !== undefined ? (
+            {mappingExpression !== undefined && !disabled && (
               <Tooltip
-                content={"Enter text or '@' for source fields menu."}
+                content={
+                  'Enter text or enter Ctrl+Enter/right-click for a source fields menu.'
+                }
                 enableFlip={true}
                 entryDelay={750}
                 exitDelay={100}
                 position={'left'}
               >
                 <div
-                  id="expressionMarkup"
-                  key="expressionMarkup-div"
+                  id="monaco-container"
+                  key="monaco-container-div"
                   aria-label="Expression Content"
-                  contentEditable
-                  className={css(styles.formControl, 'ExpressionFieldSearch')}
-                  suppressContentEditableWarning={true}
-                  onChange={onChange}
-                  onKeyDown={onKeyDown}
-                  onKeyPress={onKeyPress}
-                  onPaste={onPaste}
-                  onClick={onExprClick}
-                  ref={(el) => (markup = el)}
-                  tabIndex={-1}
-                  style={{ paddingLeft: 8 }}
+                  className={css(monacoEditorStyle)}
+                  style={{
+                    display: 'flex',
+                    overflow: 'hidden',
+                    paddingLeft: 8,
+                    width: '100%',
+                  }}
                 />
               </Tooltip>
-            ) : (
-              <TextInput
-                isDisabled={true}
-                aria-label={'Expression content'}
-              /> /* this to render a disabled field */
             )}
           </InputGroup>
         </FormGroup>

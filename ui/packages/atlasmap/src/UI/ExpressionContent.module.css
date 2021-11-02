@@ -1,0 +1,6 @@
+.monacoEditorStyle {
+  --bg-color: var(--pf-global--BackgroundColor--100);
+  --bg-color-fade: rgba(255, 255, 255, 0.5);
+  --pf-c-form-control--FontSize: small;
+  border: 1px solid #ccc;
+}

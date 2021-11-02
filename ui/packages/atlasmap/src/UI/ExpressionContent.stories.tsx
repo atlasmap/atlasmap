@@ -13,9 +13,8 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { EnumValue, getAtlasmapLanguage } from '../impl/utils';
 import { boolean, text } from '@storybook/addon-knobs';
-
-import { EnumValue } from '../impl/utils';
 import { ExpressionContent } from './ExpressionContent';
 import React from 'react';
 import { action } from '@storybook/addon-actions';
@@ -49,26 +48,15 @@ export const disabled = () => (
     executeFieldSearch={executeFieldSearch}
     getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action('mappingExpressionAddField')}
-    mappingExpressionClearText={() => ({
-      str: '',
-      uuid: '123',
-      getUuid() {
-        return this.uuid;
-      },
-      toText() {
-        return this.str;
-      },
-    })}
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
-    mappingExpressionObservable={() => null}
     mappingExpressionRemoveField={action('mappingExpressionRemoveField')}
     mappingExpression={text('Mapping expression', '')}
-    trailerId={text('Trailer id', 'expression-trailer')}
     disabled={boolean('Disabled', true)}
     onToggle={action('onToggle')}
     setSelectedEnumValue={setSelectedEnumValue}
+    getAtlasmapLanguage={getAtlasmapLanguage}
   />
 );
 
@@ -77,29 +65,18 @@ export const enabledWithExpression = () => (
     executeFieldSearch={executeFieldSearch}
     getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action('mappingExpressionAddField')}
-    mappingExpressionClearText={() => ({
-      str: '',
-      uuid: '123',
-      getUuid() {
-        return this.uuid;
-      },
-      toText() {
-        return this.str;
-      },
-    })}
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
-    mappingExpressionObservable={() => null}
     mappingExpressionRemoveField={action('mappingExpressionRemoveField')}
     mappingExpression={text(
       'Mapping expression',
       'if (prop-city== Boston, city, state)',
     )}
-    trailerId={text('Trailer id', 'expression-trailer')}
     disabled={boolean('Disabled', false)}
     onToggle={action('onToggle')}
     setSelectedEnumValue={setSelectedEnumValue}
+    getAtlasmapLanguage={getAtlasmapLanguage}
   />
 );
 
@@ -108,25 +85,14 @@ export const enabledWithoutExpression = () => (
     executeFieldSearch={executeFieldSearch}
     getFieldEnums={getFieldEnums}
     mappingExpressionAddField={action('mappingExpressionAddField')}
-    mappingExpressionClearText={() => ({
-      str: '',
-      uuid: '123',
-      getUuid() {
-        return this.uuid;
-      },
-      toText() {
-        return this.str;
-      },
-    })}
     isMappingExpressionEmpty={boolean('isMappingExpressionEmpty', true)}
     mappingExpressionInit={action('mappingExpressionInit')}
     mappingExpressionInsertText={action('mappingExpressionInsertText')}
-    mappingExpressionObservable={() => null}
     mappingExpressionRemoveField={action('mappingExpressionRemoveField')}
     mappingExpression={text('Mapping expression', '')}
-    trailerId={text('Trailer id', 'expression-trailer')}
     disabled={boolean('Disabled', false)}
     onToggle={action('onToggle')}
     setSelectedEnumValue={setSelectedEnumValue}
+    getAtlasmapLanguage={getAtlasmapLanguage}
   />
 );

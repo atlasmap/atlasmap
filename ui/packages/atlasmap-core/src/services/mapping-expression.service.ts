@@ -20,7 +20,13 @@ import {
   ErrorType,
 } from '../models/error.model';
 import { MappedField, MappingModel } from '../models/mapping.model';
+import { Position, languages } from 'monaco-editor';
 import { TransitionMode, TransitionModel } from '../models/transition.model';
+import {
+  atlasmapLanguageConfig,
+  atlasmapLanguageID,
+  atlasmapTokensProvider,
+} from '../contracts/AtlasmapLanguage';
 
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
@@ -28,7 +34,7 @@ import { ExpressionModel } from '../models/expression.model';
 import { Field } from '../models/field.model';
 import { FieldActionArgumentValue } from '../models/field-action.model';
 import { FieldType } from '../contracts/common';
-import { IExpressionNode } from '../contracts/expression';
+import { IExpressionModel } from '../contracts/expression';
 import { MappingUtil } from '../utils/mapping-util';
 import { Multiplicity } from '../contracts/field-action';
 import { Subscription } from 'rxjs';
@@ -40,6 +46,35 @@ export class MappingExpressionService {
   cfg!: ConfigModel;
 
   private mappingUpdatedSubscription?: Subscription;
+
+  atlasmapLanguage: languages.ILanguageExtensionPoint & {
+    [key: string]: any;
+  } = {
+    id: atlasmapLanguageID,
+    loader: (): any => atlasmapLanguageConfig,
+  };
+
+  initialize() {
+    this.cfg = ConfigModel.getConfig();
+    this.cfg.atlasmapLanguageID = atlasmapLanguageID;
+
+    if (languages) {
+      // Define a monaco monarch language extension point.
+      languages.register({ id: atlasmapLanguageID });
+
+      // Register a language configuration for the Atlasmap language.
+      languages.setLanguageConfiguration(
+        atlasmapLanguageID,
+        atlasmapLanguageConfig as languages.LanguageConfiguration
+      );
+
+      // Register a Monarch tokens provider for the Atlasmap language.
+      languages.setMonarchTokensProvider(
+        atlasmapLanguageID,
+        atlasmapTokensProvider as languages.IMonarchLanguage
+      );
+    }
+  }
 
   willClearOutSourceFieldsOnTogglingExpression() {
     if (this.cfg.mappings?.activeMapping?.transition.enableExpression) {
@@ -109,9 +144,6 @@ export class MappingExpressionService {
             this.updateExpression(this.cfg.mappings.activeMapping);
           }
         });
-      if (activeMapping.transition.expression) {
-        this.cfg.mappings.activeMapping.transition.expression.expressionUpdatedSource.next();
-      }
     } else {
       this.mappingUpdatedSubscription?.unsubscribe();
       activeMapping.transition.mode = TransitionMode.ONE_TO_ONE;
@@ -119,13 +151,9 @@ export class MappingExpressionService {
     }
   }
 
-  updateExpression(mapping: MappingModel, position?: string, offset?: number) {
+  updateExpression(mapping: MappingModel, position?: Position) {
     // Update conditional expression field references.
-    mapping.transition.expression?.updateFieldReference(
-      mapping,
-      position,
-      offset
-    );
+    mapping.transition.expression?.updateFieldReference(mapping, position);
   }
 
   /**
@@ -134,17 +162,13 @@ export class MappingExpressionService {
    * @param mapping
    * @param docId
    * @param fieldPath
-   * @param newTextNode
-   * @param atIndex
-   * @param isTrailer
+   * @param position
    */
   addFieldToExpression(
     mapping: MappingModel,
     docId: string,
     fieldPath: string,
-    newTextNode: IExpressionNode,
-    atIndex: number,
-    isTrailer: boolean
+    position: Position
   ) {
     let mappedField = mapping.getMappedFieldByPath(fieldPath, true, docId);
 
@@ -157,11 +181,7 @@ export class MappingExpressionService {
         const docDef = this.cfg.getDocForIdentifier(docId, true);
         const field = Field.getField(fieldPath, docDef?.getAllFields()!);
         if (field) {
-          this.updateExpression(
-            mapping,
-            newTextNode.getUuid(),
-            isTrailer ? newTextNode.toText().length : atIndex
-          );
+          this.updateExpression(mapping, position);
           this.cfg.mappingService.addFieldToActiveMapping(field);
         }
         mappedField = mapping.getMappedFieldByPath(fieldPath, true, docId);
@@ -172,8 +192,7 @@ export class MappingExpressionService {
     }
     mapping.transition!.expression?.addConditionalExpressionNode(
       mappedField,
-      newTextNode.getUuid(),
-      isTrailer ? newTextNode.str.length : atIndex
+      position
     );
   }
 
@@ -251,25 +270,28 @@ export class MappingExpressionService {
   }
 
   /**
-   * Return a string, in either text or HTML form, representing the
-   * expression mapping of either the optionally specified mapping or
-   * the active mapping if it exists, empty string otherwise.
-   * @todo avoid any, use typed mapping object - https://github.com/atlasmap/atlasmap/issues/2975
-   * @param asHTML
+   * Return a string, in either text or user form, representing the expression
+   * mapping of either the optionally specified mapping or the active mapping
+   * if it exists, empty string otherwise.
+   *
+   * @param asUserExpr
    * @param mapping
    */
-  getMappingExpressionStr(asHTML: boolean, mapping?: any): string {
+  getMappingExpressionStr(
+    asUserExpr: boolean,
+    mapping?: MappingModel | null | undefined
+  ): string {
     if (!mapping && !MappingUtil.activeMapping(this.cfg)) {
       return '';
     }
     if (!mapping) {
       mapping = this.cfg.mappings?.activeMapping;
+      if (!mapping) {
+        return '';
+      }
     }
     if (!mapping.transition.expression) {
-      if (
-        mapping.transition.enableExpression &&
-        MappingUtil.hasFieldAction(mapping.sourceFields)
-      ) {
+      if (mapping.transition.enableExpression) {
         this.createMappingExpression(mapping);
       } else {
         return '';
@@ -277,9 +299,9 @@ export class MappingExpressionService {
     }
 
     if (mapping.transition.expression && mapping.transition.enableExpression) {
-      return asHTML
-        ? mapping.transition.expression.expressionHTML
-        : mapping.transition.expression.toText(true);
+      return asUserExpr
+        ? (mapping.transition.expression as IExpressionModel).simpleExpression
+        : (mapping.transition.expression as IExpressionModel).toText();
     }
     return '';
   }

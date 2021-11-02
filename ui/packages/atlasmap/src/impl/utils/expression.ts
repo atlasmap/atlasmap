@@ -16,11 +16,10 @@
 import {
   ConfigModel,
   ExpressionModel,
+  IExpressionModel,
   MappedField,
   MappingModel,
 } from '@atlasmap/core';
-
-export const trailerId = 'expression-trailer';
 
 function activeMapping(): boolean {
   const cfg = ConfigModel.getConfig();
@@ -37,20 +36,6 @@ export abstract class ExpressionNode {
     return this.uuid;
   }
   abstract toText(): string;
-  abstract toHTML(): string;
-}
-
-export class TextNode extends ExpressionNode {
-  static readonly PREFIX = 'expression-text-';
-  constructor(public str: string) {
-    super(TextNode.PREFIX);
-  }
-  toText(): string {
-    return this.str;
-  }
-  toHTML(): string {
-    return `<span id="${this.uuid}">${this.str.replace(/ /g, '&nbsp;')}</span>`;
-  }
 }
 
 export class FieldNode extends ExpressionNode {
@@ -74,22 +59,6 @@ export class FieldNode extends ExpressionNode {
     }
     return '${' + (this.mapping.getIndexForMappedField(this.field)! - 1) + '}';
   }
-
-  toHTML(): string {
-    if (!this.field) {
-      return '';
-    }
-    if (this.field && this.field.field) {
-      return `<span contenteditable="false" id="${this.uuid}" title="${this.field.field.docDef.name}:${this.field.field.path}"
-        class="expressionFieldLabel label label-default">${this.field.field.name}</span>`;
-    } else {
-      return `<span contenteditable="false" id="${this.uuid}"
-        title="Field index '${
-          this.mapping.getIndexForMappedField(this.field)! - 1
-        }' is not available"
-        class="expressionFieldLabel label label-danger">N/A</span>`;
-    }
-  }
 }
 
 export function getExpression(): ExpressionModel | null | undefined {
@@ -98,7 +67,7 @@ export function getExpression(): ExpressionModel | null | undefined {
     return null;
   }
   const mapping = cfg.mappings!.activeMapping;
-  let expression = mapping!.transition.expression;
+  let expression: IExpressionModel = mapping!.transition.expression!;
   if (!expression) {
     mapping!.transition.expression = new ExpressionModel(mapping!, cfg);
     expression = mapping!.transition.expression;
@@ -106,7 +75,7 @@ export function getExpression(): ExpressionModel | null | undefined {
     expression.updateFieldReference(mapping!);
   } else {
     if (mapping!.transition.expression) {
-      mapping!.transition.expression.setConfigModel(cfg);
+      (mapping!.transition.expression as IExpressionModel).setConfigModel(cfg);
     }
   }
   return mapping!.transition.expression;
@@ -124,6 +93,8 @@ export function getMappingExpression(): string {
   }
   return cfg.mappings!.activeMapping!.transition.expression &&
     cfg.mappings!.activeMapping!.transition.enableExpression
-    ? cfg.mappings!.activeMapping!.transition.expression.toHTML()
+    ? (
+        cfg.mappings!.activeMapping!.transition.expression as IExpressionModel
+      ).toText()
     : '';
 }

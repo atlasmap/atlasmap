@@ -201,4 +201,27 @@ export class CommonUtil {
       return buffer;
     }
   }
+
+  /**
+   * Return a string based on sourceStr where the substring at index (length origLen)
+   * is replaced by replacement.
+   *
+   * @param sourceStr - original source string
+   * @param replacement - new replacement string
+   * @param index - 0-based substring index for replacement string
+   * @param origLen - length of original substring to be replaced
+   * @returns - updated string
+   */
+  static replaceAt(
+    sourceStr: string,
+    replacement: string,
+    index: number,
+    origLen: number
+  ): string {
+    return (
+      sourceStr.substr(0, index) +
+      replacement +
+      sourceStr.substr(index + origLen)
+    );
+  }
 }

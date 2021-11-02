@@ -15,19 +15,17 @@
 */
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from './error.model';
 import { MappedField, MappingModel } from './mapping.model';
+import { Position, Token, editor } from 'monaco-editor';
 
+import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from './config.model';
 import { IExpressionNode } from '../contracts/expression';
-import { Subject } from 'rxjs';
-
-export class ExpressionUpdatedEvent {
-  constructor(public node?: ExpressionNode, public offset?: number) {}
-}
 
 export abstract class ExpressionNode implements IExpressionNode {
   protected static sequence = 0;
   public readonly uuid: string;
-  public readonly str: string;
+  public position: Position;
+  public str: string;
 
   constructor(prefix: string) {
     this.uuid = prefix + ExpressionNode.sequence++;
@@ -37,8 +35,12 @@ export abstract class ExpressionNode implements IExpressionNode {
     return this.uuid;
   }
 
+  getPosition(): Position {
+    return this.position;
+  }
+
   abstract toText(): string;
-  abstract toHTML(): string;
+  abstract toSimpleText(): string;
 }
 
 export class TextNode extends ExpressionNode {
@@ -48,12 +50,16 @@ export class TextNode extends ExpressionNode {
     super(TextNode.PREFIX);
   }
 
+  appendExprText(aStr: string) {
+    this.str += aStr;
+  }
+
   toText(): string {
     return this.str;
   }
 
-  toHTML(): string {
-    return `<span id="${this.uuid}">${this.str.replace(/ /g, '&nbsp;')}</span>`;
+  toSimpleText(): string {
+    return this.str;
   }
 }
 
@@ -62,6 +68,7 @@ export class FieldNode extends ExpressionNode {
 
   constructor(
     private mapping: MappingModel,
+    public position: Position,
     public mappedField?: MappedField | null,
     public metaStr?: string,
     index: number = 0,
@@ -108,6 +115,11 @@ export class FieldNode extends ExpressionNode {
     }
   }
 
+  /**
+   * Return a JSON field reference name for the current mapped field.
+   *
+   * @returns
+   */
   toText(): string {
     if (!this.mappedField || !this.mappedField.field) {
       return '';
@@ -139,9 +151,13 @@ export class FieldNode extends ExpressionNode {
     }
   }
 
-  toHTML(): string {
+  /**
+   * Return the most simple name version string of the mapped field name.
+   *
+   * @returns
+   */
+  toSimpleText(): string {
     if (this.mappedField && this.mappedField.field) {
-      let titleAddendum = '';
       let mappedFieldName = this.mappedField.field.name;
       if (this.mappedField.field.enumeration) {
         const enumIdxVal = this.mappedField.field.enumIndexValue
@@ -149,17 +165,12 @@ export class FieldNode extends ExpressionNode {
           : 0;
         mappedFieldName +=
           '.' + this.mappedField.field.enumValues[enumIdxVal].name;
-        titleAddendum = ':  Click to select an enumeration value.';
       }
-      return `<span style="font-weight:bold" contenteditable="false" id="${this.uuid}" title="${this.mappedField.field.docDef.name}:${this.mappedField.field.path}${titleAddendum}"
-        class="expressionFieldLabel label label-default">${mappedFieldName}</span>`;
+      return mappedFieldName;
     } else {
-      // TODO: check this non null operator
-      return `<span contenteditable="false" id="${this.uuid}"
-        title="Field index '${
-          this.mapping.getIndexForMappedField(this.mappedField!)! - 1
-        }' is not available"
-        class="expressionFieldLabel label label-danger">N/A</span>`;
+      return `'${
+        this.mapping.getIndexForMappedField(this.mappedField!)! - 1
+      }' is not available"`;
     }
   }
 
@@ -173,17 +184,122 @@ export class FieldNode extends ExpressionNode {
 }
 
 export class ExpressionModel {
-  expressionHTML = '';
-  expressionUpdatedSource = new Subject<ExpressionUpdatedEvent>();
-  expressionUpdated$ = this.expressionUpdatedSource.asObservable();
+  simpleExpression = '';
 
   private _hasComplexField: boolean;
   private _nodes: ExpressionNode[] = [];
+  private lineOffsets: number[] = [0];
   private textCache = '';
 
   constructor(private mapping: MappingModel, private cfg: ConfigModel) {}
+  /**
+   * Extract all identifiers out of a specified text string.  Adjust the corresponding
+   * field node positions based on the tokenized identifier offset.
+   *
+   * @param text - user source expression (all lines)
+   */
+  private adjustFieldNodes(text: string) {
+    // Extract identifiers from the raw source expression.
+    const tokens = editor?.tokenize(text, this.cfg.atlasmapLanguageID);
+    if (!tokens || tokens[0].length === 0) {
+      return;
+    }
+    const lines = text.split('\n');
+    let lineTokens: Token[] | undefined;
+    let lineNumber = 1;
+    let nodeIndex = 0;
+    let i = 0;
+    let idIndex = 0;
+    this.lineOffsets = [0];
+
+    // Support multiple lines.
+    while ((lineTokens = tokens.shift()) !== undefined) {
+      let idTokens = lineTokens?.filter(
+        (t) => t.type === 'identifier'
+      ) as Token[];
+
+      // Adjust the expression field nodes based on the tokenized identifier line
+      // number and offsets.
+      for (i = 0; i < idTokens!.length; i++) {
+        idIndex = nodeIndex + i + 1;
+        if (idIndex >= this._nodes.length) {
+          break;
+        }
+        this._nodes[idIndex].position = new Position(
+          lineNumber,
+          idTokens[i].offset + 1
+        );
+      }
+      // Accumulated offset.
+      this.lineOffsets.push(
+        lines[lineNumber - 1].length + this.lineOffsets[lineNumber - 1] + 1
+      );
+      lineNumber++;
+      nodeIndex += i;
+    }
+  }
+
+  /**
+   * Create a new field node derived from the specified mapped field and push it
+   * onto the end of the master nodes array.  If the last field element is a field
+   * node and has no trailing text then prepend a '+' to make a legal expression.
+   *
+   * @param mfield
+   */
+  private appendFieldNode(mfield: MappedField) {
+    const textNode = this.getTextNode();
+    const lastNode = this.getLastNode();
+    if (lastNode instanceof FieldNode) {
+      if (
+        lastNode.position.column + lastNode.mappedField?.field?.name.length! >=
+        textNode.str.length
+      ) {
+        textNode.str = textNode.str.concat(' + ');
+      }
+    }
+    const position = new Position(1, textNode.str.length + 1);
+    textNode.str += mfield.field?.name;
+    this._nodes.push(new FieldNode(this.mapping, position, mfield));
+    this.updateCache();
+  }
+
+  /**
+   * Create an expression string containing fully expanded doc/path related field
+   * references.
+   *
+   * @returns
+   */
+  private decorateExpressionIdentifiers(): string {
+    let answer = this._nodes[0].toSimpleText();
+    if (this._nodes.length === 1) {
+      return answer;
+    }
+    this.adjustFieldNodes(answer);
+
+    for (let i = this._nodes.length - 1; i > 0; i--) {
+      let fn = this._nodes[i] as FieldNode;
+      let nodePath = fn.toText();
+      let nodePosition = fn.getPosition();
+      answer = CommonUtil.replaceAt(
+        answer,
+        nodePath,
+        this.lineOffsets[nodePosition.lineNumber - 1] + nodePosition.column - 1,
+        fn.mappedField?.field?.name.length!
+      );
+    }
+    this.textCache = answer;
+    return answer;
+  }
+
+  private updateCache() {
+    if (this._nodes.length > 0) {
+      this.textCache = this.decorateExpressionIdentifiers();
+      this.simpleExpression = this.getTextNode().toSimpleText(); // trigger expr box render
+    }
+  }
 
   generateInitialExpression() {
+    this.insertText('');
     this.mapping
       .getUserMappedFields(true)
       .forEach((f) => this.appendFieldNode(f));
@@ -216,359 +332,213 @@ export class ExpressionModel {
     return this._nodes.find((n) => n.getUuid() === nodeId);
   }
 
+  getTextNode() {
+    return this._nodes[0];
+  }
+
+  findNode(position: Position): any | null {
+    if (!position) {
+      return this.getLastNode();
+    }
+    let fieldNode = null;
+    for (let i = 1; i < this._nodes.length; i++) {
+      let fnPosition = this._nodes[i].getPosition();
+      if (
+        fnPosition.lineNumber === position.lineNumber &&
+        fnPosition.column === position.column
+      ) {
+        fieldNode = this._nodes[i];
+        break;
+      }
+    }
+    return fieldNode;
+  }
+
   setConfigModel(cfg: ConfigModel) {
     this.cfg = cfg;
   }
 
-  /**
-   * Clear all text from the specified TextNode offset range or from the '@' to
-   * the end of the text node if no node ID is specified.
-   *
-   * Return the new UUID position indicator string or null.
-   *
-   * @param nodeId
-   * @param startOffset
-   * @param endOffset
-   */
-  clearText(
-    nodeId?: string,
-    startOffset?: number,
-    endOffset?: number
-  ): TextNode | null {
-    let targetNode: TextNode | null = null;
-    if (!nodeId) {
-      const lastNode = this.getLastNode();
-      if (!(lastNode instanceof TextNode)) {
-        return null;
-      }
-      const keyPos = lastNode.str.indexOf('@');
-      if (keyPos !== -1) {
-        targetNode = lastNode;
-        targetNode.str = targetNode.str.substring(0, keyPos);
-      }
-    } else {
-      const node = this._nodes.find((n) => n.getUuid() === nodeId);
-      if (!(node instanceof TextNode) || !endOffset) {
-        return null;
-      }
-      targetNode = node;
-      // TODO: check this non null operator
-      const cleanStr = targetNode.str.replace(
-        targetNode.str.substring(startOffset!, endOffset),
-        ''
-      );
-      targetNode.str = cleanStr;
-    }
-    this.updateCache();
-    this.expressionUpdatedSource.next();
-    return targetNode;
+  getFieldNodes(): FieldNode[] {
+    return this._nodes.filter((n) => n instanceof FieldNode) as FieldNode[];
   }
 
   /**
-   * Insert text into expression at specified position. If nodeId is not specified,
-   * it will be added to the end of expression. It parses the string
-   * and insert a set of TextNode & FieldNode if it contains field reference like ${0},
-   * otherwise just one TextNode.
-   * This emits ExpressionUpdatedEvent which contains the latest node and offset it
-   * worked on, so that the subscriber can determine where to put the caret in
-   * the expression input widget. If ExpressionUpdatedEvent is undefined, it means that
-   * it worked on the end of the expression.
-   * @param str string to insert
-   * @param nodeId target node to insert the string
-   * @param offset position offset in the target node to insert the string
+   * Insert text into the expression at the specified position. If nodeId is not
+   * specified, it will be added to the end of expression.
+   *
+   * @param newText - string to insert
+   * @param jsonText - fully expanded JSON text string
    */
-  insertText(str: string, nodeId?: string, offset?: number) {
-    this.insertNodes(this.createNodesFromText(str), nodeId, offset);
+  async insertText(newText: string, jsonText?: boolean): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this.removeExprTextNode();
+      this.insertNodes(this.createNodesFromExpr(newText));
+      if (!jsonText) {
+        this.adjustFieldNodes(newText);
+      }
+      this.updateCache();
+      resolve(true);
+    });
   }
 
   /**
    * Insert an array of ExpressionNodes at the specified position. If insertPosition is
    * not specified the nodes will be appended to the end of the expression.
-   * This emits an ExpressionUpdatedEvent which contains the latest node and offset it
-   * worked on, so that the subscriber can determine where to put the caret in
-   * the expression input widget. If ExpressionUpdatedEvent is undefined, it means that
-   * it worked on the end of the expression.
    *
-   * @param newNodes an array of ExpressionNode to add
-   * @param insertPosition target node to insert the string
-   * @param offset position offset in the target node to insert the string
+   * @param newNodes - an array of ExpressionNode to add
+   * @param insertPosition - line number/ offset to insert the nodes
    */
-  insertNodes(
-    newNodes: ExpressionNode[],
-    insertPosition?: string,
-    offset?: number
-  ) {
+  insertNodes(newNodes: ExpressionNode[], insertPosition?: Position) {
+    let textNode = this.getTextNode();
+
     // No position was specified - append to the end
     if (!insertPosition) {
-      const last = this.getLastNode();
-      if (!last) {
+      if (newNodes[0] instanceof TextNode) {
+        this._nodes.splice(0, 0, ...newNodes);
+      } else {
+        const lastNode = this.getLastNode();
+        textNode = this.getTextNode();
+
+        if (lastNode instanceof FieldNode) {
+          const fn = newNodes[0] as FieldNode;
+          fn.position = new Position(
+            fn.position.lineNumber,
+            fn.position.column + 3
+          );
+          textNode.str = textNode.str.concat(' + ');
+        }
         this._nodes.push(...newNodes);
-      } else if (last instanceof TextNode && newNodes[0] instanceof TextNode) {
-        (last as TextNode).str += (newNodes[0] as TextNode).str;
-        newNodes.splice(0, 1, last);
-        this._nodes.splice(this.getLastNodeIndex(), 1, ...newNodes);
+      }
+      return;
+    }
+
+    // Insert the field nodes in position order.
+    let insertionIndex = 1;
+    for (; insertionIndex <= this.getLastNodeIndex(); insertionIndex++) {
+      let fn = this._nodes[insertionIndex];
+      if (fn.position.lineNumber > insertPosition.lineNumber) {
+        this._nodes.splice(insertionIndex, 0, ...newNodes);
+        break;
       } else if (
-        last instanceof FieldNode &&
-        newNodes[0] instanceof FieldNode
+        insertPosition.lineNumber === fn.position.lineNumber &&
+        insertPosition.column <= fn.position.column
       ) {
-        this._nodes.splice(
-          this.getLastNodeIndex(),
-          0,
-          new TextNode(' + '),
-          ...newNodes
+        this._nodes.splice(insertionIndex, 0, ...newNodes);
+        break;
+      }
+    }
+
+    let adjustedPosition = insertPosition.column;
+
+    // Insertion position indicates it's last - append the field nodes(s).
+    if (insertionIndex === this._nodes.length) {
+      const lastNode = this.getLastNode() as FieldNode;
+      if (
+        lastNode &&
+        lastNode.position?.column + lastNode.mappedField?.field?.name.length! >=
+          insertPosition.column
+      ) {
+        const fn = newNodes[0] as FieldNode;
+        fn.position = new Position(
+          fn.position.lineNumber,
+          fn.position.column + 3
         );
-      } else {
-        this._nodes.push(...newNodes);
+        adjustedPosition += 3;
+        textNode.str = CommonUtil.replaceAt(
+          textNode.str,
+          ' + ',
+          insertPosition.column - 1,
+          0
+        );
       }
-      this.updateCache();
-      this.expressionUpdatedSource.next();
-      return;
+      this._nodes.push(...newNodes);
     }
-
-    // Requires position handling
-    const updatedEvent = new ExpressionUpdatedEvent();
-    const targetNode = this._nodes.find((n) => n.getUuid() === insertPosition);
-    // TODO: check this non null operator
-    const targetNodeIndex = this._nodes.indexOf(targetNode!);
-
-    if (targetNode instanceof TextNode) {
-      if (offset === undefined || offset === null || offset < 0) {
-        offset = targetNode.str.length;
-      }
-      const pre = targetNode.str.substring(0, offset);
-      const post = targetNode.str.substring(offset);
-      if (pre.length > 0) {
-        if (newNodes[0] instanceof TextNode) {
-          targetNode.str = pre + (newNodes[0] as TextNode).str;
-          newNodes.splice(0, 1, targetNode);
-        } else {
-          targetNode.str = pre;
-          newNodes.splice(0, 0, targetNode);
-        }
-      }
-      if (post.length > 0) {
-        const lastNewNodeIndex = newNodes.length - 1;
-        if (newNodes[lastNewNodeIndex] instanceof TextNode) {
-          let mergedTextNode: TextNode;
-          if (pre.length > 0) {
-            mergedTextNode = newNodes[lastNewNodeIndex] as TextNode;
-            mergedTextNode.str += post;
-          } else {
-            mergedTextNode = targetNode;
-            mergedTextNode.str =
-              (newNodes[lastNewNodeIndex] as TextNode).str + post;
-          }
-          newNodes.splice(lastNewNodeIndex, 1, mergedTextNode);
-        } else {
-          if (pre.length > 0) {
-            newNodes.push(new TextNode(post));
-          } else {
-            targetNode.str = post;
-            newNodes.push(targetNode);
-          }
-        }
-      }
-      this._nodes.splice(targetNodeIndex, 1, ...newNodes);
-      const lastAddedIndex = targetNodeIndex + newNodes.length - 1;
-      if (
-        this._nodes[lastAddedIndex] instanceof FieldNode &&
-        this.nodes[lastAddedIndex + 1] instanceof FieldNode
-      ) {
-        // insert a glue in between FieldNodes so that it won't break syntax and caret can go into
-        const space = new TextNode(' + ');
-        this._nodes.splice(lastAddedIndex + 1, 0, space);
-        updatedEvent.node = space;
-        updatedEvent.offset = 1;
-      } else if (this._nodes[lastAddedIndex] instanceof FieldNode) {
-        updatedEvent.node = this._nodes[lastAddedIndex + 1];
-        updatedEvent.offset = 0;
-      } else {
-        updatedEvent.node = this._nodes[lastAddedIndex];
-        updatedEvent.offset =
-          (this._nodes[lastAddedIndex] as TextNode).str.length - post.length;
-      }
-      this.updateCache();
-      this.expressionUpdatedSource.next(updatedEvent);
-      return;
-    }
-
-    // targetNode is a FieldNode - insert the text before it if offset is 0, otherwise after it
-    if (offset !== 0 && newNodes[0] instanceof FieldNode) {
-      // insert a glue in between FieldNodes so that it won't break syntax and caret can go into
-      newNodes.splice(0, 0, new TextNode(' + '));
-    }
-    const nextNodeIndex = offset === 0 ? targetNodeIndex : targetNodeIndex + 1;
-    const nextNode = this._nodes[nextNodeIndex];
-    if (
-      nextNode instanceof TextNode &&
-      newNodes[newNodes.length - 1] instanceof TextNode
-    ) {
-      updatedEvent.offset = (
-        newNodes[newNodes.length - 1] as TextNode
-      ).str.length;
-      nextNode.str =
-        (newNodes[newNodes.length - 1] as TextNode).str +
-        (nextNode as TextNode).str;
-      newNodes.pop();
-      this._nodes.splice(nextNodeIndex, 1, ...newNodes);
-      updatedEvent.node = nextNode;
-    } else if (
-      nextNode instanceof FieldNode &&
-      newNodes[newNodes.length - 1] instanceof FieldNode
-    ) {
-      // insert a glue in between FieldNodes so that it won't break syntax and caret can go into
-      const space = new TextNode(' + ');
-      this._nodes.splice(nextNodeIndex, 0, ...newNodes, space);
-      updatedEvent.node = space;
-      updatedEvent.offset = 1;
-    } else {
-      this._nodes.splice(nextNodeIndex, 0, ...newNodes);
-      if (nextNode instanceof TextNode) {
-        updatedEvent.node = nextNode;
-        updatedEvent.offset = 0;
-      } else {
-        updatedEvent.node = newNodes[newNodes.length - 1];
-        updatedEvent.offset = (
-          newNodes[newNodes.length - 1] as TextNode
-        ).str.length;
-      }
-    }
-    this.updateCache();
-    this.expressionUpdatedSource.next(updatedEvent);
-  }
-
-  removeToken(tokenPosition?: string, offset?: number, removeNext?: boolean) {
-    // No position was specified - remove from the end
-    if (!tokenPosition) {
-      const last = this.getLastNode();
-      if (!last) {
-        return;
-      }
-      if (last instanceof FieldNode) {
-        const removed = this._nodes.pop() as FieldNode;
-        if (
-          !this._nodes.find(
-            (n) =>
-              n instanceof FieldNode && n.mappedField === removed.mappedField
-          )
-        ) {
-          // TODO: check this non null operator
-          this.mapping.removeField(removed.mappedField!.field!);
-          this.cfg.mappingService.updateMappedField(this.mapping);
-        }
-      } else if (last instanceof TextNode) {
-        if (last.str.length > 0) {
-          last.str = last.str.substring(0, last.str.length - 1);
-        }
-        if (last.str.length === 0) {
-          this._nodes.pop();
-        }
-      }
-      this.updateCache();
-      this.expressionUpdatedSource.next();
-      return;
-    }
-
-    // Requires position handling
-    let updatedEvent: ExpressionUpdatedEvent | undefined =
-      new ExpressionUpdatedEvent();
-    let targetNode = this._nodes.find((n) => n.getUuid() === tokenPosition);
-    // TODO: check this non null operator
-    let targetNodeIndex = this._nodes.indexOf(targetNode!);
-    if (removeNext) {
-      targetNodeIndex++;
-      targetNode = this._nodes[targetNodeIndex];
-    }
-    if (!targetNode || offset === -1) {
-      if (targetNodeIndex < 1) {
-        return;
-      }
-      targetNode = this._nodes[--targetNodeIndex];
-      offset =
-        targetNode instanceof TextNode
-          ? (targetNode as TextNode).str.length
-          : 1;
-    }
-    if (targetNode instanceof FieldNode) {
-      const removed = this._nodes.splice(targetNodeIndex, 1);
-      const targetFieldNode: FieldNode = removed[0] as FieldNode;
-      if (
-        !this._nodes.find(
-          (n) =>
-            n instanceof FieldNode &&
-            n.mappedField === targetFieldNode.mappedField
-        )
-      ) {
-        // TODO: check this non null operator
-        this.mapping.removeField(targetFieldNode.mappedField!.field!);
-        this.cfg.mappingService.updateMappedField(this.mapping);
-      }
-      if (this._nodes.length > targetNodeIndex) {
-        if (
-          this._nodes[targetNodeIndex - 1] instanceof TextNode &&
-          this._nodes[targetNodeIndex] instanceof TextNode
-        ) {
-          const newOffset = (this._nodes[targetNodeIndex - 1] as TextNode).str
-            .length;
-          (this._nodes[targetNodeIndex - 1] as TextNode).str += (
-            this._nodes[targetNodeIndex] as TextNode
-          ).str;
-          this._nodes.splice(targetNodeIndex, 1);
-          updatedEvent.node = this._nodes[targetNodeIndex - 1];
-          updatedEvent.offset = newOffset;
-        } else if (
-          this._nodes[targetNodeIndex - 1] instanceof FieldNode &&
-          this._nodes[targetNodeIndex] instanceof FieldNode
-        ) {
-          const glue = new TextNode(' + ');
-          this._nodes.splice(targetNodeIndex, 0, glue);
-          updatedEvent.node = glue;
-          updatedEvent.offset = 3;
-        } else if (this._nodes[targetNodeIndex - 1] instanceof TextNode) {
-          updatedEvent.node = this._nodes[targetNodeIndex - 1];
-          updatedEvent.offset = (
-            this._nodes[targetNodeIndex - 1] as TextNode
-          ).str.length;
-        } else if (this._nodes[targetNodeIndex] instanceof TextNode) {
-          updatedEvent.node = this._nodes[targetNodeIndex];
-          updatedEvent.offset = 0;
-        }
-      } else {
-        // end of line
-        updatedEvent = undefined;
-      }
-    } else {
-      const targetString = (targetNode as TextNode).str;
-
-      // Remove empty string text node.
-      if (targetString.length === 1) {
-        this._nodes.splice(targetNodeIndex, 1);
-      } else {
-        (targetNode as TextNode).str =
-          offset === 0
-            ? targetString.substr(1)
-            : targetString.substring(0, offset) +
-              targetString.substring(offset! + 1);
-        updatedEvent.node = targetNode;
-        updatedEvent.offset = offset;
-      }
-    }
-    this.updateCache();
-    this.expressionUpdatedSource.next(updatedEvent);
+    const fieldNodeName = (newNodes[0] as FieldNode).mappedField?.field?.name;
+    textNode.str = CommonUtil.replaceAt(
+      textNode.str,
+      fieldNodeName!,
+      this.lineOffsets[insertPosition.lineNumber - 1] + adjustedPosition - 1,
+      0
+    );
   }
 
   /**
-   * Replace the content of the last text node with a substring terminating at the
-   * specified index.
+   * Remove an expression node from the specified position.
    *
-   * @param index
+   * @param position
    */
-  clearToEnd(index: number): void {
-    const last = this.getLastNode();
-    if (!(last instanceof TextNode)) {
-      return;
+  removeNodeAtPosition(position: Position) {
+    for (let i = 1; i < this._nodes.length; i++) {
+      if (
+        this._nodes[i].position.lineNumber === position.lineNumber &&
+        this._nodes[i].position.column === position.column
+      ) {
+        const removed = this._nodes.splice(i, 1);
+        const targetFieldNode: FieldNode = removed[0] as FieldNode;
+        if (
+          !this._nodes.find(
+            (n) =>
+              n instanceof FieldNode &&
+              n.mappedField === targetFieldNode.mappedField
+          )
+        ) {
+          this.mapping.removeField(targetFieldNode.mappedField!.field!);
+          this.cfg.mappingService.updateMappedField(this.mapping);
+          break;
+        }
+      }
     }
-    last.str = last.str.substring(0, index);
+  }
+
+  /**
+   * Remove the field node/ text node at the specified index.
+   *
+   * @param idIndex - if not supplied remove the last node
+   *
+   */
+  async removeToken(idPosition?: Position): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      // No position was specified - remove from the end
+      if (idPosition === undefined) {
+        const last = this.getLastNode();
+        if (!last) {
+          resolve(false);
+          return;
+        }
+        if (last instanceof FieldNode) {
+          const removed = this._nodes.pop() as FieldNode;
+          if (
+            !this._nodes.find(
+              (n) =>
+                n instanceof FieldNode && n.mappedField === removed.mappedField
+            )
+          ) {
+            this.mapping.removeField(removed.mappedField!.field!);
+            this.cfg.mappingService.updateMappedField(this.mapping);
+          }
+        } else if (last instanceof TextNode) {
+          if (last.str.length > 0) {
+            last.str = last.str.substring(0, last.str.length - 1);
+          }
+          if (last.str.length === 0) {
+            this._nodes.pop();
+          }
+        }
+        resolve(true);
+        return;
+      }
+      this.removeNodeAtPosition(idPosition);
+      resolve(true);
+    });
+  }
+
+  /**
+   * Remove the expression text node at index 0.
+   */
+  removeExprTextNode() {
+    if (this._nodes.length > 0) {
+      this._nodes.splice(0, 1);
+    }
   }
 
   /**
@@ -578,13 +548,8 @@ export class ExpressionModel {
    *
    * @param mapping Corresponding MappingModel object
    * @param insertPosition
-   * @param offset
    */
-  updateFieldReference(
-    mapping: MappingModel,
-    insertPosition?: string,
-    offset?: number
-  ) {
+  updateFieldReference(mapping: MappingModel, insertPosition?: Position) {
     const mappedFields = mapping.getUserMappedFields(true);
     const referenceFields = mapping.getReferenceMappedFields();
     let fieldNodes = this._nodes.filter(
@@ -603,23 +568,11 @@ export class ExpressionModel {
       }
       const index = this._nodes.indexOf(node);
       this._nodes.splice(index, 1);
-      if (
-        this._nodes.length > index &&
-        this._nodes[index - 1] instanceof TextNode &&
-        this._nodes[index] instanceof TextNode
-      ) {
-        (this._nodes[index - 1] as TextNode).str += (
-          this._nodes[index] as TextNode
-        ).str;
-        this._nodes.splice(index, 1);
-      }
     }
 
     // Add any non-reference mapped fields into the expression - append if no insert
     // position is specified.
-    fieldNodes = this._nodes.filter(
-      (n) => n instanceof FieldNode
-    ) as FieldNode[];
+    fieldNodes = this.getFieldNodes();
     for (const mfield of mappedFields) {
       if (
         !fieldNodes.find((n) => n.mappedField === mfield) &&
@@ -627,9 +580,8 @@ export class ExpressionModel {
       ) {
         if (insertPosition) {
           this.insertNodes(
-            [new FieldNode(this.mapping, mfield)],
-            insertPosition,
-            offset
+            [new FieldNode(this.mapping, insertPosition, mfield)],
+            insertPosition
           );
         } else {
           this.appendFieldNode(mfield);
@@ -637,13 +589,12 @@ export class ExpressionModel {
       }
     }
     this.updateCache();
-    this.expressionUpdatedSource.next();
   }
 
   clear() {
     this._nodes = [];
+    this.lineOffsets = [0];
     this.updateCache();
-    this.expressionUpdatedSource.next();
   }
 
   toText() {
@@ -653,102 +604,124 @@ export class ExpressionModel {
     return this.textCache;
   }
 
-  toHTML() {
-    if (this.expressionHTML.length === 0) {
-      this.updateCache();
-    }
-    return this.expressionHTML;
-  }
-
   addConditionalExpressionNode(
     mappedField: MappedField,
-    nodeId: string,
-    offset: number
+    insertPosition: Position
   ): void {
     this.insertNodes(
-      [new FieldNode(this.mapping, mappedField)],
-      nodeId,
-      offset
+      [new FieldNode(this.mapping, insertPosition, mappedField)],
+      insertPosition
     );
-  }
-
-  private updateCache() {
-    let answer = '';
-    this._nodes.forEach((node) => (answer += node.toText()));
-    this.textCache = answer;
-    answer = '';
-    this._nodes.forEach((node) => (answer += node.toHTML()));
-    this.expressionHTML = answer; // trigger expr box render
+    this.updateCache();
   }
 
   /**
-   * Translate an expression string into an array of text nodes and field nodes.  Handle
-   * relative paths for collection-based field references.
+   * Establish a single text node and corresponding field nodes based on the specified
+   * expression field syntax.  The specified expression text may be JSON extended format
+   * or the simple user-defined text.
    *
-   * @param text
+   *   (i.e. ${DOC.Properties.578580:/JSONSchemaSource/prop-city} ).
+   *
+   * @param text - Raw JSON expression or simple text - can be multiple lines.
+   * @returns - An expression node array based on the supplied text string.
    */
-  private createNodesFromText(text: string): ExpressionNode[] {
-    const answer = [];
-    let position = -1;
+  createNodesFromExpr(text: string): ExpressionNode[] {
+    const answer: ExpressionNode[] = [];
+    let idPosition = -1;
     let collectionContextFieldNode = null;
+    const lines = text.split('\n');
+    let lineNumber = 1;
+    let lineDelta = 0;
+    let lineIndex = 0;
+    let lineText = '';
 
-    while (text.search(/\$\{[a-zA-Z0-9.:/<>[\]_-]+\}/) !== -1) {
-      position = text.search(/\$/);
-      if (position !== 0) {
-        answer.push(new TextNode(text.substring(0, position)));
-      }
-      const nodeMetaVal = text.substring(position + 2, text.indexOf('}'));
-      let fn = null;
-      if (isNaN(Number(nodeMetaVal))) {
-        fn = collectionContextFieldNode
-          ? new FieldNode(
-              this.mapping,
-              undefined,
-              nodeMetaVal,
-              undefined,
-              collectionContextFieldNode.mappedField?.field?.path!
-            )
-          : new FieldNode(this.mapping, undefined, nodeMetaVal);
-      } else {
-        const index = parseInt(nodeMetaVal, 10);
-        fn = new FieldNode(this.mapping, undefined, undefined, index);
-      }
+    while (lineIndex < lines.length) {
+      lineText = lines[lineIndex];
 
-      if (!fn || !fn.mappedField) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: `Unable to map expression element '${nodeMetaVal}' to a field node.`,
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.MAPPING,
-            type: ErrorType.INTERNAL,
-            mapping: this.mapping,
-          })
+      while (lineText.search(/\$\{[a-zA-Z0-9.:/<>[\]_-]+\}/) !== -1) {
+        idPosition = lineText.search(/\$/);
+        const nodeMetaVal = lineText.substring(
+          idPosition + 2,
+          lineText.indexOf('}')
         );
-      } else {
-        if (fn.mappedField?.field?.isCollection) {
-          collectionContextFieldNode = fn;
-        }
-        answer.push(fn);
-      }
-      text = text.substring(text.indexOf('}') + 1);
-    }
-    if (text.length > 0) {
-      answer.push(new TextNode(text));
-    }
-    return answer;
-  }
+        let fn = null;
+        const fieldPosition: Position = new Position(
+          lineNumber,
+          idPosition + 1
+        );
 
-  private appendFieldNode(mfield: MappedField) {
-    const lastNode = this._nodes.pop();
-    if (lastNode instanceof FieldNode) {
-      this._nodes.push(lastNode, new TextNode(' + '));
-    } else if (lastNode instanceof TextNode) {
-      if (lastNode.str.length === 0) {
-        this._nodes.push(new TextNode(' + '));
-      } else {
-        this._nodes.push(lastNode);
+        if (isNaN(Number(nodeMetaVal))) {
+          fn = collectionContextFieldNode
+            ? new FieldNode(
+                this.mapping,
+                fieldPosition,
+                undefined,
+                nodeMetaVal,
+                undefined,
+                collectionContextFieldNode.mappedField?.field?.path!
+              )
+            : new FieldNode(
+                this.mapping,
+                fieldPosition,
+                undefined,
+                nodeMetaVal
+              );
+        } else {
+          const index = parseInt(nodeMetaVal, 10);
+          fn = new FieldNode(
+            this.mapping,
+            fieldPosition,
+            undefined,
+            undefined,
+            index
+          );
+        }
+
+        if (!fn || !fn.mappedField) {
+          this.cfg.errorService.addError(
+            new ErrorInfo({
+              message: `Unable to map expression element '${nodeMetaVal}' to a field node.`,
+              level: ErrorLevel.ERROR,
+              scope: ErrorScope.MAPPING,
+              type: ErrorType.INTERNAL,
+              mapping: this.mapping,
+            })
+          );
+          break;
+        } else {
+          if (fn.mappedField?.field?.isCollection) {
+            collectionContextFieldNode = fn;
+          }
+          answer.push(fn);
+        }
+        const identifierNameSeg = nodeMetaVal.split('/');
+        if (identifierNameSeg) {
+          let replacementText = '';
+          if (collectionContextFieldNode) {
+            replacementText = fn.mappedField.field!.name;
+          } else {
+            replacementText = identifierNameSeg[identifierNameSeg.length - 1];
+          }
+          text = CommonUtil.replaceAt(
+            text,
+            replacementText,
+            idPosition + lineDelta,
+            nodeMetaVal.length + 3
+          );
+          lineText = CommonUtil.replaceAt(
+            lineText,
+            replacementText,
+            idPosition,
+            nodeMetaVal.length + 3
+          );
+        }
       }
+      // Adjust the line delta - consider the newline character.
+      lineDelta += lineText.length + 1;
+      lineNumber++;
+      lineIndex++;
     }
-    this._nodes.push(new FieldNode(this.mapping, mfield));
+    answer.splice(0, 0, new TextNode(text));
+    return answer;
   }
 }

@@ -5,7 +5,7 @@ atlasmap@googlegroups.com
 :numbered:
 :toclevels: 3
 :source-highlighter: highlightjs
-:keywords: openapi, rest, AtlasMap Design Time Service API :: Core 
+:keywords: openapi, rest, AtlasMap Design Time Service API :: Core
 :specDir: 
 :snippetDir: 
 :generator-template: v1 2019-12-20
@@ -30,12 +30,12 @@ Core Service provides basic operations which is not specific to the individual d
 
 [.createMappingRequest]
 ==== createMappingRequest
-    
+
 `PUT /mapping/{mappingFormat}/{mappingDefinitionId}`
 
 Create Mapping
 
-===== Description 
+===== Description
 
 Save a mapping file on the server
 
@@ -49,36 +49,36 @@ Save a mapping file on the server
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat 
-| Mapping Format  
-| X 
-| null 
-|  
+| mappingFormat
+| Mapping Format 
+| X
+| null
+| 
 
-| mappingDefinitionId 
-| Mapping ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -95,8 +95,8 @@ Save a mapping file on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -108,7 +108,7 @@ Save a mapping file on the server
 | Mapping file save error
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -134,12 +134,12 @@ endif::internal-generation[]
 
 [.createMappingRequestOld]
 ==== createMappingRequestOld
-    
+
 `PUT /mapping/{mappingFormat}`
 
 Create Mapping
 
-===== Description 
+===== Description
 
 Save a mapping file on the server
 
@@ -153,30 +153,30 @@ Save a mapping file on the server
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat 
-| Mapping Format  
-| X 
-| null 
-|  
+| mappingFormat
+| Mapping Format 
+| X
+| null
+| 
 
-|===         
+|===
 
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -193,8 +193,8 @@ Save a mapping file on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -206,7 +206,7 @@ Save a mapping file on the server
 | Mapping file save error
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -232,12 +232,12 @@ endif::internal-generation[]
 
 [.getMappingRequest]
 ==== getMappingRequest
-    
+
 `GET /mapping/{mappingFormat}/{mappingDefinitionId}`
 
 Get Mapping
 
-===== Description 
+===== Description
 
 Retrieve a mapping file saved on the server
 
@@ -251,22 +251,22 @@ Retrieve a mapping file saved on the server
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat 
-| Mapping Format  
-| X 
-| null 
-|  
+| mappingFormat
+| Mapping Format 
+| X
+| null
+| 
 
-| mappingDefinitionId 
-| Mapping ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 
 
@@ -288,8 +288,8 @@ Retrieve a mapping file saved on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -306,7 +306,7 @@ Retrieve a mapping file saved on the server
 | Mapping file access error
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -332,12 +332,12 @@ endif::internal-generation[]
 
 [.getMappingRequestOld]
 ==== getMappingRequestOld
-    
+
 `GET /mapping/{mappingFormat}`
 
 Get Mapping
 
-===== Description 
+===== Description
 
 Retrieve a mapping file saved on the server
 
@@ -351,16 +351,16 @@ Retrieve a mapping file saved on the server
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat 
-| Mapping Format  
-| X 
-| null 
-|  
+| mappingFormat
+| Mapping Format 
+| X
+| null
+| 
 
-|===         
+|===
 
 
 
@@ -382,8 +382,8 @@ Retrieve a mapping file saved on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -400,7 +400,7 @@ Retrieve a mapping file saved on the server
 | Mapping file access error
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -426,12 +426,12 @@ endif::internal-generation[]
 
 [.listFieldActions]
 ==== listFieldActions
-    
+
 `GET /fieldActions`
 
 List FieldActions
 
-===== Description 
+===== Description
 
 Retrieves a list of available field action
 
@@ -461,15 +461,15 @@ Retrieves a list of available field action
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a list of field action detail
 |  <<ActionDetails>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -495,12 +495,12 @@ endif::internal-generation[]
 
 [.listLibraryClasses]
 ==== listLibraryClasses
-    
+
 `GET /library/list`
 
 List Library Classes
 
-===== Description 
+===== Description
 
 Retrieves a list of available Java library class names from uploaded JARs.
 
@@ -531,15 +531,15 @@ Retrieves a list of available Java library class names from uploaded JARs.
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a list of loadable class names
 |  <<ArrayList&lt;String&gt;>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -565,12 +565,12 @@ endif::internal-generation[]
 
 [.listMappingBuilderClasses]
 ==== listMappingBuilderClasses
-    
+
 `GET /mappingBuilders`
 
 List mapping builder classes
 
-===== Description 
+===== Description
 
 List mapping builder classes which defines custom mapping logic
 
@@ -601,15 +601,15 @@ List mapping builder classes which defines custom mapping logic
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a list of loadable class names
 |  <<ArrayList&lt;String&gt;>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -635,12 +635,12 @@ endif::internal-generation[]
 
 [.listMappings]
 ==== listMappings
-    
+
 `GET /mappings/{mappingDefinitionId}`
 
 List Mappings
 
-===== Description 
+===== Description
 
 Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
@@ -654,16 +654,16 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingDefinitionId 
-| Mapping Definition ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 
 
@@ -671,16 +671,16 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ====== Query Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| filter 
-|   
-| - 
-| null 
+| filter
 |  
+| -
+| null
+| 
 
-|===         
+|===
 
 
 ===== Return Type
@@ -696,15 +696,15 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a list of a pair of mapping file name and content
 |  <<StringMap>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -730,12 +730,12 @@ endif::internal-generation[]
 
 [.listMappingsOld]
 ==== listMappingsOld
-    
+
 `GET /mappings`
 
 List Mappings
 
-===== Description 
+===== Description
 
 Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
@@ -753,16 +753,16 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ====== Query Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| filter 
-|   
-| - 
-| null 
+| filter
 |  
+| -
+| null
+| 
 
-|===         
+|===
 
 
 ===== Return Type
@@ -778,15 +778,15 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a list of a pair of mapping file name and content
 |  <<StringMap>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -812,12 +812,12 @@ endif::internal-generation[]
 
 [.ping]
 ==== ping
-    
+
 `GET /ping`
 
 Ping
 
-===== Description 
+===== Description
 
 Simple liveness check method used in liveness checks. Must not be protected via authetication.
 
@@ -848,15 +848,15 @@ Simple liveness check method used in liveness checks. Must not be protected via 
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return &#39;pong&#39;
 |  <<String>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -882,12 +882,12 @@ endif::internal-generation[]
 
 [.processMappingRequest]
 ==== processMappingRequest
-    
+
 `PUT /mapping/process`
 
 Process Mapping
 
-===== Description 
+===== Description
 
 Process Mapping by feeding input data
 
@@ -902,16 +902,16 @@ Process Mapping by feeding input data
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -930,8 +930,8 @@ Process Mapping by feeding input data
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -943,7 +943,7 @@ Process Mapping by feeding input data
 | Skipped empty mapping execution
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -969,12 +969,12 @@ endif::internal-generation[]
 
 [.removeMappingRequest]
 ==== removeMappingRequest
-    
+
 `DELETE /mapping/{mappingDefinitionId}`
 
 Remove Mapping
 
-===== Description 
+===== Description
 
 Remove a mapping file saved on the server
 
@@ -988,16 +988,16 @@ Remove a mapping file saved on the server
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingDefinitionId 
-| Mapping ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 
 
@@ -1015,8 +1015,8 @@ Remove a mapping file saved on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -1028,7 +1028,7 @@ Remove a mapping file saved on the server
 | Mapping file was not found
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1054,12 +1054,12 @@ endif::internal-generation[]
 
 [.removeMappingRequestOld]
 ==== removeMappingRequestOld
-    
+
 `DELETE /mapping`
 
 Remove Mapping
 
-===== Description 
+===== Description
 
 Remove a mapping file saved on the server
 
@@ -1087,8 +1087,8 @@ Remove a mapping file saved on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -1100,7 +1100,7 @@ Remove a mapping file saved on the server
 | Mapping file was not found
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1126,12 +1126,12 @@ endif::internal-generation[]
 
 [.resetAllMappings]
 ==== resetAllMappings
-    
+
 `DELETE /mapping/RESET/ALL`
 
 Remove All Mappings
 
-===== Description 
+===== Description
 
 Remove all mapping files and catalogs saved on the server
 
@@ -1159,8 +1159,8 @@ Remove all mapping files and catalogs saved on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -1172,7 +1172,7 @@ Remove all mapping files and catalogs saved on the server
 | Unable to remove all mapping files
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1198,12 +1198,12 @@ endif::internal-generation[]
 
 [.resetMappingById]
 ==== resetMappingById
-    
+
 `DELETE /mapping/RESET/{mappingDefinitionId}`
 
 Remove Mapping by ID
 
-===== Description 
+===== Description
 
 Remove mapping file and catalogs related to specified ID
 
@@ -1217,16 +1217,16 @@ Remove mapping file and catalogs related to specified ID
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingDefinitionId 
-| Mapping ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 
 
@@ -1244,8 +1244,8 @@ Remove mapping file and catalogs related to specified ID
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -1257,7 +1257,7 @@ Remove mapping file and catalogs related to specified ID
 | Unable to remove mapping file and Catalogs for the specified ID
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1283,12 +1283,12 @@ endif::internal-generation[]
 
 [.resetMappingByIdOld]
 ==== resetMappingByIdOld
-    
+
 `DELETE /mapping/RESET`
 
 Remove Mapping by ID
 
-===== Description 
+===== Description
 
 Remove mapping file and catalogs related to specified ID
 
@@ -1316,8 +1316,8 @@ Remove mapping file and catalogs related to specified ID
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -1329,7 +1329,7 @@ Remove mapping file and catalogs related to specified ID
 | Unable to remove mapping file and Catalogs for the specified ID
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1355,12 +1355,12 @@ endif::internal-generation[]
 
 [.resetUserLibs]
 ==== resetUserLibs
-    
+
 `DELETE /mapping/resetLibs`
 
 Remove All User-Defined JAR libraries
 
-===== Description 
+===== Description
 
 Remove all user-defined JAR files saved on the server
 
@@ -1388,8 +1388,8 @@ Remove all user-defined JAR files saved on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
@@ -1401,7 +1401,7 @@ Remove all user-defined JAR files saved on the server
 | Unable to remove all user-defined JAR files
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1427,12 +1427,12 @@ endif::internal-generation[]
 
 [.updateMappingRequest]
 ==== updateMappingRequest
-    
+
 `POST /mapping/{mappingDefinitionId}`
 
 Update Mapping
 
-===== Description 
+===== Description
 
 Update existing mapping file on the server
 
@@ -1446,30 +1446,30 @@ Update existing mapping file on the server
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingDefinitionId 
-| Mapping Definition ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -1486,15 +1486,15 @@ Update existing mapping file on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Succeeded
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1520,12 +1520,12 @@ endif::internal-generation[]
 
 [.updateMappingRequestOld]
 ==== updateMappingRequestOld
-    
+
 `POST /mapping`
 
 Update Mapping
 
-===== Description 
+===== Description
 
 Update existing mapping file on the server
 
@@ -1540,16 +1540,16 @@ Update existing mapping file on the server
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -1566,15 +1566,15 @@ Update existing mapping file on the server
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Succeeded
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1600,12 +1600,12 @@ endif::internal-generation[]
 
 [.uploadLibrary]
 ==== uploadLibrary
-    
+
 `PUT /library`
 
 Upload Library
 
-===== Description 
+===== Description
 
 Upload a Java library archive file
 
@@ -1620,16 +1620,16 @@ Upload a Java library archive file
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| body 
-|  <<object>> 
-| - 
-|  
-|  
+| body
+|  <<object>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -1646,15 +1646,15 @@ Upload a Java library archive file
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Library upload successful.
 |  <<>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1680,12 +1680,12 @@ endif::internal-generation[]
 
 [.validateMappingRequest]
 ==== validateMappingRequest
-    
+
 `PUT /mapping/validate/{mappingDefinitionId}`
 
 Validate Mapping
 
-===== Description 
+===== Description
 
 Validate mapping file
 
@@ -1699,30 +1699,30 @@ Validate mapping file
 ====== Path Parameters
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| mappingDefinitionId 
-| Mapping ID  
-| X 
-| null 
-|  
+| mappingDefinitionId
+| Mapping ID 
+| X
+| null
+| 
 
-|===         
+|===
 
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -1741,15 +1741,15 @@ Validate mapping file
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a validation result
 |  <<Validations>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1775,12 +1775,12 @@ endif::internal-generation[]
 
 [.validateMappingRequestOld]
 ==== validateMappingRequestOld
-    
+
 `PUT /mapping/validate`
 
 Validate Mapping
 
-===== Description 
+===== Description
 
 Validate mapping file
 
@@ -1795,16 +1795,16 @@ Validate mapping file
 ====== Body Parameter
 
 [cols="2,3,1,1,1"]
-|===         
+|===
 |Name| Description| Required| Default| Pattern
 
-| AtlasMapping 
-| Mapping file content <<AtlasMapping>> 
-| - 
-|  
-|  
+| AtlasMapping
+| Mapping file content <<AtlasMapping>>
+| -
+| 
+| 
 
-|===         
+|===
 
 
 
@@ -1823,15 +1823,15 @@ Validate mapping file
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return a validation result
 |  <<Validations>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1857,12 +1857,12 @@ endif::internal-generation[]
 
 [.version]
 ==== version
-    
+
 `GET /version`
 
 Version
 
-===== Description 
+===== Description
 
 Retrieves AtlasMap core library version.
 
@@ -1893,15 +1893,15 @@ Retrieves AtlasMap core library version.
 
 .http response codes
 [cols="2,3,1"]
-|===         
-| Code | Message | Datatype 
+|===
+| Code | Message | Datatype
 
 
 | 200
 | Return &#39;pong&#39;
 |  <<String>>
 
-|===         
+|===
 
 ===== Samples
 
@@ -1936,12 +1936,12 @@ endif::internal-generation[]
 
 [.fields-Action]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| @type 
-|  
-| String  
+| @type
+| 
+| String 
 | 
 |  
 
@@ -1955,60 +1955,60 @@ endif::internal-generation[]
 
 [.fields-ActionDetail]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| parameters 
-|  
-| ActionParameters  
+| parameters
+| 
+| ActionParameters 
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| custom 
-|  
-| Boolean  
+| custom
+| 
+| Boolean 
 | 
 |  
 
-| className 
-|  
-| String  
+| className
+| 
+| String 
 | 
 |  
 
-| method 
-|  
-| String  
+| method
+| 
+| String 
 | 
 |  
 
-| sourceType 
-|  
-| String  
+| sourceType
 | 
-|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
-
-| targetType 
-|  
-| String  
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
-| multiplicity 
-|  
-| String  
+| targetType
+| 
+| String 
+| 
+|  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
+
+| multiplicity
+| 
+| String 
 | 
 |  _Enum:_ ONE_TO_ONE, ONE_TO_MANY, MANY_TO_ONE, ZERO_TO_ONE, MANY_TO_MANY, 
 
-| actionSchema 
-|  
-| JsonSchema  
+| actionSchema
+| 
+| JsonSchema 
 | 
 |  
 
@@ -2022,12 +2022,12 @@ endif::internal-generation[]
 
 [.fields-ActionDetails]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| actionDetail 
-|  
-| List  of <<ActionDetail>> 
+| actionDetail
+| 
+| List  of <<ActionDetail>>
 | 
 |  
 
@@ -2041,36 +2041,36 @@ endif::internal-generation[]
 
 [.fields-ActionParameter]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| values 
-|  
-| List  of <<string>> 
+| values
+| 
+| List  of <<string>>
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| displayName 
-|  
-| String  
+| displayName
+| 
+| String 
 | 
 |  
 
-| description 
-|  
-| String  
+| description
+| 
+| String 
 | 
 |  
 
-| fieldType 
-|  
-| String  
+| fieldType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
@@ -2084,12 +2084,12 @@ endif::internal-generation[]
 
 [.fields-ActionParameters]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| parameter 
-|  
-| List  of <<ActionParameter>> 
+| parameter
+| 
+| List  of <<ActionParameter>>
 | 
 |  
 
@@ -2103,48 +2103,48 @@ endif::internal-generation[]
 
 [.fields-AtlasMapping]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| dataSource 
-|  
-| List  of <<DataSource>> 
+| dataSource
+| 
+| List  of <<DataSource>>
 | 
 |  
 
-| mappings 
-|  
-| Mappings  
+| mappings
+| 
+| Mappings 
 | 
 |  
 
-| lookupTables 
-|  
-| LookupTables  
+| lookupTables
+| 
+| LookupTables 
 | 
 |  
 
-| constants 
-|  
-| Constants  
+| constants
+| 
+| Constants 
 | 
 |  
 
-| properties 
-|  
-| Properties  
+| properties
+| 
+| Properties 
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -2158,18 +2158,18 @@ endif::internal-generation[]
 
 [.fields-AtlasMappingResult]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| targetDocuments 
-|  
-| List  of <<TargetDocument>> 
+| targetDocuments
+| 
+| List  of <<TargetDocument>>
 | 
 |  
 
-| audits 
-|  
-| Audits  
+| audits
+| 
+| Audits 
 | 
 |  
 
@@ -2183,42 +2183,42 @@ endif::internal-generation[]
 
 [.fields-Audit]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| message 
-|  
-| String  
+| message
+| 
+| String 
 | 
 |  
 
-| docId 
-|  
-| String  
+| docId
+| 
+| String 
 | 
 |  
 
-| docName 
-|  
-| String  
+| docName
+| 
+| String 
 | 
 |  
 
-| path 
-|  
-| String  
+| path
+| 
+| String 
 | 
 |  
 
-| value 
-|  
-| String  
+| value
+| 
+| String 
 | 
 |  
 
-| status 
-|  
-| String  
+| status
+| 
+| String 
 | 
 |  _Enum:_ ALL, INFO, WARN, ERROR, NONE, 
 
@@ -2232,12 +2232,12 @@ endif::internal-generation[]
 
 [.fields-Audits]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| audit 
-|  
-| List  of <<Audit>> 
+| audit
+| 
+| List  of <<Audit>>
 | 
 |  
 
@@ -2251,30 +2251,30 @@ endif::internal-generation[]
 
 [.fields-BaseMapping]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| alias 
-|  
-| String  
+| alias
+| 
+| String 
 | 
 |  
 
-| description 
-|  
-| String  
+| description
+| 
+| String 
 | 
 |  
 
-| mappingType 
-|  
-| String  
+| mappingType
+| 
+| String 
 | 
 |  _Enum:_ ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE, 
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -2288,24 +2288,24 @@ endif::internal-generation[]
 
 [.fields-Constant]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| value 
-|  
-| String  
+| value
+| 
+| String 
 | 
 |  
 
-| fieldType 
-|  
-| String  
+| fieldType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
@@ -2319,12 +2319,12 @@ endif::internal-generation[]
 
 [.fields-Constants]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| constant 
-|  
-| List  of <<Constant>> 
+| constant
+| 
+| List  of <<Constant>>
 | 
 |  
 
@@ -2338,54 +2338,54 @@ endif::internal-generation[]
 
 [.fields-DataSource]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| id 
-|  
-| String  
+| id
+| 
+| String 
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| description 
-|  
-| String  
+| description
+| 
+| String 
 | 
 |  
 
-| uri 
-|  
-| String  
+| uri
+| 
+| String 
 | 
 |  
 
-| dataSourceType 
-|  
-| String  
+| dataSourceType
+| 
+| String 
 | 
 |  _Enum:_ SOURCE, TARGET, 
 
-| characterEncoding 
-|  
-| String  
+| characterEncoding
+| 
+| String 
 | 
 |  
 
-| locale 
-|  
-| String  
+| locale
+| 
+| String 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -2399,90 +2399,90 @@ endif::internal-generation[]
 
 [.fields-Field]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| actions 
-|  
-| List  of <<Action>> 
+| actions
+| 
+| List  of <<Action>>
 | 
 |  
 
-| value 
-|  
-| Object  
+| value
+| 
+| Object 
 | 
 |  
 
-| arrayDimensions 
-|  
-| Integer  
+| arrayDimensions
 | 
-| int32 
-
-| arraySize 
-|  
-| Integer  
+| Integer 
 | 
 | int32 
 
-| collectionType 
-|  
-| String  
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
 | 
 |  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
 
-| docId 
-|  
-| String  
+| docId
+| 
+| String 
 | 
 |  
 
-| index 
-|  
-| Integer  
+| index
+| 
+| Integer 
 | 
 | int32 
 
-| path 
-|  
-| String  
+| path
+| 
+| String 
 | 
 |  
 
-| required 
-|  
-| Boolean  
+| required
+| 
+| Boolean 
 | 
 |  
 
-| status 
-|  
-| String  
+| status
+| 
+| String 
 | 
 |  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
 
-| fieldType 
-|  
-| String  
+| fieldType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
-| format 
-|  
-| String  
+| format
+| 
+| String 
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -2496,90 +2496,90 @@ endif::internal-generation[]
 
 [.fields-FieldGroup]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| actions 
-|  
-| List  of <<Action>> 
+| actions
+| 
+| List  of <<Action>>
 | 
 |  
 
-| value 
-|  
-| Object  
+| value
+| 
+| Object 
 | 
 |  
 
-| arrayDimensions 
-|  
-| Integer  
+| arrayDimensions
 | 
-| int32 
-
-| arraySize 
-|  
-| Integer  
+| Integer 
 | 
 | int32 
 
-| collectionType 
-|  
-| String  
+| arraySize
+| 
+| Integer 
+| 
+| int32 
+
+| collectionType
+| 
+| String 
 | 
 |  _Enum:_ ALL, ARRAY, LIST, MAP, NONE, 
 
-| docId 
-|  
-| String  
+| docId
+| 
+| String 
 | 
 |  
 
-| index 
-|  
-| Integer  
+| index
+| 
+| Integer 
 | 
 | int32 
 
-| path 
-|  
-| String  
+| path
+| 
+| String 
 | 
 |  
 
-| required 
-|  
-| Boolean  
+| required
+| 
+| Boolean 
 | 
 |  
 
-| status 
-|  
-| String  
+| status
+| 
+| String 
 | 
 |  _Enum:_ SUPPORTED, UNSUPPORTED, CACHED, ERROR, NOT_FOUND, EXCLUDED, 
 
-| fieldType 
-|  
-| String  
+| fieldType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
-| format 
-|  
-| String  
+| format
+| 
+| String 
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| field 
-|  
-| List  of <<Field>> 
+| field
+| 
+| List  of <<Field>>
 | 
 |  
 
@@ -2593,60 +2593,60 @@ endif::internal-generation[]
 
 [.fields-JsonSchema]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| id 
-|  
-| String  
+| id
+| 
+| String 
 | 
 |  
 
-| get$ref 
-|  
-| String  
+| get$ref
+| 
+| String 
 | 
 |  
 
-| get$schema 
-|  
-| String  
+| get$schema
+| 
+| String 
 | 
 |  
 
-| disallow 
-|  
-| List  of <<JsonSchema>> 
+| disallow
+| 
+| List  of <<JsonSchema>>
 | 
 |  
 
-| required 
-|  
-| Boolean  
+| required
+| 
+| Boolean 
 | 
 |  
 
-| readonly 
-|  
-| Boolean  
+| readonly
+| 
+| Boolean 
 | 
 |  
 
-| description 
-|  
-| String  
+| description
+| 
+| String 
 | 
 |  
 
-| extends 
-|  
-| List  of <<JsonSchema>> 
+| extends
+| 
+| List  of <<JsonSchema>>
 | 
 |  
 
-| type 
-| X 
-| String  
+| type
+| X
+| String 
 | 
 |  
 
@@ -2660,30 +2660,30 @@ endif::internal-generation[]
 
 [.fields-LookupEntry]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| sourceValue 
-|  
-| String  
+| sourceValue
+| 
+| String 
 | 
 |  
 
-| sourceType 
-|  
-| String  
+| sourceType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
-| targetValue 
-|  
-| String  
+| targetValue
+| 
+| String 
 | 
 |  
 
-| targetType 
-|  
-| String  
+| targetType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
@@ -2697,24 +2697,24 @@ endif::internal-generation[]
 
 [.fields-LookupTable]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| lookupEntry 
-|  
-| List  of <<LookupEntry>> 
+| lookupEntry
+| 
+| List  of <<LookupEntry>>
 | 
 |  
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| description 
-|  
-| String  
+| description
+| 
+| String 
 | 
 |  
 
@@ -2728,12 +2728,12 @@ endif::internal-generation[]
 
 [.fields-LookupTables]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| lookupTable 
-|  
-| List  of <<LookupTable>> 
+| lookupTable
+| 
+| List  of <<LookupTable>>
 | 
 |  
 
@@ -2747,90 +2747,90 @@ endif::internal-generation[]
 
 [.fields-Mapping]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| alias 
-|  
-| String  
+| alias
+| 
+| String 
 | 
 |  
 
-| description 
-|  
-| String  
+| description
+| 
+| String 
 | 
 |  
 
-| mappingType 
-|  
-| String  
+| mappingType
+| 
+| String 
 | 
 |  _Enum:_ ALL, COLLECTION, COMBINE, LOOKUP, MAP, SEPARATE, NONE, 
 
-| expression 
-|  
-| String  
+| expression
+| 
+| String 
 | 
 |  
 
-| inputFieldGroup 
-|  
-| FieldGroup  
+| inputFieldGroup
+| 
+| FieldGroup 
 | 
 |  
 
-| inputField 
-|  
-| List  of <<Field>> 
+| inputField
+| 
+| List  of <<Field>>
 | 
 |  
 
-| outputField 
-|  
-| List  of <<Field>> 
+| outputField
+| 
+| List  of <<Field>>
 | 
 |  
 
-| id 
-|  
-| String  
+| id
+| 
+| String 
 | 
 |  
 
-| delimiter 
-|  
-| String  
+| delimiter
+| 
+| String 
 | 
 |  
 
-| delimiterString 
-|  
-| String  
+| delimiterString
+| 
+| String 
 | 
 |  
 
-| lookupTableName 
-|  
-| String  
+| lookupTableName
+| 
+| String 
 | 
 |  
 
-| strategy 
-|  
-| String  
+| strategy
+| 
+| String 
 | 
 |  
 
-| strategyClassName 
-|  
-| String  
+| strategyClassName
+| 
+| String 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -2844,12 +2844,12 @@ endif::internal-generation[]
 
 [.fields-Mappings]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| mapping 
-|  
-| List  of <<BaseMapping>> 
+| mapping
+| 
+| List  of <<BaseMapping>>
 | 
 |  
 
@@ -2863,30 +2863,30 @@ endif::internal-generation[]
 
 [.fields-ProcessMappingResponse]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| mapping 
-|  
-| Mapping  
+| mapping
+| 
+| Mapping 
 | 
 |  
 
-| audits 
-|  
-| Audits  
+| audits
+| 
+| Audits 
 | 
 |  
 
-| atlasMappingResult 
-|  
-| AtlasMappingResult  
+| atlasMappingResult
+| 
+| AtlasMappingResult 
 | 
 |  
 
-| jsonType 
-| X 
-| String  
+| jsonType
+| X
+| String 
 | 
 |  
 
@@ -2900,12 +2900,12 @@ endif::internal-generation[]
 
 [.fields-Properties]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| property 
-|  
-| List  of <<Property>> 
+| property
+| 
+| List  of <<Property>>
 | 
 |  
 
@@ -2919,36 +2919,36 @@ endif::internal-generation[]
 
 [.fields-Property]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| value 
-|  
-| String  
+| value
+| 
+| String 
 | 
 |  
 
-| fieldType 
-|  
-| String  
+| fieldType
+| 
+| String 
 | 
 |  _Enum:_ ANY, ANY_DATE, BIG_INTEGER, BOOLEAN, BYTE, BYTE_ARRAY, CHAR, COMPLEX, DATE, DATE_TIME, DATE_TIME_TZ, DATE_TZ, DECIMAL, DOUBLE, FLOAT, INTEGER, LONG, NONE, NUMBER, SHORT, STRING, TIME, TIME_TZ, UNSIGNED_BYTE, UNSIGNED_INTEGER, UNSIGNED_LONG, UNSIGNED_SHORT, UNSUPPORTED, 
 
-| scope 
-|  
-| String  
+| scope
+| 
+| String 
 | 
 |  
 
-| dataSourceType 
-|  
-| String  
+| dataSourceType
+| 
+| String 
 | 
 |  _Enum:_ SOURCE, TARGET, 
 
@@ -2962,12 +2962,12 @@ endif::internal-generation[]
 
 [.fields-StringMap]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| stringMapEntry 
-|  
-| List  of <<StringMapEntry>> 
+| stringMapEntry
+| 
+| List  of <<StringMapEntry>>
 | 
 |  
 
@@ -2981,18 +2981,18 @@ endif::internal-generation[]
 
 [.fields-StringMapEntry]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| name 
-|  
-| String  
+| name
+| 
+| String 
 | 
 |  
 
-| value 
-|  
-| String  
+| value
+| 
+| String 
 | 
 |  
 
@@ -3006,18 +3006,18 @@ endif::internal-generation[]
 
 [.fields-TargetDocument]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| body 
-|  
-| String  
+| body
+| 
+| String 
 | 
 |  
 
-| docId 
-|  
-| String  
+| docId
+| 
+| String 
 | 
 |  
 
@@ -3031,42 +3031,42 @@ endif::internal-generation[]
 
 [.fields-Validation]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| message 
-|  
-| String  
+| message
+| 
+| String 
 | 
 |  
 
-| id 
-|  
-| String  
+| id
+| 
+| String 
 | 
 |  
 
-| docId 
-|  
-| String  
+| docId
+| 
+| String 
 | 
 |  
 
-| docName 
-|  
-| String  
+| docName
+| 
+| String 
 | 
 |  
 
-| scope 
-|  
-| String  
+| scope
+| 
+| String 
 | 
 |  _Enum:_ ALL, DATA_SOURCE, MAPPING, LOOKUP_TABLE, CONSTANT, PROPERTY, 
 
-| status 
-|  
-| String  
+| status
+| 
+| String 
 | 
 |  _Enum:_ ALL, INFO, WARN, ERROR, NONE, 
 
@@ -3080,12 +3080,12 @@ endif::internal-generation[]
 
 [.fields-Validations]
 [cols="2,1,2,4,1"]
-|===         
+|===
 | Field Name| Required| Type| Description| Format
 
-| validation 
-|  
-| List  of <<Validation>> 
+| validation
+| 
+| List  of <<Validation>>
 | 
 |  
 
