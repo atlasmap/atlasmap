@@ -98,7 +98,7 @@
       "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js"
     },
     "transform": {
-      "/node_modules/monaco-editor": "jest-esm-transformer",
+      "monaco-editor": "jest-esm-transformer",
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "transformIgnorePatterns": [
