@@ -114,7 +114,6 @@ export const useTreeFocus = ({
     }
   };
   const onKeyDown = (event: KeyboardEvent) => {
-    event.stopPropagation();
     // don't handle keyboard events performed on child elements
     if (event.target !== ref.current) {
       return;
