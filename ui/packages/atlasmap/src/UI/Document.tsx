@@ -96,8 +96,6 @@ export const Document = forwardRef<
   );
   const handleKey = useCallback(
     (event: KeyboardEvent) => {
-      event.stopPropagation();
-
       switch (event.key) {
         case 'Enter':
         case 'Space':
