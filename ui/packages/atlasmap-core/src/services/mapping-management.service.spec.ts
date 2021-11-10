@@ -256,6 +256,8 @@ describe('MappingManagementService', () => {
     expect(service.isFieldAddableToActiveMapping(tgtF2!)).toBeFalsy();
     const tgtF3 = tgtDoc.getField('/targetField3');
     expect(service.isFieldAddableToActiveMapping(tgtF3!)).toBeTruthy();
+    // should be able to create a new mapping
+    expect(service.isFieldAddableToActiveMapping(srcF2!, tgtF3!)).toBeTruthy();
   });
 
   test('isFieldAddableToActiveMapping() - one-to-collection', () => {
