@@ -390,7 +390,8 @@ export class MappingManagementService {
 
     if (
       !selectedMapping ||
-      (dropTarget && !this.cfg.mappings?.findMappingsForField(dropTarget))
+      (dropTarget &&
+        this.cfg.mappings?.findMappingsForField(dropTarget).length === 0)
     ) {
       return true;
     }
