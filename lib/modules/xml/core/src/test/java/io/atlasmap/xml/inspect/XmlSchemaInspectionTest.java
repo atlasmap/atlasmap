@@ -16,6 +16,7 @@
 package io.atlasmap.xml.inspect;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,6 +29,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.Restriction;
 import io.atlasmap.xml.v2.RestrictionType;
@@ -422,4 +424,48 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         });
     }
 
+    @Test
+    public void testInspectSchemaFileSameNameElement() throws Exception {
+        File schemaFile = Paths.get("src/test/resources/inspect/samename.xsd").toFile();
+
+        XmlInspectionService service = new XmlInspectionService();
+        XmlDocument xmlDocument = service.inspectSchema(schemaFile);
+
+        assertNotNull(xmlDocument);
+        assertNotNull(xmlDocument.getFields());
+        assertEquals(1, xmlDocument.getFields().getField().size());
+        XmlComplexType root = (XmlComplexType) xmlDocument.getFields().getField().get(0);
+        assertNotNull(root);
+        assertEquals(2, root.getXmlFields().getXmlField().size());
+        XmlField paramsField = root.getXmlFields().getXmlField().get(1);
+        assertEquals("params", paramsField.getName());
+        assertEquals("/methodCall/params", paramsField.getPath());
+        assertEquals(FieldType.COMPLEX, paramsField.getFieldType());
+        XmlComplexType paramsComplex = (XmlComplexType) paramsField;
+        assertEquals(1, paramsComplex.getXmlFields().getXmlField().size());
+        XmlField valueField = paramsComplex.getXmlFields().getXmlField().get(0);
+        assertEquals("value", valueField.getName());
+        assertEquals("/methodCall/params/value", valueField.getPath());
+        assertEquals(FieldType.COMPLEX, valueField.getFieldType());
+        XmlComplexType valueComplex = (XmlComplexType) valueField;
+        assertEquals(1, valueComplex.getXmlFields().getXmlField().size());
+        XmlField structField = valueComplex.getXmlFields().getXmlField().get(0);
+        assertEquals("struct", structField.getName());
+        assertEquals("/methodCall/params/value/struct", structField.getPath());
+        assertEquals(FieldType.COMPLEX, structField.getFieldType());
+        XmlComplexType structComplex = (XmlComplexType) structField;
+        assertEquals(1, structComplex.getXmlFields().getXmlField().size());
+        XmlField memberField = structComplex.getXmlFields().getXmlField().get(0);
+        assertEquals("member", memberField.getName());
+        assertEquals("/methodCall/params/value/struct/member", memberField.getPath());
+        assertEquals(FieldType.COMPLEX, memberField.getFieldType());
+        XmlComplexType memberComplex = (XmlComplexType) memberField;
+        assertEquals(2, memberComplex.getXmlFields().getXmlField().size());
+        XmlField value2Field = memberComplex.getXmlFields().getXmlField().get(1);
+        assertEquals("value", value2Field.getName());
+        assertEquals("/methodCall/params/value/struct/member/value", value2Field.getPath());
+        assertEquals(FieldType.COMPLEX, value2Field.getFieldType());
+        XmlComplexType value2Complex = (XmlComplexType) value2Field;
+        assertEquals(5, value2Complex.getXmlFields().getXmlField().size());
+    }
 }
