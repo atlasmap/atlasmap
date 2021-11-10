@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.39% </span>
+                <span class="strong">79.7% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>262/330</span>
+                <span class='fraction'>263/330</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.08% </span>
+                <span class="strong">59.58% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>137/240</span>
+                <span class='fraction'>143/240</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.81% </span>
+                <span class="strong">79.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>238/302</span>
+                <span class='fraction'>239/302</span>
             </div>
         
             
@@ -873,7 +873,8 @@
 <a name='L815'></a><a href='#L815'>815</a>
 <a name='L816'></a><a href='#L816'>816</a>
 <a name='L817'></a><a href='#L817'>817</a>
-<a name='L818'></a><a href='#L818'>818</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L818'></a><a href='#L818'>818</a>
+<a name='L819'></a><a href='#L819'>819</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -938,7 +939,7 @@
 <span class="cline-any cline-yes">68x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">867x</span>
+<span class="cline-any cline-yes">869x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">68x</span>
@@ -1251,8 +1252,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">63x</span>
-<span class="cline-any cline-yes">63x</span>
+<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">64x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1264,11 +1265,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-yes">63x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2072,7 +2074,7 @@ export class MappingManagementService {
     if (
       !field ||
       !field.isTerminal() ||
-<span class="branch-1 cbranch-no" title="branch not covered" >      dropTarget?.type </span>=== FieldType.UNSUPPORTED ||
+      dropTarget?.type === FieldType.UNSUPPORTED ||
       (selectedMapping &amp;&amp;
         selectedMapping.transition.mode === TransitionMode.ENUM &amp;&amp;
 <span class="branch-5 cbranch-no" title="branch not covered" >        selectedMapping.sourceFields.length &gt; 0 </span>&amp;&amp;
@@ -2081,11 +2083,12 @@ export class MappingManagementService {
       return false;
     }
 &nbsp;
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (
+    if (
       !selectedMapping ||
-      (dropTarget &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!this.cfg.mappings?.findMappingsForField(dropTarget))</span>
+      (dropTarget &amp;&amp;
+        this.cfg.mappings<span class="branch-0 cbranch-no" title="branch not covered" >?.f</span>indMappingsForField(dropTarget).length === 0)
     ) {
-<span class="cstat-no" title="statement not covered" >      return true;</span>
+      return true;
     }
     <span class="missing-if-branch" title="if path not taken" >I</span>if (selectedMapping.transition.mode === TransitionMode.EXPRESSION) {
 <span class="cstat-no" title="statement not covered" >      return field.isSource() || selectedMapping.targetFields.length === 0;</span>
@@ -2514,7 +2517,7 @@ export class MappingManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 09 2021 12:40:05 GMT+0000 (Coordinated Universal Time)
+                at Wed Nov 10 2021 21:09:31 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
