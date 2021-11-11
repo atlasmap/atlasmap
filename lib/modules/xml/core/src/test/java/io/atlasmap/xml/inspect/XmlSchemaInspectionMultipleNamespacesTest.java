@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.v2.XmlComplexType;
@@ -279,7 +280,8 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
                 assertEquals(1, photoUrlFields.size());
                 XmlField photoUrlField = photoUrlFields.get(0);
                 assertEquals(FieldType.STRING, photoUrlField.getFieldType());
-                assertEquals("/tns:request/tns:body/Pet/photoUrl/photoUrl", photoUrlField.getPath());
+                assertEquals("/tns:request/tns:body/Pet/photoUrl/photoUrl<>", photoUrlField.getPath());
+                assertEquals(CollectionType.LIST, photoUrlField.getCollectionType());
                 break;
             case "tag":
                 assertEquals(FieldType.COMPLEX, xmlField.getFieldType());
@@ -288,18 +290,19 @@ public class XmlSchemaInspectionMultipleNamespacesTest extends BaseXmlInspection
                 assertEquals(1, tagFields.size());
                 XmlField tagField = tagFields.get(0);
                 assertEquals(FieldType.COMPLEX, tagField.getFieldType());
-                assertEquals("/tns:request/tns:body/Pet/tag/Tag", tagField.getPath());
+                assertEquals("/tns:request/tns:body/Pet/tag/Tag<>", tagField.getPath());
+                assertEquals(CollectionType.LIST, tagField.getCollectionType());
                 List<XmlField> tagTagFields = XmlComplexType.class.cast(tagField).getXmlFields().getXmlField();
                 assertEquals(2, tagTagFields.size());
                 for (XmlField tagTagField : tagTagFields) {
                     switch (tagTagField.getName()) {
                     case "id":
                         assertEquals(FieldType.DECIMAL, tagTagField.getFieldType());
-                        assertEquals("/tns:request/tns:body/Pet/tag/Tag/id", tagTagField.getPath());
+                        assertEquals("/tns:request/tns:body/Pet/tag/Tag<>/id", tagTagField.getPath());
                         break;
                     case "name":
                         assertEquals(FieldType.STRING, tagTagField.getFieldType());
-                        assertEquals("/tns:request/tns:body/Pet/tag/Tag/name", tagTagField.getPath());
+                        assertEquals("/tns:request/tns:body/Pet/tag/Tag<>/name", tagTagField.getPath());
                         break;
                     default:
                         fail(String.format("Unknown field '%s'", tagTagField.getPath()));

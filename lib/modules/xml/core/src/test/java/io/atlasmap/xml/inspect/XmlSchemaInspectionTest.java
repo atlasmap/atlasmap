@@ -298,7 +298,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(item);
         assertEquals("item", item.getName());
         assertNull(item.getValue());
-        assertEquals("/tns:purchaseOrder/items/item", item.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>", item.getPath());
         assertEquals(FieldType.COMPLEX, item.getFieldType());
         assertEquals(false, item.isAttribute());
         assertEquals(CollectionType.LIST, item.getCollectionType());
@@ -309,7 +309,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(partNum);
         assertEquals("partNum", partNum.getName());
         assertNull(partNum.getValue());
-        assertEquals("/tns:purchaseOrder/items/item/@partNum", partNum.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>/@partNum", partNum.getPath());
         assertEquals(FieldType.STRING, partNum.getFieldType());
         assertEquals("SKU", partNum.getTypeName());
         assertEquals(true, partNum.isAttribute());
@@ -319,7 +319,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(productName);
         assertEquals("productName", productName.getName());
         assertNull(productName.getValue());
-        assertEquals("/tns:purchaseOrder/items/item/productName", productName.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>/productName", productName.getPath());
         assertEquals(FieldType.STRING, productName.getFieldType());
         assertEquals(false, productName.isAttribute());
 
@@ -328,7 +328,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(quantity);
         assertEquals("quantity", quantity.getName());
         assertNull(quantity.getValue());
-        assertEquals("/tns:purchaseOrder/items/item/quantity", quantity.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>/quantity", quantity.getPath());
         assertEquals(FieldType.BIG_INTEGER, quantity.getFieldType());
         assertEquals(false, quantity.isAttribute());
         assertNotNull(quantity.getRestrictions().getRestriction());
@@ -345,7 +345,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(usPrice);
         assertEquals("USPrice", usPrice.getName());
         assertNull(usPrice.getValue());
-        assertEquals("/tns:purchaseOrder/items/item/USPrice", usPrice.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>/USPrice", usPrice.getPath());
         assertEquals(FieldType.DECIMAL, usPrice.getFieldType());
         assertEquals(false, usPrice.isAttribute());
 
@@ -354,7 +354,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(itemComment);
         assertEquals("tns:comment", itemComment.getName());
         assertNull(itemComment.getValue());
-        assertEquals("/tns:purchaseOrder/items/item/tns:comment", itemComment.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>/tns:comment", itemComment.getPath());
         assertEquals(FieldType.STRING, itemComment.getFieldType());
         assertEquals(false, itemComment.isAttribute());
 
@@ -363,7 +363,7 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertNotNull(shipDate);
         assertEquals("shipDate", shipDate.getName());
         assertNull(shipDate.getValue());
-        assertEquals("/tns:purchaseOrder/items/item/shipDate", shipDate.getPath());
+        assertEquals("/tns:purchaseOrder/items/item<>/shipDate", shipDate.getPath());
         assertEquals(FieldType.DATE, shipDate.getFieldType());
         assertEquals(false, shipDate.isAttribute());
 
@@ -457,14 +457,16 @@ public class XmlSchemaInspectionTest extends BaseXmlInspectionServiceTest {
         assertEquals(1, structComplex.getXmlFields().getXmlField().size());
         XmlField memberField = structComplex.getXmlFields().getXmlField().get(0);
         assertEquals("member", memberField.getName());
-        assertEquals("/methodCall/params/value/struct/member", memberField.getPath());
+        assertEquals("/methodCall/params/value/struct/member<>", memberField.getPath());
         assertEquals(FieldType.COMPLEX, memberField.getFieldType());
+        assertEquals(CollectionType.LIST, memberField.getCollectionType());
         XmlComplexType memberComplex = (XmlComplexType) memberField;
         assertEquals(2, memberComplex.getXmlFields().getXmlField().size());
         XmlField value2Field = memberComplex.getXmlFields().getXmlField().get(1);
         assertEquals("value", value2Field.getName());
-        assertEquals("/methodCall/params/value/struct/member/value", value2Field.getPath());
+        assertEquals("/methodCall/params/value/struct/member<>/value<>", value2Field.getPath());
         assertEquals(FieldType.COMPLEX, value2Field.getFieldType());
+        assertEquals(CollectionType.LIST, value2Field.getCollectionType());
         XmlComplexType value2Complex = (XmlComplexType) value2Field;
         assertEquals(5, value2Complex.getXmlFields().getXmlField().size());
     }
