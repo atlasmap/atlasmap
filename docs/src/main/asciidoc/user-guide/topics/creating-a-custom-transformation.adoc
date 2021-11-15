@@ -124,3 +124,6 @@ type a string, for example, `bat`.
 *Preview Results* field in the target panel with `concur-ball` prepended. 
 +
 image:../images/Trans9.png[Import custom field action JAR]
++
+
+NOTE: When you run the mapping with custom transformation, Java classes and service declaration files you created above have to be put into classpath. Although uploaded jar file are stored in .adm file, those are only used to load mapping definition in the UI, but not at runtime.

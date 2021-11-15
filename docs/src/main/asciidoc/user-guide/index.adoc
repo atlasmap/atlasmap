@@ -67,7 +67,7 @@ include::topics/importing-data-files-into-atlasmap.adoc[leveloffset=+1]
 
 include::topics/mapping-fields-in-atlasmap.adoc[leveloffset=+1]
 
-include::topics/exporting-mappings-to-an-atlasmap-catalog-file.adoc[leveloffset=+1]
+include::topics/exporting-mappings-to-an-atlasmap-adm-archive-file.adoc[leveloffset=+1]
 
 include::topics/resetting-data-files-in-atlasmap.adoc[leveloffset=+1]
 
