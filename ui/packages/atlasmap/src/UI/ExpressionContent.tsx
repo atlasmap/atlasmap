@@ -109,6 +109,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   const [editorInitPhase, setEditorInitPhase] = useState(false);
   const [insertField, setInsertField] = useState<boolean>();
   const [insertedField, setInsertedField] = useState<boolean>(false);
+  const [expressionHeight, setExpressionHeight] = useState<string>('40px');
 
   let addFieldToExpression: (
     selectedDocId: string,
@@ -440,6 +441,32 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   );
 
   /**
+   * Once the user refocuses outside of the edit buffer reset the edit window to
+   * its standard size and drop the line numbers.
+   */
+  const onBlurEditorText = useCallback(() => {
+    condExprEditor?.updateOptions({
+      lineDecorationsWidth: 0,
+      lineNumbers: 'off',
+      lineNumbersMinChars: 0,
+    });
+    setExpressionHeight('40px');
+  }, [condExprEditor]);
+
+  /**
+   * If the user focuses into the edit window bump the edit buffer to a larger window
+   * size, establish line numbers and rerender.
+   */
+  const onDidFocusEditorText = useCallback(() => {
+    condExprEditor?.updateOptions({
+      lineDecorationsWidth: 2,
+      lineNumbers: 'on',
+      lineNumbersMinChars: 3,
+    });
+    setExpressionHeight('200px');
+  }, [condExprEditor]);
+
+  /**
    * Handle key down events.
    *
    * @param event - expression keyboard event
@@ -527,6 +554,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           condExprEditor.onDidChangeModelContent(onChange);
           condExprEditor.onDidPaste(onPaste);
           condExprEditor.onKeyDown(onKeyDown);
+          condExprEditor.onDidBlurEditorText(onBlurEditorText);
+          condExprEditor.onDidFocusEditorText(onDidFocusEditorText);
         }
         setEditorInitPhase(false); // Monaco editor initialization phase complete.
       }
@@ -547,7 +576,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     initializeMappingExpression,
     insertedField,
     isMappingExpressionEmpty,
+    onBlurEditorText,
     onChange,
+    onDidFocusEditorText,
     onExprClick,
     onKeyDown,
     onPaste,
@@ -605,6 +636,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
                     overflow: 'hidden',
                     paddingLeft: 8,
                     width: '100%',
+                    height: expressionHeight,
                   }}
                 />
               </Tooltip>
