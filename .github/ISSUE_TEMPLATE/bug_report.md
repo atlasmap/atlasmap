@@ -15,6 +15,7 @@ A clear and concise description of what the bug is. The more info is provided, t
 **Attach .adm file and source document examples**
 <!--
 The .adm archive file you can export from AtlasMap UI contains all metadata to reproduce your mapping. Also don't forget to provide source document examples to reproduce the runtime behavior exactly what you see.
+NOTE: GitHub doesn't allow uploading the file with unsupported extension, e.g. .adm and .xsd. You would need to either 1) pack into a ZIP file or 2) add a fake extension like schema.xsd.txt
  -->
  
 **Attach debug logs**
