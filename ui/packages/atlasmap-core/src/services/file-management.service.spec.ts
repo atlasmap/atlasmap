@@ -13,17 +13,13 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import {
-  ConfigModel,
-  DocumentInitializationModel,
-} from '../models/config.model';
 import { DocumentDefinition, MappingDefinition } from '../models';
 import { DocumentType, InspectionType } from '../contracts/common';
 import { TextDecoder, TextEncoder } from 'text-encoding';
 
 import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
-import { ErrorHandlerService } from './error-handler.service';
+import { DocumentInitializationModel } from '../models/config.model';
 import { ErrorLevel } from '../models/error.model';
 import { FileManagementService } from './file-management.service';
 import FileSaver from 'file-saver';
@@ -49,8 +45,8 @@ describe('FileManagementService', () => {
   const mockedPako = mocked(pako);
 
   beforeEach(() => {
-    service.cfg = new ConfigModel();
-    service.cfg.errorService = new ErrorHandlerService();
+    const initService = new InitializationService(ky);
+    service.cfg = initService.cfg;
     service.cfg.logger = log.getLogger('config');
     service.cfg.fileService = service;
   });
