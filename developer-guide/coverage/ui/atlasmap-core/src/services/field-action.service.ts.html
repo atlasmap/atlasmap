@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.31% </span>
+                <span class="strong">72.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>135/192</span>
+                <span class='fraction'>140/192</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.92% </span>
+                <span class="strong">55.77% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>54/104</span>
+                <span class='fraction'>58/104</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.41% </span>
+                <span class="strong">72.35% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>118/170</span>
+                <span class='fraction'>123/170</span>
             </div>
         
             
@@ -548,8 +548,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">78x</span>
-<span class="cline-any cline-yes">78x</span>
+<span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-yes">96x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -557,17 +557,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">78x</span>
-<span class="cline-any cline-yes">78x</span>
+<span class="cline-any cline-yes">96x</span>
+<span class="cline-any cline-yes">96x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">78x</span>
+<span class="cline-any cline-yes">96x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">938x</span>
@@ -595,22 +595,22 @@
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1021,7 +1021,7 @@ export class FieldActionService {
 &nbsp;
   async fetchFieldActions(): Promise&lt;boolean&gt; {
     return new Promise&lt;boolean&gt;((resolve) =&gt; {
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (this.cfg.preloadedFieldActionMetadata) {
+      if (this.cfg.preloadedFieldActionMetadata) {
         this.clearActionDefinitions();
         if (this.cfg.preloadedFieldActionMetadata.ActionDetails) {
           for (const actionDetail of this.cfg.preloadedFieldActionMetadata
@@ -1049,11 +1049,11 @@ export class FieldActionService {
         return;
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (</span>
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (
         this.cfg.mappingService == null ||
         this.cfg.initCfg.baseMappingServiceUrl == null
       ) {
-<span class="cstat-no" title="statement not covered" >        this.cfg.errorService.addError(</span>
+        this.cfg.errorService.addError(
           new ErrorInfo({
             message:
               'Mapping service URL is not provided. Field Actions will not be used.',
@@ -1062,9 +1062,9 @@ export class FieldActionService {
             type: ErrorType.INTERNAL,
           })
         );
-<span class="cstat-no" title="statement not covered" >        this.isInitialized = true;</span>
-<span class="cstat-no" title="statement not covered" >        resolve(false);</span>
-<span class="cstat-no" title="statement not covered" >        return;</span>
+        this.isInitialized = true;
+        resolve(false);
+        return;
       }
 &nbsp;
       // Fetch the field actions from the runtime service.
@@ -1425,7 +1425,7 @@ export class FieldActionService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 16 2021 14:05:20 GMT+0000 (Coordinated Universal Time)
+                at Wed Nov 17 2021 20:30:46 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
