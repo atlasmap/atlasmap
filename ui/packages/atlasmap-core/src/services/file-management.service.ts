@@ -372,16 +372,29 @@ export class FileManagementService {
   }
 
   /**
-   * Push a user-defined Java archive file (binary buffer) to the runtime.
+   * Push a user-defined Java archive file (JAR binary buffer) to the runtime.
    *
-   * @param binaryBuffer
+   * @param binaryBuffer - binary JAR file
    */
   importJarFile(binaryBuffer: BlobPart): Promise<boolean> {
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
-    const fileContent: Blob = new Blob([binaryBuffer], {
-      type: 'application/octet-stream',
+    return new Promise<boolean>(async (resolve) => {
+      const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
+      const fileContent: Blob = new Blob([binaryBuffer], {
+        type: 'application/octet-stream',
+      });
+      const jarUpdated = await this.setBinaryFileToService(
+        fileContent,
+        url,
+        FileName.JAR
+      );
+      if (jarUpdated && this.cfg.mappingService) {
+        this.cfg.mappingService.notifyMappingUpdated();
+        await this.cfg.fieldActionService.fetchFieldActions();
+        resolve(true);
+      } else {
+        resolve(false);
+      }
     });
-    return this.setBinaryFileToService(fileContent, url, FileName.JAR);
   }
 
   /**
