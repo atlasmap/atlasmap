@@ -14,9 +14,14 @@
     limitations under the License.
 */
 import * as constants from '../../atlasmap.json';
+import {
+  ConfigModel,
+  ErrorInfo,
+  ErrorLevel,
+  ErrorScope,
+  ErrorType,
+} from '@atlasmap/core';
 import { getDocDef, getDocDefByName, removeDocumentRef } from './document';
-
-import { ConfigModel } from '@atlasmap/core';
 
 /**
  * Return true if the specified file object exists as a source or target
@@ -66,14 +71,25 @@ export function importADMArchiveFile(selectedFile: File, cfg: ConfigModel) {
 }
 
 /**
- * Import a JAR file.
+ * Import a user-defined JAR file.
  *
- * @param selectedFile
- * @param userFileSuffix
- * @param cfg
+ * @param selectedFile - user selected JAR file
+ * @param cfg - configuration model
  */
 export function importJarFile(selectedFile: File, cfg: ConfigModel) {
-  cfg.fileService.importJarFile(selectedFile);
+  return new Promise<boolean>((resolve) => {
+    cfg.fileService.importJarFile(selectedFile).then(() => {
+      cfg.errorService.addError(
+        new ErrorInfo({
+          message: `${selectedFile.name} import complete.`,
+          level: ErrorLevel.INFO,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.USER,
+        }),
+      );
+      resolve(true);
+    });
+  });
 }
 
 /**

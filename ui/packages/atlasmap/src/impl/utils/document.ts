@@ -217,7 +217,6 @@ export async function importInstanceSchema(
       .then(() => {
         cfg.fileService.updateDigestFile().finally(() => {
           cfg.initializationService.updateStatus();
-          resolve(true);
           cfg.errorService.addError(
             new ErrorInfo({
               message: `${selectedFile.name} import complete.`,
@@ -226,6 +225,7 @@ export async function importInstanceSchema(
               type: ErrorType.USER,
             }),
           );
+          resolve(true);
         });
       });
   });
