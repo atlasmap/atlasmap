@@ -129,8 +129,8 @@ public class AtlasService {
             admHandler.setIgnoreLibrary(false);
             admHandler.setLibraryDirectory(Paths.get(libFolder));
             admHandler.load(Paths.get(atlasmapAdmPath));
-            admHandler.persist();
             this.libraryLoader.reload();
+            admHandler.persist();
         }
 
         synchronized (atlasContextFactory) {
@@ -443,8 +443,8 @@ public class AtlasService {
                 admHandler.setIgnoreLibrary(false);
                 admHandler.setLibraryDirectory(Paths.get(libFolder));
                 admHandler.load(mapping);
-                admHandler.persist();
                 this.libraryLoader.reload();
+                admHandler.persist();
                 LOG.debug("  importADMArchiveRequest complete - ID:'{}'", mappingDefinitionId);
             } catch (Exception e) {
                 LOG.error("Error importing ADM archive.\n" + e.getMessage(), e);
