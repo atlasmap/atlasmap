@@ -29,6 +29,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.List;
@@ -61,6 +62,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.MappingFileType;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.ProcessMappingRequest;
@@ -287,6 +289,18 @@ public class AtlasServiceTest {
     private boolean isWindowsJDK8() {
         return System.getProperty("os.name").toLowerCase().contains("win")
             && Double.parseDouble(System.getProperty("java.specification.version")) < 9;
+    }
+
+    @Test
+    public void testADMUpload() throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-schema-source-to-xml-schema-target.adm");
+        Response res = service.createMappingRequest(in, MappingFileType.ZIP, 0,
+            generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/ZIP/0"));
+        assertEquals(200, res.getStatus());
+        res = service.getMappingRequest(MappingFileType.JSON, 0);
+        assertEquals(200, res.getStatus());
+        AtlasMapping mappings = mapper.readValue((byte[])res.getEntity(), AtlasMapping.class);
+        assertEquals(5, mappings.getMappings().getMapping().size());
     }
 
     @Test
