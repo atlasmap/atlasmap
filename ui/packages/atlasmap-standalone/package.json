@@ -5,8 +5,8 @@
   "version": "2.4.0-SNAPSHOT",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build:module": "react-scripts build",
+    "start": "react-scripts --max_old_space_size=4096 start",
+    "build:module": "react-scripts --max_old_space_size=4096 build",
     "build": "npm-run-all build:module lint test",
     "test": "react-scripts test --watchAll=false --runInBand",
     "test:coverage": "react-scripts test --watchAll=false --coverage --runInBand",
