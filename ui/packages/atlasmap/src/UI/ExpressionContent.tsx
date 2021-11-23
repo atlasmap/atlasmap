@@ -62,7 +62,6 @@ let insertPosition: Position | null = null;
 let enumCandidates: EnumValue[] = [];
 let mappedFieldCandidates: string[][] = [];
 let searchFilter = '';
-let searchMode = false;
 let selectedNodeId: string = '';
 let mappingExprInit: () => void;
 
@@ -107,9 +106,11 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   getAtlasmapLanguage,
 }) => {
   const [editorInitPhase, setEditorInitPhase] = useState(false);
+  const [expressionHeight, setExpressionHeight] = useState<string>('40px');
   const [insertField, setInsertField] = useState<boolean>();
   const [insertedField, setInsertedField] = useState<boolean>(false);
-  const [expressionHeight, setExpressionHeight] = useState<string>('40px');
+  const [editorMouseDown, setEditorMouseDown] = useState<boolean>(false);
+  const [searchMode, setSearchMode] = useState<boolean>(false);
 
   let addFieldToExpression: (
     selectedDocId: string,
@@ -172,7 +173,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    */
   function clearSearchMode(): void {
     insertPosition = null;
-    searchMode = false;
+    setSearchMode(false);
     searchFilter = '';
     mappedFieldCandidates = [];
   }
@@ -189,7 +190,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * @returns
    */
   function insertFieldReference(): boolean {
-    searchMode = true;
+    setSearchMode(true);
     insertPosition = condExprEditor?.getPosition()!;
     searchFilter = '';
     mappedFieldCandidates = executeFieldSearch(searchFilter, true);
@@ -359,7 +360,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   const updateSearchMode = useCallback(() => {
     if (searchFilter.length === 0) {
       mappedFieldCandidates = [];
-      searchMode = false;
+      setSearchMode(false);
     } else {
       searchFilter = searchFilter.substr(0, searchFilter.length - 1);
       mappedFieldCandidates = executeFieldSearch(searchFilter, true);
@@ -441,30 +442,34 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   );
 
   /**
-   * Once the user refocuses outside of the edit buffer reset the edit window to
-   * its standard size and drop the line numbers.
+   * Once the user refocuses outside of the edit widget reset the edit window to
+   * its standard size.  If a field reference insertion is occurring then don't
+   * reset.
    */
-  const onBlurEditorText = useCallback(() => {
-    condExprEditor?.updateOptions({
-      lineDecorationsWidth: 0,
-      lineNumbers: 'off',
-      lineNumbersMinChars: 0,
-    });
-    setExpressionHeight('40px');
-  }, [condExprEditor]);
+  const onBlurEditorWidget = useCallback(() => {
+    if (!editorMouseDown && mappedFieldCandidates.length === 0) {
+      setExpressionHeight('40px');
+    }
+    setEditorMouseDown(false);
+  }, [editorMouseDown]);
 
   /**
    * If the user focuses into the edit window bump the edit buffer to a larger window
-   * size, establish line numbers and rerender.
+   * size.
    */
   const onDidFocusEditorText = useCallback(() => {
-    condExprEditor?.updateOptions({
-      lineDecorationsWidth: 2,
-      lineNumbers: 'on',
-      lineNumbersMinChars: 3,
-    });
     setExpressionHeight('200px');
-  }, [condExprEditor]);
+  }, []);
+
+  /**
+   * Track mouse-down events seperately since they are needed for accessing the monaco
+   * editor pull-down menu.
+   *
+   * @param event
+   */
+  function onMouseDown(_event: editor.IEditorMouseEvent) {
+    setEditorMouseDown(true);
+  }
 
   /**
    * Handle key down events.
@@ -508,6 +513,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       initializeMappingExpression,
       isMappingExpressionEmpty,
       removeTokenAtCaretPosition,
+      searchMode,
       updateSearchMode,
     ],
   );
@@ -554,8 +560,9 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           condExprEditor.onDidChangeModelContent(onChange);
           condExprEditor.onDidPaste(onPaste);
           condExprEditor.onKeyDown(onKeyDown);
-          condExprEditor.onDidBlurEditorText(onBlurEditorText);
+          condExprEditor.onDidBlurEditorWidget(onBlurEditorWidget);
           condExprEditor.onDidFocusEditorText(onDidFocusEditorText);
+          condExprEditor.onMouseDown(onMouseDown);
         }
         setEditorInitPhase(false); // Monaco editor initialization phase complete.
       }
@@ -576,7 +583,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     initializeMappingExpression,
     insertedField,
     isMappingExpressionEmpty,
-    onBlurEditorText,
+    editorMouseDown,
+    onBlurEditorWidget,
     onChange,
     onDidFocusEditorText,
     onExprClick,
