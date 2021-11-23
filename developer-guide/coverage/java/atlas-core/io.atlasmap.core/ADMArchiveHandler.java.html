@@ -188,13 +188,13 @@ public class ADMArchiveHandler {
 <span class="fc" id="L188">                zipOut.closeEntry();</span>
             }
 
-<span class="pc bpc" id="L191" title="4 of 6 branches missed.">            if (!isIgnoreLibrary() &amp;&amp; libraryDirectory != null &amp;&amp; libraryDirectory.toFile().isDirectory()) {</span>
-<span class="nc bnc" id="L192" title="All 2 branches missed.">                for (File jarFile : libraryDirectory.toFile().listFiles()) {</span>
-<span class="nc" id="L193">                    LOG.debug(&quot;  Creating jar file entry '{}'&quot;, &quot;lib/&quot; + jarFile.getName());</span>
-<span class="nc" id="L194">                    ZipEntry libEntry = new ZipEntry(&quot;lib/&quot; + jarFile.getName());</span>
-<span class="nc" id="L195">                    zipOut.putNextEntry(libEntry);</span>
-<span class="nc" id="L196">                    redirectStream(new FileInputStream(jarFile), zipOut);</span>
-<span class="nc" id="L197">                    zipOut.closeEntry();</span>
+<span class="pc bpc" id="L191" title="2 of 6 branches missed.">            if (!isIgnoreLibrary() &amp;&amp; libraryDirectory != null &amp;&amp; libraryDirectory.toFile().isDirectory()) {</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">                for (File jarFile : libraryDirectory.toFile().listFiles()) {</span>
+<span class="fc" id="L193">                    LOG.debug(&quot;  Creating jar file entry '{}'&quot;, &quot;lib/&quot; + jarFile.getName());</span>
+<span class="fc" id="L194">                    ZipEntry libEntry = new ZipEntry(&quot;lib/&quot; + jarFile.getName());</span>
+<span class="fc" id="L195">                    zipOut.putNextEntry(libEntry);</span>
+<span class="fc" id="L196">                    redirectStream(new FileInputStream(jarFile), zipOut);</span>
+<span class="fc" id="L197">                    zipOut.closeEntry();</span>
                 }
             }
 <span class="nc" id="L200">        } catch (Exception e) {</span>
@@ -301,18 +301,18 @@ public class ADMArchiveHandler {
     }
 
     public DataSourceMetadata getDataSourceMetadata(boolean isSource, String documentId) throws AtlasException {
-<span class="nc" id="L304">        return getDataSourceMetadata(new DataSourceKey(isSource, documentId));</span>
+<span class="fc" id="L304">        return getDataSourceMetadata(new DataSourceKey(isSource, documentId));</span>
     }
 
     public DataSourceMetadata getDataSourceMetadata(DataSourceKey key) throws AtlasException {
-<span class="nc bnc" id="L308" title="All 2 branches missed.">        if (getDataSourceMetadataMap() == null) {</span>
+<span class="pc bpc" id="L308" title="1 of 2 branches missed.">        if (getDataSourceMetadataMap() == null) {</span>
 <span class="nc" id="L309">            return null;</span>
         }
-<span class="nc" id="L311">        return getDataSourceMetadataMap().get(key);</span>
+<span class="fc" id="L311">        return getDataSourceMetadataMap().get(key);</span>
     }
 
     public Map&lt;DataSourceKey, DataSourceMetadata&gt; getDataSourceMetadataMap() throws AtlasException {
-<span class="pc bpc" id="L315" title="1 of 2 branches missed.">        if (this.dataSourceMetadata == null) {</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (this.dataSourceMetadata == null) {</span>
 <span class="fc bfc" id="L316" title="All 2 branches covered.">            if (this.gzippedAdmDigestBytes == null) {</span>
 <span class="fc" id="L317">                return null;</span>
             }
