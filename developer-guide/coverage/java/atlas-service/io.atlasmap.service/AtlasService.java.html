@@ -129,8 +129,8 @@ public class AtlasService {
 <span class="nc" id="L129">            admHandler.setIgnoreLibrary(false);</span>
 <span class="nc" id="L130">            admHandler.setLibraryDirectory(Paths.get(libFolder));</span>
 <span class="nc" id="L131">            admHandler.load(Paths.get(atlasmapAdmPath));</span>
-<span class="nc" id="L132">            admHandler.persist();</span>
-<span class="nc" id="L133">            this.libraryLoader.reload();</span>
+<span class="nc" id="L132">            this.libraryLoader.reload();</span>
+<span class="nc" id="L133">            admHandler.persist();</span>
         }
 
 <span class="fc" id="L136">        synchronized (atlasContextFactory) {</span>
@@ -349,11 +349,11 @@ public class AtlasService {
 <span class="pc bpc" id="L349" title="3 of 4 branches missed.">            if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
 <span class="nc" id="L350">                LOG.debug(new String(serialized));</span>
             }
-<span class="pc bpc" id="L352" title="1 of 2 branches missed.">            if (serialized == null) {</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">            if (serialized == null) {</span>
 <span class="fc" id="L353">                LOG.debug(&quot;Mapping definition not found for ID:{}&quot;, mappingDefinitionId);</span>
 <span class="fc" id="L354">                return Response.noContent().build();</span>
             }
-<span class="nc" id="L356">            return Response.ok().entity(serialized).build();</span>
+<span class="fc" id="L356">            return Response.ok().entity(serialized).build();</span>
         case GZ:
             try {
 <span class="nc bnc" id="L359" title="All 2 branches missed.">                if (admHandler.getGzippedADMDigestBytes() == null) {</span>
@@ -409,11 +409,11 @@ public class AtlasService {
       @Parameter(description = &quot;Mapping Format&quot;) @PathParam(&quot;mappingFormat&quot;) MappingFileType mappingFormat,
       @Parameter(description = &quot;Mapping ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
       @Context UriInfo uriInfo) {
-<span class="nc" id="L412">        LOG.debug(&quot;createMappingRequest (save) with format '{}'&quot;, mappingFormat);</span>
-<span class="nc" id="L413">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
-<span class="nc" id="L414">        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="fc" id="L412">        LOG.debug(&quot;createMappingRequest (save) with format '{}'&quot;, mappingFormat);</span>
+<span class="fc" id="L413">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
+<span class="fc" id="L414">        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);</span>
 
-<span class="nc bnc" id="L416" title="All 5 branches missed.">        switch (mappingFormat) {</span>
+<span class="pc bpc" id="L416" title="4 of 5 branches missed.">        switch (mappingFormat) {</span>
         case JSON:
             try {
 <span class="nc" id="L419">                admHandler.setMappingDefinitionBytes(mapping);</span>
@@ -438,20 +438,20 @@ public class AtlasService {
 <span class="nc" id="L438">            builder.path(admHandler.getGzippedADMDigestFileName());</span>
 <span class="nc" id="L439">            return Response.ok().location(builder.build()).build();</span>
         case ZIP:
-<span class="nc" id="L441">            LOG.debug(&quot;  importADMArchiveRequest - ID:'{}'&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L441">            LOG.debug(&quot;  importADMArchiveRequest - ID:'{}'&quot;, mappingDefinitionId);</span>
             try {
-<span class="nc" id="L443">                admHandler.setIgnoreLibrary(false);</span>
-<span class="nc" id="L444">                admHandler.setLibraryDirectory(Paths.get(libFolder));</span>
-<span class="nc" id="L445">                admHandler.load(mapping);</span>
-<span class="nc" id="L446">                admHandler.persist();</span>
-<span class="nc" id="L447">                this.libraryLoader.reload();</span>
-<span class="nc" id="L448">                LOG.debug(&quot;  importADMArchiveRequest complete - ID:'{}'&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L443">                admHandler.setIgnoreLibrary(false);</span>
+<span class="fc" id="L444">                admHandler.setLibraryDirectory(Paths.get(libFolder));</span>
+<span class="fc" id="L445">                admHandler.load(mapping);</span>
+<span class="fc" id="L446">                this.libraryLoader.reload();</span>
+<span class="fc" id="L447">                admHandler.persist();</span>
+<span class="fc" id="L448">                LOG.debug(&quot;  importADMArchiveRequest complete - ID:'{}'&quot;, mappingDefinitionId);</span>
 <span class="nc" id="L449">            } catch (Exception e) {</span>
 <span class="nc" id="L450">                LOG.error(&quot;Error importing ADM archive.\n&quot; + e.getMessage(), e);</span>
 <span class="nc" id="L451">                throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
-<span class="nc" id="L452">            }</span>
-<span class="nc" id="L453">            builder.path(&quot;atlasmap-&quot; + mappingDefinitionId + &quot;.adm&quot;);</span>
-<span class="nc" id="L454">            return Response.ok().location(builder.build()).build();</span>
+<span class="fc" id="L452">            }</span>
+<span class="fc" id="L453">            builder.path(&quot;atlasmap-&quot; + mappingDefinitionId + &quot;.adm&quot;);</span>
+<span class="fc" id="L454">            return Response.ok().location(builder.build()).build();</span>
         case XML:
 <span class="nc" id="L456">            throw new WebApplicationException(&quot;XML mapping format is no longer supported. Please use JSON format instead.&quot;);</span>
         default:
@@ -721,7 +721,7 @@ public class AtlasService {
     private ADMArchiveHandler loadExplodedMappingDirectory(Integer mappingDefinitionId) {
 <span class="fc" id="L722">        java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));</span>
 <span class="fc" id="L723">        File mappingDirFile = mappingDirPath.toFile();</span>
-<span class="pc bpc" id="L724" title="1 of 2 branches missed.">        if (!mappingDirFile.exists()) {</span>
+<span class="fc bfc" id="L724" title="All 2 branches covered.">        if (!mappingDirFile.exists()) {</span>
 <span class="fc" id="L725">            mappingDirFile.mkdirs();</span>
         }
 
