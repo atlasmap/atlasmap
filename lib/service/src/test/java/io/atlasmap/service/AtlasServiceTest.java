@@ -300,7 +300,7 @@ public class AtlasServiceTest {
         res = service.getMappingRequest(MappingFileType.JSON, 0);
         assertEquals(200, res.getStatus());
         AtlasMapping mappings = mapper.readValue((byte[])res.getEntity(), AtlasMapping.class);
-        assertEquals(5, mappings.getMappings().getMapping().size());
+        assertEquals(4, mappings.getMappings().getMapping().size());
     }
 
     @Test
