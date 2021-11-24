@@ -66,7 +66,10 @@ export class MappingUtil {
       let doc: DocumentDefinition | null = null;
       mappedFieldIndex += 1;
 
-      if (mappedField.field instanceof PaddingField) {
+      if (
+        mappedField.field instanceof PaddingField ||
+        mappedField.mappingField === undefined
+      ) {
         continue;
       }
       if (MappingUtil.isPropertyField(mappedField.mappingField)) {
