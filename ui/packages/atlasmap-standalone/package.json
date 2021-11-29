@@ -50,12 +50,12 @@
   },
   "devDependencies": {
     "@types/jest": "24.9.1",
+    "prettier": "^2.5.0",
     "typescript": "~3.9.9"
   },
   "resolutions": {
     "jest": "24.9.0",
     "babel-loader": "8.1.0",
-    "prettier": "^2.3.1",
     "webpack": "4.42.0"
   },
   "eslintConfig": {
