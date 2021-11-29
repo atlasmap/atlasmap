@@ -162,7 +162,8 @@
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,6 +207,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-yes">22x</span>
@@ -311,69 +313,70 @@ export interface ITreeGroupAndNodeRefsAndDnDProps {
   children: ITreeGroupProps['children'];
 }
 &nbsp;
-export const TreeGroupAndNodeRefsAndDnD: FunctionComponent&lt;ITreeGroupAndNodeRefsAndDnDProps&gt; =
-  ({
-    fieldId,
-    group,
-    showTypes,
-    boundaryId,
-    overrideWidth,
-    parentId,
-    acceptDropType,
-    draggableType,
-    level = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-    position = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-    setSize = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-    children,
-  }) =&gt; (
-    &lt;FieldDropTarget
-      key={fieldId}
-      target={{
-        id: group.id,
-        name: group.name,
-        type: draggableType,
-      }}
-      canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >f</span>alse}</span>
-      accept={[acceptDropType]}
-    &gt;
-      {({ isOver }) =&gt; (
-        &lt;DelayedBoolean value={isOver}&gt;
-          {(isOver) =&gt; (
-            &lt;NodeRef
+export const TreeGroupAndNodeRefsAndDnD: FunctionComponent&lt;
+  ITreeGroupAndNodeRefsAndDnDProps
+&gt; = ({
+  fieldId,
+  group,
+  showTypes,
+  boundaryId,
+  overrideWidth,
+  parentId,
+  acceptDropType,
+  draggableType,
+  level = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  position = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  setSize = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  children,
+}) =&gt; (
+  &lt;FieldDropTarget
+    key={fieldId}
+    target={{
+      id: group.id,
+      name: group.name,
+      type: draggableType,
+    }}
+    canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >f</span>alse}</span>
+    accept={[acceptDropType]}
+  &gt;
+    {({ isOver }) =&gt; (
+      &lt;DelayedBoolean value={isOver}&gt;
+        {(isOver) =&gt; (
+          &lt;NodeRef
+            id={fieldId}
+            parentId={parentId}
+            boundaryId={boundaryId}
+            overrideWidth={overrideWidth}
+          &gt;
+            &lt;TreeGroup
               id={fieldId}
-              parentId={parentId}
-              boundaryId={boundaryId}
-              overrideWidth={overrideWidth}
+              level={level}
+              position={position}
+              setSize={setSize}
+              expanded={isOver === true ? <span class="branch-0 cbranch-no" title="branch not covered" >true </span>: undefined}
+              renderLabel={({ expanded }) =&gt; (
+                &lt;DocumentGroup
+                  name={group.name}
+                  type={group.type}
+                  showType={showTypes}
+                  icon={group.isCollection ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;LayerGroupIcon /&gt; </span>: undefined}
+                  iconTooltip={
+                    group.isCollection
+                      ? <span class="branch-0 cbranch-no" title="branch not covered" >'This object is a collection'</span>
+                      : undefined
+                  }
+                  expanded={isOver || expanded}
+                /&gt;
+              )}
             &gt;
-              &lt;TreeGroup
-                id={fieldId}
-                level={level}
-                position={position}
-                setSize={setSize}
-                expanded={isOver === true ? <span class="branch-0 cbranch-no" title="branch not covered" >true </span>: undefined}
-                renderLabel={({ expanded }) =&gt; (
-                  &lt;DocumentGroup
-                    name={group.name}
-                    type={group.type}
-                    showType={showTypes}
-                    icon={group.isCollection ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;LayerGroupIcon /&gt; </span>: undefined}
-                    iconTooltip={
-                      group.isCollection
-                        ? <span class="branch-0 cbranch-no" title="branch not covered" >'This object is a collection'</span>
-                        : undefined
-                    }
-                    expanded={isOver || expanded}
-                  /&gt;
-                )}
-              &gt;
-                {children}
-              &lt;/TreeGroup&gt;
-            &lt;/NodeRef&gt;
-          )}
-        &lt;/DelayedBoolean&gt;
-      )}
-    &lt;/FieldDropTarget&gt;
-  );
+              {children}
+            &lt;/TreeGroup&gt;
+          &lt;/NodeRef&gt;
+        )}
+      &lt;/DelayedBoolean&gt;
+    )}
+  &lt;/FieldDropTarget&gt;
+);
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -381,7 +384,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent&lt;ITreeGroupAndNodeR
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Nov 29 2021 13:13:36 GMT+0000 (Coordinated Universal Time)
+                at Mon Nov 29 2021 19:30:40 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

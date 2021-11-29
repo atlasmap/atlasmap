@@ -157,7 +157,8 @@
 <a name='L99'></a><a href='#L99'>99</a>
 <a name='L100'></a><a href='#L100'>100</a>
 <a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,6 +193,7 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -292,73 +294,74 @@ export interface IExpressionEnumSelectProps {
 }
 let selectValue = '';
 &nbsp;
-export const ExpressionEnumSelect: FunctionComponent&lt;IExpressionEnumSelectProps&gt; =
-<span class="fstat-no" title="function not covered" >  ({</span> selectedNodeId<span class="cstat-no" title="statement not covered" >, e</span>numCandidates<span class="cstat-no" title="statement not covered" >, c</span>learEnumSelect<span class="cstat-no" title="statement not covered" >, o</span>nEnumSelect<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
-    const id = <span class="cstat-no" title="statement not covered" >`expr-enum-select-${selectValue}`;</span>
-    const { state<span class="cstat-no" title="statement not covered" >, t</span>oggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(true, onToggleEnumSelect);</span>
+export const ExpressionEnumSelect: FunctionComponent&lt;
+  IExpressionEnumSelectProps
+&gt; = <span class="fstat-no" title="function not covered" >({</span> selectedNodeId<span class="cstat-no" title="statement not covered" >, e</span>numCandidates<span class="cstat-no" title="statement not covered" >, c</span>learEnumSelect<span class="cstat-no" title="statement not covered" >, o</span>nEnumSelect<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
+  const id = <span class="cstat-no" title="statement not covered" >`expr-enum-select-${selectValue}`;</span>
+  const { state<span class="cstat-no" title="statement not covered" >, t</span>oggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(true, onToggleEnumSelect);</span>
 &nbsp;
-    function <span class="fstat-no" title="function not covered" >onToggleEnumSelect(</span>toggled: boolean): any {
-<span class="cstat-no" title="statement not covered" >      if (!toggled) {</span>
-<span class="cstat-no" title="statement not covered" >        enumCandidates = [];</span>
-<span class="cstat-no" title="statement not covered" >        clearEnumSelect();</span>
-      }
+  function <span class="fstat-no" title="function not covered" >onToggleEnumSelect(</span>toggled: boolean): any {
+<span class="cstat-no" title="statement not covered" >    if (!toggled) {</span>
+<span class="cstat-no" title="statement not covered" >      enumCandidates = [];</span>
+<span class="cstat-no" title="statement not covered" >      clearEnumSelect();</span>
     }
+  }
 &nbsp;
-    function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
-      event: any,
-      value: string | SelectOptionObject,
-      _isPlaceholder?: boolean | undefined,
-    ): void {
-<span class="cstat-no" title="statement not covered" >      selectValue = value as string;</span>
-<span class="cstat-no" title="statement not covered" >      onEnumSelect(selectedNodeId, event.currentTarget.id.split('-').pop());</span>
-<span class="cstat-no" title="statement not covered" >      onToggleEnumSelect(false);</span>
-<span class="cstat-no" title="statement not covered" >      toggleOff();</span>
+  function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
+    event: any,
+    value: string | SelectOptionObject,
+    _isPlaceholder?: boolean | undefined,
+  ): void {
+<span class="cstat-no" title="statement not covered" >    selectValue = value as string;</span>
+<span class="cstat-no" title="statement not covered" >    onEnumSelect(selectedNodeId, event.currentTarget.id.split('-').pop());</span>
+<span class="cstat-no" title="statement not covered" >    onToggleEnumSelect(false);</span>
+<span class="cstat-no" title="statement not covered" >    toggleOff();</span>
+  }
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string, idx: number): any {
+<span class="cstat-no" title="statement not covered" >    if (selectField[1].length === 0) {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;SelectOption
+          isDisabled={true}
+          label={selectField}
+          value={selectField}
+          key={idx}
+          className={styles.document}
+        /&gt;
+      );
+    } else {
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;SelectOption
+          label={selectField}
+          value={selectField}
+          key={idx}
+          className={styles.field}
+        /&gt;
+      );
     }
+  }
 &nbsp;
-    function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string, idx: number): any {
-<span class="cstat-no" title="statement not covered" >      if (selectField[1].length === 0) {</span>
-<span class="cstat-no" title="statement not covered" >        return (</span>
-          &lt;SelectOption
-            isDisabled={true}
-            label={selectField}
-            value={selectField}
-            key={idx}
-            className={styles.document}
-          /&gt;
-        );
-      } else {
-<span class="cstat-no" title="statement not covered" >        return (</span>
-          &lt;SelectOption
-            label={selectField}
-            value={selectField}
-            key={idx}
-            className={styles.field}
-          /&gt;
-        );
-      }
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;div
-        aria-label="Expression Enumeration"
-        className="enumSelectMenu"
-        data-testid={'expression-enumeration-select'}
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;div
+      aria-label="Expression Enumeration"
+      className="enumSelectMenu"
+      data-testid={'expression-enumeration-select'}
+    &gt;
+      &lt;Select
+        onToggle={toggle}
+        isOpen={state}
+        value={selectValue}
+        id={id}
+        onSelect={selectionChanged}
+        data-testid={id}
       &gt;
-        &lt;Select
-          onToggle={toggle}
-          isOpen={state}
-          value={selectValue}
-          id={id}
-          onSelect={selectionChanged}
-          data-testid={id}
-        &gt;
-          {enumCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
-<span class="cstat-no" title="statement not covered" >            createSelectOption(s.name, idx),</span>
-          )}
-        &lt;/Select&gt;
-      &lt;/div&gt;
-    );
-  };
+        {enumCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
+<span class="cstat-no" title="statement not covered" >          createSelectOption(s.name, idx),</span>
+        )}
+      &lt;/Select&gt;
+    &lt;/div&gt;
+  );
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -366,7 +369,7 @@ export const ExpressionEnumSelect: FunctionComponent&lt;IExpressionEnumSelectPro
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Nov 29 2021 13:13:36 GMT+0000 (Coordinated Universal Time)
+                at Mon Nov 29 2021 19:30:40 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

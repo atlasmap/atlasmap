@@ -535,7 +535,8 @@
 <a name='L477'></a><a href='#L477'>477</a>
 <a name='L478'></a><a href='#L478'>478</a>
 <a name='L479'></a><a href='#L479'>479</a>
-<a name='L480'></a><a href='#L480'>480</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L480'></a><a href='#L480'>480</a>
+<a name='L481'></a><a href='#L481'>481</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -594,6 +595,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1072,76 +1074,77 @@ export interface IAtlasmapToolbarItemProps {
   onExportAtlasFile: () =&gt; void;
   onResetAtlasmap: () =&gt; void;
 }
-export const <span class="cstat-no" title="statement not covered" >AtlasmapToolbarItem: FunctionComponent&lt;IAtlasmapToolbarItemProps&gt; =</span>
-<span class="fstat-no" title="function not covered" >  ({</span>
-    showImportAtlasFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
-    showImportJarFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
-    showExportAtlasFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
-    showResetToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
-    onImportAtlasFile<span class="cstat-no" title="statement not covered" >,</span>
-    onImportJarFile<span class="cstat-no" title="statement not covered" >,</span>
-    onExportAtlasFile<span class="cstat-no" title="statement not covered" >,</span>
-    onResetAtlasmap<span class="cstat-no" title="statement not covered" >,</span>
-  }) =&gt; {
-    const { state: isOpen<span class="cstat-no" title="statement not covered" >, toggle: o</span>nToggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(false);</span>
-    const runAndClose = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>b: (...args: any[]) =&gt; any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      return <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" >.</span>..args: any[])</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        cb(...args);</span>
-<span class="cstat-no" title="statement not covered" >        toggleOff();</span>
-      };
+export const <span class="cstat-no" title="statement not covered" >AtlasmapToolbarItem: FunctionComponent&lt;</span>
+  IAtlasmapToolbarItemProps
+&gt; = <span class="fstat-no" title="function not covered" >({</span>
+  showImportAtlasFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+  showImportJarFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+  showExportAtlasFileToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+  showResetToolbarItem<span class="cstat-no" title="statement not covered" >,</span>
+  onImportAtlasFile<span class="cstat-no" title="statement not covered" >,</span>
+  onImportJarFile<span class="cstat-no" title="statement not covered" >,</span>
+  onExportAtlasFile<span class="cstat-no" title="statement not covered" >,</span>
+  onResetAtlasmap<span class="cstat-no" title="statement not covered" >,</span>
+}) =&gt; {
+  const { state: isOpen<span class="cstat-no" title="statement not covered" >, toggle: o</span>nToggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(false);</span>
+  const runAndClose = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(c</span>b: (...args: any[]) =&gt; any) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    return <span class="fstat-no" title="function not covered" >(<span class="cstat-no" title="statement not covered" >.</span>..args: any[])</span> =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      cb(...args);</span>
+<span class="cstat-no" title="statement not covered" >      toggleOff();</span>
     };
-    const dropdownItems = <span class="cstat-no" title="statement not covered" >[</span>
-      showImportAtlasFileToolbarItem &amp;&amp; (
-        &lt;ImportAtlasFileToolbarItem
-          onFile={runAndClose(onImportAtlasFile)}
-          key="import-catalog"
-        /&gt;
-      ),
-      showImportJarFileToolbarItem &amp;&amp; (
-        &lt;ImportJarFileToolbarItem
-          onFile={runAndClose(onImportJarFile)}
-          key="import-java-archive"
-        /&gt;
-      ),
-      (showImportAtlasFileToolbarItem || showImportJarFileToolbarItem) &amp;&amp; (
-        &lt;DropdownSeparator key="import-separator" /&gt;
-      ),
-      showExportAtlasFileToolbarItem &amp;&amp; (
-        &lt;ExportAtlasFileToolbarItem
-          onClick={runAndClose(onExportAtlasFile)}
-          key={'export-catalog'}
-        /&gt;
-      ),
-      showExportAtlasFileToolbarItem &amp;&amp; (
-        &lt;DropdownSeparator key="export-separator" /&gt;
-      ),
-      showResetToolbarItem &amp;&amp; (
-        &lt;ResetToolbarItem
-          onClick={runAndClose(onResetAtlasmap)}
-          key="reset-catalog"
-        /&gt;
-      ),
-    ].filter(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f);</span>
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;ToolbarItem&gt;
-        &lt;Dropdown
-          toggle={
-            &lt;DropdownToggle
-              id="atlasmap-toggle"
-              onToggle={onToggle}
-              toggleIndicator={CaretDownIcon}
-              data-testid="atlasmap-menu-button"
-            &gt;
-              AtlasMap
-            &lt;/DropdownToggle&gt;
-          }
-          isOpen={isOpen}
-          dropdownItems={dropdownItems}
-          isPlain={true}
-        /&gt;
-      &lt;/ToolbarItem&gt;
-    );
   };
+  const dropdownItems = <span class="cstat-no" title="statement not covered" >[</span>
+    showImportAtlasFileToolbarItem &amp;&amp; (
+      &lt;ImportAtlasFileToolbarItem
+        onFile={runAndClose(onImportAtlasFile)}
+        key="import-catalog"
+      /&gt;
+    ),
+    showImportJarFileToolbarItem &amp;&amp; (
+      &lt;ImportJarFileToolbarItem
+        onFile={runAndClose(onImportJarFile)}
+        key="import-java-archive"
+      /&gt;
+    ),
+    (showImportAtlasFileToolbarItem || showImportJarFileToolbarItem) &amp;&amp; (
+      &lt;DropdownSeparator key="import-separator" /&gt;
+    ),
+    showExportAtlasFileToolbarItem &amp;&amp; (
+      &lt;ExportAtlasFileToolbarItem
+        onClick={runAndClose(onExportAtlasFile)}
+        key={'export-catalog'}
+      /&gt;
+    ),
+    showExportAtlasFileToolbarItem &amp;&amp; (
+      &lt;DropdownSeparator key="export-separator" /&gt;
+    ),
+    showResetToolbarItem &amp;&amp; (
+      &lt;ResetToolbarItem
+        onClick={runAndClose(onResetAtlasmap)}
+        key="reset-catalog"
+      /&gt;
+    ),
+  ].filter(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; <span class="cstat-no" title="statement not covered" >f);</span>
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;ToolbarItem&gt;
+      &lt;Dropdown
+        toggle={
+          &lt;DropdownToggle
+            id="atlasmap-toggle"
+            onToggle={onToggle}
+            toggleIndicator={CaretDownIcon}
+            data-testid="atlasmap-menu-button"
+          &gt;
+            AtlasMap
+          &lt;/DropdownToggle&gt;
+        }
+        isOpen={isOpen}
+        dropdownItems={dropdownItems}
+        isPlain={true}
+      /&gt;
+    &lt;/ToolbarItem&gt;
+  );
+};
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >ImportAtlasFileToolbarItem: FunctionComponent&lt;{</span>
   onFile: (file: File) =&gt; void;
@@ -1500,7 +1503,7 @@ export const <span class="cstat-no" title="statement not covered" >AboutToolbarI
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Nov 29 2021 13:13:36 GMT+0000 (Coordinated Universal Time)
+                at Mon Nov 29 2021 19:30:40 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
