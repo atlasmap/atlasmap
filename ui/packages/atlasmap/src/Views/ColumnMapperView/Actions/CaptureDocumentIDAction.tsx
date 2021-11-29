@@ -22,20 +22,21 @@ export interface ICaptureDocumentIDActionProps {
   id: string;
   onClick: () => void;
 }
-export const CaptureDocumentIDAction: FunctionComponent<ICaptureDocumentIDActionProps> =
-  ({ id, onClick }) => (
-    <Tooltip
-      position={'auto'}
-      enableFlip={true}
-      content={<div>Capture Document ID to clipboard</div>}
+export const CaptureDocumentIDAction: FunctionComponent<
+  ICaptureDocumentIDActionProps
+> = ({ id, onClick }) => (
+  <Tooltip
+    position={'auto'}
+    enableFlip={true}
+    content={<div>Capture Document ID to clipboard</div>}
+  >
+    <Button
+      variant="plain"
+      onClick={onClick}
+      aria-label="Capture Document ID to clipboard"
+      data-testid={`capture-${id}-name-button`}
     >
-      <Button
-        variant="plain"
-        onClick={onClick}
-        aria-label="Capture Document ID to clipboard"
-        data-testid={`capture-${id}-name-button`}
-      >
-        <ClipboardIcon />
-      </Button>
-    </Tooltip>
-  );
+      <ClipboardIcon />
+    </Button>
+  </Tooltip>
+);

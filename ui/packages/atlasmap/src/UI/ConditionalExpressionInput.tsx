@@ -24,43 +24,44 @@ import styles from './ConditionalExpressionInput.module.css';
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {}
 
-export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> =
-  ({
-    executeFieldSearch,
-    getFieldEnums,
-    mappingExpressionAddField,
-    isMappingExpressionEmpty,
-    mappingExpressionInit,
-    mappingExpressionInsertText,
-    mappingExpressionRemoveField,
-    mappingExpression,
-    disabled,
-    onToggle,
-    setSelectedEnumValue,
-    getAtlasmapLanguage,
-  }) => {
-    return (
-      <ToolbarGroup
-        variant="filter-group"
-        className={styles.toolbarItem}
-        role={'form'}
-      >
-        <ToolbarItem className={styles.toolbarItem}>
-          <ExpressionContent
-            disabled={disabled}
-            executeFieldSearch={executeFieldSearch}
-            getFieldEnums={getFieldEnums}
-            mappingExpressionAddField={mappingExpressionAddField}
-            isMappingExpressionEmpty={isMappingExpressionEmpty}
-            mappingExpressionInit={mappingExpressionInit}
-            mappingExpressionInsertText={mappingExpressionInsertText}
-            mappingExpressionRemoveField={mappingExpressionRemoveField}
-            mappingExpression={mappingExpression}
-            onToggle={onToggle}
-            setSelectedEnumValue={setSelectedEnumValue}
-            getAtlasmapLanguage={getAtlasmapLanguage}
-          />
-        </ToolbarItem>
-      </ToolbarGroup>
-    );
-  };
+export const ConditionalExpressionInput: FunctionComponent<
+  IConditionalExpressionInputProps
+> = ({
+  executeFieldSearch,
+  getFieldEnums,
+  mappingExpressionAddField,
+  isMappingExpressionEmpty,
+  mappingExpressionInit,
+  mappingExpressionInsertText,
+  mappingExpressionRemoveField,
+  mappingExpression,
+  disabled,
+  onToggle,
+  setSelectedEnumValue,
+  getAtlasmapLanguage,
+}) => {
+  return (
+    <ToolbarGroup
+      variant="filter-group"
+      className={styles.toolbarItem}
+      role={'form'}
+    >
+      <ToolbarItem className={styles.toolbarItem}>
+        <ExpressionContent
+          disabled={disabled}
+          executeFieldSearch={executeFieldSearch}
+          getFieldEnums={getFieldEnums}
+          mappingExpressionAddField={mappingExpressionAddField}
+          isMappingExpressionEmpty={isMappingExpressionEmpty}
+          mappingExpressionInit={mappingExpressionInit}
+          mappingExpressionInsertText={mappingExpressionInsertText}
+          mappingExpressionRemoveField={mappingExpressionRemoveField}
+          mappingExpression={mappingExpression}
+          onToggle={onToggle}
+          setSelectedEnumValue={setSelectedEnumValue}
+          getAtlasmapLanguage={getAtlasmapLanguage}
+        />
+      </ToolbarItem>
+    </ToolbarGroup>
+  );
+};
