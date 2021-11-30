@@ -396,7 +396,7 @@ describe('FileManagementService', () => {
         }
       })()
     );
-    mockedFileSaver.saveAs = jest.fn().mockImplementation((_data) => {});
+    jest.spyOn(FileSaver, 'saveAs').mockImplementation((_data) => {});
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = new DocumentDefinition();
     srcDoc.name = 'dummy source document';
