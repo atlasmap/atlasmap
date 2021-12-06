@@ -203,7 +203,11 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
         Element childNode = children.size() > 0 ? children.get(0) : null;
         if (children.size() > 0 && segment.getCollectionType() != CollectionType.NONE) {
-            int index = segment.getCollectionIndex();
+            Integer index = segment.getCollectionIndex();
+            if(index == null) {
+                // no collection entry - it will only create parent nodes of the collection
+                return null;
+            }
             childNode = null;
             if (children.size() > index) {
                 childNode = children.get(index);
