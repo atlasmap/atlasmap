@@ -1,0 +1,25 @@
+{
+	"methodName": "GetBalanceAndDate",
+	"params": [
+		{
+			"paramString": {
+				"fieldName": "stringFieldName",
+				"value": {
+					"string": "abc"
+				}
+			},
+			"paramBoolean": {
+				"fieldName": "booleanFieldName",
+				"value": {
+					"boolean": true
+				}
+			},
+			"paramDatetime": {
+				"fieldName": "dateTimeFieldName",
+				"value": {
+					"dateTime.iso8601": "20070925T21:36:59+0530"
+				}
+			}
+		}
+	]
+}
