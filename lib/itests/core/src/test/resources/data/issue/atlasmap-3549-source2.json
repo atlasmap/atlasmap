@@ -1,0 +1,21 @@
+{
+	"methodName": "GetBalanceAndDate",
+	"params": [
+		{
+			"paramString": {
+				"fieldName": "abc1",
+				"value": {
+					"string": "xmyya"
+				}
+			}
+		},
+		{
+			"paramBoolean": {
+				"fieldName": "booleanParamFieldName",
+				"value": {
+					"boolean": true
+				}
+			}
+		}
+	]
+}

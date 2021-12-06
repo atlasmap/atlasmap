@@ -1,0 +1,151 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+      "name" : "ocsMapping",
+      "description" : "Source document ocsMapping type: JSON",
+      "uri" : "atlas:json:ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+      "name" : "GBADRequest",
+      "description" : "Target document GBADRequest type: XML",
+      "uri" : "atlas:xml:GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+      "dataSourceType" : "TARGET",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ ]
+      }
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+          "path" : "/methodName",
+          "fieldType" : "STRING",
+          "name" : "methodName"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+          "path" : "/methodCall/methodName",
+          "fieldType" : "STRING",
+          "name" : "methodName",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.233566"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+            "path" : "/params<>/paramString/fieldName",
+            "fieldType" : "STRING",
+            "name" : "fieldName"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+          "path" : "/methodCall/params/param/value/struct/member<>/name",
+          "fieldType" : "STRING",
+          "name" : "name",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.699239"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+            "path" : "/params<>/paramString/value/string",
+            "fieldType" : "STRING",
+            "name" : "string"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+          "path" : "/methodCall/params/param/value/struct/member<>/value/string",
+          "fieldType" : "STRING",
+          "name" : "string",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.337717"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+            "path" : "/params<>/paramDatetime/value/dateTime.iso8601",
+            "fieldType" : "STRING",
+            "name" : "dateTime.iso8601"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+          "path" : "/methodCall/params/param/value/struct/member<>/value/dateTime.iso8601",
+          "fieldType" : "STRING",
+          "name" : "dateTime.iso8601",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.242439"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+            "path" : "/params<>/paramBoolean/value/boolean",
+            "fieldType" : "BOOLEAN",
+            "name" : "boolean"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+          "path" : "/methodCall/params/param/value/struct/member<>/value/boolean",
+          "fieldType" : "STRING",
+          "name" : "boolean",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.673495"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}
