@@ -312,8 +312,8 @@ export class InitializationService {
         const fragData = mappingDigest.exportBlockData[fragIndex].value;
         const docID = metaFragment.id ? metaFragment.id : metaFragment.name;
         const docType = metaFragment.dataSourceType
-          ? (metaFragment.dataSourceType as DocumentType)
-          : (metaFragment.documentType as DocumentType);
+          ? (metaFragment.dataSourceType.toUpperCase() as DocumentType)
+          : (metaFragment.documentType?.toUpperCase() as DocumentType);
         const isSource =
           typeof metaFragment.isSource === 'string'
             ? (metaFragment.isSource as string).toLowerCase() === 'true'
