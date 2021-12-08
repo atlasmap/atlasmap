@@ -370,72 +370,133 @@ export class MappingManagementService {
   }
 
   /**
-   * Return true if it's possible to add the specified source field to the
-   * active mapping, false otherwise.
+   * Return true if it's possible to add the specified field to the
+   * specified mapping, or if it's possible to create a new mapping
+   * with the specified field when the specified mapping is null or undefined,
+   * false otherwise.
    * @param field field
-   * @param dropTarget a destination field to drop if it's drag & drop
+   * @param mapping a mapping to add the field
    */
-  isFieldAddableToActiveMapping(field: Field, dropTarget?: Field): boolean {
-    let selectedMapping = this.cfg.mappings?.activeMapping;
+  isFieldAddableToMapping(
+    field: Field,
+    mapping?: MappingModel | null
+  ): boolean {
     if (
       !field ||
       !field.isTerminal() ||
-      dropTarget?.type === FieldType.UNSUPPORTED ||
-      (selectedMapping &&
-        selectedMapping.transition.mode === TransitionMode.ENUM &&
-        selectedMapping.sourceFields.length > 0 &&
-        selectedMapping.targetFields.length > 0)
+      field.type === FieldType.UNSUPPORTED ||
+      (mapping &&
+        mapping.transition.mode === TransitionMode.ENUM &&
+        mapping.sourceFields.length > 0 &&
+        mapping.targetFields.length > 0)
     ) {
       return false;
     }
 
+    // non-collection target field can't participate to more than one mapping
     if (
-      !selectedMapping ||
-      (dropTarget &&
-        this.cfg.mappings?.findMappingsForField(dropTarget).length === 0)
+      !field.isSource() &&
+      !field.isCollection &&
+      !field.isInCollection() &&
+      this.cfg.mappings?.findMappingsForField(field).length !== 0
     ) {
+      return false;
+    }
+
+    if (!mapping) {
       return true;
     }
-    if (selectedMapping.transition.mode === TransitionMode.EXPRESSION) {
-      return field.isSource() || selectedMapping.targetFields.length === 0;
+    if (mapping.transition.mode === TransitionMode.EXPRESSION) {
+      return field.isSource() || mapping.targetFields.length === 0;
     }
     // skip if already in the mapping
     if (
       (field.isSource() &&
-        selectedMapping.sourceFields.find((f) => f.field === field)) ||
-      (!field.isSource() &&
-        selectedMapping.targetFields.find((f) => f.field === field))
+        mapping.sourceFields.find((f) => f.field === field)) ||
+      (!field.isSource() && mapping.targetFields.find((f) => f.field === field))
     ) {
       return false;
     }
     // adding a collection field
     if (field.isCollection || field.isInCollection()) {
       return field.isSource()
-        ? selectedMapping.sourceFields.length === 0
-        : selectedMapping.targetFields.length === 0;
+        ? mapping.sourceFields.length === 0
+        : mapping.targetFields.length === 0;
     }
 
     if (field.isSource()) {
       // adding a source non-collection field
-      if (selectedMapping.sourceFields.length === 0) {
+      if (mapping.sourceFields.length === 0) {
         return true;
       }
       return (
-        !selectedMapping.sourceFields.find(
+        !mapping.sourceFields.find(
           (f) => f.field?.isCollection || f.field?.isInCollection()
-        ) && selectedMapping.targetFields.length <= 1
+        ) && mapping.targetFields.length <= 1
       );
     } else {
       // adding a target non-collection field
-      if (selectedMapping.targetFields.length === 0) {
+      if (mapping.targetFields.length === 0) {
         return true;
       }
       return (
-        !selectedMapping.targetFields.find(
+        !mapping.targetFields.find(
           (f) => f.field?.isCollection || f.field?.isInCollection()
-        ) && selectedMapping.sourceFields.length <= 1
+        ) && mapping.sourceFields.length <= 1
       );
     }
+  }
+
+  /**
+   * Return true if it's possible to add the specified source field to the
+   * active mapping, false otherwise.
+   * @param field field
+   * @param dropTarget a destination field to drop if it's drag & drop
+   */
+  isFieldAddableToActiveMapping(field: Field): boolean {
+    return this.isFieldAddableToMapping(
+      field,
+      this.cfg.mappings?.activeMapping
+    );
+  }
+
+  /**
+   * Return true if it's possible to drag a field to the destination field, false otherwise.
+   * @param src dragging field
+   * @param dest a destination field to drop
+   */
+  isFieldDragAndDropAllowed(src?: Field, dest?: Field): boolean {
+    if (
+      !src ||
+      !dest ||
+      (src.isSource() && dest.isSource()) ||
+      (!src.isSource() && !dest.isSource())
+    ) {
+      return false;
+    }
+    const source = src.isSource() ? src : dest;
+    const target = src.isSource() ? dest : src;
+
+    const activeMapping = this.cfg.mappings?.activeMapping;
+    if (activeMapping) {
+      if (
+        activeMapping.isFieldMapped(source) &&
+        activeMapping.isFieldMapped(target)
+      ) {
+        return false;
+      }
+      if (activeMapping.isFieldMapped(source)) {
+        return this.isFieldAddableToMapping(target, activeMapping);
+      }
+      if (activeMapping.isFieldMapped(target)) {
+        return this.isFieldAddableToMapping(source, activeMapping);
+      }
+    }
+    // It'll create a new mapping
+    return (
+      this.isFieldAddableToMapping(source, null) &&
+      this.isFieldAddableToMapping(target, null)
+    );
   }
 
   /**

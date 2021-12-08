@@ -153,22 +153,6 @@ export function createMapping(source: Field | undefined, target?: Field): void {
 
   if (target) {
     if (
-      !cfg.mappings?.activeMapping &&
-      (source?.partOfMapping || target.partOfMapping)
-    ) {
-      cfg.errorService.addError(
-        new ErrorInfo({
-          message: `Unable to map '${source!.name}/${
-            target.name
-          }'.  Please select a mapping before adding to it.`,
-          level: ErrorLevel.INFO,
-          scope: ErrorScope.MAPPING,
-          type: ErrorType.USER,
-        }),
-      );
-      return;
-    }
-    if (
       source &&
       cfg.mappings?.activeMapping &&
       (source.partOfMapping || target.partOfMapping)
