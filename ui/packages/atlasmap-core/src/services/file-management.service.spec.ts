@@ -38,7 +38,6 @@ describe('FileManagementService', () => {
   const mockedKy = mocked(ky, true);
   const service = new FileManagementService(ky);
   jest.mock('file-saver');
-  const mockedFileSaver = mocked(FileSaver);
   jest.mock('../utils/common-util');
   const mockedCommonUtil = mocked(CommonUtil, true);
   jest.mock('pako');

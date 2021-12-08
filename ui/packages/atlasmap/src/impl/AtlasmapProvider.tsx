@@ -541,14 +541,19 @@ export function useAtlasmap() {
    * from the specified panel, false otherwise.
    */
   const isFieldAddableToSelection = useCallback(
-    (
-      _documentType: 'source' | 'target',
-      field: IAtlasmapField,
-      dropTarget?: IAtlasmapField,
-    ): boolean => {
+    (_documentType: 'source' | 'target', field: IAtlasmapField): boolean => {
       return configModel.mappingService.isFieldAddableToActiveMapping(
         field.amField,
-        dropTarget?.amField,
+      );
+    },
+    [configModel],
+  );
+
+  const isFieldDragAndDropAllowed = useCallback(
+    (field: IAtlasmapField, dropTarget: IAtlasmapField): boolean => {
+      return configModel.mappingService.isFieldDragAndDropAllowed(
+        field.amField,
+        dropTarget.amField,
       );
     },
     [configModel],
@@ -626,6 +631,7 @@ export function useAtlasmap() {
     trailerId,
     canAddToSelectedMapping,
     isFieldAddableToSelection,
+    isFieldDragAndDropAllowed,
     isFieldRemovableFromSelection,
     searchSources,
     searchTargets,
