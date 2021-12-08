@@ -257,7 +257,7 @@ describe('MappingManagementService', () => {
     const tgtF3 = tgtDoc.getField('/targetField3');
     expect(service.isFieldAddableToActiveMapping(tgtF3!)).toBeTruthy();
     // should be able to create a new mapping
-    expect(service.isFieldAddableToActiveMapping(srcF2!, tgtF3!)).toBeTruthy();
+    expect(service.isFieldDragAndDropAllowed(srcF2!, tgtF3!)).toBeTruthy();
   });
 
   test('isFieldAddableToActiveMapping() - one-to-collection', () => {
@@ -455,6 +455,65 @@ describe('MappingManagementService', () => {
     service.addFieldToActiveMapping(tgtF2!);
     const tgtF3 = tgtDoc.getField('/targetField3');
     expect(service.isFieldAddableToActiveMapping(tgtF3!)).toBeTruthy();
+  });
+
+  test('isFieldAddableToActiveMapping() - multiple mappings to the non-collection target should not be allowed', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcF = srcDoc.getField('/sourceField');
+    service.addNewMapping(srcF!, false);
+    const tgtF = tgtDoc.getField('/targetField');
+    service.addFieldToActiveMapping(tgtF!);
+    const srcF2 = srcDoc.getField('/sourceField2');
+    service.addNewMapping(srcF2!, false);
+    const tgtF2 = tgtDoc.getField('/targetField2');
+    expect(service.isFieldDragAndDropAllowed(srcF!, tgtF2!));
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldDragAndDropAllowed(srcF2!, tgtF!)).toBeFalsy();
+    service.deselectMapping();
+    expect(service.isFieldDragAndDropAllowed(srcF!, tgtF2!));
+    expect(service.isFieldAddableToActiveMapping(tgtF!)).toBeFalsy();
+    expect(service.isFieldDragAndDropAllowed(srcF2!, tgtF!)).toBeFalsy();
+  });
+
+  test('isFieldAddableToActiveMapping() - multiple mappings to the collection target should be allowed', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
+    TestUtils.createMockDocs(service.cfg);
+    service.cfg.mappings = new MappingDefinition();
+    const srcDoc = service.cfg.sourceDocs[0];
+    const tgtDoc = service.cfg.targetDocs[0];
+    const srcF = srcDoc.getField('/sourceField');
+    service.addNewMapping(srcF!, false);
+    const tgtCF = tgtDoc.getField('/targetCollectionField<>');
+    service.addFieldToActiveMapping(tgtCF!);
+    const srcF2 = srcDoc.getField('/sourceField2');
+    service.addNewMapping(srcF2!, false);
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeTruthy();
+    expect(service.isFieldDragAndDropAllowed(srcF2!, tgtCF!)).toBeTruthy();
+    service.deselectMapping();
+    expect(service.isFieldAddableToActiveMapping(tgtCF!)).toBeTruthy();
+    expect(service.isFieldDragAndDropAllowed(srcF2!, tgtCF!)).toBeTruthy();
   });
 
   test('addNewMapping()', () => {

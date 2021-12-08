@@ -90,6 +90,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     // mapping
     canAddToSelectedMapping,
     isFieldAddableToSelection,
+    isFieldDragAndDropAllowed,
     isFieldRemovableFromSelection,
     onAddToMapping,
     onRemoveFromMapping,
@@ -158,11 +159,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       acceptDropType: 'target',
       draggableType: 'source',
       canDrop: (dt, i) => {
-        return isFieldAddableToSelection(
-          'target',
-          i.payload as IAtlasmapField,
-          dt,
-        );
+        return isFieldDragAndDropAllowed(i.payload as IAtlasmapField, dt);
       },
       onDrop: (s, t) => onCreateMapping(s, t?.payload as IAtlasmapField),
       onShowMappingDetails: selectMapping,
@@ -240,6 +237,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateMapping,
       canAddToSelectedMapping,
       isFieldAddableToSelection,
+      isFieldDragAndDropAllowed,
       isFieldRemovableFromSelection,
       sourceProperties,
     ],
@@ -251,11 +249,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       acceptDropType: 'source',
       draggableType: 'target',
       canDrop: (dt, i) => {
-        return isFieldAddableToSelection(
-          'source',
-          i.payload as IAtlasmapField,
-          dt,
-        );
+        return isFieldDragAndDropAllowed(i.payload as IAtlasmapField, dt);
       },
       onDrop: (s, t) => onCreateMapping(t?.payload as IAtlasmapField, s),
       canAddToSelectedMapping: canAddToSelectedMapping,
@@ -322,6 +316,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       onCreateMapping,
       canAddToSelectedMapping,
       isFieldAddableToSelection,
+      isFieldDragAndDropAllowed,
       isFieldRemovableFromSelection,
       targetProperties,
     ],
