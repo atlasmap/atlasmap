@@ -28,6 +28,7 @@ import {
   InspectionType,
 } from '../contracts/common';
 import { IAtlasMappingContainer, IMapping } from '../contracts/mapping';
+import ky, { Input, Options } from 'ky';
 
 import { CsvInspectionModel } from '../models/inspect/csv-inspection.model';
 import { DocumentInspectionUtil } from './document-inspection-util';
@@ -55,8 +56,6 @@ import atlasMappingSplitCollapseJson from '../../../../test-resources/mapping/at
 import atlasMappingSplitJson from '../../../../test-resources/mapping/atlasmapping-split.json';
 import atlasMappingTestJson from '../../../../test-resources/mapping/atlasmapping-test.json';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
-
-import ky from 'ky';
 
 function createTwitter4jSourceDoc() {
   const twitter = new DocumentDefinition();
@@ -390,6 +389,16 @@ describe('MappingSerializer', () => {
     init.initialize();
     cfg = init.cfg;
     cfg.mappings = new MappingDefinition();
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
   });
 
   tName = 'deserialize & serialize mapping definition';

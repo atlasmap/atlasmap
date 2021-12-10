@@ -21,3 +21,7 @@ var matchMedia = new MatchMediaMock();
 
 // re-export everything
 export * from '@testing-library/react';
+
+process.on('unhandledRejection', (reason) => {
+  console.log('REJECTION', reason);
+});

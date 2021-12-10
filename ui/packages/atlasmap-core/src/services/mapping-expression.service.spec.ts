@@ -19,6 +19,7 @@ import {
 } from '../models/config.model';
 import { DocumentType, InspectionType } from '../contracts/common';
 import { IPosition, Position } from 'monaco-editor';
+import ky, { Input, Options } from 'ky';
 
 import { DocumentDefinition } from '../models/document-definition.model';
 import { Field } from '../models/field.model';
@@ -27,7 +28,6 @@ import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingExpressionService } from './mapping-expression.service';
 import { MappingModel } from '../models/mapping.model';
 import { TestUtils } from '../../test/test-util';
-import ky from 'ky';
 
 describe('MappingExpressionService', () => {
   let cfg: ConfigModel;
@@ -176,6 +176,16 @@ describe('MappingExpressionService', () => {
   });
 
   test('test adding a field to an expression makes it into the mapping', () => {
+    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+      return new (class {
+        json(): Promise<any> {
+          return Promise.resolve(options.json);
+        }
+        arrayBuffer(): Promise<ArrayBuffer> {
+          return Promise.resolve(new ArrayBuffer(0));
+        }
+      })();
+    });
     TestUtils.createMockMappings(cfg);
     const mapping = cfg.mappings!.mappings[1];
 

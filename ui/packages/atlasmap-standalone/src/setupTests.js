@@ -13,7 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import '@testing-library/jest-dom';
+
+import MatchMediaMock from 'jest-matchmedia-mock';
+
+new MatchMediaMock();
 
 process.on('unhandledRejection', (reason) => {
   console.log('REJECTION', reason);
