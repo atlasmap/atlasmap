@@ -83,18 +83,15 @@ export const ExpressionFieldSearch: FunctionComponent<
 
   function onKeyDown(event: any): void {
     if ('Enter' === event.key) {
-      event.preventDefault();
       if (candidateSrcElement) {
         // insertSelectedField(candidateIndex);
       }
     } else if ('ArrowDown' === event.key) {
-      event.preventDefault();
       trackSelection(event);
       if (candidateSrcElement) {
         updateCandidate(candidateSrcElement.nextElementSibling);
       }
     } else if ('ArrowUp' === event.key) {
-      event.preventDefault();
       trackSelection(event);
       if (candidateSrcElement) {
         updateCandidate(candidateSrcElement.previousElementSibling);
@@ -108,7 +105,6 @@ export const ExpressionFieldSearch: FunctionComponent<
         candidateSrcElement &&
         candidateSrcElement.nextElementSibling
       ) {
-        event.preventDefault();
         updateCandidate(candidateSrcElement!.nextElementSibling);
       }
     }
@@ -169,6 +165,7 @@ export const ExpressionFieldSearch: FunctionComponent<
         onKeyDown={onKeyDown}
         onSelect={selectionChanged}
         data-testid={id}
+        defaultValue={mappedFieldCandidates[0]}
       >
         {mappedFieldCandidates.map((s, idx: number) =>
           createSelectOption(s, idx),
