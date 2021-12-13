@@ -88,6 +88,30 @@
         } ],
         "id" : "mapping.337717"
       }, {
+          "jsonType" : "io.atlasmap.v2.Mapping",
+          "inputFieldGroup" : {
+            "jsonType" : "io.atlasmap.v2.FieldGroup",
+            "actions" : [ ],
+            "field" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+              "path" : "/params<>/paramDateime/fieldName",
+              "fieldType" : "STRING",
+              "name" : "fieldName"
+            } ]
+          },
+          "inputField" : [ ],
+          "outputField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+            "path" : "/methodCall/params/param/value/struct/member<>/name",
+            "fieldType" : "STRING",
+            "name" : "name",
+            "userCreated" : false,
+            "attribute" : false
+          } ],
+          "id" : "mapping.699239"
+        }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
         "inputFieldGroup" : {
           "jsonType" : "io.atlasmap.v2.FieldGroup",
@@ -112,6 +136,30 @@
         } ],
         "id" : "mapping.242439"
       }, {
+          "jsonType" : "io.atlasmap.v2.Mapping",
+          "inputFieldGroup" : {
+            "jsonType" : "io.atlasmap.v2.FieldGroup",
+            "actions" : [ ],
+            "field" : [ {
+              "jsonType" : "io.atlasmap.json.v2.JsonField",
+              "docId" : "ocsMapping-b9108c7e-6bce-4b93-99cc-fe46c5c45f5a",
+              "path" : "/params<>/paramBoolean/fieldName",
+              "fieldType" : "STRING",
+              "name" : "fieldName"
+            } ]
+          },
+          "inputField" : [ ],
+          "outputField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "docId" : "GBADRequest-508cf937-27b1-4e12-b2a6-2c02f2da2032",
+            "path" : "/methodCall/params/param/value/struct/member<>/name",
+            "fieldType" : "STRING",
+            "name" : "name",
+            "userCreated" : false,
+            "attribute" : false
+          } ],
+          "id" : "mapping.699239"
+        }, {
         "jsonType" : "io.atlasmap.v2.Mapping",
         "inputFieldGroup" : {
           "jsonType" : "io.atlasmap.v2.FieldGroup",
