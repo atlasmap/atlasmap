@@ -64,7 +64,7 @@ public class AtlasMap3549Test {
         assertNotNull(output);
         assertThat(output).valueByXPath("/methodCall/methodName").isEqualTo("GetBalanceAndDate");
         assertThat(output).valueByXPath("count(/methodCall/params/param/value/struct/member)").isEqualTo(1);
-        assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/name").isEqualTo("stringFieldName");
+        assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/name").isEqualTo("booleanFieldName");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/value/string").isEqualTo("abc");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/value/boolean").isEqualTo("true");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/value/dateTime.iso8601").isEqualTo("20070925T21:36:59+0530");
@@ -94,7 +94,7 @@ public class AtlasMap3549Test {
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/value/string").isEqualTo("xmyya");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/value/boolean").isEqualTo("");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[1]/value/dateTime.iso8601").isEqualTo("");
-        assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[2]/name").isEqualTo("");
+        assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[2]/name").isEqualTo("booleanParamFieldName");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[2]/value/string").isEqualTo("");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[2]/value/boolean").isEqualTo("true");
         assertThat(output).valueByXPath("/methodCall/params/param/value/struct/member[2]/value/dateTime.iso8601").isEqualTo("");
