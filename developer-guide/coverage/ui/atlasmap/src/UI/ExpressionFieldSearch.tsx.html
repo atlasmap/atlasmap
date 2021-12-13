@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">10.71% </span>
+                <span class="strong">11.54% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/56</span>
+                <span class='fraction'>6/52</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.76% </span>
+                <span class="strong">12.77% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/51</span>
+                <span class='fraction'>6/47</span>
             </div>
         
             
@@ -232,10 +232,7 @@
 <a name='L174'></a><a href='#L174'>174</a>
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -321,16 +318,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -345,7 +339,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -393,6 +386,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,18 +493,15 @@ export const ExpressionFieldSearch: FunctionComponent&lt;
 &nbsp;
   function <span class="fstat-no" title="function not covered" >onKeyDown(</span>event: any): void {
 <span class="cstat-no" title="statement not covered" >    if ('Enter' === event.key) {</span>
-<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >      if (candidateSrcElement) {</span>
         // insertSelectedField(candidateIndex);
       }
     } else <span class="cstat-no" title="statement not covered" >if ('ArrowDown' === event.key) {</span>
-<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >      trackSelection(event);</span>
 <span class="cstat-no" title="statement not covered" >      if (candidateSrcElement) {</span>
 <span class="cstat-no" title="statement not covered" >        updateCandidate(candidateSrcElement.nextElementSibling);</span>
       }
     } else <span class="cstat-no" title="statement not covered" >if ('ArrowUp' === event.key) {</span>
-<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >      trackSelection(event);</span>
 <span class="cstat-no" title="statement not covered" >      if (candidateSrcElement) {</span>
 <span class="cstat-no" title="statement not covered" >        updateCandidate(candidateSrcElement.previousElementSibling);</span>
@@ -524,7 +515,6 @@ export const ExpressionFieldSearch: FunctionComponent&lt;
         candidateSrcElement &amp;&amp;
         candidateSrcElement.nextElementSibling
       ) {
-<span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
 <span class="cstat-no" title="statement not covered" >        updateCandidate(candidateSrcElement!.nextElementSibling);</span>
       }
     }
@@ -585,6 +575,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;
         onKeyDown={onKeyDown}
         onSelect={selectionChanged}
         data-testid={id}
+        defaultValue={mappedFieldCandidates[0]}
       &gt;
         {mappedFieldCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
 <span class="cstat-no" title="statement not covered" >          createSelectOption(s, idx),</span>
@@ -600,7 +591,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Dec 13 2021 16:00:32 GMT+0000 (Coordinated Universal Time)
+                at Mon Dec 13 2021 17:45:07 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
