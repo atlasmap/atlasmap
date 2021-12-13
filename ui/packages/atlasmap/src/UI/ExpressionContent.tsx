@@ -34,6 +34,7 @@ import {
 } from 'monaco-editor';
 import React, {
   FunctionComponent,
+  MouseEvent,
   useCallback,
   useEffect,
   useState,
@@ -58,6 +59,7 @@ window.MonacoEnvironment = {
   },
 };
 
+let editorMouseDown = false;
 let insertPosition: Position | null = null;
 let enumCandidates: EnumValue[] = [];
 let mappedFieldCandidates: string[][] = [];
@@ -109,7 +111,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   const [expressionHeight, setExpressionHeight] = useState<string>('40px');
   const [insertField, setInsertField] = useState<boolean>();
   const [insertedField, setInsertedField] = useState<boolean>(false);
-  const [editorMouseDown, setEditorMouseDown] = useState<boolean>(false);
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
   let addFieldToExpression: (
@@ -444,14 +445,18 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   /**
    * Once the user refocuses outside of the edit widget reset the edit window to
    * its standard size.  If a field reference insertion is occurring then don't
-   * reset.
+   * reset and retain focus back to the editor.
    */
   const onBlurEditorWidget = useCallback(() => {
     if (!editorMouseDown && mappedFieldCandidates.length === 0) {
       setExpressionHeight('40px');
+    } else {
+      if (mappedFieldCandidates.length === 0) {
+        condExprEditor?.focus();
+      }
     }
-    setEditorMouseDown(false);
-  }, [editorMouseDown]);
+    editorMouseDown = false;
+  }, [condExprEditor]);
 
   /**
    * If the user focuses into the edit window bump the edit buffer to a larger window
@@ -468,7 +473,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * @param event
    */
   function onMouseDown(_event: editor.IEditorMouseEvent) {
-    setEditorMouseDown(true);
+    editorMouseDown = true;
   }
 
   /**
@@ -517,6 +522,29 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       updateSearchMode,
     ],
   );
+
+  /**
+   * Track a blur event on a DOM HTML element (not the editor).  If no related
+   * target is detected and there are mapped field candidates then this is a
+   * click outside of the editor while the field reference select menu is up.
+   *
+   * @param event
+   */
+  function onBlur(event: any) {
+    if (event.relatedTarget === null && mappedFieldCandidates.length > 0) {
+      mappedFieldCandidates = [];
+      editorMouseDown = true;
+    }
+  }
+
+  /**
+   * Track a mouse click on a DOM HTML element (not the editor).
+   *
+   * @param _event
+   */
+  function onMouseClick(_event: MouseEvent<HTMLElement>) {
+    editorMouseDown = false;
+  }
 
   /**
    * Toggle the conditional expression monaco editor and expression JSON.
@@ -583,7 +611,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     initializeMappingExpression,
     insertedField,
     isMappingExpressionEmpty,
-    editorMouseDown,
     onBlurEditorWidget,
     onChange,
     onDidFocusEditorText,
@@ -595,7 +622,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     mappingExpressionRemoveField,
   ]);
   return (
-    <>
+    <div id="expression-content" onClick={onMouseClick} onBlur={onBlur}>
       <Form>
         <FormGroup fieldId="expressionContent">
           <InputGroup>
@@ -652,7 +679,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           </InputGroup>
         </FormGroup>
       </Form>
-      <div>
+      <div id="expression-menu-select">
         {mappedFieldCandidates.length > 0 && (
           <span>
             <ExpressionFieldSearch
@@ -673,6 +700,6 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           </span>
         )}
       </div>
-    </>
+    </div>
   );
 };
