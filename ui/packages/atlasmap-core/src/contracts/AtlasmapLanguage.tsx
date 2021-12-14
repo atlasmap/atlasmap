@@ -27,7 +27,7 @@ export const atlasmapWordPattern =
 export const atlasmapLanguageConfig = {
   wordPattern: /(-?\d*\.\d\w*)|([^`~!@#%^&*()=+[{\]}\\|;:'",.<>/?\s]+)/g,
   comments: {
-    lineComment: '//',
+    // lineComment: '//',
     blockComment: ['/*', '*/'],
   },
   brackets: [
@@ -290,7 +290,7 @@ export const atlasmapTokensProvider = {
     whitespace: [
       [/[ \t\r\n]+/, ''],
       [/\/\*/, 'comment', '@comment'],
-      [/\/\/.*$/, 'comment'],
+      // [/\/\/.*$/, 'comment'],
     ],
 
     comment: [
