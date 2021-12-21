@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>KafkaConnectFieldWriter.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-kafka-connect-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.kafkaconnect.core</a> &gt; <span class="el_source">KafkaConnectFieldWriter.java</span></div><h1>KafkaConnectFieldWriter.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.kafkaconnect.core;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.kafka.connect.data.ConnectSchema;
+import org.apache.kafka.connect.data.Schema;
+import org.apache.kafka.connect.data.Struct;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.spi.AtlasConversionService;
+import io.atlasmap.spi.AtlasFieldWriter;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.Field;
+
+/**
+ */
+public class KafkaConnectFieldWriter implements AtlasFieldWriter {
+<span class="fc" id="L39">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(KafkaConnectFieldWriter.class);</span>
+
+    private AtlasConversionService conversionService;
+<span class="fc" id="L42">    private Object root = null;</span>
+    private org.apache.kafka.connect.data.Schema schema;
+
+<span class="fc" id="L45">    public KafkaConnectFieldWriter(AtlasConversionService conversion) {</span>
+<span class="fc" id="L46">        this.conversionService = conversion;</span>
+<span class="fc" id="L47">    }</span>
+
+    public Object getDocument() {
+<span class="fc" id="L50">        return root;</span>
+    }
+
+    public void setSchema(org.apache.kafka.connect.data.Schema schema) {
+<span class="fc" id="L54">        this.schema = schema;</span>
+<span class="fc" id="L55">    }</span>
+
+    @Override
+    public void write(AtlasInternalSession session) throws AtlasException {
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (this.schema == null) {</span>
+<span class="fc" id="L60">            throw new AtlasException(&quot;Kafka Connect schema must be set to write Kafka Connect object&quot;);</span>
+        }
+<span class="fc" id="L62">        Field targetField = session.head().getTargetField();</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (targetField == null) {</span>
+<span class="nc" id="L64">            throw new AtlasException(new IllegalArgumentException(&quot;Target field cannot be null&quot;));</span>
+        }
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L67">            LOG.debug(&quot;Field: &quot; + AtlasModelFactory.toString(targetField));</span>
+<span class="nc" id="L68">            LOG.debug(&quot;Field type=&quot; + targetField.getFieldType() + &quot; path=&quot; + targetField.getPath() + &quot; v=&quot;</span>
+<span class="nc" id="L69">                    + targetField.getValue());</span>
+        }
+
+<span class="fc" id="L72">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
+<span class="fc" id="L73">        this.root = writeSegment(path, 0, root, schema, targetField);</span>
+<span class="fc" id="L74">    }</span>
+
+    private Object writeSegment(AtlasPath path, int index, Object parent, Schema parentSchema, Field field) throws AtlasException {
+        Object answer;
+        Schema schema;
+<span class="fc" id="L79">        List&lt;SegmentContext&gt; segments = path.getSegments(true);</span>
+<span class="fc" id="L80">        SegmentContext segment = segments.get(index);</span>
+        // terminal field
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (segments.size() == index + 1) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (segment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L84">                List&lt;Object&gt; collection = new LinkedList&lt;Object&gt;();</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                if (parent == null) {</span>
+<span class="nc" id="L86">                    answer = collection;</span>
+                } else {
+<span class="fc" id="L88">                    Object array = ((Struct)parent).get(segment.getName());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">                    if (array == null) {</span>
+<span class="fc" id="L90">                        ((Struct)parent).put(segment.getName(), collection);</span>
+                    } else {
+<span class="fc" id="L92">                        collection = (List&lt;Object&gt;) array;</span>
+                    }
+<span class="fc" id="L94">                    answer = parent;</span>
+                }
+<span class="fc" id="L96">                int pos = segment.getCollectionIndex();</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">                while (collection.size() &lt; pos + 1) {</span>
+<span class="fc" id="L98">                    collection.add(null);</span>
+                }
+<span class="fc" id="L100">                collection.set(pos, field.getValue());</span>
+<span class="fc" id="L101">            } else {</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                if (parent == null) {</span>
+<span class="nc" id="L103">                    answer = field.getValue();</span>
+                } else {
+<span class="fc" id="L105">                    ((Struct)parent).put(segment.getName(), field.getValue());</span>
+<span class="fc" id="L106">                    answer = parent;</span>
+                }
+            }
+<span class="fc" id="L109">            return answer;</span>
+        }
+
+        // non-terminal field
+
+        // non-collection segment
+<span class="pc bpc" id="L115" title="1 of 4 branches missed.">        if (segment.getCollectionType() == null || segment.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if (index == 0) {</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">                answer = root != null ? root : new Struct(enforceDefaultOrOptional(parentSchema));</span>
+<span class="fc" id="L118">                schema = parentSchema;</span>
+            } else {
+<span class="fc" id="L120">                schema = parentSchema.field(segment.getName()).schema();</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">                if (((Struct)parent).getStruct(segment.getName()) == null) {</span>
+<span class="fc" id="L122">                    ((Struct)parent).put(segment.getName(), new Struct(schema));</span>
+                }
+<span class="fc" id="L124">                answer = ((Struct)parent).getStruct(segment.getName());</span>
+            }
+<span class="fc" id="L126">            writeSegment(path, index + 1, answer, schema, field);</span>
+<span class="fc" id="L127">            return answer;</span>
+        }
+
+        // collection segment
+        List&lt;Object&gt; array;
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (index == 0) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            array = root != null ? (List&lt;Object&gt;)root : new LinkedList&lt;Object&gt;();</span>
+<span class="fc" id="L134">            schema = enforceDefaultOrOptional(parentSchema.valueSchema());</span>
+        } else {
+<span class="fc" id="L136">            schema = parentSchema.field(segment.getName()).schema().valueSchema();</span>
+<span class="fc" id="L137">            array = ((Struct) parent).getArray(segment.getName());</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">            if (array == null) {</span>
+<span class="fc" id="L139">                array = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L140">                ((Struct) parent).put(segment.getName(), array);</span>
+            }
+        }
+<span class="fc" id="L143">        int pos = segment.getCollectionIndex();</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        while (array.size() &lt; pos + 1) {</span>
+<span class="fc" id="L145">            array.add(null);</span>
+        }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (array.get(pos) == null) {</span>
+<span class="fc" id="L148">            array.set(pos, new Struct(schema));</span>
+        }
+<span class="fc" id="L150">        writeSegment(path, index + 1, array.get(pos), schema, field);</span>
+<span class="fc" id="L151">        return array;</span>
+    }
+
+    /**
+     * Dirty hack. In current Kafka Connect implementation, &lt;code&gt;Struct#put()&lt;/code&gt; throws an Exception
+     * if non-optional child doesn't have a value.
+     * @param schema
+     * @return modified schema
+     */
+    private Schema enforceDefaultOrOptional(Schema schema) {
+<span class="pc bpc" id="L161" title="1 of 4 branches missed.">        if (!schema.isOptional() &amp;&amp; schema.defaultValue() == null) {</span>
+<span class="fc" id="L162">            LOG.warn(&quot;Enforcing schema to be optional since there is no default value. &quot;</span>
+                + &quot;It is recommended to either 1) define a default value or 2) set it optional in the Kafka Connect schema.&quot;);
+            try {
+<span class="fc" id="L165">                java.lang.reflect.Field optionalField = ConnectSchema.class.getDeclaredField(&quot;optional&quot;);</span>
+<span class="fc" id="L166">                optionalField.setAccessible(true);</span>
+<span class="fc" id="L167">                optionalField.setBoolean(schema, true);</span>
+<span class="nc" id="L168">            } catch (Exception e) {</span>
+<span class="nc" id="L169">                LOG.warn(&quot;&quot;, e);</span>
+<span class="fc" id="L170">            }</span>
+        }
+<span class="pc bpc" id="L172" title="1 of 4 branches missed.">        switch (schema.type()) {</span>
+            case ARRAY:
+<span class="fc" id="L174">                enforceDefaultOrOptional(schema.valueSchema());</span>
+<span class="fc" id="L175">                break;</span>
+            case STRUCT:
+<span class="fc" id="L177">                schema.fields().forEach(f -&gt; enforceDefaultOrOptional(f.schema()));</span>
+<span class="fc" id="L178">                break;</span>
+            case MAP:
+<span class="nc" id="L180">                enforceDefaultOrOptional(schema.keySchema());</span>
+<span class="nc" id="L181">                enforceDefaultOrOptional(schema.valueSchema());</span>
+<span class="nc" id="L182">                break;</span>
+            default:
+        }
+<span class="fc" id="L185">        return schema;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

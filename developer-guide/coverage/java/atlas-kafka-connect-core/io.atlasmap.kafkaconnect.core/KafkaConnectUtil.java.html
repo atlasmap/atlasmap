@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>KafkaConnectUtil.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-kafka-connect-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.kafkaconnect.core</a> &gt; <span class="el_source">KafkaConnectUtil.java</span></div><h1>KafkaConnectUtil.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.kafkaconnect.core;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.kafka.connect.data.Schema.Type;
+import org.apache.kafka.connect.json.JsonConverter;
+import org.apache.kafka.connect.json.JsonConverterConfig;
+import org.apache.kafka.connect.storage.StringConverterConfig;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.apicurio.registry.serde.avro.AvroSchemaUtils;
+import io.apicurio.registry.utils.converter.avro.AvroData;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
+import io.atlasmap.v2.FieldType;
+
+<span class="nc" id="L34">public class KafkaConnectUtil {</span>
+    
+    public static FieldType getFieldType(Type type) {
+<span class="pc bpc" id="L37" title="6 of 13 branches missed.">        switch (type) {</span>
+            case ARRAY:
+<span class="nc" id="L39">                return FieldType.COMPLEX;</span>
+            case BOOLEAN:
+<span class="fc" id="L41">                return FieldType.BOOLEAN;</span>
+            case BYTES:
+<span class="fc" id="L43">                return FieldType.BYTE_ARRAY;</span>
+            case FLOAT32:
+<span class="fc" id="L45">                return FieldType.FLOAT;</span>
+            case FLOAT64:
+<span class="fc" id="L47">                return FieldType.DOUBLE;</span>
+            case INT16:
+<span class="nc" id="L49">                return FieldType.SHORT;</span>
+            case INT32:
+<span class="fc" id="L51">                return FieldType.INTEGER;</span>
+            case INT64:
+<span class="fc" id="L53">                return FieldType.LONG;</span>
+            case INT8:
+<span class="nc" id="L55">                return FieldType.BYTE;</span>
+            case MAP:
+<span class="nc" id="L57">                return FieldType.COMPLEX;</span>
+            case STRING:
+<span class="fc" id="L59">                return FieldType.STRING;</span>
+            case STRUCT:
+<span class="nc" id="L61">                return FieldType.COMPLEX;</span>
+            default:
+<span class="nc" id="L63">                return FieldType.UNSUPPORTED;</span>
+
+        }
+    }
+
+    public static org.apache.kafka.connect.data.Schema parseJson(String jsonSchema, HashMap&lt;String, ?&gt; options) throws Exception {
+<span class="fc" id="L69">        try (JsonConverter converter = new JsonConverter()) {</span>
+<span class="fc" id="L70">            converter.configure(options);</span>
+<span class="fc" id="L71">            JsonNode parsed = new ObjectMapper().readTree(jsonSchema);</span>
+<span class="fc" id="L72">            return converter.asConnectSchema(parsed);</span>
+        }
+    }
+
+    public static org.apache.kafka.connect.data.Schema parseAvro(String avroSchema, HashMap&lt;String, ?&gt; options) throws Exception {
+<span class="fc" id="L77">        org.apache.avro.Schema schema = AvroSchemaUtils.parse(avroSchema);</span>
+<span class="fc" id="L78">        AvroData avro = new AvroData(0);</span>
+<span class="fc" id="L79">        return avro.toConnectSchema(schema);</span>
+    }
+
+    /**
+     * Repack KafkaConnect parser options from inspection request options.
+     * @param requestOptions
+     * @return KafkaConnect parser options
+     */
+    public static HashMap&lt;String, Object&gt; repackParserOptions(Map&lt;String, String&gt; requestOptions) {
+<span class="fc" id="L88">        HashMap&lt;String, Object&gt; options = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L89">        String isKeyStr = requestOptions.get(KafkaConnectConstants.OPTIONS_IS_KEY);</span>
+<span class="pc bpc" id="L90" title="2 of 4 branches missed.">        boolean isKey = isKeyStr != null &amp;&amp; Boolean.parseBoolean(isKeyStr) ? true : false;</span>
+<span class="fc" id="L91">        String cacheSizeStr = requestOptions.get(KafkaConnectConstants.OPTIONS_SCHEMA_CACHE_SIZE);</span>
+<span class="fc" id="L92">        options.put(JsonConverterConfig.SCHEMAS_CACHE_SIZE_CONFIG,</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            cacheSizeStr != null ? Integer.parseInt(cacheSizeStr) : Integer.valueOf(0));</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        options.put(StringConverterConfig.TYPE_CONFIG, isKey ? &quot;key&quot; : &quot;value&quot;);</span>
+<span class="fc" id="L95">        return options;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

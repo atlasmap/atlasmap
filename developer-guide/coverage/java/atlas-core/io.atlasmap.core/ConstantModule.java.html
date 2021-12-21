@@ -31,13 +31,14 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.ConstantField;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 @AtlasModuleDetail(name = &quot;ConstantModule&quot;, uri = &quot;&quot;, modes = { &quot;SOURCE&quot; }, dataFormats = {}, configPackages = {})
-<span class="fc" id="L39">public class ConstantModule implements AtlasModule {</span>
-<span class="fc" id="L40">    private static final Logger LOG = LoggerFactory.getLogger(ConstantModule.class);</span>
+<span class="fc" id="L40">public class ConstantModule implements AtlasModule {</span>
+<span class="fc" id="L41">    private static final Logger LOG = LoggerFactory.getLogger(ConstantModule.class);</span>
 
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
@@ -47,193 +48,203 @@ import io.atlasmap.v2.FieldType;
     @Override
     public void init() {
         // no-op
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L51">    }</span>
 
     @Override
     public void destroy() {
         // no-op
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L56">    }</span>
 
     @Override
     public void setClassLoader(ClassLoader classLoader) {
-<span class="nc" id="L59">        this.classLoader = classLoader;</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L60">        this.classLoader = classLoader;</span>
+<span class="nc" id="L61">    }</span>
 
     @Override
     public ClassLoader getClassLoader() {
-<span class="nc" id="L64">        return classLoader;</span>
+<span class="nc" id="L65">        return classLoader;</span>
     }
 
     @Override
     public void processPreValidation(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L71">    }</span>
 
     @Override
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L76">    }</span>
 
     @Override
     public void readSourceValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L79">        Field sourceField = session.head().getSourceField();</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (!(sourceField instanceof ConstantField)) {</span>
-<span class="nc" id="L81">            return;</span>
+<span class="fc" id="L80">        Field sourceField = session.head().getSourceField();</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (!(sourceField instanceof ConstantField)) {</span>
+<span class="nc" id="L82">            return;</span>
         }
-<span class="pc bpc" id="L83" title="2 of 6 branches missed.">        if (getConversionService() != null &amp;&amp; sourceField.getFieldType() != null &amp;&amp; sourceField.getValue() != null) {</span>
-<span class="fc" id="L84">            sourceField.setValue(getConversionService().convertType(sourceField.getValue(), null,</span>
-<span class="fc" id="L85">                    getConversionService().classFromFieldType(sourceField.getFieldType()), null));</span>
-<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        } else if (sourceField.getFieldType() == null) {</span>
-<span class="fc" id="L87">            sourceField.setFieldType(FieldType.STRING);</span>
+<span class="pc bpc" id="L84" title="2 of 6 branches missed.">        if (getConversionService() != null &amp;&amp; sourceField.getFieldType() != null &amp;&amp; sourceField.getValue() != null) {</span>
+<span class="fc" id="L85">            sourceField.setValue(getConversionService().convertType(sourceField.getValue(), null,</span>
+<span class="fc" id="L86">                    getConversionService().classFromFieldType(sourceField.getFieldType()), null));</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        } else if (sourceField.getFieldType() == null) {</span>
+<span class="fc" id="L88">            sourceField.setFieldType(FieldType.STRING);</span>
         }
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L90">            LOG.debug(&quot;Processed source ConstantField sPath=&quot; + sourceField.getPath() + &quot; sV=&quot; + sourceField.getValue()</span>
-<span class="nc" id="L91">                    + &quot; sT=&quot; + sourceField.getFieldType() + &quot; docId: &quot; + sourceField.getDocId());</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L91">            LOG.debug(&quot;Processed source ConstantField sPath=&quot; + sourceField.getPath() + &quot; sV=&quot; + sourceField.getValue()</span>
+<span class="nc" id="L92">                    + &quot; sT=&quot; + sourceField.getFieldType() + &quot; docId: &quot; + sourceField.getDocId());</span>
         }
-<span class="fc" id="L93">    }</span>
+<span class="fc" id="L94">    }</span>
 
     @Override
     public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L99">    }</span>
 
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L102">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
+<span class="fc" id="L103">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
     }
 
     @Override
     public void populateTargetField(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L107">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
+<span class="nc" id="L108">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
     }
 
     @Override
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L112">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
+<span class="fc" id="L113">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
     }
 
     @Override
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L117">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
+<span class="fc" id="L118">        throw new UnsupportedOperationException(&quot;ConstantField cannot be placed as a target field&quot;);</span>
     }
 
     @Override
     public void processPostValidation(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L123">    }</span>
+<span class="fc" id="L124">    }</span>
 
     @Override
     public AtlasModuleMode getMode() {
-<span class="fc" id="L127">        return AtlasModuleMode.SOURCE;</span>
+<span class="fc" id="L128">        return AtlasModuleMode.SOURCE;</span>
     }
 
     @Override
     public void setMode(AtlasModuleMode atlasModuleMode) {
         // no-op
-<span class="nc" id="L133">    }</span>
+<span class="nc" id="L134">    }</span>
 
     @Override
     public AtlasConversionService getConversionService() {
-<span class="fc" id="L137">        return this.conversionService;</span>
+<span class="fc" id="L138">        return this.conversionService;</span>
     }
 
     @Override
     public void setConversionService(AtlasConversionService atlasConversionService) {
-<span class="fc" id="L142">        this.conversionService = atlasConversionService;</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L143">        this.conversionService = atlasConversionService;</span>
+<span class="fc" id="L144">    }</span>
 
     @Override
     public List&lt;AtlasModuleMode&gt; listSupportedModes() {
-<span class="fc" id="L147">        return Arrays.asList(new AtlasModuleMode[] { AtlasModuleMode.SOURCE });</span>
+<span class="fc" id="L148">        return Arrays.asList(new AtlasModuleMode[] { AtlasModuleMode.SOURCE });</span>
     }
 
     @Override
     public String getDocId() {
-<span class="fc" id="L152">        return null;</span>
+<span class="fc" id="L153">        return null;</span>
     }
 
     @Override
     public void setDocId(String docId) {
         // no-op
-<span class="nc" id="L158">    }</span>
+<span class="nc" id="L159">    }</span>
 
     @Override
     public String getUri() {
-<span class="fc" id="L162">        return null;</span>
+<span class="fc" id="L163">        return null;</span>
     }
 
     @Override
     public void setUri(String uri) {
         // no-op
-<span class="nc" id="L168">    }</span>
+<span class="nc" id="L169">    }</span>
 
     @Override
     public Boolean isStatisticsSupported() {
-<span class="fc" id="L172">        return false;</span>
+<span class="fc" id="L173">        return false;</span>
     }
 
     @Override
     public Boolean isStatisticsEnabled() {
-<span class="fc" id="L177">        return false;</span>
+<span class="fc" id="L178">        return false;</span>
     }
 
     @Override
     public Boolean isSupportedField(Field field) {
-<span class="fc" id="L182">        return field instanceof ConstantField;</span>
+<span class="fc" id="L183">        return field instanceof ConstantField;</span>
     }
 
     @Override
     public Field cloneField(Field field) throws AtlasException {
-<span class="fc" id="L187">        return null;</span>
+<span class="fc" id="L188">        return null;</span>
     }
 
     @Override
     public AtlasFieldActionService getFieldActionService() {
-<span class="fc" id="L192">        return this.fieldActionService;</span>
+<span class="fc" id="L193">        return this.fieldActionService;</span>
     }
 
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
-<span class="fc" id="L197">        this.fieldActionService = atlasFieldActionService;</span>
-<span class="fc" id="L198">        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);</span>
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L198">        this.fieldActionService = atlasFieldActionService;</span>
+<span class="fc" id="L199">        this.collectionHelper = new DefaultAtlasCollectionHelper(atlasFieldActionService);</span>
+<span class="fc" id="L200">    }</span>
 
     public AtlasCollectionHelper getCollectionHelper() {
-<span class="nc" id="L202">        return collectionHelper;</span>
+<span class="nc" id="L203">        return collectionHelper;</span>
     }
 
     @Override
     public String getUriDataType() {
-<span class="nc" id="L207">        return null;</span>
+<span class="nc" id="L208">        return null;</span>
     }
 
     @Override
     public Map&lt;String, String&gt; getUriParameters() {
-<span class="nc" id="L212">        return null;</span>
+<span class="nc" id="L213">        return null;</span>
     }
 
     @Override
     public void setDataSourceMetadata(DataSourceMetadata meta) {
-<span class="nc" id="L217">    }</span>
+<span class="nc" id="L218">    }</span>
 
     @Override
     public DataSourceMetadata getDataSourceMetadata() {
-<span class="nc" id="L221">        return null;</span>
+<span class="nc" id="L222">        return null;</span>
     }
 
     @Override
     public void setDocName(String docName) {
-<span class="nc" id="L226">    }</span>
+<span class="nc" id="L227">    }</span>
 
     @Override
     public String getDocName() {
-<span class="nc" id="L230">        return &quot;Constants&quot;;</span>
+<span class="nc" id="L231">        return &quot;Constants&quot;;</span>
     }
 
     @Override
     public ConstantField createField() {
-<span class="fc" id="L235">        return new ConstantField();</span>
+<span class="fc" id="L236">        return new ConstantField();</span>
     }
+
+    @Override
+    public DataSource getDataSource() {
+<span class="nc" id="L241">        return null;</span>
+    }
+
+    @Override
+    public void setDataSource(DataSource ds) {
+        // no-op
+<span class="nc" id="L247">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

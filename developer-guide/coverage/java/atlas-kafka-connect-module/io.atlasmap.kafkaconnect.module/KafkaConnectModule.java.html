@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>KafkaConnectModule.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-kafka-connect-module</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.kafkaconnect.module</a> &gt; <span class="el_source">KafkaConnectModule.java</span></div><h1>KafkaConnectModule.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.kafkaconnect.module;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.kafka.connect.data.Schema.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasValidationException;
+import io.atlasmap.core.AtlasPath;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.core.BaseAtlasModule;
+import io.atlasmap.kafkaconnect.core.KafkaConnectFieldReader;
+import io.atlasmap.kafkaconnect.core.KafkaConnectFieldWriter;
+import io.atlasmap.kafkaconnect.core.KafkaConnectUtil;
+import io.atlasmap.kafkaconnect.v2.AtlasKafkaConnectModelFactory;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectEnumField;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectField;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectSchemaType;
+import io.atlasmap.spi.AtlasInternalSession;
+import io.atlasmap.spi.AtlasModuleDetail;
+import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.AuditStatus;
+import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.Validations;
+
+@AtlasModuleDetail(name = &quot;KafkaConnectModule&quot;, uri = &quot;atlas:kafkaconnect&quot;, modes = { &quot;SOURCE&quot;, &quot;TARGET&quot; }, dataFormats = {
+        &quot;kafkaconnect&quot; }, configPackages = { &quot;io.atlasmap.kafkaconnect.v2&quot; })
+<span class="fc" id="L50">public class KafkaConnectModule extends BaseAtlasModule {</span>
+<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectModule.class);</span>
+
+    private boolean isKey;
+    private Type rootSchemaType;
+
+    @Override
+    public void init() throws AtlasException {
+<span class="nc" id="L58">        super.init();</span>
+<span class="nc" id="L59">        String typeStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), &quot;rootSchemaType&quot;));</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        rootSchemaType = typeStr != null ? Type.valueOf(typeStr) : Type.STRUCT;</span>
+<span class="nc" id="L61">        String isKeyStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), &quot;isKey&quot;));</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        isKey = isKeyStr != null ? Boolean.parseBoolean(isKeyStr) : false;</span>
+<span class="nc" id="L63">    }</span>
+
+    @Override
+    public void processPreValidation(AtlasInternalSession session) throws AtlasException {
+<span class="nc bnc" id="L67" title="All 4 branches missed.">        if (session == null || session.getMapping() == null) {</span>
+<span class="nc" id="L68">            throw new AtlasValidationException(&quot;Invalid session: Session and AtlasMapping must be specified&quot;);</span>
+        }
+
+<span class="nc" id="L71">        Validations validations = session.getValidations();</span>
+<span class="nc" id="L72">        KafkaConnectValidationService kafkaConnectValidationService = new KafkaConnectValidationService(getConversionService(), getFieldActionService());</span>
+<span class="nc" id="L73">        kafkaConnectValidationService.setMode(getMode());</span>
+<span class="nc" id="L74">        kafkaConnectValidationService.setDocId(getDocId());</span>
+<span class="nc" id="L75">        List&lt;Validation&gt; kafkaConnectValidations = kafkaConnectValidationService.validateMapping(session.getMapping());</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">        if (kafkaConnectValidations != null &amp;&amp; !kafkaConnectValidations.isEmpty()) {</span>
+<span class="nc" id="L77">            validations.getValidation().addAll(kafkaConnectValidations);</span>
+        }
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L81">            LOG.debug(&quot;Detected &quot; + kafkaConnectValidations.size() + &quot; json validation notices&quot;);</span>
+        }
+
+<span class="nc bnc" id="L84" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L85">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
+        }
+<span class="nc" id="L87">    }</span>
+
+    @Override
+    public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L91">        Object sourceDocument = session.getSourceDocument(getDocId());</span>
+<span class="nc" id="L92">        KafkaConnectFieldReader fieldReader = new KafkaConnectFieldReader(getConversionService());</span>
+<span class="nc" id="L93">        fieldReader.setDocument(sourceDocument);</span>
+<span class="nc" id="L94">        fieldReader.setSchema(extractSchema(getDataSourceMetadata()));</span>
+<span class="nc" id="L95">        session.setFieldReader(getDocId(), fieldReader);</span>
+
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L98">            LOG.debug(&quot;{} processPreSourceExcution completed&quot;, getDocId());</span>
+        }
+<span class="nc" id="L100">    }</span>
+
+    private org.apache.kafka.connect.data.Schema extractSchema(DataSourceMetadata meta) throws AtlasException {
+<span class="nc bnc" id="L103" title="All 4 branches missed.">        if (meta == null || meta.getSpecification() == null) {</span>
+<span class="nc" id="L104">            return null;</span>
+        }
+<span class="nc" id="L106">        byte[] bytes = meta.getSpecification();</span>
+<span class="nc" id="L107">        String schema = new String(bytes);</span>
+<span class="nc" id="L108">        String typeStr = meta.getInspectionParameters().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
+<span class="nc" id="L109">        KafkaConnectSchemaType type = KafkaConnectSchemaType.valueOf(typeStr);</span>
+<span class="nc" id="L110">        HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(meta.getInspectionParameters());</span>
+        try {
+<span class="nc bnc" id="L112" title="All 3 branches missed.">            switch (type) {</span>
+                case JSON:
+<span class="nc" id="L114">                    return KafkaConnectUtil.parseJson(schema, options);</span>
+                case AVRO:
+<span class="nc" id="L116">                    return KafkaConnectUtil.parseAvro(schema, options);</span>
+                default:
+<span class="nc" id="L118">                    LOG.warn(&quot;Ignoring unsupported KafkaConnect schema type '{}'&quot;, type);</span>
+<span class="nc" id="L119">                    return null;</span>
+            }
+<span class="nc" id="L121">        } catch (Exception e) {</span>
+<span class="nc" id="L122">            throw new AtlasException(e);</span>
+        }
+    }
+
+    @Override
+    public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L128">        KafkaConnectFieldWriter writer = new KafkaConnectFieldWriter(getConversionService());</span>
+<span class="nc" id="L129">        writer.setSchema(extractSchema(getDataSourceMetadata()));</span>
+<span class="nc" id="L130">        session.setFieldWriter(getDocId(), writer);</span>
+
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L133">            LOG.debug(&quot;{} processPreTargetExcution completed&quot;, getDocId());</span>
+        }
+        
+<span class="nc" id="L136">    }</span>
+
+    @Override
+    public void readSourceValue(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L140">        Field sourceField = session.head().getSourceField();</span>
+<span class="nc" id="L141">        KafkaConnectFieldReader reader = session.getFieldReader(getDocId(), KafkaConnectFieldReader.class);</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (reader == null) {</span>
+<span class="nc" id="L143">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
+<span class="nc" id="L144">                    &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
+                    AuditStatus.ERROR, null);
+<span class="nc" id="L146">            return;</span>
+        }
+<span class="nc" id="L148">        reader.read(session);</span>
+
+<span class="nc bnc" id="L150" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L151">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
+<span class="nc" id="L152">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="nc" id="L153">                    sourceField.getValue());</span>
+        }
+<span class="nc" id="L155">    }</span>
+
+    @Override
+    public void populateTargetField(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L159">        Field sourceField = session.head().getSourceField();</span>
+<span class="nc" id="L160">        Field targetField = session.head().getTargetField();</span>
+<span class="nc" id="L161">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
+<span class="nc" id="L162">        FieldGroup targetFieldGroup = null;</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="nc" id="L164">            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
+<span class="nc" id="L165">            session.head().setTargetField(targetFieldGroup);</span>
+        }
+
+        // Attempt to Auto-detect field type based on input value
+<span class="nc bnc" id="L169" title="All 4 branches missed.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
+<span class="nc" id="L170">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
+        }
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (targetFieldGroup == null) {</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="nc" id="L175">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
+<span class="nc bnc" id="L176" title="All 4 branches missed.">                if (subFields != null &amp;&amp; subFields.size() &gt; 0) {</span>
+<span class="nc" id="L177">                    Integer index = targetField.getIndex();</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                    if (index != null) {</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                        if (subFields.size() &gt; index) {</span>
+<span class="nc" id="L180">                            sourceField = subFields.get(index);</span>
+                        } else {
+<span class="nc" id="L182">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
+                                    &quot;The number of source fields (%s) is smaller than target index (%s) - ignoring&quot;,
+<span class="nc" id="L184">                                    subFields.size(), index),</span>
+                                    AuditStatus.WARN, null);
+<span class="nc" id="L186">                            return;</span>
+                        }
+                    } else {
+                        // The last one wins for compatibility
+<span class="nc" id="L190">                        sourceField = subFields.get(subFields.size() - 1);</span>
+                    }
+<span class="nc" id="L192">                    session.head().setSourceField(sourceField);</span>
+                }
+            }
+<span class="nc" id="L195">            super.populateTargetField(session);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">        } else if (sourceField instanceof FieldGroup) {</span>
+<span class="nc" id="L197">            Field previousTargetSubField = null;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
+<span class="nc" id="L199">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
+<span class="nc" id="L200">                KafkaConnectField targetSubField = AtlasKafkaConnectModelFactory.createKafkaConnectField();</span>
+<span class="nc" id="L201">                AtlasKafkaConnectModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="nc" id="L202">                getCollectionHelper().copyCollectionIndexes(sourceField, sourceSubField, targetSubField, previousTargetSubField);</span>
+<span class="nc" id="L203">                previousTargetSubField = targetSubField;</span>
+<span class="nc" id="L204">                targetFieldGroup.getField().add(targetSubField);</span>
+<span class="nc" id="L205">                session.head().setSourceField(sourceSubField);</span>
+<span class="nc" id="L206">                session.head().setTargetField(targetSubField);</span>
+<span class="nc" id="L207">                super.populateTargetField(session);</span>
+            }
+<span class="nc" id="L209">            session.head().setSourceField(sourceField);</span>
+<span class="nc" id="L210">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="nc" id="L211">        } else {</span>
+<span class="nc" id="L212">            KafkaConnectField targetSubField = new KafkaConnectField();</span>
+<span class="nc" id="L213">            AtlasKafkaConnectModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="nc" id="L214">            path.setVacantCollectionIndex(0);</span>
+<span class="nc" id="L215">            targetSubField.setPath(path.toString());</span>
+<span class="nc" id="L216">            targetFieldGroup.getField().add(targetSubField);</span>
+<span class="nc" id="L217">            session.head().setTargetField(targetSubField);</span>
+<span class="nc" id="L218">            super.populateTargetField(session);</span>
+<span class="nc" id="L219">            session.head().setTargetField(targetFieldGroup);</span>
+        }
+
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L223">            LOG.debug(</span>
+                    &quot;{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]&quot;,
+<span class="nc" id="L225">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="nc" id="L226">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
+<span class="nc" id="L227">                    targetField.getValue());</span>
+        }
+<span class="nc" id="L229">    }</span>
+
+    @Override
+    public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L233">        KafkaConnectFieldWriter writer = session.getFieldWriter(getDocId(), KafkaConnectFieldWriter.class);</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        if (session.head().getTargetField() instanceof FieldGroup) {</span>
+<span class="nc" id="L235">            FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">            if (targetFieldGroup.getField().size() &gt; 0) {</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">                for (Field f : targetFieldGroup.getField()) {</span>
+<span class="nc" id="L238">                    session.head().setTargetField(f);</span>
+<span class="nc" id="L239">                    writer.write(session);</span>
+<span class="nc" id="L240">                }</span>
+<span class="nc" id="L241">                return;</span>
+            }
+        }
+<span class="nc" id="L244">        writer.write(session);</span>
+<span class="nc" id="L245">    }</span>
+
+    @Override
+    public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L249">        session.removeFieldReader(getDocId());</span>
+
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L252">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
+        }
+<span class="nc" id="L254">    }</span>
+
+    @Override
+    public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
+<span class="nc" id="L258">        KafkaConnectFieldWriter writer = session.getFieldWriter(getDocId(), KafkaConnectFieldWriter.class);</span>
+<span class="nc bnc" id="L259" title="All 4 branches missed.">        if (writer != null &amp;&amp; writer.getDocument() != null) {</span>
+<span class="nc" id="L260">            Object outputBody = writer.getDocument();</span>
+<span class="nc" id="L261">            session.setTargetDocument(getDocId(), outputBody);</span>
+<span class="nc" id="L262">        } else {</span>
+<span class="nc" id="L263">            AtlasUtil.addAudit(session, getDocId(), String</span>
+<span class="nc" id="L264">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
+                    AuditStatus.WARN, null);
+        }
+<span class="nc" id="L267">        session.removeFieldWriter(getDocId());</span>
+
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L270">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
+        }
+<span class="nc" id="L272">    }</span>
+
+    @Override
+    public Boolean isSupportedField(Field field) {
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (super.isSupportedField(field)) {</span>
+<span class="fc" id="L277">            return true;</span>
+        }
+<span class="fc bfc" id="L279" title="All 4 branches covered.">        return field instanceof KafkaConnectField || field instanceof KafkaConnectEnumField;</span>
+    }
+
+    @Override
+    public Field cloneField(Field field) throws AtlasException {
+<span class="nc" id="L284">        return AtlasKafkaConnectModelFactory.cloneField((KafkaConnectField)field, true);</span>
+    }
+
+    @Override
+    public Field createField() {
+<span class="nc" id="L289">        return AtlasKafkaConnectModelFactory.createKafkaConnectField();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>KafkaConnectService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-kafka-connect-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.kafkaconnect.service</a> &gt; <span class="el_source">KafkaConnectService.java</span></div><h1>KafkaConnectService.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.kafkaconnect.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import io.atlasmap.kafkaconnect.core.KafkaConnectUtil;
+import io.atlasmap.kafkaconnect.inspect.KafkaConnectInspectionService;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionRequest;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionResponse;
+import io.atlasmap.kafkaconnect.v2.KafkaConnectSchemaType;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.v2.Json;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+@Path(&quot;/kafkaconnect/&quot;)
+<span class="fc" id="L56">public class KafkaConnectService {</span>
+
+<span class="fc" id="L58">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectService.class);</span>
+
+    @Context
+    private ResourceContext resourceContext;
+
+    protected byte[] toJson(Object value) {
+        try {
+<span class="fc" id="L65">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L66">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt; clazz) {
+        try {
+<span class="nc" id="L73">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L74">        } catch (IOException e) {</span>
+<span class="nc" id="L75">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+        }
+    }
+
+    @GET
+    @Path(&quot;/simple&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
+    public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
+<span class="nc" id="L85">        return &quot;Got it! &quot; + from;</span>
+    }
+
+    @POST
+    @Consumes({ MediaType.APPLICATION_JSON })
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Path(&quot;/inspect&quot;)
+    @Operation(summary = &quot;Inspect Kafka Connect Schema&quot;, description = &quot;Inspect a Kafka Connect schema and return a Document object&quot;)
+    @RequestBody(description = &quot;KafkaConnectInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = KafkaConnectInspectionRequest.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = KafkaConnectInspectionResponse.class)), description = &quot;Return a Document object represented by KafkaConnectDocument&quot;))
+    public Response inspect(InputStream request) {
+<span class="nc" id="L96">        return inspect(fromJson(request, KafkaConnectInspectionRequest.class));</span>
+    }
+
+    public Response inspect(KafkaConnectInspectionRequest request) {
+<span class="fc" id="L100">        long startTime = System.currentTimeMillis();</span>
+
+<span class="fc" id="L102">        KafkaConnectInspectionResponse response = new KafkaConnectInspectionResponse();</span>
+<span class="fc" id="L103">        KafkaConnectDocument d = null;</span>
+
+        try {
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            ClassLoader loader = resourceContext != null</span>
+<span class="nc" id="L108">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
+<span class="fc" id="L109">                    : KafkaConnectService.class.getClassLoader();</span>
+<span class="fc" id="L110">            KafkaConnectInspectionService s = new KafkaConnectInspectionService(loader);</span>
+
+<span class="fc" id="L112">            String schemaTypeStr = request.getOptions().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
+<span class="fc" id="L113">            KafkaConnectSchemaType schemaType = KafkaConnectSchemaType.valueOf(schemaTypeStr);</span>
+<span class="fc" id="L114">            HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(request.getOptions());</span>
+    
+<span class="pc bpc" id="L116" title="2 of 3 branches missed.">            switch (schemaType) {</span>
+                case JSON:
+<span class="nc" id="L118">                    d = s.inspectJson(request.getSchemaData(), options);</span>
+<span class="nc" id="L119">                    break;</span>
+                case AVRO:
+<span class="fc" id="L121">                    d = s.inspectAvro(request.getSchemaData(), options);</span>
+<span class="fc" id="L122">                    break;</span>
+                default:
+<span class="nc" id="L124">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + schemaType);</span>
+                    break;
+            }
+<span class="nc" id="L127">        } catch (Exception e) {</span>
+<span class="nc" id="L128">            LOG.error(&quot;Error inspecting Kafka Connect schema: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L129">            response.setErrorMessage(e.getMessage());</span>
+        } finally {
+<span class="fc" id="L131">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+        }
+
+<span class="fc" id="L134">        response.setKafkaConnectDocument(d);</span>
+<span class="fc" id="L135">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

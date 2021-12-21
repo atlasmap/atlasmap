@@ -22,109 +22,108 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.v2.AtlasModelFactory;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.PropertyField;
 
 public class PropertyModule extends BaseAtlasModule {
-<span class="fc" id="L29">    private static final Logger LOG = LoggerFactory.getLogger(PropertyModule.class);</span>
+<span class="fc" id="L30">    private static final Logger LOG = LoggerFactory.getLogger(PropertyModule.class);</span>
 
     private AtlasPropertyStrategy defaultStrategy;
 
-<span class="fc" id="L33">    public PropertyModule(AtlasPropertyStrategy propertyStrategy) {</span>
-<span class="fc" id="L34">        this.defaultStrategy = propertyStrategy;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L34">    public PropertyModule(AtlasPropertyStrategy propertyStrategy) {</span>
+<span class="fc" id="L35">        this.defaultStrategy = propertyStrategy;</span>
+<span class="fc" id="L36">        DataSource ds = new DataSource();</span>
+<span class="fc" id="L37">        ds.setName(&quot;Properties&quot;);</span>
+<span class="fc" id="L38">        setDataSource(ds);</span>
+<span class="fc" id="L39">    }</span>
 
     @Override
     public void processPreValidation(AtlasInternalSession session) throws AtlasException {
         // TODO
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L44">    }</span>
 
     @Override
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L49">    }</span>
 
     @Override
     public void readSourceValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc bfc" id="L49" title="All 2 branches covered.">        AtlasPropertyStrategy strategy = session.getAtlasPropertyStrategy() != null</span>
-<span class="fc" id="L50">                ? session.getAtlasPropertyStrategy() : this.defaultStrategy;</span>
-<span class="fc" id="L51">        Field sourceField = session.head().getSourceField();</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (sourceField instanceof PropertyField) {</span>
-<span class="fc" id="L53">            PropertyField sourcePropertyField = (PropertyField)sourceField;</span>
-<span class="fc" id="L54">            strategy.readProperty(session, sourcePropertyField);</span>
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L56">                LOG.debug(&quot;Processed source PropertyField: Name={} Scope={} Value={} Strategy={}&quot;,</span>
-<span class="nc" id="L57">                        sourcePropertyField.getName(), sourcePropertyField.getScope(),</span>
-<span class="nc" id="L58">                        sourceField.getValue(), strategy.getClass().getName());</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        AtlasPropertyStrategy strategy = session.getAtlasPropertyStrategy() != null</span>
+<span class="fc" id="L54">                ? session.getAtlasPropertyStrategy() : this.defaultStrategy;</span>
+<span class="fc" id="L55">        Field sourceField = session.head().getSourceField();</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (sourceField instanceof PropertyField) {</span>
+<span class="fc" id="L57">            PropertyField sourcePropertyField = (PropertyField)sourceField;</span>
+<span class="fc" id="L58">            strategy.readProperty(session, sourcePropertyField);</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L60">                LOG.debug(&quot;Processed source PropertyField: Name={} Scope={} Value={} Strategy={}&quot;,</span>
+<span class="nc" id="L61">                        sourcePropertyField.getName(), sourcePropertyField.getScope(),</span>
+<span class="nc" id="L62">                        sourceField.getValue(), strategy.getClass().getName());</span>
             }
         }
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L65">    }</span>
 
     @Override
     public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L70">    }</span>
 
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L75">    }</span>
 
     @Override
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        AtlasPropertyStrategy strategy = session.getAtlasPropertyStrategy() != null</span>
-<span class="fc" id="L76">                ? session.getAtlasPropertyStrategy() : this.defaultStrategy;</span>
-<span class="fc" id="L77">        Field targetField = session.head().getTargetField();</span>
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (targetField instanceof PropertyField) {</span>
-<span class="fc" id="L79">            PropertyField targetPropertyField = (PropertyField)targetField;</span>
-<span class="fc" id="L80">            strategy.writeProperty(session, targetPropertyField);</span>
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L82">                LOG.debug(&quot;Processed target PropertyField: Name={} Value={} Strategy={}&quot;,</span>
-<span class="nc" id="L83">                        targetPropertyField.getName(), targetPropertyField.getValue(),</span>
-<span class="nc" id="L84">                        strategy.getClass().getName());</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        AtlasPropertyStrategy strategy = session.getAtlasPropertyStrategy() != null</span>
+<span class="fc" id="L80">                ? session.getAtlasPropertyStrategy() : this.defaultStrategy;</span>
+<span class="fc" id="L81">        Field targetField = session.head().getTargetField();</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (targetField instanceof PropertyField) {</span>
+<span class="fc" id="L83">            PropertyField targetPropertyField = (PropertyField)targetField;</span>
+<span class="fc" id="L84">            strategy.writeProperty(session, targetPropertyField);</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L86">                LOG.debug(&quot;Processed target PropertyField: Name={} Value={} Strategy={}&quot;,</span>
+<span class="nc" id="L87">                        targetPropertyField.getName(), targetPropertyField.getValue(),</span>
+<span class="nc" id="L88">                        strategy.getClass().getName());</span>
             }
         }
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L91">    }</span>
 
     @Override
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L92">    }</span>
+<span class="fc" id="L96">    }</span>
 
     @Override
     public void processPostValidation(AtlasInternalSession session) throws AtlasException {
         // no-op
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L101">    }</span>
 
     @Override
     public Boolean isSupportedField(Field field) {
-<span class="fc" id="L101">        return field instanceof PropertyField;</span>
+<span class="fc" id="L105">        return field instanceof PropertyField;</span>
     }
 
     @Override
     public PropertyField cloneField(Field field) throws AtlasException {
-<span class="pc bpc" id="L106" title="2 of 4 branches missed.">        if (field == null || !(field instanceof PropertyField)) {</span>
-<span class="fc" id="L107">            return null;</span>
+<span class="pc bpc" id="L110" title="2 of 4 branches missed.">        if (field == null || !(field instanceof PropertyField)) {</span>
+<span class="fc" id="L111">            return null;</span>
         }
-<span class="nc" id="L109">        PropertyField orig = (PropertyField)field;</span>
-<span class="nc" id="L110">        PropertyField clone = new PropertyField();</span>
-<span class="nc" id="L111">        AtlasModelFactory.copyField(orig, clone, true);</span>
-<span class="nc" id="L112">        clone.setScope(orig.getScope());</span>
-<span class="nc" id="L113">        return clone;</span>
+<span class="nc" id="L113">        PropertyField orig = (PropertyField)field;</span>
+<span class="nc" id="L114">        PropertyField clone = new PropertyField();</span>
+<span class="nc" id="L115">        AtlasModelFactory.copyField(orig, clone, true);</span>
+<span class="nc" id="L116">        clone.setScope(orig.getScope());</span>
+<span class="nc" id="L117">        return clone;</span>
     }
 
     @Override
     public void setDocName(String docName) {
-<span class="nc" id="L118">    }</span>
-
-    @Override
-    public String getDocName() {
-<span class="nc" id="L122">        return &quot;Properties&quot;;</span>
-    }
+<span class="nc" id="L122">    }</span>
 
     @Override
     public PropertyField createField() {
-<span class="fc" id="L127">        return new PropertyField();</span>
+<span class="fc" id="L126">        return new PropertyField();</span>
     }
 
 }

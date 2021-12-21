@@ -40,6 +40,11 @@ io.atlasmap.json.service
 io.atlasmap.json.test
 io.atlasmap.json.v2
 io.atlasmap.kafka.smt
+io.atlasmap.kafkaconnect.core
+io.atlasmap.kafkaconnect.inspect
+io.atlasmap.kafkaconnect.module
+io.atlasmap.kafkaconnect.service
+io.atlasmap.kafkaconnect.v2
 io.atlasmap.maven
 io.atlasmap.mxbean
 io.atlasmap.service
