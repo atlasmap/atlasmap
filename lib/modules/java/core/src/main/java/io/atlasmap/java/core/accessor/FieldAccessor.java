@@ -20,10 +20,19 @@ import java.lang.reflect.Type;
 
 import io.atlasmap.api.AtlasException;
 
+/**
+ * The {@link JavaChildAccessor} which accesses the field through {@link Field}.
+ */
 public class FieldAccessor extends JavaChildAccessor {
 
     private Field field;
 
+    /**
+     * A constructor.
+     * @param parent parent
+     * @param name name
+     * @param field field
+     */
     public FieldAccessor(Object parent, String name, Field field) {
         super(parent, name);
         field.setAccessible(true);

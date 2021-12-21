@@ -25,10 +25,17 @@ import org.springframework.context.ConfigurableApplicationContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
+/**
+ * SpringBoot application.
+ */
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
     private static final Logger LOG = LoggerFactory.getLogger(Application.class);
 
+    /**
+     * The entry point.
+     * @param args args
+     */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
         ConfigurableApplicationContext context = app.run(args);

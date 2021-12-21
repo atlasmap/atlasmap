@@ -16,6 +16,7 @@
 package io.atlasmap.api;
 
 /**
+ * AtlasFieldAction.
  * @deprecated Use {@link io.atlasmap.spi.AtlasFieldAction}
  */
 @Deprecated

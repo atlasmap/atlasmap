@@ -27,6 +27,18 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
+/**
+ * The {@code SELECT()} function for conditional mapping expression which extracts
+ * one of the child field by specifying the field name.
+ * The common usecase is to filter the parent COMPLEX field by filtering with the one of
+ * the children, then collects the other child with {@code SELECT()}. For example:
+ * <pre>
+ * {@code
+ *    SELECT( FILTER( ${Employees:/employee<>}, ${/status} == 'active' ), ${/firstName} )
+ * }
+ * </pre>
+ * where {@code /status} and {@code /firstName} are the children of {@code Employees:/employee<>}.
+ */
 public class SELECT extends BaseFunctionFactory {
 
     @Override

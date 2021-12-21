@@ -40,6 +40,7 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 /**
+ * The {@link AtlasFieldWriter} implementation of the JSON Document.
  */
 public class JsonFieldWriter implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonFieldWriter.class);
@@ -47,20 +48,35 @@ public class JsonFieldWriter implements AtlasFieldWriter {
     private ObjectMapper objectMapper = null;
     private ContainerNode<?> rootNode = null;
 
+    /**
+     * A constructor.
+     */
     public JsonFieldWriter() {
         this.objectMapper = new ObjectMapper()
             .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)
             .setDefaultPrettyPrinter(new DefaultPrettyPrinter());
     }
 
+    /**
+     * A constructor.
+     * @param objectMapper mapper
+     */
     public JsonFieldWriter(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
+    /**
+     * Gets the root node.
+     * @return root node
+     */
     public ContainerNode<?> getRootNode() {
         return rootNode;
     }
 
+    /**
+     * Gets the ObjectMapper.
+     * @return ObjectMapper
+     */
     public ObjectMapper getObjectMapper() {
         return objectMapper;
     }

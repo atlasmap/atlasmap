@@ -19,10 +19,30 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.ActionDetail;
 
+/**
+ * The field action processor.
+ */
 public interface ActionProcessor {
 
+    /**
+     * Gets {@link ActionDetail}.
+     * @return field action detail
+     */
     ActionDetail getActionDetail();
+
+    /**
+     * Gets the field action model class.
+     * @return field action model class
+     */
     Class<? extends Action> getActionClass();
+
+    /**
+     * Process the field action.
+     * @param action field action model class
+     * @param sourceObject source object
+     * @return result
+     * @throws AtlasException unexpected error
+     */
     Object process(Action action, Object sourceObject) throws AtlasException;
 
 }

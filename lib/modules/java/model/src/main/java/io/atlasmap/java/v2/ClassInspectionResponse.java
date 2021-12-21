@@ -20,16 +20,21 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The top container object of Java Document inspection response that AtlasMap design time backend
+ * service sends back to the UI in return for {@link ClassInspectionRequest}.
+ */
 @JsonRootName("ClassInspectionResponse")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class ClassInspectionResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** Java Document inspection result. */
     protected JavaClass javaClass;
-
+    /** error message. */
     protected String errorMessage;
-
+    /** execution time. */
     protected Long executionTime;
 
     /**
@@ -104,6 +109,7 @@ public class ClassInspectionResponse implements Serializable {
         this.executionTime = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -172,6 +178,7 @@ public class ClassInspectionResponse implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

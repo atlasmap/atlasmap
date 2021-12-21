@@ -15,17 +15,31 @@
  */
 package io.atlasmap.kafkaconnect.v2;
 
+/**
+ * The enumeration of Kafka Connect schema type.
+ */
 public enum KafkaConnectSchemaType {
+    /** JSON. */
     JSON("JSON"),
+    /** AVRO. */
     AVRO("AVRO"),
+    /** PROTOBUF. */
     PROTOBUF("PROTOBUF");
 
     private String value;
 
+    /**
+     * A constructor.
+     * @param inspectionType inspection type
+     */
     KafkaConnectSchemaType(String inspectionType) {
         value = inspectionType;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value(){
         return this.value;
     }

@@ -19,20 +19,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link KafkaConnectEnumField}.
+ */
 public class KafkaConnectEnumFields implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    protected List<KafkaConnectEnumField> jsonEnumField;
+    /** A list of the enum fields */
+    protected List<KafkaConnectEnumField> kcEnumField;
 
     /**
-     * Gets the value of the jsonEnumField property.
+     * Gets the value of the kcEnumField property.
      * 
      * <p>
      * This accessor method returns a reference to the live list,
      * not a snapshot. Therefore any modification you make to the
      * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the jsonEnumField property.
+     * This is why there is not a <CODE>set</CODE> method for the kcEnumField property.
      * 
      * <p>
      * For example, to add a new item, do as follows:
@@ -48,12 +51,13 @@ public class KafkaConnectEnumFields implements Serializable {
      * 
      */
     public List<KafkaConnectEnumField> getKafkaConnectEnumField() {
-        if (jsonEnumField == null) {
-            jsonEnumField = new ArrayList<KafkaConnectEnumField>();
+        if (kcEnumField == null) {
+            kcEnumField = new ArrayList<KafkaConnectEnumField>();
         }
-        return this.jsonEnumField;
+        return this.kcEnumField;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -64,11 +68,11 @@ public class KafkaConnectEnumFields implements Serializable {
         final KafkaConnectEnumFields that = ((KafkaConnectEnumFields) object);
         {
             List<KafkaConnectEnumField> leftKafkaConnectEnumField;
-            leftKafkaConnectEnumField = (((this.jsonEnumField!= null)&&(!this.jsonEnumField.isEmpty()))?this.getKafkaConnectEnumField():null);
+            leftKafkaConnectEnumField = (((this.kcEnumField!= null)&&(!this.kcEnumField.isEmpty()))?this.getKafkaConnectEnumField():null);
             List<KafkaConnectEnumField> rightKafkaConnectEnumField;
-            rightKafkaConnectEnumField = (((that.jsonEnumField!= null)&&(!that.jsonEnumField.isEmpty()))?that.getKafkaConnectEnumField():null);
-            if ((this.jsonEnumField!= null)&&(!this.jsonEnumField.isEmpty())) {
-                if ((that.jsonEnumField!= null)&&(!that.jsonEnumField.isEmpty())) {
+            rightKafkaConnectEnumField = (((that.kcEnumField!= null)&&(!that.kcEnumField.isEmpty()))?that.getKafkaConnectEnumField():null);
+            if ((this.kcEnumField!= null)&&(!this.kcEnumField.isEmpty())) {
+                if ((that.kcEnumField!= null)&&(!that.kcEnumField.isEmpty())) {
                     if (!leftKafkaConnectEnumField.equals(rightKafkaConnectEnumField)) {
                         return false;
                     }
@@ -76,7 +80,7 @@ public class KafkaConnectEnumFields implements Serializable {
                     return false;
                 }
             } else {
-                if ((that.jsonEnumField!= null)&&(!that.jsonEnumField.isEmpty())) {
+                if ((that.kcEnumField!= null)&&(!that.kcEnumField.isEmpty())) {
                     return false;
                 }
             }
@@ -84,13 +88,14 @@ public class KafkaConnectEnumFields implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {
             currentHashCode = (currentHashCode* 31);
             List<KafkaConnectEnumField> theKafkaConnectEnumField;
-            theKafkaConnectEnumField = (((this.jsonEnumField!= null)&&(!this.jsonEnumField.isEmpty()))?this.getKafkaConnectEnumField():null);
-            if ((this.jsonEnumField!= null)&&(!this.jsonEnumField.isEmpty())) {
+            theKafkaConnectEnumField = (((this.kcEnumField!= null)&&(!this.kcEnumField.isEmpty()))?this.getKafkaConnectEnumField():null);
+            if ((this.kcEnumField!= null)&&(!this.kcEnumField.isEmpty())) {
                 currentHashCode += theKafkaConnectEnumField.hashCode();
             }
         }

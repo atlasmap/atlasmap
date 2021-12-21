@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.JarURLConnection;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Path;
@@ -37,8 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +50,22 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * A collection of utility methods.
+ */
 public class AtlasUtil {
+    /** split limit. */
     public static final int SPLIT_LIMIT = 4;
+    /** new line chars. */
     public static final String NEW_LINE_CHARS = "(?m)$^|[\\r\\n]+\\z";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasUtil.class);
 
+    /**
+     * Loads the property file from the specified URL.
+     * @param url property file URL
+     * @return loaded properties
+     * @throws Exception unexpected error
+     */
     public static Properties loadPropertiesFromURL(URL url) throws Exception {
         try (InputStream is = url.openStream()) {
             Properties prop = new Properties();
@@ -67,10 +74,22 @@ public class AtlasUtil {
         }
     }
 
+    /**
+     * Gets if the specified string is null or empty. Note that unlike {@link String#isEmpty()},
+     * the whitespace(s) is also considered empty.
+     * @param string string to test
+     * @return true if it's null or empty, or false
+     */
     public static boolean isEmpty(String string) {
         return string == null || string.isEmpty() || string.matches("^\\s+$");
     }
 
+    /**
+     * Gets if the module part of the URI match.
+     * @param uriA URI A
+     * @param uriB URI B
+     * @return true if the module part of the URI match
+     */
     public static boolean matchUriModule(String uriA, String uriB) {
         if (uriA == null || uriB == null) {
             return false;
@@ -84,6 +103,10 @@ public class AtlasUtil {
 
     }
 
+    /**
+     * Validates the URI.
+     * @param atlasUri URI
+     */
     protected static void validateUri(String atlasUri) {
         if (!atlasUri.startsWith("atlas:")) {
             throw new IllegalStateException(
@@ -95,6 +118,11 @@ public class AtlasUtil {
         }
     }
 
+    /**
+     * Parses the URI and return a list of the parts.
+     * @param atlasUri URI
+     * @return a list of the URI parts
+     */
     protected static List<String> getUriPartsAsArray(String atlasUri) {
 
         if (atlasUri == null) {
@@ -146,6 +174,11 @@ public class AtlasUtil {
         return uriA.get(0);
     }
 
+    /**
+     * Gets the module part of the URI.
+     * @param atlasUri URI
+     * @return module part
+     */
     public static String getUriModule(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
         if (uriA == null || uriA.size() < 2 || isEmpty(uriA.get(1))) {
@@ -155,6 +188,11 @@ public class AtlasUtil {
         return uriA.get(1);
     }
 
+    /**
+     * Gets the data type part of the URI.
+     * @param atlasUri URI
+     * @return data part
+     */
     public static String getUriDataType(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
         if (uriA == null || uriA.size() < 3 || isEmpty(uriA.get(2))) {
@@ -164,6 +202,11 @@ public class AtlasUtil {
         return uriA.get(2);
     }
 
+    /**
+     * Gets the version part of the URI.
+     * @param atlasUri URI
+     * @return version part
+     */
     public static String getUriModuleVersion(String atlasUri) {
         List<String> uriA = AtlasUtil.getUriPartsAsArray(atlasUri);
         if (uriA == null || uriA.size() < 4 || isEmpty(uriA.get(3))) {
@@ -173,6 +216,12 @@ public class AtlasUtil {
         return uriA.get(3);
     }
 
+    /**
+     * Gets the parameter value in the URI.
+     * @param atlasUri URI
+     * @param key parameter key
+     * @return parameter value
+     */
     public static String getUriParameterValue(String atlasUri, String key) {
         Map<String, String> params = getUriParameters(atlasUri);
         if (params == null || params.isEmpty()) {
@@ -182,6 +231,11 @@ public class AtlasUtil {
         return params.get(key);
     }
 
+    /**
+     * Gets the URI parameters.
+     * @param atlasUri URI
+     * @return map of the URI parameters
+     */
     public static Map<String, String> getUriParameters(String atlasUri) {
 
         if (atlasUri == null) {
@@ -239,6 +293,12 @@ public class AtlasUtil {
         return params;
     }
 
+    /**
+     * Counts the specified character in the URI.
+     * @param text text
+     * @param match character to count
+     * @return count
+     */
     public static int countCharacters(String text, char match) {
         int count = 0;
         for (int i = 0; i < text.length(); i++) {
@@ -249,33 +309,14 @@ public class AtlasUtil {
         return count;
     }
 
-    public static List<Class<?>> findClassesForPackage(String scannedPackage) {
-        String scannedPath = scannedPackage.replace('.', '/');
-        URL scannedUrl = getResource(scannedPath);
-
-        if (scannedUrl == null) {
-            throw new IllegalArgumentException(String.format("Unable to detect resources for url='%s' for package='%s'",
-                    scannedPath, scannedPackage));
-        }
-
-        if ("jar".equals(scannedUrl.getProtocol())) {
-            return findClassesFromJar(scannedUrl);
-        }
-
-        File scannedFd = new File(scannedUrl.getFile());
-        List<Class<?>> classes = new ArrayList<Class<?>>();
-
-        if (scannedFd.listFiles() == null) {
-            return classes;
-        }
-
-        for (File file : scannedFd.listFiles()) {
-            classes.addAll(find(file, scannedPackage));
-        }
-
-        return classes;
-    }
-
+    /**
+     * Adds the Audit into the session.
+     * @param session session
+     * @param field field
+     * @param message message
+     * @param status audit status
+     * @param value value
+     */
     public static void addAudit(AtlasInternalSession session, Field field,
             String message, AuditStatus status, String value) {
         String docId = field != null ? field.getDocId() : null;
@@ -285,6 +326,14 @@ public class AtlasUtil {
                 createAudit(status, docId, docName, path, value, message));
     }
 
+    /**
+     * Adds the Audit into the session.
+     * @param session session
+     * @param docId Document ID
+     * @param message message
+     * @param status audit status
+     * @param value value
+     */
     public static void addAudit(AtlasInternalSession session, String docId,
             String message, AuditStatus status, String value) {
         String docName = session != null ? getDocumentNameById(session, docId) : null;
@@ -292,6 +341,16 @@ public class AtlasUtil {
                 createAudit(status, docId, docName, null, value, message));
     }
 
+    /**
+     * Creates the Audit.
+     * @param status audit status
+     * @param docId Document ID
+     * @param docName Document name
+     * @param path field path
+     * @param value value
+     * @param message message
+     * @return audit
+     */
     public static Audit createAudit(AuditStatus status, String docId, String docName,
             String path, String value, String message) {
         Audit audit = new Audit();
@@ -304,6 +363,11 @@ public class AtlasUtil {
         return audit;
     }
 
+    /**
+     * Converts from the Validation to the Audit and add into the session.
+     * @param session session
+     * @param validation validation
+     */
     public static void addAudit(AtlasSession session, Validation validation) {
         Audit audit = new Audit();
         audit.setDocId(validation.getDocId());
@@ -313,6 +377,12 @@ public class AtlasUtil {
         session.getAudits().getAudit().add(audit);
     }
 
+    /**
+     * Adds the list of Audit into the session.
+     * @param session session
+     * @param field field
+     * @param audits a list of audit
+     */
     public static void addAudits(AtlasInternalSession session, Field field, List<Audit> audits) {
         String docId = field.getDocId();
         String docName = getDocumentNameById(session, docId);
@@ -323,6 +393,11 @@ public class AtlasUtil {
         }
     }
 
+    /**
+     * Converts from the validation status to the audit status.
+     * @param vstatus validation status
+     * @return audit status
+     */
     public static AuditStatus toAuditStatus(ValidationStatus vstatus) {
         switch (vstatus) {
         case ERROR:
@@ -340,6 +415,40 @@ public class AtlasUtil {
         }
     }
 
+    /**
+     * Creates a string expression from the validation.
+     * @param validation validation
+     * @return string representation of the validation
+     */
+    public static String validationToString(Validation validation) {
+        String output = "[Validation ";
+    
+        if (validation == null) {
+            return output + ">null< ]";
+        }
+    
+        if (validation.getScope() != null) {
+            output = output + " scope=" + validation.getScope();
+        }
+        if (validation.getId() != null) {
+            output = output + " id=" + validation.getId();
+        }
+        if (validation.getStatus() != null) {
+            output = output + " status=" + validation.getStatus().value();
+        }
+        if (validation.getMessage() != null) {
+            output = output + " msg=" + validation.getMessage();
+        }
+    
+        return output + "]";
+    }
+
+    /**
+     * Gets the Document name of the one has the specified Document ID.
+     * @param session session
+     * @param docId Document ID
+     * @return Document name
+     */
     public static String getDocumentNameById(AtlasInternalSession session, String docId) {
         if (session == null || docId == null) {
             return null;
@@ -348,6 +457,11 @@ public class AtlasUtil {
         return module != null ? module.getDocName() : null;
     }
 
+    /**
+     * Gets the classpath resource.
+     * @param scannedPath path
+     * @return resource URL
+     */
     protected static URL getResource(String scannedPath) {
         URL url = null;
 
@@ -366,61 +480,11 @@ public class AtlasUtil {
         return ClassLoader.getSystemResource(scannedPath);
     }
 
-    protected static List<Class<?>> find(File file, String scannedPackage) {
-        List<Class<?>> classes = new ArrayList<Class<?>>();
-        String resource = scannedPackage + '.' + file.getName();
-        if (file.isDirectory()) {
-            for (File child : file.listFiles()) {
-                classes.addAll(find(child, resource));
-            }
-        } else if (resource.endsWith(".class")) {
-            int endIndex = resource.length() - ".class".length();
-            String className = resource.substring(0, endIndex);
-            try {
-                classes.add(Class.forName(className));
-            } catch (ClassNotFoundException ignore) {
-            }
-        }
-        return classes;
-    }
-
-    protected static List<Class<?>> findClassesFromJar(URL jarFileUrl) {
-        List<Class<?>> classNames = new ArrayList<Class<?>>();
-
-        JarURLConnection connection = null;
-
-        try {
-            connection = (JarURLConnection) jarFileUrl.openConnection();
-        } catch (IOException e) {
-            LOG.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
-            return classNames;
-        }
-
-        try (ZipInputStream zip = new ZipInputStream(
-                new FileInputStream(new File(connection.getJarFileURL().toURI())))) {
-            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
-                if (!entry.isDirectory() && entry.getName().endsWith(".class")) {
-                    String className = entry.getName().replace('/', '.');
-                    className = className.substring(0, className.length() - ".class".length());
-                    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-                    if (classLoader == null) {
-                        classLoader = AtlasUtil.class.getClassLoader();
-                    }
-                    try {
-                        Class<?> clazz = Class.forName(className, false, classLoader);
-                        classNames.add(clazz);
-                    } catch (ClassNotFoundException e) {
-                        LOG.warn(String.format("Unable to load class=%s from jar file=%s msg=%s", className,
-                                jarFileUrl, e.getMessage()), e);
-                    }
-                }
-            }
-        } catch (URISyntaxException | IOException e) {
-            LOG.warn(String.format("Unable to load classes from jar file=%s msg=%s", jarFileUrl, e.getMessage()), e);
-        }
-        return classNames;
-    }
-
+    /**
+     * Gets the combined message from the chained causes of the specified Throwable.
+     * @param t throwable
+     * @return combined message
+     */
     public static String getChainedMessage(Throwable t) {
         StringBuilder buf = new StringBuilder();
         buf.append(t.getMessage());
@@ -434,6 +498,11 @@ public class AtlasUtil {
         return buf.toString();
     }
 
+    /**
+     * Escapes the special characters for URI.
+     * @param source string to escape
+     * @return escaped
+     */
     public static String escapeForUri(String source) {
         if (source == null) {
             return null;
@@ -458,6 +527,11 @@ public class AtlasUtil {
                      .replaceAll(Pattern.quote("]"), "%5D");
     }
 
+    /**
+     * Unescapes the special characters in the URI.
+     * @param uri URI
+     * @return unescaped
+     */
     public static String unescapeFromUri(String uri) {
         if (uri == null) {
             return null;
@@ -485,7 +559,7 @@ public class AtlasUtil {
     /**
      * Delete specified directory and the contents in it.
      * @see #deleteDirectoryContents
-     * @param targetDir
+     * @param targetDir The target directory to remove
      */
     public static void deleteDirectory(File targetDir) {
         File[] allContents = targetDir.listFiles();
@@ -504,9 +578,8 @@ public class AtlasUtil {
 
     /**
      * Delete all contents in the specified directory.
-     *
      * @see #deleteDirectory
-     * @param targetDir
+     * @param targetDir The target directory to remove the contents
      */
     public static void deleteDirectoryContents(File targetDir) {
         File[] allContents = targetDir.listFiles();
@@ -522,6 +595,12 @@ public class AtlasUtil {
         return;
     }
 
+    /**
+     * Copies the one file to the other.
+     * @param sourcePath source file path
+     * @param destPath target file path
+     * @throws IOException unexpected error
+     */
     public static void copyFile(Path sourcePath, Path destPath) throws IOException {
         File source = new File(sourcePath.toString());
         File dest = new File(destPath.toString());
@@ -557,8 +636,8 @@ public class AtlasUtil {
      *
      * If includePaths is null or empty it does nothing and all fields are included.
      *
-     * @param document
-     * @param includePaths
+     * @param document document
+     * @param includePaths paths
      */
     public static void excludeNotRequestedFields(Document document, List<String> includePaths) {
         if (includePaths == null || includePaths.isEmpty()) {

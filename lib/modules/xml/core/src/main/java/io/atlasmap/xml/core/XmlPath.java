@@ -23,18 +23,36 @@ import java.util.Map;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.v2.CollectionType;
 
+/**
+ * The {@link AtlasPath} for the XML Document.
+ * TODO migrate to AtlasPath - https://github.com/atlasmap/atlasmap/issues/1767
+ */
 public class XmlPath extends AtlasPath {
-
+    /** Namespace separator. */
     public static final String PATH_NAMESPACE_SEPARATOR = ":";
 
+    /**
+     * A constructor.
+     * @param path path
+     */
     public XmlPath(String path) {
         super(path);
     }
 
+    /**
+     * A constructor.
+     * @param path path
+     * @param namespacesToReplace namespaces
+     */
     public XmlPath(String path, Map<String, String> namespacesToReplace) {
         super(updatedPath(path, namespacesToReplace));
     }
 
+    /**
+     * Gets the path segments.
+     * @param includeRoot true to include root segment, or false
+     * @return segments
+     */
     public List<XmlSegmentContext> getXmlSegments(boolean includeRoot) {
         List<XmlSegmentContext> answer = new ArrayList<>();
         int start = includeRoot ? 0 : 1;
@@ -44,10 +62,12 @@ public class XmlPath extends AtlasPath {
         return Collections.unmodifiableList(answer);
     }
 
+    @Override
     public XmlSegmentContext getLastSegment() {
         return (XmlSegmentContext) super.getLastSegment();
     }
 
+    @Override
     public XmlPath getLastSegmentParentPath() {
         if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {
             return null;
@@ -60,6 +80,7 @@ public class XmlPath extends AtlasPath {
         return parentPath;
     }
 
+    @Override
     protected XmlSegmentContext createSegmentContext(String expression) {
         return new XmlSegmentContext(expression);
     }
@@ -117,10 +138,17 @@ public class XmlPath extends AtlasPath {
 
     }
 
+    /**
+     * The {@link SegmentContext} for the XML Document.
+     */
     public static class XmlSegmentContext extends SegmentContext {
         private String namespace;
         private String qname;
 
+        /**
+         * A constructor.
+         * @param expression segment expression
+         */
         public XmlSegmentContext(String expression) {
             super(expression);
             if (getExpression().contains(PATH_NAMESPACE_SEPARATOR)) {
@@ -132,10 +160,18 @@ public class XmlPath extends AtlasPath {
             }
         }
 
+        /**
+         * Gets the namespace.
+         * @return namespace
+         */
         public String getNamespace() {
             return namespace;
         }
 
+        /**
+         * Gets the QName string.
+         * @return QName
+         */
         public String getQName() {
             return qname;
         }
@@ -153,6 +189,7 @@ public class XmlPath extends AtlasPath {
             return answer;
         }
 
+        @Override
         protected XmlSegmentContext rebuild() {
             StringBuilder buf = new StringBuilder();
             if (isAttribute()) {

@@ -31,6 +31,11 @@ import io.atlasmap.v2.ActionParameters;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
+/**
+ * The default implementation of {@link FunctionResolver}. {@link DefaultAtlasExpressionProcessor}
+ * uses this to resolve functions in the expression. If no native function matches, it then looks for
+ * the field action as a fallback.
+ */
 public class DefaultAtlasFunctionResolver implements FunctionResolver {
 
     private static DefaultAtlasFunctionResolver instance;
@@ -38,6 +43,10 @@ public class DefaultAtlasFunctionResolver implements FunctionResolver {
     private HashMap<String, FunctionFactory> functions = new HashMap<>();
     private DefaultAtlasFieldActionService fieldActionService;
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static DefaultAtlasFunctionResolver getInstance() {
         if (instance == null) {
             instance = new DefaultAtlasFunctionResolver();

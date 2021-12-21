@@ -36,7 +36,8 @@ import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 
 /**
- * TODO consolidate with JavaFieldWriterUtil - https://github.com/atlasmap/atlasmap/issues/730 .
+ * TODO Migrate with {@link io.atlasmap.java.core.accessor.JavaChildAccessor} - https://github.com/atlasmap/atlasmap/issues/730 .
+ * @see JavaFieldWriterUtil
  */
 public class TargetValueConverter {
     private static final Logger LOG = LoggerFactory.getLogger(TargetValueConverter.class);
@@ -45,12 +46,27 @@ public class TargetValueConverter {
     private JavaFieldWriterUtil writerUtil = null;
     private ClassLoader classLoader;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     * @param conversionService conversion service
+     * @param writerUtil writer util
+     */
     public TargetValueConverter(ClassLoader loader, AtlasConversionService conversionService, JavaFieldWriterUtil writerUtil) {
         this.classLoader = loader;
         this.conversionService = conversionService;
         this.writerUtil = writerUtil;
     }
 
+    /**
+     * Populates target field.
+     * @param session session
+     * @param lookupTable lookup table
+     * @param sourceField source field
+     * @param parentObject parent
+     * @param targetField target field
+     * @throws AtlasException unexpected error
+     */
     public void populateTargetField(AtlasInternalSession session, LookupTable lookupTable, Field sourceField,
             Object parentObject, Field targetField) throws AtlasException {
         if (sourceField == null) {
@@ -121,6 +137,13 @@ public class TargetValueConverter {
         targetField.setValue(targetValue);
     }
 
+    /**
+     * Converts target value.
+     * @param session session
+     * @param parentObject parent
+     * @param targetField target field
+     * @throws AtlasException unexpected error
+     */
     public void convertTargetValue(AtlasInternalSession session,
             Object parentObject, Field targetField) throws AtlasException {
         String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;
@@ -130,6 +153,10 @@ public class TargetValueConverter {
         targetField.setValue(targetValue);
     }
 
+    /**
+     * Sets the class loader.
+     * @param loader class loader
+     */
     public void setClassLoader(ClassLoader loader) {
         this.classLoader = loader;
     }
@@ -180,6 +207,14 @@ public class TargetValueConverter {
         }
     }
 
+    /**
+     * Populates enum value.
+     * @param session session
+     * @param lookupTable lookup table
+     * @param sourceField source field
+     * @param targetField target field
+     * @return
+     */
     @SuppressWarnings("unchecked")
     private Object populateEnumValue(AtlasInternalSession session, LookupTable lookupTable, JavaEnumField sourceField, JavaEnumField targetField) {
         if (sourceField == null || sourceField.getValue() == null) {

@@ -47,7 +47,9 @@ import io.atlasmap.xml.core.XmlIOHelper;
  * as an option, it fills corresponding element into schema.
  */
 public class CsvDfdlSchemaGenerator implements DfdlSchemaGenerator {
+    /** Name. */
     public static final String NAME = "csv";
+    /** Default delimiter. */
     public static final String DEFAULT_DELIMITER = ",";
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvDfdlSchemaGenerator.class);
@@ -58,17 +60,31 @@ public class CsvDfdlSchemaGenerator implements DfdlSchemaGenerator {
 
     private XmlIOHelper helper = new XmlIOHelper(CsvDfdlSchemaGenerator.class.getClassLoader());
 
+    /**
+     * The inspection options.
+     */
     public enum Options {
+        /** Header. */
         HEADER(DfdlConstants.OPTION_PREFIX + ".csv.header"),
+        /** Example. */
         EXAMPLE(DfdlConstants.OPTION_EXAMPLE_DATA),
+        /** Delimiter. */
         DELIMITER(DfdlConstants.OPTION_PREFIX + ".csv.delimiter");
 
         private final String value;
 
+        /**
+         * A constructor
+         * @param value value
+         */
         Options(String value) {
             this.value = value;
         }
 
+        /**
+         * Gets the value.
+         * @return value
+         */
         public String value() {
             return this.value;
         }
@@ -127,9 +143,15 @@ public class CsvDfdlSchemaGenerator implements DfdlSchemaGenerator {
         return xsd;
     }
 
+    /**
+     * The {@link NamespaceContext} for the DFDL module.
+     */
     class NamespaceResolver implements NamespaceContext {
         private Map<String, String> nsmap = new HashMap<>();
 
+        /**
+         * A constructor.
+         */
         NamespaceResolver() {
             nsmap.put("xs", NS_XS);
             nsmap.put("dfdl", NS_DFDL);

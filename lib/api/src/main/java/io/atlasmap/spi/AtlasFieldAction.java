@@ -15,6 +15,9 @@
  */
 package io.atlasmap.spi;
 
+/**
+ * The field action interface. The AtlasMap field action has to implement this interface.
+ */
 public interface AtlasFieldAction {
 
 }

@@ -27,6 +27,9 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.java.core.ClassHelper;
 import io.atlasmap.v2.CollectionType;
 
+/**
+ * The accessor for the Java child field.
+ */
 public abstract class JavaChildAccessor {
 
     private Object parent;
@@ -35,26 +38,58 @@ public abstract class JavaChildAccessor {
     private List<Object> collectionValues;
     private Class<?> fieldClass;
 
-
+    /**
+     * A constructor.
+     * @param parent parent
+     * @param name name
+     */
     public JavaChildAccessor(Object parent, String name) {
         this.parent = parent;
         this.name = name;
     }
 
+    /**
+     * Gets the raw field value.
+     * @return value
+     * @throws AtlasException unexpected error
+     */
     public abstract Object getRawValue() throws AtlasException;
 
+    /**
+     * Gets the raw generic type of the field.
+     * @return generic type
+     * @throws AtlasException unexpected error
+     */
     public abstract Type getRawGenericType() throws AtlasException;
 
+    /**
+     * Gets the raw class.
+     * @return class
+     * @throws AtlasException unexpected error
+     */
     public abstract Class<?> getRawClass() throws AtlasException;
 
+    /**
+     * Gets the parent object.
+     * @return parent
+     */
     public Object getParentObject() {
         return this.parent;
     }
 
+    /**
+     * Gets the field name.
+     * @return name
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Gets the collection type.
+     * @return collection type.
+     * @throws AtlasException unexpected error
+     */
     public CollectionType getCollectionType() throws AtlasException {
         if (this.collectionType != null) {
             return this.collectionType;
@@ -83,11 +118,21 @@ public abstract class JavaChildAccessor {
         return this.collectionType;
     }
 
+    /**
+     * Gets the collection values.
+     * @return collection values
+     * @throws AtlasException unexpected error
+     */
     public List<?> getCollectionValues() throws AtlasException {
         getCollectionType();
         return this.collectionValues;
     }
 
+    /**
+     * Gets the field class.
+     * @return class
+     * @throws AtlasException unexpected error
+     */
     public Class<?> getFieldClass() throws AtlasException {
         if (this.fieldClass != null) {
             return this.fieldClass;
@@ -106,6 +151,11 @@ public abstract class JavaChildAccessor {
         return this.fieldClass;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     * @throws AtlasException unexpected error
+     */
     public Object getValue() throws AtlasException {
         if (getCollectionType() == CollectionType.NONE) {
             return getRawValue();
@@ -113,6 +163,13 @@ public abstract class JavaChildAccessor {
         return this.collectionValues.size() > 0 ? this.collectionValues.get(0) : null;
     }
 
+    /**
+     * Gets the value at the specified index in the collection if it's a collection.
+     * Otherwise it returs the raw value.
+     * @param pos index
+     * @return value
+     * @throws AtlasException unexpected error
+     */
     public Object getValueAt(int pos) throws AtlasException {
         if (getCollectionType() == CollectionType.NONE) {
             return getRawValue();

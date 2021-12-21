@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Add</strong> field action.
+ */
 public class Add extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

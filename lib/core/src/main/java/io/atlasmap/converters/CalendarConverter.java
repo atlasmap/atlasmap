@@ -23,13 +23,26 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link Calendar}.
+ */
 public class CalendarConverter implements AtlasConverter<Calendar> {
 
+    /**
+     * Converts to {@link Date}.
+     * @param calendar value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public Date toDate(Calendar calendar) {
         return calendar != null ? calendar.getTime() : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param calendar value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Calendar calendar) {
         return calendar == null ? null : DateTimeHelper.toZonedDateTime(calendar);

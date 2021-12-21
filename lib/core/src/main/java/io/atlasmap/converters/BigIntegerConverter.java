@@ -32,18 +32,36 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converters for {@link BigInteger}.
+ */
 public class BigIntegerConverter implements AtlasConverter<BigInteger> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(BigInteger value) {
         return value != null ? new BigDecimal(value) : null;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(BigInteger value) {
         return value;
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BOOLEAN)
     public Boolean toBoolean(BigInteger value) {
         if (value == null) {
@@ -52,6 +70,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BYTE,
             concerns = AtlasConversionConcern.RANGE)
     public Byte toByte(BigInteger value) throws AtlasConversionException {
@@ -66,6 +90,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.CHAR,
             concerns = AtlasConversionConcern.RANGE)
     public Character toCharacter(BigInteger value) throws AtlasConversionException {
@@ -81,6 +111,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         return Character.valueOf((char) value.intValue());
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param date value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.RANGE)
     public Date toDate(BigInteger date) throws AtlasConversionException {
@@ -99,6 +135,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DOUBLE,
             concerns = AtlasConversionConcern.RANGE)
     public Double toDouble(BigInteger value) throws AtlasConversionException {
@@ -113,6 +155,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         return answer;
     }
 
+    /**
+     * COnverts to {@link Float}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.FLOAT,
             concerns = AtlasConversionConcern.RANGE)
     public Float toFloat(BigInteger value) throws AtlasConversionException {
@@ -127,6 +175,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         return answer;
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.INTEGER,
             concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(BigInteger value) throws AtlasConversionException {
@@ -141,6 +195,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE,
             concerns = AtlasConversionConcern.RANGE)
     public LocalDate toLocalDate(BigInteger value) throws AtlasConversionException {
@@ -156,6 +216,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.TIME,
             concerns = AtlasConversionConcern.RANGE)
     public LocalTime toLocalTime(BigInteger value) throws AtlasConversionException {
@@ -171,6 +237,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.RANGE)
     public LocalDateTime toLocalDateTime(BigInteger value) throws AtlasConversionException {
@@ -186,6 +258,12 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.LONG,
             concerns = AtlasConversionConcern.RANGE)
     public Long toLong(BigInteger value) throws AtlasConversionException {
@@ -200,11 +278,22 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.NUMBER)
     public Number toNumber(BigInteger value) {
         return value;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.SHORT,
             concerns = AtlasConversionConcern.RANGE)
     public Short toShort(BigInteger value) throws AtlasConversionException {
@@ -219,31 +308,62 @@ public class BigIntegerConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public String toString(BigInteger value) {
         return value != null ? value.toString() : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(BigInteger value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public CharSequence toCharSequence(BigInteger value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(BigInteger value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(BigInteger value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME_TZ,
             concerns = AtlasConversionConcern.RANGE)
     public ZonedDateTime toZonedDateTime(BigInteger value) throws AtlasConversionException {

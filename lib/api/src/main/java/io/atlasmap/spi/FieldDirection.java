@@ -15,16 +15,29 @@
  */
 package io.atlasmap.spi;
 
+/**
+ * The enumeration of the field direction, whether it's source or target.
+ */
 public enum FieldDirection {
+    /** Source. */
     SOURCE("Source"),
+    /** Target. */
     TARGET("Target");
 
     private String value;
 
+    /**
+     * A constructor.
+     * @param value value
+     */
     FieldDirection(String value) {
         this.value = value;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }

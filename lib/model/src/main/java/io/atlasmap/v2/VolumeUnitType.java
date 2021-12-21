@@ -18,24 +18,43 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * The enumeration of the volume units.
+ */
 public enum VolumeUnitType {
-
+    /** Cubic Meter. */
     CUBIC_METER("Cubic Meter"),
+    /** Liter. */
     LITER("Liter"),
+    /** Cubic Foot. */
     CUBIC_FOOT("Cubic Foot"),
+    /** Gallon (US Fluid). */
     GALLON_US_FLUID("Gallon (US Fluid)");
 
     private final String value;
 
+    /**
+     * A constuctor.
+     * @param v value
+     */
     VolumeUnitType(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     @JsonValue
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     @JsonCreator
     public static VolumeUnitType fromValue(String v) {
         for (VolumeUnitType c: VolumeUnitType.values()) {

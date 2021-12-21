@@ -19,13 +19,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Field;
 
+/**
+ * The Field for Kafka Connect module.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class KafkaConnectField extends Field {
 
     private static final long serialVersionUID = 1L;
-
+    /** True if it's primitive, or false */
     protected Boolean primitive;
-
+    /** Type name. */
     protected String typeName;
 
     /**
@@ -76,6 +79,7 @@ public class KafkaConnectField extends Field {
         this.typeName = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -147,6 +151,7 @@ public class KafkaConnectField extends Field {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

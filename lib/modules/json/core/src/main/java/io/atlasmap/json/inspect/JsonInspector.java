@@ -17,8 +17,19 @@ package io.atlasmap.json.inspect;
 
 import io.atlasmap.json.v2.JsonDocument;
 
+/**
+ * The JSON inspector.
+ * @see JsonInstanceInspector
+ * @see JsonSchemaInspector
+ */
 public interface JsonInspector {
 
+    /**
+     * Inspects a JSON schema/instance.
+     * @param inspectee inspectee
+     * @return inspected
+     * @throws JsonInspectionException invalid JSON data
+     */
     JsonDocument inspect(String inspectee) throws JsonInspectionException;
 
 }

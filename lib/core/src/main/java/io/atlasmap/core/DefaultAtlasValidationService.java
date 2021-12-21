@@ -46,6 +46,9 @@ import io.atlasmap.validators.NotEmptyValidator;
 import io.atlasmap.validators.PositiveIntegerValidator;
 import io.atlasmap.validators.StringPatternValidator;
 
+/**
+ * The default implementation of {@link AtlasValidationService}.
+ */
 public class DefaultAtlasValidationService implements AtlasValidationService {
 
     enum Validators {

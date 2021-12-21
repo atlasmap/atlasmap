@@ -48,6 +48,9 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * CSV Service provides CSV inspection service which generate an AtlasMap Document object from the CSV.
+ */
 @Path("/csv/")
 public class CsvService {
 
@@ -56,6 +59,11 @@ public class CsvService {
     @Context
     private ResourceContext resourceContext;
 
+    /**
+     * Seralizes to a JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
@@ -64,6 +72,11 @@ public class CsvService {
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
@@ -73,6 +86,26 @@ public class CsvService {
         return "Got it! " + from;
     }
 
+    /**
+     * Inspect a CSV instance and return a Document object.
+     * @param request request
+     * @param format format
+     * @param delimiter delimiter
+     * @param firstRecordAsHeader first record as header
+     * @param skipHeaderRecord skip header record
+     * @param headers headers
+     * @param commentMarker comment marker
+     * @param escape escape
+     * @param ignoreEmptyLines ignore empty lines
+     * @param ignoreHeaderCase ignore header case
+     * @param ignoreSurroundingSpaces ignore surrounding spaces
+     * @param nullString null string
+     * @param quote quote
+     * @param allowDuplicateHeaderNames allow duplicate header names
+     * @param allowMissingColumnNames allow missing column names
+     * @return {@link CsvInspectionResponse}
+     * @throws IOException unexpected error
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })

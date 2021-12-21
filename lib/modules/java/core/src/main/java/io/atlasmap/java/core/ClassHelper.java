@@ -32,8 +32,16 @@ import io.atlasmap.java.core.accessor.FieldAccessor;
 import io.atlasmap.java.core.accessor.GetterAccessor;
 import io.atlasmap.java.core.accessor.JavaChildAccessor;
 
+/**
+ * The helper class to handle Java objects.
+ */
 public class ClassHelper {
 
+    /**
+     * Gets the getter method names.
+     * @param fieldName field name
+     * @return getter method names
+     */
     public static List<String> getterMethodNames(String fieldName) {
         List<String> opts = new ArrayList<String>();
         opts.add(getMethodNameFromFieldName(fieldName));
@@ -41,14 +49,31 @@ public class ClassHelper {
         return opts;
     }
 
+    /**
+     * Gets the getter method name from the field name.
+     * @param fieldName field name
+     * @return getter method name
+     */
     public static String getMethodNameFromFieldName(String fieldName) {
         return "get" + StringUtil.capitalizeFirstLetter(fieldName);
     }
 
+    /**
+     * Gets the boolean getter method name from the field name.
+     * @param fieldName field name
+     * @return boolean getter method name
+     */
     public static String isMethodNameFromFieldName(String fieldName) {
         return "is" + StringUtil.capitalizeFirstLetter(fieldName);
     }
 
+    /**
+     * Detects the getter method.
+     * @param clazz class
+     * @param methodName method name
+     * @return method
+     * @throws NoSuchMethodException unexpected error
+     */
     public static Method detectGetterMethod(Class<?> clazz, String methodName) throws NoSuchMethodException {
 
         Method[] methods = clazz.getMethods();
@@ -63,6 +88,12 @@ public class ClassHelper {
                 String.format("No matching getter method for class=%s method=%s", clazz.getName(), methodName));
     }
 
+    /**
+     * Gets all getter methods on the class.
+     * @param clazz class
+     * @return getter methods
+     * @throws Exception unexpected error
+     */
     public static Map<String, Method> detectAllGetterMethods(Class<?> clazz) throws Exception {
         Map<String, Method> answer = new HashMap<>();
         Method[] methods = clazz.getMethods();
@@ -78,6 +109,11 @@ public class ClassHelper {
         return answer;
     }
 
+    /**
+     * Detects all fields on the class.
+     * @param clazz class
+     * @return fields
+     */
     public static List<Field> detectAllJavaFields(Class<?> clazz) {
         List<Field> answer = new ArrayList<>();
         Class<?> targetClazz = clazz;
@@ -93,6 +129,14 @@ public class ClassHelper {
         return answer;
     }
 
+    /**
+     * Detects the setter method.
+     * @param clazz class
+     * @param methodName method name
+     * @param paramType parameter type
+     * @return setter method.
+     * @throws NoSuchMethodException unexpected error
+     */
     public static Method detectSetterMethod(Class<?> clazz, String methodName, Class<?> paramType)
             throws NoSuchMethodException {
         List<Method> candidates = new ArrayList<Method>();
@@ -168,10 +212,21 @@ public class ClassHelper {
                 clazz.getName(), methodName, paramTypeClassName));
     }
 
+    /**
+     * Detects class from the first type argument.
+     * @param type type argument
+     * @return class
+     */
     public static Class<?> detectClassFromTypeArgument(Type type) {
         return detectClassFromTypeArgumentAt(type, 0);
     }
 
+    /**
+     * Detects class from the type argument at the specified position.
+     * @param type type
+     * @param pos position
+     * @return class
+     */
     public static Class<?> detectClassFromTypeArgumentAt(Type type, int pos) {
         if (type == null || !(type instanceof ParameterizedType)) {
             return Object.class;
@@ -184,6 +239,12 @@ public class ClassHelper {
         return typeArgs[pos] instanceof Class ? (Class<?>) typeArgs[pos] : Object.class;
     }
 
+    /**
+     * Looks up the getter method.
+     * @param object object
+     * @param name name
+     * @return getter method
+     */
     public static Method lookupGetterMethod(Object object, String name) {
         List<String> getters = getterMethodNames(name);
         Method getterMethod = null;
@@ -204,6 +265,12 @@ public class ClassHelper {
         }
     }
 
+    /**
+     * Looks up the Java field.
+     * @param source objet
+     * @param fieldName field name
+     * @return field
+     */
     public static Field lookupJavaField(Object source, String fieldName) {
         Class<?> targetClazz = source != null ? source.getClass() : null;
         while (targetClazz != null && targetClazz != Object.class) {
@@ -219,6 +286,12 @@ public class ClassHelper {
         return null;
     }
 
+    /**
+     * Looks up the {@link JavaChildAccessor}.
+     * @param source object
+     * @param name name
+     * @return accessor
+     */
     public static JavaChildAccessor lookupAccessor(Object source, String name) {
         if (source == null || AtlasUtil.isEmpty(name)) {
             return null;
@@ -234,6 +307,12 @@ public class ClassHelper {
         return null;
     }
 
+    /**
+     * Looks up all accessors on the object.
+     * @param source object
+     * @return accessors
+     * @throws Exception unexpected error
+     */
     public static List<JavaChildAccessor> lookupAllAccessors(Object source) throws Exception {
         List<JavaChildAccessor> answer = new ArrayList<>();
         if (source == null) {

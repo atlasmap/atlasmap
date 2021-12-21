@@ -27,6 +27,10 @@ import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.Field;
 
+/**
+ * The {@code ISEMPTY()} function for conditinal mapping expression which returns
+ * {@code true} if it's empty, otherwise returns {@code false}.
+ */
 public class ISEMPTY extends BaseFunctionFactory {
 
     @Override

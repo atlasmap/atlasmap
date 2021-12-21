@@ -43,15 +43,22 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Validation;
 
+/**
+ * {@link io.atlasmap.spi.AtlasModule} implementation for the Java Document.
+ */
 @AtlasModuleDetail(name = "JavaModule", uri = "atlas:java", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "java" }, configPackages = { "io.atlasmap.java.v2" })
 public class JavaModule extends BaseAtlasModule {
+    /** default list class. */
     public static final String DEFAULT_LIST_CLASS = "java.util.ArrayList";
     private static final Logger LOG = LoggerFactory.getLogger(JavaModule.class);
 
     private TargetValueConverter targetValueConverter = null;
     private JavaFieldWriterUtil writerUtil = null;
 
+    /**
+     * A constructor.
+     */
     public JavaModule() {
         this.setAutomaticallyProcessOutputFieldActions(false);
     }

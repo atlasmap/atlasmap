@@ -19,10 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link JsonEnumField}.
+ */
 public class JsonEnumFields implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** JSON enum fields. */
     protected List<JsonEnumField> jsonEnumField;
 
     /**
@@ -54,6 +57,7 @@ public class JsonEnumFields implements Serializable {
         return this.jsonEnumField;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -84,6 +88,7 @@ public class JsonEnumFields implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

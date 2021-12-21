@@ -48,4 +48,4 @@ jobs:
     - name: Build aggregated javadoc
       continue-on-error: true
       working-directory: docs
-      run: mvn -f pom-javadoc.xml  -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
+      run: mvn -f pom-javadoc.xml  -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all -pl \!io.atlasmap.com.sun.xsom:xsom javadoc:aggregate

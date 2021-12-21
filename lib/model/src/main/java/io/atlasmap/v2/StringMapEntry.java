@@ -17,12 +17,16 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model object of an entry of {@link StringMap}.
+ */
 public class StringMapEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
-
+    /** value */
     protected String value;
 
     /**

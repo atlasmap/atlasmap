@@ -44,6 +44,11 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.CompoundClassLoader;
 
+/**
+ * The class loader to achieve dynamic loading for which is required for design time
+ * backend, such as custom field action, Java Document and custom mapping. The user uploaded
+ * jar is dynamically added and classpath is updated to reflect them in UI on the fly.
+ */
 public class AtlasLibraryLoader extends CompoundClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasLibraryLoader.class);
 
@@ -52,6 +57,11 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
     private Set<ClassLoader> alternativeLoaders = new HashSet<>();
     private Set<AtlasLibraryLoaderListener> listeners = new HashSet<>();
 
+    /**
+     * A constructor.
+     * @param saveDirName the path to the directory to save the uploaded jar
+     * @throws AtlasException invalid save directory
+     */
     public AtlasLibraryLoader(String saveDirName) throws AtlasException {
         LOG.debug("Using {} as a lib directory", saveDirName);
         this.saveDir = new File(saveDirName);
@@ -64,6 +74,11 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         reload();
     }
 
+    /**
+     * Adds jar file from the {@link InputStream}.
+     * @param is input stream
+     * @throws Exception unexpected error
+     */
     public void addJarFromStream(InputStream is) throws Exception {
         File dest = new File(saveDir + File.separator + UUID.randomUUID().toString() + ".jar");
         while (dest.exists()) {
@@ -86,6 +101,9 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         reload();
     }
 
+    /**
+     * Clears all loaded jars.
+     */
     public void clearLibraries() {
         if (this.urlClassLoader != null) {
             try {
@@ -110,6 +128,11 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         reload();
     }
 
+    /**
+     * Gets the library class names available through this loader.
+     * @return library class names
+     * @throws AtlasException unexpected error
+     */
     public ArrayList<String> getLibraryClassNames() throws AtlasException {
         final String classSuffix = ".class";
         ArrayList<String> classNames = new ArrayList<String>();
@@ -135,6 +158,14 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         return classNames;
     }
 
+    /**
+     * Gets the library class names available through this loader, with filtered to the sub type of the class specified.
+     * @param clazz class to filter
+     * @param allowAbstract true to allow abstract classes
+     * @return filtered library class names
+     * @throws AtlasException unexpected error
+     * @see #getLibraryClassNames()
+     */
     public ArrayList<String> getSubTypesOf(Class<?> clazz, boolean allowAbstract) throws AtlasException {
         ArrayList<String> answer = new ArrayList<>();
         if (clazz == null) {
@@ -164,6 +195,9 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         return answer;
     }
 
+    /**
+     * Reloads all jars in the save directory.
+     */
     public synchronized void reload() {
         List<URL> urls = new LinkedList<>();
         File[] files = saveDir.listFiles();
@@ -271,6 +305,10 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         return super.getResourceAsStream(name);
     }
 
+    /**
+     * Gets if it has no jar loaded.
+     * @return true if empty, or false
+     */
     public boolean isEmpty() {
         return this.urlClassLoader == null;
     }
@@ -282,11 +320,26 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         }
     }
 
+    /**
+     * Adds the listener of the library loading/unloading event.
+     * {@link AtlasLibraryLoaderListener#onUpdate(AtlasLibraryLoader)}
+     * is invoked on the event.
+     * @param listener listener
+     */
     public void addListener(AtlasLibraryLoaderListener listener) {
         this.listeners.add(listener);
     }
 
+    /**
+     * The interface for the event listener of the library loading/unloading event.
+     * {@link AtlasLibraryLoaderListener#onUpdate(AtlasLibraryLoader)}
+     * is invoked on the event.
+     */
     public interface AtlasLibraryLoaderListener {
+        /**
+         * Handles library loading/unloading event.
+         * @param loader library loader
+         */
         public void onUpdate(AtlasLibraryLoader loader);
     }
 }

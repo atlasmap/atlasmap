@@ -22,19 +22,40 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldType;
 
 /**
+ * AtlasFieldAction.
  * @deprecated Use {@link io.atlasmap.spi.AtlasActionProcessor} instead
  */
 @Deprecated
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasFieldActionInfo {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     String name();
 
+    /**
+     * Gets the source type.
+     * @return source type
+     */
     FieldType sourceType();
 
+    /**
+     * Gets the target type.
+     * @return target type
+     */
     FieldType targetType();
 
+    /**
+     * Gets the source collection type.
+     * @return source collection type
+     */
     CollectionType sourceCollectionType();
 
+    /**
+     * Gets the target collection type.
+     * @return target collection type
+     */
     CollectionType targetCollectionType();
 }

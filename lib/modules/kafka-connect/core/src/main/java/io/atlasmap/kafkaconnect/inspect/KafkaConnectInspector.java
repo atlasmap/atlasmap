@@ -37,26 +37,49 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * Inspects Kafka Connect schema.
+ */
 public class KafkaConnectInspector {
     private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectInspector.class);
 
     private ClassLoader classLoader;
     private KafkaConnectDocument output;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     public KafkaConnectInspector(ClassLoader loader) {
         this.classLoader = loader;
     }
 
+    /**
+     * Inspects Kafka Connect JSON schema.
+     * @param jsonSchema Kafka Connect JSON schema
+     * @param options inspection options
+     * @throws Exception unexpected error
+     */
     public void inspectJson(String jsonSchema, HashMap<String, ?> options) throws Exception {
         org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseJson(jsonSchema, options);
         this.output = createDocument(connectSchema);
     }
 
+    /**
+     * Inspects Kafka Connect AVRO schema.
+     * @param avroSchema Kafka Connect AVRO schema
+     * @param options inspection options
+     * @throws Exception unexpected error
+     */
     public void inspectAvro(String avroSchema, HashMap<String, ?> options) throws Exception {
         org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseAvro(avroSchema, options);
         this.output = createDocument(connectSchema);
     }
 
+    /**
+     * Gets the result Document of Kafka Connect schema inspection.
+     * @return Document
+     */
     public KafkaConnectDocument getKafkaConnectDocument() {
         return this.output;
     }

@@ -56,19 +56,33 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath.SegmentContext;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.v2.CollectionType;
 
+/**
+ * The utility class for {@link JavaFieldWriter}.
+ * TODO: Migrate with {@link io.atlasmap.java.core.accessor.JavaChildAccessor}
+ */
 public class JavaFieldWriterUtil {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldWriterUtil.class);
     private AtlasConversionService conversionService = null;
     private ClassLoader classLoader;
     private Map<Class<?>, Class<?>> defaultCollectionImplClasses = new HashMap<>();
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     */
     public JavaFieldWriterUtil(AtlasConversionService conversionService) {
         this(Thread.currentThread().getContextClassLoader(), conversionService);
     }
 
+    /**
+     * A constructor.
+     * @param classLoader class loader
+     * @param conversionService conversion service
+     */
     public JavaFieldWriterUtil(ClassLoader classLoader, AtlasConversionService conversionService) {
         this.conversionService = conversionService;
         this.classLoader = classLoader;
@@ -91,6 +105,12 @@ public class JavaFieldWriterUtil {
         defaultCollectionImplClasses.put(TransferQueue.class, LinkedTransferQueue.class);
     }
 
+    /**
+     * Instantiates the class.
+     * @param clz class
+     * @return instantiated
+     * @throws AtlasException unexpected error
+     */
     public Object instantiateObject(Class<?> clz) throws AtlasException {
         if (clz == null) {
             throw new AtlasException("Cannot instantiate null class");
@@ -126,6 +146,12 @@ public class JavaFieldWriterUtil {
         }
     }
 
+    /**
+     * Loads the class.
+     * @param name name
+     * @return loaded
+     * @throws AtlasException unexpected error
+     */
     public Class<?> loadClass(String name) throws AtlasException {
         try {
             return this.classLoader.loadClass(name);
@@ -134,6 +160,11 @@ public class JavaFieldWriterUtil {
         }
     }
 
+    /**
+     * Gets the default collection implementation class.
+     * @param type collection type
+     * @return class
+     */
     public Class<?> getDefaultCollectionImplClass(CollectionType type) {
         if (type == CollectionType.LIST) {
             return this.defaultCollectionImplClasses.get(List.class);
@@ -143,6 +174,13 @@ public class JavaFieldWriterUtil {
         return null;
     }
 
+    /**
+     * Gets the child object.
+     * @param parentObject parent
+     * @param segment segment
+     * @return child
+     * @throws AtlasException unexpected error
+     */
     public Object getChildObject(Object parentObject, SegmentContext segment) throws AtlasException {
         String fieldName = segment.getName();
         if (LOG.isDebugEnabled()) {
@@ -186,6 +224,14 @@ public class JavaFieldWriterUtil {
         return childObject;
     }
 
+    /**
+     * Creates the complex child object.
+     * @param parentObject parent
+     * @param segmentContext segment
+     * @param clazz class
+     * @return created
+     * @throws AtlasException unexpected error
+     */
     public Object createComplexChildObject(Object parentObject, SegmentContext segmentContext, Class<?> clazz) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating object for segment:'{} \n\tparentObject: {} \n\tclass: {}",
@@ -213,6 +259,13 @@ public class JavaFieldWriterUtil {
         }
     }
 
+    /**
+     * Creates the complex child object.
+     * @param parentObject parent
+     * @param segmentContext segment
+     * @return created
+     * @throws AtlasException unexpected error
+     */
     public Object createComplexChildObject(Object parentObject, SegmentContext segmentContext) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating object for segment:'{} \n\tparentObject: {}", segmentContext, parentObject);
@@ -242,6 +295,13 @@ public class JavaFieldWriterUtil {
         }
     }
 
+    /**
+     * Sets the child object.
+     * @param parentObject parent
+     * @param childObject child
+     * @param segmentContext segment
+     * @throws AtlasException unexpected error
+     */
     public void setChildObject(Object parentObject, Object childObject, SegmentContext segmentContext) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Setting object for segment:'" + segmentContext.getExpression() + "'.\n\tchildObject: " + childObject
@@ -300,6 +360,13 @@ public class JavaFieldWriterUtil {
         }
     }
 
+    /**
+     * Resolves the child class.
+     * @param parentObject parent
+     * @param segment segment
+     * @return class
+     * @throws AtlasException unexpected error
+     */
     public Class<?> resolveChildClass(Object parentObject, SegmentContext segment) throws AtlasException {
         try {
             Method setterMethod = resolveSetterMethod(parentObject, segment, null);
@@ -317,6 +384,13 @@ public class JavaFieldWriterUtil {
         }
     }
 
+    /**
+     * Gets the collection item.
+     * @param collectionObject collection
+     * @param segmentContext segment
+     * @return item
+     * @throws AtlasException unexpected error
+     */
     public Object getCollectionItem(Object collectionObject, SegmentContext segmentContext) throws AtlasException {
         Integer index = segmentContext.getCollectionIndex();
         if (index == null) {
@@ -340,6 +414,13 @@ public class JavaFieldWriterUtil {
         throw new AtlasException("Cannot determine collection type from segment: " + segmentContext.getExpression());
     }
 
+    /**
+     * Adjusts the collection size.
+     * @param collectionObject collection
+     * @param segmentContext segment
+     * @return adjusted
+     * @throws AtlasException unexpected error
+     */
     public Object adjustCollectionSize(Object collectionObject, SegmentContext segmentContext) throws AtlasException {
         Object answer = collectionObject;
         Integer index = segmentContext.getCollectionIndex();
@@ -374,6 +455,14 @@ public class JavaFieldWriterUtil {
         return answer;
     }
 
+    /**
+     * Create complex collection item.
+     * @param collectionObject collection
+     * @param itemType item type
+     * @param segmentContext segment
+     * @return created
+     * @throws AtlasException unexpected error
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public Object createComplexCollectionItem(Object collectionObject, Class<?> itemType, SegmentContext segmentContext) throws AtlasException {
         Integer index = segmentContext.getCollectionIndex();
@@ -421,11 +510,26 @@ public class JavaFieldWriterUtil {
         throw new AtlasException("Cannot determine collection type for: " + collectionObject);
     }
 
+    /**
+     * Create complex collection item.
+     * @param parentObject parent
+     * @param collectionObject collection
+     * @param segmentContext segment
+     * @return created
+     * @throws AtlasException unexpected error
+     */
     public Object createComplexCollectionItem(Object parentObject, Object collectionObject, SegmentContext segmentContext) throws AtlasException {
         Class<?> itemClazz = resolveCollectionItemClass(parentObject, segmentContext);
         return createComplexCollectionItem(collectionObject, itemClazz, segmentContext);
     }
 
+    /**
+     * Resolves collection item class.
+     * @param parentObject parent
+     * @param segmentContext segment
+     * @return class
+     * @throws AtlasException unexpected error
+     */
     public Class<?> resolveCollectionItemClass(Object parentObject, SegmentContext segmentContext) throws AtlasException {
         Class<?> itemType = null;
         Method getterMethod = resolveGetterMethod(parentObject.getClass(), segmentContext.getName());
@@ -463,6 +567,13 @@ public class JavaFieldWriterUtil {
         return itemType;
     }
 
+    /**
+     * Sets the collection item.
+     * @param collectionObject collection
+     * @param item item
+     * @param segmentContext segment
+     * @throws AtlasException unexpected error
+     */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public void setCollectionItem(Object collectionObject, Object item, SegmentContext segmentContext)
             throws AtlasException {
@@ -511,6 +622,10 @@ public class JavaFieldWriterUtil {
         throw new AtlasException("Cannot determine collection type for: " + collectionObject);
     }
 
+    /**
+     * Gets the default collection implementation classes.
+     * @return default collection implementation classes.
+     */
     public Map<Class<?>, Class<?>> getDefaultCollectionImplClasses() {
         return this.defaultCollectionImplClasses;
     }
@@ -599,7 +714,7 @@ public class JavaFieldWriterUtil {
     }
 
     private static String capitalizeFirstLetter(String string) {
-        if (StringUtil.isEmpty(string)) {
+        if (AtlasUtil.isEmpty(string)) {
             return string;
         }
         if (string.length() == 1) {

@@ -31,18 +31,36 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converters for {@link Byte}.
+ */
 public class ByteConverter implements AtlasConverter<Byte> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Byte value) {
         return value != null ? BigDecimal.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Byte value) {
         return value != null ? BigInteger.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BOOLEAN,
             concerns = {AtlasConversionConcern.CONVENTION})
     public Boolean toBoolean(Byte value) {
@@ -52,16 +70,31 @@ public class ByteConverter implements AtlasConverter<Byte> {
         return value.byteValue() != 0;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.BYTE)
     public Byte toByte(Byte value) {
         return value != null ? new Byte(value) : null;
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.CHAR)
     public Character toCharacter(Byte value) {
         return value != null ? (char) value.byteValue() : null;
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME)
     public Date toDate(Byte value) {
         if (value == null) {
@@ -73,77 +106,152 @@ public class ByteConverter implements AtlasConverter<Byte> {
         return new Date(value);
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DOUBLE)
     public Double toDouble(Byte value) {
         return value != null ? (double) value : null;
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.FLOAT)
     public Float toFloat(Byte value) {
         return value != null ? (float) value : null;
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.INTEGER)
     public Integer toInteger(Byte value) {
         return value != null ? (int) value : null;
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Byte value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Byte value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Byte value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.LONG)
     public Long toLong(Byte value) {
         return value != null ? (long) value : null;
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.NUMBER)
     public Number toNumber(Byte value) {
         return toShort(value);
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.SHORT)
     public Short toShort(Byte value) {
         return value != null ? (short) value : null;
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING,
             concerns = {AtlasConversionConcern.CONVENTION})
     public String toString(Byte value) {
         return value != null ? String.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Byte value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Byte value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Byte value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Byte value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.BYTE, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Byte value) {
         return Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault());

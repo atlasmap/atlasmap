@@ -15,6 +15,10 @@
  */
 package io.atlasmap.spi;
 
+/**
+ * The converter interface. The AtlasMap field converter has to implement this interface.
+ * @param <T> Java type to convert from
+ */
 public interface AtlasConverter<T> {
 
 }

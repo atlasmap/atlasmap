@@ -40,6 +40,10 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The base implementation of the module validation service.
+ * @param <T> type of the field specific to the module
+ */
 public abstract class BaseModuleValidationService<T extends Field> implements AtlasValidationService {
 
     private AtlasConversionService conversionService;
@@ -49,6 +53,9 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
     private String docId;
     private MappingFieldPairValidator mappingFieldPairValidator;
 
+    /**
+     * A constructor.
+     */
     public BaseModuleValidationService() {
         this.conversionService = DefaultAtlasConversionService.getInstance();
         this.fieldActionService = DefaultAtlasFieldActionService.getInstance();
@@ -56,6 +63,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         init();
     }
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public BaseModuleValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         this.conversionService = conversionService;
         this.fieldActionService = fieldActionService;
@@ -67,22 +79,42 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         this.mappingFieldPairValidator = new MappingFieldPairValidator(this);
     }
 
+    /**
+     * Sets the module mode.
+     * @param mode module mode
+     */
     public void setMode(AtlasModuleMode mode) {
         this.mode = mode;
     }
 
+    /**
+     * Gets the module mode.
+     * @return module mode
+     */
     public AtlasModuleMode getMode() {
         return mode;
     }
 
+    /**
+     * Sets the Document ID.
+     * @param docId Document ID
+     */
     public void setDocId(String docId) {
         this.docId = docId;
     }
 
+    /**
+     * Gets the Document ID.
+     * @return Document ID
+     */
     public String getDocId() {
         return this.docId;
     }
 
+    /**
+     * Gets the {@link AtlasModuleDetail} which contains module metadata.
+     * @return module detail
+     */
     protected abstract AtlasModuleDetail getModuleDetail();
 
     @Override
@@ -119,6 +151,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         return validations;
     }
 
+    /**
+     * Validates mapping entries.
+     * @param mappings a list of the mapping entries
+     * @param validations a container to put the result validations
+     */
     protected void validateMappingEntries(List<BaseMapping> mappings, List<Validation> validations) {
         for (BaseMapping fieldMapping : mappings) {
             if (fieldMapping.getClass().isAssignableFrom(CustomMapping.class)) {
@@ -138,6 +175,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    /**
+     * Validates MAP mapping.
+     * @param mapping mapping
+     * @param validations a container to put the result validations
+     */
     protected void validateMapMapping(Mapping mapping, List<Validation> validations) {
         if (mapping == null
                 || mapping.getInputField() == null || (mapping.getInputFieldGroup() == null && mapping.getInputField().size() <= 0)
@@ -181,6 +223,11 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    /**
+     * Validates the custom mapping.
+     * @param mapping custom mapping
+     * @param validations a container to put the result validations
+     */
     protected void validateCustomMapping(CustomMapping mapping, List<Validation> validations) {
         if (mapping.getClassName() == null || mapping.getClassName().isEmpty()) {
             Validation v = new Validation();
@@ -191,10 +238,22 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    /**
+     * Validates the field group.
+     * @param mappingId mapping ID
+     * @param fieldGroup field group
+     * @param direction direction
+     * @param validations a container to put the result validations
+     */
     protected void validateFieldGroup(String mappingId, FieldGroup fieldGroup, FieldDirection direction, List<Validation> validations) {
         fieldGroup.getField().forEach(f -> {validateField(mappingId, null, f, direction, validations);});
     }
 
+    /**
+     * Validate the combination of source field(s) and target field(s).
+     * @param mapping mapping
+     * @param validations a container to put the result validations
+     */
     protected void validateFieldCombinations(Mapping mapping, List<Validation> validations) {
         String mappingId = mapping.getId();
         FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();
@@ -221,6 +280,14 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    /**
+     * Validates the field.
+     * @param mappingId mapping ID
+     * @param sourceField source field
+     * @param targetField target field
+     * @param direction direction
+     * @param validations a container to put the result validations
+     */
     @SuppressWarnings("unchecked")
     protected void validateField(String mappingId, Field sourceField, Field targetField, FieldDirection direction, List<Validation> validations) {
         if (targetField == null) {
@@ -266,14 +333,35 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    /**
+     * Gets the field type.
+     * @return field type class
+     */
     protected abstract Class<T> getFieldType();
 
+    /**
+     * Validates module specific field.
+     * @param mappingId mapping ID
+     * @param field field
+     * @param direction direction
+     * @param validation a container to put the result validations
+     */
     protected abstract void validateModuleField(String mappingId, T field, FieldDirection direction, List<Validation> validation);
 
+    /**
+     * Gets if Document ID is null or matches with the specified.
+     * @param docId Document ID
+     * @return true if the Document ID is null or matches with the specified.
+     */
     protected boolean matchDocIdOrNull(String docId) {
         return docId == null || getDocId().equals(docId);
     }
 
+    /**
+     * Gets the field name.
+     * @param field field
+     * @return field name
+     */
     @SuppressWarnings("unchecked")
     protected String getFieldName(Field field) {
         if (field == null) {
@@ -288,24 +376,49 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         return field.getClass().getName();
     }
 
+    /**
+     * Gets the module specific field name.
+     * @param field field
+     * @return field name
+     */
     protected abstract String getModuleFieldName(T field);
 
+    /**
+     * Gets the conversion service.
+     * @return conversion service
+     */
     protected AtlasConversionService getConversionService() {
         return conversionService;
     }
 
+    /**
+     * Gets the field action service.
+     * @return field action service.
+     */
     protected AtlasFieldActionService getFieldActionService() {
         return fieldActionService;
     }
 
+    /**
+     * Gets the mapping field pair validator.
+     * @return mapping field pair validator.
+     */
     protected MappingFieldPairValidator getMappingFieldPairValidator() {
         return mappingFieldPairValidator;
     }
 
+    /**
+     * Sets the mapping field pair validator.
+     * @param mfpv mapping field pair validator
+     */
     protected void setMappingFieldPairValidator(MappingFieldPairValidator mfpv) {
         mappingFieldPairValidator = mfpv;
     }
 
+    /**
+     * Sets the conversion service.
+     * @param conversionService conversion service
+     */
     protected void setConversionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
@@ -314,6 +427,12 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
      * vvv Remove in 2.0 vvv
      */
 
+    /**
+     * Validates combine mapping.
+     * @deprecated
+     * @param mapping mapping
+     * @param validations a container to put the result validations
+     */
     @Deprecated
     protected void validateCombineMapping(Mapping mapping, List<Validation> validations) {
         if (mapping == null) {
@@ -360,6 +479,12 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         }
     }
 
+    /**
+     * Validates separate mapping.
+     * @deprecated
+     * @param mapping mapping
+     * @param validations a container to put the result validations
+     */
     @Deprecated
     protected void validateSeparateMapping(Mapping mapping, List<Validation> validations) {
         if (mapping == null) {

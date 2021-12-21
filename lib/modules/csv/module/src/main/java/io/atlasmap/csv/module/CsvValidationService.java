@@ -25,10 +25,18 @@ import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.Validation;
 
+/**
+ * The module validation service implementation for CSV Document.
+ */
 public class CsvValidationService extends BaseModuleValidationService<CsvField> {
 
     private AtlasModuleDetail moduleDetail = CsvModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public CsvValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         super(conversionService, fieldActionService);
     }

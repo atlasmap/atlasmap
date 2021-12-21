@@ -18,8 +18,18 @@ package io.atlasmap.spi;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.Field;
 
+/**
+ * AtlasFieldReader reads the field value from source document. Each format specific module implement
+ * its own field reader.
+ */
 public interface AtlasFieldReader {
 
+    /**
+     * Reads the field.
+     * @param session session
+     * @return field
+     * @throws AtlasException unexpected error
+     */
     Field read(AtlasInternalSession session) throws AtlasException;
 
 }

@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Absolute Value</strong> field action.
+ */
 public class AbsoluteValue extends Action implements Serializable
 {
 

@@ -21,12 +21,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-
+/**
+ * The container of the {@link ActionDetail}.
+ */
 @JsonRootName("ActionDetails")
 public class ActionDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link ActionDetail} */
     protected List<ActionDetail> actionDetail;
 
     /**

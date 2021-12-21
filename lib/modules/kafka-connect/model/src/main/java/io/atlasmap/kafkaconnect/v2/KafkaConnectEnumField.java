@@ -19,13 +19,19 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Field;
 
+/**
+ * The enum field for Kafka Connect module.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class KafkaConnectEnumField extends Field {
 
     private static final long serialVersionUID = 1L;
 
+    /** Ordinal. */
     protected Integer ordinal;
+    /** Type name. */
     protected String typeName;
+    /** True if it's user created, or false. */
     protected Boolean userCreated;
 
     /**
@@ -100,6 +106,7 @@ public class KafkaConnectEnumField extends Field {
         this.userCreated = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -133,6 +140,7 @@ public class KafkaConnectEnumField extends Field {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

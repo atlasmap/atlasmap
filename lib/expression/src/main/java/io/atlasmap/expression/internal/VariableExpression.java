@@ -30,14 +30,27 @@ public class VariableExpression implements Expression {
 
     private final String name;
 
+    /**
+     * A constructor.
+     * @param name name
+     */
     public VariableExpression(String name) {
         this.name = name;
     }
 
+    /**
+     * Evaluates the expression context.
+     * @param expressionContext expression context
+     * @return result
+     */
     public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
         return expressionContext.getVariable(name);
     }
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     public String getName() {
         return name;
     }

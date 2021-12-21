@@ -20,11 +20,32 @@ import java.util.List;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The interface for validator implementations. Validator has to implement this interface.
+ */
 public interface AtlasValidator {
 
+    /**
+     * Gets if the specified class is supported.
+     * @param clazz class
+     * @return true if supported, or false
+     */
     boolean supports(Class<?> clazz);
 
+    /**
+     * Validates the object.
+     * @param target object
+     * @param validations container to store the results
+     * @param mappingId mapping ID
+     */
     void validate(Object target, List<Validation> validations, String mappingId);
 
+    /**
+     * Validates the object.
+     * @param target object
+     * @param validations container to store the results
+     * @param mappingId mapping ID
+     * @param status validation status
+     */
     void validate(Object target, List<Validation> validations, String mappingId, ValidationStatus status);
 }

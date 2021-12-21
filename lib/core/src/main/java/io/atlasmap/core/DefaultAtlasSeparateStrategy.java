@@ -22,9 +22,15 @@ import java.util.List;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 import io.atlasmap.spi.StringDelimiter;
 
+/**
+ * @deprecated {@link AtlasSeparateStrategy}.
+ */
+@Deprecated
 public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {
 
+    /** . */
     public static final Integer DEFAULT_SEPARATE_LIMIT = new Integer(512);
+    /** . */
     public static final StringDelimiter DEFAULT_SEPARATE_DELIMITER = StringDelimiter.MULTI_SPACE;
 
     private StringDelimiter delimiter = DEFAULT_SEPARATE_DELIMITER;

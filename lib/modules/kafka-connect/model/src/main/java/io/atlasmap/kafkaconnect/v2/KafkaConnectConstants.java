@@ -15,10 +15,15 @@
  */
 package io.atlasmap.kafkaconnect.v2;
 
+/**
+ * A collection of constants for Kafka Connect module.
+ */
 public final class KafkaConnectConstants {
-
+    /** The key for schemaType option. */
     public static final String OPTIONS_SCHEMA_TYPE = "schemaType";
+    /** The key for isKey option. */
     public static final String OPTIONS_IS_KEY = "isKey";
+    /** The key for schemaCacheSize option. */
     public static final Object OPTIONS_SCHEMA_CACHE_SIZE = "schemaCacheSize";
 
 }

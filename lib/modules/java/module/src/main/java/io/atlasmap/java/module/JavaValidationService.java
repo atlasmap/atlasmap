@@ -32,28 +32,42 @@ import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.spi.FieldDirection;
-import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 
+/**
+ * The module validation service for the Java Document.
+ * @see io.atlasmap.api.AtlasValidationService
+ */
 public class JavaValidationService extends BaseModuleValidationService<JavaField> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaValidationService.class);
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = JavaModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    /**
+     * A constructor.
+     */
     public JavaValidationService() {
         super();
         init();
     }
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public JavaValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         super(conversionService, fieldActionService);
         init();
     }
 
+    /**
+     * Initializes.
+     */
     public void init() {
         setMappingFieldPairValidator(new JavaMappingFieldPairValidator(this, getConversionService()));
         NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
@@ -71,6 +85,9 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
         validatorMap.put("output.field.type.not.null", outputFieldTypeNonNullValidator);
     }
 
+    /**
+     * Uninitializes.
+     */
     public void destroy() {
         validatorMap.clear();
     }
@@ -88,10 +105,6 @@ public class JavaValidationService extends BaseModuleValidationService<JavaField
     @Override
     protected String getModuleFieldName(JavaField field) {
         return field.getName() != null ? field.getName() : field.getPath();
-    }
-
-    protected void validateSourceAndTargetTypes(String mappingId, Field inputField, Field outField,
-            List<Validation> validations) {
     }
 
     @Override

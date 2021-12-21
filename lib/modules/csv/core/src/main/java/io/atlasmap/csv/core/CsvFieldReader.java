@@ -44,19 +44,28 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
 /**
+ * The {@link AtlasFieldReader} implementation for CSV Document.
  * It accepts InputStream as a document in order to process big files efficiently.
- * It uses the mark operation of the InputStream to reset the stream and read consecutive fields.
- * If InputStream does not support the mark operation it is wrapped in BufferedInputStream.
+ * It uses the mark operation of the {@link InputStream} to reset the stream and read consecutive fields.
+ * If InputStream does not support the mark operation it is wrapped in {@link BufferedInputStream}.
  */
 public class CsvFieldReader implements AtlasFieldReader {
 
     private final CsvConfig csvConfig;
     private InputStream document;
 
+    /**
+     * A constructor.
+     * @param csvConfig config
+     */
     public CsvFieldReader(CsvConfig csvConfig) {
         this.csvConfig = csvConfig;
     }
 
+    /**
+     * Sets the CSV Document.
+     * @param inputStream CSV Document
+     */
     public void setDocument(InputStream inputStream) {
         if (inputStream != null && !inputStream.markSupported()) {
             this.document = new BufferedInputStream(inputStream);

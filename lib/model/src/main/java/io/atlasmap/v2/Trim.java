@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Trim</strong> field action.
+ */
 public class Trim extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

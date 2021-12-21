@@ -39,8 +39,8 @@ import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
 /**
- * JSON instance document inspector. It consumes JSON instance document as an example
- * and build a AtlasMap Document model object from it.
+ * JSON instance inspector. It consumes JSON instance as an example
+ * and build a {@link JsonDocument} from it.
  */
 public class JsonInstanceInspector implements JsonInspector {
 
@@ -51,10 +51,15 @@ public class JsonInstanceInspector implements JsonInspector {
     private JsonInstanceInspector() {
     }
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static JsonInstanceInspector instance() {
         return myself;
     }
 
+    @Override
     public JsonDocument inspect(String instance) throws JsonInspectionException {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Start JSON instance inspection: {}", instance);

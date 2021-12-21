@@ -18,12 +18,17 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
+/**
+ * The model class for the <strong>Replace All</strong> field action.
+ */
 public class ReplaceAll extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** matching regular expression */
     protected String match;
-
+    /** new string replacing to */
     protected String newString;
 
     /**

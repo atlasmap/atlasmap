@@ -15,19 +15,42 @@
  */
 package io.atlasmap.spi;
 
+/**
+ * The enumeration of the {@link AtlasModule} mode, specifically
+ * {@link SOURCE} for the source document, {@link TARGET} for the target document,
+ * and {@link UNSET} for none of those.
+ */
 public enum AtlasModuleMode {
-    SOURCE("source"), TARGET("target"), UNSET("unset");
+    /** Source Document. */
+    SOURCE("source"),
+    /** Target Document. */
+    TARGET("target"),
+    /** None of those. */
+    UNSET("unset");
 
     private final String mode;
 
+    /**
+     * A constructor.
+     * @param mode mode
+     */
     AtlasModuleMode(String mode) {
         this.mode = mode;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return this.mode;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static AtlasModuleMode fromValue(String v) {
         for (AtlasModuleMode c : AtlasModuleMode.values()) {
             if (c.mode.equals(v)) {

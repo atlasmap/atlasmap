@@ -15,24 +15,45 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of the audit status.
+ */
 public enum AuditStatus {
 
+    /** All. */
     ALL("All"),
+    /** Info. */
     INFO("Info"),
+    /** Warn. */
     WARN("Warn"),
+    /** Error. */
     ERROR("Error"),
+    /** None. */
     NONE("None");
 
     private final String value;
 
+    /**
+     * A Constructor.
+     * @param v value
+     */
     AuditStatus(String v) {
         value = v;
     }
 
+    /**
+     * Gets a value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets an enum from value.
+     * @param v value
+     * @return an enum
+     */
     public static AuditStatus fromValue(String v) {
         for (AuditStatus c: AuditStatus.values()) {
             if (c.value.equals(v)) {

@@ -17,16 +17,23 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model object represents an entry in the {@link LookupTable}.
+ */
 public class LookupEntry implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** source value */
     protected String sourceValue;
 
+    /** source type */
     protected FieldType sourceType;
 
+    /** target value */
     protected String targetValue;
 
+    /** target type */
     protected FieldType targetType;
 
     /**

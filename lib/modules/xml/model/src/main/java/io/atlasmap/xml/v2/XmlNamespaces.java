@@ -19,10 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link XmlNamespace}.
+ */
 public class XmlNamespaces implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** A list of {@link XmlNamespace}. */
     protected List<XmlNamespace> xmlNamespace;
 
     /**
@@ -54,6 +57,7 @@ public class XmlNamespaces implements Serializable {
         return this.xmlNamespace;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -84,6 +88,7 @@ public class XmlNamespaces implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

@@ -24,6 +24,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The default implementation of {@link CompoundClassLoader}.
+ */
 class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(CompoundClassLoader.class);
 

@@ -17,6 +17,9 @@ package io.atlasmap.spi;
 
 import io.atlasmap.v2.Field;
 
+/**
+ * The interface for the collection helper class.
+ */
 public interface AtlasCollectionHelper {
 
     /**

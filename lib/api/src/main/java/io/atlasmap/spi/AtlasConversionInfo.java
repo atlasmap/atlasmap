@@ -20,13 +20,28 @@ import java.lang.annotation.RetentionPolicy;
 
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The annotation to be set on the converter method.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasConversionInfo {
 
+    /**
+     * Gets the source type.
+     * @return source type
+     */
     FieldType sourceType() default FieldType.ANY;
 
+    /**
+     * Gets the target type.
+     * @return target type
+     */
     FieldType targetType() default FieldType.ANY;
 
+    /**
+     * Gets the conversion concern.
+     * @return an array of conversion concern
+     */
     AtlasConversionConcern[] concerns() default { AtlasConversionConcern.NONE };
 
 }

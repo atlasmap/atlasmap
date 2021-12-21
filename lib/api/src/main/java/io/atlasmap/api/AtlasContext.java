@@ -18,10 +18,23 @@ package io.atlasmap.api;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Mapping;
 
+/**
+ * The AtlasMap mapping processing context. The instance of this corresponds to
+ * a mapping definition one-by-one.
+ */
 public interface AtlasContext {
 
+    /**
+     * Gets the {@link AtlasContextFactory} this context is created from.
+     * @return factory
+     */
     AtlasContextFactory getContextFactory();
 
+    /**
+     * Creates the {@link AtlasSession}.
+     * @return session
+     * @throws AtlasException unexpected error
+     */
     AtlasSession createSession() throws AtlasException;
 
     /*
@@ -29,8 +42,18 @@ public interface AtlasContext {
      * Consider moving following 3 methods into AtlasSession in V2
      */
 
+     /**
+      * Processes the mappings.
+      * @param session session
+      * @throws AtlasException unexpected error
+      */
     void process(AtlasSession session) throws AtlasException;
 
+    /**
+     * Validates the mappings.
+     * @param session session
+     * @throws AtlasException unexpected error
+     */
     void processValidation(AtlasSession session) throws AtlasException;
 
     /**
@@ -38,6 +61,7 @@ public interface AtlasContext {
      * 
      * @param mapping A mapping item to process preview
      * @return A list of audit log
+     * @throws AtlasException unexpected error
      */
     @Deprecated
     Audits processPreview(Mapping mapping) throws AtlasException;

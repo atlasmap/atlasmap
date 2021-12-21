@@ -20,21 +20,37 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 
+/**
+ * The CSV field.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class CsvField extends Field {
 
     private static final long serialVersionUID = 1L;
-
+    /** Column index. */
     private Integer column;
 
+    /**
+     * Sets the column index.
+     * @param column index
+     */
     public void setColumn(Integer column) {
         this.column = column;
     }
 
+    /**
+     * Gets the column index.
+     * @return index
+     */
     public Integer getColumn() {
         return column;
     }
 
+    /**
+     * Clones the CSV field.
+     * @param field field
+     * @return cloned
+     */
     public static CsvField cloneOf(CsvField field) {
         CsvField newField = new CsvField();
         AtlasModelFactory.copyField(field, newField, true);

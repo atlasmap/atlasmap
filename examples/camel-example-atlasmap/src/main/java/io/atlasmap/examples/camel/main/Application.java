@@ -18,6 +18,9 @@ package io.atlasmap.examples.camel.main;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.main.Main;
 
+/**
+ * An example for running AtlasMap data mapping through the camel-atlasmap component.
+ */
 public class Application extends RouteBuilder {
 
     @Override
@@ -29,6 +32,11 @@ public class Application extends RouteBuilder {
             .log("--&lt; Received: [${body}]");
     }
 
+    /**
+     * The application entry point.
+     * @param args args
+     * @throws Exception unexpected error
+     */
     public static void main(String args[]) throws Exception {
         Main camelMain = new Main();
         camelMain.addRouteBuilder(new Application());

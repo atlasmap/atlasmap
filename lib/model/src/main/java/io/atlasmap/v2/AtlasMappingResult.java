@@ -21,13 +21,18 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The result of processing mappings.
+ */
 @JsonRootName("AtlasMappingResult")
 public class AtlasMappingResult implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link TargetDocument} */
     protected List<TargetDocument> targetDocuments;
 
+    /** {@link Audits} */
     protected Audits audits;
 
     /**

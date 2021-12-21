@@ -18,13 +18,26 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * The base class for Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
 public abstract class BaseInspectionRequest implements Serializable {
+    /** Paths to inspect. */
     protected List<String> inspectPaths;
 
+    /**
+     * Gets the paths to inspect.
+     * @return paths
+     */
     public List<String> getInspectPaths() {
         return inspectPaths;
     }
 
+    /**
+     * Sets the paths to inspect.
+     * @param inspectPaths paths
+     */
     public void setInspectPaths(List<String> inspectPaths) {
         this.inspectPaths = inspectPaths;
     }

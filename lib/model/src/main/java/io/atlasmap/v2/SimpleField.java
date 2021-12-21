@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The simple {@link Field} model object.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class SimpleField extends Field {
 

@@ -42,9 +42,13 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
 
+/**
+ * The Generate Inspections Mojo performs offline inspection and writes down
+ * the inspection result Document into a JSON file.
+ */
 @Mojo(name = "generate-inspections")
 public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
-
+    /** Default output file prefix. */
     public static final String DEFAULT_OUTPUT_FILE_PREFIX = "atlasmap-inspection";
 
     /**
@@ -104,10 +108,19 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
     @Parameter()
     private List<Inspection> inspections;
 
+    /**
+     * The enumeration for the inspection type, i.e. {@link InspectionType#SCHEMA} or {@link InspectionType#INSTANCE}.
+     */
     public enum InspectionType {
-        SCHEMA, INSTANCE
+        /** Schema. */
+        SCHEMA,
+        /** Instance. */
+        INSTANCE
     }
 
+    /**
+     * The inspection parameters.
+     */
     public static class Inspection {
         private List<String> artifacts;
         private String className;
@@ -117,63 +130,120 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         private String fileName;
         private InspectionType inspectionType;
 
+        /**
+         * Gets the class name.
+         * @return class name
+         */
         public String getClassName() {
             return className;
         }
 
+        /**
+         * Get sthe class names.
+         * @return class names
+         */
         public List<String> getClassNames() {
             return classNames;
         }
 
+        /**
+         * Sets the class name.
+         * @param className class name
+         */
         public void setClassName(String className) {
             this.className = className;
         }
 
+        /**
+         * Sets the class names.
+         * @param classNames class names.
+         */
         public void setClassNames(List<String> classNames) {
             this.classNames = classNames;
         }
 
+        /**
+         * Gets the collection type.
+         * @return collection type
+         */
         public String getCollectionType() {
             return collectionType;
         }
 
+        /**
+         * Sets the collection type.
+         * @param collectionType connection type
+         */
         public void setCollectionType(String collectionType) {
             this.collectionType = collectionType;
         }
 
+        /**
+         * Gets the collection class name.
+         * @return collection class name
+         */
         public String getCollectionClassName() {
             return collectionClassName;
         }
 
+        /**
+         * Sets the collection class name.
+         * @param collectionClassName collection class name
+         */
         public void setCollectionClassName(String collectionClassName) {
             this.collectionClassName = collectionClassName;
         }
 
+        /**
+         * Gets the artifacts.
+         * @return artifacts
+         */
         public List<String> getArtifacts() {
             return artifacts;
         }
 
+        /**
+         * Sets the artifacts.
+         * @param artifacts artifacts
+         */
         public void setArtifacts(List<String> artifacts) {
             this.artifacts = artifacts;
         }
 
+        /**
+         * Gets the file name.
+         * @return file name
+         */
         public String getFileName() {
             return this.fileName;
         }
 
+        /**
+         * Sets the file name.
+         * @param fileName file name
+         */
         public void setFileName(String fileName) {
             this.fileName = fileName;
         }
 
+        /**
+         * Gets the inspection type.
+         * @return inspection type
+         */
         public InspectionType getInspectionType() {
             return this.inspectionType;
         }
 
+        /**
+         * Sets the inspection type.
+         * @param inspectionType inspection type
+         */
         public void setInspectionType(InspectionType inspectionType) {
             this.inspectionType = inspectionType;
         }
     }
 
+    @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         if (getOutputDir() != null) {
             getOutputDir().mkdirs();
@@ -333,26 +403,50 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         }
     }
 
+    /**
+     * Gets the artifacts.
+     * @return artifacts
+     */
     public List<String> getArtifacts() {
         return artifacts;
     }
 
+    /**
+     * Sets the artifacts.
+     * @param artifacts artifacts
+     */
     public void setArtifacts(List<String> artifacts) {
         this.artifacts = artifacts;
     }
 
+    /**
+     * Gets the class name.
+     * @return class name
+     */
     public String getClassName() {
         return className;
     }
 
+    /**
+     * Sets the class name.
+     * @param className class name
+     */
     public void setClassName(String className) {
         this.className = className;
     }
 
+    /**
+     * Gets the inspections.
+     * @return inspections
+     */
     public List<Inspection> getInspections() {
         return inspections;
     }
 
+    /**
+     * Sets the inspections.
+     * @param inspections inspections
+     */
     public void setInspections(List<Inspection> inspections) {
         this.inspections = inspections;
     }

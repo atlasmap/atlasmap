@@ -46,6 +46,9 @@ import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.SimpleField;
 
+/**
+ * The base implementation of the {@link AtlasModule} which implements common routines.
+ */
 public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean {
     private static final Logger LOG = LoggerFactory.getLogger(BaseAtlasModule.class);
 
@@ -112,6 +115,14 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         }
     }
 
+    /**
+     * Processes Lookup mapping.
+     * @param session session
+     * @param lookupTable lookup table
+     * @param sourceValue source value
+     * @param targetField target field
+     * @throws AtlasException unexpected error
+     */
     protected void processLookupField(AtlasInternalSession session, LookupTable lookupTable, Object sourceValue,
             Field targetField) throws AtlasException {
         String lookupValue = null;
@@ -143,6 +154,12 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         targetField.setValue(targetValue);
     }
 
+    /**
+     * Applies target field actions.
+     * @param session session
+     * @return processed field
+     * @throws AtlasException unexpected error
+     */
     protected Field applyTargetFieldActions(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getTargetField();
         if (isAutomaticallyProcessOutputFieldActions() && field.getActions() != null
@@ -152,6 +169,12 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         return field;
     }
 
+    /**
+     * Applies source field actions.
+     * @param session session
+     * @return processed field
+     * @throws AtlasException unexpected error
+     */
     protected Field applySourceFieldActions(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
         if (field.getActions() != null && field.getActions() != null) {
@@ -254,14 +277,27 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
         this.collectionHelper = createCollectionHelper(atlasFieldActionService);
     }
 
+    /**
+     * Creates the collection helper.
+     * @param fieldActionService field action service
+     * @return collection helper
+     */
     protected AtlasCollectionHelper createCollectionHelper(AtlasFieldActionService fieldActionService) {
         return new DefaultAtlasCollectionHelper(fieldActionService);
     }
 
+    /**
+     * Gets if it processes target field actions automatically.
+     * @return true if it processes automatically, or false
+     */
     public boolean isAutomaticallyProcessOutputFieldActions() {
         return automaticallyProcessOutputFieldActions;
     }
 
+    /**
+     * Sets if it processes target field actions automatically.
+     * @param automaticallyProcessOutputFieldActions true if it processes automatically, or false
+     */
     public void setAutomaticallyProcessOutputFieldActions(boolean automaticallyProcessOutputFieldActions) {
         this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;
     }

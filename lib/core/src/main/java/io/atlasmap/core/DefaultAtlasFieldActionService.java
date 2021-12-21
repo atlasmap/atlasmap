@@ -38,9 +38,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.spi.ActionProcessor;
@@ -66,6 +63,9 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Multiplicity;
 import io.atlasmap.v2.SimpleField;
 
+/**
+ * The default implementation of {@link AtlasFieldActionService}.
+ */
 public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasFieldActionService.class);
@@ -86,6 +86,10 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         this.conversionService = conversionService;
     }
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static DefaultAtlasFieldActionService getInstance() {
         if (instance == null) {
             synchronized (DefaultAtlasFieldActionService.class) {
@@ -98,16 +102,19 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return instance;
     }
 
+    /**
+     * Initializes with the class loader which loaded this class.
+     */
     public void init() {
         // TODO load custom field actions in application bundles
         // on hierarchical class loader environment
         init(this.getClass().getClassLoader());
     }
 
-    private JavaType javaType(Type type) {
-        return TypeFactory.defaultInstance().constructType(type);
-    }
-
+    /**
+     * Initializes with the class loader.
+     * @param classLoader class loader
+     */
     public void init(ClassLoader classLoader) {
         Lock writeLock = actionProcessorsLock.writeLock();
         try {
@@ -120,10 +127,19 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
     }
 
+    /**
+     * Loads field actions from the classpath.
+     * @return a list of {@link ActionProcessor}
+     */
     public List<ActionProcessor> loadFieldActions() {
         return loadFieldActions(this.getClass().getClassLoader());
     }
 
+    /**
+     * Loads field actions from the classpath.
+     * @param classLoader class loader
+     * @return a list of {@link ActionProcessor}
+     */
     public List<ActionProcessor> loadFieldActions(ClassLoader classLoader) {
         final ServiceLoader<AtlasFieldAction> fieldActionServiceLoader = ServiceLoader.load(AtlasFieldAction.class,
             classLoader);
@@ -526,12 +542,10 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         }
     }
 
-    /*
-     * TODO: getActionDetailByActionName() when all references are updated to use
-     *
-     * ActionDetail = findActionDetail(String actionName, FieldType sourceType)
-     *
-     * ref: https://github.com/atlasmap/atlasmap-runtime/issues/216
+    /**
+     * @deprecated .
+     * @param actionName name
+     * @return detail
      */
     @Deprecated
     protected ActionDetail getActionDetailByActionName(String actionName) {
@@ -596,6 +610,12 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return findBestActionProcessor(matches, sourceType);
     }
 
+    /**
+     * Finds the {@link ActionProcessor} that matches with the name and value type.
+     * @param name name
+     * @param value value
+     * @return action processor
+     */
     public ActionProcessor findActionProcessor(String name, Object value) {
         FieldType valueType = (value != null ? getConversionService().fieldTypeFromClass(value.getClass()) : FieldType.NONE);
         String uppercaseName = name.toUpperCase();
@@ -631,6 +651,13 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return processors.get(0);
     }
 
+    /**
+     * Instantiate the field action impl class from {@link ActionProcessor} and processes it.
+     * @param actionProcessor action processor
+     * @param actionParameters action parameters
+     * @param field field
+     * @return processed field
+     */
     public Field buildAndProcessAction(ActionProcessor actionProcessor, Map<String, Object> actionParameters, Field field) {
         FieldType valueType = determineFieldType(field);
 
@@ -979,6 +1006,10 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         return expected.equals(actual);
     }
 
+    /**
+     * Gets the conversion service.
+     * @return conversion service
+     */
     public AtlasConversionService getConversionService() {
         return this.conversionService;
     }

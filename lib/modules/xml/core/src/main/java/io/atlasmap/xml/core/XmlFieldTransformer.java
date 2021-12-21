@@ -24,26 +24,49 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * The base class for both of {@link XmlFieldReader} and {@link XmlFieldWriter}
+ * to put common routimes together.
+ */
 public abstract class XmlFieldTransformer {
-
+    /** Namespaces. */
     protected Map<String, String> namespaces = new HashMap<>();
+    /** Class loader. */
     protected ClassLoader classLoader;
+    /** XML IO helper. */
     protected XmlIOHelper xmlHelper;
 
+    /**
+     * A constructor.
+     * @param cl class loader
+     */
     public XmlFieldTransformer(ClassLoader cl) {
         this(cl, new HashMap<>());
     }
 
+    /**
+     * A constructor.
+     * @param cl class loader
+     * @param namespaces namespaces
+     */
     public XmlFieldTransformer(ClassLoader cl, Map<String, String> namespaces) {
         this.classLoader = cl;
         this.xmlHelper = new XmlIOHelper(cl);
         this.namespaces = namespaces;
     }
 
+    /**
+     * Gets the namespaces.
+     * @param namespaces namespaces
+     */
     public void setNamespaces(Map<String, String> namespaces) {
         this.namespaces = namespaces;
     }
 
+    /**
+     * Gathers namespaces declared in the XML Document and put into {@link #namespaces}.
+     * @param document XML Document
+     */
     protected void seedDocumentNamespaces(Document document) {
         NodeList nodeList = document.getChildNodes();
         if (namespaces == null) {

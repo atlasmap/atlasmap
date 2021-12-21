@@ -45,6 +45,9 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModule} implementation for Kafka Connect.
+ */
 @AtlasModuleDetail(name = "KafkaConnectModule", uri = "atlas:kafkaconnect", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "kafkaconnect" }, configPackages = { "io.atlasmap.kafkaconnect.v2" })
 public class KafkaConnectModule extends BaseAtlasModule {

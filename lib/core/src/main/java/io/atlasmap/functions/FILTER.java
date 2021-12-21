@@ -27,6 +27,17 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
+/**
+ * The {@code FILTER()} function to fliter a list of fields.
+ * The common usecase is to filter the parent COMPLEX field by filtering with the one of
+ * the children, then collects the other child with {@code SELECT()}. For example:
+ * <pre>
+ * {@code
+ *    SELECT( FILTER( ${Employees:/employee<>}, ${/status} == 'active' ), ${/firstName} )
+ * }
+ * </pre>
+ * where {@code /status} and {@code /firstName} are the children of {@code /employee}.
+ */
 public class FILTER extends BaseFunctionFactory {
 
     @Override

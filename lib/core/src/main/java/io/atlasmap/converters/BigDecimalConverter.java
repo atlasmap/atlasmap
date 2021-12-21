@@ -32,18 +32,36 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-public class BigDecimalConverter implements AtlasConverter<BigInteger> {
+/**
+ * The type converters for {@link BigDecimal}.
+ */
+public class BigDecimalConverter implements AtlasConverter<BigDecimal> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(BigDecimal value) {
         return value;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(BigDecimal value) {
         return value != null ? value.toBigInteger() : null;
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.BOOLEAN)
     public Boolean toBoolean(BigDecimal value) {
         if (value == null) {
@@ -52,6 +70,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.BYTE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Byte toByte(BigDecimal value) throws AtlasConversionException {
@@ -66,6 +90,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.CHAR,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Character toCharacter(BigDecimal value) throws AtlasConversionException {
@@ -81,6 +111,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         return Character.valueOf((char) value.intValue());
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param date value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE_TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Date toDate(BigDecimal date) throws AtlasConversionException {
@@ -99,6 +135,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DOUBLE,
             concerns = {AtlasConversionConcern.RANGE})
     public Double toDouble(BigDecimal value) throws AtlasConversionException {
@@ -113,6 +155,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         return answer;
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.FLOAT,
             concerns = AtlasConversionConcern.RANGE)
     public Float toFloat(BigDecimal value) throws AtlasConversionException {
@@ -127,6 +175,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         return answer;
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.INTEGER,
             concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(BigDecimal value) throws AtlasConversionException {
@@ -141,6 +195,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalDate toLocalDate(BigDecimal value) throws AtlasConversionException {
@@ -156,6 +216,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalTime toLocalTime(BigDecimal value) throws AtlasConversionException {
@@ -171,6 +237,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE_TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalDateTime toLocalDateTime(BigDecimal value) throws AtlasConversionException {
@@ -186,6 +258,12 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.LONG,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Long toLong(BigDecimal value) throws AtlasConversionException {
@@ -200,11 +278,22 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.NUMBER)
     public Number toNumber(BigDecimal value) {
         return value;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.SHORT,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Short toShort(BigDecimal value) throws AtlasConversionException {
@@ -219,31 +308,62 @@ public class BigDecimalConverter implements AtlasConverter<BigInteger> {
         }
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.STRING)
     public String toString(BigDecimal value) {
         return value != null ? value.toString() : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(BigDecimal value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.STRING)
     public CharSequence toCharSequence(BigDecimal value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(BigDecimal value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(BigDecimal value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DECIMAL, targetType = FieldType.DATE_TIME_TZ,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public ZonedDateTime toZonedDateTime(BigDecimal value) throws AtlasConversionException {

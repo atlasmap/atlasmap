@@ -19,12 +19,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Convert Mass Unit</strong> field action.
+ */
 public class ConvertMassUnit extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** mass unit to convert from */
     protected MassUnitType fromUnit;
 
+    /** mass unit to convert to */
     protected MassUnitType toUnit;
 
     /**

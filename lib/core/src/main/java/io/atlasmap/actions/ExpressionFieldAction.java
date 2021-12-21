@@ -27,8 +27,21 @@ import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.Field;
 
+/**
+ * The expression field action.
+ * @deprecated expression is now decleared at {@link io.atlasmap.v2.Mapping} level and processed directly in {@link io.atlasmap.core.DefaultAtlasContext}.
+ */
+@Deprecated
 public class ExpressionFieldAction implements AtlasFieldAction {
 
+    /**
+     * Processes expression field action.
+     * @param action action model
+     * @param args expression arguments
+     * @return processed
+     * @throws ExpressionException expression processing error
+     */
+    @Deprecated
     @AtlasActionProcessor
     public static Object process(io.atlasmap.v2.Expression action, List<Object> args) throws ExpressionException {
         if (action.getExpression() == null || action.getExpression().trim().isEmpty()) {

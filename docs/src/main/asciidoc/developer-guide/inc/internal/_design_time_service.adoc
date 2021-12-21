@@ -32,3 +32,9 @@ XML Service provides XML inspection service which generate an AtlasMap Document 
 * API Reference: link:openapi/dfdl/index.html[API]
 
 XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.
+
+=== Kafka Connect Service
+* Code Location: https://github.com/atlasmap/atlasmap/blob/main/lib/modules/kafka-connect/service
+* API Reference: link:openapi/kafka-connect/index.html[API]
+
+Kafka Connect Service provides Kafka Connect inspection service which generate an AtlasMap Document object from Kafka Connect schema such as JSON or AVRO.

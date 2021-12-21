@@ -23,22 +23,26 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.BaseInspectionRequest;
 import io.atlasmap.v2.StringList;
 
+/**
+ * The top container object of XML Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
 @JsonRootName("XmlInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class XmlInspectionRequest extends BaseInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** Field name exclusions. */
     protected StringList fieldNameExclusions;
-
+    /** Type name exclusions. */
     protected StringList typeNameExclusions;
-
+    /** Namespace exclusions. */
     protected StringList namespaceExclusions;
-
+    /** Raw XML schema/instance data to inspect. */
     protected String xmlData;
-
+    /** URI. */
     protected String uri;
-
+    /** Inspection type. */
     protected InspectionType type;
 
     /**
@@ -185,6 +189,7 @@ public class XmlInspectionRequest extends BaseInspectionRequest implements Seria
         this.type = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -310,6 +315,7 @@ public class XmlInspectionRequest extends BaseInspectionRequest implements Seria
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

@@ -42,10 +42,17 @@ public class ActionListUpgradeDeserializer extends JsonDeserializer<ArrayList<Ac
 
     private ClassLoader classLoader;
 
+    /**
+     * A constructor.
+     */
     public ActionListUpgradeDeserializer() {
         this.classLoader = getClass().getClassLoader();
     }
 
+    /**
+     * A constructor.
+     * @param classLoader class loader
+     */
     public ActionListUpgradeDeserializer(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }

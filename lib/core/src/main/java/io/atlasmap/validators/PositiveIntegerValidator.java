@@ -22,11 +22,19 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The positive integer validator.
+ */
 public class PositiveIntegerValidator implements AtlasValidator {
 
     private String violationMessage;
     private ValidationScope scope;
 
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     */
     public PositiveIntegerValidator(ValidationScope scope, String violationMessage) {
         this.violationMessage = violationMessage;
         this.scope = scope;

@@ -20,6 +20,12 @@ import java.util.Vector;
 import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
 
+/**
+ * Represents the simple type restriction in XML schema. This copies the properties from
+ * XSOM {@link XSRestrictionSimpleType} and holds them.
+ * 
+ * @see XSRestrictionSimpleType
+ */
 @SuppressWarnings("unused")
 public class SimpleTypeRestriction {
 
@@ -34,6 +40,10 @@ public class SimpleTypeRestriction {
     private String maxExclusive = null;
     private String minExclusive = null;
 
+    /**
+     * Initializes from XSOM {@link XSRestrictionSimpleType}.
+     * @param restriction restriction
+     */
     public void initRestrictions(XSRestrictionSimpleType restriction) {
         if (restriction != null) {
             Vector<String> enumeration = new Vector<>();

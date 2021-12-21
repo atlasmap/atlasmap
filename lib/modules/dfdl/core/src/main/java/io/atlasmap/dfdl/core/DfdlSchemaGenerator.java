@@ -25,10 +25,25 @@ import org.w3c.dom.Document;
  */
 public interface DfdlSchemaGenerator {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     String getName();
 
+    /**
+     * Generates the DFDL Document.
+     * @param classLoader class loader
+     * @param options options
+     * @return Document
+     * @throws Exception unexpected error
+     */
     Document generate(ClassLoader classLoader, Map<String, String> options) throws Exception;
 
+    /**
+     * Gets the options.
+     * @return options
+     */
     String[] getOptions();
 
 }

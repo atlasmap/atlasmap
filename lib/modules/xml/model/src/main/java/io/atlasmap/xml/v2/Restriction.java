@@ -17,12 +17,17 @@ package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
 
+/**
+ * Represents the XML schema restrictions.
+ * @see RestrictionType
+ */
 public class Restriction implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** restriction type. */
     protected RestrictionType type;
-
+    /** restriction value. */
     protected String value;
 
     /**
@@ -73,6 +78,7 @@ public class Restriction implements Serializable {
         this.value = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -122,6 +128,7 @@ public class Restriction implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

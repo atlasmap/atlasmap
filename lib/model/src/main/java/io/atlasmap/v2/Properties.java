@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of {@link Property}.
+ */
 public class Properties implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Property} */
     protected List<Property> property;
 
     /**

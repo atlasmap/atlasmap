@@ -33,19 +33,37 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link Float}.
+ */
 public class FloatConverter implements AtlasConverter<Float> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Float value) {
         return value != null ? BigDecimal.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.FRACTIONAL_PART)
     public BigInteger toBigInteger(Float value) {
         return value != null ? BigDecimal.valueOf(value).toBigInteger() : null;
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
     public Boolean toBoolean(Float value) {
@@ -58,6 +76,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return Boolean.TRUE;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE })
     public Byte toByte(Float value) throws AtlasConversionException {
@@ -72,6 +96,12 @@ public class FloatConverter implements AtlasConverter<Float> {
                 value)));
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character toCharacter(Float value) throws AtlasConversionException {
@@ -87,6 +117,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return Character.valueOf((char) value.intValue());
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Date toDate(Float value) throws AtlasConversionException {
@@ -100,6 +136,11 @@ public class FloatConverter implements AtlasConverter<Float> {
         return new Date(value.longValue());
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DOUBLE)
     public Double toDouble(Float value) {
         if (value == null) {
@@ -108,6 +149,11 @@ public class FloatConverter implements AtlasConverter<Float> {
         return value.doubleValue();
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.FLOAT)
     public Float toFloat(Float value) {
         if (value == null) {
@@ -117,6 +163,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return value.floatValue();
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(Float value) throws AtlasConversionException {
         if (value == null) {
@@ -129,6 +181,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return value.intValue();
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalDate toLocalDate(Float value) throws AtlasConversionException {
@@ -142,6 +200,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalTime toLocalTime(Float value) throws AtlasConversionException {
@@ -155,6 +219,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public LocalDateTime toLocalDateTime(Float value) throws AtlasConversionException {
@@ -168,6 +238,12 @@ public class FloatConverter implements AtlasConverter<Float> {
         return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG,
             concerns = AtlasConversionConcern.RANGE)
     public Long toLong(Float value) throws AtlasConversionException {
@@ -181,11 +257,22 @@ public class FloatConverter implements AtlasConverter<Float> {
         return value.longValue();
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.NUMBER)
     public Number toNumber(Float value) {
         return value;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short toShort(Float value) throws AtlasConversionException {
         if (value == null) {
@@ -198,31 +285,62 @@ public class FloatConverter implements AtlasConverter<Float> {
         return value.shortValue();
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public String toString(Float value) {
         return value != null ? String.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Float value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Float value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Float value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Float value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME_TZ,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public ZonedDateTime toZonedDateTime(Float value) throws AtlasConversionException {

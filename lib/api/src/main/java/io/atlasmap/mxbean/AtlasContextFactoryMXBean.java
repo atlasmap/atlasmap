@@ -15,14 +15,33 @@
  */
 package io.atlasmap.mxbean;
 
+/**
+ * The {@link io.atlasmap.api.AtlasContextFactory} MBean.
+ */
 public interface AtlasContextFactoryMXBean {
 
+    /**
+     * Gets the UUID.
+     * @return UUID
+     */
     String getUuid();
 
+    /**
+     * Gets the class name.
+     * @return class name
+     */
     String getClassName();
 
+    /**
+     * Gets the thread name.
+     * @return thread name
+     */
     String getThreadName();
 
+    /**
+     * Gets the version.
+     * @return version
+     */
     String getVersion();
 
 }

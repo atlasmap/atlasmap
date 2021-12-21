@@ -25,10 +25,17 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The class loader to load a class from jar files.
+ */
 public class JarClassLoader extends ClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
     private URLClassLoader loader;
 
+    /**
+     * A constructor.
+     * @param paths path to the jar files
+     */
     public JarClassLoader(String... paths) {
         Set<URL> urls = new HashSet<>();
         for (String path : paths) {
@@ -62,10 +69,12 @@ public class JarClassLoader extends ClassLoader {
         return loader.loadClass(name);
     }
 
+    @Override
     public URL getResource(String name) {
         return loader.getResource(name);
     }
 
+    @Override
     public InputStream getResourceAsStream(String name) {
         return loader.getResourceAsStream(name);
     }

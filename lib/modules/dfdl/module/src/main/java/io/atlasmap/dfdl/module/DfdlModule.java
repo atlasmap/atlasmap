@@ -41,6 +41,9 @@ import io.atlasmap.dfdl.core.DfdlSchemaResolver;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.xml.module.XmlModule;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModule} implementation for the DFDL Document.
+ */
 @AtlasModuleDetail(name = "DfdlModule", uri = "atlas:dfdl", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "dfdl" }, configPackages = { "io.atlasmap.dfdl.v2" })
 public class DfdlModule extends XmlModule {

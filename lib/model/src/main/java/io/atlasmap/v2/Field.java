@@ -21,6 +21,9 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
+/**
+ * The Field model object.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public abstract class Field
     implements Serializable
@@ -28,30 +31,43 @@ public abstract class Field
 
     private static final long serialVersionUID = 1L;
 
+    /** actions */
     protected ArrayList<Action> actions;
 
+    /** field value */
     protected Object value;
 
+    /** array dimension */
     protected Integer arrayDimensions;
 
+    /** array size */
     protected Integer arraySize;
 
+    /** collection type */
     protected CollectionType collectionType;
 
+    /** Document ID */
     protected String docId;
 
+    /** field index */
     protected Integer index;
 
+    /** field path */
     protected String path;
 
+    /** true if it's required field, or false */
     protected Boolean required;
 
+    /** field status */
     protected FieldStatus status;
 
+    /** field type */
     protected FieldType fieldType;
 
+    /** field value format */
     protected String format;
 
+    /** field name */
     protected String name;
 
     /**

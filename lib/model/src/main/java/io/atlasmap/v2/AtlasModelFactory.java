@@ -23,17 +23,32 @@ import java.util.List;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * The factory class for common AtlasMap model objects.
+ */
 public class AtlasModelFactory {
 
+    /** The path expression for the generated field. */
     public static final String GENERATED_PATH = "$ATLASMAP";
 
     private AtlasModelFactory() {
     }
 
+    /**
+     * Creates a {@link Mapping} model object.
+     * @param <T> type
+     * @return {@link Mapping} model object
+     */
     public static <T extends BaseMapping> T createMapping() {
         return createMapping(MappingType.MAP);
     }
 
+    /**
+     * Creates a {@link Mapping} model object.
+     * @param <T> type
+     * @param type type
+     * @return {@link Mapping} model object
+     */
     @SuppressWarnings("unchecked")
     public static <T extends BaseMapping> T createMapping(MappingType type) {
         T fm = null;
@@ -58,6 +73,10 @@ public class AtlasModelFactory {
         }
     }
 
+    /**
+     * Creates an {@link AtlasMapping} model object.
+     * @return {@link AtlasMapping} model object
+     */
     public static AtlasMapping createAtlasMapping() {
         AtlasMapping mapping = new AtlasMapping();
         mapping.setMappings(new Mappings());
@@ -66,6 +85,10 @@ public class AtlasModelFactory {
         return mapping;
     }
 
+    /**
+     * Creates a {@link Collection} model object.
+     * @return {@link Collection} model object
+     */
     public static Collection createCollection() {
         Collection collectionMapping = new Collection();
         collectionMapping.setMappings(new Mappings());
@@ -73,20 +96,38 @@ public class AtlasModelFactory {
         return collectionMapping;
     }
 
+    /**
+     * Creates a {@link MockDocument}.
+     * @return {@link MockDocument}
+     */
     public static MockDocument createMockDocument() {
         MockDocument mockDocument = new MockDocument();
         mockDocument.setFields(new Fields());
         return mockDocument;
     }
 
+    /**
+     * Creates a {@link MockField}.
+     * @return {@link MockField}
+     */
     public static MockField createMockField() {
         return new MockField();
     }
 
+    /**
+     * Creates a {@link PropertyField}.
+     * @return {@link PropertyField}
+     */
     public static PropertyField createPropertyField() {
         return new PropertyField();
     }
 
+    /**
+     * Clones a {@link BaseMapping}.
+     * @param baseMapping {@link BaseMapping} to clone
+     * @param deepClone true to deep clone
+     * @return cloned {@link BaseMapping}
+     */
     public static BaseMapping cloneMapping(BaseMapping baseMapping, boolean deepClone) {
         if (baseMapping.getMappingType().equals(MappingType.COLLECTION)) {
             Collection mapping = (Collection) baseMapping;
@@ -126,6 +167,11 @@ public class AtlasModelFactory {
         return clone;
     }
 
+    /**
+     * Clones a {@link Field}.
+     * @param f {@link Field} to clone
+     * @return cloned {@link Field}
+     */
     public static Field cloneField(Field f) {
         throw new IllegalArgumentException("Use module specific factories to clone fields");
     }
@@ -145,6 +191,11 @@ public class AtlasModelFactory {
         return newfg;
     }
 
+    /**
+     * Clones a {@link Field} to a {@link SimpleField}.
+     * @param field {@link Field} to clone
+     * @return cloned {@link SimpleField}
+     */
     public static SimpleField cloneFieldToSimpleField(Field field) {
         if (field == null) {
             return null;
@@ -155,6 +206,12 @@ public class AtlasModelFactory {
         return f;
     }
 
+    /**
+     * Copies {@link Field} properties.
+     * @param from from
+     * @param to to
+     * @param withActions true to copy actions
+     */
     public static void copyField(Field from, Field to, boolean withActions) {
         if (withActions) {
             to.setActions(cloneFieldActions(from.getActions()));
@@ -192,12 +249,23 @@ public class AtlasModelFactory {
         // We can't clone so don't set value
     }
 
+    /**
+     * Creates a {@link FieldGroup} from the {@link Field} passed in.
+     * @param field a source {@link Field} to copy from
+     * @param withActions true to copy actions
+     * @return created {@link FieldGroup}
+     */
     public static FieldGroup createFieldGroupFrom(Field field, boolean withActions) {
         FieldGroup answer = new FieldGroup();
         copyField(field, answer, withActions);
         return answer;
     }
 
+    /**
+     * Clones a list of {@link Action}.
+     * @param actions a list of {@link Action} to clone
+     * @return cloned
+     */
     public static ArrayList<Action> cloneFieldActions(ArrayList<Action> actions) {
         if (actions == null) {
             return null;
@@ -215,6 +283,11 @@ public class AtlasModelFactory {
         return n;
     }
 
+    /**
+     * Clones an {@link Action}.
+     * @param action {@link Action}
+     * @return cloned
+     */
     public static Action cloneAction(Action action) {
         if (action == null) {
             return null;
@@ -230,6 +303,11 @@ public class AtlasModelFactory {
         }
     }
 
+    /**
+     * Gets a string description of the {@link Field}.
+     * @param f field
+     * @return string description
+     */
     protected static String baseFieldToString(Field f) {
         if (f == null) {
             return "";
@@ -256,6 +334,11 @@ public class AtlasModelFactory {
         return tmp.toString();
     }
 
+    /**
+     * Gets a string description of the {@link PropertyField}.
+     * @param f property field
+     * @return string description
+     */
     public static String toString(PropertyField f) {
         StringBuilder tmp = new StringBuilder("PropertyField [name=");
         if (f != null && f.getName() != null) {
@@ -266,6 +349,11 @@ public class AtlasModelFactory {
         return tmp.toString();
     }
 
+    /**
+     * Gets a string description of the {@link Field}.
+     * @param f field
+     * @return string description
+     */
     public static String toString(Field f) {
         StringBuilder tmp = new StringBuilder("Field [name=");
         if (f != null) {
@@ -276,10 +364,21 @@ public class AtlasModelFactory {
         return tmp.toString();
     }
 
+    /**
+     * Wraps the passed in object with a {@link Field}.
+     * @param val object
+     * @return wrapped {@link Field}
+     */
     public static Field wrapWithField(Object val) {
         return wrapWithField(val, "/");
     }
 
+    /**
+     * Wraps the passed in object with a {@link Field}.
+     * @param val object
+     * @param parentPath parent path
+     * @return wrapped {@link Field}
+     */
     public static Field wrapWithField(Object val, String parentPath) {
         if (val instanceof java.util.Collection) {
             Object[] collection = ((java.util.Collection)val).toArray();
@@ -298,6 +397,11 @@ public class AtlasModelFactory {
         return answer;
     }
 
+    /**
+     * Unwraps the field and return a value. It returns a {@link List} if it's a collection.
+     * @param f field
+     * @return value
+     */
     public static Object unwrapField(Field f) {
         if (f == null) {
             return null;

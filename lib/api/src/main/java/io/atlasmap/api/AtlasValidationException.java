@@ -15,22 +15,41 @@
  */
 package io.atlasmap.api;
 
+/**
+ * The Exception indicates the validation error.
+ */
 public class AtlasValidationException extends AtlasException {
 
     private static final long serialVersionUID = 6537018220259702613L;
 
+    /**
+     * A constructor.
+     */
     public AtlasValidationException() {
         super();
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     * @param cause cause
+     */
     public AtlasValidationException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     */
     public AtlasValidationException(String message) {
         super(message);
     }
 
+    /**
+     * A constructor.
+     * @param cause cause
+     */
     public AtlasValidationException(Throwable cause) {
         super(cause);
     }

@@ -15,10 +15,15 @@
  */
 package io.atlasmap.xml.core;
 
+/**
+ * The collection of constants for AtlasMap XML module.
+ */
 public final class AtlasXmlConstants {
-
+    /** SchemaSet namespace. */
     public static final String ATLAS_XML_SCHEMASET_NAMESPACE = "http://atlasmap.io/xml/schemaset/v2";
+    /** Namespace alias for XML schema. */
     public static final String NS_PREFIX_XMLSCHEMA = "xs";
+    /** Namespace alias for SchemaSet. */
     public static final String NS_PREFIX_SCHEMASET = "ss";
 
 }

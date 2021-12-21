@@ -25,11 +25,19 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The not-empty validator.
+ */
 public class NotEmptyValidator implements AtlasValidator {
 
     private String violationMessage;
     private ValidationScope scope;
 
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     */
     public NotEmptyValidator(ValidationScope scope, String violationMessage) {
         this.violationMessage = violationMessage;
         this.scope = scope;
@@ -41,6 +49,11 @@ public class NotEmptyValidator implements AtlasValidator {
                 || clazz.isAssignableFrom(Set.class) || clazz.isAssignableFrom(Collection.class);
     }
 
+    /**
+     * Gets if the specified instance is supported.
+     * @param object object
+     * @return true if supported, or false
+     */
     public boolean supports(Object object) {
         return (object instanceof List || object instanceof Map || object instanceof Set
                 || object instanceof Collection);

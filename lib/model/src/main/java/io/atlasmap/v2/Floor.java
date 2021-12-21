@@ -16,6 +16,10 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+
+/**
+ * The model class for the <strong>Floor</strong> field action.
+ */
 public class Floor extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -24,9 +24,10 @@ import java.util.Map;
  * @param <K> key
  * @param <V> value
  */
-
 public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     private static final long serialVersionUID = -342098639681884413L;
+
+    /** max cache size */
     protected int maxCacheSize = 10000;
 
     /**
@@ -64,6 +65,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     }
 
     /**
+     * Gets max cache size.
      * @return Returns the maxCacheSize.
      */
     public int getMaxCacheSize() {
@@ -71,12 +73,18 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     }
 
     /**
+     * Sets max cache size.
      * @param maxCacheSize The maxCacheSize to set.
      */
     public void setMaxCacheSize(int maxCacheSize) {
         this.maxCacheSize = maxCacheSize;
     }
 
+    /**
+     * Removes eldest entry.
+     * @param eldest eldest entry
+     * @return true if removed, or false
+     */
     protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
         if( size() > maxCacheSize ) {
             onCacheEviction(eldest);
@@ -85,6 +93,10 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
         return false;
     }
 
+    /**
+     * Do nothing for now.
+     * @param eldest eldest
+     */
     protected void onCacheEviction(Map.Entry<K,V> eldest) {
     }
 }

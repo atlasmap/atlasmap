@@ -19,13 +19,18 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Pad String Left</strong> field action.
+ */
 public class PadStringLeft extends Action implements Serializable
 {
 
     private static final long serialVersionUID = 1L;
 
+    /** pad character */
     protected String padCharacter;
 
+    /** pad count */
     protected Integer padCount;
 
     /**

@@ -37,12 +37,15 @@ import io.atlasmap.v2.Field;
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
+    /** true to convert string expressions, or false. */
     public static final ThreadLocal<Boolean> CONVERT_STRING_EXPRESSIONS = new ThreadLocal<Boolean>();
+    /** Regular expression control characters. */
     private static final Set<Character> REGEXP_CONTROL_CHARS = new HashSet<Character>();
-
+    /** true to convert string expressions, or false */
     boolean convertStringExpressions = false;
 
     /**
+     * A constructor.
      * @param left left {@link Expression}
      * @param right right {@link Expression}
      */
@@ -51,10 +54,24 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         convertStringExpressions = CONVERT_STRING_EXPRESSIONS.get()!=null;
     }
 
+    /**
+     * Creates between expression.
+     * @param value value
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createBetween(Expression value, Expression left, Expression right) {
         return LogicExpression.createAND(createGreaterThanEqual(value, left), createLessThanEqual(value, right));
     }
 
+    /**
+     * Creates not between expression.
+     * @param value value
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createNotBetween(Expression value, Expression left, Expression right) {
         return LogicExpression.createOR(createLessThan(value, left), createGreaterThan(value, right));
     }
@@ -152,6 +169,13 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         }
     }
 
+    /**
+     * Creates like expression.
+     * @param left left
+     * @param right right
+     * @param escape escape
+     * @return result
+     */
     public static BooleanExpression createLike(Expression left, String right, String escape) {
         if (escape != null && escape.length() != 1) {
             throw new RuntimeException("The ESCAPE string litteral is invalid.  It can only be one character.  Litteral used: " + escape);
@@ -164,10 +188,23 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         return new LikeExpression(left, right, c);
     }
 
+    /**
+     * Creates not like expression.
+     * @param left left
+     * @param right right
+     * @param escape escape
+     * @return result
+     */
     public static BooleanExpression createNotLike(Expression left, String right, String escape) {
         return UnaryExpression.createNOT(createLike(left, right, escape));
     }
 
+    /**
+     * Creates in expression.
+     * @param left left
+     * @param elements elements
+     * @return result
+     */
     public static BooleanExpression createInFilter(Expression left, List elements) {
 
         if (!(left instanceof VariableExpression)) {
@@ -177,6 +214,12 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 
     }
 
+    /**
+     * Creates not in expression.
+     * @param left left
+     * @param elements elements
+     * @return result
+     */
     public static BooleanExpression createNotInFilter(Expression left, List elements) {
 
         if (!(left instanceof VariableExpression)) {
@@ -186,18 +229,40 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 
     }
 
+    /**
+     * Creates is null expression.
+     * @param left left
+     * @return result
+     */
     public static BooleanExpression createIsNull(Expression left) {
         return doCreateEqual(left, ConstantExpression.NULL);
     }
 
+    /**
+     * Creates is not null expression.
+     * @param left left
+     * @return result
+     */
     public static BooleanExpression createIsNotNull(Expression left) {
         return UnaryExpression.createNOT(doCreateEqual(left, ConstantExpression.NULL));
     }
 
+    /**
+     * Creates not equal expression.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createNotEqual(Expression left, Expression right) {
         return UnaryExpression.createNOT(createEqual(left, right));
     }
 
+    /**
+     * creates equal expression.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createEqual(Expression left, Expression right) {
         checkEqualOperandCompatability(left, right);
         return doCreateEqual(left, right);
@@ -233,6 +298,12 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         };
     }
 
+    /**
+     * Creates greater than expression.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createGreaterThan(final Expression left, final Expression right) {
         checkLessThanOperand(left);
         checkLessThanOperand(right);
@@ -247,6 +318,12 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         };
     }
 
+    /**
+     * Creates greater than equal expression.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createGreaterThanEqual(final Expression left, final Expression right) {
         checkLessThanOperand(left);
         checkLessThanOperand(right);
@@ -261,6 +338,12 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         };
     }
 
+    /**
+     * Creates less than expression.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createLessThan(final Expression left, final Expression right) {
         checkLessThanOperand(left);
         checkLessThanOperand(right);
@@ -277,6 +360,12 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         };
     }
 
+    /**
+     * Creates less than equal expression.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     public static BooleanExpression createLessThanEqual(final Expression left, final Expression right) {
         checkLessThanOperand(left);
         checkLessThanOperand(right);
@@ -325,6 +414,11 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         }
     }
 
+    /**
+     * Evaluates the expression context.
+     * @param expressionContext expression context
+     * @return {@link Field}
+     */
     public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
         Comparable<Comparable> lv = (Comparable)left.evaluate(expressionContext).getValue();
         if (lv == null) {
@@ -337,6 +431,12 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         return wrapWithField(compare(lv, rv));
     }
 
+    /**
+     * Performs {@link java.lang.Comparable#compareTo(Object)}.
+     * @param lv left
+     * @param rv right
+     * @return result
+     */
     protected Boolean compare(Comparable lv, Comparable rv) {
         Class<? extends Comparable> lc = lv.getClass();
         Class<? extends Comparable> rc = rv.getClass();
@@ -525,8 +625,18 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         return asBoolean(lv.compareTo(rv)) ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    /**
+     * Gets a boolean value from the integer.
+     * @param answer integer
+     * @return result
+     */
     protected abstract boolean asBoolean(int answer);
 
+    /**
+     * Check if the result of expression evaluation is true or not.
+     * @param message expression context
+     * @return result
+     */
     public boolean matches(ExpressionContext message) throws ExpressionException {
         Object object = evaluate(message).getValue();
         return object != null && object == Boolean.TRUE;

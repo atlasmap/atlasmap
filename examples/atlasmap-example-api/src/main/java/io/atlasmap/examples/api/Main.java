@@ -32,13 +32,31 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
+/**
+ * An example for running AtlasMap data mapping through the core API.
+ * This consumes mapping definition JSON file alone without packaging
+ * into ADM archive file. While it still works for the simple testing
+ * purpose, functionality is limited in this usage. Use ADM Archive file
+ * to leverage full feature of AtlasMap.
+ * @deprecated Use ADM Archive file instead of mapping definition JSON file alone
+ */
+@Deprecated
 public class Main {
 
+    /**
+     * The application entry point.
+     * @param args arguments
+     * @throws Exception unexpected error
+     */
     public static void main(String args[]) throws Exception {
         Main m = new Main();
         m.process();
     }
 
+    /**
+     * Processes AtlasMap data mapping.
+     * @throws Exception unexpected error
+     */
     public void process() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("atlasmapping.json");
         AtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();

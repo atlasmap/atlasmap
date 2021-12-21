@@ -15,25 +15,46 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of {@link Validation} scope.
+ */
 public enum ValidationScope {
-
+    /** All. */
     ALL("All"),
+    /** DataSource. */
     DATA_SOURCE("DataSource"),
+    /** Mapping. */
     MAPPING("Mapping"),
+    /** LookupTable. */
     LOOKUP_TABLE("LookupTable"),
+    /** Constant. */
     CONSTANT("Constant"),
+    /** Property. */
     PROPERTY("Property");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     ValidationScope(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static ValidationScope fromValue(String v) {
         for (ValidationScope c: ValidationScope.values()) {
             if (c.value.equals(v)) {

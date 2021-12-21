@@ -46,6 +46,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.v2.Json;
 
+/**
+ * The base Mojo of AtlasMap maven plugin.
+ * @see GenerateFieldActionsMojo
+ * @see GenerateInspectionsMojo
+ */
 public abstract class AbstractAtlasMapMojo extends AbstractMojo {
 
     @Component
@@ -69,6 +74,12 @@ public abstract class AbstractAtlasMapMojo extends AbstractMojo {
     @Parameter()
     private File outputFile;
 
+    /**
+     * Resolves the classpath.
+     * @param artifacts artifacts
+     * @return resolved
+     * @throws MojoFailureException unexpected error
+     */
     protected List<URL> resolveClasspath(List<String> artifacts) throws MojoFailureException {
         final List<URL> urls = new ArrayList<>();
 
@@ -112,6 +123,12 @@ public abstract class AbstractAtlasMapMojo extends AbstractMojo {
         return urls;
     }
 
+    /**
+     * Writes to the JSON file.
+     * @param name file name
+     * @param object object to write
+     * @throws MojoExecutionException failure
+     */
     protected void writeToJsonFile(String name, Object object) throws MojoExecutionException {
         try {
             ObjectMapper objectMapper = Json.mapper();
@@ -128,42 +145,82 @@ public abstract class AbstractAtlasMapMojo extends AbstractMojo {
         }
     }
 
+    /**
+     * Gets the repository system.
+     * @return repository system
+     */
     public RepositorySystem getSystem() {
         return system;
     }
 
+    /**
+     * Sets the repository system.
+     * @param system repository system
+     */
     public void setSystem(RepositorySystem system) {
         this.system = system;
     }
 
+    /**
+     * Gets the remote repositories.
+     * @return remote repos
+     */
     public List<RemoteRepository> getRemoteRepos() {
         return remoteRepos;
     }
 
+    /**
+     * Sets the remote reopsitories.
+     * @param remoteRepos remote repos
+     */
     public void setRemoteRepos(List<RemoteRepository> remoteRepos) {
         this.remoteRepos = remoteRepos;
     }
 
+    /**
+     * Get the repository system session.
+     * @return repo session
+     */
     public RepositorySystemSession getRepoSession() {
         return repoSession;
     }
 
+    /**
+     * Sets the repository system session.
+     * @param repoSession repo session
+     */
     public void setRepoSession(RepositorySystemSession repoSession) {
         this.repoSession = repoSession;
     }
 
+    /**
+     * Gets the output directory.
+     * @return output directory
+     */
     public File getOutputDir() {
         return outputDir;
     }
 
+    /**
+     * Sets the output directory.
+     * @param outputDir output directory
+     */
     public void setOutputDir(File outputDir) {
         this.outputDir = outputDir;
     }
 
+    /**
+     * Gets the output file.
+     * @return output file
+     */
     public File getOutputFile() {
         return outputFile;
     }
 
+    /**
+     * Sets the output file.
+     * @param outputFile output file
+     */
     public void setOutputFile(File outputFile) {
         this.outputFile = outputFile;
     }

@@ -18,6 +18,11 @@ package io.atlasmap.examples.camel.main;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.main.Main;
 
+/**
+ * An example for running AtlasMap data mapping through camel-atlasmap component.
+ * This example shows how to perform data mapping from multiple source Documents
+ * with using AtlasMap Data Mapper running as a part of Camel route.
+ */
 public class Application extends RouteBuilder {
 
     @Override
@@ -40,6 +45,11 @@ public class Application extends RouteBuilder {
             .log("--< Outcome: [${body}]");
     }
 
+    /**
+     * The application entry point.
+     * @param args args
+     * @throws Exception unexpected error
+     */
     public static void main(String args[]) throws Exception {
         Main camelMain = new Main();
         camelMain.addRouteBuilder(new Application());

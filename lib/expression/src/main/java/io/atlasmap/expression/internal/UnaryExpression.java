@@ -37,12 +37,22 @@ import io.atlasmap.v2.Field;
 public abstract class UnaryExpression implements Expression {
 
     private static final BigDecimal BD_LONG_MIN_VALUE = BigDecimal.valueOf(Long.MIN_VALUE);
+    /** right */
     protected Expression right;
 
+    /**
+     * A constructor.
+     * @param left left
+     */
     public UnaryExpression(Expression left) {
         this.right = left;
     }
 
+    /**
+     * Creates negate expression.
+     * @param left left
+     * @return result
+     */
     public static Expression createNegate(Expression left) {
         return new UnaryExpression(left) {
             public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
@@ -62,6 +72,13 @@ public abstract class UnaryExpression implements Expression {
         };
     }
 
+    /**
+     * Creates in expression.
+     * @param right right
+     * @param elements elements
+     * @param not not
+     * @return result
+     */
     public static BooleanExpression createInExpression(VariableExpression right, List<Object> elements, final boolean not) {
 
         // Use a HashSet if there are many elements.
@@ -136,6 +153,11 @@ public abstract class UnaryExpression implements Expression {
         }
     };
 
+    /**
+     * Creates not expression.
+     * @param left left
+     * @return result
+     */
     public static BooleanExpression createNOT(BooleanExpression left) {
         return new BooleanUnaryExpression(left) {
             public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
@@ -152,6 +174,11 @@ public abstract class UnaryExpression implements Expression {
         };
     }
 
+    /**
+     * Creates boolean cast.
+     * @param left left
+     * @return result
+     */
     public static BooleanExpression createBooleanCast(Expression left) {
         return new BooleanUnaryExpression(left) {
             public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
@@ -205,10 +232,18 @@ public abstract class UnaryExpression implements Expression {
         }
     }
 
+    /**
+     * Gets the right expression.
+     * @return right
+     */
     public Expression getRight() {
         return right;
     }
 
+    /**
+     * Sets the right expression.
+     * @param expression right
+     */
     public void setRight(Expression expression) {
         right = expression;
     }

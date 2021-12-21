@@ -33,10 +33,17 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The lookup table validator.
+ */
 public class LookupTableNameValidator implements AtlasValidator {
 
     private String violationMessage;
 
+    /**
+     * A constructor.
+     * @param violationMessage violation message
+     */
     public LookupTableNameValidator(String violationMessage) {
         this.violationMessage = violationMessage;
     }

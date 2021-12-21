@@ -19,10 +19,14 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Last Index Of</strong> field action.
+ */
 public class LastIndexOf extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** string to test */
     protected String string;
 
     /**

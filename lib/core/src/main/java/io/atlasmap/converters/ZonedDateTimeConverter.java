@@ -32,20 +32,39 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link ZonedDateTime}.
+ */
 public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DECIMAL,
             concerns = AtlasConversionConcern.TIMEZONE)
     public BigDecimal toBigDecimal(ZonedDateTime value) {
         return value != null ? BigDecimal.valueOf(getEpochMilli(value)) : null;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.TIMEZONE)
     public BigInteger toBigInteger(ZonedDateTime value) {
         return value != null ? BigInteger.valueOf(getEpochMilli(value)) : null;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.BYTE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.TIMEZONE})
     public Byte toByte(ZonedDateTime value) throws AtlasConversionException {
@@ -60,34 +79,65 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
                 String.format("ZonedDateTime %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value));
     }
 
+    /**
+     * Converts to {@link Calendar}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public Calendar toCalendar(ZonedDateTime value) {
         return value != null ? GregorianCalendar.from(value) : null;
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.TIMEZONE)
     public Date toDate(ZonedDateTime value) {
         return value != null ? Date.from(value.toInstant()) : null;
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DOUBLE,
             concerns = AtlasConversionConcern.TIMEZONE)
     public Double toDouble(ZonedDateTime value) {
         return value != null ? getEpochMilli(value).doubleValue() : null;
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.FLOAT,
             concerns = AtlasConversionConcern.TIMEZONE)
     public Float toFloat(ZonedDateTime value) {
         return value != null ? getEpochMilli(value).floatValue() : null;
     }
 
+    /**
+     * Converts to {@link GregorianCalendar}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar toGregorianCalendar(ZonedDateTime value) {
         return value != null ? GregorianCalendar.from(value) : null;
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.INTEGER,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.TIMEZONE})
     public Integer toInteger(ZonedDateTime value) throws AtlasConversionException {
@@ -102,27 +152,53 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
         return longValue.intValue();
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
     public LocalDate toLocalDate(ZonedDateTime value) {
         return value != null ? value.toLocalDate() : null;
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(ZonedDateTime value) {
         return value != null ? value.toLocalDateTime() : null;
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
     public LocalTime toLocalTime(ZonedDateTime value) {
         return value != null ? value.toLocalTime() : null;
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.LONG,
             concerns = AtlasConversionConcern.TIMEZONE)
     public Long toLong(ZonedDateTime value) {
         return value != null ? getEpochMilli(value) : null;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.SHORT,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.TIMEZONE})
     public Short toShort(ZonedDateTime value) throws AtlasConversionException {
@@ -137,52 +213,102 @@ public class ZonedDateTimeConverter implements AtlasConverter<ZonedDateTime> {
         return longValue.shortValue();
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public String toString(ZonedDateTime value) {
         return value != null ? value.toString() : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(ZonedDateTime value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public CharSequence toCharSequence(ZonedDateTime value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(ZonedDateTime value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(ZonedDateTime value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.NUMBER,
             concerns = AtlasConversionConcern.TIMEZONE)
     public Number toNumber(ZonedDateTime value) {
         return value != null ? getEpochMilli(value) : null;
     }
 
+    /**
+     * Converts to {@link java.sql.Date}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE)
     public java.sql.Date toSqlDate(ZonedDateTime value) {
         return value != null ? java.sql.Date.valueOf(value.toLocalDate()) : null;
     }
 
+    /**
+     * Converts to {@link java.sql.Time}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.TIME)
     public java.sql.Time toSqlTime(ZonedDateTime value) {
         return value != null ? java.sql.Time.valueOf(value.toLocalTime()) : null;
     }
 
+    /**
+     * Converts to {@link java.sql.Timestamp}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public java.sql.Timestamp toSqlTimestamp(ZonedDateTime value) {
         return value != null ? java.sql.Timestamp.valueOf(value.toLocalDateTime()) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(ZonedDateTime value) {
         return value;

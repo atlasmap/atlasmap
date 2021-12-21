@@ -29,9 +29,13 @@ import org.apache.maven.plugins.annotations.Parameter;
 import io.atlasmap.core.DefaultAtlasFieldActionService;
 import io.atlasmap.v2.ActionDetails;
 
+/**
+ * The Generate Field Actions Mojo loads the AtlasMap Field Actions available in the classpath
+ * and generates the metadata JSON.
+ */
 @Mojo(name = "generate-field-actions")
 public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
-
+    /** Default output file prefix. */
     public static final String DEFAULT_OUTPUT_FILE_PREFIX = "atlasmap-field-action";
 
     /**
@@ -77,22 +81,41 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
     @Parameter()
     private List<FieldAction> fieldActions;
 
+    /**
+     * The Field Action metadata.
+     */
     public static class FieldAction {
         private List<String> artifacts;
         private List<String> jars;
 
+        /**
+         * Gets the artifacts.
+         * @return artifacts
+         */
         public List<String> getArtifacts() {
             return artifacts;
         }
 
+        /**
+         * Sets the artifacts.
+         * @param artifacts artifacts
+         */
         public void setArtifacts(List<String> artifacts) {
             this.artifacts = artifacts;
         }
 
+        /**
+         * Get the jars.
+         * @return jars
+         */
         public List<String> getJars() {
             return this.jars;
         }
 
+        /**
+         * Sets the jars.
+         * @param jars jars
+         */
         public void setJars(List<String> jars) {
             this.jars = jars;
         }
@@ -171,26 +194,50 @@ public class GenerateFieldActionsMojo extends AbstractAtlasMapMojo {
         writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX, answer);
     }
 
+    /**
+     * Gets the artifacts.
+     * @return artifacts
+     */
     public List<String> getArtifacts() {
         return artifacts;
     }
 
+    /**
+     * Sets the artifacts.
+     * @param artifacts artifacts
+     */
     public void setArtifacts(List<String> artifacts) {
         this.artifacts = artifacts;
     }
 
+    /**
+     * Gets the field action metadata.
+     * @return field action metadata
+     */
     public List<FieldAction> getFieldActions() {
         return fieldActions;
     }
 
+    /**
+     * Sets the field action metadata.
+     * @param fieldActions field action metadata
+     */
     public void setFieldActions(List<FieldAction> fieldActions) {
         this.fieldActions = fieldActions;
     }
 
+    /**
+     * Gets the field action output directory.
+     * @return output directory
+     */
     public File getFieldActionOutputDir() {
         return fieldActionOutputDir;
     }
 
+    /**
+     * Sets the field action output directory.
+     * @param outputDir output directory
+     */
     public void setFieldActionOutputDir(File outputDir) {
         this.fieldActionOutputDir = outputDir;
     }

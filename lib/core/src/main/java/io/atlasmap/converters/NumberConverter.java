@@ -30,6 +30,9 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link Number}.
+ */
 public class NumberConverter implements AtlasConverter<Number> {
     private BigDecimalConverter bigDecimalConverter = new BigDecimalConverter();
     private BigIntegerConverter bigIntegerConverter = new BigIntegerConverter();
@@ -40,106 +43,231 @@ public class NumberConverter implements AtlasConverter<Number> {
     private LongConverter longConverter = new LongConverter();
     private ShortConverter shortConverter = new ShortConverter();
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Number value) throws AtlasConversionException {
         return invoke(value, BigDecimal.class);
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Number value) throws AtlasConversionException {
         return invoke(value, BigInteger.class);
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.BOOLEAN)
     public Boolean toBoolean(Number value) throws AtlasConversionException {
         return invoke(value, Boolean.class);
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.BYTE)
     public Byte toByte(Number value) throws AtlasConversionException {
         return invoke(value, Byte.class);
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.CHAR)
     public Character toCharacter(Number value) throws AtlasConversionException {
         return invoke(value, Character.class);
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE_TIME)
     public Date toDate(Number value) throws AtlasConversionException {
         return invoke(value, Date.class);
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DOUBLE)
     public Double toDouble(Number value) throws AtlasConversionException {
         return invoke(value, Double.class);
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.FLOAT)
     public Float toFloat(Number value) throws AtlasConversionException {
         return invoke(value, Float.class);
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.INTEGER)
     public Integer toInteger(Number value) throws AtlasConversionException {
         return invoke(value, Integer.class);
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Number value) throws AtlasConversionException {
         return invoke(value, LocalDate.class);
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Number value) throws AtlasConversionException {
         return invoke(value, LocalTime.class);
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Number value) throws AtlasConversionException {
         return invoke(value, LocalDateTime.class);
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.LONG)
     public Long toLong(Number value) throws AtlasConversionException {
         return invoke(value, Long.class);
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER)
     public Number toNumber(Number value) {
         return value;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.SHORT)
     public Short toShort(Number value) throws AtlasConversionException {
         return invoke(value, Short.class);
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public String toString(Number value) throws AtlasConversionException {
         return invoke(value, String.class);
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Number value) throws AtlasConversionException {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Number value) throws AtlasConversionException {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Number value) throws AtlasConversionException {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Number value) throws AtlasConversionException {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException conversion error
+     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Number value) throws AtlasConversionException {
         return invoke(value, ZonedDateTime.class);

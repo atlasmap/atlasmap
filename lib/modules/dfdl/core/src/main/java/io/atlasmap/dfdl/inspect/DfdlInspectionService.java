@@ -19,18 +19,39 @@ import java.util.Map;
 
 import io.atlasmap.xml.v2.XmlDocument;
 
+/**
+ * The DFDL inspection service.
+ */
 public class DfdlInspectionService {
     private DfdlInspector inspector;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     public DfdlInspectionService(ClassLoader loader) {
         this.inspector = new DfdlInspector(loader);
     }
 
+    /**
+     * Inspects the DFDL instance.
+     * @param dfdlSchemaName instance
+     * @param options options
+     * @return inspected
+     * @throws Exception unexpected error
+     */
     public XmlDocument inspectDfdlInstance(String dfdlSchemaName, Map<String, String> options) throws Exception {
         inspector.inspectInstance(dfdlSchemaName, options);
         return inspector.getXmlDocument();
     }
 
+    /**
+     * Inspects the DFDL schema.
+     * @param dfdlSchemaName schema
+     * @param options options
+     * @return inspected
+     * @throws Exception unexpected error
+     */
     public XmlDocument inspectDfdlSchema(String dfdlSchemaName, Map<String, String> options) throws Exception {
         inspector.inspectSchema(dfdlSchemaName, options);
         return inspector.getXmlDocument();

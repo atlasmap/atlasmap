@@ -17,20 +17,29 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * Represents an audit entry.
+ */
 public class Audit implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** message */
     protected String message;
 
+    /** Document ID */
     protected String docId;
 
+    /** Document name */
     protected String docName;
 
+    /** field path */
     protected String path;
 
+    /** field value */
     protected String value;
 
+    /** {@link AuditStatus} */
     protected AuditStatus status;
 
     /**

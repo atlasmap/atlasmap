@@ -48,6 +48,9 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * DFDL Service provides DFDL inspection service which generate an AtlasMap Document object from DFDL instance or DFDL schema.
+ */
 @Path("/dfdl/")
 public class DfdlService {
 
@@ -56,6 +59,11 @@ public class DfdlService {
     @Context
     private ResourceContext resourceContext;
 
+    /**
+     * Serializes to a JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
@@ -64,6 +72,13 @@ public class DfdlService {
         }
     }
 
+    /**
+     * Deserializes from a JSON.
+     * @param <T> type
+     * @param value value
+     * @param clazz type
+     * @return deserialized
+     */
     protected <T> T fromJson(InputStream value, Class<T>clazz) {
         try {
             return Json.mapper().readValue(value, clazz);
@@ -72,6 +87,11 @@ public class DfdlService {
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
@@ -81,6 +101,11 @@ public class DfdlService {
         return "Got it! " + from;
     }
 
+    /**
+     * Inspects a DFDL schema or instance and return a Document object.
+     * @param request {@link DfdlInspectionRequest}
+     * @return {@link DfdlInspectionResponse}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -92,6 +117,11 @@ public class DfdlService {
         return inspect(fromJson(request, DfdlInspectionRequest.class));
     }
 
+    /**
+     * Inspects a DFDL schema or instance and return a Document object.
+     * @param request request
+     * @return {@link DfdlInspectionResponse}
+     */
     public Response inspect(DfdlInspectionRequest request) {
         long startTime = System.currentTimeMillis();
 

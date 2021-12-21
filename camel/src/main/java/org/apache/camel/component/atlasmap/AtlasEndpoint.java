@@ -49,8 +49,9 @@ import io.atlasmap.v2.DataSourceType;
  */
 @UriEndpoint(firstVersion = "2.19.0", scheme = "atlas", title = "AtlasMap", syntax = "atlas:resourceUri", producerOnly = true, label = "transformation")
 public class AtlasEndpoint extends ResourceEndpoint {
-
+    /** Content type for JSON. */
     public static final String CONTENT_TYPE_JSON = "application/json";
+    /** Content type for XML. */
     public static final String CONTENT_TYPE_XML = "application/xml";
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasEndpoint.class);
@@ -68,10 +69,24 @@ public class AtlasEndpoint extends ResourceEndpoint {
     @UriParam(defaultValue = "MAP")
     private TargetMapMode targetMapMode = TargetMapMode.MAP;
 
+    /**
+     * The enum for target map mode.
+     */
     public enum TargetMapMode {
-        MAP, MESSAGE_HEADER, EXCHANGE_PROPERTY;
+        /** Map. */
+        MAP,
+        /** Message header. */
+        MESSAGE_HEADER,
+        /** Exchange property. */
+        EXCHANGE_PROPERTY;
     }
 
+    /**
+     * A constructor.
+     * @param uri URI
+     * @param component component
+     * @param resourceUri resource URI
+     */
     public AtlasEndpoint(String uri, AtlasComponent component, String resourceUri) {
         super(uri, component, resourceUri);
     }
@@ -91,22 +106,42 @@ public class AtlasEndpoint extends ResourceEndpoint {
         return "atlas:" + getResourceUri();
     }
 
+    /**
+     * Gets the AtlasContextFactory.
+     * @return factory
+     */
     public AtlasContextFactory getAtlasContextFactory() {
         return this.atlasContextFactory;
     }
 
+    /**
+     * Sets the AtlasContextFactory.
+     * @param atlasContextFactory factory
+     */
     public void setAtlasContextFactory(AtlasContextFactory atlasContextFactory) {
         this.atlasContextFactory = atlasContextFactory;
     }
 
+    /**
+     * Gets the AtlasContext.
+     * @return context
+     */
     public AtlasContext getAtlasContext() {
         return this.atlasContext;
     }
 
+    /**
+     * Sets the AtlasContxt.
+     * @param atlasContext context
+     */
     public void setAtlasContext(AtlasContext atlasContext) {
         this.atlasContext = atlasContext;
     }
 
+    /**
+     * Gets if the AtlasMap resource loader cache is enabled or not.
+     * @return true if enabled, or false
+     */
     public boolean isLoaderCache() {
         return loaderCache;
     }
@@ -128,6 +163,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
         this.encoding = encoding;
     }
 
+    /**
+     * Gets the character encoding.
+     * @return encoding
+     */
     public String getEncoding() {
         return encoding;
     }
@@ -142,6 +181,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
         this.sourceMapName = name;
     }
 
+    /**
+     * Gets the source map name.
+     * @return name
+     */
     public String getSourceMapName() {
         return this.sourceMapName;
     }
@@ -156,6 +199,10 @@ public class AtlasEndpoint extends ResourceEndpoint {
         this.targetMapName = name;
     }
 
+    /**
+     * Gets the target map name.
+     * @return name
+     */
     public String getTargetMapName() {
         return this.targetMapName;
     }
@@ -168,10 +215,20 @@ public class AtlasEndpoint extends ResourceEndpoint {
         this.targetMapMode = mode;
     }
 
+    /**
+     * Gets the target map mode.
+     * @return mode
+     */
     public TargetMapMode getTargetMapMode() {
         return this.targetMapMode;
     }
 
+    /**
+     * Return an existing AtlasEndpoint or create if not exist.
+     * @param uri URI
+     * @param newResourceUri new resource URI
+     * @return endpoint
+     */
     public AtlasEndpoint findOrCreateEndpoint(String uri, String newResourceUri) {
         String newUri = uri.replace(getResourceUri(), newResourceUri);
         log.debug("Getting endpoint with URI: {}", newUri);

@@ -19,23 +19,33 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The Data Source model object in the AtlasMap mapping definition JSON.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class DataSource implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** ID */
     protected String id;
 
+    /** name */
     protected String name;
 
+    /** description */
     protected String description;
 
+    /** URI */
     protected String uri;
 
+    /** Data Source type, either source or target */
     protected DataSourceType dataSourceType;
 
+    /** character encoding */
     protected String characterEncoding;
 
+    /** locale */
     protected String locale;
 
     /**

@@ -36,6 +36,9 @@ import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The {@link AtlasModule} for constants.
+ */
 @AtlasModuleDetail(name = "ConstantModule", uri = "", modes = { "SOURCE" }, dataFormats = {}, configPackages = {})
 public class ConstantModule implements AtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(ConstantModule.class);

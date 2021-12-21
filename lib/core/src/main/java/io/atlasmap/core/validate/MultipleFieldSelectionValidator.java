@@ -24,14 +24,28 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The multiple fields selection validator.
+ */
 public class MultipleFieldSelectionValidator {
 
     private BaseModuleValidationService<?> service;
 
+    /**
+     * A constructor.
+     * @param service module validation service
+     */
     public MultipleFieldSelectionValidator(BaseModuleValidationService<?> service) {
         this.service = service;
     }
 
+    /**
+     * Validates multiple fields selection.
+     * @param validations a container to put the result {@link Validation}.
+     * @param mappingId mapping ID
+     * @param direction direction
+     * @param fields fields
+     */
     public void validate(List<Validation> validations, String mappingId, FieldDirection direction, List<Field> fields) {
         if (fields.size() <= 1) {
             return;

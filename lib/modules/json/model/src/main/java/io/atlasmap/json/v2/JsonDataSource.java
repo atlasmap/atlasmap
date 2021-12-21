@@ -20,10 +20,13 @@ import java.io.Serializable;
 
 import io.atlasmap.v2.DataSource;
 
+/**
+ * The {@link DataSource} implementation for the JSON Document.
+ */
 public class JsonDataSource extends DataSource implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** Template. */
     protected String template;
 
     /**
@@ -50,6 +53,7 @@ public class JsonDataSource extends DataSource implements Serializable {
         this.template = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -83,6 +87,7 @@ public class JsonDataSource extends DataSource implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

@@ -21,11 +21,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The container of {@link StringMapEntry}.
+ */
 @JsonRootName("StringMap")
 public class StringMap implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** a list of {@link StringMapEntry} */
     protected List<StringMapEntry> stringMapEntry;
 
     /**

@@ -17,16 +17,41 @@ package io.atlasmap.spi;
 
 import java.util.Set;
 
+/**
+ * The runtime registry of {@link AtlasModuleInfo}. {@link io.atlasmap.api.AtlasContext} builds this registry
+ * to store module metadata which corresponds to the DataSource/Document defined in the
+ * mapping definition.
+ */
 public interface AtlasModuleInfoRegistry {
 
+    /**
+     * Looks up the module info by URI.
+     * @param dataFormat URI
+     * @return module info
+     */
     AtlasModuleInfo lookupByUri(String dataFormat);
 
+    /**
+     * Gets all module info registered.
+     * @return a list of module info
+     */
     Set<AtlasModuleInfo> getAll();
 
+    /**
+     * Registers the module info.
+     * @param module module info
+     */
     void register(AtlasModuleInfo module);
 
+    /**
+     * Gets the number of the module info registered.
+     * @return the number of the module info registered
+     */
     int size();
 
+    /**
+     * Unregister all module info from this registry.
+     */
     void unregisterAll();
 
 }

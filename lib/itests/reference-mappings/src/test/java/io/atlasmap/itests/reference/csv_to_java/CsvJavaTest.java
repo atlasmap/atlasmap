@@ -20,8 +20,6 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.itests.reference.AtlasMappingBaseTest;
 import io.atlasmap.itests.reference.AtlasTestUtil;
 import io.atlasmap.java.test.TargetFlatPrimitiveClass;
-import io.atlasmap.json.test.AtlasJsonTestUnrootedMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -29,7 +27,6 @@ import java.io.File;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CsvJavaTest extends AtlasMappingBaseTest {
 

@@ -23,16 +23,27 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Copy To</strong> field action.
+ */
 public class CopyTo extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** index */
     private String index;
 
+    /**
+     * A constructor.
+     * @param index index
+     */
     public CopyTo(String index) {
         this.index = index;
     }
 
+    /**
+     * A constructor.
+     */
     public CopyTo() {
     }
 
@@ -58,6 +69,10 @@ public class CopyTo extends Action implements Serializable {
         this.index = index;
     }
 
+    /**
+     * Gets indexes.
+     * @return indexes
+     */
     @JsonIgnore
     public List<Integer> getIndexes() {
         // indexes coming from the ui are 1-based while we work with 0-based indexes

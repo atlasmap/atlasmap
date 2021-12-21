@@ -15,8 +15,15 @@
  */
 package io.atlasmap.core;
 
+/**
+ * The compound class loader that holds multiple class loaders for delegation.
+ */
 public abstract class CompoundClassLoader extends ClassLoader {
 
+    /**
+     * Adds a class loader to delegate.
+     * @param cl class loader
+     */
     public abstract void addAlternativeLoader(ClassLoader cl);
 
 }

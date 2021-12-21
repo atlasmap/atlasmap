@@ -20,10 +20,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The list of the {@link Modifier}.
+ */
 public class ModifierList implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** a list of {@link Modifier}. */
     protected List<Modifier> modifier;
 
     /**
@@ -55,6 +58,7 @@ public class ModifierList implements Serializable {
         return this.modifier;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -85,6 +89,7 @@ public class ModifierList implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

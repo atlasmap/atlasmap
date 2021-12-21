@@ -16,7 +16,8 @@
 package io.atlasmap.api;
 
 /**
- * @deprecated Use {@link io.atlasmap.spi.AtlasConverter}
+ * AtlasConverter.
+ * @deprecated Use {@link io.atlasmap.spi.AtlasConverter}.
  * @param <T> Java type to convert from
  */
 @Deprecated

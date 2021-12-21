@@ -15,27 +15,51 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of number types.
+ */
 public enum NumberType {
 
+    /** Big Integer. */
     BIG_INTEGER("Big Integer"),
+    /** Byte. */
     BYTE("Byte"),
+    /** Decimal. */
     DECIMAL("Decimal"),
+    /** Double. */
     DOUBLE("Double"),
+    /** Float. */
     FLOAT("Float"),
+    /** Integer. */
     INTEGER("Integer"),
+    /** Long. */
     LONG("Long"),
+    /** Short. */
     SHORT("Short");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     NumberType(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static NumberType fromValue(String v) {
         for (NumberType c: NumberType.values()) {
             if (c.value.equals(v)) {

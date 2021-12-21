@@ -20,14 +20,19 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The process mapping request model object.
+ */
 @JsonRootName("ProcessMappingRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class ProcessMappingRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** single {@link Mapping} entry */
     protected Mapping mapping;
 
+    /** whole {@link AtlasMapping} */
     protected AtlasMapping atlasMapping;
 
     /**

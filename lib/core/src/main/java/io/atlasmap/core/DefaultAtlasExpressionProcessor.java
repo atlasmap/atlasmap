@@ -33,9 +33,18 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 
+/**
+ * The expression processor processes the conditional mapping expression. {@link DefaultAtlasContext}
+ * uses this to process the expression where it's declared in the mapping definition.
+ */
 public class DefaultAtlasExpressionProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);
 
+    /**
+     * Processes the expression.
+     * @param session session
+     * @param expression expression
+     */
     public static void processExpression(DefaultAtlasSession session, String expression) {
         if (expression == null || expression.trim().isEmpty()) {
             return;

@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * JDK packages.
+ */
 public class JdkPackages {
 
     private static final List<String> JDK_PACKAGES = Arrays.asList("java.applet", "java.awt", "java.awt.color",
@@ -77,6 +80,11 @@ public class JdkPackages {
 
     private static final List<String> VENDOR_PACKAGES = Arrays.asList("sun");
 
+    /**
+     * Gets if it contains the specified package.
+     * @param packageName package name
+     * @return true if contained, or false
+     */
     public static Boolean contains(String packageName) {
         if (packageName == null || packageName.length() < 1) {
             return false;
@@ -94,10 +102,19 @@ public class JdkPackages {
         return false;
     }
 
+    /**
+     * Gets the list of the JDK packages.
+     * @return the list of JDK packages
+     */
     public static List<String> getJdkPackageList() {
         return getJdkPackageList(getRuntimeVersion());
     }
 
+    /**
+     * Gets the list of the JDK packages.
+     * @param version version
+     * @return the list of the JDK packages
+     */
     public static List<String> getJdkPackageList(String version) {
         if (version == null) {
             return new ArrayList<String>();

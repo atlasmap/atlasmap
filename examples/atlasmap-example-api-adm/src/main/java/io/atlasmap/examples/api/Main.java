@@ -32,13 +32,25 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
+/**
+ * An example for running AtlasMap data mapping with ADM archive file through the core API.
+ */
 public class Main {
 
+    /**
+     * The application entry point.
+     * @param args args
+     * @throws Exception unexpected error
+     */
     public static void main(String args[]) throws Exception {
         Main m = new Main();
         m.process();
     }
 
+    /**
+     * Processes AtlasMap data mapping.
+     * @throws Exception unexpected error
+     */
     public void process() throws Exception {
         URL url = Thread.currentThread().getContextClassLoader().getResource("atlasmap-mapping.adm");
         AtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();

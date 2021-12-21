@@ -17,6 +17,7 @@ package io.atlasmap.actions;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,6 +26,7 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Capitalize;
+import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.LowercaseChar;
 import io.atlasmap.v2.SeparateByDash;
@@ -58,6 +60,18 @@ public class StringSimpleFieldActionsTest {
         assertEquals("", StringSimpleFieldActions.fileExtension(null, "foo."));
         assertEquals("bar", StringSimpleFieldActions.fileExtension(null, "foo.bar"));
         assertEquals("bar", StringSimpleFieldActions.fileExtension(null, "foo.foo.bar"));
+    }
+
+    @Test
+    public void testGenareteUUID() {
+        validateGeneratedUUID(StringSimpleFieldActions.genareteUUID(new GenerateUUID()));
+    }
+
+    protected void validateGeneratedUUID(String uuid) {
+        assertNotNull(uuid);
+        assertTrue(uuid.length() > 0);
+        assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(uuid)
+                .matches());
     }
 
     @Test

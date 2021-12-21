@@ -15,17 +15,20 @@
  */
 package io.atlasmap.java.core;
 
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import io.atlasmap.core.AtlasUtil;
 
+/**
+ * The collection of utility methods for Java Document handling.
+ */
 public class StringUtil {
 
-    public static boolean isEmpty(String s) {
-        return s == null || "".equals(s.trim());
-    }
-
+    /**
+     * Capitalizes the first letter.
+     * @param sentence String
+     * @return capitalized
+     */
     public static String capitalizeFirstLetter(String sentence) {
-        if (StringUtil.isEmpty(sentence)) {
+        if (AtlasUtil.isEmpty(sentence)) {
             return sentence;
         }
         if (sentence.length() == 1) {
@@ -34,8 +37,13 @@ public class StringUtil {
         return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);
     }
 
+    /**
+     * Gets the field name from the getter method.
+     * @param getter getter method name
+     * @return field name
+     */
     public static String getFieldNameFromGetter(String getter) {
-        if (StringUtil.isEmpty(getter)) {
+        if (AtlasUtil.isEmpty(getter)) {
             return getter;
         }
 
@@ -57,8 +65,13 @@ public class StringUtil {
         return String.valueOf(subGetter.charAt(0)).toLowerCase() + subGetter.substring(1);
     }
 
+    /**
+     * Gets the field name from the setter method.
+     * @param setter setter method name
+     * @return field name
+     */
     public static String getFieldNameFromSetter(String setter) {
-        if (StringUtil.isEmpty(setter)) {
+        if (AtlasUtil.isEmpty(setter)) {
             return setter;
         }
 
@@ -75,9 +88,4 @@ public class StringUtil {
         return String.valueOf(subSetter.charAt(0)).toLowerCase() + subSetter.substring(1);
     }
 
-    public static String formatTimeHMS(long milliseconds) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss.SSS");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(milliseconds);
-    }
 }

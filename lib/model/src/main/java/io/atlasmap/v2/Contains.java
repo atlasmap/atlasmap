@@ -19,10 +19,14 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Contains</strong> field action.
+ */
 public class Contains extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** value to test */
     protected String value;
 
     /**

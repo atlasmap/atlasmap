@@ -22,6 +22,16 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.parser.ParseException;
 
+/**
+ * The {@code IF()} function for conditional mapping expression.
+ * <pre>
+ * {@code
+ *   IF(ISEMPTY(${DOC:/foo}), null, ${DOC:/foo})
+ * }
+ * </pre>
+ * which returns {@code null} if the field {@code ${DOC:/foo}} is empty,
+ * otherwise returns {@code ${DOC:/foo}}
+ */
 public class IF extends BaseFunctionFactory {
 
     @Override

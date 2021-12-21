@@ -19,10 +19,13 @@ package org.apache.camel.component.atlasmap;
  * Atlas Constants.
  */
 public final class AtlasConstants {
-
+    /** Resource URI key. */
     public static final String ATLAS_RESOURCE_URI = "CamelAtlasResourceUri";
+    /** AtlasMapping key. */
     public static final String ATLAS_MAPPING = "CamelAtlasMapping";
+    /** Source map key. */
     public static final String ATLAS_SOURCE_MAP = "CamelAtlasSourceMap";
+    /** target map key. */
     public static final String ATLAS_TARGET_MAP = "CamelAtlasTargetMap";
 
     private AtlasConstants() {

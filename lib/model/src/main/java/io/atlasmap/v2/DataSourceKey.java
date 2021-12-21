@@ -15,11 +15,19 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The unique key to identify the Data Source.
+ */
 public class DataSourceKey {
     private boolean isSource;
     private String documentId;
     private int hashCode;
 
+    /**
+     * A constructor.
+     * @param isSource true if it's source Document, or false
+     * @param docId Document ID
+     */
     public DataSourceKey(boolean isSource, String docId) {
         this.isSource = isSource;
         this.documentId = docId;

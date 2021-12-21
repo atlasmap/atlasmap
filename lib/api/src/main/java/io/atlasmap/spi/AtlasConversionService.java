@@ -20,12 +20,32 @@ import java.util.Optional;
 import io.atlasmap.api.AtlasConversionException;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The AtlasMap conversion service resolves the appropriate {@link AtlasConverter} to convert the field value and apply.
+ */
 public interface AtlasConversionService {
 
+    /**
+     * Finds matching {@link AtlasConverter}.
+     * @param source source type
+     * @param target target type
+     * @return converter
+     */
     Optional<AtlasConverter<?>> findMatchingConverter(FieldType source, FieldType target);
 
+    /**
+     * Finds matching {@link AtlasConverter}.
+     * @param sourceClassName source class name
+     * @param targetClassName target class name
+     * @return converter
+     */
     Optional<AtlasConverter<?>> findMatchingConverter(String sourceClassName, String targetClassName);
 
+    /**
+     * Copies the primitive value.
+     * @param sourceValue source value
+     * @return copied value
+     */
     Object copyPrimitive(Object sourceValue);
 
     /**
@@ -73,26 +93,83 @@ public interface AtlasConversionService {
     Object convertType(Object sourceValue, String sourceFormat, Class<?> targetType, String targetFormat)
             throws AtlasConversionException;
 
+    /**
+     * Check if the convertion is available for the specified value.
+     * @param sourceValue source value
+     * @param targetType target type
+     * @return true if available
+     */
     boolean isConvertionAvailableFor(Object sourceValue, Class<?> targetType);
 
+    /**
+     * Boxes or unboxes the primitive value.
+     * @param clazz class
+     * @return result
+     */
     Class<?> boxOrUnboxPrimitive(Class<?> clazz);
 
+    /**
+     * Boxes or unboxes the primitive value.
+     * @param clazzName class name
+     * @return result
+     */
     Class<?> boxOrUnboxPrimitive(String clazzName);
 
+    /**
+     * Gets the class from {@link FieldType}.
+     * @param fieldType field type
+     * @return class
+     */
     Class<?> classFromFieldType(FieldType fieldType);
 
+    /**
+     * Gets the {@link FieldType} from class.
+     * @param clazz class
+     * @return field type
+     */
     FieldType fieldTypeFromClass(Class<?> clazz);
 
+    /**
+     * Gets the {@link FieldType} from class name.
+     * @param className class name
+     * @return field type
+     */
     FieldType fieldTypeFromClass(String className);
 
+    /**
+     * Check if the class is primitive.
+     * @param className class name
+     * @return true if it's primitive class
+     */
     Boolean isPrimitive(String className);
 
+    /**
+     * Check if the class is primitive.
+     * @param clazz class
+     * @return true if it's primitive class
+     */
     Boolean isPrimitive(Class<?> clazz);
 
+    /**
+     * Check if the field type is primitive.
+     * @param fieldType field type
+     * @return true if it's primitive type
+     */
     Boolean isPrimitive(FieldType fieldType);
 
+    /**
+     * Check if the class is a boxed primitive.
+     * @param clazz class
+     * @return true if it's boxed primitive
+     */
     Boolean isBoxedPrimitive(Class<?> clazz);
 
+    /**
+     * Check if the source and target field types are assignable.
+     * @param source source type
+     * @param target target type
+     * @return true if it's assignable
+     */
     Boolean isAssignableFieldType(FieldType source, FieldType target);
 
 }

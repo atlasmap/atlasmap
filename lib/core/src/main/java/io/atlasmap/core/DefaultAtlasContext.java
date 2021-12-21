@@ -75,6 +75,10 @@ import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
+/**
+ * The default implementation of {@link AtlasContext}.
+ * @see AtlasContext
+ */
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);
@@ -89,16 +93,30 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap;
     private boolean initialized;
 
+    /**
+     * A constructor.
+     * @param atlasMappingUri mapping defiition URI
+     */
     public DefaultAtlasContext(URI atlasMappingUri) {
         this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri);
     }
 
+    /**
+     * A constructor.
+     * @param factory factory
+     * @param atlasMappingUri mapping definition URI
+     */
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
         this.atlasMappingUri = atlasMappingUri;
     }
 
+    /**
+     * A constructor.
+     * @param factory factory
+     * @param mapping mapping definition
+     */
     public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) {
         this.factory = factory;
         this.uuid = UUID.randomUUID();
@@ -107,6 +125,13 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         this.admHandler.setMappingDefinition(mapping);
     }
 
+    /**
+     * A constructor.
+     * @param factory factory
+     * @param format {@link AtlasContextFactory.Format#ADM} or {@link AtlasContextFactory.Format#JSON}.
+     * @param stream mapping definition
+     * @throws AtlasException unexpected error
+     */
     public DefaultAtlasContext(DefaultAtlasContextFactory factory,
             AtlasContextFactory.Format format, InputStream stream) throws AtlasException {
         this.factory = factory;
@@ -224,6 +249,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         initialized = true;
     }
 
+    /**
+     * Registers the JMX objects.
+     * @param context context
+     */
     protected void registerJmx(DefaultAtlasContext context) {
         try {
             setJmxObjectName(new ObjectName(
@@ -253,6 +282,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return this.factory.createPreviewContext().processPreview(mapping);
     }
 
+    /**
+     * Applies field actions declared on the field.
+     * @param session session
+     * @param field field
+     * @return processed field
+     */
     protected Field applyFieldActions(DefaultAtlasSession session, Field field) {
         if (field.getActions() == null) {
             return field;
@@ -270,10 +305,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
     }
 
-    /**
-     * Process session lifecycle.
-     *
-     */
     @Override
     public void process(AtlasSession userSession) throws AtlasException {
         if (!(userSession instanceof DefaultAtlasSession)) {
@@ -391,6 +422,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return mappings;
     }
 
+    /**
+     * Processes source fields.
+     * @param session session
+     */
     protected void processSourceFieldMapping(DefaultAtlasSession session) {
         try {
             Mapping mapping = session.head().getMapping();
@@ -470,6 +505,12 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         }
     }
 
+    /**
+     * Resolves {@link AtlasModule} for the field.
+     * @param direction source or target
+     * @param field field
+     * @return module
+     */
     protected AtlasModule resolveModule(FieldDirection direction, Field field) {
         String docId = field.getDocId();
         if (docId == null || docId.isEmpty()) {
@@ -731,6 +772,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return true;
     }
 
+    /**
+     * @deprecated .
+     * @param session session
+     * @param mapping mapping
+     * @param sourceFields source fields
+     * @param targetField target field
+     * @return processed
+     */
+    @Deprecated
     protected Field processCombineField(DefaultAtlasSession session, Mapping mapping, List<Field> sourceFields,
             Field targetField) {
         Map<Integer, String> combineValues = null;
@@ -784,6 +834,15 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return answer;
     }
 
+    /**
+     * @deprecated .
+     * @param session session
+     * @param mapping mapping
+     * @param sourceField source field
+     * @return processed
+     * @throws AtlasException .
+     */
+    @Deprecated
     protected List<Field> processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
             throws AtlasException {
         if (sourceField.getValue() == null) {
@@ -872,22 +931,16 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return this.factory;
     }
 
+    /**
+     * Gets the mapping definition.
+     * @return mapping definition
+     */
     public AtlasMapping getMapping() {
         return admHandler != null ? admHandler.getMappingDefinition() : null;
     }
 
     @Override
     public AtlasSession createSession() throws AtlasException {
-        init();
-        return doCreateSession();
-    }
-
-    public AtlasSession createSession(AtlasMapping mappingDefinition) throws AtlasException {
-        this.atlasMappingUri = null;
-        this.admHandler = new ADMArchiveHandler(this.factory.getClassLoader());
-        this.admHandler.setIgnoreLibrary(true);
-        this.admHandler.setMappingDefinition(mappingDefinition);
-        this.initialized = false;
         init();
         return doCreateSession();
     }
@@ -901,41 +954,77 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         return session;
     }
 
+    /**
+     * Sets the default session properties.
+     * @param session session
+     */
     protected void setDefaultSessionProperties(AtlasSession session) {
         Date date = new Date();
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
         df.setTimeZone(TimeZone.getDefault());
-        session.getProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
+        session.getSourceProperties().put("Atlas.CreatedDateTimeTZ", df.format(date));
     }
 
+    /**
+     * Gets the source modules.
+     * @return source modules
+     */
     public Map<String, AtlasModule> getSourceModules() {
         return sourceModules;
     }
 
+    /**
+     * Sets the source modules.
+     * @param sourceModules source modules
+     */
     public void setSourceModules(Map<String, AtlasModule> sourceModules) {
         this.sourceModules = sourceModules;
     }
 
+    /**
+     * Gets the target modules.
+     * @return target modules
+     */
     public Map<String, AtlasModule> getTargetModules() {
         return targetModules;
     }
 
+    /**
+     * Sets the target modules.
+     * @param targetModules target modules
+     */
     public void setTargetModules(Map<String, AtlasModule> targetModules) {
         this.targetModules = targetModules;
     }
 
+    /**
+     * Gets the lookup tables.
+     * @return lookup tables
+     */
     public Map<String, LookupTable> getLookupTables() {
         return lookupTables;
     }
 
+    /**
+     * Sets the lookup tables.
+     * @param lookupTables lookup tables
+     */
     public void setLookupTables(Map<String, LookupTable> lookupTables) {
         this.lookupTables = lookupTables;
     }
 
+    /**
+     * Sets the JMX name.
+     * @param jmxObjectName name
+     */
     protected void setJmxObjectName(ObjectName jmxObjectName) {
         this.jmxObjectName = jmxObjectName;
     }
 
+    /**
+     * Gets the JMX name.
+     * @return name
+     */
     public ObjectName getJmxObjectName() {
         return this.jmxObjectName;
     }
@@ -956,6 +1045,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 ? admHandler.getMappingDefinition().getName() : null);
     }
 
+    /**
+     * Sets the mapping definition URI.
+     * @param atlasMappingUri URI
+     */
     protected void setMappingUri(URI atlasMappingUri) {
         this.atlasMappingUri = atlasMappingUri;
     }
@@ -982,6 +1075,10 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 + sourceModules + ", targetModules=" + targetModules + "]";
     }
 
+    /**
+     * Gets the {@link ADMArchiveHandler}.
+     * @return handler
+     */
     public ADMArchiveHandler getADMArchiveHandler() {
         return this.admHandler;
     }

@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link BaseMapping}.
+ */
 public class Mappings implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link BaseMapping} */
     protected List<BaseMapping> mapping;
 
     /**

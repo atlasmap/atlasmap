@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link Constant}.
+ */
 public class Constants implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Constant} */
     protected List<Constant> constant;
 
     /**

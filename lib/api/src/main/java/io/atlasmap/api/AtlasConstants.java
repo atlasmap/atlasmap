@@ -15,13 +15,24 @@
  */
 package io.atlasmap.api;
 
+/**
+ * The constants.
+ */
 public class AtlasConstants {
+    /** default source Document ID. */
     public static final String DEFAULT_SOURCE_DOCUMENT_ID = "ATLAS_DEFAULT_SOURCE_DOC";
+    /** default target Document ID. */
     public static final String DEFAULT_TARGET_DOCUMENT_ID = "ATLAS_DEFAULT_TARGET_DOC";
+    /** Constants Document ID. */
     public static final String CONSTANTS_DOCUMENT_ID = "ATLAS_CONSTANTS_DOC";
+    /** source Properties Document ID. */
     public static final String PROPERTIES_SOURCE_DOCUMENT_ID = "ATLAS_SOURCE_PROPERTIES_DOC";
+    /** target Properties Document ID. */
     public static final String PROPERTIES_TARGET_DOCUMENT_ID = "ATLAS_TARGET_PROPERTIES_DOC";
 
+    /**
+     * A constructor.
+     */
     private AtlasConstants() {
     }
 }

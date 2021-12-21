@@ -22,29 +22,32 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.StringList;
 
+/**
+ * The java field.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class JavaField extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** annotations. */
     protected StringList annotations;
-
+    /** modifiers. */
     protected ModifierList modifiers;
-
+    /** parameterized types. */
     protected StringList parameterizedTypes;
-
+    /** class name. */
     protected String className;
-
+    /** canonical class name. */
     protected String canonicalClassName;
-
+    /** collection class name. */
     protected String collectionClassName;
-
+    /** getter method. */
     protected String getMethod;
-
+    /** setter method. */
     protected String setMethod;
-
+    /** true if it's a primitive type. */
     protected Boolean primitive;
-
+    /** true if it's synthetic. */
     protected Boolean synthetic;
 
     /**
@@ -287,6 +290,7 @@ public class JavaField extends Field implements Serializable {
         this.synthetic = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -510,6 +514,7 @@ public class JavaField extends Field implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

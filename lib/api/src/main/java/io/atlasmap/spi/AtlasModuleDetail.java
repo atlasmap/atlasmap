@@ -18,16 +18,39 @@ package io.atlasmap.spi;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * AtlasModuleDetail adds metadata onto {@link AtlasModule}.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasModuleDetail {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     String name();
 
+    /**
+     * Gets the URI.
+     * @return URI
+     */
     String uri();
 
+    /**
+     * Gets a list of data formats.
+     * @return a list of data formats
+     */
     String[] dataFormats();
 
+    /**
+     * Gets the full package name of the corresponding model objects.
+     * @return a list of the package names
+     */
     String[] configPackages();
 
+    /**
+     * Gets a list of supported module modes.
+     * @return a list of the supported module modes
+     */
     String[] modes();
 }

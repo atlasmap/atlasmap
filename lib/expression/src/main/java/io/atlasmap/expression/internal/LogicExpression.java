@@ -29,6 +29,7 @@ import io.atlasmap.v2.Field;
 public abstract class LogicExpression extends BinaryExpression implements BooleanExpression {
 
     /**
+     * A constructor.
      * @param left left {@link BooleanExpression}
      * @param right right {@link BooleanExpression}
      */
@@ -36,6 +37,12 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
         super(left, right);
     }
 
+    /**
+     * Creates or expression.
+     * @param lvalue left
+     * @param rvalue right
+     * @return result
+     */
     public static BooleanExpression createOR(BooleanExpression lvalue, BooleanExpression rvalue) {
         return new LogicExpression(lvalue, rvalue) {
 
@@ -57,6 +64,12 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
         };
     }
 
+    /**
+     * Creates and expression.
+     * @param lvalue left
+     * @param rvalue right
+     * @return result
+     */
     public static BooleanExpression createAND(BooleanExpression lvalue, BooleanExpression rvalue) {
         return new LogicExpression(lvalue, rvalue) {
 
@@ -82,8 +95,18 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
         };
     }
 
+    /**
+     * Evaluates the expression.
+     * @param expressionContext expression context
+     * @return result
+     */
     public abstract Field evaluate(ExpressionContext expressionContext) throws ExpressionException;
 
+    /**
+     * Returns true if condition is satisfied.
+     * @param message expression context
+     * @return true if satisfied
+     */
     public boolean matches(ExpressionContext message) throws ExpressionException {
         Object object = evaluate(message).getValue();
         return object != null && object == Boolean.TRUE;

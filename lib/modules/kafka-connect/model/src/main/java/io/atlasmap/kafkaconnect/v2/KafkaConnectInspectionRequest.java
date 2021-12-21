@@ -24,22 +24,26 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.StringList;
 
+/**
+ * The top container object of Kafka Connect Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
 @JsonRootName("KafkaConnectInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class KafkaConnectInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** Field name exclusions. */
     protected StringList fieldNameExclusions;
-
+    /** Type name exclusions. */
     protected StringList typeNameExclusions;
-
+    /** Namespace exclusions. */
     protected StringList namespaceExclusions;
-
+    /** URI. */
     protected String uri;
-
+    /** Schema data. */
     protected String schemaData;
-
+    /** Inspection options. */
     protected Map<String, String> options = new HashMap<>();
 
     /**
@@ -186,6 +190,7 @@ public class KafkaConnectInspectionRequest implements Serializable {
         this.options = options;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -311,6 +316,7 @@ public class KafkaConnectInspectionRequest implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

@@ -19,10 +19,14 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Item At</strong> field action.
+ */
 public class ItemAt extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** index */
     protected Integer index;
 
     /**

@@ -43,16 +43,28 @@ public class ConstantExpression implements Expression {
         }
     }
 
+    /** null. */
     public static final BooleanConstantExpression NULL = new BooleanConstantExpression(null);
+    /** true. */
     public static final BooleanConstantExpression TRUE = new BooleanConstantExpression(Boolean.TRUE);
+    /** false. */
     public static final BooleanConstantExpression FALSE = new BooleanConstantExpression(Boolean.FALSE);
 
     private Object value;
 
+    /**
+     * A constructor.
+     * @param value value
+     */
     public ConstantExpression(Object value) {
         this.value = value;
     }
 
+    /**
+     * Creates from the decimal.
+     * @param text decimal
+     * @return result
+     */
     public static ConstantExpression createFromDecimal(String text) {
 
         // Strip off the 'l' or 'L' if needed.
@@ -75,6 +87,11 @@ public class ConstantExpression implements Expression {
         return new ConstantExpression(value);
     }
 
+    /**
+     * Creates from the hex.
+     * @param text hex
+     * @return result
+     */
     public static ConstantExpression createFromHex(String text) {
         Number value = Long.valueOf(Long.parseLong(text.substring(2), 16));
         long l = value.longValue();
@@ -84,6 +101,11 @@ public class ConstantExpression implements Expression {
         return new ConstantExpression(value);
     }
 
+    /**
+     * Creates from the octal.
+     * @param text octal
+     * @return result
+     */
     public static ConstantExpression createFromOctal(String text) {
         Number value = Long.valueOf(Long.parseLong(text, 8));
         long l = value.longValue();
@@ -93,15 +115,29 @@ public class ConstantExpression implements Expression {
         return new ConstantExpression(value);
     }
 
+    /**
+     * Creates from the float.
+     * @param text float
+     * @return result
+     */
     public static ConstantExpression createFloat(String text) {
         Number value = new Double(text);
         return new ConstantExpression(value);
     }
 
+    /**
+     * Evaluates the expression.
+     * @param expressionContext expression context
+     * @return {@link Field}
+     */
     public Field evaluate(ExpressionContext expressionContext) throws ExpressionException {
         return wrapWithField(value);
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public Object getValue() {
         return value;
     }

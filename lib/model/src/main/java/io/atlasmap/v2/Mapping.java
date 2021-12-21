@@ -21,29 +21,42 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The mapping model object.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class Mapping extends BaseMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** conditional mapping expression */
     protected String expression;
 
+    /** source field group */
     protected FieldGroup inputFieldGroup;
 
+    /** A list of source {@link Field} */
     protected List<Field> inputField;
 
+    /** A list of target {@link Field} */
     protected List<Field> outputField;
 
+    /** ID */
     protected String id;
 
+    /** @deprecated delimiter */
     protected String delimiter;
 
+    /** @deprecated delimiter string */
     protected String delimiterString;
 
+    /** lookup table name */
     protected String lookupTableName;
 
+    /** @deprecated strategy */
     protected String strategy;
 
+    /** @deprecated strategy class name */
     protected String strategyClassName;
 
     /**

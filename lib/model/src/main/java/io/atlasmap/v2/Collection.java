@@ -20,19 +20,25 @@ import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The collection mapping.
+ * @deprecated collection field is now handled vertically and this is not in use.
+ * However, we might want to resurrect it to support one-to-many/many-to-one for
+ * each collection, see https://github.com/atlasmap/atlasmap/issues/1236
+ */
 @Deprecated
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class Collection
-    extends BaseMapping
-    implements Serializable
-{
+public class Collection extends BaseMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** {@link Mappings} */
     protected Mappings mappings;
 
+    /** collection size */
     protected BigInteger collectionSize;
 
+    /** collection type */
     protected CollectionType collectionType;
 
     /**

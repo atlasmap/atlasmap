@@ -22,22 +22,31 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * Represents <strong>AtlasMapping</strong> root object of the AtlasMap mapping definition JSON.
+ */
 @JsonRootName("AtlasMapping")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class AtlasMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link DataSource} */
     protected List<DataSource> dataSource;
 
+    /** {@link Mappings} */
     protected Mappings mappings;
 
+    /** {@link LookupTables} */
     protected LookupTables lookupTables;
 
+    /** {@link Constants} */
     protected Constants constants;
 
+    /** {@link Properties} */
     protected Properties properties;
 
+    /** name */
     protected String name;
 
     /**

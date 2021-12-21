@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Camelize</strong> field action.
+ */
 public class Camelize extends Action implements Serializable
 {
 

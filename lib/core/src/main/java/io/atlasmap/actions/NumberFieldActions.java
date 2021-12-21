@@ -46,6 +46,9 @@ import io.atlasmap.v2.Round;
 import io.atlasmap.v2.Subtract;
 import io.atlasmap.v2.VolumeUnitType;
 
+/**
+ * The number field actions.
+ */
 public class NumberFieldActions implements AtlasFieldAction {
     private static final Logger LOG = LoggerFactory.getLogger(NumberFieldActions.class);
 
@@ -175,6 +178,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         volumeConvertionTable = Collections.unmodifiableMap(rootTable);
     }
 
+    /**
+     * Gets the absolute value.
+     * @param action action model
+     * @param input source
+     * @return absolute value
+     */
     @AtlasActionProcessor
     public static Number absoluteValue(AbsoluteValue action, Number input) {
         if (input == null) {
@@ -189,6 +198,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return Math.abs(input.longValue());
     }
 
+    /**
+     * Calculates the addition.
+     * @param action action model
+     * @param inputs source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static Number add(Add action, List<Number> inputs) {
         if (inputs == null) {
@@ -215,6 +230,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return sum;
     }
 
+    /**
+     * Gets the average.
+     * @param action action model
+     * @param inputs a list of source objects
+     * @return average
+     */
     @AtlasActionProcessor
     public static Number average(Average action, List<Number> inputs) {
         if (inputs == null) {
@@ -223,11 +244,23 @@ public class NumberFieldActions implements AtlasFieldAction {
         return add(null, inputs).doubleValue() / inputs.size();
     }
 
+    /**
+     * Gets the ceiling.
+     * @param action action model
+     * @param input source
+     * @return ceiling
+     */
     @AtlasActionProcessor
     public static Number ceiling(Ceiling action, Number input) {
         return input == null ? 0L : (long)Math.ceil(input.doubleValue());
     }
 
+    /**
+     * Converts mass unit.
+     * @param convertMassUnit action model
+     * @param input source
+     * @return converted
+     */
     @AtlasActionProcessor
     public static Number convertMassUnit(ConvertMassUnit convertMassUnit, Number input) {
         if (input == null) {
@@ -245,6 +278,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return doMultiply(input, rate);
     }
 
+    /**
+     * Converts distance unit.
+     * @param convertDistanceUnit action model
+     * @param input source
+     * @return converted
+     */
     @AtlasActionProcessor
     public static Number convertDistanceUnit(ConvertDistanceUnit convertDistanceUnit, Number input) {
         if (input == null) {
@@ -262,6 +301,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return doMultiply(input, rate);
     }
 
+    /**
+     * Converts area unit.
+     * @param convertAreaUnit action model
+     * @param input source
+     * @return converted
+     */
     @AtlasActionProcessor
     public static Number convertAreaUnit(ConvertAreaUnit convertAreaUnit, Number input) {
         if (input == null) {
@@ -279,6 +324,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return doMultiply(input, rate);
     }
 
+    /**
+     * Converts volume unit.
+     * @param convertVolumeUnit action model
+     * @param input source
+     * @return converted
+     */
     @AtlasActionProcessor
     public static Number convertVolumeUnit(ConvertVolumeUnit convertVolumeUnit, Number input) {
         if (input == null) {
@@ -296,6 +347,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return doMultiply(input, rate);
     }
 
+    /**
+     * Calculates the division.
+     * @param divide action model
+     * @param inputs a list of source objects
+     * @return calculated
+     */
     @AtlasActionProcessor
     public static Number divide(Divide divide, List<Number> inputs) {
         if (inputs == null) {
@@ -322,11 +379,23 @@ public class NumberFieldActions implements AtlasFieldAction {
         return quotient;
     }
 
+    /**
+     * Gets the floor.
+     * @param floor action model
+     * @param input source
+     * @return floor
+     */
     @AtlasActionProcessor
     public static Number floor(Floor floor, Number input) {
         return input == null ? 0L : (long)Math.floor(input.doubleValue());
     }
 
+    /**
+     * Gets the maximum.
+     * @param maximum action model
+     * @param inputs a list of source objects
+     * @return maximum
+     */
     @AtlasActionProcessor
     public static Number maximum(Maximum maximum, List<Number> inputs) {
         if (inputs == null) {
@@ -349,6 +418,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return max;
     }
 
+    /**
+     * Gets the minumum.
+     * @param minimum action model
+     * @param inputs a list of source objects
+     * @return minumum
+     */
     @AtlasActionProcessor
     public static Number minimum(Minimum minimum, List<Number> inputs) {
         if (inputs == null) {
@@ -371,6 +446,12 @@ public class NumberFieldActions implements AtlasFieldAction {
         return min;
     }
 
+    /**
+     * Calculates the multiplication.
+     * @param multiply action model
+     * @param inputs a list of source objects
+     * @return calculated
+     */
     @AtlasActionProcessor
     public static Number multiply(Multiply multiply, List<Number> inputs) {
         if (inputs == null) {
@@ -397,11 +478,23 @@ public class NumberFieldActions implements AtlasFieldAction {
         return product;
     }
 
+    /**
+     * Gets the round.
+     * @param action action model
+     * @param input source
+     * @return round
+     */
     @AtlasActionProcessor
     public static Number round(Round action, Number input) {
         return input == null ? 0L : Math.round(input.doubleValue());
     }
 
+    /**
+     * Calculates the subtraction.
+     * @param subtract action model
+     * @param inputs source
+     * @return calculated
+     */
     @AtlasActionProcessor
     public static Number subtract(Subtract subtract, List<Number> inputs) {
         if (inputs == null) {

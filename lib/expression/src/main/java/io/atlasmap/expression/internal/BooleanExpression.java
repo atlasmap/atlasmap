@@ -35,6 +35,12 @@ public interface BooleanExpression extends Expression {
      */
     boolean matches(ExpressionContext message) throws ExpressionException;
 
+    /**
+     * Converts to the {@link BooleanExpression}.
+     * @param value expression
+     * @return converted expression
+     * @throws ParseException unexpected error
+     */
     static BooleanExpression asBooleanExpression(Expression value) throws ParseException {
         if (value instanceof BooleanExpression) {
             return (BooleanExpression) value;

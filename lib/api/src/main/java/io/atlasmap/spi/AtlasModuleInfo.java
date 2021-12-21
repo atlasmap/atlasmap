@@ -15,20 +15,51 @@
  */
 package io.atlasmap.spi;
 
+/**
+ * Represents {@link AtlasModule} metadata.
+ */
 public interface AtlasModuleInfo {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     String getName();
 
+    /**
+     * Gets the URI.
+     * @return URI
+     */
     String getUri();
 
+    /**
+     * Gets the module class.
+     * @return module class
+     */
     Class<AtlasModule> getModuleClass();
 
+    /**
+     * Gets a list of the data formats.
+     * @return a list of the data formats
+     */
     String[] getDataFormats();
 
+    /**
+     * Gets the full package name of the corresponding model objects.
+     * @return a list of package names
+     */
     String[] getPackageNames();
 
+    /**
+     * Gets if this module supports to be the source Document.
+     * @return true if source is supported, or false
+     */
     Boolean isSourceSupported();
 
+    /**
+     * Gets if this module supports to be the target Document.
+     * @return true if target is supported, or false
+     */
     Boolean isTargetSupported();
 
 }

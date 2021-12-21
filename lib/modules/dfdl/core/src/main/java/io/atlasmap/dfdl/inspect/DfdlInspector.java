@@ -37,6 +37,9 @@ import io.atlasmap.xml.inspect.XmlInstanceInspector;
 import io.atlasmap.xml.inspect.XmlSchemaInspector;
 import io.atlasmap.xml.v2.XmlDocument;
 
+/**
+ * Inspects DFDL instance of schema.
+ */
 public class DfdlInspector {
     private static final Logger LOG = LoggerFactory.getLogger(DfdlInspector.class);
 
@@ -46,12 +49,22 @@ public class DfdlInspector {
     private XmlSchemaInspector xmlSchemaInspector = new XmlSchemaInspector();
     private XmlDocument output;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     public DfdlInspector(ClassLoader loader) {
         this.classLoader = loader;
         xmlSchemaInspector.setClassLoader(loader);
         this.schemaResolver = new DfdlSchemaResolver(loader);
     }
 
+    /**
+     * Inspects DFDL instance.
+     * @param dfdlSchemaName instance
+     * @param options options
+     * @throws Exception unexpected error
+     */
     public void inspectInstance(String dfdlSchemaName, Map<String, String> options) throws Exception {
         String example = options.get(DfdlConstants.OPTION_EXAMPLE_DATA);
         if (example == null) {
@@ -81,12 +94,22 @@ public class DfdlInspector {
         this.output = xmlInstanceInspector.getXmlDocument();
     }
 
+    /**
+     * Inspects DFDL schema.
+     * @param dfdlSchemaName schema
+     * @param options options
+     * @throws Exception unexpected error
+     */
     public void inspectSchema(String dfdlSchemaName, Map<String, String> options) throws Exception {
         URI uri = schemaResolver.resolve(dfdlSchemaName, options);
         xmlSchemaInspector.inspect(new File(uri));
         this.output = xmlSchemaInspector.getXmlDocument();
     }
 
+    /**
+     * Gets the DFDL Document.
+     * @return DFDL Document
+     */
     public XmlDocument getXmlDocument() {
         return this.output;
     }

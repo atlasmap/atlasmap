@@ -45,6 +45,8 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Json;
 
 /**
+ * The JSON schema inspector. It consumes JSON instance as an example
+ * and build a {@link JsonDocument} from it.
  */
 public class JsonSchemaInspector implements JsonInspector {
 
@@ -54,6 +56,10 @@ public class JsonSchemaInspector implements JsonInspector {
     private JsonSchemaInspector() {
     }
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static JsonSchemaInspector instance() {
         return myself;
     }

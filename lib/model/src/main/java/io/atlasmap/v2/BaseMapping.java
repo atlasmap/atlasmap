@@ -19,15 +19,21 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * A base class of the mapping entry in AtlasMap mapping definition JSON.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public abstract class BaseMapping implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** alias */
     protected String alias;
 
+    /** description */
     protected String description;
 
+    /** mapping type */
     protected MappingType mappingType;
 
     /**

@@ -20,9 +20,16 @@ import java.lang.annotation.RetentionPolicy;
 
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The annotation to add on a field action method.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasActionProcessor {
 
+    /**
+     * Gets the source type.
+     * @return source type
+     */
     FieldType sourceType() default FieldType.NONE;
 
 }

@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Length</strong> field action.
+ */
 public class Length extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -31,7 +31,7 @@ public interface AtlasMappingBuilder {
     /**
      * Set {@code AtlasSession}.
      * @param session {@code AtlasSession}
-     * @throws AtlasException
+     * @throws AtlasException unexpected error
      */
     void setAtlasSession(AtlasSession session) throws AtlasException;
 

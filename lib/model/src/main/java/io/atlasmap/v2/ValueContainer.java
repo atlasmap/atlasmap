@@ -15,14 +15,25 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The value container.
+ */
 public class ValueContainer {
 
     private String value;
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets the value.
+     * @param value value
+     */
     public void setValue(String value) {
         this.value = value;
     }

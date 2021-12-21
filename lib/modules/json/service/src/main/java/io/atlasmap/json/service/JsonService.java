@@ -47,11 +47,19 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * The JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.
+ */
 @Path("/json/")
 public class JsonService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);
 
+    /**
+     * Serializes to a JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
@@ -60,6 +68,13 @@ public class JsonService {
         }
     }
 
+    /**
+     * Deserializes from a JSON.
+     * @param <T> type
+     * @param value value
+     * @param clazz type
+     * @return deserialized
+     */
     protected <T> T fromJson(InputStream value, Class<T>clazz) {
         try {
             return Json.mapper().readValue(value, clazz);
@@ -68,6 +83,11 @@ public class JsonService {
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
@@ -77,6 +97,11 @@ public class JsonService {
         return "Got it! " + from;
     }
 
+    /**
+     * Inspect a JSON schema or instance and return a Document object.
+     * @param requestIn request
+     * @return {@link JsonInspectionResponse}
+     */
     @POST
     @Path("/inspect")
     @Consumes({ MediaType.APPLICATION_JSON })
@@ -129,6 +154,11 @@ public class JsonService {
         return Response.ok().entity(toJson(response)).build();
     }
 
+    /**
+     * Gets if the JSON data is valid.
+     * @param jsonData json data
+     * @return true if valid, or false
+     */
     protected boolean validJsonData(String jsonData) {
         if (jsonData == null || jsonData.isEmpty()) {
             return false;
@@ -137,6 +167,11 @@ public class JsonService {
         return jsonData.startsWith("{") || jsonData.startsWith("[");
     }
 
+    /**
+     * Trims the String.
+     * @param jsonData String
+     * @return trimmed
+     */
     protected String cleanJsonData(String jsonData) {
         return jsonData.trim();
     }

@@ -19,12 +19,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Convert Volume Unit</strong> field action.
+ */
 public class ConvertVolumeUnit extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** volume unit to convert from */
     protected VolumeUnitType fromUnit;
 
+    /** volume unit to convert to */
     protected VolumeUnitType toUnit;
 
     /**

@@ -27,34 +27,61 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
+/**
+ * The field path manupulating API. It parses path expression and build a list of
+ * {@link SegmentContext} which represent the path segment.
+ */
 public class AtlasPath implements Cloneable {
 
+    /** path separator as a string. */
     public static final String PATH_SEPARATOR = "/";
+    /** path separator as a char. */
     public static final char PATH_SEPARATOR_CHAR = '/';
+    /** path separator escaped. */
     public static final String PATH_SEPARATOR_ESCAPED = "/";
+    /** start bracket for the array suffix. */
     public static final String PATH_ARRAY_START = "[";
+    /** end bracket for the array suffix. */
     public static final String PATH_ARRAY_END = "]";
+    /** array suffix. */
     public static final String PATH_ARRAY_SUFFIX = PATH_ARRAY_START + PATH_ARRAY_END;
+    /** start bracket for the list suffix. */
     public static final String PATH_LIST_START = "<";
+    /** end bracket for the list suffix. */
     public static final String PATH_LIST_END = ">";
+    /** list suffix. */
     public static final String PATH_LIST_SUFFIX = PATH_LIST_START + PATH_LIST_END;
+    /** start bracket for the map suffix. */
     public static final String PATH_MAP_START = "{";
+    /** end bracket for the map suffix. */
     public static final String PATH_MAP_END = "}";
+    /** map suffix. */
     public static final String PATH_MAP_SUFFIX = PATH_MAP_START + PATH_MAP_END;
+    /** attribute prefix. */
     public static final String PATH_ATTRIBUTE_PREFIX = "@";
+    /** namespace separator. */
     public static final String PATH_NAMESPACE_SEPARATOR = ":";
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasPath.class);
 
+    /** a list of path segments. */
     protected List<SegmentContext> segmentContexts;
     private String originalPath = null;
 
+    /**
+     * A constructor.
+     * @param p path expression
+     */
     public AtlasPath(String p) {
         String path = p;
         this.originalPath = path;
         this.segmentContexts = parse(path);
     }
 
+    /**
+     * A constructor.
+     * @param segments a list of {@link SegmentContext}
+     */
     protected AtlasPath(List<SegmentContext> segments) {
         this.segmentContexts = segments;
         this.originalPath = getSegmentPath(segments.get(segments.size() - 1));
@@ -153,6 +180,12 @@ public class AtlasPath implements Cloneable {
         return answer;
     }
 
+    /**
+     * Sets the collection indexes recursively, which includes modifying path of the subsequent children.
+     * @param group parent field
+     * @param segmentIndex target segment index
+     * @param index index to set
+     */
     public static void setCollectionIndexRecursively(FieldGroup group, int segmentIndex, int index) {
         AtlasPath path = new AtlasPath(group.getPath());
         path.setCollectionIndex(segmentIndex, index);
@@ -168,6 +201,11 @@ public class AtlasPath implements Cloneable {
         }
     }
 
+    /**
+     * Appends a field segment to the path.
+     * @param fieldExpression segment expression
+     * @return this instance
+     */
     public AtlasPath appendField(String fieldExpression) {
         this.segmentContexts.add(createSegmentContext(fieldExpression));
         return this;
@@ -178,6 +216,11 @@ public class AtlasPath implements Cloneable {
         return new AtlasPath(this.toString());
     }
 
+    /**
+     * Gets a list of the path segments.
+     * @param includeRoot true to include root segment, or false
+     * @return a list of the path segments.
+     */
     public List<SegmentContext> getSegments(boolean includeRoot) {
         if (includeRoot) {
             return Collections.unmodifiableList(this.segmentContexts);
@@ -188,31 +231,59 @@ public class AtlasPath implements Cloneable {
         return Collections.emptyList();
     }
 
+    /**
+     * Gets if this path represents the root.
+     * @return true if it's root, or false
+     */
     public Boolean isRoot() {
         return this.segmentContexts.size() == 1 && this.segmentContexts.get(0).isRoot();
     }
 
+    /**
+     * Gets the root segment of the path.
+     * @return root segment
+     */
     public SegmentContext getRootSegment() {
         return this.segmentContexts.get(0);
     }
 
+    /**
+     * Gets if this path is a collection root and has no children.
+     * @return true if it is the collection root, or false
+     */
     public Boolean isCollectionRoot() {
         return this.segmentContexts.size() == 1 && this.segmentContexts.get(0).getCollectionType() != CollectionType.NONE;
     }
 
+    /**
+     * Gets if this path has a collection root.
+     * @return true if it has the collection root, or false
+     */
     public Boolean hasCollectionRoot() {
         return this.segmentContexts.get(0).getCollectionType() != CollectionType.NONE;
     }
 
+    /**
+     * Gets the last segment of the path.
+     * @return last segment
+     */
     public SegmentContext getLastSegment() {
         return this.segmentContexts.get(this.segmentContexts.size()-1);
     }
 
+    /**
+     * Gets the last collection segment of the path.
+     * @return last collection segment
+     */
     public SegmentContext getLastCollectionSegment() {
         List<SegmentContext> collectionSegments = getCollectionSegments(true);
         return collectionSegments.get(collectionSegments.size() - 1);
     }
 
+    /**
+     * Gets the parent segment of the last segment of the path.
+     * @return parent segment of the last segment
+     */
     public SegmentContext getLastSegmentParent() {
         if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {
             return null;
@@ -221,6 +292,10 @@ public class AtlasPath implements Cloneable {
         return this.segmentContexts.get(this.segmentContexts.size() - 2);
     }
 
+    /**
+     * Gets the parent segment of the last segment of the path as a new {@link AtlasPath} instance.
+     * @return parent path
+     */
     public AtlasPath getLastSegmentParentPath() {
         if (this.segmentContexts.isEmpty() || this.segmentContexts.size() == 1) {
             return null;
@@ -233,6 +308,11 @@ public class AtlasPath implements Cloneable {
         return parentPath;
     }
 
+    /**
+     * Gets the parent segment of the specified segment.
+     * @param sc segment
+     * @return parent segment
+     */
     public SegmentContext getParentSegmentOf(SegmentContext sc) {
         for (int i=0; i<this.segmentContexts.size(); i++) {
             if (this.segmentContexts.get(i) == sc) {
@@ -245,6 +325,10 @@ public class AtlasPath implements Cloneable {
         return null;
     }
 
+    /**
+     * Gets if it has a collection in this path.
+     * @return true if there's a collection, or false
+     */
     public boolean hasCollection() {
         for (SegmentContext sc : this.segmentContexts) {
             if (sc.getCollectionType() != CollectionType.NONE) {
@@ -254,6 +338,10 @@ public class AtlasPath implements Cloneable {
         return false;
     }
 
+    /**
+     * Gets if it's indexed collection.
+     * @return true if it's indexed collection, or false
+     */
     public boolean isIndexedCollection() {
         boolean collection = false;
         boolean isIndexedCollection = true;
@@ -269,6 +357,12 @@ public class AtlasPath implements Cloneable {
         return collection && isIndexedCollection;
     }
 
+    /**
+     * Sets the collection index in this path.
+     * @param segmentIndex segment index
+     * @param collectionIndex collection index to set
+     * @return modified segment
+     */
     public SegmentContext setCollectionIndex(int segmentIndex, Integer collectionIndex) {
         if (collectionIndex != null && collectionIndex < 0) {
             throw new IllegalArgumentException(String.format(
@@ -280,6 +374,11 @@ public class AtlasPath implements Cloneable {
         return this.segmentContexts.set(segmentIndex, sc.rebuild());
     }
 
+    /**
+     * Gets a list of the the collection segments in this path.
+     * @param includeRoot true to include root segment, or false
+     * @return a list of the collection segments in this path
+     */
     public List<SegmentContext> getCollectionSegments(boolean includeRoot) {
         List<SegmentContext> segments = getSegments(includeRoot);
         List<SegmentContext> collectionSegments = new ArrayList<>();
@@ -291,6 +390,11 @@ public class AtlasPath implements Cloneable {
         return collectionSegments;
     }
 
+    /**
+     * Looks up a collection segment which doesn't have an index and set the one.
+     * @param collectionIndex collection index to set
+     * @return modified segment
+     */
     public SegmentContext setVacantCollectionIndex(Integer collectionIndex) {
         for (int i = 0; i < this.segmentContexts.size(); i++) {
             SegmentContext sc = segmentContexts.get(i);
@@ -301,6 +405,11 @@ public class AtlasPath implements Cloneable {
         throw new IllegalArgumentException("No Vacant index on collection segments in the path " + this.toString());
     }
 
+    /**
+     * Gets the full path expression of the specified segment.
+     * @param sc segment
+     * @return path expression
+     */
     public String getSegmentPath(SegmentContext sc) {
         int toIndex = this.segmentContexts.indexOf(sc);
         if (toIndex == -1) {
@@ -324,10 +433,18 @@ public class AtlasPath implements Cloneable {
         return getSegmentPath(getLastSegment());
     }
 
+    /**
+     * Gets the original path expression.
+     * @return original path expression.
+     */
     public String getOriginalPath() {
         return originalPath;
     }
 
+    /**
+     * Gets the number of collection segments in this path.
+     * @return the number of collection segment.
+     */
     public int getCollectionSegmentCount() {
         int answer = 0;
         for (SegmentContext sc : getSegments(true)) {
@@ -338,6 +455,11 @@ public class AtlasPath implements Cloneable {
         return answer;
     }
 
+    /**
+     * Parses the path expression and build a list of {@link SegmentContext}.
+     * @param path path expression
+     * @return a list of the path segment
+     */
     protected List<SegmentContext> parse(String path) {
         path = sanitize(path);
         List<SegmentContext> segmentContexts = new ArrayList<>();
@@ -361,6 +483,11 @@ public class AtlasPath implements Cloneable {
         return segmentContexts;
     }
 
+    /**
+     * Sanitizes the path expression, e.g. remove duplicated path separator.
+     * @param path path expression
+     * @return sanitized path expression
+     */
     protected String sanitize(String path) {
         String answer = path;
         if (answer == null || answer.isEmpty()) {
@@ -380,10 +507,18 @@ public class AtlasPath implements Cloneable {
         return answer;
     }
 
+    /**
+     * Creates a {@link SegmentContext} from the specified expression.
+     * @param expression path expression
+     * @return path segment
+     */
     protected SegmentContext createSegmentContext(String expression) {
         return new SegmentContext(expression);
     }
 
+    /**
+     * Represents the segment of the path separated by the path separator.
+     */
     public static class SegmentContext {
 
         private String name;
@@ -394,6 +529,10 @@ public class AtlasPath implements Cloneable {
         private boolean isAttribute;
         private boolean isRoot;
 
+        /**
+         * A constructor.
+         * @param expression path expression
+         */
         public SegmentContext(String expression) {
             this.expression = expression;
             if (this.expression.startsWith(PATH_SEPARATOR)) {
@@ -418,34 +557,66 @@ public class AtlasPath implements Cloneable {
             this.isRoot = this.name.isEmpty();
         }
 
+        /**
+         * Gets the name.
+         * @return name
+         */
         public String getName() {
             return name;
         }
 
+        /**
+         * Gets the expression.
+         * @return expression
+         */
         public String getExpression() {
             return expression;
         }
 
+        /**
+         * Gets the collection type.
+         * @return collection type.
+         */
         public CollectionType getCollectionType() {
             return this.collectionType;
         }
 
+        /**
+         * Gets the collection index.
+         * @return collection index
+         */
         public Integer getCollectionIndex() {
             return this.collectionIndex;
         }
 
+        /**
+         * Gets the map key.
+         * @return map key
+         */
         public String getMapKey() {
             return this.mapKey;
         }
 
+        /**
+         * Gets if it's attribute or not.
+         * @return true if it's attribute, or false
+         */
         public boolean isAttribute() {
             return isAttribute;
         }
 
+        /**
+         * Gets if it's a root segment.
+         * @return true if it's a root segment, or false
+         */
         public boolean isRoot() {
             return isRoot;
         }
 
+        /**
+         * Rebuilds this path segment.
+         * @return rebuilt path segment
+         */
         protected SegmentContext rebuild() {
             StringBuilder buf = new StringBuilder();
             if (this.isAttribute) {
@@ -473,6 +644,11 @@ public class AtlasPath implements Cloneable {
                     name, expression, collectionType, collectionIndex);
         }
 
+        /**
+         * Cleans the path segment
+         * @param expression path segment expression
+         * @return cleaned expression
+         */
         protected String cleanPathSegment(String expression) {
             String answer = expression;
             if (answer == null) {

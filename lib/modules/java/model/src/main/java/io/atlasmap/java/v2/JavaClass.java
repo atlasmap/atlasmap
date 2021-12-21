@@ -19,29 +19,32 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * Represents the Java Document which describes the structure of the inspected Java class.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class JavaClass extends JavaField implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** java enum fields. */
     protected JavaEnumFields javaEnumFields;
-
+    /** java fields. */
     protected JavaFields javaFields;
-
+    /** package name. */
     protected String packageName;
-
+    /** true if it's an annotation. */
     protected Boolean annotation;
-
+    /** true if it's an anonymous class. */
     protected Boolean annonymous;
-
+    /** true if it's an enum. */
     protected Boolean enumeration;
-
+    /** true if it's an interface. */
     protected Boolean isInterface;
-
+    /** true if it's a local class. */
     protected Boolean localClass;
-
+    /** true if it's a member class. */
     protected Boolean memberClass;
-
+    /** URI. */
     protected String uri;
 
     /**
@@ -284,6 +287,7 @@ public class JavaClass extends JavaField implements Serializable {
         this.uri = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -488,6 +492,7 @@ public class JavaClass extends JavaField implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

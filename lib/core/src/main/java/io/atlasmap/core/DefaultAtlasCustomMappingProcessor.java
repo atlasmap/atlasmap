@@ -22,10 +22,18 @@ import io.atlasmap.api.AtlasMappingBuilder;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CustomMapping;
 
+/**
+ * The custom mapping processor processes the {@link CustomMapping}. {@link DefaultAtlasContext}
+ * uses this to process custom mapping where it's declared in the mapping definition.
+ */
 public class DefaultAtlasCustomMappingProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasCustomMappingProcessor.class);
     private static DefaultAtlasCustomMappingProcessor instance;
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static DefaultAtlasCustomMappingProcessor getInstance() {
         if (instance == null) {
             instance = new DefaultAtlasCustomMappingProcessor();
@@ -33,6 +41,11 @@ public class DefaultAtlasCustomMappingProcessor {
         return instance;
     }
 
+    /**
+     * Processes the {@link CustomMapping}.
+     * @param session session
+     * @param customMapping custom mapping
+     */
     public void process(DefaultAtlasSession session, CustomMapping customMapping) {
         String className = customMapping.getClassName();
         if (className == null || className.isEmpty()) {

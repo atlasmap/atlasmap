@@ -18,10 +18,14 @@ package io.atlasmap.java.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * The container of {@link JavaField}.
+ */
 public class JavaFields implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** a list of {@link JavaField}. */
     protected List<JavaField> javaField;
 
     /**
@@ -53,6 +57,7 @@ public class JavaFields implements Serializable {
         return this.javaField;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -83,6 +88,7 @@ public class JavaFields implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

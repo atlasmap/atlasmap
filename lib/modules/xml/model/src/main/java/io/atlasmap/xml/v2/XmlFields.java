@@ -19,10 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link XmlField}.
+ */
 public class XmlFields implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** A list of {@link XmlField}. */
     protected List<XmlField> xmlField;
 
     /**
@@ -54,6 +57,7 @@ public class XmlFields implements Serializable {
         return this.xmlField;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -84,6 +88,7 @@ public class XmlFields implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

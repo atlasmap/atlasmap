@@ -17,8 +17,12 @@ package io.atlasmap.dfdl.v2;
 
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 
+/**
+ * The model factory for DFDL module.
+ */
 public class AtlasDfdlModelFactory extends AtlasXmlModelFactory {
 
+    /** URI format. */
     public static final String URI_FORMAT = "atlas:dfdl";
 
 }
