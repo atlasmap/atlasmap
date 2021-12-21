@@ -16,16 +16,18 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        java: [ '13', '15' ]
+        java: [ '18' ]
     name: Java ${{ matrix.Java }} build
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java versions
+      continue-on-error: true
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Cache Maven repo
+      continue-on-error: true
       uses: actions/cache@v2
       with:
         path: ~/.m2/repository
