@@ -19,11 +19,15 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Split</strong> field action.
+ */
 public class Split extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** delimiter */
     protected String delimiter;
+    /** true to collapse repeating delimiter, or false */
     private boolean collapseRepeatingDelimiter = false;
 
     /**
@@ -52,10 +56,18 @@ public class Split extends Action implements Serializable {
         this.delimiter = value;
     }
 
+    /**
+     * Gets the collapseRepeatingDelimiters property.
+     * @return the property
+     */
     public Boolean getCollapseRepeatingDelimiters() {
         return collapseRepeatingDelimiter;
     }
 
+    /**
+     * Sets the collapseRepeatingDelimiters property.
+     * @param collapseRepeatingDelimiter the property
+     */
     @JsonPropertyDescription("Check to collapse repeating delimiters")
     @AtlasActionProperty(title = "Collapse Repeating Delimiters", type = FieldType.STRING)
     public void setCollapseRepeatingDelimiters(Boolean collapseRepeatingDelimiter) {

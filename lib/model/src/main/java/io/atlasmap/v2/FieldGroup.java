@@ -19,11 +19,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldGroup extends Field implements Serializable
-{
+/**
+ * The container of the {@link Field}.
+ * It groups sub fields and collection item fields.
+ */
+public class FieldGroup extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Field} */
     protected List<Field> field;
 
     /**

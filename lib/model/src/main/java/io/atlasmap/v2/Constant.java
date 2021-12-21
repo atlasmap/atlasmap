@@ -17,14 +17,20 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The constant model object.
+ */
 public class Constant implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
 
+    /** value */
     protected String value;
 
+    /** field type */
     protected FieldType fieldType;
 
     /**

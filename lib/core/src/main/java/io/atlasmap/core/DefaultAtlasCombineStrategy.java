@@ -21,9 +21,16 @@ import java.util.TreeMap;
 import io.atlasmap.spi.AtlasCombineStrategy;
 import io.atlasmap.spi.StringDelimiter;
 
+/**
+ * @deprecated {@link AtlasCombineStrategy}.
+ * @see AtlasCombineStrategy
+ */
+@Deprecated
 public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
 
+    /** . */
     public static final StringDelimiter DEFAULT_COMBINE_DELIMITER = StringDelimiter.SPACE;
+    /** . */
     public static final Integer DEFAULT_COMBINE_LIMIT = 512;
     private StringDelimiter delimiter = DEFAULT_COMBINE_DELIMITER;
     private Integer limit = DEFAULT_COMBINE_LIMIT;
@@ -50,18 +57,34 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
         this.limit = limit;
     }
 
+    /**
+     * .
+     * @return .
+     */
     public boolean isDisableAutoTrim() {
         return disableAutoTrim;
     }
 
+    /**
+     * .
+     * @param disableAutoTrim .
+     */
     public void setDisableAutoTrim(boolean disableAutoTrim) {
         this.disableAutoTrim = disableAutoTrim;
     }
 
+    /**
+     * .
+     * @return .
+     */
     public boolean isDisableAddDelimiterOnNull() {
         return disableAddDelimiterOnNull;
     }
 
+    /**
+     * .
+     * @param disableAddDelimiterOnNull .
+     */
     public void setDisableAddDelimiterOnNull(boolean disableAddDelimiterOnNull) {
         this.disableAddDelimiterOnNull = disableAddDelimiterOnNull;
     }
@@ -132,6 +155,11 @@ public class DefaultAtlasCombineStrategy implements AtlasCombineStrategy {
         return null;
     }
 
+    /**
+     * .
+     * @param map .
+     * @return .
+     */
     protected static Map<Integer, String> sortByKey(Map<Integer, String> map) {
         TreeMap<Integer, String> treeMap = new TreeMap<>((key1, key2) -> {
             if (key1 == null && key2 == null) {

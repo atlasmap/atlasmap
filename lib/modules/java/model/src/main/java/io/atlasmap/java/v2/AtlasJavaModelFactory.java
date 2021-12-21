@@ -22,10 +22,18 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
+/**
+ * The model factory for java module.
+ */
 public class AtlasJavaModelFactory {
 
+    /** template string for the module URI. */
     public static final String URI_FORMAT = "atlas:java?className=%s";
 
+    /**
+     * Creates {@link JavaClass}.
+     * @return JavaClass
+     */
     public static JavaClass createJavaClass() {
         JavaClass javaClass = new JavaClass();
         javaClass.setJavaEnumFields(new JavaEnumFields());
@@ -33,12 +41,21 @@ public class AtlasJavaModelFactory {
         return javaClass;
     }
 
+    /**
+     * Creates {@link JavaField}.
+     * @return JavaField
+     */
     public static JavaField createJavaField() {
         JavaField javaField = new JavaField();
         javaField.setModifiers(new ModifierList());
         return javaField;
     }
 
+    /**
+     * Clones {@link FieldGroup}.
+     * @param group source
+     * @return cloned
+     */
     public static FieldGroup cloneFieldGroup(FieldGroup group) {
         FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);
         List<Field> newChildren = new ArrayList<>();
@@ -53,6 +70,12 @@ public class AtlasJavaModelFactory {
         return clone;
     }
 
+    /**
+     * Clones {@link JavaField} or {@link JavaEnumField}.
+     * @param field field
+     * @param withActions true to clone actions as well
+     * @return cloned
+     */
     public static Field cloneJavaField(Field field, boolean withActions) {
         if (field instanceof FieldGroup) {
             FieldGroup clone = AtlasModelFactory.createFieldGroupFrom(field, withActions);
@@ -66,6 +89,12 @@ public class AtlasJavaModelFactory {
         return clone;
     }
 
+    /**
+     * Deep copies the field.
+     * @param from from
+     * @param to to
+     * @param withActions true to clone actions as well
+     */
     public static void copyField(Field from, Field to, boolean withActions) {
         AtlasModelFactory.copyField(from, to, withActions);
 

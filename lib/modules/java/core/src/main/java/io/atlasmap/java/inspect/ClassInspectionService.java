@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.java.core.ClassHelper;
@@ -50,9 +51,13 @@ import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.StringList;
 
+/**
+ * The Java class inspection service.
+ */
 public class ClassInspectionService {
-
+    /** max reentry limit. */
     public static final int MAX_REENTRY_LIMIT = 1;
+    /** max array dimension limit. */
     public static final int MAX_ARRAY_DIM_LIMIT = 256; // JVM specification
 
     private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);
@@ -74,80 +79,162 @@ public class ClassInspectionService {
     private Boolean disablePublicOnlyFields = false;
     private Boolean disablePublicGetterSetterFields = false;
 
+    /**
+     * Gets the map classes.
+     * @return map classes
+     */
     public List<String> getMapClasses() {
         return this.mapClasses;
     }
 
+    /**
+     * Gets the list classes.
+     * @return list classes
+     */
     public List<String> getListClasses() {
         return this.listClasses;
     }
 
+    /**
+     * Gets the class name exclusions.
+     * @return class name exclusions
+     */
     public List<String> getClassNameExclusions() {
         return this.classNameExclusions;
     }
 
+    /**
+     * Gets the field exclusions.
+     * @return field exclusions
+     */
     public List<String> getFieldExclusions() {
         return this.fieldExclusions;
     }
 
+    /**
+     * Gets if it disables protected fields.
+     * @return true if disabled, or false
+     */
     public Boolean getDisableProtectedOnlyFields() {
         return disableProtectedOnlyFields;
     }
 
+    /**
+     * Sets if it disables protected fields.
+     * @param disableProtectedOnlyFields true to disable, or false
+     */
     public void setDisableProtectedOnlyFields(Boolean disableProtectedOnlyFields) {
         this.disableProtectedOnlyFields = disableProtectedOnlyFields;
     }
 
+    /**
+     * Gets if it disables package private fields.
+     * @return true if disabled, or false
+     */
     public Boolean getDisablePackagePrivateOnlyFields() {
         return disablePackagePrivateOnlyFields;
     }
 
+    /**
+     * Sets if it disables package private fields.
+     * @param disablePackagePrivateOnlyFields true to disable, or false
+     */
     public void setDisablePackagePrivateOnlyFields(Boolean disablePackagePrivateOnlyFields) {
         this.disablePackagePrivateOnlyFields = disablePackagePrivateOnlyFields;
     }
 
+    /**
+     * Gets if it disables private fields.
+     * @return true if disabled, or false
+     */
     public Boolean getDisablePrivateOnlyFields() {
         return disablePrivateOnlyFields;
     }
 
+    /**
+     * Sets if it disables private fields.
+     * @param disablePrivateOnlyFields true to disable, or false
+     */
     public void setDisablePrivateOnlyFields(Boolean disablePrivateOnlyFields) {
         this.disablePrivateOnlyFields = disablePrivateOnlyFields;
     }
 
+    /**
+     * Gets if it disables public fields.
+     * @return true if disabled, or false
+     */
     public Boolean getDisablePublicOnlyFields() {
         return disablePublicOnlyFields;
     }
 
+    /**
+     * Sets if it disables public fields.
+     * @param disablePublicOnlyFields true to disable, or false
+     */
     public void setDisablePublicOnlyFields(Boolean disablePublicOnlyFields) {
         this.disablePublicOnlyFields = disablePublicOnlyFields;
     }
 
+    /**
+     * Gets if it disables the field with public getter/setter.
+     * @return true if disabled, or false
+     */
     public Boolean getDisablePublicGetterSetterFields() {
         return disablePublicGetterSetterFields;
     }
 
+    /**
+     * Sets if it disables the field with public getter/setter.
+     * @param disablePublicGetterSetterFields true to disable, or false
+     */
     public void setDisablePublicGetterSetterFields(Boolean disablePublicGetterSetterFields) {
         this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;
     }
 
+    /**
+     * Inspects Java class as a Document and return {@link JavaClass} Java Document.
+     * @param className class name
+     * @param collectionType collection type
+     * @param collectionClassName collection class name
+     * @return Java Document
+     * @throws ClassNotFoundException class was not found
+     */
     public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName) throws ClassNotFoundException {
         // Use a loader for this class for now
         ClassLoader classLoader = getClass().getClassLoader();
         return inspectClass(classLoader, className, collectionType, collectionClassName);
     }
 
+    /**
+     * Inspects Java class as a Document and return {@link JavaClass} Java Document.
+     * @param classLoader class loader
+     * @param className class name
+     * @param collectionType collection type
+     * @param collectionClassName collection class name
+     * @return Java Document
+     * @throws ClassNotFoundException class was not found
+     */
     public JavaClass inspectClass(ClassLoader classLoader, String className, CollectionType collectionType, String collectionClassName)
         throws ClassNotFoundException {
         Class<?> clazz = classLoader.loadClass(className);
         return inspectClass(classLoader, clazz, collectionType, collectionClassName);
     }
 
-    public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName, String classpath) throws InspectionException {
+    /**
+     * Inspects Java class as a Document and return {@link JavaClass} Java Document.
+     * @param className class name
+     * @param collectionType collection type
+     * @param collectionClassName collection class name
+     * @param classpath classpath
+     * @return Java Document
+     * @throws AtlasException class name or classpath is null
+     */
+    public JavaClass inspectClass(String className, CollectionType collectionType, String collectionClassName, String classpath) throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Inspecting class: " + className + ", classPath: " + classpath);
         }
         if (className == null || classpath == null) {
-            throw new InspectionException("ClassName and Classpath must be specified");
+            throw new AtlasException("ClassName and Classpath must be specified");
         }
 
         JavaClass d = null;
@@ -166,6 +253,13 @@ public class ClassInspectionService {
         return d;
     }
 
+    /**
+     * Inspects Java class as a Document and return {@link JavaClass} Java Document.
+     * @param clazz class
+     * @param collectionType collection type
+     * @param collectionClassName collection class name
+     * @return Java Document
+     */
     public JavaClass inspectClass(Class<?> clazz, CollectionType collectionType, String collectionClassName) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class must be specified");
@@ -174,6 +268,14 @@ public class ClassInspectionService {
         return inspectClass(clazz.getClassLoader(), clazz, collectionType, collectionClassName);
     }
 
+    /**
+     * Inspects Java class as a Document and return {@link JavaClass} Java Document.
+     * @param classLoader class loader
+     * @param clazz class
+     * @param collectionType collection type
+     * @param collectionClassName collection class name
+     * @return Java Document
+     */
     public JavaClass inspectClass(ClassLoader classLoader, Class<?> clazz, CollectionType collectionType, String collectionClassName) {
         if (clazz == null) {
             throw new IllegalArgumentException("Class must be specified");
@@ -698,6 +800,11 @@ public class ClassInspectionService {
         }
     }
 
+    /**
+     * Gets if the field type is map or not.
+     * @param fieldType field type
+     * @return true if it's a map, or false
+     */
     protected boolean isFieldMap(String fieldType) {
         return getMapClasses().contains(fieldType);
     }
@@ -879,6 +986,10 @@ public class ClassInspectionService {
         return atlasConversionService;
     }
 
+    /**
+     * Gets the conversion service.
+     * @param atlasConversionService conversion service
+     */
     public void setConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
     }

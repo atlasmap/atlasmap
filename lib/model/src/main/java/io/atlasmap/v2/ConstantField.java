@@ -19,6 +19,9 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The constant field.
+ */
 @JsonRootName("io.atlasmap.v2.ConstantField")
 public class ConstantField extends Field implements Serializable {
 

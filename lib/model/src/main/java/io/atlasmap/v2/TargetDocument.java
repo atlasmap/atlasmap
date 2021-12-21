@@ -19,13 +19,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-
+/**
+ * The target {@link Document} model object.
+ */
 @JsonRootName("TargetDocument")
 public class TargetDocument implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    protected String body;
 
+    /** body */
+    protected String body;
+    /** Document ID */
     protected String docId;
 
     /**

@@ -22,6 +22,10 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.parser.ParseException;
 
+/**
+ * The {@code LT()} function for conditional mapping expression which returns
+ * {@code true} if the left is less than right, otherwise returns {@code false}.
+ */
 public class LT extends BaseFunctionFactory {
 
     @Override

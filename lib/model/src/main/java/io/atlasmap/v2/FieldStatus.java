@@ -15,24 +15,47 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of {#link Field} status.
+ */
 public enum FieldStatus {
 
+    /** Supported. */
     SUPPORTED("Supported"),
+    /** Unsupported. */
     UNSUPPORTED("Unsupported"),
+    /** Cached. */
     CACHED("Cached"),
+    /** Error. */
     ERROR("Error"),
+    /** Not Found. */
     NOT_FOUND("NotFound"),
+    /** Excluded. */
     EXCLUDED("Excluded");
+
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     FieldStatus(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static FieldStatus fromValue(String v) {
         for (FieldStatus c: FieldStatus.values()) {
             if (c.value.equals(v)) {

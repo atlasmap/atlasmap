@@ -19,13 +19,18 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The mock {@link Field}.
+ */
 @JsonRootName("io.atlasmap.v2.MockField")
 public class MockField extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
 
+    /** custom */
     protected String custom;
 
     /**

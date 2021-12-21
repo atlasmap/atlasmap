@@ -16,6 +16,10 @@
 package io.atlasmap.v2;
 
 import java.io.Serializable;
+
+/**
+ * The model class for the <strong>Day of Week</strong> field action.
+ */
 public class DayOfWeek extends Action implements Serializable
 {
 

@@ -19,10 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of {@link XmlEnumField}.
+ */
 public class XmlEnumFields implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** A list of {@link XmlEnumField}. */
     protected List<XmlEnumField> xmlEnumField;
 
     /**
@@ -54,6 +57,7 @@ public class XmlEnumFields implements Serializable {
         return this.xmlEnumField;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -84,6 +88,7 @@ public class XmlEnumFields implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

@@ -24,14 +24,20 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.ComplexType;
 import io.atlasmap.v2.Field;
 
+/**
+ * Represents the complex field of JSON Document.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class JsonComplexType extends JsonField implements Serializable, ComplexType {
 
     private static final long serialVersionUID = 1L;
-
+    /** JSON fields. */
     protected JsonFields jsonFields;
+    /** JSON enum fields. */
     protected JsonEnumFields jsonEnumFields;
+    /** True if enumeration. */
     protected Boolean enumeration;
+    /** URI. */
     protected String uri;
 
     /**
@@ -136,6 +142,7 @@ public class JsonComplexType extends JsonField implements Serializable, ComplexT
         return jsonFields.getJsonField();
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -188,6 +195,7 @@ public class JsonComplexType extends JsonField implements Serializable, ComplexT
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

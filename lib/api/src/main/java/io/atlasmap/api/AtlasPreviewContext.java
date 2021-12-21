@@ -18,8 +18,17 @@ package io.atlasmap.api;
 import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.Mapping;
 
+/**
+ * {@link AtlasContext} to process single entry mapping preview.
+ */
 public interface AtlasPreviewContext {
 
+    /**
+     * Processes mapping preview.
+     * @param mapping mapping entry
+     * @return a list of {@link io.atlasmap.v2.Audit}
+     * @throws AtlasException unexpected error
+     */
     Audits processPreview(Mapping mapping) throws AtlasException;
 
 }

@@ -24,22 +24,36 @@ import io.atlasmap.expression.Expression;
  * @version $Revision: 1.2 $
  */
 public abstract class BinaryExpression implements Expression {
+    /** left expression */
     protected Expression left;
+    /** right expression */
     protected Expression right;
 
+    /**
+     * A constructor.
+     * @param left left
+     * @param right right
+     */
     public BinaryExpression(Expression left, Expression right) {
         this.left = left;
         this.right = right;
     }
 
+    /**
+     * Gets left expression.
+     * @return left
+     */
     public Expression getLeft() {
         return left;
     }
 
+    /**
+     * Gets right expression.
+     * @return right
+     */
     public Expression getRight() {
         return right;
     }
-
 
     /**
      * {@inheritDoc}
@@ -77,6 +91,7 @@ public abstract class BinaryExpression implements Expression {
     public abstract String getExpressionSymbol();
 
     /**
+     * Sets right expression.
      * @param expression right {@link Expression}
      */
     public void setRight(Expression expression) {
@@ -84,6 +99,7 @@ public abstract class BinaryExpression implements Expression {
     }
 
     /**
+     * Sets left expression.
      * @param expression left {@link Expression}
      */
     public void setLeft(Expression expression) {

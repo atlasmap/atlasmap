@@ -46,6 +46,9 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The {@link AtlasFieldReader} implementation for the JSON Document.
+ */
 public class JsonFieldReader implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonFieldReader.class);
@@ -57,6 +60,10 @@ public class JsonFieldReader implements AtlasFieldReader {
     private JsonFieldReader() {
     }
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     */
     public JsonFieldReader(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
@@ -341,6 +348,11 @@ public class JsonFieldReader implements AtlasFieldReader {
         throw new AtlasException("Unknown error: detected a container JSON node which is not ARRAY nor OBJECT");
     }
 
+    /**
+     * Sets the JSON document.
+     * @param document document
+     * @throws AtlasException Failed to parse as a JSON
+     */
     public void setDocument(String document) throws AtlasException {
         if (document == null || document.isEmpty()) {
             this.rootNode = null;

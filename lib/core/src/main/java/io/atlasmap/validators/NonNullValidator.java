@@ -22,11 +22,19 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The non-null validator.
+ */
 public class NonNullValidator implements AtlasValidator {
 
     private String violationMessage;
     private ValidationScope scope;
 
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     */
     public NonNullValidator(ValidationScope scope, String violationMessage) {
         this.scope = scope;
         this.violationMessage = violationMessage;

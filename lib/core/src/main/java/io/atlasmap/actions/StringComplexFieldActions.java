@@ -17,7 +17,6 @@ package io.atlasmap.actions;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import io.atlasmap.spi.AtlasActionProcessor;
@@ -27,7 +26,6 @@ import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Format;
-import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
@@ -42,11 +40,17 @@ import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
 
+/**
+ * The String field action that has parameter(s).
+ */
 public class StringComplexFieldActions implements AtlasFieldAction {
 
-    public static final String STRING_SEPARATOR_REGEX = "^\\s+:_+=";
-    public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);
-
+    /**
+     * Appends to the source String.
+     * @param append action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String append(Append append, String input) {
         if (append == null) {
@@ -62,6 +66,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? string : input.toString().concat(string);
     }
 
+    /**
+     * Concatenates a list of String.
+     * @param concat action model
+     * @param inputs a list of source String
+     * @return processed
+     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String concatenate(Concatenate concat, List<String> inputs) {
         if (concat == null) {
@@ -90,6 +100,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
+    /**
+     * Gets if the source string ends with the String specified as a parameter.
+     * @param endsWith action model
+     * @param input source
+     * @return true if it ends with the one, or false
+     */
     @AtlasActionProcessor
     public static Boolean endsWith(EndsWith endsWith, String input) {
         if (endsWith == null || endsWith.getString() == null) {
@@ -99,6 +115,13 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? false : input.endsWith(endsWith.getString());
     }
 
+    /**
+     * Formats the template String specified as a parameter by using {@link String#format(Locale, String, Object...)}.
+     * Source Strings are used as template parameters.
+     * @param format action model
+     * @param input a list of source Strings
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String format(Format format, List<Object> input) {
         if (format == null || format.getTemplate() == null) {
@@ -108,11 +131,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return String.format(Locale.ROOT, format.getTemplate(), input == null ? null : input.toArray(new Object[0]));
     }
 
-    @AtlasActionProcessor
-    public static String genareteUUID(GenerateUUID action) {
-        return UUID.randomUUID().toString();
-    }
-
+    /**
+     * Gets the index of the String specified as a parameter in the source String by using {@link String#indexOf(String)}.
+     * @param indexOf action model
+     * @param input source
+     * @return index
+     */
     @AtlasActionProcessor
     public static Number indexOf(IndexOf indexOf, String input) {
         if (indexOf == null || indexOf.getString() == null) {
@@ -122,6 +146,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? -1 : input.indexOf(indexOf.getString());
     }
 
+    /**
+     * Gets the last index of the String specified as a parameter in the source String by using {@link String#lastIndexOf(String)}.
+     * @param lastIndexOf action model
+     * @param input source
+     * @return index
+     */
     @AtlasActionProcessor
     public static Number lastIndexOf(LastIndexOf lastIndexOf, String input) {
         if (lastIndexOf == null || lastIndexOf.getString() == null) {
@@ -131,6 +161,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? -1 : input.lastIndexOf(lastIndexOf.getString());
     }
 
+    /**
+     * Appends the specified number of padding characters to the right.
+     * @param padStringRight action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String padStringRight(PadStringRight padStringRight, String input) {
         if (padStringRight == null || padStringRight.getPadCharacter() == null
@@ -149,6 +185,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
+    /**
+     *  Prepends the specified number of padding character to the left.
+     * @param padStringLeft action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String padStringLeft(PadStringLeft padStringLeft, String input) {
         if (padStringLeft == null || padStringLeft.getPadCharacter() == null
@@ -167,6 +209,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return builder.toString();
     }
 
+    /**
+     * Prepends the specified String to the left.
+     * @param action action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String prepend(Prepend action, String input) {
         String string = action.getString();
@@ -179,6 +227,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return string.concat(input);
     }
 
+    /**
+     * Replaces all hits with the regular expression specified as a parameter.
+     * @param replaceAll action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String replaceAll(ReplaceAll replaceAll, String input) {
         if (replaceAll == null || replaceAll.getMatch() == null || replaceAll.getMatch().isEmpty()) {
@@ -189,6 +243,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? null : input.replaceAll(match, newString == null ? "" : newString);
     }
 
+    /**
+     * Replaces first hit with the regular expression specified as a parameter.
+     * @param replaceFirst action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor
     public static String replaceFirst(ReplaceFirst replaceFirst, String input) {
         if (replaceFirst == null || replaceFirst.getMatch() == null || replaceFirst.getMatch().isEmpty()) {
@@ -199,6 +259,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? null : input.replaceFirst(match, newString == null ? "" : newString);
     }
 
+    /**
+     * Splits the String with the specified delimiter.
+     * @param split action model
+     * @param input source
+     * @return splitted
+     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String[] split(Split split, String input) {
         if (split == null || split.getDelimiter() == null) {
@@ -214,6 +280,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? null : input.toString().split(quotedDelimiter);
     }
 
+    /**
+     * Repeats the source value based on the {@code Count} parameter.
+     * @param repeat action model
+     * @param input source
+     * @return repeated
+     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String[] repeat(Repeat repeat, String input) {
 
@@ -234,6 +306,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return returnObj;
     }
 
+    /**
+     * Gets if the source String starts with the {@code String} parameter.
+     * @param startsWith action model
+     * @param input source
+     * @return true if it starts with {@code String}, or false
+     */
     @AtlasActionProcessor
     public static Boolean startsWith(StartsWith startsWith, String input) {
         if (startsWith == null || startsWith.getString() == null) {
@@ -243,6 +321,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return input == null ? false : input.startsWith(startsWith.getString());
     }
 
+    /**
+     * Gets the substring from the source String with specified indexes.
+     * @param subString action model
+     * @param input source
+     * @return substring
+     */
     @AtlasActionProcessor
     public static String subString(SubString subString, String input) {
         if (input == null || input.length() == 0) {
@@ -256,6 +340,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return doSubString(input, subString.getStartIndex(), subString.getEndIndex());
     }
 
+    /**
+     * Gets the substring from the source String which is after the part matches the regular expression.
+     * @param subStringAfter action model
+     * @param input source
+     * @return substring
+     */
     @AtlasActionProcessor
     public static String subStringAfter(SubStringAfter subStringAfter, String input) {
         if (input == null || input.length() == 0) {
@@ -278,6 +368,12 @@ public class StringComplexFieldActions implements AtlasFieldAction {
         return doSubString(input.substring(idx), subStringAfter.getStartIndex(), subStringAfter.getEndIndex());
     }
 
+    /**
+     * Gets the substring from the source String which is before the part matches the regular expression.
+     * @param subStringBefore action model
+     * @param input source
+     * @return substring
+     */
     @AtlasActionProcessor
     public static String subStringBefore(SubStringBefore subStringBefore, String input) {
         if (input == null || input.length() == 0) {

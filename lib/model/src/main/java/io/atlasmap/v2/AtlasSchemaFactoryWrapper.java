@@ -29,8 +29,14 @@ import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
+/**
+ * The {@link SchemaFactoryWrapper} of field action.
+ */
 public class AtlasSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
+    /**
+     * A constructor.
+     */
     public AtlasSchemaFactoryWrapper() {
         super(new AtlasSchemaFactoryWrapper.AtlasWrapperFactory());
         schemaProvider = new JsonSchemaFactory() {

@@ -50,6 +50,9 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * Java Service provides Java inspection service which generate an AtlasMap Document object from Java class.
+ */
 @Path("/java/")
 public class JavaService {
 
@@ -58,6 +61,11 @@ public class JavaService {
     @Context
     private ResourceContext resourceContext;
 
+    /**
+     * Serializes to JSON
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
@@ -66,6 +74,13 @@ public class JavaService {
         }
     }
 
+    /**
+     * Deserializes from JSON
+     * @param <T> type
+     * @param value value
+     * @param clazz type
+     * @return deserialized
+     */
     protected <T> T fromJson(InputStream value, Class<T>clazz) {
         try {
             return Json.mapper().readValue(value, clazz);
@@ -74,6 +89,11 @@ public class JavaService {
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender name
+     * @return pong
+     */
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
@@ -83,6 +103,11 @@ public class JavaService {
         return "Got it! " + from;
     }
 
+    /**
+     * Inspects a Java Class with specified fully qualified class name and return a Document object.
+     * @param requestIn request
+     * @return {@link ClassInspectionResponse}
+     */
     @POST
     @Path("/class")
     @Consumes({ MediaType.APPLICATION_JSON })
@@ -132,6 +157,11 @@ public class JavaService {
         return Response.ok().entity(toJson(response)).build();
     }
 
+    /**
+     * Maps inspection parameters from the request to the inspection service.
+     * @param classInspectionService inspection service
+     * @param request request
+     */
     protected void configureInspectionService(ClassInspectionService classInspectionService,
             ClassInspectionRequest request) {
         if (request.getFieldNameExclusions() != null && request.getFieldNameExclusions().getString() != null

@@ -17,8 +17,15 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/**
+ * The base interface of field action implementation class.
+ */
 public interface FieldAction {
 
+    /**
+     * Gets the display name.
+     * @return display name
+     */
     @JsonIgnore
     default String getDisplayName() {
         // TODO display name should be more human readable one instead of class name

@@ -20,8 +20,17 @@ import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.CopyTo;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The field actions for handling collections.
+ */
 public class CollectionActions implements AtlasFieldAction {
 
+    /**
+     * The pseudo copyTo field action to convince action resolver. The real implementation is in {@link io.atlasmap.core.DefaultAtlasContext}.
+     * @param action action model
+     * @param input source
+     * @return processed
+     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static Object[] copyTo(CopyTo action, Object input) {
         // This a noop processor. Nevertheless it's signature is important to signal that's a one-to-many action.

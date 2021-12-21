@@ -275,8 +275,8 @@ public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test
     public void testCreateSession() throws Exception {
-
-        assertNotNull(context.createSession(mapping));
+        DefaultAtlasContextFactory factory = DefaultAtlasContextFactory.getInstance();
+        assertNotNull(new DefaultAtlasContext(factory, mapping));
 
         File file = Paths.get(
                 "src" + File.separator + "test" + File.separator + "resources" + File.separator + "atlasmapping.json")

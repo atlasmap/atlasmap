@@ -19,8 +19,15 @@ import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.DefaultAtlasCollectionHelper;
 import io.atlasmap.spi.AtlasFieldActionService;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasCollectionHelper} implementation for XML module.
+ */
 public class XmlCollectionHelper extends DefaultAtlasCollectionHelper {
 
+    /**
+     * A constructor.
+     * @param fieldActionService field action service
+     */
     public XmlCollectionHelper(AtlasFieldActionService fieldActionService) {
         super(fieldActionService);
     }

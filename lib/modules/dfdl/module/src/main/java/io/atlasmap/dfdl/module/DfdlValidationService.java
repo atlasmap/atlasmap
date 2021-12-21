@@ -20,10 +20,18 @@ import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.xml.module.XmlValidationService;
 
+/**
+ * The module validation service for DFDL Document.
+ */
 public class DfdlValidationService extends XmlValidationService {
 
     private AtlasModuleDetail moduleDetail = DfdlModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public DfdlValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         super(conversionService, fieldActionService);
     }

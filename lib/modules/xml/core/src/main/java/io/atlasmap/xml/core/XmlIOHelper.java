@@ -31,10 +31,17 @@ import org.w3c.dom.NodeList;
 
 import io.atlasmap.api.AtlasException;
 
+/**
+ * The XML IO helper.
+ */
 public final class XmlIOHelper {
 
     private TransformerFactory transformerFactory;
 
+    /**
+     * A constructor.
+     * @param cl class loader
+     */
     public XmlIOHelper(ClassLoader cl) {
         ClassLoader origTccl = Thread.currentThread().getContextClassLoader();
         try {
@@ -45,6 +52,12 @@ public final class XmlIOHelper {
         }
     }
 
+    /**
+     * Gets the children which has the specified name.
+     * @param name name
+     * @param parentNode parent
+     * @return children
+     */
     public static List<Element> getChildrenWithName(String name, Element parentNode) {
         List<Element> children = new LinkedList<>();
         if (parentNode == null) {
@@ -60,6 +73,13 @@ public final class XmlIOHelper {
         return children;
     }
 
+    /**
+     * Gets the children which has the specified name with stripping namespace alias.
+     * @param name name
+     * @param namespace namespace
+     * @param parentNode parent
+     * @return children
+     */
     public static List<Element> getChildrenWithNameStripAlias(String name, Optional<String> namespace, Element parentNode) {
         List<Element> children = new LinkedList<>();
         if (parentNode == null) {
@@ -80,6 +100,13 @@ public final class XmlIOHelper {
         return children;
     }
 
+    /**
+     * Writes the XML Document into a String.
+     * @param stripSpaces true to strip spaces
+     * @param node node
+     * @return wrtten Document in String
+     * @throws AtlasException unexpected error
+     */
     public String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
         try {
             if (node == null) {
@@ -100,6 +127,11 @@ public final class XmlIOHelper {
         }
     }
 
+    /**
+     * Gets the node name without namespace alias.
+     * @param child node
+     * @return name
+     */
     public static String getNodeNameWithoutNamespaceAlias(Node child) {
         String nodeName = child.getNodeName();
         int index = nodeName.indexOf(":");

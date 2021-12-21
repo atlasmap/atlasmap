@@ -19,21 +19,26 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The validation model object.
+ */
 @JsonRootName("Validation")
 public class Validation implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    protected String message;
 
+    /** message */
+    protected String message;
+    /** @deprecated ID */
     @Deprecated
     protected String id;
-
+    /** Document ID */
     protected String docId;
-
+    /** Document name */
     protected String docName;
-
+    /** validation scope */
     protected ValidationScope scope;
-
+    /** validation status */
     protected ValidationStatus status;
 
     /**

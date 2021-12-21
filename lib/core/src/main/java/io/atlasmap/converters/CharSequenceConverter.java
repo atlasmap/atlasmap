@@ -34,10 +34,19 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link CharSequence}.
+ */
 public class CharSequenceConverter implements AtlasConverter<CharSequence> {
 
     private static final Pattern TRUE_PATTERN = Pattern.compile("true|t|yes|y", Pattern.CASE_INSENSITIVE);
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DECIMAL,
             concerns = AtlasConversionConcern.FORMAT)
     public BigDecimal toBigDecimal(CharSequence value) throws AtlasConversionException {
@@ -49,6 +58,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         }
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.FORMAT)
     public BigInteger toBigInteger(CharSequence value) throws AtlasConversionException {
@@ -60,6 +75,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         }
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean toBoolean(CharSequence value, String sourceFormat, String targetFormat) {
         if (value == null) {
@@ -92,6 +114,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return Boolean.FALSE;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.FORMAT, AtlasConversionConcern.FRACTIONAL_PART})
     public Byte toByte(CharSequence value) throws AtlasConversionException {
@@ -116,6 +144,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         }
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or longer than one character
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character toCharacter(CharSequence value) throws AtlasConversionException {
         if (value == null) {
@@ -132,6 +166,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return value.charAt(0);
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param date value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
     public Date toDate(CharSequence date, String sourceFormat, String targetFormat) {
 
@@ -140,6 +181,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return Date.from(ZonedDateTime.parse(date, formater).toInstant());
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Double toDouble(CharSequence value) throws AtlasConversionException {
@@ -169,6 +216,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return parsedDouble;
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Float toFloat(CharSequence value) throws AtlasConversionException {
@@ -199,6 +252,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return Float.valueOf(str);
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Integer toInteger(CharSequence value) throws AtlasConversionException {
@@ -227,21 +286,42 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return i;
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE)
     public LocalDate toLocalDate(CharSequence value) {
         return value != null ? LocalDate.parse(value) : null;
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.TIME)
     public LocalTime toLocalTime(CharSequence value) {
         return value != null ? LocalTime.parse(value) : null;
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(CharSequence value) {
         return value != null ? LocalDateTime.parse(value) : null;
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Long toLong(CharSequence value) throws AtlasConversionException {
@@ -270,6 +350,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return l;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range or not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Short toShort(CharSequence value) throws AtlasConversionException {
@@ -297,6 +383,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return shortty;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(CharSequence value, String sourceFormat, String targetFormat) {
         if (value == null) {
@@ -305,6 +398,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return CharBuffer.wrap(value);
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public CharSequence toCharSequence(CharSequence value, String sourceFormat, String targetFormat) {
         if (value == null) {
@@ -313,6 +413,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return new String(value.toString());
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public String toString(CharSequence value, String sourceFormat, String targetFormat) {
         if (value == null) {
@@ -321,6 +428,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return new String(value.toString());
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(CharSequence value, String sourceFormat, String targetFormat) {
         if (value == null) {
@@ -329,6 +443,13 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return new StringBuffer(value);
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(CharSequence value, String sourceFormat, String targetFormat) {
         if (value == null) {
@@ -337,6 +458,12 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         return new StringBuilder(value);
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException not a number
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
             AtlasConversionConcern.FORMAT })
     public Number toNumber(CharSequence value) throws AtlasConversionException {
@@ -354,6 +481,11 @@ public class CharSequenceConverter implements AtlasConverter<CharSequence> {
         }
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(CharSequence value) {
         return value != null ? ZonedDateTime.parse(value) : null;

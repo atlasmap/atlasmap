@@ -33,7 +33,6 @@ import io.atlasmap.v2.Append;
 import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
 import io.atlasmap.v2.Format;
-import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
@@ -147,11 +146,6 @@ public class StringComplexFieldActionsTest {
         assertThrows(IllegalArgumentException.class, () -> {
             StringComplexFieldActions.format(new Format(), null);
         });
-    }
-
-    @Test
-    public void testGenareteUUID() {
-        validateGeneratedUUID(StringComplexFieldActions.genareteUUID(new GenerateUUID()));
     }
 
     @Test
@@ -629,10 +623,4 @@ public class StringComplexFieldActionsTest {
         assertTrue(Pattern.compile("([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]").matcher(timeValue).matches());
     }
 
-    protected void validateGeneratedUUID(String uuid) {
-        assertNotNull(uuid);
-        assertTrue(uuid.length() > 0);
-        assertTrue(Pattern.compile("[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}").matcher(uuid)
-                .matches());
-    }
 }

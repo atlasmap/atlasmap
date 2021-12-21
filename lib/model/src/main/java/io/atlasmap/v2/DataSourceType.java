@@ -15,21 +15,39 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of {@link DataSource} type.
+ */
 public enum DataSourceType {
 
+    /** Source. */
     SOURCE("Source"),
+    /** Target. */
     TARGET("Target");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     DataSourceType(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from value.
+     * @param v value
+     * @return the enum
+     */
     public static DataSourceType fromValue(String v) {
         for (DataSourceType c: DataSourceType.values()) {
             if (c.value.equals(v)) {

@@ -21,11 +21,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The container of strings.
+ */
 @JsonRootName("StringList")
 public class StringList implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of strings */
     protected List<String> string;
 
     /**

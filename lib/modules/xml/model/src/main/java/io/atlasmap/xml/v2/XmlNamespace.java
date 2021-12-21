@@ -17,16 +17,19 @@ package io.atlasmap.xml.v2;
 
 import java.io.Serializable;
 
+/**
+ * Represents the XML namespace.
+ */
 public class XmlNamespace implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** Alias. */
     protected String alias;
-
+    /** URI. */
     protected String uri;
-
+    /** Location URI. */
     protected String locationUri;
-
+    /** Target namespace. */
     protected Boolean targetNamespace;
 
     /**
@@ -125,6 +128,7 @@ public class XmlNamespace implements Serializable {
         this.targetNamespace = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -212,6 +216,7 @@ public class XmlNamespace implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

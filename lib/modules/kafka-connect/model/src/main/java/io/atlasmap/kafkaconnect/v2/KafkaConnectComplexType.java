@@ -17,14 +17,21 @@ package io.atlasmap.kafkaconnect.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The complex field type for Kafka Connect module.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class KafkaConnectComplexType extends KafkaConnectField {
 
     private static final long serialVersionUID = 1L;
 
+    /** children. */
     protected KafkaConnectFields kafkaConnectFields;
+    /** enum fields. */
     protected KafkaConnectEnumFields kafkaConnectEnumFields;
+    /** true if it's an enum. */
     protected Boolean enumeration;
+    /** URI. */
     protected String uri;
 
     /**
@@ -123,6 +130,7 @@ public class KafkaConnectComplexType extends KafkaConnectField {
         this.uri = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -175,6 +183,7 @@ public class KafkaConnectComplexType extends KafkaConnectField {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.core.AtlasMappingUtil;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.DataSource;
@@ -139,7 +140,7 @@ public abstract class BaseMappingTest {
 
     protected void debugErrors(Validations validations) {
         for (Validation validation : validations.getValidation()) {
-            logger.debug(DefaultAtlasValidationsHelper.validationToString(validation));
+            logger.debug(AtlasUtil.validationToString(validation));
         }
     }
 }

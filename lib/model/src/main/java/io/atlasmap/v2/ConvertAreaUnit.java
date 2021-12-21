@@ -19,12 +19,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Convert Area Unit</strong> field action.
+ */
 public class ConvertAreaUnit extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** area unit to convert from */
     protected AreaUnitType fromUnit;
 
+    /** area unit to convert to */
     protected AreaUnitType toUnit;
 
     /**

@@ -18,12 +18,18 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
+/**
+ * The model class for the <strong>Pad String Right</strong> field action.
+ */
 public class PadStringRight extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** pad character */
     protected String padCharacter;
 
+    /** pad count */
     protected Integer padCount;
 
     /**

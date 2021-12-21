@@ -33,8 +33,9 @@ import io.atlasmap.v2.PropertyField;
  *
  */
 public class CamelAtlasPropertyStrategy extends DefaultAtlasPropertyStrategy {
-
+    /** Exchange property scope. */
     public static final String SCOPE_EXCHANGE_PROPERTY = "camelExchangeProperty";
+    /** Current message scope. */
     public static final String SCOPE_CURRENT_MESSAGE_HEADER = "current";
 
     private Exchange camelExchange;
@@ -74,18 +75,35 @@ public class CamelAtlasPropertyStrategy extends DefaultAtlasPropertyStrategy {
         }
     }
 
+    /**
+     * Sets the camel Exchange.
+     * @param ex exchange
+     */
     public void setExchange(Exchange ex) {
         this.camelExchange = ex;
     }
 
+    /**
+     * Sets the source message.
+     * @param documentId Document ID
+     * @param msg message
+     */
     public void setSourceMessage(String documentId, Message msg) {
         sourceMessageMap.put(documentId, msg);
     }
 
+    /**
+     * Sets the current source message.
+     * @param msg message
+     */
     public void setCurrentSourceMessage(Message msg) {
         sourceMessageMap.put(SCOPE_CURRENT_MESSAGE_HEADER, msg);
     }
 
+    /**
+     * Sets the target message.
+     * @param msg message
+     */
     public void setTargetMessage(Message msg) {
         this.camelTargetMessage = msg;
     }

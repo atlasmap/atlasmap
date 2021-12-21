@@ -15,18 +15,45 @@
  */
 package io.atlasmap.mxbean;
 
+/**
+ * The {@link io.atlasmap.api.AtlasContext} MBean.
+ */
 public interface AtlasContextMXBean {
 
+    /**
+     * Gets the UUID.
+     * @return UUID
+     */
     String getUuid();
 
+    /**
+     * Gets the mapping name.
+     * @return mapping name
+     */
     String getMappingName();
 
+    /**
+     * Gets the mapping URI.
+     * @return mapping URI
+     */
     String getMappingUri();
 
+    /**
+     * Gets the class name.
+     * @return class name
+     */
     String getClassName();
 
+    /**
+     * Gets the thread name.
+     * @return thread name
+     */
     String getThreadName();
 
+    /**
+     * Gets the version.
+     * @return version
+     */
     String getVersion();
 
 }

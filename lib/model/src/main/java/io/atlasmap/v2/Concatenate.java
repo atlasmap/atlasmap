@@ -19,12 +19,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Concatenate</strong> field action.
+ */
 public class Concatenate extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** delimiter */
     protected String delimiter;
 
+    /** true to delimiting empty values */
     protected Boolean delimitingEmptyValues = true;
 
     /**

@@ -76,11 +76,18 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * The AtlasMap Core Service provides basic operations which is not specific to the individual data formats,
+ * Create/Get/Update/Remove mapping definition stored in Design Time Service local storage, validate mapping,
+ * retrieve metadata for available field actions and etc.
+ */
 @Path("/")
 public class AtlasService {
-
+    /** Mapping name prefix. */
     static final String MAPPING_NAME_PREFIX = "UI.";
+    /** The property name for the ADM Archive file to preload. */
     static final String ATLASMAP_ADM_PATH = "atlasmap.adm.path";
+    /** The property name for the AtlasMap design time service backend working directory. */
     static final String ATLASMAP_WORKSPACE = "atlasmap.workspace";
     private static final Logger LOG = LoggerFactory.getLogger(AtlasService.class);
 
@@ -92,6 +99,10 @@ public class AtlasService {
     private String libFolder = "";
     private AtlasLibraryLoader libraryLoader;
 
+    /**
+     * A constructor.
+     * @throws AtlasException unexpected error
+     */
     public AtlasService() throws AtlasException {
         String atlasmapWorkspace = System.getProperty(ATLASMAP_WORKSPACE);
         LOG.debug("AtlasMap backend Working directory: {}", atlasmapWorkspace);
@@ -140,6 +151,11 @@ public class AtlasService {
         this.previewContext = atlasContextFactory.createPreviewContext();
     }
 
+    /**
+     * Retrieves a list of available field action.
+     * @param uriInfo URI info
+     * @return {@link ActionDetails} serialized to JSON
+     */
     @GET
     @Path("/fieldActions")
     @Produces(MediaType.APPLICATION_JSON)
@@ -160,6 +176,12 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    /**
+     * @deprecated use {@link #listMappings(UriInfo,String,Integer)}.
+     * @param uriInfo URI info
+     * @param filter filter
+     * @return A list of mapping file name in {@link StringMap}
+     */
     @Deprecated
     @GET
     @Path("/mappings")
@@ -171,6 +193,13 @@ public class AtlasService {
         return listMappings(uriInfo, filter, 0);
     }
 
+    /**
+     * Retrieves a list of mapping file name saved with specified mapping definition ID.
+     * @param uriInfo URI info
+     * @param filter filter
+     * @param mappingDefinitionId mapping definition ID
+     * @return A list of mapping file name in {@link StringMap}
+     */
     @GET
     @Path("/mappings/{mappingDefinitionId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -200,6 +229,10 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    /**
+     * @deprecated use {@link #removeMappingRequest(Integer)} instead.
+     * @return .
+     */
     @Deprecated
     @DELETE
     @Path("/mapping")
@@ -212,6 +245,11 @@ public class AtlasService {
         return removeMappingRequest(0);
     }
 
+    /**
+     * Remove a mapping file saved on the backend.
+     * @param mappingDefinitionId mapping definition ID
+     * @return empty response
+     */
     @DELETE
     @Path("/mapping/{mappingDefinitionId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -237,11 +275,15 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    /**
+     * @deprecated use {@link #resetMappingById(Integer)} instead.
+     * @return .
+     */
     @Deprecated
     @DELETE
     @Path("/mapping/RESET")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Remove Mapping by ID", description = "Remove mapping file and catalogs related to specified ID")
+    @Operation(summary = "Remove Mapping by ID", description = "Removes mapping file and catalogs related to specified ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Mapping file and Catalogs were removed successfully"),
         @ApiResponse(responseCode = "204", description = "Unable to remove mapping file and Catalogs for the specified ID")})
@@ -250,6 +292,11 @@ public class AtlasService {
         return resetMappingById(0);
     }
 
+    /**
+     * Removes the mapping file and catalogs related to specified ID.
+     * @param mappingDefinitionId mapping definition ID
+     * @return empty response
+     */
     @DELETE
     @Path("/mapping/RESET/{mappingDefinitionId}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -274,6 +321,10 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    /**
+     * Removes all mapping files and catalogs saved on the server.
+     * @return empty response
+     */
     @DELETE
     @Path("/mapping/RESET/ALL")
     @Produces(MediaType.APPLICATION_JSON)
@@ -295,6 +346,10 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    /**
+     * Removes all user-defined JAR files saved on the server.
+     * @return empty response
+     */
     @DELETE
     @Path("/mapping/resetLibs")
     @Produces(MediaType.APPLICATION_JSON)
@@ -308,6 +363,11 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    /**
+     * @deprecated use {@link #getMappingRequest(MappingFileType, Integer)} instead.
+     * @param mappingFormat .
+     * @return .
+     */
     @Deprecated
     @GET
     @Path("/mapping/{mappingFormat}")
@@ -323,6 +383,12 @@ public class AtlasService {
         return getMappingRequest(mappingFormat, 0);
     }
 
+    /**
+     * Retrieve a mapping file saved on the server.
+     * @param mappingFormat file type
+     * @param mappingDefinitionId mapping definition ID
+     * @return file
+     */
     @GET
     @Path("/mapping/{mappingFormat}/{mappingDefinitionId}")
     @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
@@ -380,6 +446,13 @@ public class AtlasService {
         }
     }
 
+    /**
+     * @deprecated use {@link #createMappingRequest(InputStream, MappingFileType, Integer, UriInfo)} instead.
+     * @param mapping .
+     * @param mappingFormat .
+     * @param uriInfo .
+     * @return .
+     */
     @Deprecated
     @PUT
     @Path("/mapping/{mappingFormat}")
@@ -396,6 +469,14 @@ public class AtlasService {
         return createMappingRequest(mapping, mappingFormat, 0, uriInfo);
     }
 
+    /**
+     * Saves a file on the server.
+     * @param mapping request payload
+     * @param mappingFormat file type
+     * @param mappingDefinitionId mapping definition ID
+     * @param uriInfo URI info
+     * @return empty response
+     */
     @PUT
     @Path("/mapping/{mappingFormat}/{mappingDefinitionId}")
     @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
@@ -459,6 +540,12 @@ public class AtlasService {
         }
     }
 
+    /**
+     * @deprecated use {@link #updateMappingRequest(InputStream, Integer, UriInfo)} instead.
+     * @param mapping mapping
+     * @param uriInfo URI info
+     * @return .
+     */
     @Deprecated
     @POST
     @Path("/mapping")
@@ -474,6 +561,13 @@ public class AtlasService {
         return updateMappingRequest(mapping, 0, uriInfo);
     }
 
+    /**
+     * Updates existing mapping file on the server.
+     * @param mapping mapping
+     * @param mappingDefinitionId mapping definition ID
+     * @param uriInfo URI info
+     * @return empty response
+     */
     @POST
     @Path("/mapping/{mappingDefinitionId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -499,6 +593,12 @@ public class AtlasService {
         return Response.ok().location(builder.build()).build();
     }
 
+    /**
+     * @deprecated use {@link #validateMappingRequest(InputStream, Integer, UriInfo)} instead.
+     * @param mapping .
+     * @param uriInfo .
+     * @return .
+     */
     @Deprecated
     @PUT
     @Path("/mapping/validate")
@@ -513,6 +613,13 @@ public class AtlasService {
         return validateMappingRequest(mapping, 0, uriInfo);
     }
 
+    /**
+     * Validates the mapping file.
+     * @param mapping mapping
+     * @param mappingDefinitionId mapping definition ID
+     * @param uriInfo URI info
+     * @return {@link Validations} validation result
+     */
     @PUT
     @Path("/mapping/validate/{mappingDefinitionId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -532,6 +639,12 @@ public class AtlasService {
         }
     }
 
+    /**
+     * Processes mapping by feeding input data.
+     * @param request request
+     * @param uriInfo URI info
+     * @return {@link ProcessMappingResponse} which holds the result of the mappings
+     */
     @PUT
     @Path("/mapping/process")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -571,6 +684,10 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    /**
+     * Simple liveness check method used in liveness checks. Must not be protected via authetication.
+     * @return pong
+     */
     @GET
     @Path("/ping")
     @Operation(summary = "Ping", description = "Simple liveness check method used in liveness checks. Must not be protected via authetication.")
@@ -580,6 +697,10 @@ public class AtlasService {
         return Response.ok().entity(toJson("pong")).build();
     }
 
+    /**
+     * Retrieves AtlasMap core library version.
+     * @return version
+     */
     @GET
     @Path("/version")
     @Operation(summary = "Version", description = "Retrieves AtlasMap core library version.")
@@ -590,6 +711,11 @@ public class AtlasService {
         return Response.ok().entity(toJson(version)).build();
     }
 
+    /**
+     * Retrieves a list of available Java library class names from uploaded JARs.
+     * @param uriInfo URI info
+     * @return class names
+     */
     @GET
     @Path("/library/list")
     @Produces(MediaType.APPLICATION_JSON)
@@ -615,6 +741,11 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    /**
+     * Uploads a Java library archive file (jar).
+     * @param requestIn request
+     * @return empty response
+     */
     @PUT
     @Path("/library")
     @Operation(summary = "Upload Library", description = "Upload a Java library archive file")
@@ -642,6 +773,11 @@ public class AtlasService {
         return Response.ok().build();
     }
 
+    /**
+     * List mapping builder classes which defines custom mapping logic.
+     * @param uriInfo URI info
+     * @return class names
+     */
     @GET
     @Path("/mappingBuilders")
     @Operation(summary = "List mapping builder classes",
@@ -667,11 +803,23 @@ public class AtlasService {
         return Response.ok().entity(serialized).build();
     }
 
-    
+    /**
+     * Gets the library loader.
+     * @return loader
+     */
     public AtlasLibraryLoader getLibraryLoader() {
         return this.libraryLoader;
     }
 
+    /**
+     * Performs mapping validation.
+     * @param mappingDefinitionId mapping definition ID
+     * @param mapping mapping
+     * @param uriInfo URI info
+     * @return {@link Validations} validation result
+     * @throws IOException unexpected error
+     * @throws AtlasException unexpected error
+     */
     protected Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
         AtlasSession session;
         synchronized (atlasContextFactory) {

@@ -40,6 +40,9 @@ import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.Validations;
 
+/**
+ * The default implementation of {@link io.atlasmap.api.AtlasSession}.
+ */
 public class DefaultAtlasSession implements AtlasInternalSession {
 
     private DefaultAtlasContext atlasContext;
@@ -57,6 +60,11 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private String defaultSourceDocumentId;
     private String defaultTargetDocumentId;
 
+    /**
+     * A constructor.
+     * @param context context
+     * @throws AtlasException unexpected error
+     */
     public DefaultAtlasSession(DefaultAtlasContext context) throws AtlasException {
         this.atlasContext = context;
         initialize();
@@ -67,6 +75,9 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         this.mapping = context.getADMArchiveHandler().cloneMappingDefinition();
     }
 
+    /**
+     * Initializes.
+     */
     protected void initialize() {
         sourceProperties = new ConcurrentHashMap<String, Object>();
         targetProperties = new ConcurrentHashMap<String, Object>();
@@ -385,14 +396,26 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         return answer;
     }
 
+    /**
+     * Gets the constant module.
+     * @return constant module
+     */
     public ConstantModule getConstantModule() {
         return (ConstantModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.CONSTANTS_DOCUMENT_ID);
     }
 
+    /**
+     * Gets the source property module.
+     * @return source property module
+     */
     public PropertyModule getSourcePropertyModule() {
         return (PropertyModule) this.getAtlasContext().getSourceModules().get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);
     }
 
+    /**
+     * Gets the target property module.
+     * @return target property module
+     */
     public PropertyModule getTargetPropertyModule() {
         return (PropertyModule) this.getAtlasContext().getTargetModules().get(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);
     }
@@ -405,6 +428,10 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         private Field targetField;
         private List<Audit> audits = new LinkedList<Audit>();
 
+        /**
+         * A constructor.
+         * @param session session
+         */
         public HeadImpl(DefaultAtlasSession session) {
             this.session = session;
         }

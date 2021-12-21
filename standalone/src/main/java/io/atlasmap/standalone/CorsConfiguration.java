@@ -24,12 +24,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * CORS configuration.
+ */
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties("cors")
 public class CorsConfiguration {
 
     private List<String> allowedOrigins = Arrays.asList(org.springframework.web.cors.CorsConfiguration.ALL);
+
+    /**
+     * Gets the {@link CorsFilter}.
+     * @return CorsFliter filter
+     */
     @Bean
     public CorsFilter corsFilter() {
         return new CorsFilter(request -> {
@@ -50,10 +58,18 @@ public class CorsConfiguration {
         });
     }
 
+    /**
+     * Gets allowedOrigins.
+     * @return allowedOrigins
+     */
     public List<String> getAllowedOrigins() {
         return allowedOrigins;
     }
 
+    /**
+     * Sets allowedOrigins.
+     * @param allowedOrigins allowedOrigins
+     */
     public void setAllowedOrigins(List<String> allowedOrigins) {
         this.allowedOrigins = allowedOrigins;
     }

@@ -44,12 +44,23 @@ public class AtlasField {
     private DefaultAtlasFieldActionService fieldActionService;
     private Field rawField;
 
+    /**
+     * A constructor.
+     * @param session session
+     */
     public AtlasField(DefaultAtlasSession session) {
         this.session = session;
         this.conversionService = session.getAtlasContext().getContextFactory().getConversionService();
         this.fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();
     }
 
+    /**
+     * Reads the field from the source Document.
+     * @param docId Document ID
+     * @param path field path
+     * @return read field
+     * @throws AtlasException unexpected error
+     */
     public AtlasField read(String docId, String path) throws AtlasException {
         AtlasModule module = session.resolveModule(docId);
         if (module == null) {
@@ -68,6 +79,12 @@ public class AtlasField {
         return this;
     }
 
+    /**
+     * Reads the constant.
+     * @param name name
+     * @return read field
+     * @throws AtlasException unexpected error
+     */
     public AtlasField readConstant(String name) throws AtlasException {
         ConstantModule module = session.getConstantModule();
         List<Constant> constants = session.getMapping().getConstants().getConstant();
@@ -86,6 +103,13 @@ public class AtlasField {
         throw new AtlasException(String.format("Constant '%s' not found", name));
     }
 
+    /**
+     * Reads the source property.
+     * @param scope scope
+     * @param name name
+     * @return read field
+     * @throws AtlasException unexpected error
+     */
     public AtlasField readProperty(String scope, String name) throws AtlasException {
         PropertyModule module = session.getSourcePropertyModule();
         PropertyField sourceField = module.createField();
@@ -97,6 +121,12 @@ public class AtlasField {
         return this;
     }
 
+    /**
+     * Wr8ites the field.
+     * @param docId Document ID
+     * @param path path
+     * @throws AtlasException unexpected error
+     */
     public void write(String docId, String path) throws AtlasException {
         AtlasModule module = session.resolveModule(docId);
         if (module == null) {
@@ -115,6 +145,12 @@ public class AtlasField {
         module.writeTargetValue(session);
     }
 
+    /**
+     * Writes the target property.
+     * @param scope scope
+     * @param name name
+     * @throws AtlasException unexpected error
+     */
     public void writeProperty(String scope, String name) throws AtlasException {
         PropertyModule module = session.getTargetPropertyModule();
         PropertyField f = module.createField();
@@ -126,6 +162,12 @@ public class AtlasField {
         module.writeTargetValue(session);
     }
 
+    /**
+     * Apply the field action.
+     * @param actionName action name
+     * @param parameters action parameters
+     * @return result field
+     */
     public AtlasField action(String actionName, List<Object> parameters) {
         Object value = parameters != null && parameters.size() > 1 ? parameters.get(parameters.size()-1) : null;
         ActionProcessor ap = this.fieldActionService.findActionProcessor(actionName, value);
@@ -133,10 +175,19 @@ public class AtlasField {
         return this;
     }
 
+    /**
+     * Gets the raw {@link Field}.
+     * @return field
+     */
     public Field getRawField() {
         return this.rawField;
     }
 
+    /**
+     * Sets the raw {@link Field}.
+     * @param f field
+     * @return this instance
+     */
     public AtlasField setRawField(Field f) {
         this.rawField = f;
         return this;

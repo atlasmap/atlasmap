@@ -18,6 +18,9 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.core.util.VersionUtil;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
+/**
+ * The jackson {@link com.fasterxml.jackson.databind.Module} of the field action.
+ */
 public class AtlasJsonModule extends SimpleModule {
 
     private static final long serialVersionUID = -2352383379765836801L;
@@ -25,6 +28,9 @@ public class AtlasJsonModule extends SimpleModule {
     private static final VersionUtil VERSION_UTIL = new VersionUtil() {
     };
 
+    /**
+     * A constructor.
+     */
     public AtlasJsonModule() {
         super(NAME, VERSION_UTIL.version());
     }

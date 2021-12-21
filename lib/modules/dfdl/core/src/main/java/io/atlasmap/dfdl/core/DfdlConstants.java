@@ -15,9 +15,13 @@
  */
 package io.atlasmap.dfdl.core;
 
+/**
+ * The collection of constants for DFDL module.
+ */
 public final class DfdlConstants {
-
+    /** Option name prefix. */
     public static final String OPTION_PREFIX = "atlas.dfdl";
+    /** Option name for the example. */
     public static final String OPTION_EXAMPLE_DATA = "atlas.dfdl.example";
 
 }

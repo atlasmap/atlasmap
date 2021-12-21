@@ -48,12 +48,17 @@ import com.sun.xml.xsom.XSXPath;
 import com.sun.xml.xsom.visitor.XSVisitor;
 
 /**
- * Rewrite XML document instance to conform XML schema as a XSOM {@link XSVisitor}.
+ * Rewrite XML document instance to conform XML schema as a XSOM XSVisitor.
  */
 public class AtlasRewritingXSVisitor implements XSVisitor {
     private final Node source;
     private final Node target;
 
+    /**
+     * A constructor.
+     * @param source source
+     * @param target target
+     */
     public AtlasRewritingXSVisitor(Node source, Node target) {
         this.source = source;
         this.target = target;

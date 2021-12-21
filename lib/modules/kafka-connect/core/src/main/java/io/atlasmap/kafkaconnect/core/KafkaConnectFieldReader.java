@@ -39,6 +39,9 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The {@link AtlasFieldReader} implementation for Kafka Connect.
+ */
 public class KafkaConnectFieldReader implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectFieldReader.class);
@@ -51,6 +54,10 @@ public class KafkaConnectFieldReader implements AtlasFieldReader {
     private KafkaConnectFieldReader() {
     }
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     */
     public KafkaConnectFieldReader(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }
@@ -281,10 +288,19 @@ public class KafkaConnectFieldReader implements AtlasFieldReader {
         return group;
     }
 
+    /**
+     * Sets the Document.
+     * @param document Document
+     * @throws AtlasException none
+     */
     public void setDocument(Object document) throws AtlasException {
         this.root = document;
     }
 
+    /**
+     * Sets the schema.
+     * @param schema schema
+     */
     public void setSchema(org.apache.kafka.connect.data.Schema schema) {
         this.schema = schema;
     }

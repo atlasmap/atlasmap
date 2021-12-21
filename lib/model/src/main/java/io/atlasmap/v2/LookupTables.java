@@ -18,10 +18,15 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * The container of {@link LookupTable}.
+ */
 public class LookupTables implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link LookupTable} */
     protected List<LookupTable> lookupTable;
 
     /**

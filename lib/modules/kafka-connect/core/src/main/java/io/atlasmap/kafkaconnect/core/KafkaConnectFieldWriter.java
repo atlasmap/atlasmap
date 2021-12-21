@@ -34,6 +34,7 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 
 /**
+ * The {@link AtlasFieldWriter} implementation for Kafka Connect.
  */
 public class KafkaConnectFieldWriter implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(KafkaConnectFieldWriter.class);
@@ -42,14 +43,26 @@ public class KafkaConnectFieldWriter implements AtlasFieldWriter {
     private Object root = null;
     private org.apache.kafka.connect.data.Schema schema;
 
+    /**
+     * A constructor.
+     * @param conversion conversion service
+     */
     public KafkaConnectFieldWriter(AtlasConversionService conversion) {
         this.conversionService = conversion;
     }
 
+    /**
+     * Gets the Document.
+     * @return Document
+     */
     public Object getDocument() {
         return root;
     }
 
+    /**
+     * Sets the schema.
+     * @param schema schema
+     */
     public void setSchema(org.apache.kafka.connect.data.Schema schema) {
         this.schema = schema;
     }

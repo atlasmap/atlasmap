@@ -32,7 +32,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 import io.atlasmap.v2.ComplexType;
 import io.atlasmap.v2.Document;
@@ -40,6 +39,8 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Fields;
 import org.junit.jupiter.api.Test;
 
+import io.atlasmap.v2.Validation;
+import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
 public class AtlasUtilTest {
@@ -118,29 +119,8 @@ public class AtlasUtilTest {
     }
 
     @Test
-    public void testFindClassesForPackage() {
-        List<Class<?>> classes = AtlasUtil.findClassesForPackage("io.atlasmap.v2");
-        assertNotNull(classes);
-        assertTrue(classes.stream().map(Class::getName).collect(Collectors.toList()).containsAll(
-                Arrays.asList("io.atlasmap.v2.Field", "io.atlasmap.v2.AtlasMapping", "io.atlasmap.v2.Action", "io.atlasmap.v2.Capitalize")));
-    }
-
-    @Test
     public void testGetUriDataType() {
         assertEquals("util", AtlasUtil.getUriDataType("atlas:java:util?param1=value1&param2=value2"));
-    }
-
-    @Test
-    public void testFindClassesForPackageIllegalArgumentException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            AtlasUtil.findClassesForPackage("io.atlasmapv2");
-        });
-    }
-
-    @Test
-    public void testFind() {
-        File file = Paths.get("src" + File.separator + "main" + File.separator + "java" + File.separator + "io" + File.separator + "atlasmap" + File.separator + "core").toFile();
-        assertEquals(0, AtlasUtil.find(file, ".").size());
     }
 
     @Test
@@ -251,27 +231,6 @@ public class AtlasUtilTest {
         assertNull(AtlasUtil.getUriParameterValue("atlas:?&", "java"));
         assertNull(AtlasUtil.getUriParameterValue("atlas:?=", "java"));
         assertNull(AtlasUtil.getUriParameterValue("atlas:? ", "java"));
-    }
-
-    @Test
-    public void testFindClassesFromJar() throws Exception {
-        URL jarFile = new File("target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar").toURI().toURL();
-        String urlString = "jar:file:" + jarFile.getPath() + "!/";
-        assertFalse(AtlasUtil.findClassesFromJar(new URL(urlString)).isEmpty());
-    }
-
-    @Test
-    public void testFindClassesFromJarFileNotFoundIOException() throws Exception {
-        String urlString = "jar:file:" + File.separator + "target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar!/";
-        assertEquals(0, AtlasUtil.findClassesFromJar(new URL(urlString)).size());
-    }
-
-    @Test
-    public void testFindClassesFromJarClassCastException() throws Exception {
-        assertThrows(ClassCastException.class, () -> {
-            URL url = Paths.get("target" + File.separator + "test-dependencies" + File.separator + "atlas-model.jar").toUri().toURL();
-            AtlasUtil.findClassesFromJar(url);
-        });
     }
 
     @Test
@@ -450,5 +409,15 @@ public class AtlasUtilTest {
                 return text.toString();
             }
         };
+    }
+
+    public void testValidationToString() {
+        assertNotNull(AtlasUtil.validationToString(null));
+        Validation info = new Validation();
+        info.setScope(ValidationScope.MAPPING);
+        info.setId("0001");
+        info.setMessage("Information message");
+        info.setStatus(ValidationStatus.INFO);
+        assertNotNull(AtlasUtil.validationToString(info));
     }
 }

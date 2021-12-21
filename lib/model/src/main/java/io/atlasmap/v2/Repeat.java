@@ -19,16 +19,28 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Repeat</strong> field action.
+ */
 public class Repeat extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** count */
     private Integer count;
 
+    /**
+     * Gets the count.
+     * @return count
+     */
     public Integer getCount() {
         return count;
     }
 
+    /**
+     * Sets the count.
+     * @param count count
+     */
     @JsonPropertyDescription("count ")
     @AtlasActionProperty(title = "count", type = FieldType.INTEGER)
     public void setCount(Integer count) {

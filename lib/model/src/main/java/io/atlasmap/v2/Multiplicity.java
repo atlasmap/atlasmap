@@ -15,28 +15,44 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of multiplicity.
+ */
 public enum Multiplicity {
-
+    /** One To One. */
     ONE_TO_ONE("OneToOne"),
-
+    /** One To Many. */
     ONE_TO_MANY("OneToMany"),
-
+    /** Many To One. */
     MANY_TO_ONE("ManyToOne"),
-
+    /** Zero To One. */
     ZERO_TO_ONE("ZeroToOne"),
-
+    /** Many To Many. */
     MANY_TO_MANY("ManyToMany");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     Multiplicity(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static Multiplicity fromValue(String v) {
         for (Multiplicity c: Multiplicity.values()) {
             if (c.value.equals(v)) {

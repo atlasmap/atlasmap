@@ -26,27 +26,39 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
+/**
+ * The field action metadata.
+ */
 @JsonRootName("ActionDetail")
 public class ActionDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** action parameters */
     protected ActionParameters parameters;
 
+    /** action name */
     protected String name;
 
+    /** true if it's a custom field action */
     protected Boolean custom;
 
+    /** name of the field action model class */
     protected String className;
 
+    /** method name */
     protected String method;
 
+    /** source(input) type */
     protected FieldType sourceType;
 
+    /** target(output) type */
     protected FieldType targetType;
 
+    /** multiplicity */
     protected Multiplicity multiplicity;
 
+    /** field action schema */
     protected ObjectSchema actionSchema;
 
     /**
@@ -241,14 +253,27 @@ public class ActionDetail implements Serializable {
         this.multiplicity = value;
     }
 
+    /**
+     * Gets the value of the action schema property.
+     * @return action schema
+     */
     public JsonSchema getActionSchema() {
         return actionSchema;
     }
 
+    /**
+     * Sets the value of the action schema property.
+     * @param actionSchema action schema
+     */
     public void setActionSchema(ObjectSchema actionSchema) {
         this.actionSchema = actionSchema;
     }
 
+    /**
+     * Sets the action schema from a field action model class.
+     * @param clazz field action model class
+     * @throws JsonMappingException unexpected error
+     */
     @JsonProperty("actionSchema")
     public void setActionSchema(Class<? extends Action> clazz) throws JsonMappingException {
 

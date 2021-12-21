@@ -15,17 +15,31 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of inspection type.
+ */
 public enum InspectionType {
+    /** Schema. */
     SCHEMA("SCHEMA"),
+    /** Instance. */
     INSTANCE("INSTANCE"),
+    /** Java Class. */
     JAVA_CLASS("JAVA_CLASS");
 
     private String value;
 
+    /**
+     * A constructor.
+     * @param inspectionType inspection type
+     */
     InspectionType(String inspectionType) {
         value = inspectionType;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value(){
         return this.value;
     }

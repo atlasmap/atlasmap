@@ -36,16 +36,30 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The mapping field pair validator.
+ */
 public class MappingFieldPairValidator {
 
     private static final Logger LOG = LoggerFactory.getLogger(MappingFieldPairValidator.class);
 
     private BaseModuleValidationService<?> service;
 
+    /**
+     * A constructor.
+     * @param service module validation service
+     */
     public MappingFieldPairValidator(BaseModuleValidationService<?> service) {
         this.service = service;
     }
 
+    /**
+     * Validates field types by delegating to {@link #doValidateFieldTypes(List,String,Field,Field,FieldType)}.
+     * @param validations a container to put the result {@link Validation}
+     * @param mappingId mapping ID
+     * @param sourceFieldGroup source FieldGroup
+     * @param targetField target field
+     */
     public void validateFieldTypes(List<Validation> validations, String mappingId, FieldGroup sourceFieldGroup, Field targetField) {
         FieldType actionOutputType = getActionOutputFieldType(validations, mappingId, sourceFieldGroup);
         for (Field sourceField : sourceFieldGroup.getField()) {
@@ -57,6 +71,13 @@ public class MappingFieldPairValidator {
         }
     }
 
+    /**
+     * Validates field types by delegating to {@link #doValidateFieldTypes(List,String,Field,Field,FieldType)}.
+     * @param validations a container to put the result {@link Validation}
+     * @param mappingId mapping ID
+     * @param sourceFields source fields
+     * @param targetField target field
+     */
     public void validateFieldTypes(List<Validation> validations, String mappingId, List<Field> sourceFields, Field targetField) {
         for (Field sourceField : sourceFields) {
             if (!service.matchDocIdOrNull(sourceField.getDocId())) {
@@ -68,6 +89,13 @@ public class MappingFieldPairValidator {
         }
     }
 
+    /**
+     * Validates field types by delegating to {@link #doValidateFieldTypes(List,String,Field,Field,FieldType)}.
+     * @param validations a container to put the result {@link Validation}
+     * @param mappingId mapping ID
+     * @param sourceField source field
+     * @param targetFields target fields
+     */
     public void validateFieldTypes(List<Validation> validations, String mappingId, Field sourceField, List<Field> targetFields) {
         if (!service.matchDocIdOrNull(sourceField.getDocId())) {
             return;
@@ -79,12 +107,27 @@ public class MappingFieldPairValidator {
         }
     }
 
+    /**
+     * Validates field types by delegating to {@link #doValidateFieldTypes(List,String,Field,Field,FieldType)}.
+     * @param validations a container to put the result {@link Validation}
+     * @param mappingId mapping ID
+     * @param sourceField source field
+     * @param targetField target field
+     */
     public void validateFieldTypes(List<Validation> validations, String mappingId, Field sourceField, Field targetField) {
         FieldType actionOutputType = getActionOutputFieldType(validations, mappingId, sourceField);
         doValidateFieldTypes(validations, mappingId, sourceField, targetField,
                 actionOutputType != null ? actionOutputType : sourceField.getFieldType());
     }
 
+    /**
+     * Validates field types.
+     * @param validations a container to put the result {@link Validation}.
+     * @param mappingId mapping ID
+     * @param sourceField source field
+     * @param targetField target field
+     * @param sourceFieldType source field type
+     */
     protected  void doValidateFieldTypes(List<Validation> validations, String mappingId, Field sourceField, Field targetField, FieldType sourceFieldType) {
         if (sourceField == null && targetField == null || sourceField.getFieldType() == targetField.getFieldType()) {
             return;
@@ -154,6 +197,14 @@ public class MappingFieldPairValidator {
         return detail.getTargetType();
     }
 
+    /**
+     * Parses the {@link AtlasConversionInfo} annotation and add {@link Validation} for each concerns.
+     * @param validations a container to put the result {@link Validation}.
+     * @param mappingId mapping ID
+     * @param converterAnno annotation
+     * @param sourceFieldName source field name
+     * @param targetFieldName target field name
+     */
     public void populateConversionConcerns(List<Validation> validations, String mappingId, AtlasConversionInfo converterAnno,
             String sourceFieldName, String targetFieldName) {
         if (converterAnno == null || converterAnno.concerns() == null) {

@@ -31,8 +31,16 @@ import io.apicurio.registry.utils.converter.avro.AvroData;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * A collection of utility methods for Kafka Connect module.
+ */
 public class KafkaConnectUtil {
-    
+
+    /**
+     * Converts Kafka Connect from {@link Type} to AtlasMap {@link FieldType}.
+     * @param type type
+     * @return FieldType
+     */
     public static FieldType getFieldType(Type type) {
         switch (type) {
             case ARRAY:
@@ -65,6 +73,14 @@ public class KafkaConnectUtil {
         }
     }
 
+    /**
+     * Parses the Kafka Connect JSON schema and returns the {@link org.apache.kafka.connect.data.Schema}.
+     * @param jsonSchema Kafka Connect JSON schema
+     * @param options passed into the {@link JsonConverter#configure(Map)}
+     * @return Kafka Connect schema
+     * @throws Exception unexpected error
+     * @see JsonConverter
+     */
     public static org.apache.kafka.connect.data.Schema parseJson(String jsonSchema, HashMap<String, ?> options) throws Exception {
         try (JsonConverter converter = new JsonConverter()) {
             converter.configure(options);
@@ -73,6 +89,15 @@ public class KafkaConnectUtil {
         }
     }
 
+    /**
+     * Parses the Kafka Connect AVRO schema and returns the {@link org.apache.kafka.connect.data.Schema}.
+     * @param avroSchema Kafka Connect AVRO schema
+     * @param options unused
+     * @return Kafka Connect schema
+     * @throws Exception unexpected error
+     * @see AvroSchemaUtils
+     * @see AvroData
+     */
     public static org.apache.kafka.connect.data.Schema parseAvro(String avroSchema, HashMap<String, ?> options) throws Exception {
         org.apache.avro.Schema schema = AvroSchemaUtils.parse(avroSchema);
         AvroData avro = new AvroData(0);
@@ -81,7 +106,7 @@ public class KafkaConnectUtil {
 
     /**
      * Repack KafkaConnect parser options from inspection request options.
-     * @param requestOptions
+     * @param requestOptions inspection request options
      * @return KafkaConnect parser options
      */
     public static HashMap<String, Object> repackParserOptions(Map<String, String> requestOptions) {

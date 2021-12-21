@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Is Null</strong> field action.
+ */
 public class IsNull extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

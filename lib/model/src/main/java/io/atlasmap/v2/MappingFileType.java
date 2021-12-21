@@ -15,19 +15,35 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of the file type those are used in AtlasMap.
+ */
 public enum MappingFileType {
+    /** ADM archive. */
     ADM("adm"),
+    /** gzipped. */
     GZ("gz"),
+    /** zipped. */
     ZIP("zip"),
+    /** JSON. */
     JSON("json"),
+    /** XML. */
     XML("xml");
 
     private String value;
 
+    /**
+     * A constructor.
+     * @param mappingFormat file type
+     */
     MappingFileType(String mappingFormat) {
         value = mappingFormat;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value(){
         return this.value;
     }

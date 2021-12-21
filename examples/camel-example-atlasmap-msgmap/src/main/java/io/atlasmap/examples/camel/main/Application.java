@@ -28,6 +28,11 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.impl.DefaultMessage;
 import org.apache.camel.main.Main;
 
+/**
+ * An example for running AtlasMap data mapping through the camel-atlasmap component.
+ * In this example, AtlasMap consumes 2 source Documents by feeding them in a {@link HashMap}.
+ * {@link Application#SOURCE_MAP_NAME} is the exchange property key for the source Document map.
+ */
 public class Application extends RouteBuilder {
 
     private static final String SOURCE_MAP_NAME = "atlasSourceMap";
@@ -57,22 +62,40 @@ public class Application extends RouteBuilder {
             .log("]");
     }
 
+    /**
+     * The application entry point.
+     * @param args args
+     * @throws Exception unexpected error
+     */
     public static void main(String args[]) throws Exception {
         Main camelMain = new Main();
         camelMain.addRouteBuilder(new Application());
         camelMain.run(args);
     }
 
+    /**
+     * The processor to store a source Document into the source Document map.
+     */
     public class MessageCaptureProcessor implements Processor {
         private String id;
         private String path;
 
+        /**
+         * Set the source Document.
+         * @param id Document ID
+         * @param path file path in the classpath
+         * @return this instance
+         */
         public MessageCaptureProcessor setSource(String id, String path) {
             this.id = id;
             this.path = path;
             return this;
         }
 
+        /**
+         * Reads a file from the path and put into the source Document map.
+         * @param ex exchange
+         */
         public void process(Exchange ex) throws Exception {
             Message msg = new DefaultMessage(ex.getContext());
             msg.setHeader("id", id);

@@ -27,8 +27,17 @@ import io.atlasmap.v2.IsNull;
 import io.atlasmap.v2.ItemAt;
 import io.atlasmap.v2.Length;
 
+/**
+ * The object field actions.
+ */
 public class ObjectFieldActions implements AtlasFieldAction {
 
+    /**
+     * Counts the number of source objects.
+     * @param action action model
+     * @param inputs a list of source objects
+     * @return count
+     */
     @AtlasActionProcessor
     public static Integer count(Count action, List<Object> inputs) {
         if (inputs == null) {
@@ -37,6 +46,12 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return inputs.size();
     }
 
+    /**
+     * Gets if the source objects contain the object specified as a parameter.
+     * @param contains action model
+     * @param inputs a list of source objects
+     * @return true if it contains, or false
+     */
     @AtlasActionProcessor
     public static Boolean contains(Contains contains, List<Object> inputs) {
         if (contains == null) {
@@ -48,6 +63,12 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return collectionContains(inputs, contains);
     }
 
+    /**
+     * Gets if the source object is equal to the object specified as a parameter.
+     * @param equals action model
+     * @param input source
+     * @return true if it's equal, or false
+     */
     @AtlasActionProcessor
     public static Boolean equals(Equals equals, Object input) {
         if (equals == null) {
@@ -60,11 +81,23 @@ public class ObjectFieldActions implements AtlasFieldAction {
         return input.toString().equals(equals.getValue());
     }
 
+    /**
+     * Gets if the source object is null or not.
+     * @param action action model
+     * @param input source
+     * @return true if it's null, or false
+     */
     @AtlasActionProcessor
     public static Boolean isNull(IsNull action, Object input) {
         return input == null;
     }
 
+    /**
+     * Gets an item from the list of the source objects by specifying an index.
+     * @param itemAt action model
+     * @param inputs a list of source object
+     * @return item
+     */
     @AtlasActionProcessor
     public static Object itemAt(ItemAt itemAt, List<Object> inputs) {
         if (inputs == null) {
@@ -81,6 +114,12 @@ public class ObjectFieldActions implements AtlasFieldAction {
         }
     }
 
+    /**
+     * Gets the length of the string representation of the source object.
+     * @param length action model
+     * @param input source
+     * @return length
+     */
     @AtlasActionProcessor
     public static Integer length(Length length, Object input) {
         if (input == null) {

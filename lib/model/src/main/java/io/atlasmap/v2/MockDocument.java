@@ -19,6 +19,9 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The mock {@link Document}.
+ */
 @JsonRootName("io.atlasmap.v2.MockDocument")
 public class MockDocument extends Document implements Serializable {
 

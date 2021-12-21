@@ -18,26 +18,65 @@ package io.atlasmap.spi;
 import java.util.List;
 
 /**
+ * AtlasSeparateStrategy.
  * @deprecated COMBINE/SEPARATE mode has been deprecated. Use transformations with multiple field selection.
  */
 @Deprecated
 public interface AtlasSeparateStrategy {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     default String getName() {
         return this.getClass().getSimpleName();
     }
 
+    /**
+     * Gets the delimiter.
+     * @return delimiter
+     */
     StringDelimiter getDelimiter();
 
+    /**
+     * Sets the delimiter.
+     * @param delimiter delimiter
+     */
     void setDelimiter(StringDelimiter delimiter);
 
+    /**
+     * Gets the limit.
+     * @return limit
+     */
     Integer getLimit();
 
+    /**
+     * Sets the limit.
+     * @param limit limit
+     */
     void setLimit(Integer limit);
 
+    /**
+     * Separates the value.
+     * @param value value
+     * @return separated
+     */
     List<String> separateValue(String value);
 
+    /**
+     * Separates the value.
+     * @param value value
+     * @param delimiter delimiter
+     * @return separated
+     */
     List<String> separateValue(String value, StringDelimiter delimiter);
 
+    /**
+     * Separates the value.
+     * @param value value
+     * @param delimiter delimiter
+     * @param limit limit
+     * @return separated
+     */
     List<String> separateValue(String value, StringDelimiter delimiter, Integer limit);
 }

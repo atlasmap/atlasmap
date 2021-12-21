@@ -58,6 +58,10 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.xml.core.AtlasXmlNamespaceContext;
 
+/**
+ * The XML schema parser which parses a single XML Schema or SchemaSet XML
+ * which contains multipe XML schema and build a XSOM {@link XSSchemaSet}.
+ */
 public class AtlasXmlSchemaSetParser {
 
     private static final Logger LOG = LoggerFactory.getLogger(AtlasXmlSchemaSetParser.class);
@@ -68,6 +72,11 @@ public class AtlasXmlSchemaSetParser {
     private Transformer transformer;
     private DocumentBuilder documentBuilder;
 
+    /**
+     * A constructor.
+     * @param cl class loader
+     * @throws AtlasException unexpected error
+     */
     public AtlasXmlSchemaSetParser(ClassLoader cl) throws AtlasException {
         this.classLoader = cl;
         this.namespaceContext = new AtlasXmlNamespaceContext();
@@ -84,7 +93,7 @@ public class AtlasXmlSchemaSetParser {
 
     /**
      * Parse single XML Schema or SchemaSet which contains multiple XML Schema and
-     * build a {@link XSSchemaSet}.
+     * build a XSOM {@link XSSchemaSet}.
      * @param doc DOM {@link Document} instance of XML Schema
      * @return parsed {@link XSSchemaSet}
      * @throws AtlasException If it fails to parse
@@ -147,22 +156,43 @@ public class AtlasXmlSchemaSetParser {
         }
     }
 
+    /**
+     * Sets the namespace context.
+     * @param nsc namespace context
+     */
     public void setNamespaceContext(AtlasXmlNamespaceContext nsc) {
         this.namespaceContext = nsc;
     }
 
+    /**
+     * Gets the namespace context.
+     * @return namespace context
+     */
     public AtlasXmlNamespaceContext getNamespaceContext() {
         return this.namespaceContext;
     }
 
+    /**
+     * Sets the root namespace.
+     * @param rootns root namespace
+     */
     public void setRootNamespace(String rootns) {
         this.rootNamespace = rootns;
     }
 
+    /**
+     * Gets the root namespace.
+     * @return root namespace
+     */
     public String getRootNamespace() {
         return this.rootNamespace;
     }
 
+    /**
+     * Gets the target namespace.
+     * @param n node
+     * @return target namespace
+     */
     private String getTargetNamespace(Node n) {
         NamedNodeMap attributes = n.getAttributes();
         if (attributes == null) {

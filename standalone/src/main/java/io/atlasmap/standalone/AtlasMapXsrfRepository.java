@@ -26,6 +26,9 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
 
+/**
+ * XSRF repository.
+ */
 public class AtlasMapXsrfRepository implements CsrfTokenRepository {
 
     private static final String XSRF_HEADER_NAME = "ATLASMAP-XSRF-TOKEN";

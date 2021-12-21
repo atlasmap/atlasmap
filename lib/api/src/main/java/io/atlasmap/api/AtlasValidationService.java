@@ -20,8 +20,16 @@ import java.util.List;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Validation;
 
+/**
+ * Handles mapping validation.
+ */
 public interface AtlasValidationService {
 
+    /**
+     * Validates mapping definition.
+     * @param mapping mapping definition
+     * @return a list of validations
+     */
     List<Validation> validateMapping(AtlasMapping mapping);
 
 }

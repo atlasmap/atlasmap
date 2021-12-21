@@ -57,7 +57,6 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 import io.atlasmap.xml.core.AtlasXmlConstants;
 import io.atlasmap.xml.core.AtlasXmlNamespaceContext;
-import io.atlasmap.xml.core.XmlComplexTypeFactory;
 import io.atlasmap.xml.core.schema.AtlasXmlSchemaSetParser;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.Restriction;
@@ -72,9 +71,12 @@ import io.atlasmap.xml.v2.XmlFields;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
+/**
+ * The XML schema inspector inspects the XML schema and build the {@link XmlDocument}.
+ */
 public class XmlSchemaInspector {
 
-    static final Logger LOG = LoggerFactory.getLogger(XmlSchemaInspector.class);
+    private static final Logger LOG = LoggerFactory.getLogger(XmlSchemaInspector.class);
     private static final Map<String, FieldType> XS_TYPE_TO_FIELD_TYPE_MAP;
     private static final Map<String, FieldType> EXCLUDED_TYPES;
 
@@ -115,14 +117,27 @@ public class XmlSchemaInspector {
     private String rootNamespace;
     private ClassLoader classLoader;
 
+    /**
+     * Sets the class loader.
+     * @param loader class loader
+     */
     public void setClassLoader(ClassLoader loader) {
         this.classLoader = loader;
     }
 
+    /**
+     * Gets the XML Document.
+     * @return XML Document
+     */
     public XmlDocument getXmlDocument() {
         return xmlDocument;
     }
 
+    /**
+     * Inspects the XML schema.
+     * @param schemaFile XML schema.
+     * @throws XmlInspectionException inspection error
+     */
     public void inspect(File schemaFile) throws XmlInspectionException {
         try {
             doInspect(new FileInputStream(schemaFile));
@@ -131,6 +146,11 @@ public class XmlSchemaInspector {
         }
     }
 
+    /**
+     * Inspects the XML schema.
+     * @param schemaAsString XML schema
+     * @throws XmlInspectionException inspection error
+     */
     public void inspect(String schemaAsString) throws XmlInspectionException {
         try {
             doInspect(new ByteArrayInputStream(schemaAsString.getBytes("UTF-8")));
@@ -397,7 +417,7 @@ public class XmlSchemaInspector {
     }
 
     private XmlComplexType getXmlComplexType() {
-        XmlComplexType rootComplexType = XmlComplexTypeFactory.createXmlComlexField();
+        XmlComplexType rootComplexType = AtlasXmlModelFactory.createXmlComlexField();
         rootComplexType.setFieldType(FieldType.COMPLEX);
         rootComplexType.setXmlFields(new XmlFields());
         return rootComplexType;

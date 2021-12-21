@@ -51,6 +51,10 @@ import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 import io.atlasmap.v2.AtlasMapping;
 
+/**
+ * The default implementation of {@link AtlasContextFactory}.
+ * @see AtlasContextFactory
+ */
 public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasContextFactoryMXBean {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContextFactory.class);
@@ -73,6 +77,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
     private DefaultAtlasContextFactory() {
     }
 
+    /**
+     * Gets the singleton instance of the {@link DefaultAtlasContextFactory}.
+     * @return the singleton instance
+     */
     public static DefaultAtlasContextFactory getInstance() {
         return getInstance(true);
     }
@@ -102,6 +110,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         init(cl);
     }
 
+    /**
+     * Initializes with the class loader.
+     * @param cl class loader
+     * @see #init()
+     */
     public synchronized void init(CompoundClassLoader cl) {
         if (this.initialized) {
             return;
@@ -202,6 +215,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return context;
     }
 
+    /**
+     * Creates {@link io.atlasmap.api.AtlasContext} from the {@link AtlasMapping} mapping definition.
+     * @param mapping mapping definition
+     * @return context
+     * @throws AtlasException unexpected error
+     */
     public DefaultAtlasContext createContext(AtlasMapping mapping) throws AtlasException {
         DefaultAtlasContext context = new DefaultAtlasContext(this, mapping);
         return context;
@@ -229,6 +248,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return this.threadName;
     }
 
+    /**
+     * Sets the thread name.
+     * @param threadName thread name
+     */
     public void setThreadName(String threadName) {
         this.threadName = threadName;
     }
@@ -243,14 +266,26 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return this.uuid;
     }
 
+    /**
+     * Gets the JMX name.
+     * @return JMX name
+     */
     public ObjectName getJmxObjectName() {
         return this.objectName;
     }
 
+    /**
+     * Gets the {@link AtlasModuleInfoRegistry}.
+     * @return registry
+     */
     public AtlasModuleInfoRegistry getModuleInfoRegistry() {
         return this.moduleInfoRegistry;
     }
 
+    /**
+     * Sets the {@link AtlasModuleInfoRegistry}.
+     * @param registry registry
+     */
     public void setModuleInfoRegistry(AtlasModuleInfoRegistry registry) {
         this.moduleInfoRegistry = registry;
     }
@@ -270,6 +305,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return atlasCombineStrategy;
     }
 
+    /**
+     * Sets the combine strategy.
+     * @param atlasCombineStrategy combine strategy
+     */
     public void setCombineStrategy(AtlasCombineStrategy atlasCombineStrategy) {
         this.atlasCombineStrategy = atlasCombineStrategy;
     }
@@ -289,6 +328,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return atlasSeparateStrategy;
     }
 
+    /**
+     * Sets the separate strategy.
+     * @param atlasSeparateStrategy separate strategy
+     */
     public void setSeparateStrategy(AtlasSeparateStrategy atlasSeparateStrategy) {
         this.atlasSeparateStrategy = atlasSeparateStrategy;
     }
@@ -298,10 +341,18 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return atlasValidationService;
     }
 
+    /**
+     * Sets the validation service.
+     * @param atlasValidationService validation service
+     */
     public void setValidationService(AtlasValidationService atlasValidationService) {
         this.atlasValidationService = atlasValidationService;
     }
 
+    /**
+     * Gets the compound class loader.
+     * @return class loader
+     */
     public CompoundClassLoader getClassLoader() {
         return this.classLoader;
     }
@@ -311,10 +362,19 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         this.classLoader.addAlternativeLoader(cl);
     }
 
+    /**
+     * Sets the compound class loader.
+     * @param cl class loader
+     */
     public void setClassLoader(CompoundClassLoader cl) {
         this.classLoader = cl;
     }
 
+    /**
+     * Loads all modules in the classpath.
+     * @param moduleClassProperty module class property
+     * @param moduleInterface module interface
+     */
     protected void loadModules(String moduleClassProperty, Class<?> moduleInterface) {
         Class<?> moduleClass = null;
         String moduleClassName = null;
@@ -371,6 +431,9 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
     }
 
+    /**
+     * Unloads modules.
+     */
     protected void unloadModules() {
         if (getModuleInfoRegistry() == null) {
             return;
@@ -383,6 +446,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
     }
 
+    /**
+     * Gets if it's {@link AtlasModule}.
+     * @param clazz class
+     * @param moduleInterface module interface
+     * @return true if it's module, or false
+     */
     protected boolean isClassAtlasModule(Class<?> clazz, Class<?> moduleInterface) {
         if (clazz == null) {
             return false;
@@ -401,6 +470,12 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return false;
     }
 
+    /**
+     * Gets if it's {@link AtlasModule} interface.
+     * @param clazz class
+     * @param moduleInterface module interface
+     * @return true if it's a module interface, or false
+     */
     protected boolean isAtlasModuleInterface(Class<?> clazz, Class<?> moduleInterface) {
         if (clazz == null) {
             return false;
@@ -422,6 +497,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return isIface;
     }
 
+    /**
+     * Gets the module URI.
+     * @param clazz class
+     * @return URI
+     */
     protected String getModuleUri(Class<?> clazz) {
 
         AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);
@@ -433,6 +513,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return "UNDEFINED";
     }
 
+    /**
+     * Gets the module name.
+     * @param clazz class
+     * @return name
+     */
     protected String getModuleName(Class<?> clazz) {
 
         AtlasModuleDetail detail = clazz.getAnnotation(AtlasModuleDetail.class);
@@ -444,6 +529,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return "UNDEFINED-" + UUID.randomUUID().toString();
     }
 
+    /**
+     * Gets the supported data formats
+     * @param clazz class
+     * @return a list of supported data formats
+     */
     protected List<String> getSupportedDataFormats(Class<?> clazz) {
 
         List<String> dataFormats = null;
@@ -466,6 +556,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return dataFormats;
     }
 
+    /**
+     * Gets the config packages.
+     * @param clazz class
+     * @return a list of config packages
+     */
     protected List<String> getConfigPackages(Class<?> clazz) {
 
         List<String> configPackages = null;
@@ -488,6 +583,11 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return configPackages;
     }
 
+    /**
+     * Gets all module config packages.
+     * @param registry registry
+     * @return a list of module config packages
+     */
     protected List<String> getAllModuleConfigPackages(AtlasModuleInfoRegistry registry) {
         List<String> pkgs = new ArrayList<>();
         for (AtlasModuleInfo moduleInfo : registry.getAll()) {
@@ -496,6 +596,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         return pkgs;
     }
 
+    /**
+     * Register the JMX MBean.
+     * @param factory factory
+     */
     protected void registerFactoryJmx(DefaultAtlasContextFactory factory) {
         if (factory == null) {
             return;
@@ -513,6 +617,10 @@ public class DefaultAtlasContextFactory implements AtlasContextFactory, AtlasCon
         }
     }
 
+    /**
+     * Sets the JMX name.
+     * @throws MalformedObjectNameException unexpected error
+     */
     protected void setObjectName() throws MalformedObjectNameException {
         this.objectName = new ObjectName(String.format("io.atlasmap:type=AtlasServiceFactory,factoryUuid=%s", getUuid()));
     }

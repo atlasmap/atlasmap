@@ -33,6 +33,9 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.LookupTable;
 
+/**
+ * The {@link AtlasFieldWriter} for the Java Document.
+ */
 public class JavaFieldWriter implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldWriter.class);
 
@@ -42,10 +45,20 @@ public class JavaFieldWriter implements AtlasFieldWriter {
     private Map<String, Object> pathParentQueue = new LinkedHashMap<>();
     private Class<?> collectionItemClass = null;
 
+    /**
+     * A constructor.
+     * @param util util
+     */
     public JavaFieldWriter(JavaFieldWriterUtil util) {
         this.writerUtil = util;
     }
 
+    /**
+     * Prepares the parent object.
+     * @param session session
+     * @return prepared
+     * @throws AtlasException unexpected error
+     */
     public Object prepareParentObject(AtlasInternalSession session) throws AtlasException {
         Field targetField = session.head().getTargetField();
         if (targetField == null) {
@@ -124,6 +137,12 @@ public class JavaFieldWriter implements AtlasFieldWriter {
         }
     }
 
+    /**
+     * Populates the target field value.
+     * @param session session
+     * @param parentObject parent
+     * @throws AtlasException unexpected error.
+     */
     public void populateTargetFieldValue(AtlasInternalSession session, Object parentObject) throws AtlasException {
         Field sourceField = session.head().getSourceField();
         Field targetField = session.head().getTargetField();
@@ -131,10 +150,20 @@ public class JavaFieldWriter implements AtlasFieldWriter {
         converter.populateTargetField(session, lookupTable, sourceField, parentObject, targetField);
     }
 
+    /**
+     * Push the pair of {@link Field} and parent object into the queue for writing.
+     * @param field field
+     * @param parentObject parent
+     */
     public void enqueueFieldAndParent(Field field, Object parentObject) {
         this.pathParentQueue.put(field.getPath(), parentObject);
     }
 
+    /**
+     * Commits queued write tasks.
+     * @param session session
+     * @throws AtlasException unexpected error
+     */
     public void commitWriting(AtlasInternalSession session) throws AtlasException {
         Field targetField = session.head().getTargetField();
         try {
@@ -232,6 +261,14 @@ public class JavaFieldWriter implements AtlasFieldWriter {
         }
     }
 
+    /**
+     * Writes the target field. This invokes
+     * {@link #prepareParentObject(AtlasInternalSession)},
+     * {@link #populateTargetFieldValue(AtlasInternalSession, Object)},
+     * {@link #enqueueFieldAndParent(Field, Object)},
+     * {@link #commitWriting(AtlasInternalSession)} at once.
+     * @param session session
+     */
     public void write(AtlasInternalSession session) throws AtlasException {
         Object parentObject = prepareParentObject(session);
         populateTargetFieldValue(session, parentObject);
@@ -240,18 +277,34 @@ public class JavaFieldWriter implements AtlasFieldWriter {
         commitWriting(session);
     }
 
+    /**
+     * Gets the Document root object.
+     * @return Document root
+     */
     public Object getRootObject() {
         return rootObject;
     }
 
+    /**
+     * Sets the Document root object.
+     * @param rootObject Document root
+     */
     public void setRootObject(Object rootObject) {
         this.rootObject = rootObject;
     }
 
+    /**
+     * Sets the target value converter.
+     * @param converter converter
+     */
     public void setTargetValueConverter(TargetValueConverter converter) {
         this.converter = converter;
     }
 
+    /**
+     * Sets the collection item class.
+     * @param clazz class
+     */
     public void setCollectionItemClass(Class<?> clazz) {
         this.collectionItemClass = clazz;
     }

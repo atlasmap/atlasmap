@@ -15,22 +15,41 @@
  */
 package io.atlasmap.api;
 
+/**
+ * The Exception indicates that unsupported operation is performed.
+ */
 public class AtlasUnsupportedException extends AtlasException {
 
     private static final long serialVersionUID = 4276166328541103662L;
 
+    /**
+     * A constructor.
+     */
     public AtlasUnsupportedException() {
         super();
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     * @param cause cause
+     */
     public AtlasUnsupportedException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     */
     public AtlasUnsupportedException(String message) {
         super(message);
     }
 
+    /**
+     * A constructor.
+     * @param cause cause
+     */
     public AtlasUnsupportedException(Throwable cause) {
         super(cause);
     }

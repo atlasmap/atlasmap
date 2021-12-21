@@ -22,19 +22,33 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
+/**
+ * The Document for Kafka Connect module.
+ */
 @JsonRootName("KafkaConnectDocument")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class KafkaConnectDocument extends Document {
 
     private static final long serialVersionUID = 1L;
+    /** Root schema type. */
     private Type rootSchemaType;
+    /** True if it's an enum. */
     private boolean enumeration;
+    /** Enum fields. */
     private KafkaConnectEnumFields enumFields;
 
+    /**
+     * Gets the root schema type.
+     * @return root schema type
+     */
     public Type getRootSchemaType() {
         return rootSchemaType;
     }
 
+    /**
+     * Sets the root schema type.
+     * @param rootSchemaType root schema type
+     */
     public void setRootSchemaType(Type rootSchemaType) {
         this.rootSchemaType = rootSchemaType;
     }
@@ -87,6 +101,7 @@ public class KafkaConnectDocument extends Document {
         this.enumFields = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -100,6 +115,7 @@ public class KafkaConnectDocument extends Document {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

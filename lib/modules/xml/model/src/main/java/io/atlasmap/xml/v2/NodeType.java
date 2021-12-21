@@ -15,23 +15,43 @@
  */
 package io.atlasmap.xml.v2;
 
+/**
+ * The node type enumeration.
+ */
 public enum NodeType {
 
+    /** All. */
     ALL("All"),
+    /** Element. */
     ELEMENT("Element"),
+    /** Attribute. */
     ATTRIBUTE("Attribute"),
+    /** None. */
     NONE("None");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     NodeType(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static NodeType fromValue(String v) {
         for (NodeType c: NodeType.values()) {
             if (c.value.equals(v)) {

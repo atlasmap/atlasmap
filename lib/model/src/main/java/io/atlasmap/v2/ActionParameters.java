@@ -19,9 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link ActionParameter}.
+ */
 public class ActionParameters implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    /** A list of {@link ActionParameter} */
     protected List<ActionParameter> parameter;
 
     /**

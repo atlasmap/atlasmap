@@ -37,6 +37,9 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
 
+/**
+ * The {@link AtlasFieldWriter} implementation for XML Document.
+ */
 public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWriter {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(XmlFieldWriter.class);
 
@@ -45,10 +48,21 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
     private boolean enableAttributeNamespaces = true;
     private boolean ignoreMissingNamespaces = true;
 
+    /**
+     * A constructor.
+     * @throws AtlasException unexpected error
+     */
     public XmlFieldWriter() throws AtlasException {
         this(XmlFieldWriter.class.getClassLoader(), new HashMap<>(), null);
     }
 
+    /**
+     * A constructor.
+     * @param classLoader class loader
+     * @param namespaces namespaces
+     * @param seedDocument seed Document
+     * @throws AtlasException unexpected error
+     */
     public XmlFieldWriter(ClassLoader classLoader, Map<String, String> namespaces, String seedDocument) throws AtlasException {
         super(classLoader, namespaces);
         this.classLoader = classLoader;
@@ -355,30 +369,58 @@ public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWri
         }
     }
 
+    /**
+     * Gets the Document.
+     * @return Document
+     */
     public Document getDocument() {
         return document;
     }
 
+    /**
+     * Gets enableElementNamespces.
+     * @return true if enabled, or false
+     */
     public boolean isEnableElementNamespaces() {
         return enableElementNamespaces;
     }
 
+    /**
+     * Sets enableElementNamespaces.
+     * @param enableElementNamespaces true to enable, or false
+     */
     public void setEnableElementNamespaces(boolean enableElementNamespaces) {
         this.enableElementNamespaces = enableElementNamespaces;
     }
 
+    /**
+     * Gets enableAttributeNamespaces.
+     * @return true if enabled, or false
+     */
     public boolean isEnableAttributeNamespaces() {
         return enableAttributeNamespaces;
     }
 
+    /**
+     * Sets enableAttributeNamespaces.
+     * @param enableAttributeNamespaces true to enable, or false
+     */
     public void setEnableAttributeNamespaces(boolean enableAttributeNamespaces) {
         this.enableAttributeNamespaces = enableAttributeNamespaces;
     }
 
+    /**
+     * Gets ignoreMissingNamespaces.
+     * @return true if enabled, or false
+     */
     public boolean isIgnoreMissingNamespaces() {
         return ignoreMissingNamespaces;
     }
 
+    /**
+     * Sets ignoreMissingNamespaces.
+     * @param ignoreMissingNamespaces true to enable, or false
+     */
     public void setIgnoreMissingNamespaces(boolean ignoreMissingNamespaces) {
         this.ignoreMissingNamespaces = ignoreMissingNamespaces;
     }

@@ -19,18 +19,39 @@ import java.util.HashMap;
 
 import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
 
+/**
+ * The Document inspection service for Kafka Connect.
+ */
 public class KafkaConnectInspectionService {
     private KafkaConnectInspector inspector;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     public KafkaConnectInspectionService(ClassLoader loader) {
         this.inspector = new KafkaConnectInspector(loader);
     }
 
+    /**
+     * Inspects Kafka Connect JSON schema.
+     * @param jsonSchema Kafka Connect JSON schema
+     * @param options inspection options
+     * @return inspected
+     * @throws Exception unexpected error
+     */
     public KafkaConnectDocument inspectJson(String jsonSchema, HashMap<String, ?> options) throws Exception {
         inspector.inspectJson(jsonSchema, options);
         return inspector.getKafkaConnectDocument();
     }
 
+    /**
+     * Inspects Kafka Connect AVRO schema.
+     * @param avroSchema Kafka Connect AVRO schema
+     * @param options inspection options
+     * @return inspected
+     * @throws Exception unexpected error
+     */
     public KafkaConnectDocument inspectAvro(String avroSchema, HashMap<String, ?> options) throws Exception {
         inspector.inspectAvro(avroSchema, options);
         return inspector.getKafkaConnectDocument();

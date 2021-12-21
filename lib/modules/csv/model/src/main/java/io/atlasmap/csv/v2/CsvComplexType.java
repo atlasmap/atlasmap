@@ -24,13 +24,17 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.ComplexType;
 import io.atlasmap.v2.Field;
 
+/**
+ * The CSV complex field.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class CsvComplexType extends CsvField implements Serializable, ComplexType {
 
     private static final long serialVersionUID = 1L;
 
+    /** Children. */
     protected CsvFields csvFields;
-
+    /** URI. */
     protected String uri;
 
     /**
@@ -87,6 +91,7 @@ public class CsvComplexType extends CsvField implements Serializable, ComplexTyp
         return csvFields.getCsvField();
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -139,6 +144,7 @@ public class CsvComplexType extends CsvField implements Serializable, ComplexTyp
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

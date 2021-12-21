@@ -24,13 +24,19 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 
+/**
+ * The top container object of DFDL Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
 @JsonRootName("DfdlInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class DfdlInspectionRequest extends XmlInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** DFDL schema name. */
     protected String dfdlSchemaName;
+    /** Inspection options. */
     protected Map<String, String> options = new HashMap<>();
 
     /**
@@ -81,6 +87,7 @@ public class DfdlInspectionRequest extends XmlInspectionRequest implements Seria
         this.dfdlSchemaName = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if (!super.equals(object) || !(object instanceof DfdlInspectionRequest)) {
             return false;
@@ -123,6 +130,7 @@ public class DfdlInspectionRequest extends XmlInspectionRequest implements Seria
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = super.hashCode();
         currentHashCode = (currentHashCode* 31);

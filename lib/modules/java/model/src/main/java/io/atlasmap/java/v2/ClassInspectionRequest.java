@@ -25,31 +25,37 @@ import io.atlasmap.v2.BaseInspectionRequest;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.StringList;
 
+/**
+ * The top container object of Java Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
 @JsonRootName("ClassInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class ClassInspectionRequest extends BaseInspectionRequest implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** field name exclusions. */
     protected StringList fieldNameExclusions;
-
+    /** class name exclusions. */
     protected StringList classNameExclusions;
+    /** classpath string. */
     protected String classpath;
-
+    /** class name. */
     protected String className;
-
+    /** collection type of the Document root. */
     protected CollectionType collectionType;
-
+    /** collection class name of the Document root. */
     protected String collectionClassName;
-
+    /** if private fields are disabled or not. */
     protected Boolean disablePrivateOnlyFields;
-
+    /** if proteceted fields are disabled or not. */
     protected Boolean disableProtectedOnlyFields;
-
+    /** if public fields are disabled or not. */
     protected Boolean disablePublicOnlyFields;
-
+    /** if the fields that have public getter/setter are disabled or not. */
     protected Boolean disablePublicGetterSetterFields;
-
+    /** Paths to inspect. */
     protected List<String> inspectPaths;
 
     /**

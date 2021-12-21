@@ -39,6 +39,9 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The {@link AtlasFieldReader} for the Java Document.
+ */
 public class JavaFieldReader implements AtlasFieldReader {
     private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldReader.class);
 
@@ -262,10 +265,18 @@ public class JavaFieldReader implements AtlasFieldReader {
         return group;
     }
 
+    /**
+     * Sets the Java Document root object.
+     * @param sourceDocument Java Document
+     */
     public void setDocument(Object sourceDocument) {
         this.sourceDocument = sourceDocument;
     }
 
+    /**
+     * Sets the conversion service.
+     * @param conversionService conversion service.
+     */
     public void setConversionService(AtlasConversionService conversionService) {
         this.conversionService = conversionService;
     }

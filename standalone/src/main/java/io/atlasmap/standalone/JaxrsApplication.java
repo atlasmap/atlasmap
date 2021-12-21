@@ -26,36 +26,72 @@ import io.atlasmap.csv.service.CsvService;
 import io.atlasmap.dfdl.service.DfdlService;
 import io.atlasmap.java.service.JavaService;
 import io.atlasmap.json.service.JsonService;
+import io.atlasmap.kafkaconnect.service.KafkaConnectService;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.xml.service.XmlService;
 
+/**
+ * JAX-RS application.
+ */
 @Component
 @ApplicationPath("/v2/atlas/")
 public class JaxrsApplication extends Application {
 
+    /**
+     * Java service.
+     * @return Java service
+     */
     @Bean
     public JavaService javaService() {
         return new JavaService();
     }
 
+    /**
+     * JSON service.
+     * @return JSON service
+     */
     @Bean
     public JsonService jsonService() {
         return new JsonService();
     }
 
+    /**
+     * XML service.
+     * @return XML service
+     */
     @Bean
     public XmlService xmlService() {
         return new XmlService();
     }
 
+    /**
+     * DFDL service.
+     * @return DFDL service.
+     */
     @Bean
     public DfdlService dfdlService() {
         return new DfdlService();
     }
 
+    /**
+     * CSV service.
+     * @return CSV service.
+     */
     @Bean
     public CsvService csvService() { return new CsvService(); }
 
+    /**
+     * Kafka Connect service.
+     * @return Kafka Connect service.
+     */
+    @Bean
+    public KafkaConnectService kafkaConnectService() { return new KafkaConnectService(); }
+    
+    /**
+     * Core service.
+     * @return Core service
+     * @throws AtlasException unexpected error
+     */
     @Bean
     public AtlasService atlasService() throws AtlasException {
         return new AtlasService();

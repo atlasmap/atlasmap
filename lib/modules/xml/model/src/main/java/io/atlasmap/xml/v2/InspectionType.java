@@ -16,26 +16,43 @@
 package io.atlasmap.xml.v2;
 
 /**
- * @deprecated Migrate to {@code io.atlasmap.v2.InspectionType}
+ * @deprecated Migrate to {@code io.atlasmap.v2.InspectionType}.
  */
 @Deprecated
 public enum InspectionType {
 
+    /** All. */
     ALL("All"),
+    /** Instance. */
     INSTANCE("Instance"),
+    /** Schema. */
     SCHEMA("Schema"),
+    /** None. */
     NONE("None");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     InspectionType(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static InspectionType fromValue(String v) {
         for (InspectionType c: InspectionType.values()) {
             if (c.value.equals(v)) {

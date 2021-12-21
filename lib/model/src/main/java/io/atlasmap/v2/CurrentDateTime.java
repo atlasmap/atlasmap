@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the <strong>Current Date Time</strong> field action.
+ */
 public class CurrentDateTime extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;

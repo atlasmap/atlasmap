@@ -17,18 +17,22 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The property model object.
+ */
 public class Property implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
-
+    /** value */
     protected String value;
-
+    /** field type */
     protected FieldType fieldType;
-
+    /** scope */
     protected String scope;
-
+    /** data source type */
     protected DataSourceType dataSourceType;
 
     /**

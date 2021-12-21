@@ -31,16 +31,27 @@ import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 import io.atlasmap.xml.v2.XmlField;
 
+/**
+ * The module validation service for the XML Document.
+ */
 public class XmlValidationService extends BaseModuleValidationService<XmlField> {
 
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public XmlValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         super(conversionService, fieldActionService);
         init();
     }
 
+    /**
+     * Initializes.
+     */
     public void init() {
         NonNullValidator javaFileNameNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The name element must not be null nor empty");
@@ -60,6 +71,9 @@ public class XmlValidationService extends BaseModuleValidationService<XmlField> 
         validatorMap.put("output.field.type.not.null", outputFieldTypeNonNullValidator);
     }
 
+    /**
+     * Uninitializes.
+     */
     public void destroy() {
         validatorMap.clear();
     }

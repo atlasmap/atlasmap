@@ -15,24 +15,45 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of collection type.
+ */
 public enum CollectionType {
 
+    /** All. */
     ALL("All"),
+    /** Array. */
     ARRAY("Array"),
+    /** List. */
     LIST("List"),
+    /** Map. */
     MAP("Map"),
+    /** None. */
     NONE("None");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     CollectionType(String v) {
         value = v;
     }
 
+    /**
+     * Gets a value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets a collection type enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static CollectionType fromValue(String v) {
         for (CollectionType c: CollectionType.values()) {
             if (c.value.equals(v)) {

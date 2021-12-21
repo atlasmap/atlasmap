@@ -28,9 +28,11 @@ import io.atlasmap.v2.Field;
  * @version $Revision: 1.2 $
  */
 public abstract class ArithmeticExpression extends BinaryExpression {
-
+    /** integer */
     protected static final int INTEGER = 1;
+    /** long */
     protected static final int LONG = 2;
+    /** double */
     protected static final int DOUBLE = 3;
     boolean convertStringExpressions = false;
 
@@ -44,6 +46,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         convertStringExpressions = ComparisonExpression.CONVERT_STRING_EXPRESSIONS.get()!=null;
     }
 
+    /**
+     * Creates plus expression.
+     * @param left left
+     * @param right right
+     * @return expression
+     */
     public static Expression createPlus(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
             protected Field evaluate(Field lfield, Field rfield) {
@@ -64,6 +72,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         };
     }
 
+    /**
+     * Creates minus expression.
+     * @param left left
+     * @param right right
+     * @return expression
+     */
     public static Expression createMinus(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
             protected Field evaluate(Field lfield, Field rfield) {
@@ -78,6 +92,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         };
     }
 
+    /**
+     * Creates multiply expression.
+     * @param left left
+     * @param right right
+     * @return expression
+     */
     public static Expression createMultiply(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
 
@@ -93,6 +113,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         };
     }
 
+    /**
+     * Creates divide expression.
+     * @param left left
+     * @param right right
+     * @return expression
+     */
     public static Expression createDivide(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
 
@@ -108,6 +134,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         };
     }
 
+    /**
+     * Creates mod expression.
+     * @param left left
+     * @param right right
+     * @return expression
+     */
     public static Expression createMod(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
 
@@ -123,6 +155,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         };
     }
 
+    /**
+     * Calculates plus.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     protected Number plus(Number left, Number right) {
         switch (numberType(left, right)) {
         case INTEGER:
@@ -134,6 +172,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         }
     }
 
+    /**
+     * Calculates minus.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     protected Number minus(Number left, Number right) {
         switch (numberType(left, right)) {
         case INTEGER:
@@ -145,6 +189,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         }
     }
 
+    /**
+     * Calculates multiply.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     protected Number multiply(Number left, Number right) {
         switch (numberType(left, right)) {
         case INTEGER:
@@ -156,10 +206,22 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         }
     }
 
+    /**
+     * Calculates divide.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     protected Number divide(Number left, Number right) {
         return new Double(left.doubleValue() / right.doubleValue());
     }
 
+    /**
+     * Calculates mod.
+     * @param left left
+     * @param right right
+     * @return result
+     */
     protected Number mod(Number left, Number right) {
         return new Double(left.doubleValue() % right.doubleValue());
     }
@@ -178,6 +240,11 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         return n instanceof Float || n instanceof Double;
     }
 
+    /**
+     * Conerts to {@link Number}.
+     * @param value value
+     * @return result
+     */
     protected Number asNumber(Object value) {
         if (value instanceof Number) {
             return (Number)value;
@@ -198,6 +265,11 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         }
     }
 
+    /**
+     * Evaluates the expression.
+     * @param message expression context
+     * @return result {@link Field}
+     */
     public Field evaluate(ExpressionContext message) throws ExpressionException {
         Field lfield = left.evaluate(message);
         if (lfield == null || lfield.getValue() == null) {
@@ -211,10 +283,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     }
 
     /**
-     * Evaluate expression.
+     * Evaluates the expression.
      * @param lvalue {@link Field} represents left value
      * @param rvalue {@link Field} represents right value
-     * @return {@link Field} reporesents a result
+     * @return {@link Field} represents a result
      */
     protected abstract Field evaluate(Field lvalue, Field rvalue);
 

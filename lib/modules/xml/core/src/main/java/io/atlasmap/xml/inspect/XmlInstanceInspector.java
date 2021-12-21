@@ -33,7 +33,6 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
-import io.atlasmap.xml.core.XmlComplexTypeFactory;
 import io.atlasmap.xml.core.XmlPath;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
 import io.atlasmap.xml.v2.XmlComplexType;
@@ -43,16 +42,27 @@ import io.atlasmap.xml.v2.XmlFields;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
+/**
+ * The XML instance inspector inspects the XML instance and build the {@link XmlDocument}.
+ */
 public class XmlInstanceInspector {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlInstanceInspector.class);
     private XmlDocument xmlDocument = AtlasXmlModelFactory.createXmlDocument();
 
+    /**
+     * Inspects the XML instance.
+     * @param document XML instance
+     */
     public void inspect(Document document) {
         xmlDocument.setFields(new Fields());
         parseDocument(document.getDocumentElement());
     }
 
+    /**
+     * Gets the XML Document.
+     * @return XML Document
+     */
     public XmlDocument getXmlDocument() {
         return xmlDocument;
     }
@@ -210,7 +220,7 @@ public class XmlInstanceInspector {
     }
 
     private XmlComplexType createXmlComplexType(Node childNode, XmlComplexType parentField) {
-        XmlComplexType childComplexType = XmlComplexTypeFactory.createXmlComlexField();
+        XmlComplexType childComplexType = AtlasXmlModelFactory.createXmlComlexField();
         childComplexType.setXmlFields(new XmlFields());
         childComplexType.setName(childNode.getNodeName());
         XmlPath path = null;

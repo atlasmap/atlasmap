@@ -19,10 +19,14 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Add Days</strong> field action.
+ */
 public class AddDays extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** number of days to add */
     protected Integer days;
 
     /**

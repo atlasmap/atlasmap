@@ -23,14 +23,25 @@ import io.atlasmap.spi.AtlasValidator;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The composite validator.
+ */
 public class CompositeValidator implements AtlasValidator {
 
     private List<AtlasValidator> validators;
 
+    /**
+     * A constructor.
+     * @param validators validators
+     */
     public CompositeValidator(List<AtlasValidator> validators) {
         this.validators = new ArrayList<>(validators);
     }
 
+    /**
+     * A constructor.
+     * @param validators validators
+     */
     public CompositeValidator(AtlasValidator... validators) {
         this.validators = new ArrayList<>();
         Collections.addAll(this.validators, validators);

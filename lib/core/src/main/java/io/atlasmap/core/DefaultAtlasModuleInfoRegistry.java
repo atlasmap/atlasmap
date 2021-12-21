@@ -28,11 +28,18 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.spi.AtlasModuleInfo;
 import io.atlasmap.spi.AtlasModuleInfoRegistry;
 
+/**
+ * The default implementation of {@link AtlasModuleInfoRegistry}.
+ */
 public class DefaultAtlasModuleInfoRegistry implements AtlasModuleInfoRegistry {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasModuleInfoRegistry.class);
     private final String jmxObjectNamePrefix;
     private final Set<AtlasModuleInfo> moduleInfos = new HashSet<>();
 
+    /**
+     * A constructor.
+     * @param factory factory
+     */
     public DefaultAtlasModuleInfoRegistry(DefaultAtlasContextFactory factory) {
         jmxObjectNamePrefix = factory.getJmxObjectName() + ",modules=AvailableModules,moduleName=";
     }

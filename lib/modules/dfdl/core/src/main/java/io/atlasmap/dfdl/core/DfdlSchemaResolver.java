@@ -34,13 +34,17 @@ import io.atlasmap.api.AtlasException;
 /**
  * DFDL schema resolver resolves DFDL schema file to be used to process DFDL document.
  * It first looks for a static DFDL schema file with specified name. If no schema file is found,
- * then it looks for a {@code DfdlSchemaGenerator} and delegate to it to generate custom schema.
+ * then it looks for a {@link DfdlSchemaGenerator} and delegate to it to generate custom schema.
  */
 public class DfdlSchemaResolver {
 
     private ClassLoader classLoader;
     private Map<String, DfdlSchemaGenerator> dfdlGenerators;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     public DfdlSchemaResolver(ClassLoader loader) {
         this.classLoader = loader;
         this.dfdlGenerators = new HashMap<>();
@@ -50,6 +54,13 @@ public class DfdlSchemaResolver {
         }
     }
 
+    /**
+     * Looks up the DFDL schema file in the classpath.
+     * @param dfdlSchemaName DFDL schema name
+     * @param options options
+     * @return URI
+     * @throws Exception unexpected error
+     */
     public URI resolve(String dfdlSchemaName, Map<String, String> options) throws Exception {
         if (dfdlSchemaName == null) {
             throw new AtlasException("DFDL schema name must be specified");

@@ -33,45 +33,86 @@ package io.atlasmap.spi;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The enumeration of the string delimters.
+ */
 public enum StringDelimiter {
+    /** Ampersand(&amp;). */
     AMPERSAND("Ampersand", "&", "&"),
+    /** At sign(@). */
     AT_SIGN("AtSign", "@", "@"),
+    /** Backslash(\). */
     BACKSLASH("Backslash", "\\\\", "\\"),
+    /** Colon(:). */
     COLON("Colon", ":", ":"),
+    /** Comma(,). */
     COMMA("Comma", ",", ","),
+    /** Dash(-). */
     DASH("Dash", "-", "-"),
+    /** Equal(=). */
     EQUAL("Equal", "=", "="),
+    /** Hash(#). */
     HASH("Hash", "#", "#"),
+    /** Multispace(  ). */
     MULTI_SPACE("MultiSpace", "\\s+", "    "),
+    /** Period(.). */
     PERIOD("Period", "\\.", "."),
+    /** Pipe(|). */
     PIPE("Pipe", "\\|", "|"),
+    /** Semicolon(;). */
     SEMICOLON("Semicolon", ";", ";"),
+    /** Slash(/). */
     SLASH("Slash", "/", "/"),
+    /** Space( ). */
     SPACE("Space", "\\s", " "),
+    /** Underscore(_). */
     UNDERSCORE("Underscore", "_", "_");
 
     private String name;
     private String regex;
     private String value;
 
+    /**
+     * A constructor.
+     * @param name name
+     * @param regex regular expression
+     * @param value value
+     */
     StringDelimiter(String name, String regex, String value) {
         this.name = name;
         this.regex = regex;
         this.value = value;
     }
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the regular expression.
+     * @return regular expression
+     */
     public String getRegex() {
         return regex;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Gets the enum from the name.
+     * @param name name
+     * @return the enum
+     */
     public static StringDelimiter fromName(String name) {
         for (StringDelimiter entry : values()) {
             if (entry.getName().equals(name)) {
@@ -81,6 +122,10 @@ public enum StringDelimiter {
         return null;
     }
 
+    /**
+     * Gets all regular expressions.
+     * @return a list of regular expression strings
+     */
     public static List<String> getAllRegexes() {
         List<String> values = new ArrayList<String>();
         for (StringDelimiter en : values()) {
@@ -89,6 +134,10 @@ public enum StringDelimiter {
         return values;
     }
 
+    /**
+     * Gets all names.
+     * @return a list of names.
+     */
     public static List<String> getAllNames() {
         List<String> names = new ArrayList<String>();
         for (StringDelimiter en : values()) {

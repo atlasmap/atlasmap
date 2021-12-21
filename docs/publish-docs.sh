@@ -20,7 +20,7 @@ echo Deploying AtlasMap documentation
 echo ================================
 
 ../mvnw -Phtml,pdf package
-../mvnw -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all javadoc:aggregate
+../mvnw -f pom-javadoc.xml -pl \!io.atlasmap:atlasmap-lib-all -pl \!io.atlasmap.com.sun.xsom:xsom javadoc:aggregate
 mkdir -p target/generated-docs/html/developer-guide/coverage/java
 mkdir target/generated-docs/html/developer-guide/coverage/ui
 cp -a ../coverage-report/target/site/jacoco-aggregate/* target/generated-docs/html/developer-guide/coverage/java

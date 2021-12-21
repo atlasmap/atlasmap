@@ -15,22 +15,41 @@
  */
 package io.atlasmap.expression;
 
+/**
+ * The expression exception.
+ */
 public class ExpressionException extends Exception {
 
     private static final long serialVersionUID = -6892363158919485507L;
 
+    /**
+     * A constructor.
+     */
     public ExpressionException() {
         super();
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     * @param cause cause
+     */
     public ExpressionException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     */
     public ExpressionException(String message) {
         super(message);
     }
 
+    /**
+     * A constructor.
+     * @param cause cause
+     */
     public ExpressionException(Throwable cause) {
         super(cause);
     }

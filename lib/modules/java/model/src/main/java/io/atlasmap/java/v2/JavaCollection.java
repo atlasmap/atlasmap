@@ -19,10 +19,14 @@ import java.io.Serializable;
 
 import io.atlasmap.v2.Collection;
 
+/**
+ * @deprecated {@link Collection}.
+ */
+@Deprecated
 public class JavaCollection extends Collection implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** collection class name. */
     protected String collectionClassName;
 
     /**
@@ -49,6 +53,7 @@ public class JavaCollection extends Collection implements Serializable {
         this.collectionClassName = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -82,6 +87,7 @@ public class JavaCollection extends Collection implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

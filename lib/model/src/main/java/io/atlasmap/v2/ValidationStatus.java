@@ -15,24 +15,44 @@
  */
 package io.atlasmap.v2;
 
+/**
+ * The enumeration of {@link Validation} status.
+ */
 public enum ValidationStatus {
-
+    /** All. */
     ALL("All"),
+    /** Info. */
     INFO("Info"),
+    /** Warn. */
     WARN("Warn"),
+    /** Error. */
     ERROR("Error"),
+    /** None. */
     NONE("None");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     ValidationStatus(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static ValidationStatus fromValue(String v) {
         for (ValidationStatus c: ValidationStatus.values()) {
             if (c.value.equals(v)) {

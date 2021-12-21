@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link Audit}.
+ */
 public class Audits implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Audit} */
     protected List<Audit> audit;
 
     /**

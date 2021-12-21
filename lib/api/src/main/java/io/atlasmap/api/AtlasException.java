@@ -15,21 +15,40 @@
  */
 package io.atlasmap.api;
 
+/**
+ * The generic AtlasMap Exception.
+ */
 public class AtlasException extends Exception {
     private static final long serialVersionUID = 7547364931796852076L;
 
+    /**
+     * A constructor.
+     */
     public AtlasException() {
         super();
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     * @param cause cause
+     */
     public AtlasException(String message, Throwable cause) {
         super(message, cause);
     }
 
+    /**
+     * A constructor.
+     * @param message message
+     */
     public AtlasException(String message) {
         super(message);
     }
 
+    /**
+     * A constructor.
+     * @param cause cause
+     */
     public AtlasException(Throwable cause) {
         super(cause);
     }

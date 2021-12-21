@@ -19,17 +19,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The field action parameter model.
+ */
 public class ActionParameter implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    /** A list of parameter values */
     protected List<String> values;
 
+    /** parameter name */
     protected String name;
 
+    /** user friendly parameter name */
     protected String displayName;
 
+    /** A description of the parameter */
     protected String description;
 
+    /** field type of the parameter */
     protected FieldType fieldType;
 
     /**

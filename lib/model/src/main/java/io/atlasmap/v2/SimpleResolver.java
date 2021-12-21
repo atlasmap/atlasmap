@@ -26,9 +26,14 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+/**
+ * The jackson {@link com.fasterxml.jackson.databind.jsontype.TypeIdResolver} for the AtlasMap field actions.
+ */
 public class SimpleResolver extends TypeIdResolverBase {
 
+    /** type to ID dictionary */
     protected final HashMap<Class<?>, String> typeToId = new HashMap<Class<?>, String>();
+    /** ID to type dictionary */
     protected final HashMap<String, JavaType> idToType = new HashMap<String, JavaType>();
 
     private JavaType baseType;
@@ -102,14 +107,26 @@ public class SimpleResolver extends TypeIdResolverBase {
         return "valid values: " + idToType.keySet();
     }
 
+    /**
+     * Sets the class loader.
+     * @param classLoader class loader
+     */
     public void setClassLoader(ClassLoader classLoader) {
         this.classLoader = classLoader;
     }
 
+    /**
+     * Gets the class loader.
+     * @return class loader
+     */
     public ClassLoader getClassLoader() {
         return this.classLoader;
     }
 
+    /**
+     * Sets the {@link TypeFactory}.
+     * @param tf {@link TypeFactory}
+     */
     public void setTypeFactory(TypeFactory tf) {
         this.typeFactory = tf;
     }

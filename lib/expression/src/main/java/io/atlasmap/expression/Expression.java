@@ -32,6 +32,7 @@ import io.atlasmap.v2.Field;
  */
 public interface Expression {
 
+    /** cache. */
     LRUCache<String, Object> CACHE = new LRUCache<>(100);
 
     /**
@@ -43,6 +44,13 @@ public interface Expression {
      */
     Field evaluate(ExpressionContext expressionContext) throws ExpressionException;
 
+    /**
+     * Parses the expression text.
+     * @param expessionText expression text
+     * @param functionResolver function resolver
+     * @return result
+     * @throws ExpressionException unexpected error
+     */
     static Expression parse(String expessionText, FunctionResolver functionResolver) throws ExpressionException {
         if (functionResolver == null) {
             functionResolver = (name, args) -> {
@@ -70,6 +78,9 @@ public interface Expression {
         }
     }
 
+    /**
+     * Clears the cache.
+     */
     static void clearCache() {
         CACHE.clear();
     }

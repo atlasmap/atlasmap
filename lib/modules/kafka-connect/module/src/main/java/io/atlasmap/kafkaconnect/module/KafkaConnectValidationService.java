@@ -31,17 +31,28 @@ import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 
+/**
+ * The module validation service for Kafka Connect.
+ */
 public class KafkaConnectValidationService extends BaseModuleValidationService<KafkaConnectField> {
 
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = KafkaConnectModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public KafkaConnectValidationService(AtlasConversionService conversionService,
             AtlasFieldActionService fieldActionService) {
         super(conversionService, fieldActionService);
         init();
     }
 
+    /**
+     * Initializes.
+     */
     public void init() {
         NonNullValidator pathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The path element must not be null nor empty");

@@ -22,6 +22,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+/**
+ * The utility class to access jackson {@link ObjectMapper}.
+ */
 public class Json {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
@@ -36,10 +39,19 @@ public class Json {
     private Json() {
     }
 
+    /**
+     * Gets the {@link ObjectMapper} instance.
+     * @return {@link ObjectMapper}
+     */
     public static ObjectMapper mapper() {
         return OBJECT_MAPPER;
     }
 
+    /**
+     * Gets the {@link ObjectMapper} instance which is initialized with the passed in class loader.
+     * @param classLoader class loader
+     * @return {@link ObjectMapper}
+     */
     public static ObjectMapper withClassLoader(ClassLoader classLoader) {
         OBJECT_MAPPER.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));
         OBJECT_MAPPER.setHandlerInstantiator(new AtlasHandlerInstantiator(classLoader));

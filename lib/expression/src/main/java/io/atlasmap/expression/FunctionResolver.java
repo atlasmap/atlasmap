@@ -20,7 +20,15 @@ import java.util.List;
 import io.atlasmap.expression.parser.ParseException;
 
 /**
+ * The function resolver for the expression evaluation.
  */
 public interface FunctionResolver {
+    /**
+     * Resolves the function.
+     * @param functionName function name
+     * @param args function arguments
+     * @return result
+     * @throws ParseException parse error
+     */
     Expression resolve(String functionName, List<Expression> args) throws ParseException;
 }

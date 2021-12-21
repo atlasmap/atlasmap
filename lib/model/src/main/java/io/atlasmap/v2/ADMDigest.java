@@ -17,6 +17,9 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * The ADM digest model class.
+ */
 public class ADMDigest {
 
     @JsonProperty("exportMappings")
@@ -26,26 +29,50 @@ public class ADMDigest {
     @JsonProperty("exportBlockData")
     private ValueContainer[] exportBlockData;
 
+    /**
+     * Gets exportMappings property.
+     * @return exportMappings property
+     */
     public ValueContainer getExportMappings() {
         return exportMappings;
     }
 
+    /**
+     * Sets exportMappings property.
+     * @param exportMappings exportMappings property
+     */
     public void setExportMappings(ValueContainer exportMappings) {
         this.exportMappings = exportMappings;
     }
 
+    /**
+     * Get an array of {@link DataSourceMetadata} property.
+     * @return an array of {@link DataSourceMetadata}
+     */
     public DataSourceMetadata[] getExportMeta() {
         return exportMeta;
     }
 
+    /**
+     * Sets an array of {@link DataSourceMetadata} property.
+     * @param exportMeta an array of {@link DataSourceMetadata}
+     */
     public void setExportMeta(DataSourceMetadata[] exportMeta) {
         this.exportMeta = exportMeta;
     }
 
+    /**
+     * Gets an array of exportBlockData property.
+     * @return exportBlockData property
+     */
     public ValueContainer[] getExportBlockData() {
         return exportBlockData;
     }
 
+    /**
+     * Sets an array of exportBlockData property.
+     * @param exportBlockData exportBlockData property
+     */
     public void setExportBlockData(ValueContainer[] exportBlockData) {
         this.exportBlockData = exportBlockData;
     }

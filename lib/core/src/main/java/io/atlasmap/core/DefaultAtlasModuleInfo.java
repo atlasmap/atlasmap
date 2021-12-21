@@ -22,6 +22,9 @@ import io.atlasmap.mxbean.AtlasModuleInfoMXBean;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleInfo;
 
+/**
+ * The default implementation of {@link AtlasModuleInfo}.
+ */
 public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoMXBean {
     private String name;
     private String uri;
@@ -32,6 +35,15 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
     private List<String> formats;
     private List<String> packageNames;
 
+    /**
+     * A constructor.
+     * @param name name
+     * @param uri URI
+     * @param moduleClass module class
+     * @param constructor module constructor
+     * @param formats formats
+     * @param packageNames package names
+     */
     public DefaultAtlasModuleInfo(String name, String uri, Class<AtlasModule> moduleClass, Constructor<AtlasModule> constructor,
             List<String> formats, List<String> packageNames) {
         this.name = name;
@@ -50,10 +62,18 @@ public class DefaultAtlasModuleInfo implements AtlasModuleInfo, AtlasModuleInfoM
         return null;
     }
 
+    /**
+     * Gets the module constructor.
+     * @return constructor
+     */
     public Constructor<AtlasModule> getConstructor() {
         return constructor;
     }
 
+    /**
+     * Gets the formats.
+     * @return formats
+     */
     public List<String> getFormats() {
         return formats;
     }

@@ -17,17 +17,29 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The custom mapping entry.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class CustomMapping extends BaseMapping {
 
     private static final long serialVersionUID = 1L;
 
+    /** class name */
     private String className;
 
+    /**
+     * Gets the custom mapping class name.
+     * @return custom mapping class name
+     */
     public String getClassName() {
         return className;
     }
 
+    /**
+     * Sets the custom mapping class name.
+     * @param className custom mapping class name.
+     */
     public void setClassName(String className) {
         this.className = className;
     }

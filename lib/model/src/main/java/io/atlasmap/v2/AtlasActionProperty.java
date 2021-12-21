@@ -18,9 +18,26 @@ package io.atlasmap.v2;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * An annotation to add a metadata on a field action parameter.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AtlasActionProperty {
+    /**
+     * The user friendly title of the field action parameter.
+     * @return title
+     */
     String title();
+
+    /**
+     * The type of the field action parameter.
+     * @return {@link FieldType}
+     */
     FieldType type();
+
+    /**
+     * The collection type of the field action parameter.
+     * @return {@link CollectionType}
+     */
     CollectionType collectionType() default CollectionType.NONE;
 }

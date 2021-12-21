@@ -21,6 +21,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
+/**
+ * A base class for the field action model. The actual field action
+ * extends this class and declare its own parameters.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
@@ -31,6 +35,10 @@ public abstract class Action implements Serializable, FieldAction {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Return a type name of the field action.
+     * @return field action type name
+     */
     @JsonProperty("@type")
     public String getType() {
         return ActionResolver.getInstance().toId(getClass());

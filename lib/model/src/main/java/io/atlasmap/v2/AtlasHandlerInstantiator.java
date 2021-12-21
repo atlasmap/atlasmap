@@ -26,6 +26,9 @@ import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 
+/**
+ * The jackson {@link HandlerInstantiator} for the field action.
+ */
 public class AtlasHandlerInstantiator extends HandlerInstantiator {
 
     private ClassLoader classLoader;

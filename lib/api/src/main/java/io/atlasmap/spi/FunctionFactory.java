@@ -20,10 +20,23 @@ import java.util.List;
 import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.parser.ParseException;
 
+/**
+ * The factory class to create function expression.
+ */
 public interface FunctionFactory {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     String getName();
 
+    /**
+     * Creates the function expression.
+     * @param args argument expressions
+     * @return created expression
+     * @throws ParseException unexpected error
+     */
     Expression create(List<Expression> args) throws ParseException;
 
 }

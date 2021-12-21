@@ -21,15 +21,19 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Field;
 
+/**
+ * The Java enum field.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class JavaEnumField extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** name. */
     protected String name;
-
+    /** ordinal. */
     protected Integer ordinal;
-
+    /** class name. */
     protected String className;
 
     /**
@@ -104,6 +108,7 @@ public class JavaEnumField extends Field implements Serializable {
         this.className = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -175,6 +180,7 @@ public class JavaEnumField extends Field implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

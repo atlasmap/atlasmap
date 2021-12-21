@@ -21,6 +21,9 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+/**
+ * The {@link ErrorHandler} implementation.
+ */
 class XSOMErrorHandler implements ErrorHandler {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasXmlSchemaSetParser.class);
 

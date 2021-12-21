@@ -29,7 +29,7 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.SimpleField;
 
 /**
- * A base {@code AtlasMappingBuilder} with some common utility methods.
+ * A base {@link AtlasMappingBuilder} with some common utility methods.
  * In most cases user can extend this class and just implement {@link #processMapping()}.
  * @see AtlasField
  */
@@ -40,18 +40,45 @@ public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder 
     private AtlasConversionService conversionService;
     private AtlasFieldActionService fieldActionService;
 
+    /**
+     * Reads a field.
+     * @param docId Document ID
+     * @param path field path
+     * @return result
+     * @throws AtlasException unexpected error
+     */
     public AtlasField read(String docId, String path) throws AtlasException {
         return new AtlasField(session).read(docId, path);
     }
 
+    /**
+     * Reads a constant.
+     * @param name constant name
+     * @return result
+     * @throws AtlasException unexpected error
+     */
     public AtlasField readConstant(String name) throws AtlasException {
         return new AtlasField(session).readConstant(name);
     }
 
+    /**
+     * Reads a property.
+     * @param scope property scope
+     * @param name property name
+     * @return result
+     * @throws AtlasException unexpected error
+     */
     public AtlasField readProperty(String scope, String name) throws AtlasException {
         return new AtlasField(session).readProperty(scope, name);
     }
 
+    /**
+     * Writes a field.
+     * @param docId Document ID
+     * @param path field path
+     * @param value field value
+     * @throws AtlasException unexpected error
+     */
     public void write(String docId, String path, Object value) throws AtlasException {
         SimpleField source = new SimpleField();
         if (value != null) {
@@ -98,6 +125,11 @@ public abstract class DefaultAtlasMappingBuilder implements AtlasMappingBuilder 
         return this.session;
     };
 
+    /**
+     * Adds an {@link io.atlasmap.v2.Audit} entry out of the Exception passed in into the current session.
+     * {@link AuditStatus#ERROR} is used.
+     * @param e Exception
+     */
     public void addAudit(Exception e) {
         AtlasUtil.addAudit(this.session, this.getClass().getName(),
                 e.getMessage(), AuditStatus.ERROR, null);

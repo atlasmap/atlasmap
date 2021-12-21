@@ -50,6 +50,9 @@ import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
+/**
+ * The {@link AtlasFieldReader} implementation for the XML Document.
+ */
 public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlFieldReader.class);
@@ -57,16 +60,28 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
     private AtlasConversionService conversionService;
     private Document document;
 
+    /**
+     * A constructor.
+     * @param cl class loader
+     * @param conversionService conversion service
+     */
     public XmlFieldReader(ClassLoader cl, AtlasConversionService conversionService) {
         super(cl);
         this.conversionService = conversionService;
     }
 
+    /**
+     * A constructor.
+     * @param cl class loader
+     * @param conversionService conversion service
+     * @param namespaces namespaces
+     */
     public XmlFieldReader(ClassLoader cl, AtlasConversionService conversionService, Map<String, String> namespaces) {
         super(cl, namespaces);
         this.conversionService = conversionService;
     }
 
+    @Override
     public Field read(AtlasInternalSession session) throws AtlasException {
         Field field = session.head().getSourceField();
         if (document == null) {
@@ -305,6 +320,11 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         }
     }
 
+    /**
+     * Sets the XML Document.
+     * @param document XML Document
+     * @throws AtlasException unexpected error
+     */
     public void setDocument(Document document) throws AtlasException {
         this.document = document;
     }

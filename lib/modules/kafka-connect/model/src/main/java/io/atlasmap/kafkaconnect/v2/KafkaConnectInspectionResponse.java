@@ -20,14 +20,20 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The top container object of Kafka Connect Document inspection response that AtlasMap design time backend
+ * service sends back to the UI in return for {@link KafkaConnectInspectionRequest}.
+ */
 @JsonRootName("KafkaConnectInspectionResponse")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class KafkaConnectInspectionResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** The Kafka Connect Document created as a result of the inspection. */
     private KafkaConnectDocument kafkaConnectDocument;
+    /** Error message. */
     private String errorMessage;
+    /** Execution time. */
     private Long executionTime;
 
     /**

@@ -46,11 +46,19 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.
+ */
 @Path("/xml/")
 public class XmlService {
 
     private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);
 
+    /**
+     * Serializes to a JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
@@ -59,6 +67,13 @@ public class XmlService {
         }
     }
 
+    /**
+     * Deserializes from a JSON.
+     * @param <T> type
+     * @param value value
+     * @param clazz type
+     * @return deserialized
+     */
     protected <T> T fromJson(InputStream value, Class<T>clazz) {
         try {
             return Json.mapper().readValue(value, clazz);
@@ -67,6 +82,11 @@ public class XmlService {
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from from
+     * @return pong
+     */
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
@@ -76,7 +96,11 @@ public class XmlService {
         return "Got it! " + from;
     }
 
-
+    /**
+     * Inspects a XML schema or instance and return a Document object.
+     * @param request {@link XmlInspectionRequest}
+     * @return {@link XmlInspectionResponse}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -88,6 +112,11 @@ public class XmlService {
         return inspect(fromJson(request, XmlInspectionRequest.class));
     }
 
+    /**
+     * Inspets a XML schema or instance and return a Document object.
+     * @param request request
+     * @return {@link XmlInspectionResponse}
+     */
     public Response inspect(XmlInspectionRequest request) {
         long startTime = System.currentTimeMillis();
 

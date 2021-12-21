@@ -23,12 +23,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
+/**
+ * Represents XML Document.
+ */
 @JsonRootName("XmlDocument")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class XmlDocument extends Document implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** XML namespaces. */
     protected XmlNamespaces xmlNamespaces;
 
     /**
@@ -55,6 +58,7 @@ public class XmlDocument extends Document implements Serializable {
         this.xmlNamespaces = value;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -88,6 +92,7 @@ public class XmlDocument extends Document implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         currentHashCode = ((currentHashCode* 31)+ super.hashCode());

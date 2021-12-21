@@ -17,18 +17,26 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
+/**
+ * The model class for the custom field action.
+ */
 public class CustomAction extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
 
+    /** class name */
     protected String className;
 
+    /** method name */
     protected String methodName;
 
+    /** input field type */
     protected FieldType inputFieldType;
 
+    /** output field type */
     protected FieldType outputFieldType;
 
     /**

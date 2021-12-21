@@ -19,8 +19,15 @@ import java.lang.reflect.Type;
 
 import io.atlasmap.api.AtlasException;
 
+/**
+ * The {@link JavaChildAccessor} which accesses the Document root.
+ */
 public class RootAccessor extends JavaChildAccessor {
 
+    /**
+     * A constructor.
+     * @param parent the root object
+     */
     public RootAccessor(Object parent) {
         super(parent, null);
     }

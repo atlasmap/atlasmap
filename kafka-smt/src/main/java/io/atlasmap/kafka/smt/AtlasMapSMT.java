@@ -29,8 +29,16 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
+/**
+ * Kafka Connect Single Message Transformation that uses AtlasMap to transform.
+ * This maps from 2 source Documents which are key and value, to the
+ * 2 target Documents (key and value). Not only the Kafka Connect data structure
+ * defined with the Kafka Connect schema, the Document could be also a serialized
+ * data format that is supported by AtlasMap, such as JSON or XML.
+ * @param <R> ConnectRecord type
+ */
 public class AtlasMapSMT<R extends ConnectRecord<R>> implements Transformation<R> {
-
+    /** Overview. */
     public static final String OVERVIEW_DOC = "Process AtlasMap data mapping with a Kafka Connect record";
 
     private interface ConfigName {
@@ -41,6 +49,7 @@ public class AtlasMapSMT<R extends ConnectRecord<R>> implements Transformation<R
         String DOCID_TARGET_VALUE = "docid.target.value";
     }
 
+    /** Config Def. */
     public static final ConfigDef CONFIG_DEF = new ConfigDef()
         .define(ConfigName.ADM_PATH, ConfigDef.Type.STRING, "", ConfigDef.Importance.HIGH, "Path for the ADM file")
         .define(ConfigName.DOCID_SOURCE_KEY, ConfigDef.Type.STRING, "", ConfigDef.Importance.MEDIUM, "Document ID for the source key")

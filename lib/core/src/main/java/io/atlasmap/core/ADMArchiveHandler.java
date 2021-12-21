@@ -94,10 +94,17 @@ public class ADMArchiveHandler {
     private Path persistDirectory;
     private Path libraryDirectory;
 
+    /**
+     * A constructor.
+     */
     public ADMArchiveHandler() {
         this(ADMArchiveHandler.class.getClassLoader());
     }
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     public ADMArchiveHandler(ClassLoader loader) {
         this.jsonMapper = Json.withClassLoader(loader);
         this.jsonMapperForDigest = this.jsonMapper.copy();
@@ -244,6 +251,10 @@ public class ADMArchiveHandler {
         }
     }
 
+    /**
+     * Gets the {@link AtlasMapping} mapping definition.
+     * @return mapping definition
+     */
     public AtlasMapping getMappingDefinition() {
         if (this.mappingDefinition == null && this.mappingDefinitionBytes != null) {
             try {
@@ -260,11 +271,20 @@ public class ADMArchiveHandler {
         return this.mappingDefinition;
     }
 
+    /**
+     * Sets the {@link AtlasMapping} mapping definition.
+     * @param mapping mapping definition
+     */
     public void setMappingDefinition(AtlasMapping mapping) {
         this.mappingDefinitionBytes = null;
         this.mappingDefinition = mapping;
     }
 
+    /**
+     * Sets the serialized mapping definition JSON from InputStream.
+     * @param is serialized mapping definition JSON
+     * @throws AtlasException unexpected error
+     */
     public void setMappingDefinitionBytes(InputStream is) throws AtlasException {
         try {
             this.mappingDefinition = null;
@@ -277,6 +297,11 @@ public class ADMArchiveHandler {
         }
     }
 
+    /**
+     * Gets the serialized mapping definition JSON as a byte array.
+     * @return serialized mapping definition JSON
+     * @throws AtlasException unexpected error
+     */
     public byte[] getMappingDefinitionBytes() throws AtlasException {
         try {
             if (this.mappingDefinitionBytes == null && this.mappingDefinition != null) {
@@ -288,6 +313,11 @@ public class ADMArchiveHandler {
         }
     }
 
+    /**
+     * Sets the gzipped ADM Digest JSON from InputStream.
+     * @param is gzipped ADM Digest JSON
+     * @throws AtlasException unexpected error
+     */
     public void setGzippedADMDigest(InputStream is) throws AtlasException {
         try {
             this.gzippedAdmDigestBytes = readIntoByteArray(is);
@@ -296,14 +326,31 @@ public class ADMArchiveHandler {
         }
     }
 
+    /**
+     * Gets the gzipped ADM Digest JSON as a byte array.
+     * @return gzipped ADM Digest JSON
+     */
     public byte[] getGzippedADMDigestBytes() {
         return this.gzippedAdmDigestBytes;
     }
 
+    /**
+     * Looks up the DataSource metadata associated with the specified Document ID.
+     * @param isSource true if it's a source Document, or false
+     * @param documentId Document ID
+     * @return DataSource metadata
+     * @throws AtlasException unexpected error
+     */
     public DataSourceMetadata getDataSourceMetadata(boolean isSource, String documentId) throws AtlasException {
         return getDataSourceMetadata(new DataSourceKey(isSource, documentId));
     }
 
+    /**
+     * Looks up the DataSource metadata associated with the specified DataSource key.
+     * @param key DataSource key
+     * @return DataSource metadata
+     * @throws AtlasException unexpected error
+     */
     public DataSourceMetadata getDataSourceMetadata(DataSourceKey key) throws AtlasException {
         if (getDataSourceMetadataMap() == null) {
             return null;
@@ -311,6 +358,11 @@ public class ADMArchiveHandler {
         return getDataSourceMetadataMap().get(key);
     }
 
+    /**
+     * Gets a map of DataSource metadata.
+     * @return a map of DataSource metadata.
+     * @throws AtlasException unexpected error
+     */
     public Map<DataSourceKey, DataSourceMetadata> getDataSourceMetadataMap() throws AtlasException {
         if (this.dataSourceMetadata == null) {
             if (this.gzippedAdmDigestBytes == null) {
@@ -335,6 +387,11 @@ public class ADMArchiveHandler {
         return Collections.unmodifiableMap(this.dataSourceMetadata);
     }
 
+    /**
+     * Clones a {@link AtlasMapping} mapping definition object.
+     * @return mapping definition
+     * @throws AtlasException unexpected error
+     */
     public AtlasMapping cloneMappingDefinition() throws AtlasException {
         AtlasMapping atlasMapping = getMappingDefinition();
         if (atlasMapping == null) {
@@ -348,6 +405,9 @@ public class ADMArchiveHandler {
         }
     }
 
+    /**
+     * Clears all contents.
+     */
     public void clear() {
         this.mappingDefinitionBytes = null;
         this.mappingDefinition = null;
@@ -355,36 +415,71 @@ public class ADMArchiveHandler {
         this.dataSourceMetadata = null;
     }
 
+    /**
+     * Sets if it ignores the library or not.
+     * @param ignoreLib true to ignore library, or false
+     */
     public void setIgnoreLibrary(boolean ignoreLib) {
         this.ignoreLibrary = ignoreLib;
     }
 
+    /**
+     * Gets if it ignores the library or not.
+     * @return true if it ignores library, or false
+     */
     public boolean isIgnoreLibrary() {
         return this.ignoreLibrary;
     }
 
+    /**
+     * Sets the persistent directory.
+     * @param dir persistent directory path
+     * @throws AtlasException unexpected error
+     */
     public void setPersistDirectory(Path dir) throws AtlasException {
         ensureDirectory(dir);
         this.persistDirectory = dir;
     }
 
+    /**
+     * Sets the library directory.
+     * @param dir library directory path
+     * @throws AtlasException unexpected error
+     */
     public void setLibraryDirectory(Path dir) throws AtlasException {
         ensureDirectory(dir);
         this.libraryDirectory = dir;
     }
 
+    /**
+     * Sets the mapping definition ID.
+     * @param id mapping definition ID
+     */
     public void setMappingDefinitionId(String id) {
         this.mappingDefinitionId = id;
     }
 
+    /**
+     * Gets the file name of the gzipped ADM Dugest JSON.
+     * @return file name
+     */
     public String getGzippedADMDigestFileName() {
         return String.format(GZIPPED_ADM_DIGEST_TEMPLATE, this.mappingDefinitionId);
     }
 
+    /**
+     * Gets the file name of the mapping definition JSON.
+     * @return file name
+     */
     public String getMappingDefinitionFileName() {
         return String.format(MAPPING_DEFINITION_TEMPLATE, this.mappingDefinitionId);
     }
 
+    /**
+     * Loads ADM Archive from a exploded directory.
+     * @param dir directory path.
+     * @throws AtlasException unexpected error
+     */
     private void loadExploded(File dir) throws AtlasException {
         setPersistDirectory(dir.toPath());
         this.mappingDefinitionId = dir.getName();

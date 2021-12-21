@@ -24,21 +24,36 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
+/**
+ * The model factory for Kafka Connect module.
+ */
 public class AtlasKafkaConnectModelFactory {
-
+    /** URI format. */
     public static final String URI_FORMAT = "atlas:kafkaconnect";
 
+    /**
+     * Creates the Kafka Connect Document.
+     * @return Document
+     */
     public static KafkaConnectDocument createKafkaConnectDocument() {
         KafkaConnectDocument kafkaConnectDocument = new KafkaConnectDocument();
         kafkaConnectDocument.setFields(new Fields());
         return kafkaConnectDocument;
     }
 
+    /**
+     * Creates the Kafka Connect Field.
+     * @return Field
+     */
     public static KafkaConnectField createKafkaConnectField() {
         KafkaConnectField kafkaConnectField = new KafkaConnectField();
         return kafkaConnectField;
     }
 
+    /**
+     * Creates the Kafka Connect ComplexType.
+     * @return Complex Field
+     */
     public static KafkaConnectComplexType createKafkaConnectComplexType() {
         KafkaConnectComplexType kafkaConnectComplexField = new KafkaConnectComplexType();
         kafkaConnectComplexField.setKafkaConnectFields(new KafkaConnectFields());
@@ -46,6 +61,11 @@ public class AtlasKafkaConnectModelFactory {
         return kafkaConnectComplexField;
     }
 
+    /**
+     * Gets a string representation of the Kafka Connect Field.
+     * @param f Field
+     * @return string
+     */
     public static String toString(KafkaConnectField f) {
         return "JsonField [name=" + f.getName() + ", primitive=" + f.isPrimitive() + ", typeName=" + f.getTypeName()
                 + ", actions=" + f.getActions() + ", value=" + f.getValue()
@@ -55,12 +75,23 @@ public class AtlasKafkaConnectModelFactory {
                 + ", fieldType=" + f.getFieldType() + "]";
     }
 
+    /**
+     * Clones the Kafka Connect Field.
+     * @param field Field
+     * @param withActions true to also clone the field actions, or false
+     * @return cloned
+     */
     public static KafkaConnectField cloneField(KafkaConnectField field, boolean withActions) {
         KafkaConnectField clone = new KafkaConnectField();
         copyField(field, clone, withActions);
         return clone;
     }
 
+    /**
+     * Clones the FieldGroup.
+     * @param group FieldGroup
+     * @return cloned
+     */
     public static FieldGroup cloneFieldGroup(FieldGroup group) {
         FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);
         List<Field> newChildren = new ArrayList<>();
@@ -75,6 +106,12 @@ public class AtlasKafkaConnectModelFactory {
         return clone;
     }
 
+    /**
+     * Copies the Field properties.
+     * @param from from
+     * @param to to
+     * @param withActions true to also clone the field actions, or false
+     */
     public static void copyField(Field from, Field to, boolean withActions) {
         AtlasModelFactory.copyField(from, to, withActions);
 

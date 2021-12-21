@@ -27,22 +27,42 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Multiplicity;
 
+/**
+ * The default implementation of {@link AtlasCollectionHelper}.
+ */
 public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
 
     private AtlasFieldActionService fieldActionService;
 
+    /**
+     * A constructor.
+     */
     public DefaultAtlasCollectionHelper() {
         this.fieldActionService = DefaultAtlasFieldActionService.getInstance();
     }
 
+    /**
+     * A constructor.
+     * @param fieldActionService field action service
+     */
     public DefaultAtlasCollectionHelper(AtlasFieldActionService fieldActionService) {
         this.fieldActionService = fieldActionService;
     }
 
+    /**
+     * Creates the {@link AtlasPath} for the target field.
+     * @param path path string
+     * @return created
+     */
     protected AtlasPath createTargetAtlasPath(String path) {
         return new AtlasPath(path);
     }
 
+    /**
+     * Determines the collection count of the target field.
+     * @param targetField target field
+     * @return count
+     */
     public int determineTargetCollectionCount(Field targetField) {
         AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());
         int targetCollectionCount = targetPath.getCollectionSegmentCount();
@@ -52,6 +72,12 @@ public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
         return targetCollectionCount;
     }
 
+    /**
+     * Determines the collection cound of the source field.
+     * @param sourceParentField source parent field
+     * @param sourceField source field
+     * @return count
+     */
     public int determineSourceCollectionCount(Field sourceParentField, Field sourceField) {
         AtlasPath sourcePath = new AtlasPath(sourceField.getPath());
         int sourceCollectionCount = sourcePath.getCollectionSegmentCount();
@@ -86,6 +112,13 @@ public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
         return sourceCollectionCount;
     }
 
+    /**
+     * Copies collection indexes from source to target.
+     * @param sourceParentField source parent field
+     * @param sourceField source field
+     * @param targetField target field
+     * @param previousTargetField previous target field
+     */
     public void copyCollectionIndexes(Field sourceParentField, Field sourceField, Field targetField, Field previousTargetField) {
         AtlasPath sourcePath = new AtlasPath(sourceField.getPath());
         AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());

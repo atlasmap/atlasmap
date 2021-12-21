@@ -34,17 +34,28 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Fields;
 
+/**
+ * The {@link AtlasFieldWriter} implementation for CSV Document.
+ */
 public class CsvFieldWriter implements AtlasFieldWriter {
 
     private final CsvConfig csvConfig;
     private Document document;
 
+    /**
+     * A constructor.
+     * @param csvConfig config
+     */
     public CsvFieldWriter(CsvConfig csvConfig) {
         this.csvConfig = csvConfig;
         document = new Document();
         document.setFields(new Fields());
     }
 
+    /**
+     * Gets the CSV Document.
+     * @return CSV Document
+     */
     public Document getDocument() {
         return document;
     }
@@ -52,8 +63,8 @@ public class CsvFieldWriter implements AtlasFieldWriter {
     /**
      * Write is not performed until after the whole target document is ready and toCsv is called.
      *
-     * @param session
-     * @throws AtlasException
+     * @param session {@link AtlasInternalSession}
+     * @throws AtlasException unexpected error
      */
     @Override
     public void write(AtlasInternalSession session) throws AtlasException {
@@ -80,6 +91,11 @@ public class CsvFieldWriter implements AtlasFieldWriter {
         document.getFields().getField().add(targetField);
     }
 
+    /**
+     * Exports as a CSV.
+     * @return exported
+     * @throws AtlasException unexpected error
+     */
     public String toCsv() throws AtlasException {
         CSVFormat csvFormat = csvConfig.newCsvFormat();
 

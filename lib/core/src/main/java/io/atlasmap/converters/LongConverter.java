@@ -33,18 +33,36 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link Long}.
+ */
 public class LongConverter implements AtlasConverter<Long> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Long value) {
         return value != null ? BigDecimal.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Long value) {
         return value != null ? BigInteger.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BOOLEAN,
             concerns = AtlasConversionConcern.CONVENTION)
     public Boolean toBoolean(Long value) {
@@ -54,6 +72,12 @@ public class LongConverter implements AtlasConverter<Long> {
         return value == 0L ? Boolean.FALSE : Boolean.TRUE;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.BYTE,
             concerns = AtlasConversionConcern.RANGE)
     public Byte toByte(Long value) throws AtlasConversionException {
@@ -67,6 +91,12 @@ public class LongConverter implements AtlasConverter<Long> {
                 String.format("Long %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character toCharacter(Long value) throws AtlasConversionException {
@@ -82,6 +112,11 @@ public class LongConverter implements AtlasConverter<Long> {
         return Character.valueOf((char) value.intValue());
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param date value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME_TZ)
     public Date toDate(Long date) {
         if (date >= Instant.MIN.getEpochSecond()) {
@@ -90,6 +125,11 @@ public class LongConverter implements AtlasConverter<Long> {
         return new Date(date);
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DOUBLE)
     public Double toDouble(Long value) {
         if (value == null) {
@@ -98,6 +138,11 @@ public class LongConverter implements AtlasConverter<Long> {
         return value.doubleValue();
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.FLOAT)
     public Float toFloat(Long value) {
         if (value == null) {
@@ -106,6 +151,12 @@ public class LongConverter implements AtlasConverter<Long> {
         return value.floatValue();
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(Long value) throws AtlasConversionException {
         if (value == null) {
@@ -118,26 +169,52 @@ public class LongConverter implements AtlasConverter<Long> {
         return value.intValue();
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Long value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Long value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Long value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.LONG)
     public Long toLong(Long value) {
         return value != null ? new Long(value) : null;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short toShort(Long value) throws AtlasConversionException {
         if (value == null) {
@@ -150,36 +227,71 @@ public class LongConverter implements AtlasConverter<Long> {
         return value.shortValue();
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.NUMBER)
     public Number toNumber(Long value) {
         return value;
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public String toString(Long value) {
         return value != null ? String.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Long value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Long value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Long value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Long value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.LONG, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Long value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()) : null;

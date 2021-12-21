@@ -33,7 +33,7 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
 /**
- * @version
+ * The Camel component for AtlasMap.
  */
 public class AtlasComponent extends DefaultComponent {
 
@@ -45,6 +45,10 @@ public class AtlasComponent extends DefaultComponent {
     @Metadata(label = "advanced")
     private String propertiesFile;
 
+    /**
+     * Gets the AtlasContextFactory.
+     * @return factory
+     */
     public AtlasContextFactory getAtlasContextFactory() {
         return atlasContextFactory;
     }
@@ -58,6 +62,10 @@ public class AtlasComponent extends DefaultComponent {
         propertiesFile = file;
     }
 
+    /**
+     * Gets the properties file.
+     * @return properties file
+     */
     public String getPropertiesFile() {
         return propertiesFile;
     }
@@ -70,6 +78,7 @@ public class AtlasComponent extends DefaultComponent {
         this.atlasContextFactory = atlasContextFactory;
     }
 
+    @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
         boolean cache = getAndRemoveParameter(parameters, "contentCache", Boolean.class, Boolean.TRUE);
         String sourceMapName = getAndRemoveParameter(parameters, "sourceMapName", String.class);

@@ -35,6 +35,11 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Property;
 import io.atlasmap.v2.PropertyField;
 
+/**
+ * The default implementation of {@link AtlasPropertyStrategy} which processes {@link AtlasSession} session properies,
+ * Java system properties, Environment variables and mapping defined properties. Note that mapping defined
+ * property has been removed functionally to avoid confusion with the constant. It is left for backward compatibility only.
+ */
 public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasPropertyStrategy.class);
 
@@ -92,6 +97,12 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         }
     }
 
+    /**
+     * Processes environment variables.
+     * @param propertyField field
+     * @return true if the environment variable is found
+     * @throws AtlasConversionException unexpected error
+     */
     protected boolean processEnvironmentVariable(PropertyField propertyField)
         throws AtlasConversionException {
 
@@ -127,6 +138,12 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         return false;
     }
 
+    /**
+     * Processes Java system properties.
+     * @param propertyField field
+     * @return true if the Java system property is found
+     * @throws AtlasConversionException unexpected error
+     */
     protected boolean processJavaSystemProperty(PropertyField propertyField)
         throws AtlasConversionException {
 
@@ -162,6 +179,16 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         return false;
     }
 
+    /**
+     * Processes mapping defined properties.
+     * @deprecated The mapping defined property has been removed to avoid confusion with constants. This is left
+     * for backward compatibility only.
+     * @param propertyField field
+     * @param atlasMapping mapping
+     * @return true if the mapping defined property is found
+     * @throws AtlasConversionException unexpected error
+     */
+    @Deprecated
     protected boolean processMappingDefinedProperties(PropertyField propertyField, AtlasMapping atlasMapping)
             throws AtlasConversionException {
 
@@ -201,6 +228,13 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         return false;
     }
 
+    /**
+     * Processes {@link AtlasSession} properties.
+     * @param propertyField field
+     * @param runtimeProperties session properties
+     * @return true if the session property is found
+     * @throws AtlasConversionException unexpected error
+     */
     protected boolean processRuntimeProperties(PropertyField propertyField, Map<String, Object> runtimeProperties)
             throws AtlasConversionException {
 
@@ -244,6 +278,10 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         session.getTargetProperties().put(propertyField.getName(), propertyField.getValue());
     }
 
+    /**
+     * Sets the property priority order by specifying a list of {@link AtlasPropertyType} values.
+     * @param propertyValues a list of property type values
+     */
     public void setPropertyOrderValue(List<String> propertyValues) {
         List<AtlasPropertyType> tmp = null;
 
@@ -263,50 +301,101 @@ public class DefaultAtlasPropertyStrategy implements AtlasPropertyStrategy {
         propertyOrder = tmp;
     }
 
+    /**
+     * Gets if environment variables are enabled.
+     * @return true if enabled, or false
+     */
     public boolean isEnvironmentPropertiesEnabled() {
         return environmentPropertiesEnabled;
     }
 
+    /**
+     * Sets if environment variables are enabled.
+     * @param environmentPropertiesEnabled true to enable, or false
+     */
     public void setEnvironmentPropertiesEnabled(boolean environmentPropertiesEnabled) {
         this.environmentPropertiesEnabled = environmentPropertiesEnabled;
     }
 
+    /**
+     * Gets if Java system properties are enabled.
+     * @return true if enabled, or false
+     */
     public boolean isSystemPropertiesEnabled() {
         return systemPropertiesEnabled;
     }
 
+    /**
+     * Sets if Java system properties are enabled.
+     * @param systemPropertiesEnabled true to enable, or false
+     */
     public void setSystemPropertiesEnabled(boolean systemPropertiesEnabled) {
         this.systemPropertiesEnabled = systemPropertiesEnabled;
     }
 
+    /**
+     * Gets if mapping defined properties are enabled.
+     * @deprecated
+     * @return true if enabled, or false
+     */
+    @Deprecated
     public boolean isMappingDefinedPropertiesEnabled() {
         return mappingDefinedPropertiesEnabled;
     }
 
+    /**
+     * Sets if mapping defined properties are enabled.
+     * @deprecated
+     * @param mappingDefinedPropertiesEnabled true to enable, or false
+     */
     public void setMappingDefinedPropertiesEnabled(boolean mappingDefinedPropertiesEnabled) {
         this.mappingDefinedPropertiesEnabled = mappingDefinedPropertiesEnabled;
     }
 
+    /**
+     * Gets if {@link AtlasSession} properties are enabled.
+     * @return true if enabled, or false
+     */
     public boolean isRuntimePropertiesEnabled() {
         return runtimePropertiesEnabled;
     }
 
+    /**
+     * Sets if {@link AtlasSession} properties are enabled.
+     * @param runtimePropertiesEnabled true to enable, or false
+     */
     public void setRuntimePropertiesEnabled(boolean runtimePropertiesEnabled) {
         this.runtimePropertiesEnabled = runtimePropertiesEnabled;
     }
 
+    /**
+     * Gets the property priority order.
+     * @return order
+     */
     public List<AtlasPropertyType> getPropertyOrder() {
         return propertyOrder;
     }
 
+    /**
+     * Sets the property priority order.
+     * @param propertyOrder order
+     */
     public void setPropertyOrder(List<AtlasPropertyType> propertyOrder) {
         this.propertyOrder = propertyOrder;
     }
 
+    /**
+     * Gets the conversion service.
+     * @return conversion service
+     */
     public AtlasConversionService getAtlasConversionService() {
         return atlasConversionService;
     }
 
+    /**
+     * Sets the conversion service.
+     * @param atlasConversionService conversion service
+     */
     public void setAtlasConversionService(AtlasConversionService atlasConversionService) {
         this.atlasConversionService = atlasConversionService;
     }

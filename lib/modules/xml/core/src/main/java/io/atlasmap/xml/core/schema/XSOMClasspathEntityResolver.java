@@ -24,9 +24,16 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/**
+ * The XSOM {@link EntityResolver} to resolve the entity from the classpath.
+ */
 class XSOMClasspathEntityResolver implements EntityResolver {
     private ClassLoader classLoader;
 
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
     XSOMClasspathEntityResolver(ClassLoader loader) {
         this.classLoader = loader != null ? loader : XSOMClasspathEntityResolver.class.getClassLoader();
     }

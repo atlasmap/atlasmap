@@ -22,6 +22,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.xml.v2.XmlInspectionResponse;
 
+/**
+ * The top container object of DFDL Document inspection response that AtlasMap design time backend
+ * service sends back to the UI in return for {@link DfdlInspectionRequest}.
+ */
 @JsonRootName("DfdlInspectionResponse")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class DfdlInspectionResponse extends XmlInspectionResponse implements Serializable {

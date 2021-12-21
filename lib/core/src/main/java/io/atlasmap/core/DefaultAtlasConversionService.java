@@ -42,6 +42,9 @@ import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The default implementation of {@link AtlasConversionService}.
+ */
 public class DefaultAtlasConversionService implements AtlasConversionService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasConversionService.class);
@@ -108,6 +111,10 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
     private DefaultAtlasConversionService() {
     }
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static DefaultAtlasConversionService getInstance() {
         DefaultAtlasConversionService result = instance;
         if (result == null) {
@@ -123,6 +130,10 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
         return result;
     }
 
+    /**
+     * Gets a list of java primitive class names.
+     * @return primitive class names
+     */
     public static Set<String> listPrimitiveClassNames() {
         return PRIMITIVE_CLASSNAMES;
     }

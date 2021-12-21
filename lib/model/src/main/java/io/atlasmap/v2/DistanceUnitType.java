@@ -18,25 +18,46 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * The enumeration of distance units.
+ */
 public enum DistanceUnitType {
 
+    /** Meter. */
     METER_M("Meter (m)"),
+    /** Mile. */
     MILE_MI("Mile (mi)"),
+    /** Yard. */
     YARD_YD("Yard (yd)"),
+    /** Foot. */
     FOOT_FT("Foot (ft)"),
+    /** Inch. */
     INCH_IN("Inch (in)");
 
     private final String value;
 
+    /**
+     * A constructor.
+     * @param v value
+     */
     DistanceUnitType(String v) {
         value = v;
     }
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     @JsonValue
     public String value() {
         return value;
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     @JsonCreator
     public static DistanceUnitType fromValue(String v) {
         for (DistanceUnitType c: DistanceUnitType.values()) {

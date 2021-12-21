@@ -1290,7 +1290,7 @@ Remove Mapping by ID
 
 ===== Description
 
-Remove mapping file and catalogs related to specified ID
+Removes mapping file and catalogs related to specified ID
 
 
 // markup not found, no include::{specDir}mapping/RESET/DELETE/spec.adoc[opts=optional]

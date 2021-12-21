@@ -19,12 +19,17 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Convert Distance Unit</strong> field action.
+ */
 public class ConvertDistanceUnit extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** distance unit to convert from */
     protected DistanceUnitType fromUnit;
 
+    /** distance unit to convert to */
     protected DistanceUnitType toUnit;
 
     /**

@@ -17,8 +17,17 @@ package io.atlasmap.spi;
 
 import io.atlasmap.api.AtlasException;
 
+/**
+ * AtlasFieldWriter writes the field value to the target document. Each format specific module implement
+ * its own field writer.
+ */
 public interface AtlasFieldWriter {
 
+    /**
+     * Writes the target field value.
+     * @param session session
+     * @throws AtlasException unexpected error
+     */
     void write(AtlasInternalSession session) throws AtlasException;
 
 }

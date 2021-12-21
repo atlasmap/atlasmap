@@ -52,6 +52,10 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * Kafka Connect Service provides Kafka Connect schema inspection service which generate an AtlasMap Document object from
+ * Kafka Connect schema such as JSON or AVRO.
+ */
 @Path("/kafkaconnect/")
 public class KafkaConnectService {
 
@@ -60,6 +64,11 @@ public class KafkaConnectService {
     @Context
     private ResourceContext resourceContext;
 
+    /**
+     * Serializes to the JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
             return Json.mapper().writeValueAsBytes(value);
@@ -68,6 +77,13 @@ public class KafkaConnectService {
         }
     }
 
+    /**
+     * Deserializes from the JSON.
+     * @param <T> type
+     * @param value JSON
+     * @param clazz type
+     * @return deserialized
+     */
     protected <T> T fromJson(InputStream value, Class<T> clazz) {
         try {
             return Json.mapper().readValue(value, clazz);
@@ -76,6 +92,11 @@ public class KafkaConnectService {
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path("/simple")
     @Produces(MediaType.TEXT_PLAIN)
@@ -85,6 +106,11 @@ public class KafkaConnectService {
         return "Got it! " + from;
     }
 
+    /**
+     * Inspects a Kafka Connect schema and return a Document object.
+     * @param request {@link KafkaConnectInspectionRequest}
+     * @return {@link KafkaConnectInspectionResponse}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -96,6 +122,11 @@ public class KafkaConnectService {
         return inspect(fromJson(request, KafkaConnectInspectionRequest.class));
     }
 
+    /**
+     * Inspects a Kafka Connect schema and return a Document object.
+     * @param request request
+     * @return {@link KafkaConnectInspectionResponse}
+     */
     public Response inspect(KafkaConnectInspectionRequest request) {
         long startTime = System.currentTimeMillis();
 

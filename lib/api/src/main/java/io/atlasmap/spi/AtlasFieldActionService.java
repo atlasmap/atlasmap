@@ -23,11 +23,42 @@ import io.atlasmap.v2.ActionDetail;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * AtlasFieldActionService handles AtlasMap field action.
+ */
 public interface AtlasFieldActionService {
 
+    /**
+     * Gets a list of field action metadata {@link ActionDetail}.
+     * @return a list of action detail
+     */
     List<ActionDetail> listActionDetails();
+
+    /**
+     * Looks up an {@link ActionDetail} that corresponds to the specified action model object and field type.
+     * @param action action model object
+     * @param type field type
+     * @return action detail
+     * @throws AtlasException unexpected error
+     */
     ActionDetail findActionDetail(Action action, FieldType type) throws AtlasException;
+
+    /**
+     * Processes field actions that declared on the specified field.
+     * @param session session
+     * @param field field
+     * @return processed field
+     * @throws AtlasException unexpected error
+     */
     Field processActions(AtlasInternalSession session, Field field) throws AtlasException;
+
+    /**
+     * Looks up an {@link ActionProcessor} that corresponds to the specified action model mobject and field type.
+     * @param action action model object
+     * @param sourceType field type
+     * @return action processor
+     * @throws AtlasException unexpected error
+     */
     ActionProcessor findActionProcessor(Action action, FieldType sourceType) throws AtlasException;
 
 }

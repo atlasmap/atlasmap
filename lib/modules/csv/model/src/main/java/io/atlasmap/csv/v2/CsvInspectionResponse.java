@@ -22,36 +22,66 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
+/**
+ * The top container object of XML Document inspection response that AtlasMap design time backend
+ * service sends back to the UI in return for CSV inspection request.
+ */
 @JsonRootName("CsvInspectionResponse")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
 public class CsvInspectionResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** CSV Document. */
     private Document csvDocument;
+    /** Error message. */
     private String errorMessage;
+    /** Execution time. */
     private long executionTime;
 
+    /**
+     * Gets the CSV Document.
+     * @return CSV document
+     */
     public Document getCsvDocument() {
         return csvDocument;
     }
 
+    /**
+     * Gets the error message.
+     * @return error message
+     */
     public String getErrorMessage() {
         return errorMessage;
     }
 
+    /**
+     * Gets the execution time.
+     * @return execution time.
+     */
     public long getExecutionTime() {
         return executionTime;
     }
 
+    /**
+     * Sets the CSV Document.
+     * @param csvDocument CSV Document.
+     */
     public void setCsvDocument(Document csvDocument) {
         this.csvDocument = csvDocument;
     }
 
+    /**
+     * Sets the error message.
+     * @param message message
+     */
     public void setErrorMessage(String message) {
         this.errorMessage = message;
     }
 
+    /**
+     * Sets the execution time.
+     * @param executionTime execution time
+     */
     public void setExecutionTime(long executionTime) {
         this.executionTime = executionTime;
     }

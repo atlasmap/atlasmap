@@ -21,11 +21,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The container of {@link Validation}.
+ */
 @JsonRootName("Validations")
 public class Validations implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Validation} */
     protected List<Validation> validation;
 
     /**

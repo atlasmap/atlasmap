@@ -15,10 +15,19 @@
  */
 package io.atlasmap.expression.internal;
 
+/**
+ * The string handling utility.
+ */
 public final class Strings {
 
     private Strings(){}
 
+    /**
+     * Strips the prefix.
+     * @param string string
+     * @param prefix prefix
+     * @return result
+     */
     public static String stripPrefix(String string, String prefix) {
         if( string == null ) {
             return null;
@@ -32,6 +41,12 @@ public final class Strings {
         return string;
     }
 
+    /**
+     * Strips the suffix.
+     * @param string string
+     * @param suffix suffix
+     * @return result
+     */
     public static String stripSuffix(String string, String suffix) {
         if( string == null ) {
             return null;

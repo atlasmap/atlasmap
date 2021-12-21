@@ -61,6 +61,9 @@ import io.atlasmap.xml.v2.XmlField;
 import io.atlasmap.xml.v2.XmlNamespace;
 import io.atlasmap.xml.v2.XmlNamespaces;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModule} implementation for the XML Document.
+ */
 @AtlasModuleDetail(name = "XmlModule", uri = "atlas:xml", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "xml" }, configPackages = { "io.atlasmap.xml.v2" })
 public class XmlModule extends BaseAtlasModule {
@@ -93,6 +96,10 @@ public class XmlModule extends BaseAtlasModule {
         }
     }
 
+    /**
+     * Creates the validation service.
+     * @return validation service
+     */
     protected XmlValidationService createValidationService() {
         XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());
         xmlValidationService.setMode(getMode());
@@ -134,7 +141,9 @@ public class XmlModule extends BaseAtlasModule {
      * Convert a source document into XML. The modules extending this class can
      * override this to convert some format into XML so that XML field reader can read it.
      * @param source some document which can be converted to XML
+     * @param namespaced whether to be namespace aware or not
      * @return converted
+     * @throws AtlasException unexpected error
      */
     protected Document convertToXmlDocument(String source, boolean namespaced) throws AtlasException {
         if (source == null || source.isEmpty()) {
@@ -328,6 +337,7 @@ public class XmlModule extends BaseAtlasModule {
      * override this to convert interim XML document written by XML field writer into final format.
      * @param xml XML document written by XML field writer
      * @return converted
+     * @throws AtlasException unexpected error
      */
     protected String convertFromXmlDocument(Document xml) throws AtlasException {
         return getXmlIOHelper().writeDocumentToString(false, xml);
@@ -351,6 +361,10 @@ public class XmlModule extends BaseAtlasModule {
         return AtlasXmlModelFactory.createXmlField();
     }
 
+    /**
+     * Gets the XML IO helper.
+     * @return helper
+     */
     protected XmlIOHelper getXmlIOHelper() {
         return this.ioHelper;
     }

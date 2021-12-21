@@ -22,6 +22,9 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The String length validator.
+ */
 public class StringLengthValidator implements AtlasValidator {
 
     private String violationMessage;
@@ -29,6 +32,13 @@ public class StringLengthValidator implements AtlasValidator {
     private int maxLength = Integer.MAX_VALUE;
     private ValidationScope scope;
 
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     * @param minLength minumum length
+     * @param maxLength maximum length
+     */
     public StringLengthValidator(ValidationScope scope, String violationMessage, int minLength, int maxLength) {
         this.scope = scope;
         this.violationMessage = violationMessage;

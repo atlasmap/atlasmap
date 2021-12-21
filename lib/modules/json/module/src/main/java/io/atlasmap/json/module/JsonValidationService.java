@@ -31,16 +31,27 @@ import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 
+/**
+ * The module validation service implementation for JSON Document.
+ */
 public class JsonValidationService extends BaseModuleValidationService<JsonField> {
 
     private static Map<String, AtlasValidator> validatorMap = new HashMap<>();
     private AtlasModuleDetail moduleDetail = JsonModule.class.getAnnotation(AtlasModuleDetail.class);
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public JsonValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
         super(conversionService, fieldActionService);
         init();
     }
 
+    /**
+     * Initializes.
+     */
     public void init() {
         NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "The path element must not be null nor empty");
@@ -57,6 +68,9 @@ public class JsonValidationService extends BaseModuleValidationService<JsonField
         validatorMap.put("output.field.type.not.null", outputFieldTypeNonNullValidator);
     }
 
+    /**
+     * Uninitializes.
+     */
     public void destroy() {
         validatorMap.clear();
     }

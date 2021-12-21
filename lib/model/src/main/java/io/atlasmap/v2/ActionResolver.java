@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+/**
+ * The jackson resolver class for the field action.
+ */
 public class ActionResolver extends TypeIdResolverBase {
 
     private static ActionResolver instance;
@@ -34,6 +37,11 @@ public class ActionResolver extends TypeIdResolverBase {
         init(ActionResolver.class.getClassLoader());
     }
 
+    /**
+     * Initializer.
+     * @param cl class loader
+     * @return this instance
+     */
     public ActionResolver init(ClassLoader cl) {
         this.classLoader = cl;
         typeFactory = TypeFactory.defaultInstance().withClassLoader(classLoader);
@@ -46,6 +54,10 @@ public class ActionResolver extends TypeIdResolverBase {
         return this;
     }
 
+    /**
+     * Gets a singleton instance.
+     * @return the instance
+     */
     public static ActionResolver getInstance() {
         if (instance == null) {
             instance = new ActionResolver();
@@ -53,10 +65,21 @@ public class ActionResolver extends TypeIdResolverBase {
         return instance;
     }
 
+    /**
+     * Resolve a field action ID from the field action model class.
+     * @param aClass field action model class
+     * @return field action ID
+     */
     public String toId(Class<?> aClass) {
         return delegate.idFromValueAndType(null, aClass);
     }
 
+    /**
+     * Resolve a field action model class from the field action ID.
+     * @param id field action ID
+     * @return field action model class
+     * @throws IOException unexpected error
+     */
     public Class<? extends Action> fromId(String id) throws IOException {
         return (Class<? extends Action>) delegate.typeFromId(null, id).getRawClass();
     }
@@ -95,6 +118,10 @@ public class ActionResolver extends TypeIdResolverBase {
         return delegate.getDescForKnownTypeIds();
     }
 
+    /**
+     * Sets the {@link TypeFactory}.
+     * @param tf {@link TypeFactory}
+     */
     public void setTypeFactory(TypeFactory tf) {
         this.typeFactory = tf;
     }

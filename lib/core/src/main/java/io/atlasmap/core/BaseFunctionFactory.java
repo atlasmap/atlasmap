@@ -17,8 +17,12 @@ package io.atlasmap.core;
 
 import io.atlasmap.spi.FunctionFactory;
 
+/**
+ * The base implementation of {@link FunctionFactory} which has it's simple class name as a function name.
+ */
 public abstract class BaseFunctionFactory implements FunctionFactory {
 
+    @Override
     public String getName() {
         return getClass().getSimpleName();
     }

@@ -26,11 +26,18 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.PropertyField;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModule} for properties.
+ */
 public class PropertyModule extends BaseAtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(PropertyModule.class);
 
     private AtlasPropertyStrategy defaultStrategy;
 
+    /**
+     * A constructor.
+     * @param propertyStrategy strategy
+     */
     public PropertyModule(AtlasPropertyStrategy propertyStrategy) {
         this.defaultStrategy = propertyStrategy;
         DataSource ds = new DataSource();

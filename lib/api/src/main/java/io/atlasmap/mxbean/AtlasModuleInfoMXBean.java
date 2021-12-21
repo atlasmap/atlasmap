@@ -15,22 +15,57 @@
  */
 package io.atlasmap.mxbean;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModuleInfo} MBean.
+ */
 public interface AtlasModuleInfoMXBean {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     String getName();
 
+    /**
+     * Gets the class name.
+     * @return class name.
+     */
     String getClassName();
 
+    /**
+     * Gets the module class name.
+     * @return module class name
+     */
     String getModuleClassName();
 
+    /**
+     * Gets the version.
+     * @return version
+     */
     String getVersion();
 
+    /**
+     * Gets the data formats.
+     * @return data formats
+     */
     String[] getDataFormats();
 
+    /**
+     * Gets the package names.
+     * @return package names
+     */
     String[] getPackageNames();
 
+    /**
+     * Gets if it supports to be a source Document.
+     * @return true if supported
+     */
     Boolean isSourceSupported();
 
+    /**
+     * Gets if it supports to be a target Document.
+     * @return true if supported
+     */
     Boolean isTargetSupported();
 
 }

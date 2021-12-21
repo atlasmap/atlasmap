@@ -34,6 +34,9 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModule} implementation for CSV Document.
+ */
 @AtlasModuleDetail(name = "CsvModule", uri = "atlas:csv", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "csv" }, configPackages = { "io.atlasmap.csv.v2" })
 public class CsvModule extends BaseAtlasModule {

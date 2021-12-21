@@ -22,6 +22,10 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.AtlasModelFactory;
 
+/**
+ * The {@code TOLOWER()} function for conditional mapping expression, which
+ * returns the lower cased string of the source String.
+ */
 public class TOLOWER extends BaseFunctionFactory {
 
     @Override

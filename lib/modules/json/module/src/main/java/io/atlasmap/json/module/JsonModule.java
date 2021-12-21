@@ -39,6 +39,9 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
+/**
+ * The {@link io.atlasmap.spi.AtlasModule} implementation for JSON Document.
+ */
 @AtlasModuleDetail(name = "JsonModule", uri = "atlas:json", modes = { "SOURCE", "TARGET" }, dataFormats = {
         "json" }, configPackages = { "io.atlasmap.json.v2" })
 public class JsonModule extends BaseAtlasModule {
@@ -191,6 +194,7 @@ public class JsonModule extends BaseAtlasModule {
         }
     }
 
+    @Override
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
         JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);
         if (session.head().getTargetField() instanceof FieldGroup) {

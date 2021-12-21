@@ -23,23 +23,67 @@ import java.util.Map;
 @Deprecated
 public interface AtlasCombineStrategy {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     default String getName() {
         return this.getClass().getSimpleName();
     }
 
+    /**
+     * Gets the delimiter.
+     * @return delimiter
+     */
     StringDelimiter getDelimiter();
 
+    /**
+     * Sets the delimiter.
+     * @param delimiter delimiter
+     */
     void setDelimiter(StringDelimiter delimiter);
 
+    /**
+     * Gets the limit.
+     * @return limit
+     */
     Integer getLimit();
 
+    /**
+     * Sets the limit.
+     * @param limit limit
+     */
     void setLimit(Integer limit);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @return result
+     */
     String combineValues(Map<Integer, String> values);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @param delimiter delimiter
+     * @return result
+     */
     String combineValues(Map<Integer, String> values, StringDelimiter delimiter);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @param delimiter delimiter
+     * @param maxItems max items
+     * @return result
+     */
     String combineValues(Map<Integer, String> values, StringDelimiter delimiter, Integer maxItems);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @param delimiter delimter
+     * @return result
+     */
     String combineValues(Map<Integer, String> values, String delimiter);
 }

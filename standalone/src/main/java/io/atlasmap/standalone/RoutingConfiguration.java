@@ -19,9 +19,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/**
+ * Routing configuration.
+ */
 @Component
 public class RoutingConfiguration extends WebMvcConfigurerAdapter {
 
+    /**
+     * Adds a view controller.
+     * @param registry registry
+     */
     public void addViewControllers(final ViewControllerRegistry registry){
         super.addViewControllers(registry);
         registry.addViewController("/mapping-id/*").setViewName("forward:/");

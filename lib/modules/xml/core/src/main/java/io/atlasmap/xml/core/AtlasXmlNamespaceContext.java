@@ -26,19 +26,36 @@ import java.util.stream.Collectors;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 
+/**
+ * The {@link NamespaceContext} implementation for AtlasMap XML module.
+ */
 public class AtlasXmlNamespaceContext implements NamespaceContext {
+    /** Namespace map. */
     protected Map<String, String> nsMap = new HashMap<>();
     private int nsIndex = 1;
 
+    /**
+     * A constructor.
+     */
     public AtlasXmlNamespaceContext() {
         nsMap.put(AtlasXmlConstants.NS_PREFIX_XMLSCHEMA, XMLConstants.W3C_XML_SCHEMA_NS_URI);
         nsMap.put(AtlasXmlConstants.NS_PREFIX_SCHEMASET, AtlasXmlConstants.ATLAS_XML_SCHEMASET_NAMESPACE);
     }
 
+    /**
+     * Adds a namespace entry.
+     * @param prefix prefix
+     * @param uri URI
+     */
     public void add(String prefix, String uri) {
         nsMap.put(prefix, uri);
     }
 
+    /**
+     * Adds a namespace entry with a generated prefix.
+     * @param uri URI
+     * @return generated prefix
+     */
     public String addWithIndex(String uri) {
         String prefix = "ns" + nsIndex++;
         while (nsMap.containsKey(prefix)) {
@@ -48,6 +65,10 @@ public class AtlasXmlNamespaceContext implements NamespaceContext {
         return prefix;
     }
 
+    /**
+     * Gets the namespace map.
+     * @return namespace map
+     */
     public Map<String, String> getNamespaceMap() {
         return Collections.unmodifiableMap(nsMap);
     }

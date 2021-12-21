@@ -31,11 +31,19 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * {@link MappingFieldPairValidator} for the Java Document.
+ */
 public class JavaMappingFieldPairValidator extends MappingFieldPairValidator {
 
     private JavaValidationService service;
     private AtlasConversionService conversionService;
     
+    /**
+     * A constructor.
+     * @param service validation service
+     * @param conversion conversion service
+     */
     JavaMappingFieldPairValidator(JavaValidationService service, AtlasConversionService conversion) {
         super(service);
         this.service = service;

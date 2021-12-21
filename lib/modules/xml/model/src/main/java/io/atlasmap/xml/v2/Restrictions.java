@@ -19,10 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The container of the {@link Restriction}.
+ */
 public class Restrictions implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    /** a list of {@link Restriction}. */
     protected List<Restriction> restriction;
 
     /**
@@ -54,6 +57,7 @@ public class Restrictions implements Serializable {
         return this.restriction;
     }
 
+    @Override
     public boolean equals(Object object) {
         if ((object == null)||(this.getClass()!= object.getClass())) {
             return false;
@@ -84,6 +88,7 @@ public class Restrictions implements Serializable {
         return true;
     }
 
+    @Override
     public int hashCode() {
         int currentHashCode = 1;
         {

@@ -24,6 +24,9 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The String pattern validator.
+ */
 public class StringPatternValidator implements AtlasValidator {
 
     private String violationMessage;
@@ -31,10 +34,23 @@ public class StringPatternValidator implements AtlasValidator {
     private ValidationScope scope;
     private boolean useMatch;
 
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     * @param pattern pattern
+     */
     public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern) {
         this(scope, violationMessage, pattern, false);
     }
 
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     * @param pattern pattern
+     * @param useMatch true to use {@link Matcher#match(int,int)}, or use {@link Matcher#find()}
+     */
     public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern, boolean useMatch) {
         this.violationMessage = violationMessage;
         this.pattern = pattern;

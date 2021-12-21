@@ -19,14 +19,18 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the <strong>Substring After</strong> field action.
+ */
 public class SubStringAfter extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** start index */
     protected Integer startIndex;
-
+    /** end index */
     protected Integer endIndex;
-
+    /** the string to match */
     protected String match;
 
     /**

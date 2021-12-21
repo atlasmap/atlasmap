@@ -31,38 +31,90 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link Time}.
+ */
 public class SqlTimeConverter implements AtlasConverter<Time> {
 
+    /**
+     * Converts to {@link Calendar}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public Calendar toCalendar(Time time, String sourceFormat, String targetFormat) {
         return time != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(Instant.ofEpochMilli(time.getTime()), ZoneId.systemDefault())) : null;
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME)
     public Date toDate(Time time, String sourceFormat, String targetFormat) {
         return time != null ? new Date(time.getTime()) : null;
     }
 
+    /**
+     * Converts to {@link GregorianCalendar}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar toGregorianCalendar(Time time, String sourceFormat, String targetFormat) {
         return time != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(Instant.ofEpochMilli(time.getTime()), ZoneId.systemDefault())) : null;
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Time time, String sourceFormat, String targetFormat) {
         return time != null ? time.toLocalTime() : null;
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Time time, String sourceFormat, String targetFormat) {
         return time != null ? time.toLocalTime().atDate(LocalDate.now()) : null;
     }
 
+    /**
+     * Converts to {@link Timestamp}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME)
     public Timestamp toSqlTimestamp(Time time, String sourceFormat, String targetFormat) {
         return time != null ? new Timestamp(time.getTime()) : null;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param time value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.TIME, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Time time, String sourceFormat, String targetFormat) {
         return time != null ? ZonedDateTime.ofInstant(Instant.ofEpochMilli(time.getTime()), ZoneId.systemDefault()) : null;

@@ -33,18 +33,36 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The type converter for {@link Integer}.
+ */
 public class IntegerConverter implements AtlasConverter<Integer> {
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Integer value) {
         return value != null ? BigDecimal.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Integer value) {
         return value != null ? BigInteger.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
     public Boolean toBoolean(Integer value) {
@@ -54,6 +72,12 @@ public class IntegerConverter implements AtlasConverter<Integer> {
         return value == 0 ? Boolean.FALSE : Boolean.TRUE;
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
     public Byte toByte(Integer value) throws AtlasConversionException {
         if (value == null) {
@@ -66,6 +90,12 @@ public class IntegerConverter implements AtlasConverter<Integer> {
                 String.format("Integer %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE", value)));
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character toCharacter(Integer value) throws AtlasConversionException {
@@ -79,6 +109,11 @@ public class IntegerConverter implements AtlasConverter<Integer> {
         return Character.valueOf((char) value.intValue());
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.DATE_TIME)
     public Date toDate(Integer value) {
         if (value >= Instant.MIN.getEpochSecond()) {
@@ -87,41 +122,82 @@ public class IntegerConverter implements AtlasConverter<Integer> {
         return new Date(value);
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.DOUBLE)
     public Double toDouble(Integer value) {
         return value != null ? value.doubleValue() : null;
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.FLOAT, concerns = AtlasConversionConcern.RANGE)
     public Float toFloat(Integer value) {
         return value != null ? value.floatValue() : null;
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.INTEGER)
     public Integer toInteger(Integer value) {
         return value != null ? Integer.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Integer value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Integer value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Integer value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.LONG)
     public Long toLong(Integer value) {
         return value != null ? value.longValue() : null;
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short toShort(Integer value) throws AtlasConversionException {
         if (value == null) {
@@ -134,36 +210,71 @@ public class IntegerConverter implements AtlasConverter<Integer> {
         return value.shortValue();
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.STRING)
     public String toString(Integer value) {
         return value != null ? String.valueOf(value) : null;
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Integer value) {
         return value != null ? CharBuffer.wrap(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Integer value) {
         return value != null ? toString(value) : null;
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Integer value) {
         return value != null ? new StringBuffer(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Integer value) {
         return value != null ? new StringBuilder(toString(value)) : null;
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.NUMBER)
     public Number toNumber(Integer value) {
         return value;
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.INTEGER, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Integer value) {
         return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()) : null;

@@ -19,11 +19,15 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The property {@link Field} model object.
+ */
 @JsonRootName("io.atlasmap.v2.PropertyField")
 public class PropertyField extends Field implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** scope */
     protected String scope;
 
     /**

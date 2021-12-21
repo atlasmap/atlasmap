@@ -30,8 +30,17 @@ import org.xml.sax.SAXException;
 
 import io.atlasmap.xml.v2.XmlDocument;
 
+/**
+ * The XML inspection service.
+ */
 public class XmlInspectionService {
 
+    /**
+     * Inspects the XML instance.
+     * @param sourceDocument XML instance
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectXmlDocument(String sourceDocument) throws XmlInspectionException {
         if (sourceDocument == null || sourceDocument.isEmpty()) {
             throw new IllegalArgumentException("Source must be specified");
@@ -45,6 +54,12 @@ public class XmlInspectionService {
         return inspectXmlDocument(document);
     }
 
+    /**
+     * Inspects the XML instance.
+     * @param sourceDocument XML instance
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectXmlDocument(File sourceDocument) throws XmlInspectionException {
         if (sourceDocument == null) {
             throw new IllegalArgumentException("Source must be specified");
@@ -58,6 +73,11 @@ public class XmlInspectionService {
         return inspectXmlDocument(document);
     }
 
+    /**
+     * Inspects the XML instance.
+     * @param sourceDocument XML instance
+     * @return inspected
+     */
     public XmlDocument inspectXmlDocument(Document sourceDocument) {
         if (sourceDocument == null) {
             throw new IllegalArgumentException("Source must be specified");
@@ -67,6 +87,12 @@ public class XmlInspectionService {
         return inspector.getXmlDocument();
     }
 
+    /**
+     * Inspects the XML schema.
+     * @param schemaSource XML schema
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectSchema(String schemaSource) throws XmlInspectionException {
         if (schemaSource == null || schemaSource.isEmpty()) {
             throw new IllegalArgumentException("Source must be specified");
@@ -76,6 +102,12 @@ public class XmlInspectionService {
         return inspector.getXmlDocument();
     }
 
+    /**
+     * Inspects the XML schema.
+     * @param schemaFile XML schema
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectSchema(File schemaFile) throws XmlInspectionException {
         if (schemaFile == null || !schemaFile.exists()) {
             throw new IllegalArgumentException("Source must be specified and available");
