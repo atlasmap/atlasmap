@@ -380,10 +380,24 @@ export function mappingExpressionInit() {
     mapping,
   );
 }
-export async function mappingExpressionInsertText(str: string) {
+export async function mappingExpressionInsertText(
+  str: string,
+  cutOrPaste: boolean,
+) {
   if (
     initializationService.cfg.mappings!.activeMapping?.transition.expression
   ) {
+    if (cutOrPaste) {
+      ConfigModel.getConfig().errorService.addError(
+        new ErrorInfo({
+          message:
+            'Use caution to not cut or paste field references.  These must be done individually.',
+          level: ErrorLevel.INFO,
+          scope: ErrorScope.FIELD,
+          type: ErrorType.INTERNAL,
+        }),
+      );
+    }
     await initializationService.cfg.mappings!.activeMapping!.transition.expression!.insertText(
       str,
     );

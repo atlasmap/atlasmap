@@ -77,7 +77,7 @@ export interface IExpressionContentProps {
   ) => void;
   isMappingExpressionEmpty: boolean;
   mappingExpressionInit: () => void;
-  mappingExpressionInsertText: (str: string) => void;
+  mappingExpressionInsertText: (str: string, curOrPaste: boolean) => void;
   mappingExpressionRemoveField: (idPosition?: Position) => void;
   mappingExpression?: string;
   disabled: boolean;
@@ -337,7 +337,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         initializeMappingExpression();
         return;
       }
-      mappingExpressionInsertText(condExprEditor!.getValue());
+      mappingExpressionInsertText(condExprEditor!.getValue(), false);
     },
     [
       condExprEditor,
@@ -352,7 +352,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       if (!condExprEditor || !event) {
         return;
       }
-      mappingExpressionInsertText(condExprEditor.getValue());
+      mappingExpressionInsertText(condExprEditor.getValue(), true);
       condExprEditor!.focus();
     },
     [condExprEditor, mappingExpressionInsertText],
@@ -383,46 +383,47 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * Remove the token at the current cursor position or remove the entire
    * identifier string if the cursor points anywhere within it.
    *
-   * @param before - delete before or after the current position (bs/del)
+   * @param event - if the event was on an identifier field reference or action
+   *                then inhibit the monaco editor standard processing
    * @returns
    */
   const removeTokenAtCaretPosition = useCallback(
-    (before: boolean) => {
+    (event: IKeyboardEvent) => {
       let textLine = condExprEditor!.getValue();
       const currentPos = condExprEditor!.getPosition();
       if (!currentPos) {
         return;
       }
-      const adjustedColumn = before ? currentPos.column - 1 : currentPos.column;
       const lines = textLine.split('\n');
       const lineText = lines[currentPos.lineNumber - 1];
       const expTokens = lexExpression(lineText);
       let targetToken = null;
       let deletionRange = null;
       const keyword = condExprEditor?.getModel()!.getWordAtPosition(currentPos);
-      let targetColumn = 1;
 
       for (let tokenIndex = 0; tokenIndex < expTokens!.length; tokenIndex++) {
         let t: Token = expTokens![tokenIndex];
-        if (t.type === 'identifier') {
+        if (t.type === 'identifier' || t.type.startsWith('action.')) {
           if (
-            adjustedColumn >= t.offset + 1 &&
-            adjustedColumn <= t.offset + keyword?.word.length!
+            currentPos.column > t.offset &&
+            currentPos.column <= t.offset + keyword?.word.length! + 1
           ) {
-            targetColumn = before ? t.offset + 2 : t.offset + 1;
             deletionRange = new Range(
               currentPos.lineNumber,
-              targetColumn,
+              t.offset + 1,
               currentPos.lineNumber,
-              targetColumn + keyword?.word.length! - 1,
+              t.offset + keyword?.word.length! + 1,
             );
             targetToken = t;
+            // Stop monaco from executing the event itself.
+            event.preventDefault();
+            event.stopPropagation();
             break;
           }
         }
       }
 
-      // Remove the identifier.
+      // Remove the field identifier.
       if (targetToken) {
         const op = {
           identifier: 'expression-text-1',
@@ -430,13 +431,12 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           text: '',
           forceMoveMarkers: true,
         };
+        if (targetToken.type === 'identifier') {
+          mappingExpressionRemoveField(
+            new Position(currentPos.lineNumber, targetToken.offset + 1),
+          );
+        }
         condExprEditor!.executeEdits('expression', [op]);
-        mappingExpressionRemoveField(
-          new Position(
-            currentPos.lineNumber,
-            before ? targetColumn - 1 : targetColumn,
-          ),
-        );
       }
     },
     [condExprEditor, lexExpression, mappingExpressionRemoveField],
@@ -501,13 +501,11 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         }
       }
 
-      if ('Backspace' === event.browserEvent.key) {
-        removeTokenAtCaretPosition(true);
-        if (searchMode) {
-          updateSearchMode();
-        }
-      } else if ('Delete' === event.browserEvent.key) {
-        removeTokenAtCaretPosition(false);
+      if (
+        'Backspace' === event.browserEvent.key ||
+        'Delete' === event.browserEvent.key
+      ) {
+        removeTokenAtCaretPosition(event);
         if (searchMode) {
           updateSearchMode();
         }
@@ -582,7 +580,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         const eventListener = document.getElementById('monaco-container');
         if (eventListener) {
           eventListener.addEventListener('cut', (_event) => {
-            mappingExpressionInsertText(condExprEditor!.getValue());
+            mappingExpressionInsertText(condExprEditor!.getValue(), true);
           });
           condExprEditor.onDidChangeCursorPosition(onExprClick);
           condExprEditor.onDidChangeModelContent(onChange);

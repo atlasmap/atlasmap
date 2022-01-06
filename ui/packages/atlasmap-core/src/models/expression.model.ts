@@ -214,7 +214,27 @@ export class ExpressionModel {
 
     // Support multiple lines.
     while ((lineTokens = tokens.shift()) !== undefined) {
-      let idTokens = lineTokens?.filter(
+      let realTokens = lineTokens?.filter((t) => t.type !== '') as Token[];
+
+      // Add a plus sign between consecutive identifiers.
+      for (i = 1; i < realTokens!.length; i++) {
+        if (
+          realTokens[i].type === 'identifier' &&
+          realTokens[i - 1].type === 'identifier'
+        ) {
+          let textNode = this.getTextNode();
+          textNode.str = CommonUtil.replaceAt(
+            textNode.str,
+            ' + ',
+            this.lineOffsets[lineNumber - 1] + realTokens[i].offset - 1,
+            0
+          );
+          this.updateCache();
+          this.adjustFieldNodes(textNode.str);
+          break;
+        }
+      }
+      let idTokens = realTokens?.filter(
         (t) => t.type === 'identifier'
       ) as Token[];
 
@@ -241,22 +261,12 @@ export class ExpressionModel {
 
   /**
    * Create a new field node derived from the specified mapped field and push it
-   * onto the end of the master nodes array.  If the last field element is a field
-   * node and has no trailing text then prepend a '+' to make a legal expression.
+   * onto the end of the master nodes array.
    *
    * @param mfield
    */
   private appendFieldNode(mfield: MappedField) {
     const textNode = this.getTextNode();
-    const lastNode = this.getLastNode();
-    if (lastNode instanceof FieldNode) {
-      if (
-        lastNode.position.column + lastNode.mappedField?.field?.name.length! >=
-        textNode.str.length
-      ) {
-        textNode.str = textNode.str.concat(' + ');
-      }
-    }
     const position = new Position(1, textNode.str.length + 1);
     textNode.str += mfield.field?.name;
     this._nodes.push(new FieldNode(this.mapping, position, mfield));
@@ -363,8 +373,7 @@ export class ExpressionModel {
   }
 
   /**
-   * Insert text into the expression at the specified position. If nodeId is not
-   * specified, it will be added to the end of expression.
+   * Insert user text/ JSON text into the expression.
    *
    * @param newText - string to insert
    * @param jsonText - fully expanded JSON text string
@@ -396,17 +405,6 @@ export class ExpressionModel {
       if (newNodes[0] instanceof TextNode) {
         this._nodes.splice(0, 0, ...newNodes);
       } else {
-        const lastNode = this.getLastNode();
-        textNode = this.getTextNode();
-
-        if (lastNode instanceof FieldNode) {
-          const fn = newNodes[0] as FieldNode;
-          fn.position = new Position(
-            fn.position.lineNumber,
-            fn.position.column + 3
-          );
-          textNode.str = textNode.str.concat(' + ');
-        }
         this._nodes.push(...newNodes);
       }
       return;
@@ -432,25 +430,6 @@ export class ExpressionModel {
 
     // Insertion position indicates it's last - append the field nodes(s).
     if (insertionIndex === this._nodes.length) {
-      const lastNode = this.getLastNode() as FieldNode;
-      if (
-        lastNode &&
-        lastNode.position?.column + lastNode.mappedField?.field?.name.length! >=
-          insertPosition.column
-      ) {
-        const fn = newNodes[0] as FieldNode;
-        fn.position = new Position(
-          fn.position.lineNumber,
-          fn.position.column + 3
-        );
-        adjustedPosition += 3;
-        textNode.str = CommonUtil.replaceAt(
-          textNode.str,
-          ' + ',
-          insertPosition.column - 1,
-          0
-        );
-      }
       this._nodes.push(...newNodes);
     }
     const fieldNodeName = (newNodes[0] as FieldNode).mappedField?.field?.name;
