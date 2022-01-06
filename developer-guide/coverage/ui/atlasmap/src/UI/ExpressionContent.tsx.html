@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.25% </span>
+                <span class="strong">8.42% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/206</span>
+                <span class='fraction'>17/202</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/101</span>
+                <span class='fraction'>0/97</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.81% </span>
+                <span class="strong">8.99% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/193</span>
+                <span class='fraction'>17/189</span>
             </div>
         
             
@@ -759,9 +759,7 @@
 <a name='L701'></a><a href='#L701'>701</a>
 <a name='L702'></a><a href='#L702'>702</a>
 <a name='L703'></a><a href='#L703'>703</a>
-<a name='L704'></a><a href='#L704'>704</a>
-<a name='L705'></a><a href='#L705'>705</a>
-<a name='L706'></a><a href='#L706'>706</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L704'></a><a href='#L704'>704</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1149,6 +1147,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1162,8 +1161,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1173,19 +1170,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1200,6 +1192,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1265,11 +1263,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1545,7 +1541,7 @@ export interface IExpressionContentProps {
   ) =&gt; void;
   isMappingExpressionEmpty: boolean;
   mappingExpressionInit: () =&gt; void;
-  mappingExpressionInsertText: (str: string) =&gt; void;
+  mappingExpressionInsertText: (str: string, curOrPaste: boolean) =&gt; void;
   mappingExpressionRemoveField: (idPosition?: Position) =&gt; void;
   mappingExpression?: string;
   disabled: boolean;
@@ -1805,7 +1801,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >        initializeMappingExpression();</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
-<span class="cstat-no" title="statement not covered" >      mappingExpressionInsertText(condExprEditor!.getValue());</span>
+<span class="cstat-no" title="statement not covered" >      mappingExpressionInsertText(condExprEditor!.getValue(), false);</span>
     },
     [
       condExprEditor,
@@ -1820,7 +1816,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
 <span class="cstat-no" title="statement not covered" >      if (!condExprEditor || !event) {</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
-<span class="cstat-no" title="statement not covered" >      mappingExpressionInsertText(condExprEditor.getValue());</span>
+<span class="cstat-no" title="statement not covered" >      mappingExpressionInsertText(condExprEditor.getValue(), true);</span>
 <span class="cstat-no" title="statement not covered" >      condExprEditor!.focus();</span>
     },
     [condExprEditor, mappingExpressionInsertText],
@@ -1851,46 +1847,47 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
    * Remove the token at the current cursor position or remove the entire
    * identifier string if the cursor points anywhere within it.
    *
-   * @param before - delete before or after the current position (bs/del)
+   * @param event - if the event was on an identifier field reference or action
+   *                then inhibit the monaco editor standard processing
    * @returns
    */
   const removeTokenAtCaretPosition = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (b</span>efore: boolean) =&gt; {
+<span class="fstat-no" title="function not covered" >    (e</span>vent: IKeyboardEvent) =&gt; {
       let textLine = <span class="cstat-no" title="statement not covered" >condExprEditor!.getValue();</span>
       const currentPos = <span class="cstat-no" title="statement not covered" >condExprEditor!.getPosition();</span>
 <span class="cstat-no" title="statement not covered" >      if (!currentPos) {</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
       }
-      const adjustedColumn = <span class="cstat-no" title="statement not covered" >before ? currentPos.column - 1 : currentPos.column;</span>
       const lines = <span class="cstat-no" title="statement not covered" >textLine.split('\n');</span>
       const lineText = <span class="cstat-no" title="statement not covered" >lines[currentPos.lineNumber - 1];</span>
       const expTokens = <span class="cstat-no" title="statement not covered" >lexExpression(lineText);</span>
       let targetToken = <span class="cstat-no" title="statement not covered" >null;</span>
       let deletionRange = <span class="cstat-no" title="statement not covered" >null;</span>
       const keyword = <span class="cstat-no" title="statement not covered" >condExprEditor?.getModel()!.getWordAtPosition(currentPos);</span>
-      let targetColumn = <span class="cstat-no" title="statement not covered" >1;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      for (let tokenIndex = <span class="cstat-no" title="statement not covered" >0;</span> tokenIndex &lt; expTokens!.length; tokenIndex++) {</span>
         let t: Token = <span class="cstat-no" title="statement not covered" >expTokens![tokenIndex];</span>
-<span class="cstat-no" title="statement not covered" >        if (t.type === 'identifier') {</span>
+<span class="cstat-no" title="statement not covered" >        if (t.type === 'identifier' || t.type.startsWith('action.')) {</span>
 <span class="cstat-no" title="statement not covered" >          if (</span>
-            adjustedColumn &gt;= t.offset + 1 &amp;&amp;
-            adjustedColumn &lt;= t.offset + keyword?.word.length!
+            currentPos.column &gt; t.offset &amp;&amp;
+            currentPos.column &lt;= t.offset + keyword?.word.length! + 1
           ) {
-<span class="cstat-no" title="statement not covered" >            targetColumn = before ? t.offset + 2 : t.offset + 1;</span>
 <span class="cstat-no" title="statement not covered" >            deletionRange = new Range(</span>
               currentPos.lineNumber,
-              targetColumn,
+              t.offset + 1,
               currentPos.lineNumber,
-              targetColumn + keyword?.word.length! - 1,
+              t.offset + keyword?.word.length! + 1,
             );
 <span class="cstat-no" title="statement not covered" >            targetToken = t;</span>
+            // Stop monaco from executing the event itself.
+<span class="cstat-no" title="statement not covered" >            event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >            event.stopPropagation();</span>
 <span class="cstat-no" title="statement not covered" >            break;</span>
           }
         }
       }
 &nbsp;
-      // Remove the identifier.
+      // Remove the field identifier.
 <span class="cstat-no" title="statement not covered" >      if (targetToken) {</span>
         const op = <span class="cstat-no" title="statement not covered" >{</span>
           identifier: 'expression-text-1',
@@ -1898,13 +1895,12 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
           text: '',
           forceMoveMarkers: true,
         };
+<span class="cstat-no" title="statement not covered" >        if (targetToken.type === 'identifier') {</span>
+<span class="cstat-no" title="statement not covered" >          mappingExpressionRemoveField(</span>
+            new Position(currentPos.lineNumber, targetToken.offset + 1),
+          );
+        }
 <span class="cstat-no" title="statement not covered" >        condExprEditor!.executeEdits('expression', [op]);</span>
-<span class="cstat-no" title="statement not covered" >        mappingExpressionRemoveField(</span>
-          new Position(
-            currentPos.lineNumber,
-            before ? targetColumn - 1 : targetColumn,
-          ),
-        );
       }
     },
     [condExprEditor, lexExpression, mappingExpressionRemoveField],
@@ -1969,13 +1965,11 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
         }
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if ('Backspace' === event.browserEvent.key) {</span>
-<span class="cstat-no" title="statement not covered" >        removeTokenAtCaretPosition(true);</span>
-<span class="cstat-no" title="statement not covered" >        if (searchMode) {</span>
-<span class="cstat-no" title="statement not covered" >          updateSearchMode();</span>
-        }
-      } else <span class="cstat-no" title="statement not covered" >if ('Delete' === event.browserEvent.key) {</span>
-<span class="cstat-no" title="statement not covered" >        removeTokenAtCaretPosition(false);</span>
+<span class="cstat-no" title="statement not covered" >      if (</span>
+        'Backspace' === event.browserEvent.key ||
+        'Delete' === event.browserEvent.key
+      ) {
+<span class="cstat-no" title="statement not covered" >        removeTokenAtCaretPosition(event);</span>
 <span class="cstat-no" title="statement not covered" >        if (searchMode) {</span>
 <span class="cstat-no" title="statement not covered" >          updateSearchMode();</span>
         }
@@ -2050,7 +2044,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
         const eventListener = <span class="cstat-no" title="statement not covered" >document.getElementById('monaco-container');</span>
 <span class="cstat-no" title="statement not covered" >        if (eventListener) {</span>
 <span class="cstat-no" title="statement not covered" >          eventListener.addEventListener('cut', <span class="fstat-no" title="function not covered" >(_</span>event) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            mappingExpressionInsertText(condExprEditor!.getValue());</span>
+<span class="cstat-no" title="statement not covered" >            mappingExpressionInsertText(condExprEditor!.getValue(), true);</span>
           });
 <span class="cstat-no" title="statement not covered" >          condExprEditor.onDidChangeCursorPosition(onExprClick);</span>
 <span class="cstat-no" title="statement not covered" >          condExprEditor.onDidChangeModelContent(onChange);</span>
@@ -2178,7 +2172,7 @@ export const ExpressionContent: FunctionComponent&lt;IExpressionContentProps&gt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Dec 21 2021 20:31:14 GMT+0000 (Coordinated Universal Time)
+                at Thu Jan 06 2022 21:38:34 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
