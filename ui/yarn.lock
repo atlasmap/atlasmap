@@ -4003,6 +4003,28 @@
     unfetch "^4.2.0"
     util-deprecate "^1.0.2"
 
+"@storybook/preview-web@6.4.13":
+  version "6.4.13"
+  resolved "https://registry.yarnpkg.com/@storybook/preview-web/-/preview-web-6.4.13.tgz#14b9e106f3cc00dd411a43be9cd280e5e8a0ecfc"
+  integrity sha512-z21N09iWrzi2sX5+06aNvxPVp0rzntO7seM7zIPxqpFiEsAoPodkVJka3YyJpgK3S2JtgipmIgvLJeLXENLr3g==
+  dependencies:
+    "@storybook/addons" "6.4.13"
+    "@storybook/channel-postmessage" "6.4.13"
+    "@storybook/client-logger" "6.4.13"
+    "@storybook/core-events" "6.4.13"
+    "@storybook/csf" "0.0.2--canary.87bc651.0"
+    "@storybook/store" "6.4.13"
+    ansi-to-html "^0.6.11"
+    core-js "^3.8.2"
+    global "^4.4.0"
+    lodash "^4.17.21"
+    qs "^6.10.0"
+    regenerator-runtime "^0.13.7"
+    synchronous-promise "^2.0.15"
+    ts-dedent "^2.0.0"
+    unfetch "^4.2.0"
+    util-deprecate "^1.0.2"
+
 "@storybook/preview-web@6.4.9":
   version "6.4.9"
   resolved "https://registry.yarnpkg.com/@storybook/preview-web/-/preview-web-6.4.9.tgz#21f7d251af0de64ae796834ead08ae4ed67e6456"
@@ -4039,21 +4061,21 @@
     tslib "^2.0.0"
 
 "@storybook/react@^6.3.8":
-  version "6.4.9"
-  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-6.4.9.tgz#0b5effb07cf98bc73302b5486b9355ed545ee9fa"
-  integrity sha512-GVbCeii2dIKSD66pAdn9bY7mRoOzBE6ll+vRDW1n00FIvGfckmoIZtQHpurca7iNTAoufv8+t0L9i7IItdrUuw==
+  version "6.4.13"
+  resolved "https://registry.yarnpkg.com/@storybook/react/-/react-6.4.13.tgz#f51f2c56dd57554dbb53fdbfd0b5a20a3ad914b8"
+  integrity sha512-bmHGeAAad0qoEfselx3qvWlPf1fWccDgki3TneFWYTSoybZOuu0PWJp+M7kqWMxcyvdwQImjA9F+vCc7CUuF9w==
   dependencies:
     "@babel/preset-flow" "^7.12.1"
     "@babel/preset-react" "^7.12.10"
     "@pmmmwh/react-refresh-webpack-plugin" "^0.5.1"
-    "@storybook/addons" "6.4.9"
-    "@storybook/core" "6.4.9"
-    "@storybook/core-common" "6.4.9"
+    "@storybook/addons" "6.4.13"
+    "@storybook/core" "6.4.13"
+    "@storybook/core-common" "6.4.13"
     "@storybook/csf" "0.0.2--canary.87bc651.0"
-    "@storybook/node-logger" "6.4.9"
+    "@storybook/node-logger" "6.4.13"
     "@storybook/react-docgen-typescript-plugin" "1.0.2-canary.253f8c1.0"
     "@storybook/semver" "^7.3.2"
-    "@storybook/store" "6.4.9"
+    "@storybook/store" "6.4.13"
     "@types/webpack-env" "^1.16.0"
     babel-plugin-add-react-displayname "^0.0.5"
     babel-plugin-named-asset-import "^0.3.1"
@@ -4062,8 +4084,7 @@
     global "^4.4.0"
     lodash "^4.17.21"
     prop-types "^15.7.2"
-    react-dev-utils "^11.0.4"
-    react-refresh "^0.10.0"
+    react-refresh "^0.11.0"
     read-pkg-up "^7.0.1"
     regenerator-runtime "^0.13.7"
     ts-dedent "^2.0.0"
@@ -4126,6 +4147,27 @@
     lodash "^4.17.21"
     prettier "<=2.3.0"
     regenerator-runtime "^0.13.7"
+
+"@storybook/store@6.4.13":
+  version "6.4.13"
+  resolved "https://registry.yarnpkg.com/@storybook/store/-/store-6.4.13.tgz#afeccc2dfe0126208d869da199f702635858c1e5"
+  integrity sha512-VUDYwn1PHTa92kaJFCWqP+QS5wsHO9us2prhHnD7k9qvvQrbxD2DewtGxdT7cRHbZI8jY5CiqMVKilZRaXSM3Q==
+  dependencies:
+    "@storybook/addons" "6.4.13"
+    "@storybook/client-logger" "6.4.13"
+    "@storybook/core-events" "6.4.13"
+    "@storybook/csf" "0.0.2--canary.87bc651.0"
+    core-js "^3.8.2"
+    fast-deep-equal "^3.1.3"
+    global "^4.4.0"
+    lodash "^4.17.21"
+    memoizerific "^1.11.3"
+    regenerator-runtime "^0.13.7"
+    slash "^3.0.0"
+    stable "^0.1.8"
+    synchronous-promise "^2.0.15"
+    ts-dedent "^2.0.0"
+    util-deprecate "^1.0.2"
 
 "@storybook/store@6.4.13":
   version "6.4.13"
@@ -17191,10 +17233,10 @@ react-popper@^2.2.4:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-react-refresh@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.10.0.tgz#2f536c9660c0b9b1d500684d9e52a65e7404f7e3"
-  integrity sha512-PgidR3wST3dDYKr6b4pJoqQFpPGNKDSCDx4cZoshjXipw3LzO7mG1My2pwEzz2JVkF+inx3xRpDeQLFQGH/hsQ==
+react-refresh@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.11.0.tgz#77198b944733f0f1f1a90e791de4541f9f074046"
+  integrity sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==
 
 react-router-dom@^6.0.0:
   version "6.0.2"
