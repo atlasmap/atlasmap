@@ -78,7 +78,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
     // expression
     currentMappingExpression,
     executeFieldSearch,
+    getFieldActionFunctions,
     getFieldEnums,
+    getKeywords,
     setSelectedEnumValue,
     mappingExpressionAddField,
     mappingExpressionInit,
@@ -139,7 +141,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
           mappingExpressionEnabled ? currentMappingExpression : undefined
         }
         executeFieldSearch={executeFieldSearch}
+        getFieldActionFunctions={getFieldActionFunctions}
         getFieldEnums={getFieldEnums}
+        getKeywords={getKeywords}
         mappingExpressionAddField={mappingExpressionAddField}
         isMappingExpressionEmpty={isMappingExpressionEmpty}
         mappingExpressionInit={mappingExpressionInit}

@@ -87,7 +87,7 @@ export interface IExpressionContentProps {
   mappingExpressionInsertText: (
     str: string,
     cutOrPaste: boolean,
-  ) => Promise<boolean>;
+  ) => Promise<void>;
   mappingExpressionRemoveField: (idPosition?: Position) => void;
   mappingExpression?: string;
   disabled: boolean;
