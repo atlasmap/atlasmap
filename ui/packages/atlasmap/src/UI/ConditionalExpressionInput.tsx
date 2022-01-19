@@ -19,6 +19,7 @@ import {
 } from './ExpressionContent';
 import React, { FunctionComponent } from 'react';
 import { ToolbarGroup, ToolbarItem } from '@patternfly/react-core';
+import { getFieldActionFunctions, getKeywords } from '../impl/utils';
 import styles from './ConditionalExpressionInput.module.css';
 
 export interface IConditionalExpressionInputProps
@@ -51,6 +52,8 @@ export const ConditionalExpressionInput: FunctionComponent<
           disabled={disabled}
           executeFieldSearch={executeFieldSearch}
           getFieldEnums={getFieldEnums}
+          getFieldActionFunctions={getFieldActionFunctions}
+          getKeywords={getKeywords}
           mappingExpressionAddField={mappingExpressionAddField}
           isMappingExpressionEmpty={isMappingExpressionEmpty}
           mappingExpressionInit={mappingExpressionInit}

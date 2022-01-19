@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { Position, editor } from 'monaco-editor';
 import {
   Select,
   SelectOption,
@@ -24,19 +25,27 @@ import styles from './ExpressionFieldSearch.module.css';
 import { useToggle } from '../impl/utils';
 
 export interface IExpressionFieldSearchProps {
-  clearSearchMode: (clearAtSign: boolean) => void;
+  condExprEditor: editor.IStandaloneCodeEditor | undefined;
+  clearSearchMode: () => void;
   insertSelectedField: (docId: string, fieldStr: string) => void;
-  mappedFieldCandidates: string[][];
+  insertSelectedNonField: (elementStr: string) => void;
+  searchCandidates: string[][];
 }
 let selectedField = '';
 
 export const ExpressionFieldSearch: FunctionComponent<
   IExpressionFieldSearchProps
-> = ({ clearSearchMode, insertSelectedField, mappedFieldCandidates }) => {
+> = ({
+  condExprEditor,
+  clearSearchMode,
+  insertSelectedField,
+  insertSelectedNonField,
+  searchCandidates,
+}) => {
   function onToggleFieldSearch(toggled: boolean): any {
     if (!toggled) {
-      mappedFieldCandidates = [];
-      clearSearchMode(true);
+      searchCandidates = [];
+      clearSearchMode();
       candidateSrcElement = null;
     }
   }
@@ -54,7 +63,6 @@ export const ExpressionFieldSearch: FunctionComponent<
    */
   function trackSelection(event: any): void {
     if (event.srcElement) {
-      // const docId = event.target.getAttribute('label');
       candidateSrcElement = event.srcElement;
     }
   }
@@ -116,28 +124,24 @@ export const ExpressionFieldSearch: FunctionComponent<
     isPlaceholder?: boolean | undefined,
   ): void {
     if (!isPlaceholder) {
-      const docId = event.target.getAttribute('label');
+      const labelId = event.target.getAttribute('label');
       selectedField = value as string;
-      insertSelectedField(docId, selectedField);
+      if (labelId[0] === '>') {
+        selectedField = selectedField.concat('()');
+        insertSelectedNonField(selectedField);
+      } else if (labelId[0] === ' ') {
+        insertSelectedNonField(selectedField);
+      } else {
+        insertSelectedField(labelId, selectedField);
+      }
     }
     onToggleFieldSearch(false);
     toggleOff();
   }
 
   function createSelectOption(selectField: string[], idx: number): any {
-    // Use the display name for documents and field path for fields.
-    if (selectField[1][0] !== '/') {
-      return (
-        <SelectOption
-          label={selectField[0]}
-          value={selectField[0]}
-          key={idx}
-          index={idx}
-          className={styles.document}
-          isPlaceholder={true}
-        />
-      );
-    } else {
+    // Check for document fields.
+    if (selectField[1][0] === '/') {
       return (
         <SelectOption
           label={selectField[0]}
@@ -148,8 +152,34 @@ export const ExpressionFieldSearch: FunctionComponent<
           className={styles.field}
         />
       );
+      // Check for field action functions.
+    } else if (selectField[1][0] === '*') {
+      return (
+        <SelectOption
+          label={selectField[0]}
+          value={selectField[1].substr(1, selectField[1].length)}
+          key={idx}
+          keyHandler={onKeyHandler}
+          index={idx}
+          className={styles.field}
+        />
+      );
+      // Use the display name for documents and field path for fields.
+    } else {
+      return (
+        <SelectOption
+          label={selectField[0]}
+          value={selectField[0]}
+          key={idx}
+          index={idx}
+          className={styles.document}
+          isPlaceholder={true}
+        />
+      );
     }
   }
+
+  condExprEditor?.setPosition(new Position(1, 1));
 
   return (
     <div
@@ -157,20 +187,24 @@ export const ExpressionFieldSearch: FunctionComponent<
       className={styles.searchMenu}
       data-testid={'expression-field-search'}
     >
-      <Select
-        onToggle={toggle}
-        isOpen={state}
-        value={selectedField}
-        id={id}
-        onKeyDown={onKeyDown}
-        onSelect={selectionChanged}
-        data-testid={id}
-        defaultValue={mappedFieldCandidates[0]}
-      >
-        {mappedFieldCandidates.map((s, idx: number) =>
-          createSelectOption(s, idx),
-        )}
-      </Select>
+      {searchCandidates.length > 0 && (
+        <span>
+          <Select
+            onToggle={toggle}
+            isOpen={state}
+            value={selectedField}
+            id={id}
+            onKeyDown={onKeyDown}
+            onSelect={selectionChanged}
+            data-testid={id}
+            defaultValue={searchCandidates[0]}
+          >
+            {searchCandidates.map((s, idx: number) =>
+              createSelectOption(s, idx),
+            )}
+          </Select>
+        </span>
+      )}
     </div>
   );
 };
