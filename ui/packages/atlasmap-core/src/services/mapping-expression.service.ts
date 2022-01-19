@@ -451,4 +451,69 @@ export class MappingExpressionService {
     }
     return expression;
   }
+
+  /**
+   * Return a double-string array of expression candidates for the expression menu select.
+   *
+   * @param configModel
+   * @param labelName
+   * @param sourceElements
+   * @returns
+   */
+  private getExpressionCandidates(
+    configModel: ConfigModel,
+    labelName: string,
+    sourceElements: string[]
+  ): string[][] {
+    const activeMapping = configModel.mappings!.activeMapping;
+    if (!activeMapping) {
+      return [];
+    }
+    const formattedFields: string[][] = [];
+    let documentName = labelName;
+    const documentField = [''];
+    documentField[0] = documentName;
+    documentField[1] = documentName;
+    formattedFields.push(documentField);
+    for (const field of sourceElements) {
+      const documentField = [''];
+      documentField[0] = documentName;
+      documentField[1] = '*' + field;
+      formattedFields.push(documentField);
+    }
+    return formattedFields;
+  }
+
+  /**
+   * Return an array of predefined field-action functions and user-defined field-action
+   * functions.
+   *
+   * * Note - these are currently being pulled from the Monaco editor tokens provider
+   * (lexer).  Use the REST API when the dynamic support becomes available.
+   *
+   * @param configModel
+   * @returns
+   */
+  getFieldActionFunctionCandidates(configModel: ConfigModel): string[][] {
+    return this.getExpressionCandidates(
+      configModel,
+      '> Field Action Functions',
+      atlasmapTokensProvider.actions
+    );
+  }
+
+  /**
+   * Return from the Monaco editor tokens provider an array of AtlasMap conditional
+   * expression keywords.
+   *
+   * @param configModel
+   * @returns
+   */
+  getKeywordCandidates(configModel: ConfigModel): string[][] {
+    return this.getExpressionCandidates(
+      configModel,
+      ' Conditional Expression Keywords',
+      atlasmapTokensProvider.keywords
+    );
+  }
 }

@@ -98,3 +98,13 @@ export function getMappingExpression(): string {
       ).toText()
     : '';
 }
+
+export function getFieldActionFunctions(): string[][] | null {
+  const cfg = ConfigModel.getConfig();
+  return cfg.expressionService.getFieldActionFunctionCandidates(cfg);
+}
+
+export function getKeywords(): string[][] | null {
+  const cfg = ConfigModel.getConfig();
+  return cfg.expressionService.getKeywordCandidates(cfg);
+}

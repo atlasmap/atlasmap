@@ -62,14 +62,21 @@ window.MonacoEnvironment = {
 let editorMouseDown = false;
 let insertPosition: Position | null = null;
 let enumCandidates: EnumValue[] = [];
-let mappedFieldCandidates: string[][] = [];
+let fieldActionFunctionCandidates: string[][] = [];
+let keywordCandidates: string[][] = [];
+let searchCandidates: string[][] = [];
 let searchFilter = '';
 let selectedNodeId: string = '';
 let mappingExprInit: () => void;
 
 export interface IExpressionContentProps {
-  executeFieldSearch: (searchFilter: string, isSource: boolean) => string[][];
+  executeFieldSearch: (
+    searchFilter: string,
+    isSource: boolean,
+  ) => string[][] | null;
   getFieldEnums: (nodeId: string) => EnumValue[];
+  getFieldActionFunctions: () => string[][] | null;
+  getKeywords: () => string[][] | null;
   mappingExpressionAddField: (
     selectedDocId: string,
     selectedField: string,
@@ -77,7 +84,10 @@ export interface IExpressionContentProps {
   ) => void;
   isMappingExpressionEmpty: boolean;
   mappingExpressionInit: () => void;
-  mappingExpressionInsertText: (str: string, curOrPaste: boolean) => void;
+  mappingExpressionInsertText: (
+    str: string,
+    cutOrPaste: boolean,
+  ) => Promise<boolean>;
   mappingExpressionRemoveField: (idPosition?: Position) => void;
   mappingExpression?: string;
   disabled: boolean;
@@ -96,6 +106,8 @@ export interface IExpressionContentProps {
 export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   executeFieldSearch,
   getFieldEnums,
+  getFieldActionFunctions,
+  getKeywords,
   mappingExpressionAddField,
   isMappingExpressionEmpty,
   mappingExpressionInit,
@@ -111,6 +123,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   const [expressionHeight, setExpressionHeight] = useState<string>('40px');
   const [insertField, setInsertField] = useState<boolean>();
   const [insertedField, setInsertedField] = useState<boolean>(false);
+  const [insertFieldActionFunc, setInsertFieldActionFunc] = useState<boolean>();
+  const [insertKeywordFunc, setInsertKeywordFunc] = useState<boolean>();
   const [searchMode, setSearchMode] = useState<boolean>(false);
 
   let addFieldToExpression: (
@@ -164,6 +178,32 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     selectedField: string,
   ): void {
     addFieldToExpression(selectedDocId, selectedField, insertPosition);
+    setInsertedField(true);
+  }
+
+  /**
+   * Insert a non-document-field element (keyword, predefined function, user function)
+   * into the current user position.
+   *
+   * @param element - string to insert
+   */
+  async function insertSelectedElement(element: string) {
+    const range = new Range(
+      insertPosition!.lineNumber,
+      insertPosition!.column,
+      insertPosition!.lineNumber,
+      insertPosition!.column,
+    );
+    const id = { major: 1, minor: 1 };
+    const op = {
+      identifier: id,
+      range: range,
+      text: element,
+      forceMoveMarkers: true,
+    };
+    condExprEditor!.executeEdits('expression', [op]);
+    await mappingExpressionInsertText(condExprEditor!.getValue(), false);
+
     clearSearchMode();
     condExprEditor!.focus();
     setInsertedField(true);
@@ -172,12 +212,14 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   /**
    * Clear elements associated with mapped-field searching.
    */
-  function clearSearchMode(): void {
+  const clearSearchMode = useCallback(() => {
     insertPosition = null;
     setSearchMode(false);
     searchFilter = '';
-    mappedFieldCandidates = [];
-  }
+    fieldActionFunctionCandidates = [];
+    keywordCandidates = [];
+    searchCandidates = [];
+  }, []);
 
   function clearEnumSelect() {
     selectedNodeId = '';
@@ -190,18 +232,24 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    *
    * @returns
    */
-  function insertFieldReference(): boolean {
+  function insertFieldReference(): void {
     setSearchMode(true);
     insertPosition = condExprEditor?.getPosition()!;
     searchFilter = '';
-    mappedFieldCandidates = executeFieldSearch(searchFilter, true);
+    searchCandidates = executeFieldSearch(searchFilter, true)!;
     setInsertField(false);
-    return true;
   }
 
-  async function insertFieldCb() {
-    setInsertField(true);
-    setInsertedField(false);
+  function insertFieldActionFunctionReference(): void {
+    fieldActionFunctionCandidates = getFieldActionFunctions()!;
+    insertPosition = condExprEditor?.getPosition()!;
+    setInsertFieldActionFunc(false);
+  }
+
+  function insertKeywordReference(): void {
+    keywordCandidates = getKeywords()!;
+    insertPosition = condExprEditor?.getPosition()!;
+    setInsertKeywordFunc(false);
   }
 
   /**
@@ -211,6 +259,21 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * 'disabled' property).
    */
   const establishEditor = useCallback((): void => {
+    async function insertFieldCb() {
+      setInsertField(true);
+      setInsertedField(false);
+    }
+
+    async function insertFieldActionFuncCb() {
+      setInsertFieldActionFunc(true);
+      setInsertedField(false);
+    }
+
+    async function insertKeywordCb() {
+      setInsertKeywordFunc(true);
+      setInsertedField(false);
+    }
+
     const atlasmapLanguage = getAtlasmapLanguage();
     languages.register({ id: atlasmapLanguageID });
 
@@ -296,15 +359,39 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       id: 'insert-field-reference',
       label: 'Insert AtlasMap Field Reference',
       contextMenuOrder: 0, // choose the order
-      contextMenuGroupId: 'operation', // create a new grouping
+      contextMenuGroupId: 'operation', // create a new AtlasMap grouping
       keybindings: [
         // eslint-disable-next-line no-bitwise
         KeyMod.CtrlCmd | KeyCode.Enter,
       ],
       run: insertFieldCb,
     };
-
+    const addFAFuncRef: editor.IActionDescriptor = {
+      id: 'insert-fa-function-reference',
+      label:
+        'Insert AtlasMap Custom Field Action Function or Predefined Function Reference',
+      contextMenuOrder: 1, // choose the order
+      contextMenuGroupId: 'operation',
+      keybindings: [
+        // eslint-disable-next-line no-bitwise
+        KeyMod.Shift | KeyCode.Enter,
+      ],
+      run: insertFieldActionFuncCb,
+    };
+    const addKeywordRef: editor.IActionDescriptor = {
+      id: 'insert-keyword-reference',
+      label: 'Insert AtlasMap Keyword',
+      contextMenuOrder: 2, // choose the order
+      contextMenuGroupId: 'operation',
+      keybindings: [
+        // eslint-disable-next-line no-bitwise
+        KeyMod.Alt | KeyCode.Enter,
+      ],
+      run: insertKeywordCb,
+    };
     condExpressionEditor.addAction(addFieldRef);
+    condExpressionEditor.addAction(addFAFuncRef);
+    condExpressionEditor.addAction(addKeywordRef);
     setCondExprEditor(condExpressionEditor);
   }, [getAtlasmapLanguage, mappingExpression]);
 
@@ -320,12 +407,27 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   const onExprClick = useCallback(
     (_event: editor.ICursorPositionChangedEvent) => {
       // Check for clicking on an enumeration field node.
-      enumCandidates = getEnums(selectedNodeId);
-      if (enumCandidates.length > 0) {
-        toggleEnumSelOn();
+      if (selectedNodeId.length > 0) {
+        enumCandidates = getEnums(selectedNodeId);
+        if (enumCandidates.length > 0) {
+          toggleEnumSelOn();
+        }
+      }
+      if (condExprEditor) {
+        if (searchMode) {
+          clearSearchMode();
+        }
+        mappingExpressionInsertText(condExprEditor!.getValue(), false);
       }
     },
-    [getEnums, toggleEnumSelOn],
+    [
+      clearSearchMode,
+      condExprEditor,
+      getEnums,
+      mappingExpressionInsertText,
+      searchMode,
+      toggleEnumSelOn,
+    ],
   );
 
   /**
@@ -360,11 +462,11 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
 
   const updateSearchMode = useCallback(() => {
     if (searchFilter.length === 0) {
-      mappedFieldCandidates = [];
+      searchCandidates = [];
       setSearchMode(false);
     } else {
       searchFilter = searchFilter.substr(0, searchFilter.length - 1);
-      mappedFieldCandidates = executeFieldSearch(searchFilter, true);
+      searchCandidates = executeFieldSearch(searchFilter, true)!;
     }
   }, [executeFieldSearch]);
 
@@ -448,10 +550,10 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * reset and retain focus back to the editor.
    */
   const onBlurEditorWidget = useCallback(() => {
-    if (!editorMouseDown && mappedFieldCandidates.length === 0) {
+    if (!editorMouseDown && searchCandidates.length === 0) {
       setExpressionHeight('40px');
     } else {
-      if (mappedFieldCandidates.length === 0) {
+      if (searchCandidates.length === 0) {
         condExprEditor?.focus();
       }
     }
@@ -497,7 +599,7 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
       if (searchMode) {
         if (event.browserEvent.key.match(/[a-z0-9]/i)) {
           searchFilter += event.browserEvent.key;
-          mappedFieldCandidates = executeFieldSearch(searchFilter, true);
+          searchCandidates = executeFieldSearch(searchFilter, true)!;
         }
       }
 
@@ -529,8 +631,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
    * @param event
    */
   function onBlur(event: any) {
-    if (event.relatedTarget === null && mappedFieldCandidates.length > 0) {
-      mappedFieldCandidates = [];
+    if (event.relatedTarget === null && searchCandidates.length > 0) {
+      searchCandidates = [];
       editorMouseDown = true;
     }
   }
@@ -564,6 +666,14 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   if (insertField) {
     insertFieldReference();
     condExprEditor!.setValue(mappingExpression!);
+  }
+
+  if (insertFieldActionFunc) {
+    insertFieldActionFunctionReference();
+  }
+
+  if (insertKeywordFunc) {
+    insertKeywordReference();
   }
 
   useEffect(() => {
@@ -678,12 +788,36 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         </FormGroup>
       </Form>
       <div id="expression-menu-select">
-        {mappedFieldCandidates.length > 0 && (
+        {searchCandidates.length > 0 && (
           <span>
             <ExpressionFieldSearch
+              condExprEditor={condExprEditor}
               clearSearchMode={clearSearchMode}
               insertSelectedField={insertSelectedField}
-              mappedFieldCandidates={mappedFieldCandidates}
+              insertSelectedNonField={insertSelectedElement}
+              searchCandidates={searchCandidates}
+            />
+          </span>
+        )}
+        {fieldActionFunctionCandidates.length > 0 && (
+          <span>
+            <ExpressionFieldSearch
+              condExprEditor={condExprEditor}
+              clearSearchMode={clearSearchMode}
+              insertSelectedField={insertSelectedElement}
+              insertSelectedNonField={insertSelectedElement}
+              searchCandidates={fieldActionFunctionCandidates}
+            />
+          </span>
+        )}
+        {keywordCandidates.length > 0 && (
+          <span>
+            <ExpressionFieldSearch
+              condExprEditor={condExprEditor}
+              clearSearchMode={clearSearchMode}
+              insertSelectedField={insertSelectedElement}
+              insertSelectedNonField={insertSelectedElement}
+              searchCandidates={keywordCandidates}
             />
           </span>
         )}
