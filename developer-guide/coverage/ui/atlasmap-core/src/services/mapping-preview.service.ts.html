@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.86% </span>
+                <span class="strong">66.97% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>76/112</span>
+                <span class='fraction'>73/109</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.48% </span>
+                <span class="strong">36.47% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>34/84</span>
+                <span class='fraction'>31/85</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.11% </span>
+                <span class="strong">67.78% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>64/90</span>
+                <span class='fraction'>61/90</span>
             </div>
         
             
@@ -395,12 +395,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -410,7 +410,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -628,15 +628,15 @@ export class MappingPreviewService {
           this.cfg.logger!.debug(
             `Process Mapping Preview Response: ${JSON.stringify(body)}`
           );
-          this.processPreviewResponse(inputFieldMapping, body);
+          this.processPreviewResponse(inputFieldMapping, body).then();
         })
-        .catch((error: any) =&gt; {
-          <span class="missing-if-branch" title="else path not taken" >E</span>if (
+        .catch(<span class="fstat-no" title="function not covered" >(e</span>rror: any) =&gt; {
+<span class="cstat-no" title="statement not covered" >          if (</span>
             this.cfg.mappings &amp;&amp;
             this.cfg.mappings.activeMapping &amp;&amp;
             this.cfg.mappings.activeMapping === inputFieldMapping
           ) {
-            this.cfg.errorService.addError(
+<span class="cstat-no" title="statement not covered" >            this.cfg.errorService.addError(</span>
               new ErrorInfo({
                 message: error,
                 level: ErrorLevel.ERROR,
@@ -646,7 +646,7 @@ export class MappingPreviewService {
               })
             );
           }
-          this.mappingPreviewErrorSource.next([
+<span class="cstat-no" title="statement not covered" >          this.mappingPreviewErrorSource.next([</span>
             new ErrorInfo({ message: error, level: ErrorLevel.ERROR }),
           ]);
         });
@@ -669,16 +669,16 @@ export class MappingPreviewService {
     };
   }
 &nbsp;
-  private processPreviewResponse(
+  private async processPreviewResponse(
     inputFieldMapping: MappingModel,
     body: IProcessMappingResponseContainer
   ) {
-    const answer = MappingSerializer.deserializeFieldMapping(
+    const <span class="cstat-no" title="statement not covered" >answer = await MappingSerializer.deserializeFieldMapping(</span>
       body.ProcessMappingResponse.mapping,
       this.cfg
     );
-<span class="cstat-no" title="statement not covered" >    for (const toWrite<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >i</span>nputFieldMapping.</span>targetFields)</span> {</span>
-<span class="cstat-no" title="statement not covered" >      for (const toRead<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >a</span>nswer.</span>targetFields)</span> {</span>
+<span class="cstat-no" title="statement not covered" >    for (const <span class="cstat-no" title="statement not covered" >toWrite of i</span>nputFieldMapping.targetFields) {</span>
+<span class="cstat-no" title="statement not covered" >      for (const <span class="cstat-no" title="statement not covered" >toRead of a</span>nswer.targetFields) {</span>
         // TODO: check these non null operator
 <span class="cstat-no" title="statement not covered" >        if (</span>
           toWrite.field?.docDef?.id === toRead.field?.docDef.id &amp;&amp;
@@ -687,7 +687,7 @@ export class MappingPreviewService {
           // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
           // TODO: check this non null operator
 <span class="cstat-no" title="statement not covered" >          toWrite.field!.value = toRead.mappingField?.value!;</span>
-          const index = <span class="cstat-no" title="statement not covered" >answer.targetFields.indexOf(toRead);</span>
+          const <span class="cstat-no" title="statement not covered" >index = answer.targetFields.indexOf(toRead);</span>
 <span class="cstat-no" title="statement not covered" >          if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >            answer.targetFields.splice(index, 1);</span>
 <span class="cstat-no" title="statement not covered" >            break;</span>
@@ -696,7 +696,7 @@ export class MappingPreviewService {
       }
     }
 <span class="cstat-no" title="statement not covered" >    this.mappingPreviewOutputSource.next(answer);</span>
-    const audits = <span class="cstat-no" title="statement not covered" >MappingSerializer.deserializeAudits(</span>
+    const <span class="cstat-no" title="statement not covered" >audits = MappingSerializer.deserializeAudits(</span>
       body.ProcessMappingResponse.audits,
       ErrorType.PREVIEW
     );
@@ -771,7 +771,7 @@ export class MappingPreviewService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jan 19 2022 20:16:14 GMT+0000 (Coordinated Universal Time)
+                at Wed Jan 19 2022 21:40:08 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

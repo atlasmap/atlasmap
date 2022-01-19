@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.06% </span>
+                <span class="strong">72.77% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>160/219</span>
+                <span class='fraction'>155/213</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.21% </span>
+                <span class="strong">38.98% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>21/58</span>
+                <span class='fraction'>23/59</span>
             </div>
         
             
@@ -708,7 +708,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -830,29 +830,29 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-yes">55x</span>
-<span class="cline-any cline-yes">55x</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-yes">51x</span>
+<span class="cline-any cline-yes">51x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -1122,7 +1122,7 @@ export class InitializationService {
    *
    * @param mappingDigest - {@link ADMDigest} mapping digest
    */
-  private initializeWithMappingDigest(): Promise&lt;boolean&gt; {
+  private async initializeWithMappingDigest(): Promise&lt;boolean&gt; {
     return new Promise&lt;boolean&gt;((resolve) =&gt; {
       this.cfg.fileService
         .getCurrentMappingDigest()
@@ -1135,7 +1135,7 @@ export class InitializationService {
 &nbsp;
             // load field actions - do this even with no documents so the default field actions are loaded.
             await this.cfg.fieldActionService.fetchFieldActions();
-            this.updateStatus();
+            await this.updateStatus();
             resolve(true);
             return;
           }
@@ -1185,7 +1185,7 @@ export class InitializationService {
     });
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >  private a</span></span>ddDocumentsFromMappingDigest(
+<span class="fstat-no" title="function not covered" >  private async a</span>ddDocumentsFromMappingDigest(
     mappingDigest: ADMDigest
   ): Promise&lt;boolean&gt; {
 <span class="cstat-no" title="statement not covered" >    return new Promise&lt;any&gt;(<span class="fstat-no" title="function not covered" >async (r</span>esolve<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
@@ -1213,10 +1213,10 @@ export class InitializationService {
           isSource,
           metaFragment.inspectionParameters
         );
-<span class="cstat-no" title="statement not covered" >        this.updateStatus();</span>
+<span class="cstat-no" title="statement not covered" >        await this.updateStatus();</span>
 <span class="cstat-no" title="statement not covered" >        fragIndex++;</span>
       }
-<span class="cstat-no" title="statement not covered" >      this.cfg.mappingService.notifyMappingUpdated();</span>
+<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >      await this.cfg.mappingService.notifyMappingUpdated();</span></span>
 <span class="cstat-no" title="statement not covered" >      resolve(true);</span>
     });
   }
@@ -1254,11 +1254,11 @@ export class InitializationService {
     });
   }
 &nbsp;
-  updateStatus(): void {
+  async updateStatus(): Promise&lt;void&gt; {
     const documentCount: number = this.cfg.getAllDocs().length;
     let finishedDocCount = 0;
     for (const docDef of this.cfg.getAllDocs()) {
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (docDef.initialized || <span class="branch-1 cbranch-no" title="branch not covered" >docDef.errorOccurred)</span> {
+      if (docDef.initialized || docDef.errorOccurred) {
         finishedDocCount++;
       }
     }
@@ -1268,16 +1268,16 @@ export class InitializationService {
       this.cfg.fieldActionService.isInitialized
     ) {
       if (this.cfg.preloadedMappingJson) {
-        MappingSerializer.deserializeMappingServiceJSON(
+        await MappingSerializer.deserializeMappingServiceJSON(
           JSON.parse(this.cfg.preloadedMappingJson),
           this.cfg
         );
         this.cfg.preloadedMappingJson = null;
       }
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (this.cfg.mappings) {
+      if (<span class="missing-if-branch" title="if path not taken" >I</span>this.cfg.mappings) {
         LookupTableUtil.updateLookupTables(this.cfg.mappings);
         MappingUtil.updateDocumentNamespacesFromMappings(this.cfg);
-        MappingUtil.updateMappingsFromDocuments(this.cfg);
+        await MappingUtil.updateMappingsFromDocuments(this.cfg);
         for (const d of this.cfg.getAllDocs()) {
           d.updateFromMappings(this.cfg.mappings);
         }
@@ -1344,7 +1344,7 @@ export class InitializationService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jan 19 2022 20:16:14 GMT+0000 (Coordinated Universal Time)
+                at Wed Jan 19 2022 21:40:08 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

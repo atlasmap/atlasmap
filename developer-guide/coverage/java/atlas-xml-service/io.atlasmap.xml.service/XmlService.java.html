@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.v2.Json;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
@@ -46,23 +47,23 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @Path(&quot;/xml/&quot;)
-<span class="fc" id="L49">public class XmlService {</span>
+<span class="fc" id="L50">public class XmlService {</span>
 
-<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
+<span class="fc" id="L52">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
 
     protected byte[] toJson(Object value) {
         try {
-<span class="fc" id="L55">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L56">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L57">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L56">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L57">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L58">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
         }
     }
 
     protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
         try {
-<span class="fc" id="L63">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L64">        } catch (IOException e) {</span>
-<span class="nc" id="L65">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+<span class="fc" id="L64">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L65">        } catch (IOException e) {</span>
+<span class="nc" id="L66">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
         }
     }
 
@@ -72,7 +73,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
     public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L75">        return &quot;Got it! &quot; + from;</span>
+<span class="nc" id="L76">        return &quot;Got it! &quot; + from;</span>
     }
 
 
@@ -84,43 +85,46 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;XmlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = XmlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;,  content = @Content(schema = @Schema(implementation = XmlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
     public Response inspect(InputStream request) {
-<span class="fc" id="L87">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
+<span class="fc" id="L88">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
     }
 
     public Response inspect(XmlInspectionRequest request) {
-<span class="fc" id="L91">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L92">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L93">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
-<span class="fc" id="L94">        XmlDocument d = null;</span>
+<span class="fc" id="L94">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
+<span class="fc" id="L95">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
-<span class="nc" id="L99">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
+<span class="nc" id="L100">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
             } else {
-<span class="fc" id="L101">                XmlInspectionService s = new XmlInspectionService();</span>
+<span class="fc" id="L102">                XmlInspectionService s = new XmlInspectionService();</span>
 
-<span class="pc bpc" id="L103" title="2 of 3 branches missed.">                switch (request.getType()) {</span>
+<span class="pc bpc" id="L104" title="2 of 3 branches missed.">                switch (request.getType()) {</span>
                 case INSTANCE:
-<span class="nc" id="L105">                    d = s.inspectXmlDocument(request.getXmlData());</span>
-<span class="nc" id="L106">                    break;</span>
+<span class="nc" id="L106">                    d = s.inspectXmlDocument(request.getXmlData());</span>
+<span class="nc" id="L107">                    break;</span>
                 case SCHEMA:
-<span class="fc" id="L108">                    d = s.inspectSchema(request.getXmlData());</span>
-<span class="fc" id="L109">                    break;</span>
+<span class="fc" id="L109">                    d = s.inspectSchema(request.getXmlData());</span>
+<span class="fc" id="L110">                    break;</span>
                 default:
-<span class="nc" id="L111">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L112">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
                     break;
                 }
             }
-<span class="nc" id="L115">        } catch (Exception e) {</span>
-<span class="nc" id="L116">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L117">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L116">        } catch (Exception e) {</span>
+<span class="nc" id="L117">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L118">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L119">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L120">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L122">        response.setXmlDocument(d);</span>
-<span class="fc" id="L123">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L123">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths());</span>
+
+<span class="fc" id="L125">        response.setXmlDocument(d);</span>
+<span class="fc" id="L126">        return Response.ok().entity(toJson(response)).build();</span>
     }
 }
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

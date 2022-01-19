@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/164</span>
+                <span class='fraction'>0/168</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/158</span>
+                <span class='fraction'>0/162</span>
             </div>
         
             
@@ -707,7 +707,20 @@
 <a name='L649'></a><a href='#L649'>649</a>
 <a name='L650'></a><a href='#L650'>650</a>
 <a name='L651'></a><a href='#L651'>651</a>
-<a name='L652'></a><a href='#L652'>652</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a>
+<a name='L654'></a><a href='#L654'>654</a>
+<a name='L655'></a><a href='#L655'>655</a>
+<a name='L656'></a><a href='#L656'>656</a>
+<a name='L657'></a><a href='#L657'>657</a>
+<a name='L658'></a><a href='#L658'>658</a>
+<a name='L659'></a><a href='#L659'>659</a>
+<a name='L660'></a><a href='#L660'>660</a>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a>
+<a name='L663'></a><a href='#L663'>663</a>
+<a name='L664'></a><a href='#L664'>664</a>
+<a name='L665'></a><a href='#L665'>665</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -814,6 +827,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1075,11 +1089,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1107,6 +1125,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1200,8 +1219,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1278,6 +1303,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1388,7 +1414,7 @@
   InspectionType,
   MappingSerializer,
 } from '@atlasmap/core';
-import { IAtlasmapDocument, IAtlasmapField } from '../Views';
+import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../Views';
 <span class="cstat-no" title="statement not covered" >import React, {</span>
   FunctionComponent,
   createContext,
@@ -1458,6 +1484,7 @@ import { IAtlasmapDocument, IAtlasmapField } from '../Views';
   resetAtlasmap,
   selectMapping,
   setSelectedEnumValue,
+  toggleExpandGroup,
   toggleExpressionMode,
   toggleMappingPreview,
   toggleShowMappedFields,
@@ -1746,6 +1773,10 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 <span class="cstat-no" title="statement not covered" >        configModel.previewService.mappingPreviewOutput$.pipe(</span>
           debounceTime(debounceTimeWindow),
         );
+      const documentUpdated =
+<span class="cstat-no" title="statement not covered" >        initializationService.cfg.documentService.documentUpdated$.pipe(</span>
+          debounceTime(debounceTimeWindow),
+        );
 &nbsp;
       const subscriptions = <span class="cstat-no" title="statement not covered" >[</span>
         initializationObservable.subscribe(<span class="fstat-no" title="function not covered" >() =&gt;</span>
@@ -1758,6 +1789,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
         lineRefreshObservable.subscribe(<span class="fstat-no" title="function not covered" >() =&gt;</span>
 <span class="cstat-no" title="statement not covered" >          onSubUpdate('lineRefreshObservable'),</span>
         ),
+        documentUpdated.subscribe(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nSubUpdate('documentUpdated')),</span>
         configModel.errorService.subscribe(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nSubUpdate('errorService')),</span>
       ];
 &nbsp;
@@ -1850,6 +1882,12 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     [configModel],
   );
 &nbsp;
+  const handleOnToggleExpandGroup = <span class="cstat-no" title="statement not covered" >useCallback(</span>
+<span class="fstat-no" title="function not covered" >    (g</span>roup: IAtlasmapGroup, expand?: boolean) =&gt;
+<span class="cstat-no" title="statement not covered" >      toggleExpandGroup(group, expand),</span>
+    [],
+  );
+&nbsp;
   const handleResetAtlasmap = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    onReset();</span>
 <span class="cstat-no" title="statement not covered" >    resetAtlasmap();</span>
@@ -1936,6 +1974,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     exportADMArchiveFile: exportADMArchiveFile,
     importADMArchiveFile: handleImportADMArchiveFile,
     importJarFile: handleImportJarFile,
+    onToggleExpandGroup: handleOnToggleExpandGroup,
     resetAtlasmap: handleResetAtlasmap,
     getUIVersion: getUIVersion,
     getRuntimeVersion: getRuntimeVersion,
@@ -2016,7 +2055,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Jan 19 2022 20:17:01 GMT+0000 (Coordinated Universal Time)
+                at Wed Jan 19 2022 21:41:15 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

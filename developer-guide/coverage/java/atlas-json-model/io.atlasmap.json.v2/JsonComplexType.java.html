@@ -16,11 +16,16 @@
 package io.atlasmap.json.v2;
 
 import java.io.Serializable;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import io.atlasmap.v2.ComplexType;
+import io.atlasmap.v2.Field;
+
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L23">public class JsonComplexType extends JsonField implements Serializable {</span>
+<span class="fc" id="L28">public class JsonComplexType extends JsonField implements Serializable, ComplexType {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -31,172 +36,178 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
     /**
      * Gets the value of the jsonFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JsonFields }
-     *     
+     *
      */
     public JsonFields getJsonFields() {
-<span class="fc" id="L41">        return jsonFields;</span>
+<span class="fc" id="L46">        return jsonFields;</span>
     }
 
     /**
      * Sets the value of the jsonFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JsonFields }
-     *     
+     *
      */
     public void setJsonFields(JsonFields value) {
-<span class="fc" id="L53">        this.jsonFields = value;</span>
-<span class="fc" id="L54">    }</span>
+<span class="fc" id="L58">        this.jsonFields = value;</span>
+<span class="fc" id="L59">    }</span>
 
     /**
      * Gets the value of the jsonEnumFields property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link JsonEnumFields }
-     *     
+     *
      */
     public JsonEnumFields getJsonEnumFields() {
-<span class="fc" id="L65">        return jsonEnumFields;</span>
+<span class="fc" id="L70">        return jsonEnumFields;</span>
     }
 
     /**
      * Sets the value of the jsonEnumFields property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link JsonEnumFields }
-     *     
+     *
      */
     public void setJsonEnumFields(JsonEnumFields value) {
-<span class="fc" id="L77">        this.jsonEnumFields = value;</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L82">        this.jsonEnumFields = value;</span>
+<span class="fc" id="L83">    }</span>
 
     /**
      * Gets the value of the enumeration property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Boolean }
-     *     
+     *
      */
     public Boolean isEnumeration() {
-<span class="fc" id="L89">        return enumeration;</span>
+<span class="fc" id="L94">        return enumeration;</span>
     }
 
     /**
      * Sets the value of the enumeration property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Boolean }
-     *     
+     *
      */
     public void setEnumeration(Boolean value) {
-<span class="fc" id="L101">        this.enumeration = value;</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L106">        this.enumeration = value;</span>
+<span class="fc" id="L107">    }</span>
 
     /**
      * Gets the value of the uri property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getUri() {
-<span class="fc" id="L113">        return uri;</span>
+<span class="fc" id="L118">        return uri;</span>
     }
 
     /**
      * Sets the value of the uri property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setUri(String value) {
-<span class="nc" id="L125">        this.uri = value;</span>
-<span class="nc" id="L126">    }</span>
+<span class="nc" id="L130">        this.uri = value;</span>
+<span class="nc" id="L131">    }</span>
+
+    @JsonIgnore
+    @Override
+    public List&lt;? extends Field&gt; getChildFields() {
+<span class="fc" id="L136">        return jsonFields.getJsonField();</span>
+    }
 
     public boolean equals(Object object) {
-<span class="nc bnc" id="L129" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L130">            return false;</span>
+<span class="nc bnc" id="L140" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L141">            return false;</span>
         }
-<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L133">            return true;</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L144">            return true;</span>
         }
-<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L136">            return false;</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L147">            return false;</span>
         }
-<span class="nc" id="L138">        final JsonComplexType that = ((JsonComplexType) object);</span>
+<span class="nc" id="L149">        final JsonComplexType that = ((JsonComplexType) object);</span>
         {
             JsonFields leftJsonFields;
-<span class="nc" id="L141">            leftJsonFields = this.getJsonFields();</span>
+<span class="nc" id="L152">            leftJsonFields = this.getJsonFields();</span>
             JsonFields rightJsonFields;
-<span class="nc" id="L143">            rightJsonFields = that.getJsonFields();</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (this.jsonFields!= null) {</span>
-<span class="nc bnc" id="L145" title="All 2 branches missed.">                if (that.jsonFields!= null) {</span>
-<span class="nc bnc" id="L146" title="All 2 branches missed.">                    if (!leftJsonFields.equals(rightJsonFields)) {</span>
-<span class="nc" id="L147">                        return false;</span>
+<span class="nc" id="L154">            rightJsonFields = that.getJsonFields();</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (this.jsonFields!= null) {</span>
+<span class="nc bnc" id="L156" title="All 2 branches missed.">                if (that.jsonFields!= null) {</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">                    if (!leftJsonFields.equals(rightJsonFields)) {</span>
+<span class="nc" id="L158">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L150">                    return false;</span>
+<span class="nc" id="L161">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L153" title="All 2 branches missed.">                if (that.jsonFields!= null) {</span>
-<span class="nc" id="L154">                    return false;</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">                if (that.jsonFields!= null) {</span>
+<span class="nc" id="L165">                    return false;</span>
                 }
             }
         }
         {
             String leftUri;
-<span class="nc" id="L160">            leftUri = this.getUri();</span>
+<span class="nc" id="L171">            leftUri = this.getUri();</span>
             String rightUri;
-<span class="nc" id="L162">            rightUri = that.getUri();</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
-<span class="nc" id="L166">                        return false;</span>
+<span class="nc" id="L173">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L177">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L169">                    return false;</span>
+<span class="nc" id="L180">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L172" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc" id="L173">                    return false;</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L184">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L177">        return true;</span>
+<span class="nc" id="L188">        return true;</span>
     }
 
     public int hashCode() {
-<span class="nc" id="L181">        int currentHashCode = 1;</span>
-<span class="nc" id="L182">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L192">        int currentHashCode = 1;</span>
+<span class="nc" id="L193">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L184">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L195">            currentHashCode = (currentHashCode* 31);</span>
             JsonFields theJsonFields;
-<span class="nc" id="L186">            theJsonFields = this.getJsonFields();</span>
-<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (this.jsonFields!= null) {</span>
-<span class="nc" id="L188">                currentHashCode += theJsonFields.hashCode();</span>
+<span class="nc" id="L197">            theJsonFields = this.getJsonFields();</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (this.jsonFields!= null) {</span>
+<span class="nc" id="L199">                currentHashCode += theJsonFields.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L192">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L203">            currentHashCode = (currentHashCode* 31);</span>
             String theUri;
-<span class="nc" id="L194">            theUri = this.getUri();</span>
-<span class="nc bnc" id="L195" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc" id="L196">                currentHashCode += theUri.hashCode();</span>
+<span class="nc" id="L205">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L207">                currentHashCode += theUri.hashCode();</span>
             }
         }
-<span class="nc" id="L199">        return currentHashCode;</span>
+<span class="nc" id="L210">        return currentHashCode;</span>
     }
 
 }
