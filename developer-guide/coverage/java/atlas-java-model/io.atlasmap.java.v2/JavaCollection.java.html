@@ -19,10 +19,14 @@ import java.io.Serializable;
 
 import io.atlasmap.v2.Collection;
 
-<span class="fc" id="L22">public class JavaCollection extends Collection implements Serializable {</span>
+/**
+ * @deprecated {@link Collection}.
+ */
+@Deprecated
+<span class="fc" id="L26">public class JavaCollection extends Collection implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-
+    /** collection class name. */
     protected String collectionClassName;
 
     /**
@@ -34,7 +38,7 @@ import io.atlasmap.v2.Collection;
      *     
      */
     public String getCollectionClassName() {
-<span class="fc" id="L37">        return collectionClassName;</span>
+<span class="fc" id="L41">        return collectionClassName;</span>
     }
 
     /**
@@ -46,54 +50,56 @@ import io.atlasmap.v2.Collection;
      *     
      */
     public void setCollectionClassName(String value) {
-<span class="nc" id="L49">        this.collectionClassName = value;</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L53">        this.collectionClassName = value;</span>
+<span class="nc" id="L54">    }</span>
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L53" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L54">            return false;</span>
+<span class="nc bnc" id="L58" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L59">            return false;</span>
         }
-<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L57">            return true;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L62">            return true;</span>
         }
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L60">            return false;</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L65">            return false;</span>
         }
-<span class="nc" id="L62">        final JavaCollection that = ((JavaCollection) object);</span>
+<span class="nc" id="L67">        final JavaCollection that = ((JavaCollection) object);</span>
         {
             String leftCollectionClassName;
-<span class="nc" id="L65">            leftCollectionClassName = this.getCollectionClassName();</span>
+<span class="nc" id="L70">            leftCollectionClassName = this.getCollectionClassName();</span>
             String rightCollectionClassName;
-<span class="nc" id="L67">            rightCollectionClassName = that.getCollectionClassName();</span>
-<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">                if (that.collectionClassName!= null) {</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">                    if (!leftCollectionClassName.equals(rightCollectionClassName)) {</span>
-<span class="nc" id="L71">                        return false;</span>
+<span class="nc" id="L72">            rightCollectionClassName = that.getCollectionClassName();</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                if (that.collectionClassName!= null) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                    if (!leftCollectionClassName.equals(rightCollectionClassName)) {</span>
+<span class="nc" id="L76">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L74">                    return false;</span>
+<span class="nc" id="L79">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L77" title="All 2 branches missed.">                if (that.collectionClassName!= null) {</span>
-<span class="nc" id="L78">                    return false;</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">                if (that.collectionClassName!= null) {</span>
+<span class="nc" id="L83">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L82">        return true;</span>
+<span class="nc" id="L87">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L86">        int currentHashCode = 1;</span>
-<span class="nc" id="L87">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L92">        int currentHashCode = 1;</span>
+<span class="nc" id="L93">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L89">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L95">            currentHashCode = (currentHashCode* 31);</span>
             String theCollectionClassName;
-<span class="nc" id="L91">            theCollectionClassName = this.getCollectionClassName();</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
-<span class="nc" id="L93">                currentHashCode += theCollectionClassName.hashCode();</span>
+<span class="nc" id="L97">            theCollectionClassName = this.getCollectionClassName();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if (this.collectionClassName!= null) {</span>
+<span class="nc" id="L99">                currentHashCode += theCollectionClassName.hashCode();</span>
             }
         }
-<span class="nc" id="L96">        return currentHashCode;</span>
+<span class="nc" id="L102">        return currentHashCode;</span>
     }
 
 }

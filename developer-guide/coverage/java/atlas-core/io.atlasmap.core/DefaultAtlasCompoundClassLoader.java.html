@@ -24,68 +24,71 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<span class="fc" id="L27">class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {</span>
-<span class="fc" id="L28">    private static final Logger LOG = LoggerFactory.getLogger(CompoundClassLoader.class);</span>
+/**
+ * The default implementation of {@link CompoundClassLoader}.
+ */
+<span class="fc" id="L30">class DefaultAtlasCompoundClassLoader extends CompoundClassLoader {</span>
+<span class="fc" id="L31">    private static final Logger LOG = LoggerFactory.getLogger(CompoundClassLoader.class);</span>
 
-<span class="fc" id="L30">    private Set&lt;ClassLoader&gt; delegates = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc" id="L33">    private Set&lt;ClassLoader&gt; delegates = new LinkedHashSet&lt;&gt;();</span>
 
     @Override
     public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException {
-<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        for (ClassLoader cl : classLoaders()) {</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        for (ClassLoader cl : classLoaders()) {</span>
             try {
-<span class="fc" id="L36">                return cl.loadClass(name);</span>
-<span class="nc" id="L37">            } catch (Throwable t) {</span>
-<span class="nc" id="L38">                LOG.debug(&quot;Class '{}' was not found with ClassLoader '{}': {}&quot;, name, cl);</span>
-<span class="nc" id="L39">                LOG.debug(t.getMessage(), t);</span>
+<span class="fc" id="L39">                return cl.loadClass(name);</span>
+<span class="nc" id="L40">            } catch (Throwable t) {</span>
+<span class="nc" id="L41">                LOG.debug(&quot;Class '{}' was not found with ClassLoader '{}': {}&quot;, name, cl);</span>
+<span class="nc" id="L42">                LOG.debug(t.getMessage(), t);</span>
             }
-<span class="nc" id="L41">        }</span>
-<span class="nc" id="L42">        throw new ClassNotFoundException(name);</span>
+<span class="nc" id="L44">        }</span>
+<span class="nc" id="L45">        throw new ClassNotFoundException(name);</span>
     }
 
     private Set&lt;ClassLoader&gt; classLoaders() {
-<span class="fc" id="L46">        Set&lt;ClassLoader&gt; answer = new LinkedHashSet&lt;&gt;(delegates);</span>
-<span class="fc" id="L47">        ClassLoader tccl = Thread.currentThread().getContextClassLoader();</span>
-<span class="pc bpc" id="L48" title="1 of 4 branches missed.">        if (tccl != null &amp;&amp; !tccl.equals(this)) {</span>
-<span class="fc" id="L49">            answer.add(tccl);</span>
+<span class="fc" id="L49">        Set&lt;ClassLoader&gt; answer = new LinkedHashSet&lt;&gt;(delegates);</span>
+<span class="fc" id="L50">        ClassLoader tccl = Thread.currentThread().getContextClassLoader();</span>
+<span class="pc bpc" id="L51" title="1 of 4 branches missed.">        if (tccl != null &amp;&amp; !tccl.equals(this)) {</span>
+<span class="fc" id="L52">            answer.add(tccl);</span>
         }
-<span class="fc" id="L51">        return answer;</span>
+<span class="fc" id="L54">        return answer;</span>
     }
 
     @Override
     public URL getResource(String name) {
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        for (ClassLoader cl : classLoaders()) {</span>
-<span class="fc" id="L57">            URL url = cl.getResource(name);</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">            if (url != null) {</span>
-<span class="fc" id="L59">                return url;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        for (ClassLoader cl : classLoaders()) {</span>
+<span class="fc" id="L60">            URL url = cl.getResource(name);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (url != null) {</span>
+<span class="fc" id="L62">                return url;</span>
             }
-<span class="fc" id="L61">            LOG.debug(&quot;Resource '{}' was not found with ClassLoader '{}': {}&quot;, name, cl);</span>
-<span class="fc" id="L62">        }</span>
-<span class="fc" id="L63">        return null;</span>
+<span class="fc" id="L64">            LOG.debug(&quot;Resource '{}' was not found with ClassLoader '{}': {}&quot;, name, cl);</span>
+<span class="fc" id="L65">        }</span>
+<span class="fc" id="L66">        return null;</span>
     }
 
     @Override
     public Enumeration&lt;URL&gt; getResources(String name) {
-<span class="fc" id="L68">        Set&lt;URL&gt; answer = new LinkedHashSet&lt;&gt;();</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (ClassLoader cl : classLoaders()) {</span>
+<span class="fc" id="L71">        Set&lt;URL&gt; answer = new LinkedHashSet&lt;&gt;();</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">        for (ClassLoader cl : classLoaders()) {</span>
             try {
-<span class="fc" id="L71">                Enumeration&lt;URL&gt; urls = cl.getResources(name);</span>
-<span class="pc bpc" id="L72" title="1 of 4 branches missed.">                while (urls != null &amp;&amp; urls.hasMoreElements()) {</span>
-<span class="fc" id="L73">                    answer.add(urls.nextElement());</span>
+<span class="fc" id="L74">                Enumeration&lt;URL&gt; urls = cl.getResources(name);</span>
+<span class="pc bpc" id="L75" title="1 of 4 branches missed.">                while (urls != null &amp;&amp; urls.hasMoreElements()) {</span>
+<span class="fc" id="L76">                    answer.add(urls.nextElement());</span>
                 }
-<span class="nc" id="L75">            } catch (Exception e) {</span>
-<span class="nc" id="L76">                LOG.debug(&quot;I/O error while looking for a resource '{}' with ClassLoader '{}': {}&quot;, name, cl);</span>
-<span class="nc" id="L77">                LOG.debug(e.getMessage(), e);</span>
-<span class="fc" id="L78">            }</span>
-<span class="fc" id="L79">        }</span>
-<span class="fc" id="L80">        return Collections.enumeration(answer);</span>
+<span class="nc" id="L78">            } catch (Exception e) {</span>
+<span class="nc" id="L79">                LOG.debug(&quot;I/O error while looking for a resource '{}' with ClassLoader '{}': {}&quot;, name, cl);</span>
+<span class="nc" id="L80">                LOG.debug(e.getMessage(), e);</span>
+<span class="fc" id="L81">            }</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">        return Collections.enumeration(answer);</span>
     }
 
     @Override
     public synchronized void addAlternativeLoader(ClassLoader cl) {
-<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if (cl != null &amp;&amp; !this.equals(cl)) {</span>
-<span class="fc" id="L86">            delegates.add(cl);</span>
+<span class="pc bpc" id="L88" title="2 of 4 branches missed.">        if (cl != null &amp;&amp; !this.equals(cl)) {</span>
+<span class="fc" id="L89">            delegates.add(cl);</span>
         }
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L91">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -22,37 +22,45 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The positive integer validator.
+ */
 public class PositiveIntegerValidator implements AtlasValidator {
 
     private String violationMessage;
     private ValidationScope scope;
 
-<span class="fc" id="L30">    public PositiveIntegerValidator(ValidationScope scope, String violationMessage) {</span>
-<span class="fc" id="L31">        this.violationMessage = violationMessage;</span>
-<span class="fc" id="L32">        this.scope = scope;</span>
-<span class="fc" id="L33">    }</span>
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     */
+<span class="fc" id="L38">    public PositiveIntegerValidator(ValidationScope scope, String violationMessage) {</span>
+<span class="fc" id="L39">        this.violationMessage = violationMessage;</span>
+<span class="fc" id="L40">        this.scope = scope;</span>
+<span class="fc" id="L41">    }</span>
 
     @Override
     public boolean supports(Class&lt;?&gt; clazz) {
-<span class="fc bfc" id="L37" title="All 4 branches covered.">        return Integer.class.isAssignableFrom(clazz) || String.class.isAssignableFrom(clazz);</span>
+<span class="fc bfc" id="L45" title="All 4 branches covered.">        return Integer.class.isAssignableFrom(clazz) || String.class.isAssignableFrom(clazz);</span>
     }
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id) {
-<span class="fc" id="L42">        this.validate(target, validations, id, ValidationStatus.ERROR);</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L50">        this.validate(target, validations, id, ValidationStatus.ERROR);</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id, ValidationStatus status) {
-<span class="fc" id="L47">        Integer value = (Integer) target;</span>
-<span class="pc bpc" id="L48" title="1 of 4 branches missed.">        if (value == null || value &lt; 0) {</span>
-<span class="fc" id="L49">            Validation validation = new Validation();</span>
-<span class="fc" id="L50">            validation.setScope(scope);</span>
-<span class="fc" id="L51">            validation.setId(id);</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            validation.setMessage(String.format(violationMessage, target != null ? target.toString() : null));</span>
-<span class="fc" id="L53">            validation.setStatus(status);</span>
-<span class="fc" id="L54">            validations.add(validation);</span>
+<span class="fc" id="L55">        Integer value = (Integer) target;</span>
+<span class="pc bpc" id="L56" title="1 of 4 branches missed.">        if (value == null || value &lt; 0) {</span>
+<span class="fc" id="L57">            Validation validation = new Validation();</span>
+<span class="fc" id="L58">            validation.setScope(scope);</span>
+<span class="fc" id="L59">            validation.setId(id);</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">            validation.setMessage(String.format(violationMessage, target != null ? target.toString() : null));</span>
+<span class="fc" id="L61">            validation.setStatus(status);</span>
+<span class="fc" id="L62">            validations.add(validation);</span>
         }
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L64">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

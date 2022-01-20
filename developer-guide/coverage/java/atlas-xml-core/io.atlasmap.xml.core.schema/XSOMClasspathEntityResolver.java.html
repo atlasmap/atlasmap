@@ -24,37 +24,44 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/**
+ * The XSOM {@link EntityResolver} to resolve the entity from the classpath.
+ */
 class XSOMClasspathEntityResolver implements EntityResolver {
     private ClassLoader classLoader;
 
-<span class="fc" id="L30">    XSOMClasspathEntityResolver(ClassLoader loader) {</span>
-<span class="fc bfc" id="L31" title="All 2 branches covered.">        this.classLoader = loader != null ? loader : XSOMClasspathEntityResolver.class.getClassLoader();</span>
-<span class="fc" id="L32">    }</span>
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
+<span class="fc" id="L37">    XSOMClasspathEntityResolver(ClassLoader loader) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        this.classLoader = loader != null ? loader : XSOMClasspathEntityResolver.class.getClassLoader();</span>
+<span class="fc" id="L39">    }</span>
 
     @Override
     public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
-<span class="pc bpc" id="L36" title="1 of 4 branches missed.">        if (publicId != null || systemId == null) {</span>
-<span class="fc" id="L37">            return null;</span>
+<span class="pc bpc" id="L43" title="1 of 4 branches missed.">        if (publicId != null || systemId == null) {</span>
+<span class="fc" id="L44">            return null;</span>
         }
         URI uri;
         try {
-<span class="fc" id="L41">            uri = new URI(systemId);</span>
-<span class="nc" id="L42">        } catch (Exception e) {</span>
-<span class="nc" id="L43">            return null;</span>
-<span class="fc" id="L44">        }</span>
-<span class="pc bpc" id="L45" title="2 of 4 branches missed.">        if (uri.getScheme() != null || uri.getSchemeSpecificPart() == null) {</span>
-<span class="nc" id="L46">            return null;</span>
-        }
-<span class="fc" id="L48">        String path = uri.getSchemeSpecificPart();</span>
-<span class="pc bpc" id="L49" title="2 of 4 branches missed.">        if (path.startsWith(&quot;.&quot;) || path.startsWith(File.pathSeparator)) {</span>
+<span class="fc" id="L48">            uri = new URI(systemId);</span>
+<span class="nc" id="L49">        } catch (Exception e) {</span>
 <span class="nc" id="L50">            return null;</span>
+<span class="fc" id="L51">        }</span>
+<span class="pc bpc" id="L52" title="2 of 4 branches missed.">        if (uri.getScheme() != null || uri.getSchemeSpecificPart() == null) {</span>
+<span class="nc" id="L53">            return null;</span>
+        }
+<span class="fc" id="L55">        String path = uri.getSchemeSpecificPart();</span>
+<span class="pc bpc" id="L56" title="2 of 4 branches missed.">        if (path.startsWith(&quot;.&quot;) || path.startsWith(File.pathSeparator)) {</span>
+<span class="nc" id="L57">            return null;</span>
         }
 
-<span class="fc" id="L53">        InputStream is = classLoader.getResourceAsStream(path);</span>
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        if (is == null) {</span>
-<span class="nc" id="L55">            return null;</span>
+<span class="fc" id="L60">        InputStream is = classLoader.getResourceAsStream(path);</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (is == null) {</span>
+<span class="nc" id="L62">            return null;</span>
         }
-<span class="fc" id="L57">        return new InputSource(is);</span>
+<span class="fc" id="L64">        return new InputSource(is);</span>
     }
     
 }

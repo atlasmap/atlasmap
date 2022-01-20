@@ -18,15 +18,28 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.List;
 
-<span class="fc" id="L21">public abstract class BaseInspectionRequest implements Serializable {</span>
+/**
+ * The base class for Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
+<span class="fc" id="L25">public abstract class BaseInspectionRequest implements Serializable {</span>
+    /** Paths to inspect. */
     protected List&lt;String&gt; inspectPaths;
 
+    /**
+     * Gets the paths to inspect.
+     * @return paths
+     */
     public List&lt;String&gt; getInspectPaths() {
-<span class="fc" id="L25">        return inspectPaths;</span>
+<span class="fc" id="L34">        return inspectPaths;</span>
     }
 
+    /**
+     * Sets the paths to inspect.
+     * @param inspectPaths paths
+     */
     public void setInspectPaths(List&lt;String&gt; inspectPaths) {
-<span class="fc" id="L29">        this.inspectPaths = inspectPaths;</span>
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L42">        this.inspectPaths = inspectPaths;</span>
+<span class="fc" id="L43">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

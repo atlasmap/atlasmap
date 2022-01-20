@@ -21,11 +21,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The container of {@link StringMapEntry}.
+ */
 @JsonRootName(&quot;StringMap&quot;)
-<span class="fc" id="L25">public class StringMap implements Serializable {</span>
+<span class="fc" id="L28">public class StringMap implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** a list of {@link StringMapEntry} */
     protected List&lt;StringMapEntry&gt; stringMapEntry;
 
     /**
@@ -51,10 +55,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link StringMapEntry}
      */
     public List&lt;StringMapEntry&gt; getStringMapEntry() {
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (stringMapEntry == null) {</span>
-<span class="fc" id="L55">            stringMapEntry = new ArrayList&lt;StringMapEntry&gt;();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (stringMapEntry == null) {</span>
+<span class="fc" id="L59">            stringMapEntry = new ArrayList&lt;StringMapEntry&gt;();</span>
         }
-<span class="fc" id="L57">        return this.stringMapEntry;</span>
+<span class="fc" id="L61">        return this.stringMapEntry;</span>
     }
 
 }

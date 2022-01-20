@@ -18,38 +18,67 @@ package io.atlasmap.spi;
 import java.util.Arrays;
 import java.util.List;
 
-<span class="fc" id="L21">public enum AtlasPropertyType {</span>
-<span class="fc" id="L22">    ENVIRONMENT_VARIABLES(&quot;EnvironmentVariables&quot;), JAVA_SYSTEM_PROPERTIES(</span>
-<span class="fc" id="L23">            &quot;SystemProperties&quot;), MAPPING_DEFINED_PROPERTIES(</span>
-<span class="fc" id="L24">                    &quot;MappingDefinedProperties&quot;), RUNTIME_PROPERTIES(&quot;RuntimeProperties&quot;);</span>
+/**
+ * The type of the property.
+ */
+<span class="fc" id="L24">public enum AtlasPropertyType {</span>
+    /** Environment variables. */
+<span class="fc" id="L26">    ENVIRONMENT_VARIABLES(&quot;EnvironmentVariables&quot;),</span>
+    /** Java system properties. */
+<span class="fc" id="L28">    JAVA_SYSTEM_PROPERTIES(&quot;SystemProperties&quot;),</span>
+    /** Mapping defined properties. */
+<span class="fc" id="L30">    MAPPING_DEFINED_PROPERTIES(&quot;MappingDefinedProperties&quot;),</span>
+    /** Runtime properties. */
+<span class="fc" id="L32">    RUNTIME_PROPERTIES(&quot;RuntimeProperties&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L28">    AtlasPropertyType(String value) {</span>
-<span class="fc" id="L29">        this.value = value;</span>
-<span class="fc" id="L30">    }</span>
+    /**
+     * A constructor.
+     * @param value value
+     */
+<span class="fc" id="L40">    AtlasPropertyType(String value) {</span>
+<span class="fc" id="L41">        this.value = value;</span>
+<span class="fc" id="L42">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
-<span class="fc" id="L33">        return this.value;</span>
+<span class="fc" id="L49">        return this.value;</span>
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static AtlasPropertyType fromValue(String v) {
-<span class="fc bfc" id="L37" title="All 2 branches covered.">        for (AtlasPropertyType c : AtlasPropertyType.values()) {</span>
-<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L39">                return c;</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        for (AtlasPropertyType c : AtlasPropertyType.values()) {</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L60">                return c;</span>
             }
         }
-<span class="fc" id="L42">        throw new IllegalArgumentException(v);</span>
+<span class="fc" id="L63">        throw new IllegalArgumentException(v);</span>
     }
 
+    /**
+     * Gets a list of property type enum.
+     * @return a list of property type enum
+     */
     public static List&lt;AtlasPropertyType&gt; getAll() {
-<span class="nc" id="L46">        return Arrays.asList(ENVIRONMENT_VARIABLES, JAVA_SYSTEM_PROPERTIES, MAPPING_DEFINED_PROPERTIES,</span>
+<span class="nc" id="L71">        return Arrays.asList(ENVIRONMENT_VARIABLES, JAVA_SYSTEM_PROPERTIES, MAPPING_DEFINED_PROPERTIES,</span>
                 RUNTIME_PROPERTIES);
     }
 
+    /**
+     * Gets a list of property type enum values.
+     * @return a list of property type enum values
+     */
     public static List&lt;String&gt; getAllValues() {
-<span class="nc" id="L51">        return Arrays.asList(ENVIRONMENT_VARIABLES.value(), JAVA_SYSTEM_PROPERTIES.value(),</span>
-<span class="nc" id="L52">                MAPPING_DEFINED_PROPERTIES.value(), RUNTIME_PROPERTIES.value());</span>
+<span class="nc" id="L80">        return Arrays.asList(ENVIRONMENT_VARIABLES.value(), JAVA_SYSTEM_PROPERTIES.value(),</span>
+<span class="nc" id="L81">                MAPPING_DEFINED_PROPERTIES.value(), RUNTIME_PROPERTIES.value());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

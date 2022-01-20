@@ -17,34 +17,54 @@ package io.atlasmap.json.inspect;
 
 import io.atlasmap.json.v2.JsonDocument;
 
-<span class="fc" id="L20">public class JsonInspectionService {</span>
+/**
+ * The JSON inspection service.
+ */
+<span class="fc" id="L23">public class JsonInspectionService {</span>
 
+    /**
+     * Inspects the JSON instance.
+     * @param sourceDocument JSON instance
+     * @return inspected
+     * @throws JsonInspectionException invalid JSON data
+     */
     public JsonDocument inspectJsonDocument(String sourceDocument) throws JsonInspectionException {
-<span class="fc bfc" id="L23" title="All 6 branches covered.">        if (sourceDocument == null || sourceDocument.isEmpty() || (sourceDocument.trim().length() == 0)) {</span>
-<span class="fc" id="L24">            throw new IllegalArgumentException(&quot;Source document cannot be null, empty or contain only whitespace.&quot;);</span>
+<span class="fc bfc" id="L32" title="All 6 branches covered.">        if (sourceDocument == null || sourceDocument.isEmpty() || (sourceDocument.trim().length() == 0)) {</span>
+<span class="fc" id="L33">            throw new IllegalArgumentException(&quot;Source document cannot be null, empty or contain only whitespace.&quot;);</span>
         }
-<span class="fc" id="L26">        String cleanDocument = cleanJsonDocument(sourceDocument);</span>
+<span class="fc" id="L35">        String cleanDocument = cleanJsonDocument(sourceDocument);</span>
 
-<span class="fc bfc" id="L28" title="All 4 branches covered.">        if (cleanDocument.startsWith(&quot;{&quot;) || cleanDocument.startsWith(&quot;[&quot;)) {</span>
-<span class="fc" id="L29">            return JsonInstanceInspector.instance().inspect(cleanDocument);</span>
+<span class="fc bfc" id="L37" title="All 4 branches covered.">        if (cleanDocument.startsWith(&quot;{&quot;) || cleanDocument.startsWith(&quot;[&quot;)) {</span>
+<span class="fc" id="L38">            return JsonInstanceInspector.instance().inspect(cleanDocument);</span>
         }
-<span class="fc" id="L31">        throw new JsonInspectionException(&quot;JSON data must begin with either '{' or '['&quot;);</span>
+<span class="fc" id="L40">        throw new JsonInspectionException(&quot;JSON data must begin with either '{' or '['&quot;);</span>
     }
 
+    /**
+     * Inspects the JSON schema.
+     * @param jsonSchema JSON schema
+     * @return inspected
+     * @throws JsonInspectionException invalid JSON schema
+     */
     public JsonDocument inspectJsonSchema(String jsonSchema) throws JsonInspectionException {
-<span class="fc bfc" id="L35" title="All 6 branches covered.">        if (jsonSchema == null || jsonSchema.isEmpty() || (jsonSchema.trim().length() == 0)) {</span>
-<span class="fc" id="L36">            throw new IllegalArgumentException(&quot;Schema cannot be null, empty or contain only whitespace.&quot;);</span>
+<span class="fc bfc" id="L50" title="All 6 branches covered.">        if (jsonSchema == null || jsonSchema.isEmpty() || (jsonSchema.trim().length() == 0)) {</span>
+<span class="fc" id="L51">            throw new IllegalArgumentException(&quot;Schema cannot be null, empty or contain only whitespace.&quot;);</span>
         }
-<span class="fc" id="L38">        String cleanDocument = cleanJsonDocument(jsonSchema);</span>
+<span class="fc" id="L53">        String cleanDocument = cleanJsonDocument(jsonSchema);</span>
 
-<span class="pc bpc" id="L40" title="1 of 4 branches missed.">        if (cleanDocument.startsWith(&quot;{&quot;) || cleanDocument.startsWith(&quot;[&quot;)) {</span>
-<span class="fc" id="L41">            return JsonSchemaInspector.instance().inspect(cleanDocument);</span>
+<span class="pc bpc" id="L55" title="1 of 4 branches missed.">        if (cleanDocument.startsWith(&quot;{&quot;) || cleanDocument.startsWith(&quot;[&quot;)) {</span>
+<span class="fc" id="L56">            return JsonSchemaInspector.instance().inspect(cleanDocument);</span>
         }
-<span class="fc" id="L43">        throw new JsonInspectionException(&quot;JSON schema must begin with either '{' or '['&quot;);</span>
+<span class="fc" id="L58">        throw new JsonInspectionException(&quot;JSON schema must begin with either '{' or '['&quot;);</span>
     }
 
+    /**
+     * Trims the whitespaces at left end and right end.
+     * @param sourceDocument string
+     * @return trimmed
+     */
     protected String cleanJsonDocument(String sourceDocument) {
-<span class="fc" id="L47">        return sourceDocument.trim();</span>
+<span class="fc" id="L67">        return sourceDocument.trim();</span>
     }
 
 }

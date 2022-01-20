@@ -26,39 +26,42 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.DefaultCsrfToken;
 
-<span class="fc" id="L29">public class AtlasMapXsrfRepository implements CsrfTokenRepository {</span>
+/**
+ * XSRF repository.
+ */
+<span class="fc" id="L32">public class AtlasMapXsrfRepository implements CsrfTokenRepository {</span>
 
     private static final String XSRF_HEADER_NAME = &quot;ATLASMAP-XSRF-TOKEN&quot;;
     private static final String XSRF_HEADER_VALUE = &quot;awesome&quot;;
 
-<span class="fc" id="L34">    private static final Logger LOG = LoggerFactory.getLogger(AtlasMapXsrfRepository.class);</span>
+<span class="fc" id="L37">    private static final Logger LOG = LoggerFactory.getLogger(AtlasMapXsrfRepository.class);</span>
 
     @Override
     public CsrfToken generateToken(HttpServletRequest httpServletRequest) {
-<span class="fc" id="L38">        return new DefaultCsrfToken(XSRF_HEADER_NAME, XSRF_HEADER_NAME, XSRF_HEADER_VALUE);</span>
+<span class="fc" id="L41">        return new DefaultCsrfToken(XSRF_HEADER_NAME, XSRF_HEADER_NAME, XSRF_HEADER_VALUE);</span>
     }
 
     @Override
     public void saveToken(CsrfToken csrfToken, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-<span class="pc bpc" id="L43" title="3 of 6 branches missed.">        if (csrfToken != null &amp;&amp; csrfToken.getHeaderName() != null &amp;&amp; csrfToken.getToken() != null) {</span>
-<span class="fc" id="L44">            httpServletResponse.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());</span>
+<span class="pc bpc" id="L46" title="3 of 6 branches missed.">        if (csrfToken != null &amp;&amp; csrfToken.getHeaderName() != null &amp;&amp; csrfToken.getToken() != null) {</span>
+<span class="fc" id="L47">            httpServletResponse.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());</span>
         }
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L49">    }</span>
 
     @Override
     public CsrfToken loadToken(HttpServletRequest httpServletRequest) {
-<span class="fc" id="L50">        Optional&lt;String&gt; token = extractToken(httpServletRequest);</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (token.isPresent()) {</span>
-<span class="fc" id="L52">            LOG.trace(&quot;Xsrf token found in request to uri {}. Value is: {}&quot;, httpServletRequest.getRequestURI(), token.get());</span>
+<span class="fc" id="L53">        Optional&lt;String&gt; token = extractToken(httpServletRequest);</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (token.isPresent()) {</span>
+<span class="fc" id="L55">            LOG.trace(&quot;Xsrf token found in request to uri {}. Value is: {}&quot;, httpServletRequest.getRequestURI(), token.get());</span>
         } else {
-<span class="fc" id="L54">            LOG.trace(&quot;Xsrf token not found in request to uri {}&quot;, httpServletRequest.getRequestURI());</span>
+<span class="fc" id="L57">            LOG.trace(&quot;Xsrf token not found in request to uri {}&quot;, httpServletRequest.getRequestURI());</span>
         }
-<span class="fc" id="L56">        return token.map(val -&gt; new DefaultCsrfToken(XSRF_HEADER_NAME, XSRF_HEADER_NAME, val)).orElse(null);</span>
+<span class="fc" id="L59">        return token.map(val -&gt; new DefaultCsrfToken(XSRF_HEADER_NAME, XSRF_HEADER_NAME, val)).orElse(null);</span>
     }
 
     private Optional&lt;String&gt; extractToken(HttpServletRequest request) {
-<span class="fc" id="L60">        String token = request.getHeader(XSRF_HEADER_NAME);</span>
-<span class="fc" id="L61">        return Optional.ofNullable(token);</span>
+<span class="fc" id="L63">        String token = request.getHeader(XSRF_HEADER_NAME);</span>
+<span class="fc" id="L64">        return Optional.ofNullable(token);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

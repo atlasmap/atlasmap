@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L22">public class Audits implements Serializable {</span>
+/**
+ * The container of the {@link Audit}.
+ */
+<span class="fc" id="L25">public class Audits implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Audit} */
     protected List&lt;Audit&gt; audit;
 
     /**
@@ -48,10 +52,10 @@ import java.util.List;
      * @return a list of {@link Audit}
      */
     public List&lt;Audit&gt; getAudit() {
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (audit == null) {</span>
-<span class="fc" id="L52">            audit = new ArrayList&lt;Audit&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (audit == null) {</span>
+<span class="fc" id="L56">            audit = new ArrayList&lt;Audit&gt;();</span>
         }
-<span class="fc" id="L54">        return this.audit;</span>
+<span class="fc" id="L58">        return this.audit;</span>
     }
 
 }

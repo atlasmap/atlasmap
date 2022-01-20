@@ -22,42 +22,55 @@ import io.atlasmap.api.AtlasMappingBuilder;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CustomMapping;
 
-<span class="fc" id="L25">public class DefaultAtlasCustomMappingProcessor {</span>
-<span class="fc" id="L26">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasCustomMappingProcessor.class);</span>
+/**
+ * The custom mapping processor processes the {@link CustomMapping}. {@link DefaultAtlasContext}
+ * uses this to process custom mapping where it's declared in the mapping definition.
+ */
+<span class="fc" id="L29">public class DefaultAtlasCustomMappingProcessor {</span>
+<span class="fc" id="L30">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasCustomMappingProcessor.class);</span>
     private static DefaultAtlasCustomMappingProcessor instance;
 
+    /**
+     * Gets the singleton instance.
+     * @return instance
+     */
     public static DefaultAtlasCustomMappingProcessor getInstance() {
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (instance == null) {</span>
-<span class="fc" id="L31">            instance = new DefaultAtlasCustomMappingProcessor();</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (instance == null) {</span>
+<span class="fc" id="L39">            instance = new DefaultAtlasCustomMappingProcessor();</span>
         }
-<span class="fc" id="L33">        return instance;</span>
+<span class="fc" id="L41">        return instance;</span>
     }
 
+    /**
+     * Processes the {@link CustomMapping}.
+     * @param session session
+     * @param customMapping custom mapping
+     */
     public void process(DefaultAtlasSession session, CustomMapping customMapping) {
-<span class="fc" id="L37">        String className = customMapping.getClassName();</span>
-<span class="pc bpc" id="L38" title="2 of 4 branches missed.">        if (className == null || className.isEmpty()) {</span>
-<span class="nc" id="L39">            AtlasUtil.addAudit(session, className,</span>
+<span class="fc" id="L50">        String className = customMapping.getClassName();</span>
+<span class="pc bpc" id="L51" title="2 of 4 branches missed.">        if (className == null || className.isEmpty()) {</span>
+<span class="nc" id="L52">            AtlasUtil.addAudit(session, className,</span>
                     &quot;Custom mapping class must be specified&quot;, AuditStatus.ERROR, className);
-<span class="nc" id="L41">            return;</span>
+<span class="nc" id="L54">            return;</span>
         }
-<span class="fc" id="L43">        DefaultAtlasContextFactory factory = session.getAtlasContext().getContextFactory();</span>
+<span class="fc" id="L56">        DefaultAtlasContextFactory factory = session.getAtlasContext().getContextFactory();</span>
         AtlasMappingBuilder builder;
         try {
-<span class="fc" id="L46">            Class&lt;?&gt; clazz = factory.getClassLoader().loadClass(className);</span>
-<span class="fc" id="L47">            builder = AtlasMappingBuilder.class.cast(clazz.getDeclaredConstructor().newInstance());</span>
-<span class="fc" id="L48">            builder.setAtlasSession(session);</span>
-<span class="nc" id="L49">        } catch (Exception e) {</span>
-<span class="nc" id="L50">            AtlasUtil.addAudit(session, className, String.format(</span>
+<span class="fc" id="L59">            Class&lt;?&gt; clazz = factory.getClassLoader().loadClass(className);</span>
+<span class="fc" id="L60">            builder = AtlasMappingBuilder.class.cast(clazz.getDeclaredConstructor().newInstance());</span>
+<span class="fc" id="L61">            builder.setAtlasSession(session);</span>
+<span class="nc" id="L62">        } catch (Exception e) {</span>
+<span class="nc" id="L63">            AtlasUtil.addAudit(session, className, String.format(</span>
                     &quot;Custom mapping class '%s' could not be loaded: %s&quot;,
-<span class="nc" id="L52">                    className, e.getMessage()), AuditStatus.ERROR, className);</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L54">                LOG.error(&quot;&quot;, e);</span>
+<span class="nc" id="L65">                    className, e.getMessage()), AuditStatus.ERROR, className);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L67">                LOG.error(&quot;&quot;, e);</span>
             }
-<span class="nc" id="L56">            return;</span>
-<span class="fc" id="L57">        }</span>
+<span class="nc" id="L69">            return;</span>
+<span class="fc" id="L70">        }</span>
 
-<span class="fc" id="L59">        builder.process();</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L72">        builder.process();</span>
+<span class="fc" id="L73">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

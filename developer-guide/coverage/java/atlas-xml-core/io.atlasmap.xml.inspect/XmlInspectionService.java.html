@@ -30,67 +30,99 @@ import org.xml.sax.SAXException;
 
 import io.atlasmap.xml.v2.XmlDocument;
 
-<span class="fc" id="L33">public class XmlInspectionService {</span>
+/**
+ * The XML inspection service.
+ */
+<span class="fc" id="L36">public class XmlInspectionService {</span>
 
+    /**
+     * Inspects the XML instance.
+     * @param sourceDocument XML instance
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectXmlDocument(String sourceDocument) throws XmlInspectionException {
-<span class="fc bfc" id="L36" title="All 4 branches covered.">        if (sourceDocument == null || sourceDocument.isEmpty()) {</span>
-<span class="fc" id="L37">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
+<span class="fc bfc" id="L45" title="All 4 branches covered.">        if (sourceDocument == null || sourceDocument.isEmpty()) {</span>
+<span class="fc" id="L46">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
         }
         Document document;
         try {
-<span class="fc" id="L41">            document = getDocument(new ByteArrayInputStream(sourceDocument.getBytes()), true);</span>
-<span class="fc" id="L42">        } catch (ParserConfigurationException | SAXException | IOException e) {</span>
-<span class="fc" id="L43">            throw new XmlInspectionException(e.getMessage(), e);</span>
-<span class="fc" id="L44">        }</span>
-<span class="fc" id="L45">        return inspectXmlDocument(document);</span>
+<span class="fc" id="L50">            document = getDocument(new ByteArrayInputStream(sourceDocument.getBytes()), true);</span>
+<span class="fc" id="L51">        } catch (ParserConfigurationException | SAXException | IOException e) {</span>
+<span class="fc" id="L52">            throw new XmlInspectionException(e.getMessage(), e);</span>
+<span class="fc" id="L53">        }</span>
+<span class="fc" id="L54">        return inspectXmlDocument(document);</span>
     }
 
+    /**
+     * Inspects the XML instance.
+     * @param sourceDocument XML instance
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectXmlDocument(File sourceDocument) throws XmlInspectionException {
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (sourceDocument == null) {</span>
-<span class="nc" id="L50">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (sourceDocument == null) {</span>
+<span class="nc" id="L65">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
         }
         Document document;
         try {
-<span class="nc" id="L54">            document = getDocument(new FileInputStream(sourceDocument), true);</span>
-<span class="nc" id="L55">        } catch (Exception e) {</span>
-<span class="nc" id="L56">            throw new XmlInspectionException(e.getMessage(), e);</span>
-<span class="nc" id="L57">        }</span>
-<span class="nc" id="L58">        return inspectXmlDocument(document);</span>
+<span class="nc" id="L69">            document = getDocument(new FileInputStream(sourceDocument), true);</span>
+<span class="nc" id="L70">        } catch (Exception e) {</span>
+<span class="nc" id="L71">            throw new XmlInspectionException(e.getMessage(), e);</span>
+<span class="nc" id="L72">        }</span>
+<span class="nc" id="L73">        return inspectXmlDocument(document);</span>
     }
 
+    /**
+     * Inspects the XML instance.
+     * @param sourceDocument XML instance
+     * @return inspected
+     */
     public XmlDocument inspectXmlDocument(Document sourceDocument) {
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (sourceDocument == null) {</span>
-<span class="fc" id="L63">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (sourceDocument == null) {</span>
+<span class="fc" id="L83">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
         }
-<span class="fc" id="L65">        XmlInstanceInspector inspector = new XmlInstanceInspector();</span>
-<span class="fc" id="L66">        inspector.inspect(sourceDocument);</span>
-<span class="fc" id="L67">        return inspector.getXmlDocument();</span>
+<span class="fc" id="L85">        XmlInstanceInspector inspector = new XmlInstanceInspector();</span>
+<span class="fc" id="L86">        inspector.inspect(sourceDocument);</span>
+<span class="fc" id="L87">        return inspector.getXmlDocument();</span>
     }
 
+    /**
+     * Inspects the XML schema.
+     * @param schemaSource XML schema
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectSchema(String schemaSource) throws XmlInspectionException {
-<span class="fc bfc" id="L71" title="All 4 branches covered.">        if (schemaSource == null || schemaSource.isEmpty()) {</span>
-<span class="fc" id="L72">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
+<span class="fc bfc" id="L97" title="All 4 branches covered.">        if (schemaSource == null || schemaSource.isEmpty()) {</span>
+<span class="fc" id="L98">            throw new IllegalArgumentException(&quot;Source must be specified&quot;);</span>
         }
-<span class="fc" id="L74">        XmlSchemaInspector inspector = new XmlSchemaInspector();</span>
-<span class="fc" id="L75">        inspector.inspect(schemaSource);</span>
-<span class="fc" id="L76">        return inspector.getXmlDocument();</span>
+<span class="fc" id="L100">        XmlSchemaInspector inspector = new XmlSchemaInspector();</span>
+<span class="fc" id="L101">        inspector.inspect(schemaSource);</span>
+<span class="fc" id="L102">        return inspector.getXmlDocument();</span>
     }
 
+    /**
+     * Inspects the XML schema.
+     * @param schemaFile XML schema
+     * @return inspected
+     * @throws XmlInspectionException inspection error
+     */
     public XmlDocument inspectSchema(File schemaFile) throws XmlInspectionException {
-<span class="pc bpc" id="L80" title="1 of 4 branches missed.">        if (schemaFile == null || !schemaFile.exists()) {</span>
-<span class="fc" id="L81">            throw new IllegalArgumentException(&quot;Source must be specified and available&quot;);</span>
+<span class="pc bpc" id="L112" title="1 of 4 branches missed.">        if (schemaFile == null || !schemaFile.exists()) {</span>
+<span class="fc" id="L113">            throw new IllegalArgumentException(&quot;Source must be specified and available&quot;);</span>
         }
-<span class="fc" id="L83">        XmlSchemaInspector inspector = new XmlSchemaInspector();</span>
-<span class="fc" id="L84">        inspector.inspect(schemaFile);</span>
-<span class="fc" id="L85">        return inspector.getXmlDocument();</span>
+<span class="fc" id="L115">        XmlSchemaInspector inspector = new XmlSchemaInspector();</span>
+<span class="fc" id="L116">        inspector.inspect(schemaFile);</span>
+<span class="fc" id="L117">        return inspector.getXmlDocument();</span>
     }
 
     private Document getDocument(InputStream is, boolean namespaced)
             throws ParserConfigurationException, SAXException, IOException {
-<span class="fc" id="L90">        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
-<span class="fc" id="L91">        dbf.setNamespaceAware(namespaced); // this must be done to use namespaces</span>
-<span class="fc" id="L92">        DocumentBuilder b = dbf.newDocumentBuilder();</span>
-<span class="fc" id="L93">        return b.parse(is);</span>
+<span class="fc" id="L122">        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L123">        dbf.setNamespaceAware(namespaced); // this must be done to use namespaces</span>
+<span class="fc" id="L124">        DocumentBuilder b = dbf.newDocumentBuilder();</span>
+<span class="fc" id="L125">        return b.parse(is);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

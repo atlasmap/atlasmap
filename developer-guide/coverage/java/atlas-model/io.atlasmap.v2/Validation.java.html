@@ -19,21 +19,26 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
+/**
+ * The validation model object.
+ */
 @JsonRootName(&quot;Validation&quot;)
-<span class="fc" id="L23">public class Validation implements Serializable {</span>
+<span class="fc" id="L26">public class Validation implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    protected String message;
 
+    /** message */
+    protected String message;
+    /** @deprecated ID */
     @Deprecated
     protected String id;
-
+    /** Document ID */
     protected String docId;
-
+    /** Document name */
     protected String docName;
-
+    /** validation scope */
     protected ValidationScope scope;
-
+    /** validation status */
     protected ValidationStatus status;
 
     /**
@@ -45,7 +50,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getMessage() {
-<span class="fc" id="L48">        return message;</span>
+<span class="fc" id="L53">        return message;</span>
     }
 
     /**
@@ -57,8 +62,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setMessage(String value) {
-<span class="fc" id="L60">        this.message = value;</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L65">        this.message = value;</span>
+<span class="fc" id="L66">    }</span>
 
     /**
      * Gets the value of the id property.
@@ -71,7 +76,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      */
     @Deprecated
     public String getId() {
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        return docId != null ? docId : id;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        return docId != null ? docId : id;</span>
     }
 
     /**
@@ -85,9 +90,9 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      */
     @Deprecated
     public void setId(String value) {
-<span class="fc" id="L88">        this.id = value;</span>
-<span class="fc" id="L89">        this.docId = value;</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L93">        this.id = value;</span>
+<span class="fc" id="L94">        this.docId = value;</span>
+<span class="fc" id="L95">    }</span>
 
     /**
      * Gets the value of the docId property.
@@ -98,7 +103,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getDocId() {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        return docId != null ? docId : id;</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        return docId != null ? docId : id;</span>
     }
 
     /**
@@ -110,9 +115,9 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setDocId(String value) {
-<span class="nc" id="L113">        this.docId = value;</span>
-<span class="nc" id="L114">        this.id = value;</span>
-<span class="nc" id="L115">    }</span>
+<span class="nc" id="L118">        this.docId = value;</span>
+<span class="nc" id="L119">        this.id = value;</span>
+<span class="nc" id="L120">    }</span>
 
     /**
      * Gets the value of the docName property.
@@ -123,7 +128,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getDocName() {
-<span class="fc" id="L126">        return docName;</span>
+<span class="fc" id="L131">        return docName;</span>
     }
 
     /**
@@ -135,8 +140,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setDocName(String value) {
-<span class="nc" id="L138">        this.docName = value;</span>
-<span class="nc" id="L139">    }</span>
+<span class="nc" id="L143">        this.docName = value;</span>
+<span class="nc" id="L144">    }</span>
 
     /**
      * Gets the value of the scope property.
@@ -147,7 +152,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public ValidationScope getScope() {
-<span class="fc" id="L150">        return scope;</span>
+<span class="fc" id="L155">        return scope;</span>
     }
 
     /**
@@ -159,8 +164,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setScope(ValidationScope value) {
-<span class="fc" id="L162">        this.scope = value;</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L167">        this.scope = value;</span>
+<span class="fc" id="L168">    }</span>
 
     /**
      * Gets the value of the status property.
@@ -171,7 +176,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public ValidationStatus getStatus() {
-<span class="fc" id="L174">        return status;</span>
+<span class="fc" id="L179">        return status;</span>
     }
 
     /**
@@ -183,8 +188,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setStatus(ValidationStatus value) {
-<span class="fc" id="L186">        this.status = value;</span>
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L191">        this.status = value;</span>
+<span class="fc" id="L192">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -22,22 +22,31 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * Represents &lt;strong&gt;AtlasMapping&lt;/strong&gt; root object of the AtlasMap mapping definition JSON.
+ */
 @JsonRootName(&quot;AtlasMapping&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L27">public class AtlasMapping implements Serializable {</span>
+<span class="fc" id="L30">public class AtlasMapping implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link DataSource} */
     protected List&lt;DataSource&gt; dataSource;
 
+    /** {@link Mappings} */
     protected Mappings mappings;
 
+    /** {@link LookupTables} */
     protected LookupTables lookupTables;
 
+    /** {@link Constants} */
     protected Constants constants;
 
+    /** {@link Properties} */
     protected Properties properties;
 
+    /** name */
     protected String name;
 
     /**
@@ -63,10 +72,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      * @return A list of {@link DataSource}
      */
     public List&lt;DataSource&gt; getDataSource() {
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (dataSource == null) {</span>
-<span class="fc" id="L67">            dataSource = new ArrayList&lt;DataSource&gt;();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (dataSource == null) {</span>
+<span class="fc" id="L76">            dataSource = new ArrayList&lt;DataSource&gt;();</span>
         }
-<span class="fc" id="L69">        return this.dataSource;</span>
+<span class="fc" id="L78">        return this.dataSource;</span>
     }
 
     /**
@@ -78,7 +87,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mappings getMappings() {
-<span class="fc" id="L81">        return mappings;</span>
+<span class="fc" id="L90">        return mappings;</span>
     }
 
     /**
@@ -90,8 +99,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMappings(Mappings value) {
-<span class="fc" id="L93">        this.mappings = value;</span>
-<span class="fc" id="L94">    }</span>
+<span class="fc" id="L102">        this.mappings = value;</span>
+<span class="fc" id="L103">    }</span>
 
     /**
      * Gets the value of the lookupTables property.
@@ -102,7 +111,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public LookupTables getLookupTables() {
-<span class="fc" id="L105">        return lookupTables;</span>
+<span class="fc" id="L114">        return lookupTables;</span>
     }
 
     /**
@@ -114,8 +123,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setLookupTables(LookupTables value) {
-<span class="fc" id="L117">        this.lookupTables = value;</span>
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L126">        this.lookupTables = value;</span>
+<span class="fc" id="L127">    }</span>
 
     /**
      * Gets the value of the constants property.
@@ -126,7 +135,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Constants getConstants() {
-<span class="fc" id="L129">        return constants;</span>
+<span class="fc" id="L138">        return constants;</span>
     }
 
     /**
@@ -138,8 +147,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setConstants(Constants value) {
-<span class="fc" id="L141">        this.constants = value;</span>
-<span class="fc" id="L142">    }</span>
+<span class="fc" id="L150">        this.constants = value;</span>
+<span class="fc" id="L151">    }</span>
 
     /**
      * Gets the value of the properties property.
@@ -150,7 +159,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Properties getProperties() {
-<span class="fc" id="L153">        return properties;</span>
+<span class="fc" id="L162">        return properties;</span>
     }
 
     /**
@@ -162,8 +171,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setProperties(Properties value) {
-<span class="fc" id="L165">        this.properties = value;</span>
-<span class="fc" id="L166">    }</span>
+<span class="fc" id="L174">        this.properties = value;</span>
+<span class="fc" id="L175">    }</span>
 
     /**
      * Gets the value of the name property.
@@ -174,7 +183,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getName() {
-<span class="fc" id="L177">        return name;</span>
+<span class="fc" id="L186">        return name;</span>
     }
 
     /**
@@ -186,8 +195,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L189">        this.name = value;</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L198">        this.name = value;</span>
+<span class="fc" id="L199">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

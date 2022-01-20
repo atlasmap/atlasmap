@@ -33,58 +33,65 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The lookup table validator.
+ */
 public class LookupTableNameValidator implements AtlasValidator {
 
     private String violationMessage;
 
-<span class="fc" id="L40">    public LookupTableNameValidator(String violationMessage) {</span>
-<span class="fc" id="L41">        this.violationMessage = violationMessage;</span>
-<span class="fc" id="L42">    }</span>
+    /**
+     * A constructor.
+     * @param violationMessage violation message
+     */
+<span class="fc" id="L47">    public LookupTableNameValidator(String violationMessage) {</span>
+<span class="fc" id="L48">        this.violationMessage = violationMessage;</span>
+<span class="fc" id="L49">    }</span>
 
     @Override
     public boolean supports(Class&lt;?&gt; clazz) {
-<span class="fc" id="L46">        return LookupTables.class.isAssignableFrom(clazz);</span>
+<span class="fc" id="L53">        return LookupTables.class.isAssignableFrom(clazz);</span>
     }
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id) {
-<span class="fc" id="L51">        validate(target, validations, id, ValidationStatus.ERROR);</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L58">        validate(target, validations, id, ValidationStatus.ERROR);</span>
+<span class="fc" id="L59">    }</span>
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id, ValidationStatus status) {
-<span class="fc" id="L56">        LookupTables lookupTables = (LookupTables) target;</span>
-<span class="fc" id="L57">        List&lt;LookupTable&gt; tables = lookupTables.getLookupTable();</span>
-<span class="fc" id="L58">        List&lt;LookupTable&gt; deduped = Collections.unmodifiableList(tables).stream()</span>
-<span class="fc" id="L59">                .filter(distinctByKey(LookupTable::getName)).collect(Collectors.toList());</span>
-<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (deduped.size() != tables.size()) {</span>
-<span class="fc" id="L61">            String dupedName = findDuplicatedName(tables);</span>
-<span class="fc" id="L62">            Validation validation = new Validation();</span>
-<span class="fc" id="L63">            validation.setScope(ValidationScope.LOOKUP_TABLE);</span>
-<span class="fc" id="L64">            validation.setId(id);</span>
-<span class="fc" id="L65">            validation.setMessage(String.format(violationMessage, dupedName));</span>
-<span class="fc" id="L66">            validation.setStatus(status);</span>
-<span class="fc" id="L67">            validations.add(validation);</span>
+<span class="fc" id="L63">        LookupTables lookupTables = (LookupTables) target;</span>
+<span class="fc" id="L64">        List&lt;LookupTable&gt; tables = lookupTables.getLookupTable();</span>
+<span class="fc" id="L65">        List&lt;LookupTable&gt; deduped = Collections.unmodifiableList(tables).stream()</span>
+<span class="fc" id="L66">                .filter(distinctByKey(LookupTable::getName)).collect(Collectors.toList());</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (deduped.size() != tables.size()) {</span>
+<span class="fc" id="L68">            String dupedName = findDuplicatedName(tables);</span>
+<span class="fc" id="L69">            Validation validation = new Validation();</span>
+<span class="fc" id="L70">            validation.setScope(ValidationScope.LOOKUP_TABLE);</span>
+<span class="fc" id="L71">            validation.setId(id);</span>
+<span class="fc" id="L72">            validation.setMessage(String.format(violationMessage, dupedName));</span>
+<span class="fc" id="L73">            validation.setStatus(status);</span>
+<span class="fc" id="L74">            validations.add(validation);</span>
         }
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L76">    }</span>
 
     private String findDuplicatedName(List&lt;LookupTable&gt; tables) {
-<span class="fc" id="L72">        List&lt;String&gt; names = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L73" title="All 2 branches covered.">        for (LookupTable table : tables) {</span>
-<span class="fc" id="L74">            names.add(table.getName());</span>
-<span class="fc" id="L75">        }</span>
-<span class="fc" id="L76">        Set&lt;String&gt; uniqueSet = new HashSet&lt;&gt;(names);</span>
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">        for (String s : uniqueSet) {</span>
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">            if (Collections.frequency(names, s) &gt; 1) {</span>
-<span class="fc" id="L79">                return s;</span>
+<span class="fc" id="L79">        List&lt;String&gt; names = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for (LookupTable table : tables) {</span>
+<span class="fc" id="L81">            names.add(table.getName());</span>
+<span class="fc" id="L82">        }</span>
+<span class="fc" id="L83">        Set&lt;String&gt; uniqueSet = new HashSet&lt;&gt;(names);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        for (String s : uniqueSet) {</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">            if (Collections.frequency(names, s) &gt; 1) {</span>
+<span class="fc" id="L86">                return s;</span>
             }
-<span class="nc" id="L81">        }</span>
-<span class="nc" id="L82">        return null;</span>
+<span class="nc" id="L88">        }</span>
+<span class="nc" id="L89">        return null;</span>
     }
 
     private static &lt;T&gt; Predicate&lt;T&gt; distinctByKey(Function&lt;? super T, ?&gt; keyExtractor) {
-<span class="fc" id="L86">        Map&lt;Object, Boolean&gt; seen = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        return t -&gt; seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;</span>
+<span class="fc" id="L93">        Map&lt;Object, Boolean&gt; seen = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        return t -&gt; seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

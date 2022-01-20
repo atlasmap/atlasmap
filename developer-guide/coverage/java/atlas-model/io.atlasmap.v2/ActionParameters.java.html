@@ -19,9 +19,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L22">public class ActionParameters implements Serializable {</span>
+/**
+ * The container of the {@link ActionParameter}.
+ */
+<span class="fc" id="L25">public class ActionParameters implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
+    /** A list of {@link ActionParameter} */
     protected List&lt;ActionParameter&gt; parameter;
 
     /**
@@ -47,10 +51,10 @@ import java.util.List;
      * @return A list of {@link ActionParameter}
      */
     public List&lt;ActionParameter&gt; getParameter() {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (parameter == null) {</span>
-<span class="fc" id="L51">            parameter = new ArrayList&lt;ActionParameter&gt;();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (parameter == null) {</span>
+<span class="fc" id="L55">            parameter = new ArrayList&lt;ActionParameter&gt;();</span>
         }
-<span class="fc" id="L53">        return this.parameter;</span>
+<span class="fc" id="L57">        return this.parameter;</span>
     }
 
 }

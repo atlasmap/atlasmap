@@ -18,33 +18,54 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-<span class="fc" id="L21">public enum DistanceUnitType {</span>
+/**
+ * The enumeration of distance units.
+ */
+<span class="fc" id="L24">public enum DistanceUnitType {</span>
 
-<span class="fc" id="L23">    METER_M(&quot;Meter (m)&quot;),</span>
-<span class="fc" id="L24">    MILE_MI(&quot;Mile (mi)&quot;),</span>
-<span class="fc" id="L25">    YARD_YD(&quot;Yard (yd)&quot;),</span>
-<span class="fc" id="L26">    FOOT_FT(&quot;Foot (ft)&quot;),</span>
-<span class="fc" id="L27">    INCH_IN(&quot;Inch (in)&quot;);</span>
+    /** Meter. */
+<span class="fc" id="L27">    METER_M(&quot;Meter (m)&quot;),</span>
+    /** Mile. */
+<span class="fc" id="L29">    MILE_MI(&quot;Mile (mi)&quot;),</span>
+    /** Yard. */
+<span class="fc" id="L31">    YARD_YD(&quot;Yard (yd)&quot;),</span>
+    /** Foot. */
+<span class="fc" id="L33">    FOOT_FT(&quot;Foot (ft)&quot;),</span>
+    /** Inch. */
+<span class="fc" id="L35">    INCH_IN(&quot;Inch (in)&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L31">    DistanceUnitType(String v) {</span>
-<span class="fc" id="L32">        value = v;</span>
-<span class="fc" id="L33">    }</span>
+    /**
+     * A constructor.
+     * @param v value
+     */
+<span class="fc" id="L43">    DistanceUnitType(String v) {</span>
+<span class="fc" id="L44">        value = v;</span>
+<span class="fc" id="L45">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     @JsonValue
     public String value() {
-<span class="fc" id="L37">        return value;</span>
+<span class="fc" id="L53">        return value;</span>
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     @JsonCreator
     public static DistanceUnitType fromValue(String v) {
-<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        for (DistanceUnitType c: DistanceUnitType.values()) {</span>
-<span class="fc bfc" id="L43" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L44">                return c;</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        for (DistanceUnitType c: DistanceUnitType.values()) {</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L65">                return c;</span>
             }
         }
-<span class="nc" id="L47">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L68">        throw new IllegalArgumentException(v);</span>
     }
 
 }

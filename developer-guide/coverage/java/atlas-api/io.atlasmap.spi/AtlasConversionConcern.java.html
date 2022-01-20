@@ -16,39 +16,67 @@
 package io.atlasmap.spi;
 
 /**
+ * The enumeration of conversion concerns which represents the concerns about the data conversion.
+ * This is supposed to be displayed in the UI where the concern is appropriate.
  */
-<span class="fc" id="L20">public enum AtlasConversionConcern {</span>
-<span class="fc" id="L21">    NONE(&quot;none&quot;, &quot;Conversion from '%s' to '%s' is supported&quot;),</span>
-<span class="fc" id="L22">    RANGE(&quot;range&quot;, &quot;Conversion from '%s' to '%s' can cause out of range exceptions&quot;),</span>
-<span class="fc" id="L23">    FRACTIONAL_PART(&quot;fractional part&quot;, &quot;Conversion from '%s' to '%s' can cause fractional part to be lost&quot;),</span>
-<span class="fc" id="L24">    TIMEZONE(&quot;timezone&quot;, &quot;Conversion from '%s' to '%s' causes timezone part to be lost&quot;),</span>
-<span class="fc" id="L25">    FORMAT(&quot;format&quot;, &quot;Conversion from '%s' to '%s' can cause numeric format exceptions&quot;),</span>
-<span class="fc" id="L26">    CONVENTION(&quot;format&quot;, &quot;Conversion from '%s' to '%s' uses a default convention for values&quot;),</span>
-<span class="fc" id="L27">    UNSUPPORTED(&quot;unsupported&quot;, &quot;Conversions from '%s' to '%s' is not supported&quot;);</span>
+<span class="fc" id="L22">public enum AtlasConversionConcern {</span>
+    /** none. */
+<span class="fc" id="L24">    NONE(&quot;none&quot;, &quot;Conversion from '%s' to '%s' is supported&quot;),</span>
+    /** out of range. */
+<span class="fc" id="L26">    RANGE(&quot;range&quot;, &quot;Conversion from '%s' to '%s' can cause out of range exceptions&quot;),</span>
+    /** fractional part could be lost. */
+<span class="fc" id="L28">    FRACTIONAL_PART(&quot;fractional part&quot;, &quot;Conversion from '%s' to '%s' can cause fractional part to be lost&quot;),</span>
+    /** timezone could be lost. */
+<span class="fc" id="L30">    TIMEZONE(&quot;timezone&quot;, &quot;Conversion from '%s' to '%s' causes timezone part to be lost&quot;),</span>
+    /** numeric format exception. */
+<span class="fc" id="L32">    FORMAT(&quot;format&quot;, &quot;Conversion from '%s' to '%s' can cause numeric format exceptions&quot;),</span>
+    /** default convention is used. */
+<span class="fc" id="L34">    CONVENTION(&quot;format&quot;, &quot;Conversion from '%s' to '%s' uses a default convention for values&quot;),</span>
+    /** unsupported. */
+<span class="fc" id="L36">    UNSUPPORTED(&quot;unsupported&quot;, &quot;Conversions from '%s' to '%s' is not supported&quot;);</span>
 
     private String name;
     private String message;
 
-<span class="fc" id="L32">    AtlasConversionConcern(String name, String message) {</span>
-<span class="fc" id="L33">        this.name = name;</span>
-<span class="fc" id="L34">        this.message = message;</span>
-<span class="fc" id="L35">    }</span>
+    /**
+     * A consturctor.
+     * @param name name
+     * @param message message
+     */
+<span class="fc" id="L46">    AtlasConversionConcern(String name, String message) {</span>
+<span class="fc" id="L47">        this.name = name;</span>
+<span class="fc" id="L48">        this.message = message;</span>
+<span class="fc" id="L49">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
-<span class="nc" id="L38">        return this.name;</span>
+<span class="nc" id="L56">        return this.name;</span>
     }
 
+    /**
+     * Gets the message.
+     * @param converterAnno converter annotation
+     * @return message
+     */
     public String getMessage(AtlasConversionInfo converterAnno) {
-<span class="fc" id="L42">        return String.format(this.message, converterAnno.sourceType(), converterAnno.targetType());</span>
+<span class="fc" id="L65">        return String.format(this.message, converterAnno.sourceType(), converterAnno.targetType());</span>
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static AtlasConversionConcern fromValue(String v) {
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        for (AtlasConversionConcern c : AtlasConversionConcern.values()) {</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">            if (c.name().equals(v)) {</span>
-<span class="nc" id="L48">                return c;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        for (AtlasConversionConcern c : AtlasConversionConcern.values()) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (c.name().equals(v)) {</span>
+<span class="nc" id="L76">                return c;</span>
             }
         }
-<span class="nc" id="L51">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L79">        throw new IllegalArgumentException(v);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

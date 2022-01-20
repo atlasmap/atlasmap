@@ -33,142 +33,252 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-<span class="fc" id="L36">public class ShortConverter implements AtlasConverter&lt;Short&gt; {</span>
+/**
+ * The type converter for {@link Short}.
+ */
+<span class="fc" id="L39">public class ShortConverter implements AtlasConverter&lt;Short&gt; {</span>
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Short value) {
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Short value) {
-<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean toBoolean(Short value) {
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L51">            return null;</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L69">            return null;</span>
         }
-<span class="fc bfc" id="L53" title="All 2 branches covered.">        return value == 0 ? Boolean.FALSE : Boolean.TRUE;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        return value == 0 ? Boolean.FALSE : Boolean.TRUE;</span>
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.BYTE, concerns = AtlasConversionConcern.RANGE)
     public Byte toByte(Short value) throws AtlasConversionException {
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L59">            return null;</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L83">            return null;</span>
         }
-<span class="pc bpc" id="L61" title="1 of 4 branches missed.">        if (value &gt;= Byte.MIN_VALUE &amp;&amp; value &lt;= Byte.MAX_VALUE) {</span>
-<span class="fc" id="L62">            return value.byteValue();</span>
+<span class="pc bpc" id="L85" title="1 of 4 branches missed.">        if (value &gt;= Byte.MIN_VALUE &amp;&amp; value &lt;= Byte.MAX_VALUE) {</span>
+<span class="fc" id="L86">            return value.byteValue();</span>
         }
-<span class="fc" id="L64">        throw new AtlasConversionException(new AtlasUnsupportedException(</span>
-<span class="fc" id="L65">                String.format(&quot;Short %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value)));</span>
+<span class="fc" id="L88">        throw new AtlasConversionException(new AtlasUnsupportedException(</span>
+<span class="fc" id="L89">                String.format(&quot;Short %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value)));</span>
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character toCharacter(Short value) throws AtlasConversionException {
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L72">            return null;</span>
+<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L102">            return null;</span>
         }
 
-<span class="pc bpc" id="L75" title="1 of 4 branches missed.">        if (value &lt; Character.MIN_VALUE || value &gt; Character.MAX_VALUE) {</span>
-<span class="fc" id="L76">            throw new AtlasConversionException(String</span>
-<span class="fc" id="L77">                    .format(&quot;Short %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE&quot;, value));</span>
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">        if (value &lt; Character.MIN_VALUE || value &gt; Character.MAX_VALUE) {</span>
+<span class="fc" id="L106">            throw new AtlasConversionException(String</span>
+<span class="fc" id="L107">                    .format(&quot;Short %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L79">        return Character.valueOf((char) value.intValue());</span>
+<span class="fc" id="L109">        return Character.valueOf((char) value.intValue());</span>
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME)
     public Date toDate(Short value) {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        if (value &gt;= Instant.MIN.getEpochSecond()) {</span>
-<span class="fc" id="L85">            return Date.from(Instant.ofEpochMilli(value));</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (value &gt;= Instant.MIN.getEpochSecond()) {</span>
+<span class="fc" id="L120">            return Date.from(Instant.ofEpochMilli(value));</span>
         }
-<span class="nc" id="L87">        return new Date(value);</span>
+<span class="nc" id="L122">        return new Date(value);</span>
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DOUBLE)
     public Double toDouble(Short value) {
-<span class="fc bfc" id="L92" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L93">            return null;</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L133">            return null;</span>
         }
-<span class="fc" id="L95">        return value.doubleValue();</span>
+<span class="fc" id="L135">        return value.doubleValue();</span>
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.FLOAT)
     public Float toFloat(Short value) {
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L101">            return null;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L146">            return null;</span>
         }
-<span class="fc" id="L103">        return value.floatValue();</span>
+<span class="fc" id="L148">        return value.floatValue();</span>
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.INTEGER)
     public Integer toInteger(Short value) {
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L109">            return null;</span>
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L159">            return null;</span>
         }
-<span class="fc" id="L111">        return value.intValue();</span>
+<span class="fc" id="L161">        return value.intValue();</span>
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Short value) {
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;</span>
+<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDate() : null;</span>
     }
 
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Short value) {
-<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime() : null;</span>
     }
 
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Short value) {
-<span class="nc bnc" id="L126" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalDateTime() : null;</span>
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.LONG)
     public Long toLong(Short value) {
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        return value != null ? value.longValue() : null;</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        return value != null ? value.longValue() : null;</span>
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.NUMBER)
     public Number toNumber(Short value) {
-<span class="nc" id="L136">        return value;</span>
+<span class="nc" id="L211">        return value;</span>
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.SHORT)
     public Short toShort(Short value) {
-<span class="fc bfc" id="L141" title="All 2 branches covered.">        return value != null ? new Short(value) : null;</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">        return value != null ? new Short(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
     public String toString(Short value) {
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Short value) {
-<span class="nc bnc" id="L151" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Short value) {
-<span class="nc bnc" id="L156" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+<span class="nc bnc" id="L251" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Short value) {
-<span class="nc bnc" id="L161" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Short value) {
-<span class="nc bnc" id="L166" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.SHORT, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Short value) {
-<span class="pc bpc" id="L171" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()) : null;</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">        return value != null ? Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()) : null;</span>
     }
 
 }

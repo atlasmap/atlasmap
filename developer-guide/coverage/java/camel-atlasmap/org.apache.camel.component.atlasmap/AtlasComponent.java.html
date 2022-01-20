@@ -33,7 +33,7 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
 /**
- * @version
+ * The Camel component for AtlasMap.
  */
 <span class="fc" id="L38">public class AtlasComponent extends DefaultComponent {</span>
 
@@ -45,8 +45,12 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
     @Metadata(label = &quot;advanced&quot;)
     private String propertiesFile;
 
+    /**
+     * Gets the AtlasContextFactory.
+     * @return factory
+     */
     public AtlasContextFactory getAtlasContextFactory() {
-<span class="nc" id="L49">        return atlasContextFactory;</span>
+<span class="nc" id="L53">        return atlasContextFactory;</span>
     }
 
     /**
@@ -55,11 +59,15 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
      * @param file properties file path
      */
     public void setPropertiesFile(String file) {
-<span class="nc" id="L58">        propertiesFile = file;</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L62">        propertiesFile = file;</span>
+<span class="nc" id="L63">    }</span>
 
+    /**
+     * Gets the properties file.
+     * @return properties file
+     */
     public String getPropertiesFile() {
-<span class="fc" id="L62">        return propertiesFile;</span>
+<span class="fc" id="L70">        return propertiesFile;</span>
     }
 
     /**
@@ -67,57 +75,58 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
      * @param atlasContextFactory {@link AtlasContextFactory}
      */
     public void setAtlasContextFactory(AtlasContextFactory atlasContextFactory) {
-<span class="nc" id="L70">        this.atlasContextFactory = atlasContextFactory;</span>
-<span class="nc" id="L71">    }</span>
+<span class="nc" id="L78">        this.atlasContextFactory = atlasContextFactory;</span>
+<span class="nc" id="L79">    }</span>
 
+    @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map&lt;String, Object&gt; parameters) throws Exception {
-<span class="fc" id="L74">        boolean cache = getAndRemoveParameter(parameters, &quot;contentCache&quot;, Boolean.class, Boolean.TRUE);</span>
-<span class="fc" id="L75">        String sourceMapName = getAndRemoveParameter(parameters, &quot;sourceMapName&quot;, String.class);</span>
-<span class="fc" id="L76">        String targetMapName = getAndRemoveParameter(parameters, &quot;targetMapName&quot;, String.class);</span>
-<span class="fc" id="L77">        TargetMapMode targetMapMode = getAndRemoveParameter(parameters, &quot;targetMapMode&quot;, TargetMapMode.class);</span>
+<span class="fc" id="L83">        boolean cache = getAndRemoveParameter(parameters, &quot;contentCache&quot;, Boolean.class, Boolean.TRUE);</span>
+<span class="fc" id="L84">        String sourceMapName = getAndRemoveParameter(parameters, &quot;sourceMapName&quot;, String.class);</span>
+<span class="fc" id="L85">        String targetMapName = getAndRemoveParameter(parameters, &quot;targetMapName&quot;, String.class);</span>
+<span class="fc" id="L86">        TargetMapMode targetMapMode = getAndRemoveParameter(parameters, &quot;targetMapMode&quot;, TargetMapMode.class);</span>
 
-<span class="fc" id="L79">        AtlasEndpoint endpoint = new AtlasEndpoint(uri, this, remaining);</span>
-<span class="fc" id="L80">        setProperties(endpoint, parameters);</span>
-<span class="fc" id="L81">        endpoint.setContentCache(cache);</span>
-<span class="fc" id="L82">        endpoint.setSourceMapName(sourceMapName);</span>
-<span class="fc" id="L83">        endpoint.setTargetMapName(targetMapName);</span>
-<span class="fc" id="L84">        endpoint.setAtlasContextFactory(getOrCreateAtlasContextFactory());</span>
-<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (targetMapMode != null) {</span>
-<span class="fc" id="L86">            endpoint.setTargetMapMode(targetMapMode);</span>
+<span class="fc" id="L88">        AtlasEndpoint endpoint = new AtlasEndpoint(uri, this, remaining);</span>
+<span class="fc" id="L89">        setProperties(endpoint, parameters);</span>
+<span class="fc" id="L90">        endpoint.setContentCache(cache);</span>
+<span class="fc" id="L91">        endpoint.setSourceMapName(sourceMapName);</span>
+<span class="fc" id="L92">        endpoint.setTargetMapName(targetMapName);</span>
+<span class="fc" id="L93">        endpoint.setAtlasContextFactory(getOrCreateAtlasContextFactory());</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (targetMapMode != null) {</span>
+<span class="fc" id="L95">            endpoint.setTargetMapMode(targetMapMode);</span>
         }
 
         // if its a http resource then append any remaining parameters and update the
         // resource uri
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (ResourceHelper.isHttpUri(remaining)) {</span>
-<span class="nc" id="L92">            String remainingAndParameters = ResourceHelper.appendParameters(remaining, parameters);</span>
-<span class="nc" id="L93">            endpoint.setResourceUri(remainingAndParameters);</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (ResourceHelper.isHttpUri(remaining)) {</span>
+<span class="nc" id="L101">            String remainingAndParameters = ResourceHelper.appendParameters(remaining, parameters);</span>
+<span class="nc" id="L102">            endpoint.setResourceUri(remainingAndParameters);</span>
         }
 
-<span class="fc" id="L96">        return endpoint;</span>
+<span class="fc" id="L105">        return endpoint;</span>
     }
 
     private synchronized AtlasContextFactory getOrCreateAtlasContextFactory() throws Exception {
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (atlasContextFactory != null) {</span>
-<span class="fc" id="L101">            return atlasContextFactory;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        if (atlasContextFactory != null) {</span>
+<span class="fc" id="L110">            return atlasContextFactory;</span>
         }
 
-<span class="fc" id="L104">        atlasContextFactory = DefaultAtlasContextFactory.getInstance();</span>
-<span class="fc" id="L105">        atlasContextFactory.addClassLoader(getCamelContext().getApplicationContextClassLoader());</span>
+<span class="fc" id="L113">        atlasContextFactory = DefaultAtlasContextFactory.getInstance();</span>
+<span class="fc" id="L114">        atlasContextFactory.addClassLoader(getCamelContext().getApplicationContextClassLoader());</span>
         // load the properties from property file which may overrides the default ones
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {</span>
-<span class="nc" id="L108">            Properties properties = new Properties();</span>
-<span class="nc" id="L109">            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),</span>
-<span class="nc" id="L110">                    getPropertiesFile());</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">        if (ObjectHelper.isNotEmpty(getPropertiesFile())) {</span>
+<span class="nc" id="L117">            Properties properties = new Properties();</span>
+<span class="nc" id="L118">            InputStream reader = ResourceHelper.resolveMandatoryResourceAsInputStream(getCamelContext(),</span>
+<span class="nc" id="L119">                    getPropertiesFile());</span>
             try {
-<span class="nc" id="L112">                properties.load(reader);</span>
-<span class="nc" id="L113">                LOG.info(&quot;Loaded the Atlas properties file &quot; + getPropertiesFile());</span>
+<span class="nc" id="L121">                properties.load(reader);</span>
+<span class="nc" id="L122">                LOG.info(&quot;Loaded the Atlas properties file &quot; + getPropertiesFile());</span>
             } finally {
-<span class="nc" id="L115">                IOHelper.close(reader, getPropertiesFile(), LOG);</span>
+<span class="nc" id="L124">                IOHelper.close(reader, getPropertiesFile(), LOG);</span>
             }
-<span class="nc" id="L117">            LOG.debug(&quot;Initializing AtlasContextFactory with properties {}&quot;, properties);</span>
-<span class="nc" id="L118">            atlasContextFactory.setProperties(properties);</span>
+<span class="nc" id="L126">            LOG.debug(&quot;Initializing AtlasContextFactory with properties {}&quot;, properties);</span>
+<span class="nc" id="L127">            atlasContextFactory.setProperties(properties);</span>
         }
-<span class="fc" id="L120">        return atlasContextFactory;</span>
+<span class="fc" id="L129">        return atlasContextFactory;</span>
     }
 
 }

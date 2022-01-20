@@ -18,10 +18,15 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-<span class="fc" id="L21">public class Equals extends Action implements Serializable {</span>
+
+/**
+ * The model class for the &lt;strong&gt;Equals&lt;/strong&gt; field action.
+ */
+<span class="fc" id="L25">public class Equals extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** the string to test */
     protected String value;
 
     /**
@@ -33,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getValue() {
-<span class="fc" id="L36">        return value;</span>
+<span class="fc" id="L41">        return value;</span>
     }
 
     /**
@@ -47,8 +52,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to compare with&quot;)
     @AtlasActionProperty(title = &quot;value&quot;, type = FieldType.STRING)
     public void setValue(String value) {
-<span class="fc" id="L50">        this.value = value;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L55">        this.value = value;</span>
+<span class="fc" id="L56">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

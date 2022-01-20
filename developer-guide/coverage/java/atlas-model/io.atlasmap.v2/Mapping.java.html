@@ -21,29 +21,42 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The mapping model object.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L25">public class Mapping extends BaseMapping implements Serializable {</span>
+<span class="fc" id="L28">public class Mapping extends BaseMapping implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** conditional mapping expression */
     protected String expression;
 
+    /** source field group */
     protected FieldGroup inputFieldGroup;
 
+    /** A list of source {@link Field} */
     protected List&lt;Field&gt; inputField;
 
+    /** A list of target {@link Field} */
     protected List&lt;Field&gt; outputField;
 
+    /** ID */
     protected String id;
 
+    /** @deprecated delimiter */
     protected String delimiter;
 
+    /** @deprecated delimiter string */
     protected String delimiterString;
 
+    /** lookup table name */
     protected String lookupTableName;
 
+    /** @deprecated strategy */
     protected String strategy;
 
+    /** @deprecated strategy class name */
     protected String strategyClassName;
 
     /**
@@ -55,7 +68,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *
      */
     public String getExpression() {
-<span class="fc" id="L58">        return expression;</span>
+<span class="fc" id="L71">        return expression;</span>
     }
 
     /**
@@ -67,8 +80,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *
      */
     public void setExpression(String value) {
-<span class="fc" id="L70">        this.expression = value;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L83">        this.expression = value;</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Gets the value of the inputFieldGroup property.
@@ -79,7 +92,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public FieldGroup getInputFieldGroup() {
-<span class="fc" id="L82">        return inputFieldGroup;</span>
+<span class="fc" id="L95">        return inputFieldGroup;</span>
     }
 
     /**
@@ -91,8 +104,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setInputFieldGroup(FieldGroup value) {
-<span class="fc" id="L94">        this.inputFieldGroup = value;</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L107">        this.inputFieldGroup = value;</span>
+<span class="fc" id="L108">    }</span>
 
     /**
      * Gets the value of the inputField property.
@@ -117,10 +130,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      * @return A list of source fields represented by {@link Field}
      */
     public List&lt;Field&gt; getInputField() {
-<span class="fc bfc" id="L120" title="All 2 branches covered.">        if (inputField == null) {</span>
-<span class="fc" id="L121">            inputField = new ArrayList&lt;Field&gt;();</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (inputField == null) {</span>
+<span class="fc" id="L134">            inputField = new ArrayList&lt;Field&gt;();</span>
         }
-<span class="fc" id="L123">        return this.inputField;</span>
+<span class="fc" id="L136">        return this.inputField;</span>
     }
 
     /**
@@ -146,10 +159,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      * @return A list of target fields represented by {@link Field}
      */
     public List&lt;Field&gt; getOutputField() {
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (outputField == null) {</span>
-<span class="fc" id="L150">            outputField = new ArrayList&lt;Field&gt;();</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (outputField == null) {</span>
+<span class="fc" id="L163">            outputField = new ArrayList&lt;Field&gt;();</span>
         }
-<span class="fc" id="L152">        return this.outputField;</span>
+<span class="fc" id="L165">        return this.outputField;</span>
     }
 
     /**
@@ -161,7 +174,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getId() {
-<span class="fc" id="L164">        return id;</span>
+<span class="fc" id="L177">        return id;</span>
     }
 
     /**
@@ -173,8 +186,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setId(String value) {
-<span class="fc" id="L176">        this.id = value;</span>
-<span class="fc" id="L177">    }</span>
+<span class="fc" id="L189">        this.id = value;</span>
+<span class="fc" id="L190">    }</span>
 
     /**
      * Gets the value of the delimiter property.
@@ -186,7 +199,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public String getDelimiter() {
-<span class="fc" id="L189">        return delimiter;</span>
+<span class="fc" id="L202">        return delimiter;</span>
     }
 
     /**
@@ -199,8 +212,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public void setDelimiter(String value) {
-<span class="fc" id="L202">        this.delimiter = value;</span>
-<span class="fc" id="L203">    }</span>
+<span class="fc" id="L215">        this.delimiter = value;</span>
+<span class="fc" id="L216">    }</span>
 
     /**
      * Gets the value of the delimiterString property.
@@ -212,7 +225,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public String getDelimiterString() {
-<span class="fc" id="L215">        return delimiterString;</span>
+<span class="fc" id="L228">        return delimiterString;</span>
     }
 
     /**
@@ -225,8 +238,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public void setDelimiterString(String value) {
-<span class="fc" id="L228">        this.delimiterString = value;</span>
-<span class="fc" id="L229">    }</span>
+<span class="fc" id="L241">        this.delimiterString = value;</span>
+<span class="fc" id="L242">    }</span>
 
     /**
      * Gets the value of the lookupTableName property.
@@ -237,7 +250,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getLookupTableName() {
-<span class="fc" id="L240">        return lookupTableName;</span>
+<span class="fc" id="L253">        return lookupTableName;</span>
     }
 
     /**
@@ -249,8 +262,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setLookupTableName(String value) {
-<span class="fc" id="L252">        this.lookupTableName = value;</span>
-<span class="fc" id="L253">    }</span>
+<span class="fc" id="L265">        this.lookupTableName = value;</span>
+<span class="fc" id="L266">    }</span>
 
     /**
      * Gets the value of the strategy property.
@@ -262,7 +275,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public String getStrategy() {
-<span class="fc" id="L265">        return strategy;</span>
+<span class="fc" id="L278">        return strategy;</span>
     }
 
     /**
@@ -275,8 +288,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public void setStrategy(String value) {
-<span class="fc" id="L278">        this.strategy = value;</span>
-<span class="fc" id="L279">    }</span>
+<span class="fc" id="L291">        this.strategy = value;</span>
+<span class="fc" id="L292">    }</span>
 
     /**
      * Gets the value of the strategyClassName property.
@@ -288,7 +301,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public String getStrategyClassName() {
-<span class="fc" id="L291">        return strategyClassName;</span>
+<span class="fc" id="L304">        return strategyClassName;</span>
     }
 
     /**
@@ -301,8 +314,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      */
     @Deprecated
     public void setStrategyClassName(String value) {
-<span class="fc" id="L304">        this.strategyClassName = value;</span>
-<span class="fc" id="L305">    }</span>
+<span class="fc" id="L317">        this.strategyClassName = value;</span>
+<span class="fc" id="L318">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

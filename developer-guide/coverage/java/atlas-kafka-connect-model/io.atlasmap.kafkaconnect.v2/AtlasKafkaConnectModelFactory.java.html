@@ -24,69 +24,106 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
-<span class="nc" id="L27">public class AtlasKafkaConnectModelFactory {</span>
-
+/**
+ * The model factory for Kafka Connect module.
+ */
+<span class="nc" id="L30">public class AtlasKafkaConnectModelFactory {</span>
+    /** URI format. */
     public static final String URI_FORMAT = &quot;atlas:kafkaconnect&quot;;
 
+    /**
+     * Creates the Kafka Connect Document.
+     * @return Document
+     */
     public static KafkaConnectDocument createKafkaConnectDocument() {
-<span class="fc" id="L32">        KafkaConnectDocument kafkaConnectDocument = new KafkaConnectDocument();</span>
-<span class="fc" id="L33">        kafkaConnectDocument.setFields(new Fields());</span>
-<span class="fc" id="L34">        return kafkaConnectDocument;</span>
+<span class="fc" id="L39">        KafkaConnectDocument kafkaConnectDocument = new KafkaConnectDocument();</span>
+<span class="fc" id="L40">        kafkaConnectDocument.setFields(new Fields());</span>
+<span class="fc" id="L41">        return kafkaConnectDocument;</span>
     }
 
+    /**
+     * Creates the Kafka Connect Field.
+     * @return Field
+     */
     public static KafkaConnectField createKafkaConnectField() {
-<span class="fc" id="L38">        KafkaConnectField kafkaConnectField = new KafkaConnectField();</span>
-<span class="fc" id="L39">        return kafkaConnectField;</span>
+<span class="fc" id="L49">        KafkaConnectField kafkaConnectField = new KafkaConnectField();</span>
+<span class="fc" id="L50">        return kafkaConnectField;</span>
     }
 
+    /**
+     * Creates the Kafka Connect ComplexType.
+     * @return Complex Field
+     */
     public static KafkaConnectComplexType createKafkaConnectComplexType() {
-<span class="fc" id="L43">        KafkaConnectComplexType kafkaConnectComplexField = new KafkaConnectComplexType();</span>
-<span class="fc" id="L44">        kafkaConnectComplexField.setKafkaConnectFields(new KafkaConnectFields());</span>
-<span class="fc" id="L45">        kafkaConnectComplexField.setFieldType(FieldType.COMPLEX);</span>
-<span class="fc" id="L46">        return kafkaConnectComplexField;</span>
+<span class="fc" id="L58">        KafkaConnectComplexType kafkaConnectComplexField = new KafkaConnectComplexType();</span>
+<span class="fc" id="L59">        kafkaConnectComplexField.setKafkaConnectFields(new KafkaConnectFields());</span>
+<span class="fc" id="L60">        kafkaConnectComplexField.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L61">        return kafkaConnectComplexField;</span>
     }
 
+    /**
+     * Gets a string representation of the Kafka Connect Field.
+     * @param f Field
+     * @return string
+     */
     public static String toString(KafkaConnectField f) {
-<span class="nc" id="L50">        return &quot;JsonField [name=&quot; + f.getName() + &quot;, primitive=&quot; + f.isPrimitive() + &quot;, typeName=&quot; + f.getTypeName()</span>
-<span class="nc" id="L51">                + &quot;, actions=&quot; + f.getActions() + &quot;, value=&quot; + f.getValue()</span>
-<span class="nc" id="L52">                + &quot;, arrayDimensions=&quot; + f.getArrayDimensions() + &quot;, arraySize=&quot; + f.getArraySize()</span>
-<span class="nc" id="L53">                + &quot;, collectionType=&quot; + f.getCollectionType() + &quot;, docId=&quot; + f.getDocId() + &quot;, index=&quot; + f.getIndex()</span>
-<span class="nc" id="L54">                + &quot;, path=&quot; + f.getPath() + &quot;, required=&quot; + f.isRequired() + &quot;, status=&quot; + f.getStatus()</span>
-<span class="nc" id="L55">                + &quot;, fieldType=&quot; + f.getFieldType() + &quot;]&quot;;</span>
+<span class="nc" id="L70">        return &quot;JsonField [name=&quot; + f.getName() + &quot;, primitive=&quot; + f.isPrimitive() + &quot;, typeName=&quot; + f.getTypeName()</span>
+<span class="nc" id="L71">                + &quot;, actions=&quot; + f.getActions() + &quot;, value=&quot; + f.getValue()</span>
+<span class="nc" id="L72">                + &quot;, arrayDimensions=&quot; + f.getArrayDimensions() + &quot;, arraySize=&quot; + f.getArraySize()</span>
+<span class="nc" id="L73">                + &quot;, collectionType=&quot; + f.getCollectionType() + &quot;, docId=&quot; + f.getDocId() + &quot;, index=&quot; + f.getIndex()</span>
+<span class="nc" id="L74">                + &quot;, path=&quot; + f.getPath() + &quot;, required=&quot; + f.isRequired() + &quot;, status=&quot; + f.getStatus()</span>
+<span class="nc" id="L75">                + &quot;, fieldType=&quot; + f.getFieldType() + &quot;]&quot;;</span>
     }
 
+    /**
+     * Clones the Kafka Connect Field.
+     * @param field Field
+     * @param withActions true to also clone the field actions, or false
+     * @return cloned
+     */
     public static KafkaConnectField cloneField(KafkaConnectField field, boolean withActions) {
-<span class="fc" id="L59">        KafkaConnectField clone = new KafkaConnectField();</span>
-<span class="fc" id="L60">        copyField(field, clone, withActions);</span>
-<span class="fc" id="L61">        return clone;</span>
+<span class="fc" id="L85">        KafkaConnectField clone = new KafkaConnectField();</span>
+<span class="fc" id="L86">        copyField(field, clone, withActions);</span>
+<span class="fc" id="L87">        return clone;</span>
     }
 
+    /**
+     * Clones the FieldGroup.
+     * @param group FieldGroup
+     * @return cloned
+     */
     public static FieldGroup cloneFieldGroup(FieldGroup group) {
-<span class="fc" id="L65">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
-<span class="fc" id="L66">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
-<span class="fc bfc" id="L68" title="All 2 branches covered.">            if (child instanceof FieldGroup) {</span>
-<span class="fc" id="L69">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
+<span class="fc" id="L96">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
+<span class="fc" id="L97">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">            if (child instanceof FieldGroup) {</span>
+<span class="fc" id="L100">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
             } else {
-<span class="fc" id="L71">                newChildren.add(cloneField((KafkaConnectField)child, true));</span>
+<span class="fc" id="L102">                newChildren.add(cloneField((KafkaConnectField)child, true));</span>
             }
-<span class="fc" id="L73">        }</span>
-<span class="fc" id="L74">        clone.getField().addAll(newChildren);</span>
-<span class="fc" id="L75">        return clone;</span>
+<span class="fc" id="L104">        }</span>
+<span class="fc" id="L105">        clone.getField().addAll(newChildren);</span>
+<span class="fc" id="L106">        return clone;</span>
     }
 
+    /**
+     * Copies the Field properties.
+     * @param from from
+     * @param to to
+     * @param withActions true to also clone the field actions, or false
+     */
     public static void copyField(Field from, Field to, boolean withActions) {
-<span class="fc" id="L79">        AtlasModelFactory.copyField(from, to, withActions);</span>
+<span class="fc" id="L116">        AtlasModelFactory.copyField(from, to, withActions);</span>
 
         // json specific
-<span class="pc bpc" id="L82" title="2 of 4 branches missed.">        if (from instanceof KafkaConnectField &amp;&amp; to instanceof KafkaConnectField) {</span>
-<span class="fc" id="L83">            KafkaConnectField fromJson = (KafkaConnectField)from;</span>
-<span class="fc" id="L84">            KafkaConnectField toJson = (KafkaConnectField)to;</span>
-<span class="fc" id="L85">            toJson.setName(fromJson.getName());</span>
-<span class="fc" id="L86">            toJson.setPrimitive(fromJson.isPrimitive());</span>
-<span class="fc" id="L87">            toJson.setTypeName(fromJson.getTypeName());</span>
+<span class="pc bpc" id="L119" title="2 of 4 branches missed.">        if (from instanceof KafkaConnectField &amp;&amp; to instanceof KafkaConnectField) {</span>
+<span class="fc" id="L120">            KafkaConnectField fromJson = (KafkaConnectField)from;</span>
+<span class="fc" id="L121">            KafkaConnectField toJson = (KafkaConnectField)to;</span>
+<span class="fc" id="L122">            toJson.setName(fromJson.getName());</span>
+<span class="fc" id="L123">            toJson.setPrimitive(fromJson.isPrimitive());</span>
+<span class="fc" id="L124">            toJson.setTypeName(fromJson.getTypeName());</span>
         }
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L126">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

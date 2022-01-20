@@ -25,70 +25,168 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-<span class="nc" id="L28">public class DateTimeHelper {</span>
+/**
+ * The helper class to handle date/time related conversion. The timezone string parameter
+ * is directly passed in to {@link ZoneId#of(String)}.
+ */
+<span class="nc" id="L32">public class DateTimeHelper {</span>
 
+    /**
+     * Converts from {@link Date} to {@link GregorianCalendar}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static GregorianCalendar convertDateToGregorianCalendar(Date date, String timeZone) {
-<span class="fc" id="L31">        return GregorianCalendar.from(DateTimeHelper.toZonedDateTime(date, timeZone));</span>
+<span class="fc" id="L41">        return GregorianCalendar.from(DateTimeHelper.toZonedDateTime(date, timeZone));</span>
     }
 
+    /**
+     * Converts from {@link java.sql.Date} to {@link Date}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static Date convertSqlDateToDate(java.sql.Date date, String timeZone) {
-<span class="fc" id="L35">        return Date.from(date.toLocalDate().atStartOfDay(zoneId(timeZone)).toInstant());</span>
+<span class="fc" id="L51">        return Date.from(date.toLocalDate().atStartOfDay(zoneId(timeZone)).toInstant());</span>
     }
 
+    /**
+     * Converts from {@link Date} to {@link java.sql.Date}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static java.sql.Date convertDateToSqlDate(Date date, String timeZone) {
-<span class="fc" id="L39">        return java.sql.Date.valueOf(DateTimeHelper.convertDateToLocalDate(date, timeZone));</span>
+<span class="fc" id="L61">        return java.sql.Date.valueOf(DateTimeHelper.convertDateToLocalDate(date, timeZone));</span>
     }
 
+    /**
+     * Coverts from {@link Time} to {@link Date}.
+     * @param time value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static Date convertSqlTimeToDate(Time time, String timeZone) {
-<span class="fc" id="L43">        return DateTimeHelper.convertLocalTimeToDate(time.toLocalTime(), timeZone); // ?</span>
+<span class="fc" id="L71">        return DateTimeHelper.convertLocalTimeToDate(time.toLocalTime(), timeZone); // ?</span>
     }
 
+    /**
+     * Converts from {@link Date} to {@link LocalDate}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static LocalDate convertDateToLocalDate(Date date, String timeZone) {
-<span class="fc" id="L47">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalDate();</span>
+<span class="fc" id="L81">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalDate();</span>
     }
 
+    /**
+     * Converts from {@link LocalTime} to {@link Date}.
+     * @param localTime value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static Date convertLocalTimeToDate(LocalTime localTime, String timeZone) {
-<span class="fc" id="L51">        return Date.from(localTime.atDate(LocalDate.now()).atZone(zoneId(timeZone)).toInstant());</span>
+<span class="fc" id="L91">        return Date.from(localTime.atDate(LocalDate.now()).atZone(zoneId(timeZone)).toInstant());</span>
     }
 
+    /**
+     * Concerts from {@link Date} to {@link LocalTime}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static LocalTime convertDateToLocalTime(Date date, String timeZone) {
-<span class="fc" id="L55">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime();</span>
+<span class="fc" id="L101">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime();</span>
     }
 
+    /**
+     * Converts from {@link LocalDateTime} to {@link Date}.
+     * @param localDateTime value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static Date convertLocalDateTimeToDate(LocalDateTime localDateTime, String timeZone) {
-<span class="fc" id="L59">        return Date.from(localDateTime.atZone(zoneId(timeZone)).toInstant());</span>
+<span class="fc" id="L111">        return Date.from(localDateTime.atZone(zoneId(timeZone)).toInstant());</span>
     }
 
+    /**
+     * Converts from {@link Date} to {@link LocalDateTime}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static LocalDateTime convertDateToLocalDateTime(Date date, String timeZone) {
-<span class="fc" id="L63">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone));</span>
+<span class="fc" id="L121">        return LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone));</span>
     }
 
+    /**
+     * Converts from {@link Date} to {@link Time}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static Time convertDateToTime(Date date, String timeZone) {
-<span class="fc" id="L67">        return Time.valueOf(LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime());</span>
+<span class="fc" id="L131">        return Time.valueOf(LocalDateTime.ofInstant(date.toInstant(), zoneId(timeZone)).toLocalTime());</span>
     }
 
+    /**
+     * Converts from {@link Calendar} to {@link ZonedDateTime}.
+     * @param calendar value
+     * @return converted
+     */
     public static ZonedDateTime toZonedDateTime(Calendar calendar) {
-<span class="fc" id="L71">        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());</span>
+<span class="fc" id="L140">        return ZonedDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId());</span>
     }
 
+    /**
+     * Converts from {@link Date} to {@link ZonedDateTime}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static ZonedDateTime toZonedDateTime(Date date, String timeZone) {
-<span class="fc" id="L75">        return ZonedDateTime.ofInstant(date.toInstant(), zoneId(timeZone));</span>
+<span class="fc" id="L150">        return ZonedDateTime.ofInstant(date.toInstant(), zoneId(timeZone));</span>
     }
 
+    /**
+     * Converts from {@link LocalDate} to {@link ZonedDateTime}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static ZonedDateTime toZonedDateTime(LocalDate date, String timeZone) {
-<span class="nc" id="L79">        return date.atStartOfDay(zoneId(timeZone));</span>
+<span class="nc" id="L160">        return date.atStartOfDay(zoneId(timeZone));</span>
     }
 
+    /**
+     * Converts from {@link LocalTime} to {@link ZonedDateTime}.
+     * @param time value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static ZonedDateTime toZonedDateTime(LocalTime time, String timeZone) {
-<span class="nc" id="L83">        return toZonedDateTime(time.atDate(LocalDate.now()), timeZone);</span>
+<span class="nc" id="L170">        return toZonedDateTime(time.atDate(LocalDate.now()), timeZone);</span>
     }
 
+    /**
+     * Converts to {@link LocalDateTime} to {@link ZonedDateTime}.
+     * @param date value
+     * @param timeZone timezone
+     * @return converted
+     */
     public static ZonedDateTime toZonedDateTime(LocalDateTime date, String timeZone) {
-<span class="nc" id="L87">        return date.atZone(zoneId(timeZone));</span>
+<span class="nc" id="L180">        return date.atZone(zoneId(timeZone));</span>
     }
 
+    /**
+     * Parses timezone expression and create {@link ZoneId} from it.
+     * @param timeZone value
+     * @return created
+     */
     private static ZoneId zoneId(String timeZone) {
-<span class="fc bfc" id="L91" title="All 2 branches covered.">        return timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();</span>
+<span class="fc bfc" id="L189" title="All 2 branches covered.">        return timeZone != null ? ZoneId.of(timeZone) : ZoneId.systemDefault();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

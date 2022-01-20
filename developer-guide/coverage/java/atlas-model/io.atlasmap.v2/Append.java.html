@@ -18,10 +18,15 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-<span class="fc" id="L21">public class Append extends Action implements Serializable {</span>
+
+/**
+ * The model class for the &lt;strong&gt;Append&lt;/strong&gt; field action.
+ */
+<span class="fc" id="L25">public class Append extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** string to append */
     protected String string;
 
     /**
@@ -33,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getString() {
-<span class="fc" id="L36">        return string;</span>
+<span class="fc" id="L41">        return string;</span>
     }
 
     /**
@@ -47,8 +52,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to append after input string&quot;)
     @AtlasActionProperty(title = &quot;String&quot;, type = FieldType.STRING)
     public void setString(String value) {
-<span class="fc" id="L50">        this.string = value;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L55">        this.string = value;</span>
+<span class="fc" id="L56">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

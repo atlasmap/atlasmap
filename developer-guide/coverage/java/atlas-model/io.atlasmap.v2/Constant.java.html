@@ -17,14 +17,20 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
-<span class="fc" id="L20">public class Constant implements Serializable {</span>
+/**
+ * The constant model object.
+ */
+<span class="fc" id="L23">public class Constant implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
 
+    /** value */
     protected String value;
 
+    /** field type */
     protected FieldType fieldType;
 
     /**
@@ -36,7 +42,7 @@ import java.io.Serializable;
      *     
      */
     public String getName() {
-<span class="fc" id="L39">        return name;</span>
+<span class="fc" id="L45">        return name;</span>
     }
 
     /**
@@ -48,8 +54,8 @@ import java.io.Serializable;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L51">        this.name = value;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L57">        this.name = value;</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Gets the value of the value property.
@@ -60,7 +66,7 @@ import java.io.Serializable;
      *     
      */
     public String getValue() {
-<span class="fc" id="L63">        return value;</span>
+<span class="fc" id="L69">        return value;</span>
     }
 
     /**
@@ -72,8 +78,8 @@ import java.io.Serializable;
      *     
      */
     public void setValue(String value) {
-<span class="fc" id="L75">        this.value = value;</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L81">        this.value = value;</span>
+<span class="fc" id="L82">    }</span>
 
     /**
      * Gets the value of the fieldType property.
@@ -84,7 +90,7 @@ import java.io.Serializable;
      *     
      */
     public FieldType getFieldType() {
-<span class="fc" id="L87">        return fieldType;</span>
+<span class="fc" id="L93">        return fieldType;</span>
     }
 
     /**
@@ -96,8 +102,8 @@ import java.io.Serializable;
      *     
      */
     public void setFieldType(FieldType value) {
-<span class="fc" id="L99">        this.fieldType = value;</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L105">        this.fieldType = value;</span>
+<span class="fc" id="L106">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

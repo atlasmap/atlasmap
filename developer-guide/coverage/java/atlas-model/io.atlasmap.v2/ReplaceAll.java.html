@@ -18,12 +18,17 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-<span class="fc" id="L21">public class ReplaceAll extends Action implements Serializable {</span>
+
+/**
+ * The model class for the &lt;strong&gt;Replace All&lt;/strong&gt; field action.
+ */
+<span class="fc" id="L25">public class ReplaceAll extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** matching regular expression */
     protected String match;
-
+    /** new string replacing to */
     protected String newString;
 
     /**
@@ -35,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getMatch() {
-<span class="fc" id="L38">        return match;</span>
+<span class="fc" id="L43">        return match;</span>
     }
 
     /**
@@ -49,8 +54,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to match&quot;)
     @AtlasActionProperty(title = &quot;Match&quot;, type = FieldType.STRING)
     public void setMatch(String value) {
-<span class="fc" id="L52">        this.match = value;</span>
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L57">        this.match = value;</span>
+<span class="fc" id="L58">    }</span>
 
     /**
      * Gets the value of the newString property.
@@ -61,7 +66,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getNewString() {
-<span class="fc" id="L64">        return newString;</span>
+<span class="fc" id="L69">        return newString;</span>
     }
 
     /**
@@ -75,8 +80,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to replace with&quot;)
     @AtlasActionProperty(title = &quot;New string&quot;, type = FieldType.STRING)
     public void setNewString(String value) {
-<span class="fc" id="L78">        this.newString = value;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L83">        this.newString = value;</span>
+<span class="fc" id="L84">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

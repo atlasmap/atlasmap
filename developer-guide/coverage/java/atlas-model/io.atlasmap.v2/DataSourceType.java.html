@@ -15,28 +15,46 @@
  */
 package io.atlasmap.v2;
 
-<span class="fc" id="L18">public enum DataSourceType {</span>
+/**
+ * The enumeration of {@link DataSource} type.
+ */
+<span class="fc" id="L21">public enum DataSourceType {</span>
 
-<span class="fc" id="L20">    SOURCE(&quot;Source&quot;),</span>
-<span class="fc" id="L21">    TARGET(&quot;Target&quot;);</span>
+    /** Source. */
+<span class="fc" id="L24">    SOURCE(&quot;Source&quot;),</span>
+    /** Target. */
+<span class="fc" id="L26">    TARGET(&quot;Target&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L25">    DataSourceType(String v) {</span>
-<span class="fc" id="L26">        value = v;</span>
-<span class="fc" id="L27">    }</span>
+    /**
+     * A constructor.
+     * @param v value
+     */
+<span class="fc" id="L34">    DataSourceType(String v) {</span>
+<span class="fc" id="L35">        value = v;</span>
+<span class="fc" id="L36">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
-<span class="nc" id="L30">        return value;</span>
+<span class="nc" id="L43">        return value;</span>
     }
 
+    /**
+     * Gets the enum from value.
+     * @param v value
+     * @return the enum
+     */
     public static DataSourceType fromValue(String v) {
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        for (DataSourceType c: DataSourceType.values()) {</span>
-<span class="nc bnc" id="L35" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
-<span class="nc" id="L36">                return c;</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (DataSourceType c: DataSourceType.values()) {</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
+<span class="nc" id="L54">                return c;</span>
             }
         }
-<span class="nc" id="L39">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L57">        throw new IllegalArgumentException(v);</span>
     }
 
 }

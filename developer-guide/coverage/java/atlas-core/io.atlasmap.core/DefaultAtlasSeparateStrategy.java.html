@@ -22,54 +22,60 @@ import java.util.List;
 import io.atlasmap.spi.AtlasSeparateStrategy;
 import io.atlasmap.spi.StringDelimiter;
 
-<span class="fc" id="L25">public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {</span>
+/**
+ * @deprecated {@link AtlasSeparateStrategy}.
+ */
+@Deprecated
+<span class="fc" id="L29">public class DefaultAtlasSeparateStrategy implements AtlasSeparateStrategy {</span>
 
-<span class="fc" id="L27">    public static final Integer DEFAULT_SEPARATE_LIMIT = new Integer(512);</span>
-<span class="fc" id="L28">    public static final StringDelimiter DEFAULT_SEPARATE_DELIMITER = StringDelimiter.MULTI_SPACE;</span>
+    /** . */
+<span class="fc" id="L32">    public static final Integer DEFAULT_SEPARATE_LIMIT = new Integer(512);</span>
+    /** . */
+<span class="fc" id="L34">    public static final StringDelimiter DEFAULT_SEPARATE_DELIMITER = StringDelimiter.MULTI_SPACE;</span>
 
-<span class="fc" id="L30">    private StringDelimiter delimiter = DEFAULT_SEPARATE_DELIMITER;</span>
-<span class="fc" id="L31">    private Integer limit = DEFAULT_SEPARATE_LIMIT;</span>
+<span class="fc" id="L36">    private StringDelimiter delimiter = DEFAULT_SEPARATE_DELIMITER;</span>
+<span class="fc" id="L37">    private Integer limit = DEFAULT_SEPARATE_LIMIT;</span>
 
     @Override
     public StringDelimiter getDelimiter() {
-<span class="fc" id="L35">        return delimiter;</span>
+<span class="fc" id="L41">        return delimiter;</span>
     }
 
     @Override
     public void setDelimiter(StringDelimiter delimiter) {
-<span class="fc" id="L40">        this.delimiter = delimiter;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L46">        this.delimiter = delimiter;</span>
+<span class="fc" id="L47">    }</span>
 
     @Override
     public Integer getLimit() {
-<span class="fc" id="L45">        return limit;</span>
+<span class="fc" id="L51">        return limit;</span>
     }
 
     @Override
     public void setLimit(Integer limit) {
-<span class="fc" id="L50">        this.limit = limit;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L56">        this.limit = limit;</span>
+<span class="fc" id="L57">    }</span>
 
     @Override
     public List&lt;String&gt; separateValue(String value) {
-<span class="fc" id="L55">        return separateValue(value, getDelimiter(), getLimit());</span>
+<span class="fc" id="L61">        return separateValue(value, getDelimiter(), getLimit());</span>
     }
 
     @Override
     public List&lt;String&gt; separateValue(String value, StringDelimiter delimiter) {
-<span class="fc" id="L60">        return separateValue(value, delimiter, getLimit());</span>
+<span class="fc" id="L66">        return separateValue(value, delimiter, getLimit());</span>
     }
 
     @Override
     public List&lt;String&gt; separateValue(String value, StringDelimiter delimiter, Integer limit) {
-<span class="fc" id="L65">        List&lt;String&gt; values = new ArrayList&lt;String&gt;();</span>
-<span class="fc bfc" id="L66" title="All 4 branches covered.">        if (value == null || value.isEmpty()) {</span>
-<span class="fc" id="L67">            return values;</span>
+<span class="fc" id="L71">        List&lt;String&gt; values = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">        if (value == null || value.isEmpty()) {</span>
+<span class="fc" id="L73">            return values;</span>
         }
 
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        values.addAll(Arrays.asList(value.split((delimiter == null ? DEFAULT_SEPARATE_DELIMITER.getRegex() : delimiter.getRegex()),</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">                (limit == null ? DEFAULT_SEPARATE_LIMIT : limit))));</span>
-<span class="fc" id="L72">        return values;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        values.addAll(Arrays.asList(value.split((delimiter == null ? DEFAULT_SEPARATE_DELIMITER.getRegex() : delimiter.getRegex()),</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">                (limit == null ? DEFAULT_SEPARATE_LIMIT : limit))));</span>
+<span class="fc" id="L78">        return values;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

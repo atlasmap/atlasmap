@@ -20,10 +20,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L23">public class ModifierList implements Serializable {</span>
+/**
+ * The list of the {@link Modifier}.
+ */
+<span class="fc" id="L26">public class ModifierList implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-
+    /** a list of {@link Modifier}. */
     protected List&lt;Modifier&gt; modifier;
 
     /**
@@ -49,53 +52,55 @@ import java.util.List;
      * 
      */
     public List&lt;Modifier&gt; getModifier() {
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (modifier == null) {</span>
-<span class="fc" id="L53">            modifier = new ArrayList&lt;Modifier&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (modifier == null) {</span>
+<span class="fc" id="L56">            modifier = new ArrayList&lt;Modifier&gt;();</span>
         }
-<span class="fc" id="L55">        return this.modifier;</span>
+<span class="fc" id="L58">        return this.modifier;</span>
     }
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L59" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L60">            return false;</span>
+<span class="nc bnc" id="L63" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L64">            return false;</span>
         }
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L63">            return true;</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L67">            return true;</span>
         }
-<span class="nc" id="L65">        final ModifierList that = ((ModifierList) object);</span>
+<span class="nc" id="L69">        final ModifierList that = ((ModifierList) object);</span>
         {
             List&lt;Modifier&gt; leftModifier;
-<span class="nc bnc" id="L68" title="All 4 branches missed.">            leftModifier = (((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty()))?this.getModifier():null);</span>
+<span class="nc bnc" id="L72" title="All 4 branches missed.">            leftModifier = (((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty()))?this.getModifier():null);</span>
             List&lt;Modifier&gt; rightModifier;
-<span class="nc bnc" id="L70" title="All 4 branches missed.">            rightModifier = (((that.modifier!= null)&amp;&amp;(!that.modifier.isEmpty()))?that.getModifier():null);</span>
-<span class="nc bnc" id="L71" title="All 4 branches missed.">            if ((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty())) {</span>
-<span class="nc bnc" id="L72" title="All 4 branches missed.">                if ((that.modifier!= null)&amp;&amp;(!that.modifier.isEmpty())) {</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">                    if (!leftModifier.equals(rightModifier)) {</span>
-<span class="nc" id="L74">                        return false;</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">            rightModifier = (((that.modifier!= null)&amp;&amp;(!that.modifier.isEmpty()))?that.getModifier():null);</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">            if ((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty())) {</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">                if ((that.modifier!= null)&amp;&amp;(!that.modifier.isEmpty())) {</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                    if (!leftModifier.equals(rightModifier)) {</span>
+<span class="nc" id="L78">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L77">                    return false;</span>
-                }
-            } else {
-<span class="nc bnc" id="L80" title="All 4 branches missed.">                if ((that.modifier!= null)&amp;&amp;(!that.modifier.isEmpty())) {</span>
 <span class="nc" id="L81">                    return false;</span>
                 }
+            } else {
+<span class="nc bnc" id="L84" title="All 4 branches missed.">                if ((that.modifier!= null)&amp;&amp;(!that.modifier.isEmpty())) {</span>
+<span class="nc" id="L85">                    return false;</span>
+                }
             }
         }
-<span class="nc" id="L85">        return true;</span>
+<span class="nc" id="L89">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L89">        int currentHashCode = 1;</span>
+<span class="nc" id="L94">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L91">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L96">            currentHashCode = (currentHashCode* 31);</span>
             List&lt;Modifier&gt; theModifier;
-<span class="nc bnc" id="L93" title="All 4 branches missed.">            theModifier = (((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty()))?this.getModifier():null);</span>
-<span class="nc bnc" id="L94" title="All 4 branches missed.">            if ((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty())) {</span>
-<span class="nc" id="L95">                currentHashCode += theModifier.hashCode();</span>
+<span class="nc bnc" id="L98" title="All 4 branches missed.">            theModifier = (((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty()))?this.getModifier():null);</span>
+<span class="nc bnc" id="L99" title="All 4 branches missed.">            if ((this.modifier!= null)&amp;&amp;(!this.modifier.isEmpty())) {</span>
+<span class="nc" id="L100">                currentHashCode += theModifier.hashCode();</span>
             }
         }
-<span class="nc" id="L98">        return currentHashCode;</span>
+<span class="nc" id="L103">        return currentHashCode;</span>
     }
 
 }

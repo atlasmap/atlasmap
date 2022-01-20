@@ -21,58 +21,100 @@ import java.util.List;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Fields;
 
-<span class="nc" id="L26">public class AtlasXmlModelFactory {</span>
+/**
+ * The model object factory for the XML Document.
+ */
+<span class="nc" id="L30">public class AtlasXmlModelFactory {</span>
 
+    /** URI format. */
     public static final String URI_FORMAT = &quot;atlas:xml&quot;;
 
+    /**
+     * Creates the XML Document.
+     * @return XML Document
+     */
     public static XmlDocument createXmlDocument() {
-<span class="fc" id="L31">        XmlDocument xmlDocument = new XmlDocument();</span>
-<span class="fc" id="L32">        xmlDocument.setFields(new Fields());</span>
-<span class="fc" id="L33">        return xmlDocument;</span>
+<span class="fc" id="L40">        XmlDocument xmlDocument = new XmlDocument();</span>
+<span class="fc" id="L41">        xmlDocument.setFields(new Fields());</span>
+<span class="fc" id="L42">        return xmlDocument;</span>
     }
 
+    /**
+     * Creates the XML complex field.
+     * @return XML complex field
+     */
+    public static XmlComplexType createXmlComlexField() {
+    
+<span class="fc" id="L51">        XmlComplexType xmlComplexField = new XmlComplexType();</span>
+<span class="fc" id="L52">        xmlComplexField.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L53">        return xmlComplexField;</span>
+    }
+
+    /**
+     * Creates the XML Field.
+     * @return XML Field
+     */
     public static XmlField createXmlField() {
-<span class="fc" id="L37">        XmlField xmlField = new XmlField();</span>
-<span class="fc" id="L38">        return xmlField;</span>
+<span class="fc" id="L61">        XmlField xmlField = new XmlField();</span>
+<span class="fc" id="L62">        return xmlField;</span>
     }
 
+    /**
+     * Clones the XML Field.
+     * @param field field
+     * @param withActions true to also clone the field actions
+     * @return cloned
+     */
     public static XmlField cloneField(XmlField field, boolean withActions) {
-<span class="fc" id="L42">        XmlField clone = new XmlField();</span>
-<span class="fc" id="L43">        copyField(field, clone, withActions);</span>
-<span class="fc" id="L44">        return clone;</span>
+<span class="fc" id="L72">        XmlField clone = new XmlField();</span>
+<span class="fc" id="L73">        copyField(field, clone, withActions);</span>
+<span class="fc" id="L74">        return clone;</span>
     }
 
+    /**
+     * Clones the FieldGroup.
+     * @param group FieldGroup
+     * @return cloned
+     */
     public static FieldGroup cloneFieldGroup(FieldGroup group) {
-<span class="fc" id="L48">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
-<span class="fc" id="L49">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
-<span class="pc bpc" id="L51" title="1 of 2 branches missed.">            if (child instanceof FieldGroup) {</span>
-<span class="nc" id="L52">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
+<span class="fc" id="L83">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
+<span class="fc" id="L84">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            if (child instanceof FieldGroup) {</span>
+<span class="nc" id="L87">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
             } else {
-<span class="fc" id="L54">                newChildren.add(cloneField((XmlField)child, true));</span>
+<span class="fc" id="L89">                newChildren.add(cloneField((XmlField)child, true));</span>
             }
-<span class="fc" id="L56">        }</span>
-<span class="fc" id="L57">        clone.getField().addAll(newChildren);</span>
-<span class="fc" id="L58">        return clone;</span>
+<span class="fc" id="L91">        }</span>
+<span class="fc" id="L92">        clone.getField().addAll(newChildren);</span>
+<span class="fc" id="L93">        return clone;</span>
     }
 
+    /**
+     * Copies the XML Field.
+     * @param from from
+     * @param to to
+     * @param withActions true to also clone the field actions
+     */
     public static void copyField(Field from, Field to, boolean withActions) {
-<span class="fc" id="L62">        AtlasModelFactory.copyField(from, to, withActions);</span>
+<span class="fc" id="L103">        AtlasModelFactory.copyField(from, to, withActions);</span>
 
         // xml specific
-<span class="pc bpc" id="L65" title="1 of 4 branches missed.">        if (from instanceof XmlField &amp;&amp; to instanceof XmlField) {</span>
-<span class="fc" id="L66">            XmlField fromXml = (XmlField)from;</span>
-<span class="fc" id="L67">            XmlField toXml = (XmlField)to;</span>
-<span class="fc" id="L68">            toXml.setAnnotations(fromXml.getAnnotations());</span>
-<span class="fc" id="L69">            toXml.setName(fromXml.getName());</span>
-<span class="fc" id="L70">            toXml.setNodeType(fromXml.getNodeType());</span>
-<span class="fc" id="L71">            toXml.setPrimitive(fromXml.isPrimitive());</span>
-<span class="fc" id="L72">            toXml.setRestrictions(fromXml.getRestrictions());</span>
-<span class="fc" id="L73">            toXml.setTypeName(fromXml.getTypeName());</span>
-<span class="fc" id="L74">            toXml.setUserCreated(fromXml.isUserCreated());</span>
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">        if (from instanceof XmlField &amp;&amp; to instanceof XmlField) {</span>
+<span class="fc" id="L107">            XmlField fromXml = (XmlField)from;</span>
+<span class="fc" id="L108">            XmlField toXml = (XmlField)to;</span>
+<span class="fc" id="L109">            toXml.setAnnotations(fromXml.getAnnotations());</span>
+<span class="fc" id="L110">            toXml.setName(fromXml.getName());</span>
+<span class="fc" id="L111">            toXml.setNodeType(fromXml.getNodeType());</span>
+<span class="fc" id="L112">            toXml.setPrimitive(fromXml.isPrimitive());</span>
+<span class="fc" id="L113">            toXml.setRestrictions(fromXml.getRestrictions());</span>
+<span class="fc" id="L114">            toXml.setTypeName(fromXml.getTypeName());</span>
+<span class="fc" id="L115">            toXml.setUserCreated(fromXml.isUserCreated());</span>
         }
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L117">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

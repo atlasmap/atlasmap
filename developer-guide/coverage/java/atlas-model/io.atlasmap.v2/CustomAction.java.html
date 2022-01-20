@@ -17,18 +17,26 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
-<span class="fc" id="L20">public class CustomAction extends Action implements Serializable {</span>
+/**
+ * The model class for the custom field action.
+ */
+<span class="fc" id="L23">public class CustomAction extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
 
+    /** class name */
     protected String className;
 
+    /** method name */
     protected String methodName;
 
+    /** input field type */
     protected FieldType inputFieldType;
 
+    /** output field type */
     protected FieldType outputFieldType;
 
     /**
@@ -40,7 +48,7 @@ import java.io.Serializable;
      *     
      */
     public String getName() {
-<span class="fc" id="L43">        return name;</span>
+<span class="fc" id="L51">        return name;</span>
     }
 
     /**
@@ -52,8 +60,8 @@ import java.io.Serializable;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L55">        this.name = value;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L63">        this.name = value;</span>
+<span class="fc" id="L64">    }</span>
 
     /**
      * Gets the value of the className property.
@@ -64,7 +72,7 @@ import java.io.Serializable;
      *     
      */
     public String getClassName() {
-<span class="fc" id="L67">        return className;</span>
+<span class="fc" id="L75">        return className;</span>
     }
 
     /**
@@ -76,8 +84,8 @@ import java.io.Serializable;
      *     
      */
     public void setClassName(String value) {
-<span class="fc" id="L79">        this.className = value;</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L87">        this.className = value;</span>
+<span class="fc" id="L88">    }</span>
 
     /**
      * Gets the value of the methodName property.
@@ -88,7 +96,7 @@ import java.io.Serializable;
      *     
      */
     public String getMethodName() {
-<span class="fc" id="L91">        return methodName;</span>
+<span class="fc" id="L99">        return methodName;</span>
     }
 
     /**
@@ -100,8 +108,8 @@ import java.io.Serializable;
      *     
      */
     public void setMethodName(String value) {
-<span class="fc" id="L103">        this.methodName = value;</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L111">        this.methodName = value;</span>
+<span class="fc" id="L112">    }</span>
 
     /**
      * Gets the value of the inputFieldType property.
@@ -112,7 +120,7 @@ import java.io.Serializable;
      *     
      */
     public FieldType getInputFieldType() {
-<span class="fc" id="L115">        return inputFieldType;</span>
+<span class="fc" id="L123">        return inputFieldType;</span>
     }
 
     /**
@@ -124,8 +132,8 @@ import java.io.Serializable;
      *     
      */
     public void setInputFieldType(FieldType value) {
-<span class="fc" id="L127">        this.inputFieldType = value;</span>
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L135">        this.inputFieldType = value;</span>
+<span class="fc" id="L136">    }</span>
 
     /**
      * Gets the value of the outputFieldType property.
@@ -136,7 +144,7 @@ import java.io.Serializable;
      *     
      */
     public FieldType getOutputFieldType() {
-<span class="fc" id="L139">        return outputFieldType;</span>
+<span class="fc" id="L147">        return outputFieldType;</span>
     }
 
     /**
@@ -148,8 +156,8 @@ import java.io.Serializable;
      *     
      */
     public void setOutputFieldType(FieldType value) {
-<span class="fc" id="L151">        this.outputFieldType = value;</span>
-<span class="fc" id="L152">    }</span>
+<span class="fc" id="L159">        this.outputFieldType = value;</span>
+<span class="fc" id="L160">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

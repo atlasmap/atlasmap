@@ -58,9 +58,13 @@ import com.sun.xml.xsom.util.DomAnnotationParserFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.xml.core.AtlasXmlNamespaceContext;
 
+/**
+ * The XML schema parser which parses a single XML Schema or SchemaSet XML
+ * which contains multipe XML schema and build a XSOM {@link XSSchemaSet}.
+ */
 public class AtlasXmlSchemaSetParser {
 
-<span class="fc" id="L63">    private static final Logger LOG = LoggerFactory.getLogger(AtlasXmlSchemaSetParser.class);</span>
+<span class="fc" id="L67">    private static final Logger LOG = LoggerFactory.getLogger(AtlasXmlSchemaSetParser.class);</span>
     private ClassLoader classLoader;
     private AtlasXmlNamespaceContext namespaceContext;
     private String rootNamespace;
@@ -68,40 +72,45 @@ public class AtlasXmlSchemaSetParser {
     private Transformer transformer;
     private DocumentBuilder documentBuilder;
 
-<span class="fc" id="L71">    public AtlasXmlSchemaSetParser(ClassLoader cl) throws AtlasException {</span>
-<span class="fc" id="L72">        this.classLoader = cl;</span>
-<span class="fc" id="L73">        this.namespaceContext = new AtlasXmlNamespaceContext();</span>
-<span class="fc" id="L74">        this.saxParserFactory = SAXParserFactory.newInstance();</span>
+    /**
+     * A constructor.
+     * @param cl class loader
+     * @throws AtlasException unexpected error
+     */
+<span class="fc" id="L80">    public AtlasXmlSchemaSetParser(ClassLoader cl) throws AtlasException {</span>
+<span class="fc" id="L81">        this.classLoader = cl;</span>
+<span class="fc" id="L82">        this.namespaceContext = new AtlasXmlNamespaceContext();</span>
+<span class="fc" id="L83">        this.saxParserFactory = SAXParserFactory.newInstance();</span>
         try {
-<span class="fc" id="L76">            this.transformer = TransformerFactory.newInstance().newTransformer();</span>
-<span class="fc" id="L77">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
-<span class="fc" id="L78">            dbf.setNamespaceAware(true);</span>
-<span class="fc" id="L79">            this.documentBuilder = dbf.newDocumentBuilder();</span>
-<span class="nc" id="L80">        } catch (Exception e) {</span>
-<span class="nc" id="L81">            throw new AtlasException(e);</span>
-<span class="fc" id="L82">        }</span>
-<span class="fc" id="L83">    }</span>
+<span class="fc" id="L85">            this.transformer = TransformerFactory.newInstance().newTransformer();</span>
+<span class="fc" id="L86">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L87">            dbf.setNamespaceAware(true);</span>
+<span class="fc" id="L88">            this.documentBuilder = dbf.newDocumentBuilder();</span>
+<span class="nc" id="L89">        } catch (Exception e) {</span>
+<span class="nc" id="L90">            throw new AtlasException(e);</span>
+<span class="fc" id="L91">        }</span>
+<span class="fc" id="L92">    }</span>
 
     /**
      * Parse single XML Schema or SchemaSet which contains multiple XML Schema and
-     * build a {@link XSSchemaSet}.
+     * build a XSOM {@link XSSchemaSet}.
      * @param doc DOM {@link Document} instance of XML Schema
      * @return parsed {@link XSSchemaSet}
      * @throws AtlasException If it fails to parse
      */
     public XSSchemaSet parse(Document doc) throws AtlasException {
-<span class="fc" id="L93">        XSOMParser xsomParser = createXSOMParser();</span>
-<span class="fc" id="L94">        parseInternal(doc, n -&gt; {</span>
+<span class="fc" id="L102">        XSOMParser xsomParser = createXSOMParser();</span>
+<span class="fc" id="L103">        parseInternal(doc, n -&gt; {</span>
             try {
-<span class="fc" id="L96">                xsomParser.parse(toInputStream(n));</span>
-<span class="fc" id="L97">            } catch (Exception e) {</span>
-<span class="fc" id="L98">                throw new AtlasException(e);</span>
-<span class="fc" id="L99">            }</span>
-<span class="fc" id="L100">        });</span>
+<span class="fc" id="L105">                xsomParser.parse(toInputStream(n));</span>
+<span class="fc" id="L106">            } catch (Exception e) {</span>
+<span class="fc" id="L107">                throw new AtlasException(e);</span>
+<span class="fc" id="L108">            }</span>
+<span class="fc" id="L109">        });</span>
         try {
-<span class="fc" id="L102">            return xsomParser.getResult();</span>
-<span class="nc" id="L103">        } catch (Exception e) {</span>
-<span class="nc" id="L104">            throw new AtlasException(e);</span>
+<span class="fc" id="L111">            return xsomParser.getResult();</span>
+<span class="nc" id="L112">        } catch (Exception e) {</span>
+<span class="nc" id="L113">            throw new AtlasException(e);</span>
         }
     }
 
@@ -114,10 +123,10 @@ public class AtlasXmlSchemaSetParser {
      */
     public XSSchemaSet parse(InputStream in) throws AtlasException {
         try {
-<span class="fc" id="L117">            Document doc = this.documentBuilder.parse(in);</span>
-<span class="fc" id="L118">            return parse(doc);</span>
-<span class="fc" id="L119">        } catch (Exception e) {</span>
-<span class="fc" id="L120">            throw new AtlasException(e);</span>
+<span class="fc" id="L126">            Document doc = this.documentBuilder.parse(in);</span>
+<span class="fc" id="L127">            return parse(doc);</span>
+<span class="fc" id="L128">        } catch (Exception e) {</span>
+<span class="fc" id="L129">            throw new AtlasException(e);</span>
         }
     }
 
@@ -129,47 +138,68 @@ public class AtlasXmlSchemaSetParser {
      * @throws AtlasException If it fails to parse
      */
     public Schema createSchema(InputStream in) throws AtlasException {
-<span class="fc" id="L132">        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);</span>
-<span class="fc" id="L133">        List&lt;Source&gt; schemaSources = new LinkedList&lt;&gt;();</span>
+<span class="fc" id="L141">        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);</span>
+<span class="fc" id="L142">        List&lt;Source&gt; schemaSources = new LinkedList&lt;&gt;();</span>
         Document doc;
         try {
-<span class="fc" id="L136">            doc = this.documentBuilder.parse(in);</span>
-<span class="fc" id="L137">            parseInternal(doc, n -&gt; {</span>
-<span class="fc" id="L138">                DOMSource s = new DOMSource(n);</span>
-<span class="fc" id="L139">                schemaSources.add(s);</span>
-<span class="fc" id="L140">            });</span>
-<span class="fc" id="L141">            factory.setErrorHandler(new NoopErrorHandler());</span>
-<span class="fc" id="L142">            return factory.newSchema(schemaSources.toArray(new Source[0]));</span>
-<span class="nc" id="L143">        } catch (AtlasException e) {</span>
-<span class="nc" id="L144">            throw e;</span>
-<span class="nc" id="L145">        } catch (Exception e2) {</span>
-<span class="nc" id="L146">            throw new AtlasException(e2);</span>
+<span class="fc" id="L145">            doc = this.documentBuilder.parse(in);</span>
+<span class="fc" id="L146">            parseInternal(doc, n -&gt; {</span>
+<span class="fc" id="L147">                DOMSource s = new DOMSource(n);</span>
+<span class="fc" id="L148">                schemaSources.add(s);</span>
+<span class="fc" id="L149">            });</span>
+<span class="fc" id="L150">            factory.setErrorHandler(new NoopErrorHandler());</span>
+<span class="fc" id="L151">            return factory.newSchema(schemaSources.toArray(new Source[0]));</span>
+<span class="nc" id="L152">        } catch (AtlasException e) {</span>
+<span class="nc" id="L153">            throw e;</span>
+<span class="nc" id="L154">        } catch (Exception e2) {</span>
+<span class="nc" id="L155">            throw new AtlasException(e2);</span>
         }
     }
 
+    /**
+     * Sets the namespace context.
+     * @param nsc namespace context
+     */
     public void setNamespaceContext(AtlasXmlNamespaceContext nsc) {
-<span class="nc" id="L151">        this.namespaceContext = nsc;</span>
-<span class="nc" id="L152">    }</span>
+<span class="nc" id="L164">        this.namespaceContext = nsc;</span>
+<span class="nc" id="L165">    }</span>
 
+    /**
+     * Gets the namespace context.
+     * @return namespace context
+     */
     public AtlasXmlNamespaceContext getNamespaceContext() {
-<span class="fc" id="L155">        return this.namespaceContext;</span>
+<span class="fc" id="L172">        return this.namespaceContext;</span>
     }
 
+    /**
+     * Sets the root namespace.
+     * @param rootns root namespace
+     */
     public void setRootNamespace(String rootns) {
-<span class="nc" id="L159">        this.rootNamespace = rootns;</span>
-<span class="nc" id="L160">    }</span>
+<span class="nc" id="L180">        this.rootNamespace = rootns;</span>
+<span class="nc" id="L181">    }</span>
 
+    /**
+     * Gets the root namespace.
+     * @return root namespace
+     */
     public String getRootNamespace() {
-<span class="fc" id="L163">        return this.rootNamespace;</span>
+<span class="fc" id="L188">        return this.rootNamespace;</span>
     }
 
+    /**
+     * Gets the target namespace.
+     * @param n node
+     * @return target namespace
+     */
     private String getTargetNamespace(Node n) {
-<span class="fc" id="L167">        NamedNodeMap attributes = n.getAttributes();</span>
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (attributes == null) {</span>
-<span class="nc" id="L169">            return &quot;&quot;;</span>
+<span class="fc" id="L197">        NamedNodeMap attributes = n.getAttributes();</span>
+<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (attributes == null) {</span>
+<span class="nc" id="L199">            return &quot;&quot;;</span>
         }
-<span class="fc" id="L171">        Attr tns = (Attr) attributes.getNamedItem(&quot;targetNamespace&quot;);</span>
-<span class="fc bfc" id="L172" title="All 2 branches covered.">        return tns != null ? tns.getValue() : &quot;&quot;;</span>
+<span class="fc" id="L201">        Attr tns = (Attr) attributes.getNamedItem(&quot;targetNamespace&quot;);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        return tns != null ? tns.getValue() : &quot;&quot;;</span>
     }
 
     @FunctionalInterface
@@ -177,110 +207,110 @@ public class AtlasXmlSchemaSetParser {
         void addSchema(Node n) throws AtlasException;
     }
 
-<span class="fc" id="L180">    private class NoopErrorHandler implements ErrorHandler {</span>
+<span class="fc" id="L210">    private class NoopErrorHandler implements ErrorHandler {</span>
 
         @Override
         public void warning(SAXParseException e) throws SAXException {
-<span class="nc bnc" id="L184" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L185">                LOG.debug(&quot;warning&quot;, e);</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L215">                LOG.debug(&quot;warning&quot;, e);</span>
             }
-<span class="nc" id="L187">        }</span>
+<span class="nc" id="L217">        }</span>
 
         @Override
         public void error(SAXParseException e) throws SAXException {
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L192">                LOG.debug(&quot;error&quot;, e);</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L222">                LOG.debug(&quot;error&quot;, e);</span>
             }
-<span class="fc" id="L194">        }</span>
+<span class="fc" id="L224">        }</span>
 
         @Override
         public void fatalError(SAXParseException e) throws SAXException {
-<span class="nc bnc" id="L198" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L199">                LOG.debug(&quot;fatalError&quot;, e);</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L229">                LOG.debug(&quot;fatalError&quot;, e);</span>
             }
-<span class="nc" id="L201">        }</span>
+<span class="nc" id="L231">        }</span>
         
     }
 
     private void parseInternal(Document doc, ParserCallback callback) throws AtlasException {
         try {
-<span class="fc" id="L207">            Element root = doc.getDocumentElement();</span>
-<span class="fc bfc" id="L208" title="All 2 branches covered.">            if (&quot;SchemaSet&quot;.equals(root.getLocalName())) {</span>
-<span class="fc" id="L209">                XPath xpath = XPathFactory.newInstance().newXPath();</span>
-<span class="fc" id="L210">                xpath.setNamespaceContext(this.namespaceContext);</span>
-<span class="fc" id="L211">                NodeList subSchemas = (NodeList) xpath</span>
-<span class="fc" id="L212">                        .evaluate(String.format(&quot;/%s:SchemaSet/%s:AdditionalSchemas/%s:schema&quot;, NS_PREFIX_SCHEMASET,</span>
+<span class="fc" id="L237">            Element root = doc.getDocumentElement();</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">            if (&quot;SchemaSet&quot;.equals(root.getLocalName())) {</span>
+<span class="fc" id="L239">                XPath xpath = XPathFactory.newInstance().newXPath();</span>
+<span class="fc" id="L240">                xpath.setNamespaceContext(this.namespaceContext);</span>
+<span class="fc" id="L241">                NodeList subSchemas = (NodeList) xpath</span>
+<span class="fc" id="L242">                        .evaluate(String.format(&quot;/%s:SchemaSet/%s:AdditionalSchemas/%s:schema&quot;, NS_PREFIX_SCHEMASET,</span>
                                 NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA), root, XPathConstants.NODESET);
-<span class="fc bfc" id="L214" title="All 2 branches covered.">                for (int i = 0; i &lt; subSchemas.getLength(); i++) {</span>
-<span class="fc" id="L215">                    Element e = (Element) subSchemas.item(i);</span>
-<span class="fc" id="L216">                    inheritNamespaces(e, false);</span>
-<span class="fc" id="L217">                    callback.addSchema(e);</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">                for (int i = 0; i &lt; subSchemas.getLength(); i++) {</span>
+<span class="fc" id="L245">                    Element e = (Element) subSchemas.item(i);</span>
+<span class="fc" id="L246">                    inheritNamespaces(e, false);</span>
+<span class="fc" id="L247">                    callback.addSchema(e);</span>
                 }
 
-<span class="fc" id="L220">                Element rootSchema = (Element) xpath.evaluate(</span>
-<span class="fc" id="L221">                        String.format(&quot;/%s:SchemaSet/%s:schema&quot;, NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA), root,</span>
+<span class="fc" id="L250">                Element rootSchema = (Element) xpath.evaluate(</span>
+<span class="fc" id="L251">                        String.format(&quot;/%s:SchemaSet/%s:schema&quot;, NS_PREFIX_SCHEMASET, NS_PREFIX_XMLSCHEMA), root,</span>
                         XPathConstants.NODE);
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">                if (rootSchema == null) {</span>
-<span class="nc" id="L224">                    throw new AtlasException(</span>
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">                if (rootSchema == null) {</span>
+<span class="nc" id="L254">                    throw new AtlasException(</span>
                             &quot;The root schema '/SchemaSet/schema' must be specified once and only once&quot;);
                 }
-<span class="fc" id="L227">                this.rootNamespace = getTargetNamespace(rootSchema);</span>
-<span class="pc bpc" id="L228" title="1 of 4 branches missed.">                if (this.rootNamespace != null &amp;&amp; !this.rootNamespace.isEmpty()) {</span>
-<span class="fc" id="L229">                    this.namespaceContext.add(&quot;tns&quot;, this.rootNamespace);</span>
+<span class="fc" id="L257">                this.rootNamespace = getTargetNamespace(rootSchema);</span>
+<span class="pc bpc" id="L258" title="1 of 4 branches missed.">                if (this.rootNamespace != null &amp;&amp; !this.rootNamespace.isEmpty()) {</span>
+<span class="fc" id="L259">                    this.namespaceContext.add(&quot;tns&quot;, this.rootNamespace);</span>
                 }
-<span class="fc" id="L231">                inheritNamespaces(rootSchema, true);</span>
-<span class="fc" id="L232">                callback.addSchema(rootSchema);</span>
-<span class="pc bpc" id="L233" title="1 of 2 branches missed.">            } else if (&quot;schema&quot;.equals(root.getLocalName())) {</span>
-<span class="fc" id="L234">                callback.addSchema(root);</span>
-<span class="fc" id="L235">                this.rootNamespace = getTargetNamespace(root);</span>
-<span class="pc bpc" id="L236" title="1 of 4 branches missed.">                if (this.rootNamespace != null &amp;&amp; !this.rootNamespace.isEmpty()) {</span>
-<span class="fc" id="L237">                    this.namespaceContext.add(&quot;tns&quot;, this.rootNamespace);</span>
+<span class="fc" id="L261">                inheritNamespaces(rootSchema, true);</span>
+<span class="fc" id="L262">                callback.addSchema(rootSchema);</span>
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            } else if (&quot;schema&quot;.equals(root.getLocalName())) {</span>
+<span class="fc" id="L264">                callback.addSchema(root);</span>
+<span class="fc" id="L265">                this.rootNamespace = getTargetNamespace(root);</span>
+<span class="pc bpc" id="L266" title="1 of 4 branches missed.">                if (this.rootNamespace != null &amp;&amp; !this.rootNamespace.isEmpty()) {</span>
+<span class="fc" id="L267">                    this.namespaceContext.add(&quot;tns&quot;, this.rootNamespace);</span>
                 }
             } else {
-<span class="nc" id="L240">                throw new AtlasException(</span>
-<span class="nc" id="L241">                        String.format(&quot;Unsupported document element '%s': root element must be 'schema' or 'SchemaSet'&quot;,</span>
-<span class="nc" id="L242">                                root.getLocalName()));</span>
+<span class="nc" id="L270">                throw new AtlasException(</span>
+<span class="nc" id="L271">                        String.format(&quot;Unsupported document element '%s': root element must be 'schema' or 'SchemaSet'&quot;,</span>
+<span class="nc" id="L272">                                root.getLocalName()));</span>
             }
-<span class="fc" id="L244">        } catch (Exception e) {</span>
-<span class="fc" id="L245">            throw new AtlasException(e);</span>
-<span class="fc" id="L246">        }</span>
-<span class="fc" id="L247">    }</span>
+<span class="fc" id="L274">        } catch (Exception e) {</span>
+<span class="fc" id="L275">            throw new AtlasException(e);</span>
+<span class="fc" id="L276">        }</span>
+<span class="fc" id="L277">    }</span>
 
     private XSOMParser createXSOMParser() {
-<span class="fc" id="L250">        XSOMParser parser = new XSOMParser(this.saxParserFactory);</span>
-<span class="fc" id="L251">        parser.setEntityResolver(new XSOMClasspathEntityResolver(this.classLoader));</span>
-<span class="fc" id="L252">        parser.setAnnotationParser(new DomAnnotationParserFactory());</span>
-<span class="fc" id="L253">        parser.setErrorHandler(new XSOMErrorHandler());</span>
-<span class="fc" id="L254">        return parser;</span>
+<span class="fc" id="L280">        XSOMParser parser = new XSOMParser(this.saxParserFactory);</span>
+<span class="fc" id="L281">        parser.setEntityResolver(new XSOMClasspathEntityResolver(this.classLoader));</span>
+<span class="fc" id="L282">        parser.setAnnotationParser(new DomAnnotationParserFactory());</span>
+<span class="fc" id="L283">        parser.setErrorHandler(new XSOMErrorHandler());</span>
+<span class="fc" id="L284">        return parser;</span>
     }
 
     private void inheritNamespaces(Element element, boolean updateContext) {
-<span class="fc" id="L258">        Node target = element.getParentNode();</span>
-<span class="fc bfc" id="L259" title="All 2 branches covered.">        while (target != null) {</span>
-<span class="fc" id="L260">            NamedNodeMap attributes = target.getAttributes();</span>
-<span class="fc bfc" id="L261" title="All 2 branches covered.">            if (attributes != null) {</span>
-<span class="fc bfc" id="L262" title="All 2 branches covered.">                for (int i = 0; i &lt; attributes.getLength(); i++) {</span>
-<span class="fc" id="L263">                    Attr attr = (Attr) attributes.item(i);</span>
-<span class="pc bpc" id="L264" title="2 of 4 branches missed.">                    if (&quot;xmlns&quot;.equals(attr.getPrefix()) &amp;&amp; !&quot;xmlns&quot;.equals(attr.getLocalName())) {</span>
-<span class="fc" id="L265">                        element.setAttribute(attr.getName(), attr.getValue());</span>
-<span class="fc bfc" id="L266" title="All 2 branches covered.">                        if (updateContext) {</span>
-<span class="fc" id="L267">                            namespaceContext.add(attr.getLocalName(), attr.getValue());</span>
+<span class="fc" id="L288">        Node target = element.getParentNode();</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        while (target != null) {</span>
+<span class="fc" id="L290">            NamedNodeMap attributes = target.getAttributes();</span>
+<span class="fc bfc" id="L291" title="All 2 branches covered.">            if (attributes != null) {</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">                for (int i = 0; i &lt; attributes.getLength(); i++) {</span>
+<span class="fc" id="L293">                    Attr attr = (Attr) attributes.item(i);</span>
+<span class="pc bpc" id="L294" title="2 of 4 branches missed.">                    if (&quot;xmlns&quot;.equals(attr.getPrefix()) &amp;&amp; !&quot;xmlns&quot;.equals(attr.getLocalName())) {</span>
+<span class="fc" id="L295">                        element.setAttribute(attr.getName(), attr.getValue());</span>
+<span class="fc bfc" id="L296" title="All 2 branches covered.">                        if (updateContext) {</span>
+<span class="fc" id="L297">                            namespaceContext.add(attr.getLocalName(), attr.getValue());</span>
                         }
                     }
                 }
             }
-<span class="fc" id="L272">            target = target.getParentNode();</span>
-<span class="fc" id="L273">        }</span>
-<span class="fc" id="L274">    }</span>
+<span class="fc" id="L302">            target = target.getParentNode();</span>
+<span class="fc" id="L303">        }</span>
+<span class="fc" id="L304">    }</span>
 
     private ByteArrayInputStream toInputStream(Node n) throws Exception {
-<span class="fc" id="L277">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
-<span class="fc" id="L278">        this.transformer.transform(new DOMSource(n), new StreamResult(baos));</span>
-<span class="fc" id="L279">        byte[] output = baos.toByteArray();</span>
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (LOG.isTraceEnabled()) {</span>
-<span class="fc" id="L281">            LOG.trace(&quot;&gt;&gt;&gt; {}&quot;, new String(output));</span>
+<span class="fc" id="L307">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
+<span class="fc" id="L308">        this.transformer.transform(new DOMSource(n), new StreamResult(baos));</span>
+<span class="fc" id="L309">        byte[] output = baos.toByteArray();</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (LOG.isTraceEnabled()) {</span>
+<span class="fc" id="L311">            LOG.trace(&quot;&gt;&gt;&gt; {}&quot;, new String(output));</span>
         }
-<span class="fc" id="L283">        return new ByteArrayInputStream(output);</span>
+<span class="fc" id="L313">        return new ByteArrayInputStream(output);</span>
     }
 
 }

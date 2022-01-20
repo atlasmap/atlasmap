@@ -25,49 +25,58 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * The class loader to load a class from jar files.
+ */
 public class JarClassLoader extends ClassLoader {
-<span class="nc" id="L29">    private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);</span>
+<span class="nc" id="L32">    private static final Logger LOG = LoggerFactory.getLogger(ClassInspectionService.class);</span>
     private URLClassLoader loader;
 
-<span class="nc" id="L32">    public JarClassLoader(String... paths) {</span>
-<span class="nc" id="L33">        Set&lt;URL&gt; urls = new HashSet&lt;&gt;();</span>
-<span class="nc bnc" id="L34" title="All 2 branches missed.">        for (String path : paths) {</span>
-<span class="nc" id="L35">            File f = new File(path);</span>
-<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (!f.exists()) {</span>
-<span class="nc" id="L37">                continue;</span>
+    /**
+     * A constructor.
+     * @param paths path to the jar files
+     */
+<span class="nc" id="L39">    public JarClassLoader(String... paths) {</span>
+<span class="nc" id="L40">        Set&lt;URL&gt; urls = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (String path : paths) {</span>
+<span class="nc" id="L42">            File f = new File(path);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">            if (!f.exists()) {</span>
+<span class="nc" id="L44">                continue;</span>
             }
-<span class="nc" id="L39">            populateFileUrl(f, urls);</span>
+<span class="nc" id="L46">            populateFileUrl(f, urls);</span>
         }
-<span class="nc" id="L41">        loader = new URLClassLoader(urls.toArray(new URL[0]));</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L48">        loader = new URLClassLoader(urls.toArray(new URL[0]));</span>
+<span class="nc" id="L49">    }</span>
 
     private void populateFileUrl(File file, Set&lt;URL&gt; urls) {
-<span class="nc bnc" id="L45" title="All 2 branches missed.">        if (file.isDirectory()) {</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">            for (File subf : file.listFiles()) {</span>
-<span class="nc" id="L47">                populateFileUrl(subf, urls);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (file.isDirectory()) {</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            for (File subf : file.listFiles()) {</span>
+<span class="nc" id="L54">                populateFileUrl(subf, urls);</span>
             }
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        } else if (file.getName().toLowerCase().endsWith(&quot;.jar&quot;)) {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        } else if (file.getName().toLowerCase().endsWith(&quot;.jar&quot;)) {</span>
             try {
-<span class="nc" id="L51">                urls.add(file.toURI().toURL());</span>
-<span class="nc" id="L52">            } catch (Exception e) {</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L54">                    LOG.debug(&quot;Ignoring invalid file name: {}&quot;, file.getName());</span>
+<span class="nc" id="L58">                urls.add(file.toURI().toURL());</span>
+<span class="nc" id="L59">            } catch (Exception e) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L61">                    LOG.debug(&quot;Ignoring invalid file name: {}&quot;, file.getName());</span>
                 }
-<span class="nc" id="L56">            }</span>
+<span class="nc" id="L63">            }</span>
         }
-<span class="nc" id="L58">    }</span>
+<span class="nc" id="L65">    }</span>
 
     @Override
     public Class&lt;?&gt; loadClass(String name) throws ClassNotFoundException {
-<span class="nc" id="L62">        return loader.loadClass(name);</span>
+<span class="nc" id="L69">        return loader.loadClass(name);</span>
     }
 
+    @Override
     public URL getResource(String name) {
-<span class="nc" id="L66">        return loader.getResource(name);</span>
+<span class="nc" id="L74">        return loader.getResource(name);</span>
     }
 
+    @Override
     public InputStream getResourceAsStream(String name) {
-<span class="nc" id="L70">        return loader.getResourceAsStream(name);</span>
+<span class="nc" id="L79">        return loader.getResourceAsStream(name);</span>
     }
 
 }

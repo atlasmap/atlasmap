@@ -15,19 +15,33 @@
  */
 package io.atlasmap.kafkaconnect.v2;
 
-<span class="fc" id="L18">public enum KafkaConnectSchemaType {</span>
-<span class="fc" id="L19">    JSON(&quot;JSON&quot;),</span>
-<span class="fc" id="L20">    AVRO(&quot;AVRO&quot;),</span>
-<span class="fc" id="L21">    PROTOBUF(&quot;PROTOBUF&quot;);</span>
+/**
+ * The enumeration of Kafka Connect schema type.
+ */
+<span class="fc" id="L21">public enum KafkaConnectSchemaType {</span>
+    /** JSON. */
+<span class="fc" id="L23">    JSON(&quot;JSON&quot;),</span>
+    /** AVRO. */
+<span class="fc" id="L25">    AVRO(&quot;AVRO&quot;),</span>
+    /** PROTOBUF. */
+<span class="fc" id="L27">    PROTOBUF(&quot;PROTOBUF&quot;);</span>
 
     private String value;
 
-<span class="fc" id="L25">    KafkaConnectSchemaType(String inspectionType) {</span>
-<span class="fc" id="L26">        value = inspectionType;</span>
-<span class="fc" id="L27">    }</span>
+    /**
+     * A constructor.
+     * @param inspectionType inspection type
+     */
+<span class="fc" id="L35">    KafkaConnectSchemaType(String inspectionType) {</span>
+<span class="fc" id="L36">        value = inspectionType;</span>
+<span class="fc" id="L37">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value(){
-<span class="nc" id="L30">        return this.value;</span>
+<span class="nc" id="L44">        return this.value;</span>
     }
 
     

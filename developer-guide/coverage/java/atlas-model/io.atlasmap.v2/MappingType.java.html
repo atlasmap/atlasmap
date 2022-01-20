@@ -15,34 +15,57 @@
  */
 package io.atlasmap.v2;
 
-<span class="fc" id="L18">@Deprecated</span>
+/**
+ * @deprecated The enumeration of the mapping type.
+ */
+<span class="fc" id="L21">@Deprecated</span>
 public enum MappingType {
 
-<span class="fc" id="L21">    ALL(&quot;All&quot;),</span>
-<span class="fc" id="L22">    COLLECTION(&quot;Collection&quot;),</span>
-<span class="fc" id="L23">    COMBINE(&quot;Combine&quot;),</span>
-<span class="fc" id="L24">    LOOKUP(&quot;Lookup&quot;),</span>
-<span class="fc" id="L25">    MAP(&quot;Map&quot;),</span>
-<span class="fc" id="L26">    SEPARATE(&quot;Separate&quot;),</span>
-<span class="fc" id="L27">    NONE(&quot;None&quot;);</span>
+    /** All. */
+<span class="fc" id="L25">    ALL(&quot;All&quot;),</span>
+    /** Collection. */
+<span class="fc" id="L27">    COLLECTION(&quot;Collection&quot;),</span>
+    /** Combine. */
+<span class="fc" id="L29">    COMBINE(&quot;Combine&quot;),</span>
+    /** Lookup. */
+<span class="fc" id="L31">    LOOKUP(&quot;Lookup&quot;),</span>
+    /** Map. */
+<span class="fc" id="L33">    MAP(&quot;Map&quot;),</span>
+    /** Separate. */
+<span class="fc" id="L35">    SEPARATE(&quot;Separate&quot;),</span>
+    /** None. */
+<span class="fc" id="L37">    NONE(&quot;None&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L31">    MappingType(String v) {</span>
-<span class="fc" id="L32">        value = v;</span>
-<span class="fc" id="L33">    }</span>
+    /**
+     * A constructor.
+     * @param v value
+     */
+<span class="fc" id="L45">    MappingType(String v) {</span>
+<span class="fc" id="L46">        value = v;</span>
+<span class="fc" id="L47">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
-<span class="nc" id="L36">        return value;</span>
+<span class="nc" id="L54">        return value;</span>
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static MappingType fromValue(String v) {
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        for (MappingType c: MappingType.values()) {</span>
-<span class="nc bnc" id="L41" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
-<span class="nc" id="L42">                return c;</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        for (MappingType c: MappingType.values()) {</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
+<span class="nc" id="L65">                return c;</span>
             }
         }
-<span class="nc" id="L45">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L68">        throw new IllegalArgumentException(v);</span>
     }
 
 }

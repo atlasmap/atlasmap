@@ -46,7 +46,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.v2.Json;
 
-<span class="nc" id="L49">public abstract class AbstractAtlasMapMojo extends AbstractMojo {</span>
+/**
+ * The base Mojo of AtlasMap maven plugin.
+ * @see GenerateFieldActionsMojo
+ * @see GenerateInspectionsMojo
+ */
+<span class="nc" id="L54">public abstract class AbstractAtlasMapMojo extends AbstractMojo {</span>
 
     @Component
     private RepositorySystem system;
@@ -69,104 +74,156 @@ import io.atlasmap.v2.Json;
     @Parameter()
     private File outputFile;
 
+    /**
+     * Resolves the classpath.
+     * @param artifacts artifacts
+     * @return resolved
+     * @throws MojoFailureException unexpected error
+     */
     protected List&lt;URL&gt; resolveClasspath(List&lt;String&gt; artifacts) throws MojoFailureException {
-<span class="nc" id="L73">        final List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L84">        final List&lt;URL&gt; urls = new ArrayList&lt;&gt;();</span>
 
         try {
-<span class="nc bnc" id="L76" title="All 2 branches missed.">            for (String gav : artifacts) {</span>
-<span class="nc" id="L77">                Artifact artifact = new DefaultArtifact(gav);</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            for (String gav : artifacts) {</span>
+<span class="nc" id="L88">                Artifact artifact = new DefaultArtifact(gav);</span>
 
-<span class="nc" id="L79">                getLog().debug(&quot;Resolving dependencies for artifact: &quot; + artifact);</span>
+<span class="nc" id="L90">                getLog().debug(&quot;Resolving dependencies for artifact: &quot; + artifact);</span>
 
-<span class="nc" id="L81">                CollectRequest collectRequest = new CollectRequest();</span>
-<span class="nc" id="L82">                collectRequest.setRoot(new Dependency(artifact, &quot;&quot;));</span>
-<span class="nc" id="L83">                collectRequest.setRepositories(getRemoteRepos());</span>
+<span class="nc" id="L92">                CollectRequest collectRequest = new CollectRequest();</span>
+<span class="nc" id="L93">                collectRequest.setRoot(new Dependency(artifact, &quot;&quot;));</span>
+<span class="nc" id="L94">                collectRequest.setRepositories(getRemoteRepos());</span>
 
-<span class="nc" id="L85">                DependencyRequest dependencyRequest = new DependencyRequest();</span>
-<span class="nc" id="L86">                dependencyRequest.setCollectRequest(collectRequest);</span>
-<span class="nc" id="L87">                DependencyResult dependencyResult = getSystem().resolveDependencies(getRepoSession(), dependencyRequest);</span>
+<span class="nc" id="L96">                DependencyRequest dependencyRequest = new DependencyRequest();</span>
+<span class="nc" id="L97">                dependencyRequest.setCollectRequest(collectRequest);</span>
+<span class="nc" id="L98">                DependencyResult dependencyResult = getSystem().resolveDependencies(getRepoSession(), dependencyRequest);</span>
 
-<span class="nc" id="L89">                PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();</span>
-<span class="nc" id="L90">                dependencyResult.getRoot().accept(nlg);</span>
+<span class="nc" id="L100">                PreorderNodeListGenerator nlg = new PreorderNodeListGenerator();</span>
+<span class="nc" id="L101">                dependencyResult.getRoot().accept(nlg);</span>
 
-<span class="nc" id="L92">                Iterator&lt;DependencyNode&gt; it = nlg.getNodes().iterator();</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">                while (it.hasNext()) {</span>
-<span class="nc" id="L94">                    DependencyNode node = it.next();</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">                    if (node.getDependency() != null) {</span>
-<span class="nc" id="L96">                        Artifact x = node.getDependency().getArtifact();</span>
-<span class="nc bnc" id="L97" title="All 2 branches missed.">                        if (x.getFile() != null) {</span>
-<span class="nc" id="L98">                            getLog().debug(&quot;Found dependency: &quot; + x + &quot; for artifact: &quot; + artifact);</span>
-<span class="nc" id="L99">                            urls.add(x.getFile().toURI().toURL());</span>
+<span class="nc" id="L103">                Iterator&lt;DependencyNode&gt; it = nlg.getNodes().iterator();</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                while (it.hasNext()) {</span>
+<span class="nc" id="L105">                    DependencyNode node = it.next();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                    if (node.getDependency() != null) {</span>
+<span class="nc" id="L107">                        Artifact x = node.getDependency().getArtifact();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                        if (x.getFile() != null) {</span>
+<span class="nc" id="L109">                            getLog().debug(&quot;Found dependency: &quot; + x + &quot; for artifact: &quot; + artifact);</span>
+<span class="nc" id="L110">                            urls.add(x.getFile().toURI().toURL());</span>
                         }
                     }
-<span class="nc" id="L102">                }</span>
-<span class="nc" id="L103">            }</span>
-<span class="nc" id="L104">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L105">            throw new MojoFailureException(e.getMessage(), e);</span>
-<span class="nc" id="L106">        } catch (DependencyResolutionException e) {</span>
-<span class="nc" id="L107">            throw new MojoFailureException(e.getMessage(), e);</span>
-<span class="nc" id="L108">        } catch (MalformedURLException e) {</span>
-<span class="nc" id="L109">            throw new MojoFailureException(e.getMessage(), e);</span>
-<span class="nc" id="L110">        }</span>
+<span class="nc" id="L113">                }</span>
+<span class="nc" id="L114">            }</span>
+<span class="nc" id="L115">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L116">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L117">        } catch (DependencyResolutionException e) {</span>
+<span class="nc" id="L118">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L119">        } catch (MalformedURLException e) {</span>
+<span class="nc" id="L120">            throw new MojoFailureException(e.getMessage(), e);</span>
+<span class="nc" id="L121">        }</span>
 
-<span class="nc" id="L112">        return urls;</span>
+<span class="nc" id="L123">        return urls;</span>
     }
 
+    /**
+     * Writes to the JSON file.
+     * @param name file name
+     * @param object object to write
+     * @throws MojoExecutionException failure
+     */
     protected void writeToJsonFile(String name, Object object) throws MojoExecutionException {
         try {
-<span class="nc" id="L117">            ObjectMapper objectMapper = Json.mapper();</span>
-<span class="nc" id="L118">            File target = outputFile;</span>
-<span class="nc bnc" id="L119" title="All 2 branches missed.">            if (target == null) {</span>
-<span class="nc" id="L120">                target = new File(outputDir, name + &quot;.json&quot;);</span>
+<span class="nc" id="L134">            ObjectMapper objectMapper = Json.mapper();</span>
+<span class="nc" id="L135">            File target = outputFile;</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">            if (target == null) {</span>
+<span class="nc" id="L137">                target = new File(outputDir, name + &quot;.json&quot;);</span>
             }
-<span class="nc" id="L122">            objectMapper.writeValue(target, object);</span>
-<span class="nc" id="L123">            getLog().info(&quot;Created: &quot; + target);</span>
-<span class="nc" id="L124">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L125">            throw new MojoExecutionException(e.getMessage(), e);</span>
-<span class="nc" id="L126">        } catch (IOException e) {</span>
-<span class="nc" id="L127">            throw new MojoExecutionException(e.getMessage(), e);</span>
-<span class="nc" id="L128">        }</span>
-<span class="nc" id="L129">    }</span>
+<span class="nc" id="L139">            objectMapper.writeValue(target, object);</span>
+<span class="nc" id="L140">            getLog().info(&quot;Created: &quot; + target);</span>
+<span class="nc" id="L141">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L142">            throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L143">        } catch (IOException e) {</span>
+<span class="nc" id="L144">            throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L145">        }</span>
+<span class="nc" id="L146">    }</span>
 
+    /**
+     * Gets the repository system.
+     * @return repository system
+     */
     public RepositorySystem getSystem() {
-<span class="nc" id="L132">        return system;</span>
+<span class="nc" id="L153">        return system;</span>
     }
 
+    /**
+     * Sets the repository system.
+     * @param system repository system
+     */
     public void setSystem(RepositorySystem system) {
-<span class="nc" id="L136">        this.system = system;</span>
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L161">        this.system = system;</span>
+<span class="nc" id="L162">    }</span>
 
+    /**
+     * Gets the remote repositories.
+     * @return remote repos
+     */
     public List&lt;RemoteRepository&gt; getRemoteRepos() {
-<span class="nc" id="L140">        return remoteRepos;</span>
+<span class="nc" id="L169">        return remoteRepos;</span>
     }
 
+    /**
+     * Sets the remote reopsitories.
+     * @param remoteRepos remote repos
+     */
     public void setRemoteRepos(List&lt;RemoteRepository&gt; remoteRepos) {
-<span class="nc" id="L144">        this.remoteRepos = remoteRepos;</span>
-<span class="nc" id="L145">    }</span>
+<span class="nc" id="L177">        this.remoteRepos = remoteRepos;</span>
+<span class="nc" id="L178">    }</span>
 
+    /**
+     * Get the repository system session.
+     * @return repo session
+     */
     public RepositorySystemSession getRepoSession() {
-<span class="nc" id="L148">        return repoSession;</span>
+<span class="nc" id="L185">        return repoSession;</span>
     }
 
+    /**
+     * Sets the repository system session.
+     * @param repoSession repo session
+     */
     public void setRepoSession(RepositorySystemSession repoSession) {
-<span class="nc" id="L152">        this.repoSession = repoSession;</span>
-<span class="nc" id="L153">    }</span>
+<span class="nc" id="L193">        this.repoSession = repoSession;</span>
+<span class="nc" id="L194">    }</span>
 
+    /**
+     * Gets the output directory.
+     * @return output directory
+     */
     public File getOutputDir() {
-<span class="nc" id="L156">        return outputDir;</span>
+<span class="nc" id="L201">        return outputDir;</span>
     }
 
+    /**
+     * Sets the output directory.
+     * @param outputDir output directory
+     */
     public void setOutputDir(File outputDir) {
-<span class="nc" id="L160">        this.outputDir = outputDir;</span>
-<span class="nc" id="L161">    }</span>
+<span class="nc" id="L209">        this.outputDir = outputDir;</span>
+<span class="nc" id="L210">    }</span>
 
+    /**
+     * Gets the output file.
+     * @return output file
+     */
     public File getOutputFile() {
-<span class="nc" id="L164">        return outputFile;</span>
+<span class="nc" id="L217">        return outputFile;</span>
     }
 
+    /**
+     * Sets the output file.
+     * @param outputFile output file
+     */
     public void setOutputFile(File outputFile) {
-<span class="nc" id="L168">        this.outputFile = outputFile;</span>
-<span class="nc" id="L169">    }</span>
+<span class="nc" id="L225">        this.outputFile = outputFile;</span>
+<span class="nc" id="L226">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

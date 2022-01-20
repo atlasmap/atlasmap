@@ -25,135 +25,232 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-<span class="fc" id="L28">public class CharacterConverter implements AtlasConverter&lt;Character&gt; {</span>
+/**
+ * The type converter for {@link Character}.
+ */
+<span class="fc" id="L31">public class CharacterConverter implements AtlasConverter&lt;Character&gt; {</span>
 
     private static final String TRUE_REGEX = &quot;t|T|y|Y|[1-9]&quot;;
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Character value) {
-<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Character value) {
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
     public Boolean toBoolean(Character value, String sourceFormat, String targetFormat) {
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L46">            return null;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L66">            return null;</span>
         }
 
-<span class="pc bpc" id="L49" title="3 of 4 branches missed.">        String regex = sourceFormat != null &amp;&amp; !&quot;&quot;.equals(sourceFormat) ? sourceFormat : TRUE_REGEX;</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (Character.toString(value).matches(regex)) {</span>
-<span class="fc" id="L51">            return Boolean.TRUE;</span>
+<span class="pc bpc" id="L69" title="3 of 4 branches missed.">        String regex = sourceFormat != null &amp;&amp; !&quot;&quot;.equals(sourceFormat) ? sourceFormat : TRUE_REGEX;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (Character.toString(value).matches(regex)) {</span>
+<span class="fc" id="L71">            return Boolean.TRUE;</span>
         }
-<span class="fc" id="L53">        return Boolean.FALSE;</span>
+<span class="fc" id="L73">        return Boolean.FALSE;</span>
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE })
     public Byte toByte(Character value) throws AtlasConversionException {
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L60">            return null;</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L86">            return null;</span>
         }
-<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (value.charValue() &gt; Byte.MAX_VALUE) {</span>
-<span class="fc" id="L63">            throw new AtlasConversionException(</span>
-<span class="fc" id="L64">                    String.format(&quot;Character value %s is greater than BYTE.MAX_VALUE&quot;, value));</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (value.charValue() &gt; Byte.MAX_VALUE) {</span>
+<span class="fc" id="L89">            throw new AtlasConversionException(</span>
+<span class="fc" id="L90">                    String.format(&quot;Character value %s is greater than BYTE.MAX_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L66">        return (byte) value.charValue();</span>
+<span class="fc" id="L92">        return (byte) value.charValue();</span>
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.CHAR)
     public Character toCharacter(Character value) {
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L72">            return null;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L103">            return null;</span>
         }
         // we want new Character from the value
-<span class="fc" id="L75">        return new Character(value);</span>
+<span class="fc" id="L106">        return new Character(value);</span>
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.DOUBLE)
     public Double toDouble(Character value) {
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L81">            return null;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L117">            return null;</span>
         }
-<span class="fc" id="L83">        return Double.valueOf(value);</span>
+<span class="fc" id="L119">        return Double.valueOf(value);</span>
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.FLOAT)
     public Float toFloat(Character value) {
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L89">            return null;</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L130">            return null;</span>
         }
-<span class="fc" id="L91">        return Float.valueOf(value);</span>
+<span class="fc" id="L132">        return Float.valueOf(value);</span>
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.INTEGER)
     public Integer toInteger(Character value) {
-<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L97">            return null;</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L143">            return null;</span>
         }
-<span class="fc" id="L99">        return Integer.valueOf(value);</span>
+<span class="fc" id="L145">        return Integer.valueOf(value);</span>
     }
 
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.LONG)
     public Long toLong(Character value) {
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L105">            return null;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L156">            return null;</span>
         }
-<span class="fc" id="L107">        return Long.valueOf(value);</span>
+<span class="fc" id="L158">        return Long.valueOf(value);</span>
     }
 
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.NUMBER)
     public Number toNumber(Character value) {
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L113">            return null;</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L169">            return null;</span>
         }
-<span class="fc" id="L115">        return Integer.valueOf(value);</span>
+<span class="fc" id="L171">        return Integer.valueOf(value);</span>
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Short toShort(Character value) throws AtlasConversionException {
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L122">            return null;</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L184">            return null;</span>
         }
         // only care if the char is larger than the short MAX
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (value &gt; Short.MAX_VALUE) {</span>
-<span class="fc" id="L126">            throw new AtlasConversionException();</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (value &gt; Short.MAX_VALUE) {</span>
+<span class="fc" id="L188">            throw new AtlasConversionException();</span>
         }
-<span class="fc" id="L128">        return (short) value.charValue();</span>
+<span class="fc" id="L190">        return (short) value.charValue();</span>
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
     public String toString(Character value, String sourceFormat, String targetFormat) {
-<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L134">            return null;</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L203">            return null;</span>
         }
-<span class="fc" id="L136">        return String.valueOf(value);</span>
+<span class="fc" id="L205">        return String.valueOf(value);</span>
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Character value, String sourceFormat, String targetFormat) {
-<span class="nc bnc" id="L141" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value, sourceFormat, targetFormat)) : null;</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value, sourceFormat, targetFormat)) : null;</span>
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Character value, String sourceFormat, String targetFormat) {
-<span class="nc bnc" id="L146" title="All 2 branches missed.">        return value != null ? toString(value, sourceFormat, targetFormat) : null;</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        return value != null ? toString(value, sourceFormat, targetFormat) : null;</span>
     }
 
+    /**
+     * Converts to {@link StringBuffer}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Character value, String sourceFormat, String targetFormat) {
-<span class="nc bnc" id="L151" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value, sourceFormat, targetFormat)) : null;</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value, sourceFormat, targetFormat)) : null;</span>
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @param sourceFormat source format
+     * @param targetFormat target format
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.CHAR, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Character value, String sourceFormat, String targetFormat) {
-<span class="nc bnc" id="L156" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value, sourceFormat, targetFormat)) : null;</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value, sourceFormat, targetFormat)) : null;</span>
     }
 
 }

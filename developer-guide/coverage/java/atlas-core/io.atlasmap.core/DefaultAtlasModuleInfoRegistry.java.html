@@ -28,78 +28,85 @@ import org.slf4j.LoggerFactory;
 import io.atlasmap.spi.AtlasModuleInfo;
 import io.atlasmap.spi.AtlasModuleInfoRegistry;
 
+/**
+ * The default implementation of {@link AtlasModuleInfoRegistry}.
+ */
 public class DefaultAtlasModuleInfoRegistry implements AtlasModuleInfoRegistry {
-<span class="fc" id="L32">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasModuleInfoRegistry.class);</span>
+<span class="fc" id="L35">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasModuleInfoRegistry.class);</span>
     private final String jmxObjectNamePrefix;
-<span class="fc" id="L34">    private final Set&lt;AtlasModuleInfo&gt; moduleInfos = new HashSet&lt;&gt;();</span>
+<span class="fc" id="L37">    private final Set&lt;AtlasModuleInfo&gt; moduleInfos = new HashSet&lt;&gt;();</span>
 
-<span class="fc" id="L36">    public DefaultAtlasModuleInfoRegistry(DefaultAtlasContextFactory factory) {</span>
-<span class="fc" id="L37">        jmxObjectNamePrefix = factory.getJmxObjectName() + &quot;,modules=AvailableModules,moduleName=&quot;;</span>
-<span class="fc" id="L38">    }</span>
+    /**
+     * A constructor.
+     * @param factory factory
+     */
+<span class="fc" id="L43">    public DefaultAtlasModuleInfoRegistry(DefaultAtlasContextFactory factory) {</span>
+<span class="fc" id="L44">        jmxObjectNamePrefix = factory.getJmxObjectName() + &quot;,modules=AvailableModules,moduleName=&quot;;</span>
+<span class="fc" id="L45">    }</span>
 
     @Override
     public AtlasModuleInfo lookupByUri(String uri) {
-<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (uri == null) {</span>
-<span class="fc" id="L43">            return null;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (uri == null) {</span>
+<span class="fc" id="L50">            return null;</span>
         }
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (AtlasModuleInfo module : moduleInfos) {</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (uri.startsWith(module.getUri())) {</span>
-<span class="fc" id="L47">                return module;</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (AtlasModuleInfo module : moduleInfos) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (uri.startsWith(module.getUri())) {</span>
+<span class="fc" id="L54">                return module;</span>
             }
-<span class="fc" id="L49">        }</span>
-<span class="fc" id="L50">        return null;</span>
+<span class="fc" id="L56">        }</span>
+<span class="fc" id="L57">        return null;</span>
     }
 
     @Override
     public Set&lt;AtlasModuleInfo&gt; getAll() {
-<span class="fc" id="L55">        return Collections.unmodifiableSet(moduleInfos);</span>
+<span class="fc" id="L62">        return Collections.unmodifiableSet(moduleInfos);</span>
     }
 
     @Override
     public void register(AtlasModuleInfo module) {
-<span class="fc" id="L60">        moduleInfos.add(module);</span>
-<span class="fc" id="L61">        registerModuleJmx(module);</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L67">        moduleInfos.add(module);</span>
+<span class="fc" id="L68">        registerModuleJmx(module);</span>
+<span class="fc" id="L69">    }</span>
 
     @Override
     public int size() {
-<span class="fc" id="L66">        return moduleInfos.size();</span>
+<span class="fc" id="L73">        return moduleInfos.size();</span>
     }
 
     @Override
     public synchronized void unregisterAll() {
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        for (AtlasModuleInfo info : moduleInfos) {</span>
-<span class="fc" id="L72">            unregisterModuleJmx(info);</span>
-<span class="fc" id="L73">        }</span>
-<span class="fc" id="L74">        moduleInfos.clear();</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (AtlasModuleInfo info : moduleInfos) {</span>
+<span class="fc" id="L79">            unregisterModuleJmx(info);</span>
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">        moduleInfos.clear();</span>
+<span class="fc" id="L82">    }</span>
 
     private void registerModuleJmx(AtlasModuleInfo module) {
         try {
-<span class="fc" id="L79">            String n = jmxObjectNamePrefix + module.getName();</span>
-<span class="fc" id="L80">            ObjectName on = new ObjectName(n);</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
-<span class="fc" id="L82">                ManagementFactory.getPlatformMBeanServer().registerMBean(module, on);</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L84">                    LOG.debug(&quot;Registered AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;);</span>
+<span class="fc" id="L86">            String n = jmxObjectNamePrefix + module.getName();</span>
+<span class="fc" id="L87">            ObjectName on = new ObjectName(n);</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
+<span class="fc" id="L89">                ManagementFactory.getPlatformMBeanServer().registerMBean(module, on);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L91">                    LOG.debug(&quot;Registered AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;);</span>
                 }
             }
-<span class="nc" id="L87">        } catch (Exception e) {</span>
-<span class="nc" id="L88">            LOG.warn(&quot;Unable to register AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;, e);</span>
-<span class="fc" id="L89">        }</span>
-<span class="fc" id="L90">    }</span>
+<span class="nc" id="L94">        } catch (Exception e) {</span>
+<span class="nc" id="L95">            LOG.warn(&quot;Unable to register AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;, e);</span>
+<span class="fc" id="L96">        }</span>
+<span class="fc" id="L97">    }</span>
 
     private void unregisterModuleJmx(AtlasModuleInfo module) {
         try {
-<span class="fc" id="L94">            String n = jmxObjectNamePrefix + module.getName();</span>
-<span class="fc" id="L95">            ObjectName on = new ObjectName(n);</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
-<span class="fc" id="L97">                ManagementFactory.getPlatformMBeanServer().unregisterMBean(on);</span>
+<span class="fc" id="L101">            String n = jmxObjectNamePrefix + module.getName();</span>
+<span class="fc" id="L102">            ObjectName on = new ObjectName(n);</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
+<span class="fc" id="L104">                ManagementFactory.getPlatformMBeanServer().unregisterMBean(on);</span>
             }
-<span class="nc" id="L99">        } catch (Exception e) {</span>
-<span class="nc" id="L100">            LOG.warn(&quot;Unable to unregister module '&quot; + module.getName() + &quot;' from JMX&quot;);</span>
-<span class="fc" id="L101">        }</span>
-<span class="fc" id="L102">    }</span>
+<span class="nc" id="L106">        } catch (Exception e) {</span>
+<span class="nc" id="L107">            LOG.warn(&quot;Unable to unregister module '&quot; + module.getName() + &quot;' from JMX&quot;);</span>
+<span class="fc" id="L108">        }</span>
+<span class="fc" id="L109">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

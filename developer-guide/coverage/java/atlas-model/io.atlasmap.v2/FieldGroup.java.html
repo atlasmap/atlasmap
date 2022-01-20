@@ -19,11 +19,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L22">public class FieldGroup extends Field implements Serializable</span>
-{
+/**
+ * The container of the {@link Field}.
+ * It groups sub fields and collection item fields.
+ */
+<span class="fc" id="L26">public class FieldGroup extends Field implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Field} */
     protected List&lt;Field&gt; field;
 
     /**
@@ -49,10 +53,10 @@ import java.util.List;
      * @return A list of {@link Field}
      */
     public List&lt;Field&gt; getField() {
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (field == null) {</span>
-<span class="fc" id="L53">            field = new ArrayList&lt;Field&gt;();</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (field == null) {</span>
+<span class="fc" id="L57">            field = new ArrayList&lt;Field&gt;();</span>
         }
-<span class="fc" id="L55">        return this.field;</span>
+<span class="fc" id="L59">        return this.field;</span>
     }
 
 }

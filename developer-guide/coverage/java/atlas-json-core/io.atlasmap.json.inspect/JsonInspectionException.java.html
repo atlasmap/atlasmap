@@ -15,9 +15,12 @@
  */
 package io.atlasmap.json.inspect;
 
+import io.atlasmap.api.AtlasException;
+
 /**
+ * The JSON inspection exception.
  */
-public class JsonInspectionException extends Exception {
+public class JsonInspectionException extends AtlasException {
 
     private static final long serialVersionUID = 1L;
 
@@ -31,8 +34,8 @@ public class JsonInspectionException extends Exception {
      *            retrieval by the {@link #getMessage()} method.
      */
     public JsonInspectionException(String message) {
-<span class="fc" id="L34">        super(message);</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L37">        super(message);</span>
+<span class="fc" id="L38">    }</span>
 
     /**
      * Constructs a new exception with the specified detail message and cause.
@@ -50,8 +53,8 @@ public class JsonInspectionException extends Exception {
      * @since 1.4
      */
     public JsonInspectionException(String message, Throwable cause) {
-<span class="nc" id="L53">        super(message, cause);</span>
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L56">        super(message, cause);</span>
+<span class="nc" id="L57">    }</span>
 
     /**
      * Constructs a new exception with the specified cause and a detail message of
@@ -67,28 +70,8 @@ public class JsonInspectionException extends Exception {
      * @since 1.4
      */
     public JsonInspectionException(Throwable cause) {
-<span class="fc" id="L70">        super(cause);</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L73">        super(cause);</span>
+<span class="fc" id="L74">    }</span>
 
-    /**
-     * Constructs a new exception with the specified detail message, cause,
-     * suppression enabled or disabled, and writable stack trace enabled or
-     * disabled.
-     *
-     * @param message
-     *            the detail message.
-     * @param cause
-     *            the cause. (A {@code null} value is permitted, and indicates that
-     *            the cause is nonexistent or unknown.)
-     * @param enableSuppression
-     *            whether or not suppression is enabled or disabled
-     * @param writableStackTrace
-     *            whether or not the stack trace should be writable
-     * @since 1.7
-     */
-    public JsonInspectionException(String message, Throwable cause, boolean enableSuppression,
-            boolean writableStackTrace) {
-<span class="nc" id="L91">        super(message, cause, enableSuppression, writableStackTrace);</span>
-<span class="nc" id="L92">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

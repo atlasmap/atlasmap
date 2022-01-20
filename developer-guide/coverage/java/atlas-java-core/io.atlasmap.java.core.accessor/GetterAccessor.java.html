@@ -20,33 +20,42 @@ import java.lang.reflect.Type;
 
 import io.atlasmap.api.AtlasException;
 
+/**
+ * The {@link JavaChildAccessor} which accesses the field through the getter method.
+ */
 public class GetterAccessor extends JavaChildAccessor {
 
     private Method getter;
 
+    /**
+     * A constructor.
+     * @param parent parent
+     * @param name name
+     * @param getter getter method
+     */
     public GetterAccessor(Object parent, String name, Method getter) {
-<span class="fc" id="L28">        super(parent, name);</span>
-<span class="fc" id="L29">        getter.setAccessible(true);</span>
-<span class="fc" id="L30">        this.getter = getter;</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L37">        super(parent, name);</span>
+<span class="fc" id="L38">        getter.setAccessible(true);</span>
+<span class="fc" id="L39">        this.getter = getter;</span>
+<span class="fc" id="L40">    }</span>
 
     @Override
     public Object getRawValue() throws AtlasException {
         try {
-<span class="fc" id="L36">            return getter.invoke(getParentObject(), new Object[0]);</span>
-<span class="nc" id="L37">        } catch (Exception e) {</span>
-<span class="nc" id="L38">            throw new AtlasException(e);</span>
+<span class="fc" id="L45">            return getter.invoke(getParentObject(), new Object[0]);</span>
+<span class="nc" id="L46">        } catch (Exception e) {</span>
+<span class="nc" id="L47">            throw new AtlasException(e);</span>
         }
     }
 
     @Override
     public Class&lt;?&gt; getRawClass() {
-<span class="fc" id="L44">        return getter.getReturnType();</span>
+<span class="fc" id="L53">        return getter.getReturnType();</span>
     }
 
     @Override
     public Type getRawGenericType() throws AtlasException {
-<span class="nc" id="L49">        return getter.getGenericReturnType();</span>
+<span class="nc" id="L58">        return getter.getGenericReturnType();</span>
     }
 
 }

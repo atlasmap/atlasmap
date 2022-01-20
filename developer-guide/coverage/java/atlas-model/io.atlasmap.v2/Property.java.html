@@ -17,18 +17,22 @@ package io.atlasmap.v2;
 
 import java.io.Serializable;
 
-<span class="fc" id="L20">public class Property implements Serializable {</span>
+/**
+ * The property model object.
+ */
+<span class="fc" id="L23">public class Property implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** name */
     protected String name;
-
+    /** value */
     protected String value;
-
+    /** field type */
     protected FieldType fieldType;
-
+    /** scope */
     protected String scope;
-
+    /** data source type */
     protected DataSourceType dataSourceType;
 
     /**
@@ -40,7 +44,7 @@ import java.io.Serializable;
      *     
      */
     public String getName() {
-<span class="fc" id="L43">        return name;</span>
+<span class="fc" id="L47">        return name;</span>
     }
 
     /**
@@ -52,8 +56,8 @@ import java.io.Serializable;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L55">        this.name = value;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L59">        this.name = value;</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * Gets the value of the value property.
@@ -64,7 +68,7 @@ import java.io.Serializable;
      *     
      */
     public String getValue() {
-<span class="fc" id="L67">        return value;</span>
+<span class="fc" id="L71">        return value;</span>
     }
 
     /**
@@ -76,8 +80,8 @@ import java.io.Serializable;
      *     
      */
     public void setValue(String value) {
-<span class="fc" id="L79">        this.value = value;</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L83">        this.value = value;</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Gets the value of the fieldType property.
@@ -88,7 +92,7 @@ import java.io.Serializable;
      *     
      */
     public FieldType getFieldType() {
-<span class="fc" id="L91">        return fieldType;</span>
+<span class="fc" id="L95">        return fieldType;</span>
     }
 
     /**
@@ -100,8 +104,8 @@ import java.io.Serializable;
      *     
      */
     public void setFieldType(FieldType value) {
-<span class="fc" id="L103">        this.fieldType = value;</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L107">        this.fieldType = value;</span>
+<span class="fc" id="L108">    }</span>
 
     /**
      * Gets the value of the scope property.
@@ -112,7 +116,7 @@ import java.io.Serializable;
      *
      */
     public String getScope() {
-<span class="fc" id="L115">        return scope;</span>
+<span class="fc" id="L119">        return scope;</span>
     }
 
     /**
@@ -124,8 +128,8 @@ import java.io.Serializable;
      *
      */
     public void setScope(String scope) {
-<span class="fc" id="L127">        this.scope = scope;</span>
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L131">        this.scope = scope;</span>
+<span class="fc" id="L132">    }</span>
 
     /**
      * Gets the value of the dataSourceType property.
@@ -136,7 +140,7 @@ import java.io.Serializable;
      *
      */
     public DataSourceType getDataSourceType() {
-<span class="fc" id="L139">        return dataSourceType;</span>
+<span class="fc" id="L143">        return dataSourceType;</span>
     }
 
     /**
@@ -148,8 +152,8 @@ import java.io.Serializable;
      *
      */
     public void setDataSourceType(DataSourceType value) {
-<span class="nc" id="L151">        this.dataSourceType = value;</span>
-<span class="nc" id="L152">    }</span>
+<span class="nc" id="L155">        this.dataSourceType = value;</span>
+<span class="nc" id="L156">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

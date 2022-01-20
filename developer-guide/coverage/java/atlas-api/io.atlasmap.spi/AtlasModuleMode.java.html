@@ -15,26 +15,49 @@
  */
 package io.atlasmap.spi;
 
-<span class="fc" id="L18">public enum AtlasModuleMode {</span>
-<span class="fc" id="L19">    SOURCE(&quot;source&quot;), TARGET(&quot;target&quot;), UNSET(&quot;unset&quot;);</span>
+/**
+ * The enumeration of the {@link AtlasModule} mode, specifically
+ * {@link SOURCE} for the source document, {@link TARGET} for the target document,
+ * and {@link UNSET} for none of those.
+ */
+<span class="fc" id="L23">public enum AtlasModuleMode {</span>
+    /** Source Document. */
+<span class="fc" id="L25">    SOURCE(&quot;source&quot;),</span>
+    /** Target Document. */
+<span class="fc" id="L27">    TARGET(&quot;target&quot;),</span>
+    /** None of those. */
+<span class="fc" id="L29">    UNSET(&quot;unset&quot;);</span>
 
     private final String mode;
 
-<span class="fc" id="L23">    AtlasModuleMode(String mode) {</span>
-<span class="fc" id="L24">        this.mode = mode;</span>
-<span class="fc" id="L25">    }</span>
+    /**
+     * A constructor.
+     * @param mode mode
+     */
+<span class="fc" id="L37">    AtlasModuleMode(String mode) {</span>
+<span class="fc" id="L38">        this.mode = mode;</span>
+<span class="fc" id="L39">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
-<span class="nc" id="L28">        return this.mode;</span>
+<span class="nc" id="L46">        return this.mode;</span>
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static AtlasModuleMode fromValue(String v) {
-<span class="nc bnc" id="L32" title="All 2 branches missed.">        for (AtlasModuleMode c : AtlasModuleMode.values()) {</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">            if (c.mode.equals(v)) {</span>
-<span class="nc" id="L34">                return c;</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        for (AtlasModuleMode c : AtlasModuleMode.values()) {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (c.mode.equals(v)) {</span>
+<span class="nc" id="L57">                return c;</span>
             }
         }
-<span class="nc" id="L37">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L60">        throw new IllegalArgumentException(v);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

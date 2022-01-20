@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
     private static final long serialVersionUID = 1L;
 
+    /** expression */
     protected String expression;
 
     /**
@@ -37,7 +38,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getExpression() {
-<span class="fc" id="L40">        return expression;</span>
+<span class="fc" id="L41">        return expression;</span>
     }
 
     /**
@@ -51,8 +52,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The expression string to evaluate&quot;)
     @AtlasActionProperty(title = &quot;Expression&quot;, type = FieldType.STRING)
     public void setExpression(String expression) {
-<span class="fc" id="L54">        this.expression = expression;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L55">        this.expression = expression;</span>
+<span class="fc" id="L56">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -22,48 +22,56 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
+/**
+ * The non-null validator.
+ */
 public class NonNullValidator implements AtlasValidator {
 
     private String violationMessage;
     private ValidationScope scope;
 
-<span class="fc" id="L30">    public NonNullValidator(ValidationScope scope, String violationMessage) {</span>
-<span class="fc" id="L31">        this.scope = scope;</span>
-<span class="fc" id="L32">        this.violationMessage = violationMessage;</span>
-<span class="fc" id="L33">    }</span>
+    /**
+     * A constructor.
+     * @param scope validation scope
+     * @param violationMessage violation message
+     */
+<span class="fc" id="L38">    public NonNullValidator(ValidationScope scope, String violationMessage) {</span>
+<span class="fc" id="L39">        this.scope = scope;</span>
+<span class="fc" id="L40">        this.violationMessage = violationMessage;</span>
+<span class="fc" id="L41">    }</span>
 
     @Override
     public boolean supports(Class&lt;?&gt; clazz) {
-<span class="fc" id="L37">        return true;</span>
+<span class="fc" id="L45">        return true;</span>
     }
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id) {
-<span class="fc" id="L42">        validate(target, validations, id, ValidationStatus.ERROR);</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L50">        validate(target, validations, id, ValidationStatus.ERROR);</span>
+<span class="fc" id="L51">    }</span>
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id, ValidationStatus status) {
 
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (target == null) {</span>
-<span class="fc" id="L49">            Validation validation = new Validation();</span>
-<span class="fc" id="L50">            validation.setScope(scope);</span>
-<span class="fc" id="L51">            validation.setId(id);</span>
-<span class="fc" id="L52">            validation.setMessage(violationMessage);</span>
-<span class="fc" id="L53">            validation.setStatus(status);</span>
-<span class="fc" id="L54">            validations.add(validation);</span>
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        } else if (target.getClass().isAssignableFrom(String.class)) {</span>
-<span class="fc" id="L56">            String value = (String) target;</span>
-<span class="fc bfc" id="L57" title="All 2 branches covered.">            if (value.trim().isEmpty()) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (target == null) {</span>
+<span class="fc" id="L57">            Validation validation = new Validation();</span>
+<span class="fc" id="L58">            validation.setScope(scope);</span>
+<span class="fc" id="L59">            validation.setId(id);</span>
+<span class="fc" id="L60">            validation.setMessage(violationMessage);</span>
+<span class="fc" id="L61">            validation.setStatus(status);</span>
+<span class="fc" id="L62">            validations.add(validation);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        } else if (target.getClass().isAssignableFrom(String.class)) {</span>
+<span class="fc" id="L64">            String value = (String) target;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">            if (value.trim().isEmpty()) {</span>
                 // TODO: Add support for target value
-<span class="fc" id="L59">                Validation validation = new Validation();</span>
-<span class="fc" id="L60">                validation.setScope(scope);</span>
-<span class="fc" id="L61">                validation.setId(id);</span>
-<span class="fc" id="L62">                validation.setMessage(violationMessage);</span>
-<span class="fc" id="L63">                validation.setStatus(status);</span>
-<span class="fc" id="L64">                validations.add(validation);</span>
+<span class="fc" id="L67">                Validation validation = new Validation();</span>
+<span class="fc" id="L68">                validation.setScope(scope);</span>
+<span class="fc" id="L69">                validation.setId(id);</span>
+<span class="fc" id="L70">                validation.setMessage(violationMessage);</span>
+<span class="fc" id="L71">                validation.setStatus(status);</span>
+<span class="fc" id="L72">                validations.add(validation);</span>
             }
         }
-<span class="fc" id="L67">    }</span>
+<span class="fc" id="L75">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

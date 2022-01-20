@@ -33,207 +33,325 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-<span class="fc" id="L36">public class FloatConverter implements AtlasConverter&lt;Float&gt; {</span>
+/**
+ * The type converter for {@link Float}.
+ */
+<span class="fc" id="L39">public class FloatConverter implements AtlasConverter&lt;Float&gt; {</span>
 
+    /**
+     * Converts to {@link BigDecimal}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Float value) {
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link BigInteger}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.FRACTIONAL_PART)
     public BigInteger toBigInteger(Float value) {
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value).toBigInteger() : null;</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(value).toBigInteger() : null;</span>
     }
 
+    /**
+     * Converts to {@link Boolean}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BOOLEAN, concerns = {
             AtlasConversionConcern.CONVENTION })
     public Boolean toBoolean(Float value) {
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L53">            return null;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L71">            return null;</span>
         }
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (value == 0.0) {</span>
-<span class="fc" id="L56">            return Boolean.FALSE;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (value == 0.0) {</span>
+<span class="fc" id="L74">            return Boolean.FALSE;</span>
         }
-<span class="fc" id="L58">        return Boolean.TRUE;</span>
+<span class="fc" id="L76">        return Boolean.TRUE;</span>
     }
 
+    /**
+     * Converts to {@link Byte}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE })
     public Byte toByte(Float value) throws AtlasConversionException {
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L65">            return null;</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L89">            return null;</span>
         }
-<span class="pc bpc" id="L67" title="2 of 6 branches missed.">        if (value % 1 == 0 &amp;&amp; value &gt;= Byte.MIN_VALUE &amp;&amp; value &lt;= Byte.MAX_VALUE) {</span>
-<span class="fc" id="L68">            return value.byteValue();</span>
+<span class="pc bpc" id="L91" title="2 of 6 branches missed.">        if (value % 1 == 0 &amp;&amp; value &gt;= Byte.MIN_VALUE &amp;&amp; value &lt;= Byte.MAX_VALUE) {</span>
+<span class="fc" id="L92">            return value.byteValue();</span>
         }
-<span class="fc" id="L70">        throw new AtlasConversionException(new AtlasUnsupportedException(String.format(</span>
+<span class="fc" id="L94">        throw new AtlasConversionException(new AtlasUnsupportedException(String.format(</span>
                 &quot;Float %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE or is not a whole number&quot;,
                 value)));
     }
 
+    /**
+     * Converts to {@link Character}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.CHAR, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.CONVENTION })
     public Character toCharacter(Float value) throws AtlasConversionException {
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L79">            return null;</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L109">            return null;</span>
         }
 
-<span class="fc bfc" id="L82" title="All 4 branches covered.">        if (value &lt; Character.MIN_VALUE || value &gt; Character.MAX_VALUE) {</span>
-<span class="fc" id="L83">            throw new AtlasConversionException(String</span>
-<span class="fc" id="L84">                    .format(&quot;Float %s is greater than Character.MAX_VALUE or is less than Character.MIN_VALUE&quot;, value));</span>
+<span class="fc bfc" id="L112" title="All 4 branches covered.">        if (value &lt; Character.MIN_VALUE || value &gt; Character.MAX_VALUE) {</span>
+<span class="fc" id="L113">            throw new AtlasConversionException(String</span>
+<span class="fc" id="L114">                    .format(&quot;Float %s is greater than Character.MAX_VALUE or is less than Character.MIN_VALUE&quot;, value));</span>
         }
 
-<span class="fc" id="L87">        return Character.valueOf((char) value.intValue());</span>
+<span class="fc" id="L117">        return Character.valueOf((char) value.intValue());</span>
     }
 
+    /**
+     * Converts to {@link Date}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public Date toDate(Float value) throws AtlasConversionException {
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L94">            return null;</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L130">            return null;</span>
         }
-<span class="pc bpc" id="L96" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L97">            throw new AtlasConversionException(String</span>
-<span class="nc" id="L98">                    .format(&quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));</span>
+<span class="pc bpc" id="L132" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L133">            throw new AtlasConversionException(String</span>
+<span class="nc" id="L134">                    .format(&quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L100">        return new Date(value.longValue());</span>
+<span class="fc" id="L136">        return new Date(value.longValue());</span>
     }
 
+    /**
+     * Converts to {@link Double}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DOUBLE)
     public Double toDouble(Float value) {
-<span class="fc bfc" id="L105" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L106">            return null;</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L147">            return null;</span>
         }
-<span class="fc" id="L108">        return value.doubleValue();</span>
+<span class="fc" id="L149">        return value.doubleValue();</span>
     }
 
+    /**
+     * Converts to {@link Float}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.FLOAT)
     public Float toFloat(Float value) {
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L114">            return null;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L160">            return null;</span>
         }
         // we want a copy of value
-<span class="fc" id="L117">        return value.floatValue();</span>
+<span class="fc" id="L163">        return value.floatValue();</span>
     }
 
+    /**
+     * Converts to {@link Integer}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.INTEGER, concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(Float value) throws AtlasConversionException {
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L123">            return null;</span>
-        }
-<span class="pc bpc" id="L125" title="1 of 4 branches missed.">        if (value &lt; Integer.MIN_VALUE || value &gt; Integer.MAX_VALUE) {</span>
-<span class="fc" id="L126">            throw new AtlasConversionException(String</span>
-<span class="fc" id="L127">                    .format(&quot;Float %s is greater than Integer.MAX_VALUE or is less than Integer.MIN_VALUE&quot;, value));</span>
-        }
-<span class="fc" id="L129">        return value.intValue();</span>
-    }
-
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
-            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
-    public LocalDate toLocalDate(Float value) throws AtlasConversionException {
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L136">            return null;</span>
-        }
-<span class="pc bpc" id="L138" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L139">            throw new AtlasConversionException(String.format(</span>
-                    &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
-        }
-<span class="fc" id="L142">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();</span>
-    }
-
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.TIME,
-            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
-    public LocalTime toLocalTime(Float value) throws AtlasConversionException {
-<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L149">            return null;</span>
-        }
-<span class="pc bpc" id="L151" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L152">            throw new AtlasConversionException(String.format(</span>
-                    &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
-        }
-<span class="fc" id="L155">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();</span>
-    }
-
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME,
-            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
-    public LocalDateTime toLocalDateTime(Float value) throws AtlasConversionException {
-<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L162">            return null;</span>
-        }
-<span class="nc bnc" id="L164" title="All 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
-<span class="nc" id="L165">            throw new AtlasConversionException(String.format(</span>
-                    &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
-        }
-<span class="nc" id="L168">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
-    }
-
-    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG,
-            concerns = AtlasConversionConcern.RANGE)
-    public Long toLong(Float value) throws AtlasConversionException {
 <span class="fc bfc" id="L174" title="All 2 branches covered.">        if (value == null) {</span>
 <span class="fc" id="L175">            return null;</span>
         }
-<span class="pc bpc" id="L177" title="1 of 4 branches missed.">        if (value &gt; Long.MAX_VALUE || value &lt; Long.MIN_VALUE) {</span>
-<span class="fc" id="L178">            throw new AtlasConversionException(</span>
-<span class="fc" id="L179">                    String.format(&quot;Float %s is greater than Long.MAX_VALUE or is less than Long.MIN_VALUE&quot;, value));</span>
+<span class="pc bpc" id="L177" title="1 of 4 branches missed.">        if (value &lt; Integer.MIN_VALUE || value &gt; Integer.MAX_VALUE) {</span>
+<span class="fc" id="L178">            throw new AtlasConversionException(String</span>
+<span class="fc" id="L179">                    .format(&quot;Float %s is greater than Integer.MAX_VALUE or is less than Integer.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L181">        return value.longValue();</span>
+<span class="fc" id="L181">        return value.intValue();</span>
     }
 
+    /**
+     * Converts to {@link LocalDate}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDate toLocalDate(Float value) throws AtlasConversionException {
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L194">            return null;</span>
+        }
+<span class="pc bpc" id="L196" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L197">            throw new AtlasConversionException(String.format(</span>
+                    &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+<span class="fc" id="L200">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDate();</span>
+    }
+
+    /**
+     * Converts to {@link LocalTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalTime toLocalTime(Float value) throws AtlasConversionException {
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L213">            return null;</span>
+        }
+<span class="pc bpc" id="L215" title="2 of 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L216">            throw new AtlasConversionException(String.format(</span>
+                    &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+<span class="fc" id="L219">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalTime();</span>
+    }
+
+    /**
+     * Converts to {@link LocalDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME,
+            concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
+    public LocalDateTime toLocalDateTime(Float value) throws AtlasConversionException {
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L232">            return null;</span>
+        }
+<span class="nc bnc" id="L234" title="All 4 branches missed.">        if (value &lt; Long.MIN_VALUE || value &gt; Long.MAX_VALUE) {</span>
+<span class="nc" id="L235">            throw new AtlasConversionException(String.format(</span>
+                    &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
+        }
+<span class="nc" id="L238">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
+    }
+
+    /**
+     * Converts to {@link Long}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
+    @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.LONG,
+            concerns = AtlasConversionConcern.RANGE)
+    public Long toLong(Float value) throws AtlasConversionException {
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L251">            return null;</span>
+        }
+<span class="pc bpc" id="L253" title="1 of 4 branches missed.">        if (value &gt; Long.MAX_VALUE || value &lt; Long.MIN_VALUE) {</span>
+<span class="fc" id="L254">            throw new AtlasConversionException(</span>
+<span class="fc" id="L255">                    String.format(&quot;Float %s is greater than Long.MAX_VALUE or is less than Long.MIN_VALUE&quot;, value));</span>
+        }
+<span class="fc" id="L257">        return value.longValue();</span>
+    }
+
+    /**
+     * Converts to {@link Number}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.NUMBER)
     public Number toNumber(Float value) {
-<span class="nc" id="L186">        return value;</span>
+<span class="nc" id="L267">        return value;</span>
     }
 
+    /**
+     * Converts to {@link Short}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.SHORT, concerns = AtlasConversionConcern.RANGE)
     public Short toShort(Float value) throws AtlasConversionException {
-<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L192">            return null;</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L279">            return null;</span>
         }
-<span class="pc bpc" id="L194" title="1 of 4 branches missed.">        if (value &gt; Short.MAX_VALUE || value &lt; Short.MIN_VALUE) {</span>
-<span class="fc" id="L195">            throw new AtlasConversionException(</span>
-<span class="fc" id="L196">                    String.format(&quot;Float %s is greater than Short.MAX_VALUE  or is less than Short.MIN_VALUE&quot;, value));</span>
+<span class="pc bpc" id="L281" title="1 of 4 branches missed.">        if (value &gt; Short.MAX_VALUE || value &lt; Short.MIN_VALUE) {</span>
+<span class="fc" id="L282">            throw new AtlasConversionException(</span>
+<span class="fc" id="L283">                    String.format(&quot;Float %s is greater than Short.MAX_VALUE  or is less than Short.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L198">        return value.shortValue();</span>
+<span class="fc" id="L285">        return value.shortValue();</span>
     }
 
+    /**
+     * Converts to {@link String}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public String toString(Float value) {
-<span class="fc bfc" id="L203" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        return value != null ? String.valueOf(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link CharBuffer}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Float value) {
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
     }
 
+    /**
+     * Converts to {@link CharSequence}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Float value) {
-<span class="nc bnc" id="L213" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+<span class="nc bnc" id="L315" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Float value) {
-<span class="nc bnc" id="L218" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
     }
 
+    /**
+     * Converts to {@link StringBuilder}.
+     * @param value value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Float value) {
-<span class="nc bnc" id="L223" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param value value
+     * @return converted
+     * @throws AtlasConversionException out of range
+     */
     @AtlasConversionInfo(sourceType = FieldType.FLOAT, targetType = FieldType.DATE_TIME_TZ,
             concerns = {AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART})
     public ZonedDateTime toZonedDateTime(Float value) throws AtlasConversionException {
-<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L230">            return null;</span>
+<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L348">            return null;</span>
         }
-<span class="pc bpc" id="L232" title="2 of 4 branches missed.">        if (value &gt; Long.MAX_VALUE || value &lt; Long.MIN_VALUE) {</span>
-<span class="nc" id="L233">            throw new AtlasConversionException(String.format(</span>
+<span class="pc bpc" id="L350" title="2 of 4 branches missed.">        if (value &gt; Long.MAX_VALUE || value &lt; Long.MIN_VALUE) {</span>
+<span class="nc" id="L351">            throw new AtlasConversionException(String.format(</span>
                     &quot;Float %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L236">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault());</span>
+<span class="fc" id="L354">        return Instant.ofEpochMilli(value.longValue()).atZone(ZoneId.systemDefault());</span>
     }
 
 }

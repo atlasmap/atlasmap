@@ -21,13 +21,18 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Field;
 
+/**
+ * The JSON enum field.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L25">public class JsonEnumField extends Field implements Serializable {</span>
+<span class="fc" id="L28">public class JsonEnumField extends Field implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-
+    /** Ordinal. */
     protected Integer ordinal;
+    /** Type name. */
     protected String typeName;
+    /** True if user created. */
     protected Boolean userCreated;
 
     /**
@@ -39,7 +44,7 @@ import io.atlasmap.v2.Field;
      *     
      */
     public Integer getOrdinal() {
-<span class="fc" id="L42">        return ordinal;</span>
+<span class="fc" id="L47">        return ordinal;</span>
     }
 
     /**
@@ -51,8 +56,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setOrdinal(Integer value) {
-<span class="nc" id="L54">        this.ordinal = value;</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L59">        this.ordinal = value;</span>
+<span class="nc" id="L60">    }</span>
 
     /**
      * Gets the value of the typeName property.
@@ -63,7 +68,7 @@ import io.atlasmap.v2.Field;
      *     
      */
     public String getTypeName() {
-<span class="fc" id="L66">        return typeName;</span>
+<span class="fc" id="L71">        return typeName;</span>
     }
 
     /**
@@ -75,8 +80,8 @@ import io.atlasmap.v2.Field;
      *     
      */
     public void setTypeName(String value) {
-<span class="nc" id="L78">        this.typeName = value;</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L83">        this.typeName = value;</span>
+<span class="nc" id="L84">    }</span>
 
     /**
      * Gets the value of the userCreated property.
@@ -87,7 +92,7 @@ import io.atlasmap.v2.Field;
      *
      */
     public Boolean isUserCreated() {
-<span class="fc" id="L90">        return userCreated;</span>
+<span class="fc" id="L95">        return userCreated;</span>
     }
 
     /**
@@ -99,54 +104,56 @@ import io.atlasmap.v2.Field;
      *
      */
     public void setUserCreated(Boolean value) {
-<span class="nc" id="L102">        this.userCreated = value;</span>
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L107">        this.userCreated = value;</span>
+<span class="nc" id="L108">    }</span>
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L106" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L107">            return false;</span>
-        }
-<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L110">            return true;</span>
-        }
-<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc bnc" id="L112" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
 <span class="nc" id="L113">            return false;</span>
         }
-<span class="nc" id="L115">        final JsonEnumField that = ((JsonEnumField) object);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L116">            return true;</span>
+        }
+<span class="nc bnc" id="L118" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L119">            return false;</span>
+        }
+<span class="nc" id="L121">        final JsonEnumField that = ((JsonEnumField) object);</span>
         {
             String leftName;
-<span class="nc" id="L118">            leftName = this.getName();</span>
+<span class="nc" id="L124">            leftName = this.getName();</span>
             String rightName;
-<span class="nc" id="L120">            rightName = that.getName();</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">            if (this.name!= null) {</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">                if (that.name!= null) {</span>
-<span class="nc bnc" id="L123" title="All 2 branches missed.">                    if (!leftName.equals(rightName)) {</span>
-<span class="nc" id="L124">                        return false;</span>
+<span class="nc" id="L126">            rightName = that.getName();</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                if (that.name!= null) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                    if (!leftName.equals(rightName)) {</span>
+<span class="nc" id="L130">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L127">                    return false;</span>
+<span class="nc" id="L133">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L130" title="All 2 branches missed.">                if (that.name!= null) {</span>
-<span class="nc" id="L131">                    return false;</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">                if (that.name!= null) {</span>
+<span class="nc" id="L137">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L135">        return true;</span>
+<span class="nc" id="L141">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L139">        int currentHashCode = 1;</span>
-<span class="nc" id="L140">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L146">        int currentHashCode = 1;</span>
+<span class="nc" id="L147">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L142">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L149">            currentHashCode = (currentHashCode* 31);</span>
             String theName;
-<span class="nc" id="L144">            theName = this.getName();</span>
-<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (this.name!= null) {</span>
-<span class="nc" id="L146">                currentHashCode += theName.hashCode();</span>
+<span class="nc" id="L151">            theName = this.getName();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">            if (this.name!= null) {</span>
+<span class="nc" id="L153">                currentHashCode += theName.hashCode();</span>
             }
         }
-<span class="nc" id="L149">        return currentHashCode;</span>
+<span class="nc" id="L156">        return currentHashCode;</span>
     }
 
 }

@@ -22,83 +22,112 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
-<span class="nc" id="L25">public class AtlasJavaModelFactory {</span>
+/**
+ * The model factory for java module.
+ */
+<span class="nc" id="L28">public class AtlasJavaModelFactory {</span>
 
+    /** template string for the module URI. */
     public static final String URI_FORMAT = &quot;atlas:java?className=%s&quot;;
 
+    /**
+     * Creates {@link JavaClass}.
+     * @return JavaClass
+     */
     public static JavaClass createJavaClass() {
-<span class="fc" id="L30">        JavaClass javaClass = new JavaClass();</span>
-<span class="fc" id="L31">        javaClass.setJavaEnumFields(new JavaEnumFields());</span>
-<span class="fc" id="L32">        javaClass.setJavaFields(new JavaFields());</span>
-<span class="fc" id="L33">        return javaClass;</span>
+<span class="fc" id="L38">        JavaClass javaClass = new JavaClass();</span>
+<span class="fc" id="L39">        javaClass.setJavaEnumFields(new JavaEnumFields());</span>
+<span class="fc" id="L40">        javaClass.setJavaFields(new JavaFields());</span>
+<span class="fc" id="L41">        return javaClass;</span>
     }
 
+    /**
+     * Creates {@link JavaField}.
+     * @return JavaField
+     */
     public static JavaField createJavaField() {
-<span class="fc" id="L37">        JavaField javaField = new JavaField();</span>
-<span class="fc" id="L38">        javaField.setModifiers(new ModifierList());</span>
-<span class="fc" id="L39">        return javaField;</span>
+<span class="fc" id="L49">        JavaField javaField = new JavaField();</span>
+<span class="fc" id="L50">        javaField.setModifiers(new ModifierList());</span>
+<span class="fc" id="L51">        return javaField;</span>
     }
 
+    /**
+     * Clones {@link FieldGroup}.
+     * @param group source
+     * @return cloned
+     */
     public static FieldGroup cloneFieldGroup(FieldGroup group) {
-<span class="fc" id="L43">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
-<span class="fc" id="L44">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
-<span class="pc bpc" id="L46" title="1 of 2 branches missed.">            if (child instanceof FieldGroup) {</span>
-<span class="nc" id="L47">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
+<span class="fc" id="L60">        FieldGroup clone = AtlasModelFactory.copyFieldGroup(group);</span>
+<span class="fc" id="L61">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        for (Field child : group.getField()) {</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">            if (child instanceof FieldGroup) {</span>
+<span class="nc" id="L64">                newChildren.add(cloneFieldGroup((FieldGroup)child));</span>
             } else {
-<span class="fc" id="L49">                newChildren.add(cloneJavaField(child, true));</span>
+<span class="fc" id="L66">                newChildren.add(cloneJavaField(child, true));</span>
             }
-<span class="fc" id="L51">        }</span>
-<span class="fc" id="L52">        clone.getField().addAll(newChildren);</span>
-<span class="fc" id="L53">        return clone;</span>
+<span class="fc" id="L68">        }</span>
+<span class="fc" id="L69">        clone.getField().addAll(newChildren);</span>
+<span class="fc" id="L70">        return clone;</span>
     }
 
+    /**
+     * Clones {@link JavaField} or {@link JavaEnumField}.
+     * @param field field
+     * @param withActions true to clone actions as well
+     * @return cloned
+     */
     public static Field cloneJavaField(Field field, boolean withActions) {
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (field instanceof FieldGroup) {</span>
-<span class="nc" id="L58">            FieldGroup clone = AtlasModelFactory.createFieldGroupFrom(field, withActions);</span>
-<span class="nc bnc" id="L59" title="All 2 branches missed.">            for (Field f : ((FieldGroup)field).getField()) {</span>
-<span class="nc" id="L60">                clone.getField().add(cloneJavaField(f, withActions));</span>
-<span class="nc" id="L61">            }</span>
-<span class="nc" id="L62">            return clone;</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (field instanceof FieldGroup) {</span>
+<span class="nc" id="L81">            FieldGroup clone = AtlasModelFactory.createFieldGroupFrom(field, withActions);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            for (Field f : ((FieldGroup)field).getField()) {</span>
+<span class="nc" id="L83">                clone.getField().add(cloneJavaField(f, withActions));</span>
+<span class="nc" id="L84">            }</span>
+<span class="nc" id="L85">            return clone;</span>
         }
-<span class="fc bfc" id="L64" title="All 2 branches covered.">        Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
-<span class="fc" id="L65">        copyField(field, clone, withActions);</span>
-<span class="fc" id="L66">        return clone;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        Field clone = field instanceof JavaEnumField ? new JavaEnumField() : new JavaField();</span>
+<span class="fc" id="L88">        copyField(field, clone, withActions);</span>
+<span class="fc" id="L89">        return clone;</span>
     }
 
+    /**
+     * Deep copies the field.
+     * @param from from
+     * @param to to
+     * @param withActions true to clone actions as well
+     */
     public static void copyField(Field from, Field to, boolean withActions) {
-<span class="fc" id="L70">        AtlasModelFactory.copyField(from, to, withActions);</span>
+<span class="fc" id="L99">        AtlasModelFactory.copyField(from, to, withActions);</span>
 
-<span class="pc bpc" id="L72" title="1 of 4 branches missed.">        if (from instanceof JavaField &amp;&amp; to instanceof JavaField) {</span>
-<span class="fc" id="L73">            JavaField fromJava = (JavaField) from;</span>
-<span class="fc" id="L74">            JavaField toJava = (JavaField)to;</span>
+<span class="pc bpc" id="L101" title="1 of 4 branches missed.">        if (from instanceof JavaField &amp;&amp; to instanceof JavaField) {</span>
+<span class="fc" id="L102">            JavaField fromJava = (JavaField) from;</span>
+<span class="fc" id="L103">            JavaField toJava = (JavaField)to;</span>
 
             // defined by JavaField
-<span class="fc" id="L77">            toJava.setAnnotations(fromJava.getAnnotations());</span>
-<span class="fc" id="L78">            toJava.setClassName(fromJava.getClassName());</span>
-<span class="fc" id="L79">            toJava.setCollectionClassName(fromJava.getCollectionClassName());</span>
-<span class="fc" id="L80">            toJava.setGetMethod(fromJava.getGetMethod());</span>
-<span class="fc" id="L81">            toJava.setModifiers(fromJava.getModifiers());</span>
-<span class="fc" id="L82">            toJava.setName(fromJava.getName());</span>
-<span class="fc" id="L83">            toJava.setParameterizedTypes(fromJava.getParameterizedTypes());</span>
-<span class="fc" id="L84">            toJava.setPrimitive(fromJava.isPrimitive());</span>
-<span class="fc" id="L85">            toJava.setSetMethod(fromJava.getSetMethod());</span>
-<span class="fc" id="L86">            toJava.setSynthetic(fromJava.isSynthetic());</span>
-<span class="fc" id="L87">            return;</span>
+<span class="fc" id="L106">            toJava.setAnnotations(fromJava.getAnnotations());</span>
+<span class="fc" id="L107">            toJava.setClassName(fromJava.getClassName());</span>
+<span class="fc" id="L108">            toJava.setCollectionClassName(fromJava.getCollectionClassName());</span>
+<span class="fc" id="L109">            toJava.setGetMethod(fromJava.getGetMethod());</span>
+<span class="fc" id="L110">            toJava.setModifiers(fromJava.getModifiers());</span>
+<span class="fc" id="L111">            toJava.setName(fromJava.getName());</span>
+<span class="fc" id="L112">            toJava.setParameterizedTypes(fromJava.getParameterizedTypes());</span>
+<span class="fc" id="L113">            toJava.setPrimitive(fromJava.isPrimitive());</span>
+<span class="fc" id="L114">            toJava.setSetMethod(fromJava.getSetMethod());</span>
+<span class="fc" id="L115">            toJava.setSynthetic(fromJava.isSynthetic());</span>
+<span class="fc" id="L116">            return;</span>
         }
-<span class="pc bpc" id="L89" title="2 of 4 branches missed.">        if (from instanceof JavaEnumField &amp;&amp; to instanceof JavaEnumField) {</span>
-<span class="fc" id="L90">            JavaEnumField fromEnum = (JavaEnumField) from;</span>
-<span class="fc" id="L91">            JavaEnumField toEnum = (JavaEnumField)to;</span>
+<span class="pc bpc" id="L118" title="2 of 4 branches missed.">        if (from instanceof JavaEnumField &amp;&amp; to instanceof JavaEnumField) {</span>
+<span class="fc" id="L119">            JavaEnumField fromEnum = (JavaEnumField) from;</span>
+<span class="fc" id="L120">            JavaEnumField toEnum = (JavaEnumField)to;</span>
 
             // defined by JavaEnumField
-<span class="fc" id="L94">            toEnum.setClassName(fromEnum.getClassName());</span>
-<span class="fc" id="L95">            toEnum.setName(fromEnum.getName());</span>
-<span class="fc" id="L96">            toEnum.setOrdinal(fromEnum.getOrdinal());</span>
-<span class="fc" id="L97">            return;</span>
+<span class="fc" id="L123">            toEnum.setClassName(fromEnum.getClassName());</span>
+<span class="fc" id="L124">            toEnum.setName(fromEnum.getName());</span>
+<span class="fc" id="L125">            toEnum.setOrdinal(fromEnum.getOrdinal());</span>
+<span class="fc" id="L126">            return;</span>
         }
         // TODO: needs to be atlasexception, but that's not a dependency for some reason
         // on this project.
-<span class="nc" id="L101">        throw new RuntimeException(String.format(</span>
+<span class="nc" id="L130">        throw new RuntimeException(String.format(</span>
                 &quot;Unsupported field type to copy: from=%s, to=%s&quot;, from, to));
     }
 

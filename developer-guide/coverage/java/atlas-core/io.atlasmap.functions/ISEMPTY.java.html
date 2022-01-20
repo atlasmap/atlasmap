@@ -27,26 +27,30 @@ import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.Field;
 
-<span class="fc" id="L30">public class ISEMPTY extends BaseFunctionFactory {</span>
+/**
+ * The {@code ISEMPTY()} function for conditinal mapping expression which returns
+ * {@code true} if it's empty, otherwise returns {@code false}.
+ */
+<span class="fc" id="L34">public class ISEMPTY extends BaseFunctionFactory {</span>
 
     @Override
     public Expression create(List&lt;Expression&gt; args) throws ParseException {
-<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (args.size() != 1) {</span>
-<span class="nc" id="L35">            throw new ParseException(&quot;ISEMPTY expects 1 argument.&quot;);</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (args.size() != 1) {</span>
+<span class="nc" id="L39">            throw new ParseException(&quot;ISEMPTY expects 1 argument.&quot;);</span>
         }
-<span class="fc" id="L37">        final Expression arg = args.get(0);</span>
-<span class="fc" id="L38">        return new BooleanExpression() {</span>
+<span class="fc" id="L41">        final Expression arg = args.get(0);</span>
+<span class="fc" id="L42">        return new BooleanExpression() {</span>
             public Field evaluate(ExpressionContext ctx) throws ExpressionException {
-<span class="fc" id="L40">                Field f = arg.evaluate(ctx);</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">                Object value = f == null ? null : f.getValue();</span>
-<span class="fc bfc" id="L42" title="All 4 branches covered.">                if (value == null || value.toString().isEmpty()) {</span>
-<span class="fc" id="L43">                    return wrapWithField(Boolean.TRUE);</span>
+<span class="fc" id="L44">                Field f = arg.evaluate(ctx);</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">                Object value = f == null ? null : f.getValue();</span>
+<span class="fc bfc" id="L46" title="All 4 branches covered.">                if (value == null || value.toString().isEmpty()) {</span>
+<span class="fc" id="L47">                    return wrapWithField(Boolean.TRUE);</span>
                 }
-<span class="fc" id="L45">                return wrapWithField(Boolean.FALSE);</span>
+<span class="fc" id="L49">                return wrapWithField(Boolean.FALSE);</span>
             };
             public boolean matches(ExpressionContext ctx) throws ExpressionException {
-<span class="fc" id="L48">                Object answer = evaluate(ctx).getValue();</span>
-<span class="pc bpc" id="L49" title="1 of 4 branches missed.">                return answer != null &amp;&amp; answer == Boolean.TRUE;</span>
+<span class="fc" id="L52">                Object answer = evaluate(ctx).getValue();</span>
+<span class="pc bpc" id="L53" title="1 of 4 branches missed.">                return answer != null &amp;&amp; answer == Boolean.TRUE;</span>
             }
         };
     }

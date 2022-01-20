@@ -19,12 +19,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/**
+ * Routing configuration.
+ */
 @Component
-<span class="fc" id="L23">public class RoutingConfiguration extends WebMvcConfigurerAdapter {</span>
+<span class="fc" id="L26">public class RoutingConfiguration extends WebMvcConfigurerAdapter {</span>
 
+    /**
+     * Adds a view controller.
+     * @param registry registry
+     */
     public void addViewControllers(final ViewControllerRegistry registry){
-<span class="fc" id="L26">        super.addViewControllers(registry);</span>
-<span class="fc" id="L27">        registry.addViewController(&quot;/mapping-id/*&quot;).setViewName(&quot;forward:/&quot;);</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L33">        super.addViewControllers(registry);</span>
+<span class="fc" id="L34">        registry.addViewController(&quot;/mapping-id/*&quot;).setViewName(&quot;forward:/&quot;);</span>
+<span class="fc" id="L35">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

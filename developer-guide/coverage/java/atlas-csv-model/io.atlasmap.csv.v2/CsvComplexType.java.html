@@ -24,13 +24,17 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.ComplexType;
 import io.atlasmap.v2.Field;
 
+/**
+ * The CSV complex field.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L28">public class CsvComplexType extends CsvField implements Serializable, ComplexType {</span>
+<span class="fc" id="L31">public class CsvComplexType extends CsvField implements Serializable, ComplexType {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** Children. */
     protected CsvFields csvFields;
-
+    /** URI. */
     protected String uri;
 
     /**
@@ -42,7 +46,7 @@ import io.atlasmap.v2.Field;
      *
      */
     public CsvFields getCsvFields() {
-<span class="fc" id="L45">        return csvFields;</span>
+<span class="fc" id="L49">        return csvFields;</span>
     }
 
     /**
@@ -54,8 +58,8 @@ import io.atlasmap.v2.Field;
      *
      */
     public void setCsvFields(CsvFields value) {
-<span class="fc" id="L57">        this.csvFields = value;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L61">        this.csvFields = value;</span>
+<span class="fc" id="L62">    }</span>
 
     /**
      * Gets the value of the uri property.
@@ -66,7 +70,7 @@ import io.atlasmap.v2.Field;
      *
      */
     public String getUri() {
-<span class="fc" id="L69">        return uri;</span>
+<span class="fc" id="L73">        return uri;</span>
     }
 
     /**
@@ -78,87 +82,89 @@ import io.atlasmap.v2.Field;
      *
      */
     public void setUri(String value) {
-<span class="nc" id="L81">        this.uri = value;</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L85">        this.uri = value;</span>
+<span class="nc" id="L86">    }</span>
 
     @JsonIgnore
     @Override
     public List&lt;? extends Field&gt; getChildFields() {
-<span class="nc" id="L87">        return csvFields.getCsvField();</span>
+<span class="nc" id="L91">        return csvFields.getCsvField();</span>
     }
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L91" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L92">            return false;</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L97">            return false;</span>
         }
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L95">            return true;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L100">            return true;</span>
         }
-<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L98">            return false;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L103">            return false;</span>
         }
-<span class="nc" id="L100">        final CsvComplexType that = ((CsvComplexType) object);</span>
+<span class="nc" id="L105">        final CsvComplexType that = ((CsvComplexType) object);</span>
         {
             CsvFields leftCsvFields;
-<span class="nc" id="L103">            leftCsvFields = this.getCsvFields();</span>
+<span class="nc" id="L108">            leftCsvFields = this.getCsvFields();</span>
             CsvFields rightCsvFields;
-<span class="nc" id="L105">            rightCsvFields = that.getCsvFields();</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">            if (this.csvFields!= null) {</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">                if (that.csvFields!= null) {</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">                    if (!leftCsvFields.equals(rightCsvFields)) {</span>
-<span class="nc" id="L109">                        return false;</span>
+<span class="nc" id="L110">            rightCsvFields = that.getCsvFields();</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (this.csvFields!= null) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                if (that.csvFields!= null) {</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">                    if (!leftCsvFields.equals(rightCsvFields)) {</span>
+<span class="nc" id="L114">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L112">                    return false;</span>
+<span class="nc" id="L117">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L115" title="All 2 branches missed.">                if (that.csvFields!= null) {</span>
-<span class="nc" id="L116">                    return false;</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                if (that.csvFields!= null) {</span>
+<span class="nc" id="L121">                    return false;</span>
                 }
             }
         }
         {
             String leftUri;
-<span class="nc" id="L122">            leftUri = this.getUri();</span>
+<span class="nc" id="L127">            leftUri = this.getUri();</span>
             String rightUri;
-<span class="nc" id="L124">            rightUri = that.getUri();</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
-<span class="nc" id="L128">                        return false;</span>
+<span class="nc" id="L129">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L133">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L131">                    return false;</span>
+<span class="nc" id="L136">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L134" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc" id="L135">                    return false;</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L140">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L139">        return true;</span>
+<span class="nc" id="L144">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L143">        int currentHashCode = 1;</span>
-<span class="nc" id="L144">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L149">        int currentHashCode = 1;</span>
+<span class="nc" id="L150">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L146">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L152">            currentHashCode = (currentHashCode* 31);</span>
             CsvFields theCsvFields;
-<span class="nc" id="L148">            theCsvFields = this.getCsvFields();</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">            if (this.csvFields!= null) {</span>
-<span class="nc" id="L150">                currentHashCode += theCsvFields.hashCode();</span>
+<span class="nc" id="L154">            theCsvFields = this.getCsvFields();</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">            if (this.csvFields!= null) {</span>
+<span class="nc" id="L156">                currentHashCode += theCsvFields.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L154">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L160">            currentHashCode = (currentHashCode* 31);</span>
             String theUri;
-<span class="nc" id="L156">            theUri = this.getUri();</span>
-<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc" id="L158">                currentHashCode += theUri.hashCode();</span>
+<span class="nc" id="L162">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L164">                currentHashCode += theUri.hashCode();</span>
             }
         }
-<span class="nc" id="L161">        return currentHashCode;</span>
+<span class="nc" id="L167">        return currentHashCode;</span>
     }
 
 }

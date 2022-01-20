@@ -18,14 +18,21 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-<span class="fc" id="L21">public class LookupTable implements Serializable {</span>
+
+/**
+ * The lookup table model object.
+ */
+<span class="fc" id="L25">public class LookupTable implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link LookupEntry} */
     protected List&lt;LookupEntry&gt; lookupEntry;
 
+    /** name */
     protected String name;
 
+    /** description */
     protected String description;
 
     /**
@@ -51,10 +58,10 @@ import java.util.List;
      * @return A list of {@link LookupEntry}
      */
     public List&lt;LookupEntry&gt; getLookupEntry() {
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (lookupEntry == null) {</span>
-<span class="fc" id="L55">            lookupEntry = new ArrayList&lt;LookupEntry&gt;();</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (lookupEntry == null) {</span>
+<span class="fc" id="L62">            lookupEntry = new ArrayList&lt;LookupEntry&gt;();</span>
         }
-<span class="fc" id="L57">        return this.lookupEntry;</span>
+<span class="fc" id="L64">        return this.lookupEntry;</span>
     }
 
     /**
@@ -66,7 +73,7 @@ import java.util.List;
      *     
      */
     public String getName() {
-<span class="fc" id="L69">        return name;</span>
+<span class="fc" id="L76">        return name;</span>
     }
 
     /**
@@ -78,8 +85,8 @@ import java.util.List;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L81">        this.name = value;</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L88">        this.name = value;</span>
+<span class="fc" id="L89">    }</span>
 
     /**
      * Gets the value of the description property.
@@ -90,7 +97,7 @@ import java.util.List;
      *     
      */
     public String getDescription() {
-<span class="fc" id="L93">        return description;</span>
+<span class="fc" id="L100">        return description;</span>
     }
 
     /**
@@ -102,8 +109,8 @@ import java.util.List;
      *     
      */
     public void setDescription(String value) {
-<span class="fc" id="L105">        this.description = value;</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L112">        this.description = value;</span>
+<span class="fc" id="L113">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

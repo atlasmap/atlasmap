@@ -15,7 +15,12 @@
  */
 package io.atlasmap.xml.inspect;
 
-public class XmlInspectionException extends Exception {
+import io.atlasmap.api.AtlasException;
+
+/**
+ * The XML inspection Exception.
+ */
+public class XmlInspectionException extends AtlasException {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,8 +34,8 @@ public class XmlInspectionException extends Exception {
      *            retrieval by the {@link #getMessage()} method.
      */
     public XmlInspectionException(String message) {
-<span class="nc" id="L32">        super(message);</span>
-<span class="nc" id="L33">    }</span>
+<span class="nc" id="L37">        super(message);</span>
+<span class="nc" id="L38">    }</span>
 
     /**
      * Constructs a new exception with the specified detail message and cause.
@@ -48,8 +53,8 @@ public class XmlInspectionException extends Exception {
      * @since 1.4
      */
     public XmlInspectionException(String message, Throwable cause) {
-<span class="fc" id="L51">        super(message, cause);</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L56">        super(message, cause);</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Constructs a new exception with the specified cause and a detail message of
@@ -65,28 +70,8 @@ public class XmlInspectionException extends Exception {
      * @since 1.4
      */
     public XmlInspectionException(Throwable cause) {
-<span class="fc" id="L68">        super(cause);</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L73">        super(cause);</span>
+<span class="fc" id="L74">    }</span>
 
-    /**
-     * Constructs a new exception with the specified detail message, cause,
-     * suppression enabled or disabled, and writable stack trace enabled or
-     * disabled.
-     *
-     * @param message
-     *            the detail message.
-     * @param cause
-     *            the cause. (A {@code null} value is permitted, and indicates that
-     *            the cause is nonexistent or unknown.)
-     * @param enableSuppression
-     *            whether or not suppression is enabled or disabled
-     * @param writableStackTrace
-     *            whether or not the stack trace should be writable
-     * @since 1.7
-     */
-    public XmlInspectionException(String message, Throwable cause, boolean enableSuppression,
-            boolean writableStackTrace) {
-<span class="nc" id="L89">        super(message, cause, enableSuppression, writableStackTrace);</span>
-<span class="nc" id="L90">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

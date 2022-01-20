@@ -23,18 +23,29 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
+/**
+ * The model class for the &lt;strong&gt;Copy To&lt;/strong&gt; field action.
+ */
 public class CopyTo extends Action implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /** index */
     private String index;
 
-<span class="fc" id="L32">    public CopyTo(String index) {</span>
-<span class="fc" id="L33">        this.index = index;</span>
-<span class="fc" id="L34">    }</span>
+    /**
+     * A constructor.
+     * @param index index
+     */
+<span class="fc" id="L40">    public CopyTo(String index) {</span>
+<span class="fc" id="L41">        this.index = index;</span>
+<span class="fc" id="L42">    }</span>
 
-<span class="fc" id="L36">    public CopyTo() {</span>
-<span class="fc" id="L37">    }</span>
+    /**
+     * A constructor.
+     */
+<span class="fc" id="L47">    public CopyTo() {</span>
+<span class="fc" id="L48">    }</span>
 
     /**
      * Gets the value of the string property.
@@ -43,7 +54,7 @@ public class CopyTo extends Action implements Serializable {
      * {@link Integer }
      */
     public String getIndex() {
-<span class="fc" id="L46">        return index;</span>
+<span class="fc" id="L57">        return index;</span>
     }
 
     /**
@@ -55,13 +66,17 @@ public class CopyTo extends Action implements Serializable {
     @JsonPropertyDescription(&quot;The comma-separated indexes of the item in target collections.&quot;)
     @AtlasActionProperty(title = &quot;Indexes&quot;, type = FieldType.STRING)
     public void setIndex(String index) {
-<span class="fc" id="L58">        this.index = index;</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L69">        this.index = index;</span>
+<span class="fc" id="L70">    }</span>
 
+    /**
+     * Gets indexes.
+     * @return indexes
+     */
     @JsonIgnore
     public List&lt;Integer&gt; getIndexes() {
         // indexes coming from the ui are 1-based while we work with 0-based indexes
-<span class="fc" id="L64">        return Arrays.stream(index.trim().split(&quot;,&quot;)).map(i -&gt; Integer.parseInt(i) - 1).collect(Collectors.toList());</span>
+<span class="fc" id="L79">        return Arrays.stream(index.trim().split(&quot;,&quot;)).map(i -&gt; Integer.parseInt(i) - 1).collect(Collectors.toList());</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

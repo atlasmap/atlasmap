@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.JarURLConnection;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Path;
@@ -37,8 +35,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,72 +50,104 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationStatus;
 
-<span class="nc" id="L57">public class AtlasUtil {</span>
+/**
+ * A collection of utility methods.
+ */
+<span class="nc" id="L56">public class AtlasUtil {</span>
+    /** split limit. */
     public static final int SPLIT_LIMIT = 4;
+    /** new line chars. */
     public static final String NEW_LINE_CHARS = &quot;(?m)$^|[\\r\\n]+\\z&quot;;
-<span class="fc" id="L60">    private static final Logger LOG = LoggerFactory.getLogger(AtlasUtil.class);</span>
+<span class="fc" id="L61">    private static final Logger LOG = LoggerFactory.getLogger(AtlasUtil.class);</span>
 
+    /**
+     * Loads the property file from the specified URL.
+     * @param url property file URL
+     * @return loaded properties
+     * @throws Exception unexpected error
+     */
     public static Properties loadPropertiesFromURL(URL url) throws Exception {
-<span class="fc" id="L63">        try (InputStream is = url.openStream()) {</span>
-<span class="fc" id="L64">            Properties prop = new Properties();</span>
-<span class="fc" id="L65">            prop.load(is);</span>
-<span class="fc" id="L66">            return prop;</span>
+<span class="fc" id="L70">        try (InputStream is = url.openStream()) {</span>
+<span class="fc" id="L71">            Properties prop = new Properties();</span>
+<span class="fc" id="L72">            prop.load(is);</span>
+<span class="fc" id="L73">            return prop;</span>
         }
     }
 
+    /**
+     * Gets if the specified string is null or empty. Note that unlike {@link String#isEmpty()},
+     * the whitespace(s) is also considered empty.
+     * @param string string to test
+     * @return true if it's null or empty, or false
+     */
     public static boolean isEmpty(String string) {
-<span class="fc bfc" id="L71" title="All 6 branches covered.">        return string == null || string.isEmpty() || string.matches(&quot;^\\s+$&quot;);</span>
+<span class="fc bfc" id="L84" title="All 6 branches covered.">        return string == null || string.isEmpty() || string.matches(&quot;^\\s+$&quot;);</span>
     }
 
+    /**
+     * Gets if the module part of the URI match.
+     * @param uriA URI A
+     * @param uriB URI B
+     * @return true if the module part of the URI match
+     */
     public static boolean matchUriModule(String uriA, String uriB) {
-<span class="fc bfc" id="L75" title="All 4 branches covered.">        if (uriA == null || uriB == null) {</span>
-<span class="fc" id="L76">            return false;</span>
+<span class="fc bfc" id="L94" title="All 4 branches covered.">        if (uriA == null || uriB == null) {</span>
+<span class="fc" id="L95">            return false;</span>
         }
 
-<span class="fc bfc" id="L79" title="All 4 branches covered.">        if (getUriModule(uriA) == null || getUriModule(uriB) == null) {</span>
-<span class="fc" id="L80">            return false;</span>
+<span class="fc bfc" id="L98" title="All 4 branches covered.">        if (getUriModule(uriA) == null || getUriModule(uriB) == null) {</span>
+<span class="fc" id="L99">            return false;</span>
         }
 
-<span class="fc" id="L83">        return getUriModule(uriA).equalsIgnoreCase(getUriModule(uriB));</span>
+<span class="fc" id="L102">        return getUriModule(uriA).equalsIgnoreCase(getUriModule(uriB));</span>
 
     }
 
+    /**
+     * Validates the URI.
+     * @param atlasUri URI
+     */
     protected static void validateUri(String atlasUri) {
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        if (!atlasUri.startsWith(&quot;atlas:&quot;)) {</span>
-<span class="fc" id="L89">            throw new IllegalStateException(</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!atlasUri.startsWith(&quot;atlas:&quot;)) {</span>
+<span class="fc" id="L112">            throw new IllegalStateException(</span>
                     &quot;Invalid atlas uri &quot; + atlasUri + &quot; does not begin with 'atlas:': &quot; + atlasUri);
         }
 
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (countCharacters(atlasUri, '?') &gt; 1) {</span>
-<span class="fc" id="L94">            throw new IllegalStateException(&quot;Invalid atlas uri &quot; + atlasUri + &quot; multiple '?' characters: &quot; + atlasUri);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (countCharacters(atlasUri, '?') &gt; 1) {</span>
+<span class="fc" id="L117">            throw new IllegalStateException(&quot;Invalid atlas uri &quot; + atlasUri + &quot; multiple '?' characters: &quot; + atlasUri);</span>
         }
-<span class="fc" id="L96">    }</span>
+<span class="fc" id="L119">    }</span>
 
+    /**
+     * Parses the URI and return a list of the parts.
+     * @param atlasUri URI
+     * @return a list of the URI parts
+     */
     protected static List&lt;String&gt; getUriPartsAsArray(String atlasUri) {
 
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (atlasUri == null) {</span>
-<span class="fc" id="L101">            return null;</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (atlasUri == null) {</span>
+<span class="fc" id="L129">            return null;</span>
         }
 
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(atlasUri)) {</span>
-<span class="fc" id="L105">            return Arrays.asList(new String[0]);</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(atlasUri)) {</span>
+<span class="fc" id="L133">            return Arrays.asList(new String[0]);</span>
         }
 
-<span class="fc" id="L108">        validateUri(atlasUri);</span>
+<span class="fc" id="L136">        validateUri(atlasUri);</span>
 
-<span class="fc" id="L110">        String[] pass1 = null;</span>
-<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (atlasUri.contains(&quot;?&quot;)) {</span>
-<span class="fc" id="L112">            pass1 = atlasUri.split(&quot;\\?&quot;, 2);</span>
+<span class="fc" id="L138">        String[] pass1 = null;</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        if (atlasUri.contains(&quot;?&quot;)) {</span>
+<span class="fc" id="L140">            pass1 = atlasUri.split(&quot;\\?&quot;, 2);</span>
         }
 
-<span class="fc" id="L115">        List&lt;String&gt; parts = new ArrayList&lt;String&gt;();</span>
-<span class="pc bpc" id="L116" title="1 of 4 branches missed.">        if (pass1 != null &amp;&amp; pass1.length &gt;= 1) {</span>
-<span class="fc" id="L117">            parts.addAll(Arrays.asList(pass1[0].split(&quot;:&quot;, 4)));</span>
+<span class="fc" id="L143">        List&lt;String&gt; parts = new ArrayList&lt;String&gt;();</span>
+<span class="pc bpc" id="L144" title="1 of 4 branches missed.">        if (pass1 != null &amp;&amp; pass1.length &gt;= 1) {</span>
+<span class="fc" id="L145">            parts.addAll(Arrays.asList(pass1[0].split(&quot;:&quot;, 4)));</span>
         } else {
-<span class="fc" id="L119">            parts.addAll(Arrays.asList(atlasUri.split(&quot;:&quot;, 4)));</span>
+<span class="fc" id="L147">            parts.addAll(Arrays.asList(atlasUri.split(&quot;:&quot;, 4)));</span>
         }
 
-<span class="fc" id="L122">        return parts;</span>
+<span class="fc" id="L150">        return parts;</span>
     }
 
     /**
@@ -138,477 +166,528 @@ import io.atlasmap.v2.ValidationStatus;
      *
      */
     public static String getUriScheme(String atlasUri) {
-<span class="fc" id="L141">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
-<span class="pc bpc" id="L142" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 1 || isEmpty(uriA.get(0))) {</span>
-<span class="fc" id="L143">            return null;</span>
+<span class="fc" id="L169">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L170" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 1 || isEmpty(uriA.get(0))) {</span>
+<span class="fc" id="L171">            return null;</span>
         }
 
-<span class="fc" id="L146">        return uriA.get(0);</span>
+<span class="fc" id="L174">        return uriA.get(0);</span>
     }
 
+    /**
+     * Gets the module part of the URI.
+     * @param atlasUri URI
+     * @return module part
+     */
     public static String getUriModule(String atlasUri) {
-<span class="fc" id="L150">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
-<span class="pc bpc" id="L151" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 2 || isEmpty(uriA.get(1))) {</span>
-<span class="fc" id="L152">            return null;</span>
+<span class="fc" id="L183">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L184" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 2 || isEmpty(uriA.get(1))) {</span>
+<span class="fc" id="L185">            return null;</span>
         }
 
-<span class="fc" id="L155">        return uriA.get(1);</span>
+<span class="fc" id="L188">        return uriA.get(1);</span>
     }
 
+    /**
+     * Gets the data type part of the URI.
+     * @param atlasUri URI
+     * @return data part
+     */
     public static String getUriDataType(String atlasUri) {
-<span class="fc" id="L159">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
-<span class="pc bpc" id="L160" title="1 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 3 || isEmpty(uriA.get(2))) {</span>
-<span class="fc" id="L161">            return null;</span>
+<span class="fc" id="L197">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L198" title="1 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 3 || isEmpty(uriA.get(2))) {</span>
+<span class="fc" id="L199">            return null;</span>
         }
 
-<span class="fc" id="L164">        return uriA.get(2);</span>
+<span class="fc" id="L202">        return uriA.get(2);</span>
     }
 
+    /**
+     * Gets the version part of the URI.
+     * @param atlasUri URI
+     * @return version part
+     */
     public static String getUriModuleVersion(String atlasUri) {
-<span class="fc" id="L168">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
-<span class="pc bpc" id="L169" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 4 || isEmpty(uriA.get(3))) {</span>
-<span class="fc" id="L170">            return null;</span>
+<span class="fc" id="L211">        List&lt;String&gt; uriA = AtlasUtil.getUriPartsAsArray(atlasUri);</span>
+<span class="pc bpc" id="L212" title="2 of 6 branches missed.">        if (uriA == null || uriA.size() &lt; 4 || isEmpty(uriA.get(3))) {</span>
+<span class="fc" id="L213">            return null;</span>
         }
 
-<span class="fc" id="L173">        return uriA.get(3);</span>
+<span class="fc" id="L216">        return uriA.get(3);</span>
     }
 
+    /**
+     * Gets the parameter value in the URI.
+     * @param atlasUri URI
+     * @param key parameter key
+     * @return parameter value
+     */
     public static String getUriParameterValue(String atlasUri, String key) {
-<span class="fc" id="L177">        Map&lt;String, String&gt; params = getUriParameters(atlasUri);</span>
-<span class="pc bpc" id="L178" title="1 of 4 branches missed.">        if (params == null || params.isEmpty()) {</span>
-<span class="fc" id="L179">            return null;</span>
+<span class="fc" id="L226">        Map&lt;String, String&gt; params = getUriParameters(atlasUri);</span>
+<span class="pc bpc" id="L227" title="1 of 4 branches missed.">        if (params == null || params.isEmpty()) {</span>
+<span class="fc" id="L228">            return null;</span>
         }
 
-<span class="fc" id="L182">        return params.get(key);</span>
+<span class="fc" id="L231">        return params.get(key);</span>
     }
 
+    /**
+     * Gets the URI parameters.
+     * @param atlasUri URI
+     * @return map of the URI parameters
+     */
     public static Map&lt;String, String&gt; getUriParameters(String atlasUri) {
 
-<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (atlasUri == null) {</span>
-<span class="fc" id="L188">            return null;</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (atlasUri == null) {</span>
+<span class="fc" id="L242">            return null;</span>
         }
 
-<span class="fc" id="L191">        Map&lt;String, String&gt; params = new HashMap&lt;String, String&gt;();</span>
-<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(atlasUri)) {</span>
-<span class="fc" id="L193">            return params;</span>
+<span class="fc" id="L245">        Map&lt;String, String&gt; params = new HashMap&lt;String, String&gt;();</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(atlasUri)) {</span>
+<span class="fc" id="L247">            return params;</span>
         }
 
-<span class="fc" id="L196">        validateUri(atlasUri);</span>
+<span class="fc" id="L250">        validateUri(atlasUri);</span>
 
-<span class="fc" id="L198">        String[] pass1 = null;</span>
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (atlasUri.contains(&quot;?&quot;)) {</span>
-<span class="fc" id="L200">            pass1 = atlasUri.split(&quot;\\?&quot;, 2);</span>
+<span class="fc" id="L252">        String[] pass1 = null;</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        if (atlasUri.contains(&quot;?&quot;)) {</span>
+<span class="fc" id="L254">            pass1 = atlasUri.split(&quot;\\?&quot;, 2);</span>
         }
 
-<span class="pc bpc" id="L203" title="2 of 8 branches missed.">        if (pass1 == null || pass1.length &lt; 2 || pass1[1] == null || pass1[1].length() &lt; 1) {</span>
-<span class="fc" id="L204">            return params;</span>
+<span class="pc bpc" id="L257" title="2 of 8 branches missed.">        if (pass1 == null || pass1.length &lt; 2 || pass1[1] == null || pass1[1].length() &lt; 1) {</span>
+<span class="fc" id="L258">            return params;</span>
         }
 
-<span class="fc" id="L207">        String allParams = null;</span>
+<span class="fc" id="L261">        String allParams = null;</span>
         try {
-<span class="fc" id="L209">            allParams = URLDecoder.decode(pass1[1], &quot;UTF-8&quot;);</span>
-<span class="nc" id="L210">        } catch (UnsupportedEncodingException e) {</span>
-<span class="nc" id="L211">            LOG.error(&quot;Unable to parse uri&quot; + atlasUri + &quot; for configuration parameters&quot;, e);</span>
-<span class="nc" id="L212">            return params;</span>
-<span class="fc" id="L213">        }</span>
+<span class="fc" id="L263">            allParams = URLDecoder.decode(pass1[1], &quot;UTF-8&quot;);</span>
+<span class="nc" id="L264">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L265">            LOG.error(&quot;Unable to parse uri&quot; + atlasUri + &quot; for configuration parameters&quot;, e);</span>
+<span class="nc" id="L266">            return params;</span>
+<span class="fc" id="L267">        }</span>
 
-<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (allParams == null) {</span>
-<span class="nc" id="L216">            return null;</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        if (allParams == null) {</span>
+<span class="nc" id="L270">            return null;</span>
         }
 
-<span class="fc" id="L219">        String[] configs = allParams.split(&quot;&amp;&quot;, SPLIT_LIMIT);</span>
-<span class="pc bpc" id="L220" title="2 of 4 branches missed.">        if (configs == null || configs.length &lt; 1) {</span>
-<span class="nc" id="L221">            return params;</span>
+<span class="fc" id="L273">        String[] configs = allParams.split(&quot;&amp;&quot;, SPLIT_LIMIT);</span>
+<span class="pc bpc" id="L274" title="2 of 4 branches missed.">        if (configs == null || configs.length &lt; 1) {</span>
+<span class="nc" id="L275">            return params;</span>
         }
 
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        for (int i = 0; i &lt; configs.length; i++) {</span>
-<span class="fc bfc" id="L225" title="All 2 branches covered.">            if (!configs[i].contains(&quot;=&quot;)) {</span>
-<span class="fc" id="L226">                LOG.warn(&quot;Invalid configuration parameter: &quot; + configs[i] + &quot; for uri: '&quot; + atlasUri + &quot;'&quot;);</span>
-<span class="fc" id="L227">                continue;</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        for (int i = 0; i &lt; configs.length; i++) {</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">            if (!configs[i].contains(&quot;=&quot;)) {</span>
+<span class="fc" id="L280">                LOG.warn(&quot;Invalid configuration parameter: &quot; + configs[i] + &quot; for uri: '&quot; + atlasUri + &quot;'&quot;);</span>
+<span class="fc" id="L281">                continue;</span>
             }
 
-<span class="fc" id="L230">            String[] cfgs = configs[i].split(&quot;=&quot;);</span>
-<span class="pc bpc" id="L231" title="1 of 4 branches missed.">            if (cfgs == null || cfgs.length != 2) {</span>
-<span class="fc" id="L232">                LOG.warn(&quot;Invalid configuration parameter: &quot; + configs[i] + &quot; for uri: '&quot; + atlasUri + &quot;'&quot;);</span>
-<span class="fc" id="L233">                continue;</span>
+<span class="fc" id="L284">            String[] cfgs = configs[i].split(&quot;=&quot;);</span>
+<span class="pc bpc" id="L285" title="1 of 4 branches missed.">            if (cfgs == null || cfgs.length != 2) {</span>
+<span class="fc" id="L286">                LOG.warn(&quot;Invalid configuration parameter: &quot; + configs[i] + &quot; for uri: '&quot; + atlasUri + &quot;'&quot;);</span>
+<span class="fc" id="L287">                continue;</span>
             }
 
-<span class="fc" id="L236">            params.put(cfgs[0], cfgs[1]);</span>
+<span class="fc" id="L290">            params.put(cfgs[0], cfgs[1]);</span>
         }
 
-<span class="fc" id="L239">        return params;</span>
+<span class="fc" id="L293">        return params;</span>
     }
 
+    /**
+     * Counts the specified character in the URI.
+     * @param text text
+     * @param match character to count
+     * @return count
+     */
     public static int countCharacters(String text, char match) {
-<span class="fc" id="L243">        int count = 0;</span>
-<span class="fc bfc" id="L244" title="All 2 branches covered.">        for (int i = 0; i &lt; text.length(); i++) {</span>
-<span class="fc bfc" id="L245" title="All 2 branches covered.">            if (text.charAt(i) == match) {</span>
-<span class="fc" id="L246">                count++;</span>
+<span class="fc" id="L303">        int count = 0;</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        for (int i = 0; i &lt; text.length(); i++) {</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">            if (text.charAt(i) == match) {</span>
+<span class="fc" id="L306">                count++;</span>
             }
         }
-<span class="fc" id="L249">        return count;</span>
+<span class="fc" id="L309">        return count;</span>
     }
 
-    public static List&lt;Class&lt;?&gt;&gt; findClassesForPackage(String scannedPackage) {
-<span class="fc" id="L253">        String scannedPath = scannedPackage.replace('.', '/');</span>
-<span class="fc" id="L254">        URL scannedUrl = getResource(scannedPath);</span>
-
-<span class="fc bfc" id="L256" title="All 2 branches covered.">        if (scannedUrl == null) {</span>
-<span class="fc" id="L257">            throw new IllegalArgumentException(String.format(&quot;Unable to detect resources for url='%s' for package='%s'&quot;,</span>
-                    scannedPath, scannedPackage));
-        }
-
-<span class="pc bpc" id="L261" title="1 of 2 branches missed.">        if (&quot;jar&quot;.equals(scannedUrl.getProtocol())) {</span>
-<span class="fc" id="L262">            return findClassesFromJar(scannedUrl);</span>
-        }
-
-<span class="nc" id="L265">        File scannedFd = new File(scannedUrl.getFile());</span>
-<span class="nc" id="L266">        List&lt;Class&lt;?&gt;&gt; classes = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
-
-<span class="nc bnc" id="L268" title="All 2 branches missed.">        if (scannedFd.listFiles() == null) {</span>
-<span class="nc" id="L269">            return classes;</span>
-        }
-
-<span class="nc bnc" id="L272" title="All 2 branches missed.">        for (File file : scannedFd.listFiles()) {</span>
-<span class="nc" id="L273">            classes.addAll(find(file, scannedPackage));</span>
-        }
-
-<span class="nc" id="L276">        return classes;</span>
-    }
-
+    /**
+     * Adds the Audit into the session.
+     * @param session session
+     * @param field field
+     * @param message message
+     * @param status audit status
+     * @param value value
+     */
     public static void addAudit(AtlasInternalSession session, Field field,
             String message, AuditStatus status, String value) {
-<span class="pc bpc" id="L281" title="1 of 2 branches missed.">        String docId = field != null ? field.getDocId() : null;</span>
-<span class="pc bpc" id="L282" title="1 of 2 branches missed.">        String docName = session != null ? getDocumentNameById(session, docId) : null;</span>
-<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        String path = field != null ? field.getPath() : null;</span>
-<span class="fc" id="L284">        session.getAudits().getAudit().add(</span>
-<span class="fc" id="L285">                createAudit(status, docId, docName, path, value, message));</span>
-<span class="fc" id="L286">    }</span>
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">        String docId = field != null ? field.getDocId() : null;</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">        String docName = session != null ? getDocumentNameById(session, docId) : null;</span>
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        String path = field != null ? field.getPath() : null;</span>
+<span class="fc" id="L325">        session.getAudits().getAudit().add(</span>
+<span class="fc" id="L326">                createAudit(status, docId, docName, path, value, message));</span>
+<span class="fc" id="L327">    }</span>
 
+    /**
+     * Adds the Audit into the session.
+     * @param session session
+     * @param docId Document ID
+     * @param message message
+     * @param status audit status
+     * @param value value
+     */
     public static void addAudit(AtlasInternalSession session, String docId,
             String message, AuditStatus status, String value) {
-<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        String docName = session != null ? getDocumentNameById(session, docId) : null;</span>
-<span class="fc" id="L291">        session.getAudits().getAudit().add(</span>
-<span class="fc" id="L292">                createAudit(status, docId, docName, null, value, message));</span>
-<span class="fc" id="L293">    }</span>
+<span class="pc bpc" id="L339" title="1 of 2 branches missed.">        String docName = session != null ? getDocumentNameById(session, docId) : null;</span>
+<span class="fc" id="L340">        session.getAudits().getAudit().add(</span>
+<span class="fc" id="L341">                createAudit(status, docId, docName, null, value, message));</span>
+<span class="fc" id="L342">    }</span>
 
+    /**
+     * Creates the Audit.
+     * @param status audit status
+     * @param docId Document ID
+     * @param docName Document name
+     * @param path field path
+     * @param value value
+     * @param message message
+     * @return audit
+     */
     public static Audit createAudit(AuditStatus status, String docId, String docName,
             String path, String value, String message) {
-<span class="fc" id="L297">        Audit audit = new Audit();</span>
-<span class="fc" id="L298">        audit.setDocId(docId);</span>
-<span class="fc" id="L299">        audit.setDocName(docName);</span>
-<span class="fc" id="L300">        audit.setMessage(message);</span>
-<span class="fc" id="L301">        audit.setPath(path);</span>
-<span class="fc" id="L302">        audit.setStatus(status);</span>
-<span class="fc" id="L303">        audit.setValue(value);</span>
-<span class="fc" id="L304">        return audit;</span>
+<span class="fc" id="L356">        Audit audit = new Audit();</span>
+<span class="fc" id="L357">        audit.setDocId(docId);</span>
+<span class="fc" id="L358">        audit.setDocName(docName);</span>
+<span class="fc" id="L359">        audit.setMessage(message);</span>
+<span class="fc" id="L360">        audit.setPath(path);</span>
+<span class="fc" id="L361">        audit.setStatus(status);</span>
+<span class="fc" id="L362">        audit.setValue(value);</span>
+<span class="fc" id="L363">        return audit;</span>
     }
 
+    /**
+     * Converts from the Validation to the Audit and add into the session.
+     * @param session session
+     * @param validation validation
+     */
     public static void addAudit(AtlasSession session, Validation validation) {
-<span class="fc" id="L308">        Audit audit = new Audit();</span>
-<span class="fc" id="L309">        audit.setDocId(validation.getDocId());</span>
-<span class="fc" id="L310">        audit.setDocName(validation.getDocName());</span>
-<span class="fc" id="L311">        audit.setMessage(validation.getMessage());</span>
-<span class="fc" id="L312">        audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));</span>
-<span class="fc" id="L313">        session.getAudits().getAudit().add(audit);</span>
-<span class="fc" id="L314">    }</span>
+<span class="fc" id="L372">        Audit audit = new Audit();</span>
+<span class="fc" id="L373">        audit.setDocId(validation.getDocId());</span>
+<span class="fc" id="L374">        audit.setDocName(validation.getDocName());</span>
+<span class="fc" id="L375">        audit.setMessage(validation.getMessage());</span>
+<span class="fc" id="L376">        audit.setStatus(AtlasUtil.toAuditStatus(validation.getStatus()));</span>
+<span class="fc" id="L377">        session.getAudits().getAudit().add(audit);</span>
+<span class="fc" id="L378">    }</span>
 
+    /**
+     * Adds the list of Audit into the session.
+     * @param session session
+     * @param field field
+     * @param audits a list of audit
+     */
     public static void addAudits(AtlasInternalSession session, Field field, List&lt;Audit&gt; audits) {
-<span class="nc" id="L317">        String docId = field.getDocId();</span>
-<span class="nc" id="L318">        String docName = getDocumentNameById(session, docId);</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">        for (Audit audit: audits) {</span>
-<span class="nc" id="L320">            audit.setDocId(docId);</span>
-<span class="nc" id="L321">            audit.setDocName(docName);</span>
-<span class="nc" id="L322">            session.getAudits().getAudit().add(audit);</span>
-<span class="nc" id="L323">        }</span>
-<span class="nc" id="L324">    }</span>
+<span class="nc" id="L387">        String docId = field.getDocId();</span>
+<span class="nc" id="L388">        String docName = getDocumentNameById(session, docId);</span>
+<span class="nc bnc" id="L389" title="All 2 branches missed.">        for (Audit audit: audits) {</span>
+<span class="nc" id="L390">            audit.setDocId(docId);</span>
+<span class="nc" id="L391">            audit.setDocName(docName);</span>
+<span class="nc" id="L392">            session.getAudits().getAudit().add(audit);</span>
+<span class="nc" id="L393">        }</span>
+<span class="nc" id="L394">    }</span>
 
+    /**
+     * Converts from the validation status to the audit status.
+     * @param vstatus validation status
+     * @return audit status
+     */
     public static AuditStatus toAuditStatus(ValidationStatus vstatus) {
-<span class="pc bpc" id="L327" title="1 of 6 branches missed.">        switch (vstatus) {</span>
+<span class="pc bpc" id="L402" title="1 of 6 branches missed.">        switch (vstatus) {</span>
         case ERROR:
-<span class="fc" id="L329">            return AuditStatus.ERROR;</span>
+<span class="fc" id="L404">            return AuditStatus.ERROR;</span>
         case WARN:
-<span class="fc" id="L331">            return AuditStatus.WARN;</span>
+<span class="fc" id="L406">            return AuditStatus.WARN;</span>
         case INFO:
-<span class="fc" id="L333">            return AuditStatus.INFO;</span>
+<span class="fc" id="L408">            return AuditStatus.INFO;</span>
         case ALL:
-<span class="fc" id="L335">            return AuditStatus.ALL;</span>
+<span class="fc" id="L410">            return AuditStatus.ALL;</span>
         case NONE:
-<span class="fc" id="L337">            return AuditStatus.NONE;</span>
+<span class="fc" id="L412">            return AuditStatus.NONE;</span>
         default:
-<span class="nc" id="L339">            return null;</span>
+<span class="nc" id="L414">            return null;</span>
         }
     }
 
+    /**
+     * Creates a string expression from the validation.
+     * @param validation validation
+     * @return string representation of the validation
+     */
+    public static String validationToString(Validation validation) {
+<span class="nc" id="L424">        String output = &quot;[Validation &quot;;</span>
+    
+<span class="nc bnc" id="L426" title="All 2 branches missed.">        if (validation == null) {</span>
+<span class="nc" id="L427">            return output + &quot;&gt;null&lt; ]&quot;;</span>
+        }
+    
+<span class="nc bnc" id="L430" title="All 2 branches missed.">        if (validation.getScope() != null) {</span>
+<span class="nc" id="L431">            output = output + &quot; scope=&quot; + validation.getScope();</span>
+        }
+<span class="nc bnc" id="L433" title="All 2 branches missed.">        if (validation.getId() != null) {</span>
+<span class="nc" id="L434">            output = output + &quot; id=&quot; + validation.getId();</span>
+        }
+<span class="nc bnc" id="L436" title="All 2 branches missed.">        if (validation.getStatus() != null) {</span>
+<span class="nc" id="L437">            output = output + &quot; status=&quot; + validation.getStatus().value();</span>
+        }
+<span class="nc bnc" id="L439" title="All 2 branches missed.">        if (validation.getMessage() != null) {</span>
+<span class="nc" id="L440">            output = output + &quot; msg=&quot; + validation.getMessage();</span>
+        }
+    
+<span class="nc" id="L443">        return output + &quot;]&quot;;</span>
+    }
+
+    /**
+     * Gets the Document name of the one has the specified Document ID.
+     * @param session session
+     * @param docId Document ID
+     * @return Document name
+     */
     public static String getDocumentNameById(AtlasInternalSession session, String docId) {
-<span class="pc bpc" id="L344" title="1 of 4 branches missed.">        if (session == null || docId == null) {</span>
-<span class="fc" id="L345">            return null;</span>
+<span class="pc bpc" id="L453" title="1 of 4 branches missed.">        if (session == null || docId == null) {</span>
+<span class="fc" id="L454">            return null;</span>
         }
-<span class="fc" id="L347">        AtlasModule module = session.resolveModule(docId);</span>
-<span class="fc bfc" id="L348" title="All 2 branches covered.">        return module != null ? module.getDocName() : null;</span>
+<span class="fc" id="L456">        AtlasModule module = session.resolveModule(docId);</span>
+<span class="fc bfc" id="L457" title="All 2 branches covered.">        return module != null ? module.getDocName() : null;</span>
     }
 
+    /**
+     * Gets the classpath resource.
+     * @param scannedPath path
+     * @return resource URL
+     */
     protected static URL getResource(String scannedPath) {
-<span class="fc" id="L352">        URL url = null;</span>
+<span class="nc" id="L466">        URL url = null;</span>
 
-<span class="fc" id="L354">        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span>
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">        if (classLoader == null) {</span>
-<span class="nc" id="L356">            classLoader = AtlasUtil.class.getClassLoader();</span>
+<span class="nc" id="L468">        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span>
+<span class="nc bnc" id="L469" title="All 2 branches missed.">        if (classLoader == null) {</span>
+<span class="nc" id="L470">            classLoader = AtlasUtil.class.getClassLoader();</span>
         }
 
-<span class="pc bpc" id="L359" title="1 of 2 branches missed.">        if (classLoader != null) {</span>
-<span class="fc" id="L360">            url = classLoader.getResource(scannedPath);</span>
-<span class="fc bfc" id="L361" title="All 2 branches covered.">            if (url != null) {</span>
-<span class="fc" id="L362">                return url;</span>
+<span class="nc bnc" id="L473" title="All 2 branches missed.">        if (classLoader != null) {</span>
+<span class="nc" id="L474">            url = classLoader.getResource(scannedPath);</span>
+<span class="nc bnc" id="L475" title="All 2 branches missed.">            if (url != null) {</span>
+<span class="nc" id="L476">                return url;</span>
             }
         }
 
-<span class="fc" id="L366">        return ClassLoader.getSystemResource(scannedPath);</span>
+<span class="nc" id="L480">        return ClassLoader.getSystemResource(scannedPath);</span>
     }
 
-    protected static List&lt;Class&lt;?&gt;&gt; find(File file, String scannedPackage) {
-<span class="fc" id="L370">        List&lt;Class&lt;?&gt;&gt; classes = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
-<span class="fc" id="L371">        String resource = scannedPackage + '.' + file.getName();</span>
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        if (file.isDirectory()) {</span>
-<span class="fc bfc" id="L373" title="All 2 branches covered.">            for (File child : file.listFiles()) {</span>
-<span class="fc" id="L374">                classes.addAll(find(child, resource));</span>
-            }
-<span class="pc bpc" id="L376" title="1 of 2 branches missed.">        } else if (resource.endsWith(&quot;.class&quot;)) {</span>
-<span class="nc" id="L377">            int endIndex = resource.length() - &quot;.class&quot;.length();</span>
-<span class="nc" id="L378">            String className = resource.substring(0, endIndex);</span>
-            try {
-<span class="nc" id="L380">                classes.add(Class.forName(className));</span>
-<span class="nc" id="L381">            } catch (ClassNotFoundException ignore) {</span>
-<span class="nc" id="L382">            }</span>
-        }
-<span class="fc" id="L384">        return classes;</span>
-    }
-
-    protected static List&lt;Class&lt;?&gt;&gt; findClassesFromJar(URL jarFileUrl) {
-<span class="fc" id="L388">        List&lt;Class&lt;?&gt;&gt; classNames = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
-
-<span class="fc" id="L390">        JarURLConnection connection = null;</span>
-
-        try {
-<span class="fc" id="L393">            connection = (JarURLConnection) jarFileUrl.openConnection();</span>
-<span class="nc" id="L394">        } catch (IOException e) {</span>
-<span class="nc" id="L395">            LOG.warn(String.format(&quot;Unable to load classes from jar file=%s msg=%s&quot;, jarFileUrl, e.getMessage()), e);</span>
-<span class="nc" id="L396">            return classNames;</span>
-<span class="fc" id="L397">        }</span>
-
-<span class="fc" id="L399">        try (ZipInputStream zip = new ZipInputStream(</span>
-<span class="fc" id="L400">                new FileInputStream(new File(connection.getJarFileURL().toURI())))) {</span>
-<span class="fc bfc" id="L401" title="All 2 branches covered.">            for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {</span>
-<span class="fc bfc" id="L402" title="All 4 branches covered.">                if (!entry.isDirectory() &amp;&amp; entry.getName().endsWith(&quot;.class&quot;)) {</span>
-<span class="fc" id="L403">                    String className = entry.getName().replace('/', '.');</span>
-<span class="fc" id="L404">                    className = className.substring(0, className.length() - &quot;.class&quot;.length());</span>
-<span class="fc" id="L405">                    ClassLoader classLoader = Thread.currentThread().getContextClassLoader();</span>
-<span class="pc bpc" id="L406" title="1 of 2 branches missed.">                    if (classLoader == null) {</span>
-<span class="nc" id="L407">                        classLoader = AtlasUtil.class.getClassLoader();</span>
-                    }
-                    try {
-<span class="fc" id="L410">                        Class&lt;?&gt; clazz = Class.forName(className, false, classLoader);</span>
-<span class="fc" id="L411">                        classNames.add(clazz);</span>
-<span class="nc" id="L412">                    } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L413">                        LOG.warn(String.format(&quot;Unable to load class=%s from jar file=%s msg=%s&quot;, className,</span>
-<span class="nc" id="L414">                                jarFileUrl, e.getMessage()), e);</span>
-<span class="fc" id="L415">                    }</span>
-                }
-            }
-<span class="fc" id="L418">        } catch (URISyntaxException | IOException e) {</span>
-<span class="fc" id="L419">            LOG.warn(String.format(&quot;Unable to load classes from jar file=%s msg=%s&quot;, jarFileUrl, e.getMessage()), e);</span>
-<span class="fc" id="L420">        }</span>
-<span class="fc" id="L421">        return classNames;</span>
-    }
-
+    /**
+     * Gets the combined message from the chained causes of the specified Throwable.
+     * @param t throwable
+     * @return combined message
+     */
     public static String getChainedMessage(Throwable t) {
-<span class="nc" id="L425">        StringBuilder buf = new StringBuilder();</span>
-<span class="nc" id="L426">        buf.append(t.getMessage());</span>
-<span class="nc" id="L427">        Throwable target = t;</span>
-<span class="nc bnc" id="L428" title="All 2 branches missed.">        while((target = target.getCause()) != null) {</span>
-<span class="nc bnc" id="L429" title="All 4 branches missed.">            if (target.getMessage() != null &amp;&amp; !target.getMessage().isEmpty()) {</span>
-<span class="nc" id="L430">                buf.append(&quot; - &quot;);</span>
-<span class="nc" id="L431">                buf.append(target.getMessage());</span>
+<span class="nc" id="L489">        StringBuilder buf = new StringBuilder();</span>
+<span class="nc" id="L490">        buf.append(t.getMessage());</span>
+<span class="nc" id="L491">        Throwable target = t;</span>
+<span class="nc bnc" id="L492" title="All 2 branches missed.">        while((target = target.getCause()) != null) {</span>
+<span class="nc bnc" id="L493" title="All 4 branches missed.">            if (target.getMessage() != null &amp;&amp; !target.getMessage().isEmpty()) {</span>
+<span class="nc" id="L494">                buf.append(&quot; - &quot;);</span>
+<span class="nc" id="L495">                buf.append(target.getMessage());</span>
             }
         }
-<span class="nc" id="L434">        return buf.toString();</span>
+<span class="nc" id="L498">        return buf.toString();</span>
     }
 
+    /**
+     * Escapes the special characters for URI.
+     * @param source string to escape
+     * @return escaped
+     */
     public static String escapeForUri(String source) {
-<span class="pc bpc" id="L438" title="1 of 2 branches missed.">        if (source == null) {</span>
-<span class="nc" id="L439">            return null;</span>
+<span class="pc bpc" id="L507" title="1 of 2 branches missed.">        if (source == null) {</span>
+<span class="nc" id="L508">            return null;</span>
         }
-<span class="fc" id="L441">        return source.replaceAll(Pattern.quote(&quot;!&quot;), &quot;%21&quot;)</span>
-<span class="fc" id="L442">                     .replaceAll(Pattern.quote(&quot;#&quot;), &quot;%23&quot;)</span>
-<span class="fc" id="L443">                     .replaceAll(Pattern.quote(&quot;$&quot;), &quot;%24&quot;)</span>
-<span class="fc" id="L444">                     .replaceAll(Pattern.quote(&quot;&amp;&quot;), &quot;%26&quot;)</span>
-<span class="fc" id="L445">                     .replaceAll(Pattern.quote(&quot;'&quot;), &quot;%27&quot;)</span>
-<span class="fc" id="L446">                     .replaceAll(Pattern.quote(&quot;(&quot;), &quot;%28&quot;)</span>
-<span class="fc" id="L447">                     .replaceAll(Pattern.quote(&quot;)&quot;), &quot;%29&quot;)</span>
-<span class="fc" id="L448">                     .replaceAll(Pattern.quote(&quot;*&quot;), &quot;%2A&quot;)</span>
-<span class="fc" id="L449">                     .replaceAll(Pattern.quote(&quot;+&quot;), &quot;%2B&quot;)</span>
-<span class="fc" id="L450">                     .replaceAll(Pattern.quote(&quot;,&quot;), &quot;%2C&quot;)</span>
-<span class="fc" id="L451">                     .replaceAll(Pattern.quote(&quot;/&quot;), &quot;%2F&quot;)</span>
-<span class="fc" id="L452">                     .replaceAll(Pattern.quote(&quot;:&quot;), &quot;%3A&quot;)</span>
-<span class="fc" id="L453">                     .replaceAll(Pattern.quote(&quot;;&quot;), &quot;%3B&quot;)</span>
-<span class="fc" id="L454">                     .replaceAll(Pattern.quote(&quot;=&quot;), &quot;%3D&quot;)</span>
-<span class="fc" id="L455">                     .replaceAll(Pattern.quote(&quot;?&quot;), &quot;%3F&quot;)</span>
-<span class="fc" id="L456">                     .replaceAll(Pattern.quote(&quot;@&quot;), &quot;%40&quot;)</span>
-<span class="fc" id="L457">                     .replaceAll(Pattern.quote(&quot;[&quot;), &quot;%5B&quot;)</span>
-<span class="fc" id="L458">                     .replaceAll(Pattern.quote(&quot;]&quot;), &quot;%5D&quot;);</span>
+<span class="fc" id="L510">        return source.replaceAll(Pattern.quote(&quot;!&quot;), &quot;%21&quot;)</span>
+<span class="fc" id="L511">                     .replaceAll(Pattern.quote(&quot;#&quot;), &quot;%23&quot;)</span>
+<span class="fc" id="L512">                     .replaceAll(Pattern.quote(&quot;$&quot;), &quot;%24&quot;)</span>
+<span class="fc" id="L513">                     .replaceAll(Pattern.quote(&quot;&amp;&quot;), &quot;%26&quot;)</span>
+<span class="fc" id="L514">                     .replaceAll(Pattern.quote(&quot;'&quot;), &quot;%27&quot;)</span>
+<span class="fc" id="L515">                     .replaceAll(Pattern.quote(&quot;(&quot;), &quot;%28&quot;)</span>
+<span class="fc" id="L516">                     .replaceAll(Pattern.quote(&quot;)&quot;), &quot;%29&quot;)</span>
+<span class="fc" id="L517">                     .replaceAll(Pattern.quote(&quot;*&quot;), &quot;%2A&quot;)</span>
+<span class="fc" id="L518">                     .replaceAll(Pattern.quote(&quot;+&quot;), &quot;%2B&quot;)</span>
+<span class="fc" id="L519">                     .replaceAll(Pattern.quote(&quot;,&quot;), &quot;%2C&quot;)</span>
+<span class="fc" id="L520">                     .replaceAll(Pattern.quote(&quot;/&quot;), &quot;%2F&quot;)</span>
+<span class="fc" id="L521">                     .replaceAll(Pattern.quote(&quot;:&quot;), &quot;%3A&quot;)</span>
+<span class="fc" id="L522">                     .replaceAll(Pattern.quote(&quot;;&quot;), &quot;%3B&quot;)</span>
+<span class="fc" id="L523">                     .replaceAll(Pattern.quote(&quot;=&quot;), &quot;%3D&quot;)</span>
+<span class="fc" id="L524">                     .replaceAll(Pattern.quote(&quot;?&quot;), &quot;%3F&quot;)</span>
+<span class="fc" id="L525">                     .replaceAll(Pattern.quote(&quot;@&quot;), &quot;%40&quot;)</span>
+<span class="fc" id="L526">                     .replaceAll(Pattern.quote(&quot;[&quot;), &quot;%5B&quot;)</span>
+<span class="fc" id="L527">                     .replaceAll(Pattern.quote(&quot;]&quot;), &quot;%5D&quot;);</span>
     }
 
+    /**
+     * Unescapes the special characters in the URI.
+     * @param uri URI
+     * @return unescaped
+     */
     public static String unescapeFromUri(String uri) {
-<span class="fc bfc" id="L462" title="All 2 branches covered.">        if (uri == null) {</span>
-<span class="fc" id="L463">            return null;</span>
+<span class="fc bfc" id="L536" title="All 2 branches covered.">        if (uri == null) {</span>
+<span class="fc" id="L537">            return null;</span>
         }
-<span class="fc" id="L465">        return uri.replaceAll(&quot;%21&quot;, &quot;!&quot;)</span>
-<span class="fc" id="L466">                  .replaceAll(&quot;%23&quot;, &quot;#&quot;)</span>
-<span class="fc" id="L467">                  .replaceAll(&quot;%24&quot;, &quot;$&quot;)</span>
-<span class="fc" id="L468">                  .replaceAll(&quot;%26&quot;, &quot;&amp;&quot;)</span>
-<span class="fc" id="L469">                  .replaceAll(&quot;%27&quot;, &quot;'&quot;)</span>
-<span class="fc" id="L470">                  .replaceAll(&quot;%28&quot;, &quot;(&quot;)</span>
-<span class="fc" id="L471">                  .replaceAll(&quot;%29&quot;, &quot;)&quot;)</span>
-<span class="fc" id="L472">                  .replaceAll(&quot;%2A&quot;, &quot;*&quot;)</span>
-<span class="fc" id="L473">                  .replaceAll(&quot;%2B&quot;, &quot;+&quot;)</span>
-<span class="fc" id="L474">                  .replaceAll(&quot;%2C&quot;, &quot;,&quot;)</span>
-<span class="fc" id="L475">                  .replaceAll(&quot;%2F&quot;, &quot;/&quot;)</span>
-<span class="fc" id="L476">                  .replaceAll(&quot;%3A&quot;, &quot;:&quot;)</span>
-<span class="fc" id="L477">                  .replaceAll(&quot;%3B&quot;, &quot;;&quot;)</span>
-<span class="fc" id="L478">                  .replaceAll(&quot;%3D&quot;, &quot;=&quot;)</span>
-<span class="fc" id="L479">                  .replaceAll(&quot;%3F&quot;, &quot;?&quot;)</span>
-<span class="fc" id="L480">                  .replaceAll(&quot;%40&quot;, &quot;@&quot;)</span>
-<span class="fc" id="L481">                  .replaceAll(&quot;%5B&quot;, &quot;[&quot;)</span>
-<span class="fc" id="L482">                  .replaceAll(&quot;%5D&quot;, &quot;]&quot;);</span>
+<span class="fc" id="L539">        return uri.replaceAll(&quot;%21&quot;, &quot;!&quot;)</span>
+<span class="fc" id="L540">                  .replaceAll(&quot;%23&quot;, &quot;#&quot;)</span>
+<span class="fc" id="L541">                  .replaceAll(&quot;%24&quot;, &quot;$&quot;)</span>
+<span class="fc" id="L542">                  .replaceAll(&quot;%26&quot;, &quot;&amp;&quot;)</span>
+<span class="fc" id="L543">                  .replaceAll(&quot;%27&quot;, &quot;'&quot;)</span>
+<span class="fc" id="L544">                  .replaceAll(&quot;%28&quot;, &quot;(&quot;)</span>
+<span class="fc" id="L545">                  .replaceAll(&quot;%29&quot;, &quot;)&quot;)</span>
+<span class="fc" id="L546">                  .replaceAll(&quot;%2A&quot;, &quot;*&quot;)</span>
+<span class="fc" id="L547">                  .replaceAll(&quot;%2B&quot;, &quot;+&quot;)</span>
+<span class="fc" id="L548">                  .replaceAll(&quot;%2C&quot;, &quot;,&quot;)</span>
+<span class="fc" id="L549">                  .replaceAll(&quot;%2F&quot;, &quot;/&quot;)</span>
+<span class="fc" id="L550">                  .replaceAll(&quot;%3A&quot;, &quot;:&quot;)</span>
+<span class="fc" id="L551">                  .replaceAll(&quot;%3B&quot;, &quot;;&quot;)</span>
+<span class="fc" id="L552">                  .replaceAll(&quot;%3D&quot;, &quot;=&quot;)</span>
+<span class="fc" id="L553">                  .replaceAll(&quot;%3F&quot;, &quot;?&quot;)</span>
+<span class="fc" id="L554">                  .replaceAll(&quot;%40&quot;, &quot;@&quot;)</span>
+<span class="fc" id="L555">                  .replaceAll(&quot;%5B&quot;, &quot;[&quot;)</span>
+<span class="fc" id="L556">                  .replaceAll(&quot;%5D&quot;, &quot;]&quot;);</span>
     }
 
     /**
      * Delete specified directory and the contents in it.
      * @see #deleteDirectoryContents
-     * @param targetDir
+     * @param targetDir The target directory to remove
      */
     public static void deleteDirectory(File targetDir) {
-<span class="fc" id="L491">        File[] allContents = targetDir.listFiles();</span>
-<span class="fc bfc" id="L492" title="All 2 branches covered.">        if (allContents != null) {</span>
-<span class="fc bfc" id="L493" title="All 2 branches covered.">            for (File file : allContents) {</span>
-<span class="fc bfc" id="L494" title="All 2 branches covered.">                if (!file.isDirectory()) {</span>
-<span class="fc" id="L495">                    file.delete();</span>
+<span class="fc" id="L565">        File[] allContents = targetDir.listFiles();</span>
+<span class="fc bfc" id="L566" title="All 2 branches covered.">        if (allContents != null) {</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">            for (File file : allContents) {</span>
+<span class="fc bfc" id="L568" title="All 2 branches covered.">                if (!file.isDirectory()) {</span>
+<span class="fc" id="L569">                    file.delete();</span>
                 } else {
-<span class="fc" id="L497">                    deleteDirectory(file);</span>
+<span class="fc" id="L571">                    deleteDirectory(file);</span>
                 }
             }
         }
-<span class="fc" id="L501">        targetDir.delete();</span>
-<span class="fc" id="L502">        return;</span>
+<span class="fc" id="L575">        targetDir.delete();</span>
+<span class="fc" id="L576">        return;</span>
     }
 
     /**
      * Delete all contents in the specified directory.
-     *
      * @see #deleteDirectory
-     * @param targetDir
+     * @param targetDir The target directory to remove the contents
      */
     public static void deleteDirectoryContents(File targetDir) {
-<span class="fc" id="L512">        File[] allContents = targetDir.listFiles();</span>
-<span class="pc bpc" id="L513" title="1 of 2 branches missed.">        if (allContents != null) {</span>
-<span class="fc bfc" id="L514" title="All 2 branches covered.">            for (File element : allContents) {</span>
-<span class="pc bpc" id="L515" title="1 of 2 branches missed.">                if (element.isFile()) {</span>
-<span class="nc" id="L516">                    element.delete();</span>
-<span class="pc bpc" id="L517" title="1 of 2 branches missed.">                } else if (element.isDirectory()) {</span>
-<span class="fc" id="L518">                    deleteDirectory(element);</span>
+<span class="fc" id="L585">        File[] allContents = targetDir.listFiles();</span>
+<span class="pc bpc" id="L586" title="1 of 2 branches missed.">        if (allContents != null) {</span>
+<span class="fc bfc" id="L587" title="All 2 branches covered.">            for (File element : allContents) {</span>
+<span class="pc bpc" id="L588" title="1 of 2 branches missed.">                if (element.isFile()) {</span>
+<span class="nc" id="L589">                    element.delete();</span>
+<span class="pc bpc" id="L590" title="1 of 2 branches missed.">                } else if (element.isDirectory()) {</span>
+<span class="fc" id="L591">                    deleteDirectory(element);</span>
                 }
             }
         }
-<span class="fc" id="L522">        return;</span>
+<span class="fc" id="L595">        return;</span>
     }
 
+    /**
+     * Copies the one file to the other.
+     * @param sourcePath source file path
+     * @param destPath target file path
+     * @throws IOException unexpected error
+     */
     public static void copyFile(Path sourcePath, Path destPath) throws IOException {
-<span class="nc" id="L526">        File source = new File(sourcePath.toString());</span>
-<span class="nc" id="L527">        File dest = new File(destPath.toString());</span>
+<span class="nc" id="L605">        File source = new File(sourcePath.toString());</span>
+<span class="nc" id="L606">        File dest = new File(destPath.toString());</span>
 
-<span class="nc bnc" id="L529" title="All 2 branches missed.">        if (!dest.exists()) {</span>
-<span class="nc" id="L530">            dest.createNewFile();</span>
+<span class="nc bnc" id="L608" title="All 2 branches missed.">        if (!dest.exists()) {</span>
+<span class="nc" id="L609">            dest.createNewFile();</span>
         }
-<span class="nc" id="L532">        InputStream in = null;</span>
-<span class="nc" id="L533">        OutputStream out = null;</span>
+<span class="nc" id="L611">        InputStream in = null;</span>
+<span class="nc" id="L612">        OutputStream out = null;</span>
         try {
-<span class="nc" id="L535">            in = new FileInputStream(source);</span>
-<span class="nc" id="L536">            out = new FileOutputStream(dest);</span>
+<span class="nc" id="L614">            in = new FileInputStream(source);</span>
+<span class="nc" id="L615">            out = new FileOutputStream(dest);</span>
 
             // Transfer bytes from in to out
-<span class="nc" id="L539">            byte[] buf = new byte[1024];</span>
+<span class="nc" id="L618">            byte[] buf = new byte[1024];</span>
             int len;
-<span class="nc bnc" id="L541" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
-<span class="nc" id="L542">                out.write(buf, 0, len);</span>
+<span class="nc bnc" id="L620" title="All 2 branches missed.">            while ((len = in.read(buf)) &gt; 0) {</span>
+<span class="nc" id="L621">                out.write(buf, 0, len);</span>
             }
         }
         finally {
-<span class="nc bnc" id="L546" title="All 2 branches missed.">            if (in != null) {</span>
-<span class="nc" id="L547">                in.close();</span>
+<span class="nc bnc" id="L625" title="All 2 branches missed.">            if (in != null) {</span>
+<span class="nc" id="L626">                in.close();</span>
             }
-<span class="nc bnc" id="L549" title="All 2 branches missed.">            if (out != null) {</span>
-<span class="nc" id="L550">                out.close();</span>
+<span class="nc bnc" id="L628" title="All 2 branches missed.">            if (out != null) {</span>
+<span class="nc" id="L629">                out.close();</span>
             }
         }
-<span class="nc" id="L553">    }</span>
+<span class="nc" id="L632">    }</span>
 
     /**
      * Exclude fields which are not on requested paths.
      *
      * If includePaths is null or empty it does nothing and all fields are included.
      *
-     * @param document
-     * @param includePaths
+     * @param document document
+     * @param includePaths paths
      */
     public static void excludeNotRequestedFields(Document document, List&lt;String&gt; includePaths) {
-<span class="fc bfc" id="L564" title="All 4 branches covered.">        if (includePaths == null || includePaths.isEmpty()) {</span>
-<span class="fc" id="L565">            return;</span>
+<span class="fc bfc" id="L643" title="All 4 branches covered.">        if (includePaths == null || includePaths.isEmpty()) {</span>
+<span class="fc" id="L644">            return;</span>
         }
 
-<span class="fc" id="L568">        List&lt;Field&gt; fields = document.getFields().getField();</span>
-<span class="fc" id="L569">        List&lt;String&gt; paths = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L570" title="All 2 branches covered.">        for (String includePath: includePaths) {</span>
-<span class="fc bfc" id="L571" title="All 2 branches covered.">            if (!includePath.endsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L572">                includePath += &quot;/&quot;;</span>
+<span class="fc" id="L647">        List&lt;Field&gt; fields = document.getFields().getField();</span>
+<span class="fc" id="L648">        List&lt;String&gt; paths = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L649" title="All 2 branches covered.">        for (String includePath: includePaths) {</span>
+<span class="fc bfc" id="L650" title="All 2 branches covered.">            if (!includePath.endsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L651">                includePath += &quot;/&quot;;</span>
             }
-<span class="fc" id="L574">            paths.add(includePath);</span>
-<span class="fc" id="L575">        }</span>
-<span class="fc" id="L576">        includePaths = paths;</span>
+<span class="fc" id="L653">            paths.add(includePath);</span>
+<span class="fc" id="L654">        }</span>
+<span class="fc" id="L655">        includePaths = paths;</span>
 
-<span class="fc" id="L578">        Deque&lt;List&lt;? extends Field&gt;&gt; stack = new ArrayDeque&lt;&gt;();</span>
-<span class="fc" id="L579">        stack.push(fields);</span>
-<span class="fc bfc" id="L580" title="All 2 branches covered.">        while(!stack.isEmpty()) {</span>
-<span class="fc" id="L581">            List&lt;? extends Field&gt; fieldsToCheck = stack.pop();</span>
-<span class="fc bfc" id="L582" title="All 2 branches covered.">            for (Iterator&lt;? extends Field&gt; it = fieldsToCheck.iterator(); it.hasNext(); ) {</span>
-<span class="fc" id="L583">                Field field = it.next();</span>
-<span class="fc" id="L584">                String path = field.getPath();</span>
-<span class="fc bfc" id="L585" title="All 2 branches covered.">                boolean includeField = path.lastIndexOf(&quot;/&quot;) == 0; //always include root level</span>
-<span class="fc bfc" id="L586" title="All 2 branches covered.">                if (!includeField) {</span>
-<span class="fc bfc" id="L587" title="All 2 branches covered.">                    for (String includePath : includePaths) {</span>
-<span class="fc" id="L588">                        int lastSeparator = path.lastIndexOf(&quot;/&quot;);</span>
-<span class="fc" id="L589">                        String parentPath = path.substring(0, lastSeparator);</span>
-<span class="fc" id="L590">                        parentPath += &quot;/&quot;;</span>
-<span class="fc bfc" id="L591" title="All 2 branches covered.">                        if (includePath.startsWith(parentPath)) {</span>
-<span class="fc" id="L592">                            includeField = true;</span>
-<span class="fc" id="L593">                            break;</span>
+<span class="fc" id="L657">        Deque&lt;List&lt;? extends Field&gt;&gt; stack = new ArrayDeque&lt;&gt;();</span>
+<span class="fc" id="L658">        stack.push(fields);</span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">        while(!stack.isEmpty()) {</span>
+<span class="fc" id="L660">            List&lt;? extends Field&gt; fieldsToCheck = stack.pop();</span>
+<span class="fc bfc" id="L661" title="All 2 branches covered.">            for (Iterator&lt;? extends Field&gt; it = fieldsToCheck.iterator(); it.hasNext(); ) {</span>
+<span class="fc" id="L662">                Field field = it.next();</span>
+<span class="fc" id="L663">                String path = field.getPath();</span>
+<span class="fc bfc" id="L664" title="All 2 branches covered.">                boolean includeField = path.lastIndexOf(&quot;/&quot;) == 0; //always include root level</span>
+<span class="fc bfc" id="L665" title="All 2 branches covered.">                if (!includeField) {</span>
+<span class="fc bfc" id="L666" title="All 2 branches covered.">                    for (String includePath : includePaths) {</span>
+<span class="fc" id="L667">                        int lastSeparator = path.lastIndexOf(&quot;/&quot;);</span>
+<span class="fc" id="L668">                        String parentPath = path.substring(0, lastSeparator);</span>
+<span class="fc" id="L669">                        parentPath += &quot;/&quot;;</span>
+<span class="fc bfc" id="L670" title="All 2 branches covered.">                        if (includePath.startsWith(parentPath)) {</span>
+<span class="fc" id="L671">                            includeField = true;</span>
+<span class="fc" id="L672">                            break;</span>
                         }
-<span class="fc" id="L595">                    }</span>
+<span class="fc" id="L674">                    }</span>
 
                 }
-<span class="fc bfc" id="L598" title="All 2 branches covered.">                if (includeField) {</span>
-<span class="fc bfc" id="L599" title="All 2 branches covered.">                    if (field instanceof ComplexType) {</span>
-<span class="fc" id="L600">                        ComplexType complexTypeField = (ComplexType) field;</span>
-<span class="pc bpc" id="L601" title="1 of 2 branches missed.">                        if (complexTypeField.getChildFields() != null) {</span>
-<span class="fc" id="L602">                            List&lt;? extends Field&gt; subfields = complexTypeField.getChildFields();</span>
-<span class="fc" id="L603">                            stack.push(subfields); //analyze subfields</span>
+<span class="fc bfc" id="L677" title="All 2 branches covered.">                if (includeField) {</span>
+<span class="fc bfc" id="L678" title="All 2 branches covered.">                    if (field instanceof ComplexType) {</span>
+<span class="fc" id="L679">                        ComplexType complexTypeField = (ComplexType) field;</span>
+<span class="pc bpc" id="L680" title="1 of 2 branches missed.">                        if (complexTypeField.getChildFields() != null) {</span>
+<span class="fc" id="L681">                            List&lt;? extends Field&gt; subfields = complexTypeField.getChildFields();</span>
+<span class="fc" id="L682">                            stack.push(subfields); //analyze subfields</span>
                         }
-<span class="fc" id="L605">                    }</span>
+<span class="fc" id="L684">                    }</span>
                 } else {
-<span class="fc" id="L607">                    it.remove();</span>
+<span class="fc" id="L686">                    it.remove();</span>
                 }
 
-<span class="fc" id="L610">            }</span>
-<span class="fc" id="L611">        }</span>
-<span class="fc" id="L612">    }</span>
+<span class="fc" id="L689">            }</span>
+<span class="fc" id="L690">        }</span>
+<span class="fc" id="L691">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

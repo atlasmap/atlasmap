@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L22">public class Constants implements Serializable {</span>
+/**
+ * The container of the {@link Constant}.
+ */
+<span class="fc" id="L25">public class Constants implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Constant} */
     protected List&lt;Constant&gt; constant;
 
     /**
@@ -48,10 +52,10 @@ import java.util.List;
      * @return A list of {@link Constant}
      */
     public List&lt;Constant&gt; getConstant() {
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (constant == null) {</span>
-<span class="fc" id="L52">            constant = new ArrayList&lt;Constant&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (constant == null) {</span>
+<span class="fc" id="L56">            constant = new ArrayList&lt;Constant&gt;();</span>
         }
-<span class="fc" id="L54">        return this.constant;</span>
+<span class="fc" id="L58">        return this.constant;</span>
     }
 
 }

@@ -23,16 +23,29 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-<span class="fc" id="L26">public class CalendarConverter implements AtlasConverter&lt;Calendar&gt; {</span>
+/**
+ * The type converter for {@link Calendar}.
+ */
+<span class="fc" id="L29">public class CalendarConverter implements AtlasConverter&lt;Calendar&gt; {</span>
 
+    /**
+     * Converts to {@link Date}.
+     * @param calendar value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME)
     public Date toDate(Calendar calendar) {
-<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        return calendar != null ? calendar.getTime() : null;</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        return calendar != null ? calendar.getTime() : null;</span>
     }
 
+    /**
+     * Converts to {@link ZonedDateTime}.
+     * @param calendar value
+     * @return converted
+     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME_TZ, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Calendar calendar) {
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        return calendar == null ? null : DateTimeHelper.toZonedDateTime(calendar);</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        return calendar == null ? null : DateTimeHelper.toZonedDateTime(calendar);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

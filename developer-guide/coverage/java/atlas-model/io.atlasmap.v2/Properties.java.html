@@ -19,10 +19,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-<span class="fc" id="L22">public class Properties implements Serializable {</span>
+/**
+ * The container of {@link Property}.
+ */
+<span class="fc" id="L25">public class Properties implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link Property} */
     protected List&lt;Property&gt; property;
 
     /**
@@ -48,10 +52,10 @@ import java.util.List;
      * @return A list of {@link Property}
      */
     public List&lt;Property&gt; getProperty() {
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (property == null) {</span>
-<span class="fc" id="L52">            property = new ArrayList&lt;Property&gt;();</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (property == null) {</span>
+<span class="fc" id="L56">            property = new ArrayList&lt;Property&gt;();</span>
         }
-<span class="fc" id="L54">        return this.property;</span>
+<span class="fc" id="L58">        return this.property;</span>
     }
 
 }

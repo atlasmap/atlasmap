@@ -52,39 +52,65 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * Kafka Connect Service provides Kafka Connect schema inspection service which generate an AtlasMap Document object from
+ * Kafka Connect schema such as JSON or AVRO.
+ */
 @Path(&quot;/kafkaconnect/&quot;)
-<span class="fc" id="L56">public class KafkaConnectService {</span>
+<span class="fc" id="L60">public class KafkaConnectService {</span>
 
-<span class="fc" id="L58">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectService.class);</span>
+<span class="fc" id="L62">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectService.class);</span>
 
     @Context
     private ResourceContext resourceContext;
 
+    /**
+     * Serializes to the JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
-<span class="fc" id="L65">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L66">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L74">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L75">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L76">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
         }
     }
 
+    /**
+     * Deserializes from the JSON.
+     * @param &lt;T&gt; type
+     * @param value JSON
+     * @param clazz type
+     * @return deserialized
+     */
     protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt; clazz) {
         try {
-<span class="nc" id="L73">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L74">        } catch (IOException e) {</span>
-<span class="nc" id="L75">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+<span class="nc" id="L89">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L90">        } catch (IOException e) {</span>
+<span class="nc" id="L91">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path(&quot;/simple&quot;)
     @Produces(MediaType.TEXT_PLAIN)
     @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
     public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L85">        return &quot;Got it! &quot; + from;</span>
+<span class="nc" id="L106">        return &quot;Got it! &quot; + from;</span>
     }
 
+    /**
+     * Inspects a Kafka Connect schema and return a Document object.
+     * @param request {@link KafkaConnectInspectionRequest}
+     * @return {@link KafkaConnectInspectionResponse}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -93,46 +119,51 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;KafkaConnectInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = KafkaConnectInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = KafkaConnectInspectionResponse.class)), description = &quot;Return a Document object represented by KafkaConnectDocument&quot;))
     public Response inspect(InputStream request) {
-<span class="nc" id="L96">        return inspect(fromJson(request, KafkaConnectInspectionRequest.class));</span>
+<span class="nc" id="L122">        return inspect(fromJson(request, KafkaConnectInspectionRequest.class));</span>
     }
 
+    /**
+     * Inspects a Kafka Connect schema and return a Document object.
+     * @param request request
+     * @return {@link KafkaConnectInspectionResponse}
+     */
     public Response inspect(KafkaConnectInspectionRequest request) {
-<span class="fc" id="L100">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L131">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L102">        KafkaConnectInspectionResponse response = new KafkaConnectInspectionResponse();</span>
-<span class="fc" id="L103">        KafkaConnectDocument d = null;</span>
+<span class="fc" id="L133">        KafkaConnectInspectionResponse response = new KafkaConnectInspectionResponse();</span>
+<span class="fc" id="L134">        KafkaConnectDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            ClassLoader loader = resourceContext != null</span>
-<span class="nc" id="L108">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
-<span class="fc" id="L109">                    : KafkaConnectService.class.getClassLoader();</span>
-<span class="fc" id="L110">            KafkaConnectInspectionService s = new KafkaConnectInspectionService(loader);</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            ClassLoader loader = resourceContext != null</span>
+<span class="nc" id="L139">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
+<span class="fc" id="L140">                    : KafkaConnectService.class.getClassLoader();</span>
+<span class="fc" id="L141">            KafkaConnectInspectionService s = new KafkaConnectInspectionService(loader);</span>
 
-<span class="fc" id="L112">            String schemaTypeStr = request.getOptions().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
-<span class="fc" id="L113">            KafkaConnectSchemaType schemaType = KafkaConnectSchemaType.valueOf(schemaTypeStr);</span>
-<span class="fc" id="L114">            HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(request.getOptions());</span>
+<span class="fc" id="L143">            String schemaTypeStr = request.getOptions().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
+<span class="fc" id="L144">            KafkaConnectSchemaType schemaType = KafkaConnectSchemaType.valueOf(schemaTypeStr);</span>
+<span class="fc" id="L145">            HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(request.getOptions());</span>
     
-<span class="pc bpc" id="L116" title="2 of 3 branches missed.">            switch (schemaType) {</span>
+<span class="pc bpc" id="L147" title="2 of 3 branches missed.">            switch (schemaType) {</span>
                 case JSON:
-<span class="nc" id="L118">                    d = s.inspectJson(request.getSchemaData(), options);</span>
-<span class="nc" id="L119">                    break;</span>
+<span class="nc" id="L149">                    d = s.inspectJson(request.getSchemaData(), options);</span>
+<span class="nc" id="L150">                    break;</span>
                 case AVRO:
-<span class="fc" id="L121">                    d = s.inspectAvro(request.getSchemaData(), options);</span>
-<span class="fc" id="L122">                    break;</span>
+<span class="fc" id="L152">                    d = s.inspectAvro(request.getSchemaData(), options);</span>
+<span class="fc" id="L153">                    break;</span>
                 default:
-<span class="nc" id="L124">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + schemaType);</span>
+<span class="nc" id="L155">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + schemaType);</span>
                     break;
             }
-<span class="nc" id="L127">        } catch (Exception e) {</span>
-<span class="nc" id="L128">            LOG.error(&quot;Error inspecting Kafka Connect schema: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L129">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L158">        } catch (Exception e) {</span>
+<span class="nc" id="L159">            LOG.error(&quot;Error inspecting Kafka Connect schema: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L160">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L131">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L162">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L134">        response.setKafkaConnectDocument(d);</span>
-<span class="fc" id="L135">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L165">        response.setKafkaConnectDocument(d);</span>
+<span class="fc" id="L166">        return Response.ok().entity(toJson(response)).build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

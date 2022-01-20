@@ -17,14 +17,21 @@ package io.atlasmap.kafkaconnect.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The complex field type for Kafka Connect module.
+ */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L21">public class KafkaConnectComplexType extends KafkaConnectField {</span>
+<span class="fc" id="L24">public class KafkaConnectComplexType extends KafkaConnectField {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** children. */
     protected KafkaConnectFields kafkaConnectFields;
+    /** enum fields. */
     protected KafkaConnectEnumFields kafkaConnectEnumFields;
+    /** true if it's an enum. */
     protected Boolean enumeration;
+    /** URI. */
     protected String uri;
 
     /**
@@ -36,7 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public KafkaConnectFields getKafkaConnectFields() {
-<span class="fc" id="L39">        return kafkaConnectFields;</span>
+<span class="fc" id="L46">        return kafkaConnectFields;</span>
     }
 
     /**
@@ -48,8 +55,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setKafkaConnectFields(KafkaConnectFields value) {
-<span class="fc" id="L51">        this.kafkaConnectFields = value;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L58">        this.kafkaConnectFields = value;</span>
+<span class="fc" id="L59">    }</span>
 
     /**
      * Gets the value of the kafkaConnectEnumFields property.
@@ -60,7 +67,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public KafkaConnectEnumFields getKafkaConnectEnumFields() {
-<span class="fc" id="L63">        return this.kafkaConnectEnumFields;</span>
+<span class="fc" id="L70">        return this.kafkaConnectEnumFields;</span>
     }
 
     /**
@@ -72,8 +79,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setKafkaConnectEnumFields(KafkaConnectEnumFields value) {
-<span class="fc" id="L75">        this.kafkaConnectEnumFields = value;</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L82">        this.kafkaConnectEnumFields = value;</span>
+<span class="fc" id="L83">    }</span>
 
     /**
      * Gets the value of the enumeration property.
@@ -84,7 +91,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Boolean isEnumeration() {
-<span class="fc" id="L87">        return enumeration;</span>
+<span class="fc" id="L94">        return enumeration;</span>
     }
 
     /**
@@ -96,8 +103,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setEnumeration(Boolean value) {
-<span class="fc" id="L99">        this.enumeration = value;</span>
-<span class="fc" id="L100">    }</span>
+<span class="fc" id="L106">        this.enumeration = value;</span>
+<span class="fc" id="L107">    }</span>
 
     /**
      * Gets the value of the uri property.
@@ -108,7 +115,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getUri() {
-<span class="fc" id="L111">        return uri;</span>
+<span class="fc" id="L118">        return uri;</span>
     }
 
     /**
@@ -120,81 +127,83 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setUri(String value) {
-<span class="nc" id="L123">        this.uri = value;</span>
-<span class="nc" id="L124">    }</span>
+<span class="nc" id="L130">        this.uri = value;</span>
+<span class="nc" id="L131">    }</span>
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L127" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L128">            return false;</span>
+<span class="nc bnc" id="L135" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L136">            return false;</span>
         }
-<span class="nc bnc" id="L130" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L131">            return true;</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L139">            return true;</span>
         }
-<span class="nc bnc" id="L133" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L134">            return false;</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L142">            return false;</span>
         }
-<span class="nc" id="L136">        final KafkaConnectComplexType that = ((KafkaConnectComplexType) object);</span>
+<span class="nc" id="L144">        final KafkaConnectComplexType that = ((KafkaConnectComplexType) object);</span>
         {
             KafkaConnectFields leftKafkaConnectFields;
-<span class="nc" id="L139">            leftKafkaConnectFields = this.getKafkaConnectFields();</span>
+<span class="nc" id="L147">            leftKafkaConnectFields = this.getKafkaConnectFields();</span>
             KafkaConnectFields rightKafkaConnectFields;
-<span class="nc" id="L141">            rightKafkaConnectFields = that.getKafkaConnectFields();</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">            if (this.kafkaConnectFields!= null) {</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">                if (that.kafkaConnectFields!= null) {</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">                    if (!leftKafkaConnectFields.equals(rightKafkaConnectFields)) {</span>
-<span class="nc" id="L145">                        return false;</span>
+<span class="nc" id="L149">            rightKafkaConnectFields = that.getKafkaConnectFields();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            if (this.kafkaConnectFields!= null) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                if (that.kafkaConnectFields!= null) {</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">                    if (!leftKafkaConnectFields.equals(rightKafkaConnectFields)) {</span>
+<span class="nc" id="L153">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L148">                    return false;</span>
+<span class="nc" id="L156">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L151" title="All 2 branches missed.">                if (that.kafkaConnectFields!= null) {</span>
-<span class="nc" id="L152">                    return false;</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                if (that.kafkaConnectFields!= null) {</span>
+<span class="nc" id="L160">                    return false;</span>
                 }
             }
         }
         {
             String leftUri;
-<span class="nc" id="L158">            leftUri = this.getUri();</span>
+<span class="nc" id="L166">            leftUri = this.getUri();</span>
             String rightUri;
-<span class="nc" id="L160">            rightUri = that.getUri();</span>
-<span class="nc bnc" id="L161" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc bnc" id="L162" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
-<span class="nc" id="L164">                        return false;</span>
+<span class="nc" id="L168">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L172">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L167">                    return false;</span>
+<span class="nc" id="L175">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L170" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc" id="L171">                    return false;</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L179">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L175">        return true;</span>
+<span class="nc" id="L183">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L179">        int currentHashCode = 1;</span>
-<span class="nc" id="L180">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L188">        int currentHashCode = 1;</span>
+<span class="nc" id="L189">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L182">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L191">            currentHashCode = (currentHashCode* 31);</span>
             KafkaConnectFields theKafkaConnectFields;
-<span class="nc" id="L184">            theKafkaConnectFields = this.getKafkaConnectFields();</span>
-<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (this.kafkaConnectFields!= null) {</span>
-<span class="nc" id="L186">                currentHashCode += theKafkaConnectFields.hashCode();</span>
+<span class="nc" id="L193">            theKafkaConnectFields = this.getKafkaConnectFields();</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">            if (this.kafkaConnectFields!= null) {</span>
+<span class="nc" id="L195">                currentHashCode += theKafkaConnectFields.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L190">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L199">            currentHashCode = (currentHashCode* 31);</span>
             String theUri;
-<span class="nc" id="L192">            theUri = this.getUri();</span>
-<span class="nc bnc" id="L193" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc" id="L194">                currentHashCode += theUri.hashCode();</span>
+<span class="nc" id="L201">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L203">                currentHashCode += theUri.hashCode();</span>
             }
         }
-<span class="nc" id="L197">        return currentHashCode;</span>
+<span class="nc" id="L206">        return currentHashCode;</span>
     }
 
 }

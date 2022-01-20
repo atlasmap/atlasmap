@@ -15,70 +15,78 @@
  */
 package io.atlasmap.java.core;
 
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import io.atlasmap.core.AtlasUtil;
 
-<span class="nc" id="L21">public class StringUtil {</span>
+/**
+ * The collection of utility methods for Java Document handling.
+ */
+<span class="nc" id="L23">public class StringUtil {</span>
 
-    public static boolean isEmpty(String s) {
-<span class="fc bfc" id="L24" title="All 4 branches covered.">        return s == null || &quot;&quot;.equals(s.trim());</span>
-    }
-
+    /**
+     * Capitalizes the first letter.
+     * @param sentence String
+     * @return capitalized
+     */
     public static String capitalizeFirstLetter(String sentence) {
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (StringUtil.isEmpty(sentence)) {</span>
-<span class="nc" id="L29">            return sentence;</span>
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (AtlasUtil.isEmpty(sentence)) {</span>
+<span class="nc" id="L32">            return sentence;</span>
         }
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (sentence.length() == 1) {</span>
-<span class="nc" id="L32">            return String.valueOf(sentence.charAt(0)).toUpperCase();</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (sentence.length() == 1) {</span>
+<span class="nc" id="L35">            return String.valueOf(sentence.charAt(0)).toUpperCase();</span>
         }
-<span class="fc" id="L34">        return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);</span>
+<span class="fc" id="L37">        return String.valueOf(sentence.charAt(0)).toUpperCase() + sentence.substring(1);</span>
     }
 
+    /**
+     * Gets the field name from the getter method.
+     * @param getter getter method name
+     * @return field name
+     */
     public static String getFieldNameFromGetter(String getter) {
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (StringUtil.isEmpty(getter)) {</span>
-<span class="fc" id="L39">            return getter;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (AtlasUtil.isEmpty(getter)) {</span>
+<span class="fc" id="L47">            return getter;</span>
         }
 
         String subGetter;
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        if (getter.startsWith(&quot;get&quot;)) {</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (getter.length() &lt;= &quot;get&quot;.length()) {</span>
-<span class="fc" id="L45">                return getter;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (getter.startsWith(&quot;get&quot;)) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (getter.length() &lt;= &quot;get&quot;.length()) {</span>
+<span class="fc" id="L53">                return getter;</span>
             }
-<span class="fc" id="L47">            subGetter = getter.substring(&quot;get&quot;.length());</span>
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        } else if (getter.startsWith(&quot;is&quot;)) {</span>
-<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (getter.length() &lt;= &quot;is&quot;.length()) {</span>
-<span class="fc" id="L50">                return getter;</span>
+<span class="fc" id="L55">            subGetter = getter.substring(&quot;get&quot;.length());</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        } else if (getter.startsWith(&quot;is&quot;)) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">            if (getter.length() &lt;= &quot;is&quot;.length()) {</span>
+<span class="fc" id="L58">                return getter;</span>
             }
-<span class="fc" id="L52">            subGetter = getter.substring(&quot;is&quot;.length());</span>
+<span class="fc" id="L60">            subGetter = getter.substring(&quot;is&quot;.length());</span>
         } else {
-<span class="fc" id="L54">            return getter;</span>
+<span class="fc" id="L62">            return getter;</span>
         }
 
-<span class="fc" id="L57">        return String.valueOf(subGetter.charAt(0)).toLowerCase() + subGetter.substring(1);</span>
+<span class="fc" id="L65">        return String.valueOf(subGetter.charAt(0)).toLowerCase() + subGetter.substring(1);</span>
     }
 
+    /**
+     * Gets the field name from the setter method.
+     * @param setter setter method name
+     * @return field name
+     */
     public static String getFieldNameFromSetter(String setter) {
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (StringUtil.isEmpty(setter)) {</span>
-<span class="nc" id="L62">            return setter;</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (AtlasUtil.isEmpty(setter)) {</span>
+<span class="nc" id="L75">            return setter;</span>
         }
 
         String subSetter;
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (setter.startsWith(&quot;set&quot;)) {</span>
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">            if (setter.length() &lt;= &quot;set&quot;.length()) {</span>
-<span class="nc" id="L68">                return setter;</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (setter.startsWith(&quot;set&quot;)) {</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">            if (setter.length() &lt;= &quot;set&quot;.length()) {</span>
+<span class="nc" id="L81">                return setter;</span>
             }
-<span class="fc" id="L70">            subSetter = setter.substring(&quot;set&quot;.length());</span>
+<span class="fc" id="L83">            subSetter = setter.substring(&quot;set&quot;.length());</span>
         } else {
-<span class="nc" id="L72">            return setter;</span>
+<span class="nc" id="L85">            return setter;</span>
         }
 
-<span class="fc" id="L75">        return String.valueOf(subSetter.charAt(0)).toLowerCase() + subSetter.substring(1);</span>
+<span class="fc" id="L88">        return String.valueOf(subSetter.charAt(0)).toLowerCase() + subSetter.substring(1);</span>
     }
 
-    public static String formatTimeHMS(long milliseconds) {
-<span class="nc" id="L79">        SimpleDateFormat sdf = new SimpleDateFormat(&quot;HH:mm:ss.SSS&quot;);</span>
-<span class="nc" id="L80">        sdf.setTimeZone(TimeZone.getTimeZone(&quot;UTC&quot;));</span>
-<span class="nc" id="L81">        return sdf.format(milliseconds);</span>
-    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

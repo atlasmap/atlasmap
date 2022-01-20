@@ -19,9 +19,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-<span class="nc" id="L22">public class JdkPackages {</span>
+/**
+ * JDK packages.
+ */
+<span class="nc" id="L25">public class JdkPackages {</span>
 
-<span class="fc" id="L24">    private static final List&lt;String&gt; JDK_PACKAGES = Arrays.asList(&quot;java.applet&quot;, &quot;java.awt&quot;, &quot;java.awt.color&quot;,</span>
+<span class="fc" id="L27">    private static final List&lt;String&gt; JDK_PACKAGES = Arrays.asList(&quot;java.applet&quot;, &quot;java.awt&quot;, &quot;java.awt.color&quot;,</span>
             &quot;java.awt.datatransfer&quot;, &quot;java.awt.dnd&quot;, &quot;java.awt.event&quot;, &quot;java.awt.font&quot;, &quot;java.awt.geom&quot;, &quot;java.awt.im&quot;,
             &quot;java.awt.im.spi&quot;, &quot;java.awt.image&quot;, &quot;java.awt.image.renderable&quot;, &quot;java.awt.print&quot;, &quot;java.beans&quot;,
             &quot;java.beans.beancontext&quot;, &quot;java.io&quot;, &quot;java.lang&quot;, &quot;java.lang.annotation&quot;, &quot;java.lang.instrument&quot;,
@@ -75,43 +78,57 @@ import java.util.List;
             &quot;org.w3c.dom.bootstrap&quot;, &quot;org.w3c.dom.events&quot;, &quot;org.w3c.dom.ls&quot;, &quot;org.w3c.dom.views&quot;, &quot;org.xml.sax&quot;,
             &quot;org.xml.sax.ext&quot;, &quot;org.xml.sax.helpers&quot;);
 
-<span class="fc" id="L78">    private static final List&lt;String&gt; VENDOR_PACKAGES = Arrays.asList(&quot;sun&quot;);</span>
+<span class="fc" id="L81">    private static final List&lt;String&gt; VENDOR_PACKAGES = Arrays.asList(&quot;sun&quot;);</span>
 
+    /**
+     * Gets if it contains the specified package.
+     * @param packageName package name
+     * @return true if contained, or false
+     */
     public static Boolean contains(String packageName) {
-<span class="pc bpc" id="L81" title="2 of 4 branches missed.">        if (packageName == null || packageName.length() &lt; 1) {</span>
-<span class="nc" id="L82">            return false;</span>
+<span class="pc bpc" id="L89" title="2 of 4 branches missed.">        if (packageName == null || packageName.length() &lt; 1) {</span>
+<span class="nc" id="L90">            return false;</span>
         }
 
-<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (getJdkPackageList().contains(packageName)) {</span>
-<span class="fc" id="L86">            return true;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (getJdkPackageList().contains(packageName)) {</span>
+<span class="fc" id="L94">            return true;</span>
         }
 
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (String vpkg : VENDOR_PACKAGES) {</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (packageName.startsWith(vpkg)) {</span>
-<span class="nc" id="L91">                return true;</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        for (String vpkg : VENDOR_PACKAGES) {</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">            if (packageName.startsWith(vpkg)) {</span>
+<span class="nc" id="L99">                return true;</span>
             }
-<span class="fc" id="L93">        }</span>
-<span class="fc" id="L94">        return false;</span>
+<span class="fc" id="L101">        }</span>
+<span class="fc" id="L102">        return false;</span>
     }
 
+    /**
+     * Gets the list of the JDK packages.
+     * @return the list of JDK packages
+     */
     public static List&lt;String&gt; getJdkPackageList() {
-<span class="fc" id="L98">        return getJdkPackageList(getRuntimeVersion());</span>
+<span class="fc" id="L110">        return getJdkPackageList(getRuntimeVersion());</span>
     }
 
+    /**
+     * Gets the list of the JDK packages.
+     * @param version version
+     * @return the list of the JDK packages
+     */
     public static List&lt;String&gt; getJdkPackageList(String version) {
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (version == null) {</span>
-<span class="nc" id="L103">            return new ArrayList&lt;String&gt;();</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (version == null) {</span>
+<span class="nc" id="L120">            return new ArrayList&lt;String&gt;();</span>
         }
 
         // Do we have any usecase to distinguish them?
-<span class="fc" id="L107">        switch (version) {</span>
+<span class="fc" id="L124">        switch (version) {</span>
         default:
-<span class="fc" id="L109">            return JDK_PACKAGES;</span>
+<span class="fc" id="L126">            return JDK_PACKAGES;</span>
         }
     }
 
     private static String getRuntimeVersion() {
-<span class="fc" id="L114">        return System.getProperty(&quot;java.specification.version&quot;);</span>
+<span class="fc" id="L131">        return System.getProperty(&quot;java.specification.version&quot;);</span>
     }
 
 }

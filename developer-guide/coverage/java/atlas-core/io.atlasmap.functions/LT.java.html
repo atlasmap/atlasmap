@@ -22,14 +22,18 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.internal.ComparisonExpression;
 import io.atlasmap.expression.parser.ParseException;
 
-<span class="fc" id="L25">public class LT extends BaseFunctionFactory {</span>
+/**
+ * The {@code LT()} function for conditional mapping expression which returns
+ * {@code true} if the left is less than right, otherwise returns {@code false}.
+ */
+<span class="fc" id="L29">public class LT extends BaseFunctionFactory {</span>
 
     @Override
     public Expression create(List&lt;Expression&gt; args) throws ParseException {
-<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        if (args.size() != 2) {</span>
-<span class="nc" id="L30">            throw new ParseException(&quot;LT expects 2 arguments.&quot;);</span>
+<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (args.size() != 2) {</span>
+<span class="nc" id="L34">            throw new ParseException(&quot;LT expects 2 arguments.&quot;);</span>
         }
-<span class="fc" id="L32">        return ComparisonExpression.createLessThan(args.get(0), args.get(1));</span>
+<span class="fc" id="L36">        return ComparisonExpression.createLessThan(args.get(0), args.get(1));</span>
     }
 
 }

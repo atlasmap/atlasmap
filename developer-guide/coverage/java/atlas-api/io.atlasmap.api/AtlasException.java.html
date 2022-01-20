@@ -15,23 +15,42 @@
  */
 package io.atlasmap.api;
 
+/**
+ * The generic AtlasMap Exception.
+ */
 public class AtlasException extends Exception {
     private static final long serialVersionUID = 7547364931796852076L;
 
+    /**
+     * A constructor.
+     */
     public AtlasException() {
-<span class="fc" id="L22">        super();</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L28">        super();</span>
+<span class="fc" id="L29">    }</span>
 
+    /**
+     * A constructor.
+     * @param message message
+     * @param cause cause
+     */
     public AtlasException(String message, Throwable cause) {
-<span class="fc" id="L26">        super(message, cause);</span>
-<span class="fc" id="L27">    }</span>
+<span class="fc" id="L37">        super(message, cause);</span>
+<span class="fc" id="L38">    }</span>
 
+    /**
+     * A constructor.
+     * @param message message
+     */
     public AtlasException(String message) {
-<span class="fc" id="L30">        super(message);</span>
-<span class="fc" id="L31">    }</span>
+<span class="fc" id="L45">        super(message);</span>
+<span class="fc" id="L46">    }</span>
 
+    /**
+     * A constructor.
+     * @param cause cause
+     */
     public AtlasException(Throwable cause) {
-<span class="fc" id="L34">        super(cause);</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L53">        super(cause);</span>
+<span class="fc" id="L54">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

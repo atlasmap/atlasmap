@@ -19,21 +19,42 @@ import java.util.HashMap;
 
 import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
 
+/**
+ * The Document inspection service for Kafka Connect.
+ */
 public class KafkaConnectInspectionService {
     private KafkaConnectInspector inspector;
 
-<span class="fc" id="L25">    public KafkaConnectInspectionService(ClassLoader loader) {</span>
-<span class="fc" id="L26">        this.inspector = new KafkaConnectInspector(loader);</span>
-<span class="fc" id="L27">    }</span>
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
+<span class="fc" id="L32">    public KafkaConnectInspectionService(ClassLoader loader) {</span>
+<span class="fc" id="L33">        this.inspector = new KafkaConnectInspector(loader);</span>
+<span class="fc" id="L34">    }</span>
 
+    /**
+     * Inspects Kafka Connect JSON schema.
+     * @param jsonSchema Kafka Connect JSON schema
+     * @param options inspection options
+     * @return inspected
+     * @throws Exception unexpected error
+     */
     public KafkaConnectDocument inspectJson(String jsonSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L30">        inspector.inspectJson(jsonSchema, options);</span>
-<span class="fc" id="L31">        return inspector.getKafkaConnectDocument();</span>
+<span class="fc" id="L44">        inspector.inspectJson(jsonSchema, options);</span>
+<span class="fc" id="L45">        return inspector.getKafkaConnectDocument();</span>
     }
 
+    /**
+     * Inspects Kafka Connect AVRO schema.
+     * @param avroSchema Kafka Connect AVRO schema
+     * @param options inspection options
+     * @return inspected
+     * @throws Exception unexpected error
+     */
     public KafkaConnectDocument inspectAvro(String avroSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L35">        inspector.inspectAvro(avroSchema, options);</span>
-<span class="fc" id="L36">        return inspector.getKafkaConnectDocument();</span>
+<span class="fc" id="L56">        inspector.inspectAvro(avroSchema, options);</span>
+<span class="fc" id="L57">        return inspector.getKafkaConnectDocument();</span>
     }
 
 }

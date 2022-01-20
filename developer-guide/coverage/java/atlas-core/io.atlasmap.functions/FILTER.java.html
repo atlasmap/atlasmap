@@ -27,55 +27,66 @@ import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 
-<span class="fc" id="L30">public class FILTER extends BaseFunctionFactory {</span>
+/**
+ * The {@code FILTER()} function to fliter a list of fields.
+ * The common usecase is to filter the parent COMPLEX field by filtering with the one of
+ * the children, then collects the other child with {@code SELECT()}. For example:
+ * &lt;pre&gt;
+ * {@code
+ *    SELECT( FILTER( ${Employees:/employee&lt;&gt;}, ${/status} == 'active' ), ${/firstName} )
+ * }
+ * &lt;/pre&gt;
+ * where {@code /status} and {@code /firstName} are the children of {@code /employee}.
+ */
+<span class="fc" id="L41">public class FILTER extends BaseFunctionFactory {</span>
 
     @Override
     public Expression create(List&lt;Expression&gt; args) throws ParseException {
-<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (args.size() != 2) {</span>
-<span class="nc" id="L35">            throw new ParseException(&quot;FILTER expects 2 arguments.&quot;);</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        if (args.size() != 2) {</span>
+<span class="nc" id="L46">            throw new ParseException(&quot;FILTER expects 2 arguments.&quot;);</span>
         }
-<span class="fc" id="L37">        Expression parentExpression = args.get(0);</span>
-<span class="fc" id="L38">        BooleanExpression filterExpression = BooleanExpression.asBooleanExpression(args.get(1));</span>
-<span class="fc" id="L39">        return (ctx) -&gt; {</span>
-<span class="fc" id="L40">            Field parent = (Field) parentExpression.evaluate(ctx);</span>
-<span class="pc bpc" id="L41" title="1 of 2 branches missed.">            List&lt;Field&gt; collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);</span>
-<span class="fc" id="L42">            FieldGroup filtered = AtlasModelFactory.createFieldGroupFrom(parent, true);</span>
-<span class="fc" id="L43">            int index = 0;</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            for (Field f : collection) {</span>
-<span class="fc" id="L45">                if (</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">                    filterExpression.matches((subCtx) -&gt; {</span>
-<span class="fc" id="L47">                        return AtlasPath.extractChildren(f, subCtx);</span>
+<span class="fc" id="L48">        Expression parentExpression = args.get(0);</span>
+<span class="fc" id="L49">        BooleanExpression filterExpression = BooleanExpression.asBooleanExpression(args.get(1));</span>
+<span class="fc" id="L50">        return (ctx) -&gt; {</span>
+<span class="fc" id="L51">            Field parent = (Field) parentExpression.evaluate(ctx);</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            List&lt;Field&gt; collection = parent instanceof FieldGroup ? ((FieldGroup)parent).getField() : Arrays.asList(parent);</span>
+<span class="fc" id="L53">            FieldGroup filtered = AtlasModelFactory.createFieldGroupFrom(parent, true);</span>
+<span class="fc" id="L54">            int index = 0;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">            for (Field f : collection) {</span>
+<span class="fc" id="L56">                if (</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">                    filterExpression.matches((subCtx) -&gt; {</span>
+<span class="fc" id="L58">                        return AtlasPath.extractChildren(f, subCtx);</span>
                     })
                 ) {
-<span class="fc" id="L50">                    adjustRootCollectionIndex(f, index);</span>
-<span class="fc" id="L51">                    index++;</span>
-<span class="fc" id="L52">                    filtered.getField().add(f);</span>
+<span class="fc" id="L61">                    adjustRootCollectionIndex(f, index);</span>
+<span class="fc" id="L62">                    index++;</span>
+<span class="fc" id="L63">                    filtered.getField().add(f);</span>
                 }
-<span class="fc" id="L54">            }</span>
-<span class="fc" id="L55">            return filtered;</span>
+<span class="fc" id="L65">            }</span>
+<span class="fc" id="L66">            return filtered;</span>
         };
     }
 
     private void adjustRootCollectionIndex(Field f, int index) {
-<span class="fc" id="L60">        AtlasPath filteredPath = new AtlasPath(f.getPath());</span>
-<span class="fc" id="L61">        Integer collectionSegmentIndex = null;</span>
-<span class="fc" id="L62">        List&lt;AtlasPath.SegmentContext&gt; filteredSegments = filteredPath.getSegments(true);</span>
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (filteredSegments.get(0).getCollectionIndex() != null) {</span>
-<span class="nc" id="L64">            collectionSegmentIndex = 0;</span>
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        } else if (filteredSegments.get(1).getCollectionIndex() != null) {</span>
-<span class="fc" id="L66">            collectionSegmentIndex = 1;</span>
+<span class="fc" id="L71">        AtlasPath filteredPath = new AtlasPath(f.getPath());</span>
+<span class="fc" id="L72">        Integer collectionSegmentIndex = null;</span>
+<span class="fc" id="L73">        List&lt;AtlasPath.SegmentContext&gt; filteredSegments = filteredPath.getSegments(true);</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (filteredSegments.get(0).getCollectionIndex() != null) {</span>
+<span class="nc" id="L75">            collectionSegmentIndex = 0;</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        } else if (filteredSegments.get(1).getCollectionIndex() != null) {</span>
+<span class="fc" id="L77">            collectionSegmentIndex = 1;</span>
         }
 
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (collectionSegmentIndex != null) {</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            if (f instanceof FieldGroup) {</span>
-<span class="fc" id="L71">                AtlasPath.setCollectionIndexRecursively((FieldGroup) f, collectionSegmentIndex, index);</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (collectionSegmentIndex != null) {</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">            if (f instanceof FieldGroup) {</span>
+<span class="fc" id="L82">                AtlasPath.setCollectionIndexRecursively((FieldGroup) f, collectionSegmentIndex, index);</span>
             } else {
-<span class="nc" id="L73">                filteredPath.setCollectionIndex(collectionSegmentIndex, index);</span>
-<span class="nc" id="L74">                f.setPath(filteredPath.getOriginalPath());</span>
+<span class="nc" id="L84">                filteredPath.setCollectionIndex(collectionSegmentIndex, index);</span>
+<span class="nc" id="L85">                f.setPath(filteredPath.getOriginalPath());</span>
             }
 
         }
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L89">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

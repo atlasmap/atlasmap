@@ -47,36 +47,61 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * The JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.
+ */
 @Path(&quot;/json/&quot;)
-<span class="fc" id="L51">public class JsonService {</span>
+<span class="fc" id="L54">public class JsonService {</span>
 
-<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);</span>
+<span class="fc" id="L56">    private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);</span>
 
+    /**
+     * Serializes to a JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
-<span class="fc" id="L57">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L58">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L59">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L65">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L66">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
         }
     }
 
+    /**
+     * Deserializes from a JSON.
+     * @param &lt;T&gt; type
+     * @param value value
+     * @param clazz type
+     * @return deserialized
+     */
     protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
         try {
-<span class="fc" id="L65">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L66">        } catch (IOException e) {</span>
-<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+<span class="fc" id="L80">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L81">        } catch (IOException e) {</span>
+<span class="nc" id="L82">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path(&quot;/simple&quot;)
     @Produces(MediaType.TEXT_PLAIN)
     @Operation(summary =&quot;Simple&quot;, description = &quot;Simple hello service&quot;)
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
     public String simpleHelloWorld(@Parameter(description = &quot;From&quot;) @QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L77">        return &quot;Got it! &quot; + from;</span>
+<span class="nc" id="L97">        return &quot;Got it! &quot; + from;</span>
     }
 
+    /**
+     * Inspect a JSON schema or instance and return a Document object.
+     * @param requestIn request
+     * @return {@link JsonInspectionResponse}
+     */
     @POST
     @Path(&quot;/inspect&quot;)
     @Consumes({ MediaType.APPLICATION_JSON })
@@ -85,60 +110,70 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;JsonInspectionRequest object&quot;,  content = @Content(schema = @Schema(implementation = JsonInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JsonInspectionResponse.class)), description = &quot;Return a Document object represented by JsonDocument&quot;))
     public Response inspect(InputStream requestIn) {
-<span class="fc" id="L88">        JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);</span>
-<span class="fc" id="L89">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L113">        JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);</span>
+<span class="fc" id="L114">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L91">        JsonInspectionResponse response = new JsonInspectionResponse();</span>
-<span class="fc" id="L92">        JsonDocument d = null;</span>
+<span class="fc" id="L116">        JsonInspectionResponse response = new JsonInspectionResponse();</span>
+<span class="fc" id="L117">        JsonDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L96" title="2 of 4 branches missed.">            if (request.getType() == null || request.getJsonData() == null) {</span>
-<span class="nc" id="L97">                response.setErrorMessage(</span>
+<span class="pc bpc" id="L121" title="2 of 4 branches missed.">            if (request.getType() == null || request.getJsonData() == null) {</span>
+<span class="nc" id="L122">                response.setErrorMessage(</span>
                         &quot;Json data and Instance or Schema inspection type must be specified in request&quot;);
             } else {
-<span class="fc" id="L100">                JsonInspectionService s = new JsonInspectionService();</span>
+<span class="fc" id="L125">                JsonInspectionService s = new JsonInspectionService();</span>
 
-<span class="fc" id="L102">                String jsonData = cleanJsonData(request.getJsonData());</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                if (!validJsonData(jsonData)) {</span>
-<span class="nc" id="L104">                    response.setErrorMessage(&quot;Invalid json payload specified&quot;);</span>
+<span class="fc" id="L127">                String jsonData = cleanJsonData(request.getJsonData());</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                if (!validJsonData(jsonData)) {</span>
+<span class="nc" id="L129">                    response.setErrorMessage(&quot;Invalid json payload specified&quot;);</span>
                 } else {
-<span class="pc bpc" id="L106" title="2 of 3 branches missed.">                    switch (request.getType()) {</span>
+<span class="pc bpc" id="L131" title="2 of 3 branches missed.">                    switch (request.getType()) {</span>
                     case INSTANCE:
-<span class="nc" id="L108">                        d = s.inspectJsonDocument(jsonData);</span>
-<span class="nc" id="L109">                        break;</span>
+<span class="nc" id="L133">                        d = s.inspectJsonDocument(jsonData);</span>
+<span class="nc" id="L134">                        break;</span>
                     case SCHEMA:
-<span class="fc" id="L111">                        d = s.inspectJsonSchema(jsonData);</span>
-<span class="fc" id="L112">                        break;</span>
+<span class="fc" id="L136">                        d = s.inspectJsonSchema(jsonData);</span>
+<span class="fc" id="L137">                        break;</span>
                     default:
-<span class="nc" id="L114">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L139">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
                         break;
                     }
                 }
             }
-<span class="nc" id="L119">        } catch (Exception e) {</span>
-<span class="nc" id="L120">            LOG.error(&quot;Error inspecting json: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L121">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L144">        } catch (Exception e) {</span>
+<span class="nc" id="L145">            LOG.error(&quot;Error inspecting json: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L146">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L123">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L148">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L126">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths());</span>
+<span class="fc" id="L151">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths());</span>
 
-<span class="fc" id="L128">        response.setJsonDocument(d);</span>
-<span class="fc" id="L129">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L153">        response.setJsonDocument(d);</span>
+<span class="fc" id="L154">        return Response.ok().entity(toJson(response)).build();</span>
     }
 
+    /**
+     * Gets if the JSON data is valid.
+     * @param jsonData json data
+     * @return true if valid, or false
+     */
     protected boolean validJsonData(String jsonData) {
-<span class="pc bpc" id="L133" title="2 of 4 branches missed.">        if (jsonData == null || jsonData.isEmpty()) {</span>
-<span class="nc" id="L134">            return false;</span>
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">        if (jsonData == null || jsonData.isEmpty()) {</span>
+<span class="nc" id="L164">            return false;</span>
         }
 
-<span class="fc bfc" id="L137" title="All 4 branches covered.">        return jsonData.startsWith(&quot;{&quot;) || jsonData.startsWith(&quot;[&quot;);</span>
+<span class="fc bfc" id="L167" title="All 4 branches covered.">        return jsonData.startsWith(&quot;{&quot;) || jsonData.startsWith(&quot;[&quot;);</span>
     }
 
+    /**
+     * Trims the String.
+     * @param jsonData String
+     * @return trimmed
+     */
     protected String cleanJsonData(String jsonData) {
-<span class="fc" id="L141">        return jsonData.trim();</span>
+<span class="fc" id="L176">        return jsonData.trim();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

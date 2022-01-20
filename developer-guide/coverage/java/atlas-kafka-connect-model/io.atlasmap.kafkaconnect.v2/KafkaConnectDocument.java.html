@@ -22,22 +22,36 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
+/**
+ * The Document for Kafka Connect module.
+ */
 @JsonRootName(&quot;KafkaConnectDocument&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L27">public class KafkaConnectDocument extends Document {</span>
+<span class="fc" id="L30">public class KafkaConnectDocument extends Document {</span>
 
     private static final long serialVersionUID = 1L;
+    /** Root schema type. */
     private Type rootSchemaType;
+    /** True if it's an enum. */
     private boolean enumeration;
+    /** Enum fields. */
     private KafkaConnectEnumFields enumFields;
 
+    /**
+     * Gets the root schema type.
+     * @return root schema type
+     */
     public Type getRootSchemaType() {
-<span class="fc" id="L35">        return rootSchemaType;</span>
+<span class="fc" id="L45">        return rootSchemaType;</span>
     }
 
+    /**
+     * Sets the root schema type.
+     * @param rootSchemaType root schema type
+     */
     public void setRootSchemaType(Type rootSchemaType) {
-<span class="fc" id="L39">        this.rootSchemaType = rootSchemaType;</span>
-<span class="fc" id="L40">    }</span>
+<span class="fc" id="L53">        this.rootSchemaType = rootSchemaType;</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Gets the value of the enumeration property.
@@ -48,7 +62,7 @@ import io.atlasmap.v2.Document;
      *     
      */
     public Boolean isEnumeration() {
-<span class="fc" id="L51">        return enumeration;</span>
+<span class="fc" id="L65">        return enumeration;</span>
     }
 
     /**
@@ -60,8 +74,8 @@ import io.atlasmap.v2.Document;
      *     
      */
     public void setEnumeration(Boolean value) {
-<span class="fc" id="L63">        this.enumeration = value;</span>
-<span class="fc" id="L64">    }</span>
+<span class="fc" id="L77">        this.enumeration = value;</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Gets the value of the enumFields property.
@@ -72,7 +86,7 @@ import io.atlasmap.v2.Document;
      *
      */
     public KafkaConnectEnumFields getEnumFields() {
-<span class="fc" id="L75">        return enumFields;</span>
+<span class="fc" id="L89">        return enumFields;</span>
     }
 
     /**
@@ -84,26 +98,28 @@ import io.atlasmap.v2.Document;
      *
      */
     public void setEnumFields(KafkaConnectEnumFields value) {
-<span class="nc" id="L87">        this.enumFields = value;</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L101">        this.enumFields = value;</span>
+<span class="nc" id="L102">    }</span>
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L91" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L92">            return false;</span>
+<span class="nc bnc" id="L106" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L107">            return false;</span>
         }
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L95">            return true;</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L110">            return true;</span>
         }
-<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L98">            return false;</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L113">            return false;</span>
         }
-<span class="nc" id="L100">        return true;</span>
+<span class="nc" id="L115">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L104">        int currentHashCode = 1;</span>
-<span class="nc" id="L105">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
-<span class="nc" id="L106">        return currentHashCode;</span>
+<span class="nc" id="L120">        int currentHashCode = 1;</span>
+<span class="nc" id="L121">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L122">        return currentHashCode;</span>
     }
 
 }

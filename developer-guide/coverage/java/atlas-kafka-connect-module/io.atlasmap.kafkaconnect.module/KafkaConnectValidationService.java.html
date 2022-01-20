@@ -31,51 +31,62 @@ import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 
+/**
+ * The module validation service for Kafka Connect.
+ */
 public class KafkaConnectValidationService extends BaseModuleValidationService&lt;KafkaConnectField&gt; {
 
-<span class="nc" id="L36">    private static Map&lt;String, AtlasValidator&gt; validatorMap = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L37">    private AtlasModuleDetail moduleDetail = KafkaConnectModule.class.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="nc" id="L39">    private static Map&lt;String, AtlasValidator&gt; validatorMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L40">    private AtlasModuleDetail moduleDetail = KafkaConnectModule.class.getAnnotation(AtlasModuleDetail.class);</span>
 
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     * @param fieldActionService field action service
+     */
     public KafkaConnectValidationService(AtlasConversionService conversionService,
             AtlasFieldActionService fieldActionService) {
-<span class="nc" id="L41">        super(conversionService, fieldActionService);</span>
-<span class="nc" id="L42">        init();</span>
-<span class="nc" id="L43">    }</span>
+<span class="nc" id="L49">        super(conversionService, fieldActionService);</span>
+<span class="nc" id="L50">        init();</span>
+<span class="nc" id="L51">    }</span>
 
+    /**
+     * Initializes.
+     */
     public void init() {
-<span class="nc" id="L46">        NonNullValidator pathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="nc" id="L57">        NonNullValidator pathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;The path element must not be null nor empty&quot;);
-<span class="nc" id="L48">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="nc" id="L59">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;Filed type should not be null nor empty&quot;);
 
-<span class="nc" id="L51">        validatorMap.put(&quot;json.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
-<span class="nc" id="L52">        validatorMap.put(&quot;json.field.path.not.null&quot;, pathNonNullValidator);</span>
-<span class="nc" id="L53">        validatorMap.put(&quot;input.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
-<span class="nc" id="L54">        validatorMap.put(&quot;output.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
-<span class="nc" id="L55">    }</span>
+<span class="nc" id="L62">        validatorMap.put(&quot;json.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
+<span class="nc" id="L63">        validatorMap.put(&quot;json.field.path.not.null&quot;, pathNonNullValidator);</span>
+<span class="nc" id="L64">        validatorMap.put(&quot;input.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
+<span class="nc" id="L65">        validatorMap.put(&quot;output.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
+<span class="nc" id="L66">    }</span>
 
     protected AtlasModuleDetail getModuleDetail() {
-<span class="nc" id="L58">        return moduleDetail;</span>
+<span class="nc" id="L69">        return moduleDetail;</span>
     }
 
     @Override
     protected Class&lt;KafkaConnectField&gt; getFieldType() {
-<span class="nc" id="L63">        return KafkaConnectField.class;</span>
+<span class="nc" id="L74">        return KafkaConnectField.class;</span>
     }
 
     @Override
     protected void validateModuleField(String mappingId, KafkaConnectField field, FieldDirection direction,
             List&lt;Validation&gt; validations) {
-<span class="nc" id="L69">        validatorMap.get(&quot;kafkaconnect.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
+<span class="nc" id="L80">        validatorMap.get(&quot;kafkaconnect.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
 
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (field.getPath() == null) {</span>
-<span class="nc" id="L72">            validatorMap.get(&quot;kafkaconnect.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (field.getPath() == null) {</span>
+<span class="nc" id="L83">            validatorMap.get(&quot;kafkaconnect.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
         }
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L85">    }</span>
 
     @Override
     protected String getModuleFieldName(KafkaConnectField field) {
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        return field.getName() != null ? field.getName() : field.getPath();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        return field.getName() != null ? field.getName() : field.getPath();</span>
     }
 
 }

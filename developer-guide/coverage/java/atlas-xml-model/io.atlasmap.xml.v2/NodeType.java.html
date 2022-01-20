@@ -15,30 +15,50 @@
  */
 package io.atlasmap.xml.v2;
 
-<span class="fc" id="L18">public enum NodeType {</span>
+/**
+ * The node type enumeration.
+ */
+<span class="fc" id="L21">public enum NodeType {</span>
 
-<span class="fc" id="L20">    ALL(&quot;All&quot;),</span>
-<span class="fc" id="L21">    ELEMENT(&quot;Element&quot;),</span>
-<span class="fc" id="L22">    ATTRIBUTE(&quot;Attribute&quot;),</span>
-<span class="fc" id="L23">    NONE(&quot;None&quot;);</span>
+    /** All. */
+<span class="fc" id="L24">    ALL(&quot;All&quot;),</span>
+    /** Element. */
+<span class="fc" id="L26">    ELEMENT(&quot;Element&quot;),</span>
+    /** Attribute. */
+<span class="fc" id="L28">    ATTRIBUTE(&quot;Attribute&quot;),</span>
+    /** None. */
+<span class="fc" id="L30">    NONE(&quot;None&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L27">    NodeType(String v) {</span>
-<span class="fc" id="L28">        value = v;</span>
-<span class="fc" id="L29">    }</span>
+    /**
+     * A constructor.
+     * @param v value
+     */
+<span class="fc" id="L38">    NodeType(String v) {</span>
+<span class="fc" id="L39">        value = v;</span>
+<span class="fc" id="L40">    }</span>
 
+    /**
+     * Gets the value.
+     * @return value
+     */
     public String value() {
-<span class="nc" id="L32">        return value;</span>
+<span class="nc" id="L47">        return value;</span>
     }
 
+    /**
+     * Gets the enum from the value.
+     * @param v value
+     * @return the enum
+     */
     public static NodeType fromValue(String v) {
-<span class="nc bnc" id="L36" title="All 2 branches missed.">        for (NodeType c: NodeType.values()) {</span>
-<span class="nc bnc" id="L37" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
-<span class="nc" id="L38">                return c;</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        for (NodeType c: NodeType.values()) {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
+<span class="nc" id="L58">                return c;</span>
             }
         }
-<span class="nc" id="L41">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L61">        throw new IllegalArgumentException(v);</span>
     }
 
 }

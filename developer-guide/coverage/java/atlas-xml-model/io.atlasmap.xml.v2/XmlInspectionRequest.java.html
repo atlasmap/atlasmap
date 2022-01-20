@@ -23,22 +23,26 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.BaseInspectionRequest;
 import io.atlasmap.v2.StringList;
 
+/**
+ * The top container object of XML Document inspection request that AtlasMap UI sends
+ * to the backend.
+ */
 @JsonRootName(&quot;XmlInspectionRequest&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L28">public class XmlInspectionRequest extends BaseInspectionRequest implements Serializable {</span>
+<span class="fc" id="L32">public class XmlInspectionRequest extends BaseInspectionRequest implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-
+    /** Field name exclusions. */
     protected StringList fieldNameExclusions;
-
+    /** Type name exclusions. */
     protected StringList typeNameExclusions;
-
+    /** Namespace exclusions. */
     protected StringList namespaceExclusions;
-
+    /** Raw XML schema/instance data to inspect. */
     protected String xmlData;
-
+    /** URI. */
     protected String uri;
-
+    /** Inspection type. */
     protected InspectionType type;
 
     /**
@@ -50,7 +54,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public StringList getFieldNameExclusions() {
-<span class="fc" id="L53">        return fieldNameExclusions;</span>
+<span class="fc" id="L57">        return fieldNameExclusions;</span>
     }
 
     /**
@@ -62,8 +66,8 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setFieldNameExclusions(StringList value) {
-<span class="nc" id="L65">        this.fieldNameExclusions = value;</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L69">        this.fieldNameExclusions = value;</span>
+<span class="nc" id="L70">    }</span>
 
     /**
      * Gets the value of the typeNameExclusions property.
@@ -74,7 +78,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public StringList getTypeNameExclusions() {
-<span class="fc" id="L77">        return typeNameExclusions;</span>
+<span class="fc" id="L81">        return typeNameExclusions;</span>
     }
 
     /**
@@ -86,8 +90,8 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setTypeNameExclusions(StringList value) {
-<span class="nc" id="L89">        this.typeNameExclusions = value;</span>
-<span class="nc" id="L90">    }</span>
+<span class="nc" id="L93">        this.typeNameExclusions = value;</span>
+<span class="nc" id="L94">    }</span>
 
     /**
      * Gets the value of the namespaceExclusions property.
@@ -98,7 +102,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public StringList getNamespaceExclusions() {
-<span class="fc" id="L101">        return namespaceExclusions;</span>
+<span class="fc" id="L105">        return namespaceExclusions;</span>
     }
 
     /**
@@ -110,8 +114,8 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setNamespaceExclusions(StringList value) {
-<span class="nc" id="L113">        this.namespaceExclusions = value;</span>
-<span class="nc" id="L114">    }</span>
+<span class="nc" id="L117">        this.namespaceExclusions = value;</span>
+<span class="nc" id="L118">    }</span>
 
     /**
      * Gets the value of the xmlData property.
@@ -122,7 +126,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public String getXmlData() {
-<span class="fc" id="L125">        return xmlData;</span>
+<span class="fc" id="L129">        return xmlData;</span>
     }
 
     /**
@@ -134,8 +138,8 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setXmlData(String value) {
-<span class="fc" id="L137">        this.xmlData = value;</span>
-<span class="fc" id="L138">    }</span>
+<span class="fc" id="L141">        this.xmlData = value;</span>
+<span class="fc" id="L142">    }</span>
 
     /**
      * Gets the value of the uri property.
@@ -146,7 +150,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public String getUri() {
-<span class="fc" id="L149">        return uri;</span>
+<span class="fc" id="L153">        return uri;</span>
     }
 
     /**
@@ -158,8 +162,8 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setUri(String value) {
-<span class="nc" id="L161">        this.uri = value;</span>
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L165">        this.uri = value;</span>
+<span class="nc" id="L166">    }</span>
 
     /**
      * Gets the value of the type property.
@@ -170,7 +174,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public InspectionType getType() {
-<span class="fc" id="L173">        return type;</span>
+<span class="fc" id="L177">        return type;</span>
     }
 
     /**
@@ -182,185 +186,187 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setType(InspectionType value) {
-<span class="fc" id="L185">        this.type = value;</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc" id="L189">        this.type = value;</span>
+<span class="fc" id="L190">    }</span>
 
+    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L189" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L190">            return false;</span>
+<span class="nc bnc" id="L194" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L195">            return false;</span>
         }
-<span class="nc bnc" id="L192" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L193">            return true;</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L198">            return true;</span>
         }
-<span class="nc" id="L195">        final XmlInspectionRequest that = ((XmlInspectionRequest) object);</span>
+<span class="nc" id="L200">        final XmlInspectionRequest that = ((XmlInspectionRequest) object);</span>
         {
             StringList leftFieldNameExclusions;
-<span class="nc" id="L198">            leftFieldNameExclusions = this.getFieldNameExclusions();</span>
+<span class="nc" id="L203">            leftFieldNameExclusions = this.getFieldNameExclusions();</span>
             StringList rightFieldNameExclusions;
-<span class="nc" id="L200">            rightFieldNameExclusions = that.getFieldNameExclusions();</span>
-<span class="nc bnc" id="L201" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
-<span class="nc bnc" id="L202" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
-<span class="nc bnc" id="L203" title="All 2 branches missed.">                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {</span>
-<span class="nc" id="L204">                        return false;</span>
+<span class="nc" id="L205">            rightFieldNameExclusions = that.getFieldNameExclusions();</span>
+<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {</span>
+<span class="nc" id="L209">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L207">                    return false;</span>
+<span class="nc" id="L212">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L210" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
-<span class="nc" id="L211">                    return false;</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
+<span class="nc" id="L216">                    return false;</span>
                 }
             }
         }
         {
             StringList leftTypeNameExclusions;
-<span class="nc" id="L217">            leftTypeNameExclusions = this.getTypeNameExclusions();</span>
+<span class="nc" id="L222">            leftTypeNameExclusions = this.getTypeNameExclusions();</span>
             StringList rightTypeNameExclusions;
-<span class="nc" id="L219">            rightTypeNameExclusions = that.getTypeNameExclusions();</span>
-<span class="nc bnc" id="L220" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
-<span class="nc bnc" id="L221" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">                    if (!leftTypeNameExclusions.equals(rightTypeNameExclusions)) {</span>
-<span class="nc" id="L223">                        return false;</span>
+<span class="nc" id="L224">            rightTypeNameExclusions = that.getTypeNameExclusions();</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">                    if (!leftTypeNameExclusions.equals(rightTypeNameExclusions)) {</span>
+<span class="nc" id="L228">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L226">                    return false;</span>
+<span class="nc" id="L231">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L229" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
-<span class="nc" id="L230">                    return false;</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
+<span class="nc" id="L235">                    return false;</span>
                 }
             }
         }
         {
             StringList leftNamespaceExclusions;
-<span class="nc" id="L236">            leftNamespaceExclusions = this.getNamespaceExclusions();</span>
+<span class="nc" id="L241">            leftNamespaceExclusions = this.getNamespaceExclusions();</span>
             StringList rightNamespaceExclusions;
-<span class="nc" id="L238">            rightNamespaceExclusions = that.getNamespaceExclusions();</span>
-<span class="nc bnc" id="L239" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
-<span class="nc bnc" id="L240" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
-<span class="nc bnc" id="L241" title="All 2 branches missed.">                    if (!leftNamespaceExclusions.equals(rightNamespaceExclusions)) {</span>
-<span class="nc" id="L242">                        return false;</span>
+<span class="nc" id="L243">            rightNamespaceExclusions = that.getNamespaceExclusions();</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
+<span class="nc bnc" id="L245" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
+<span class="nc bnc" id="L246" title="All 2 branches missed.">                    if (!leftNamespaceExclusions.equals(rightNamespaceExclusions)) {</span>
+<span class="nc" id="L247">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L245">                    return false;</span>
+<span class="nc" id="L250">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L248" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
-<span class="nc" id="L249">                    return false;</span>
+<span class="nc bnc" id="L253" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
+<span class="nc" id="L254">                    return false;</span>
                 }
             }
         }
         {
             String leftXmlData;
-<span class="nc" id="L255">            leftXmlData = this.getXmlData();</span>
+<span class="nc" id="L260">            leftXmlData = this.getXmlData();</span>
             String rightXmlData;
-<span class="nc" id="L257">            rightXmlData = that.getXmlData();</span>
-<span class="nc bnc" id="L258" title="All 2 branches missed.">            if (this.xmlData!= null) {</span>
-<span class="nc bnc" id="L259" title="All 2 branches missed.">                if (that.xmlData!= null) {</span>
-<span class="nc bnc" id="L260" title="All 2 branches missed.">                    if (!leftXmlData.equals(rightXmlData)) {</span>
-<span class="nc" id="L261">                        return false;</span>
+<span class="nc" id="L262">            rightXmlData = that.getXmlData();</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            if (this.xmlData!= null) {</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">                if (that.xmlData!= null) {</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">                    if (!leftXmlData.equals(rightXmlData)) {</span>
+<span class="nc" id="L266">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L264">                    return false;</span>
+<span class="nc" id="L269">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L267" title="All 2 branches missed.">                if (that.xmlData!= null) {</span>
-<span class="nc" id="L268">                    return false;</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">                if (that.xmlData!= null) {</span>
+<span class="nc" id="L273">                    return false;</span>
                 }
             }
         }
         {
             String leftUri;
-<span class="nc" id="L274">            leftUri = this.getUri();</span>
+<span class="nc" id="L279">            leftUri = this.getUri();</span>
             String rightUri;
-<span class="nc" id="L276">            rightUri = that.getUri();</span>
-<span class="nc bnc" id="L277" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc bnc" id="L278" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc bnc" id="L279" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
-<span class="nc" id="L280">                        return false;</span>
+<span class="nc" id="L281">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L284" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L285">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L283">                    return false;</span>
+<span class="nc" id="L288">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L286" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc" id="L287">                    return false;</span>
+<span class="nc bnc" id="L291" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc" id="L292">                    return false;</span>
                 }
             }
         }
         {
             InspectionType leftType;
-<span class="nc" id="L293">            leftType = this.getType();</span>
+<span class="nc" id="L298">            leftType = this.getType();</span>
             InspectionType rightType;
-<span class="nc" id="L295">            rightType = that.getType();</span>
-<span class="nc bnc" id="L296" title="All 2 branches missed.">            if (this.type!= null) {</span>
-<span class="nc bnc" id="L297" title="All 2 branches missed.">                if (that.type!= null) {</span>
-<span class="nc bnc" id="L298" title="All 2 branches missed.">                    if (!leftType.equals(rightType)) {</span>
-<span class="nc" id="L299">                        return false;</span>
+<span class="nc" id="L300">            rightType = that.getType();</span>
+<span class="nc bnc" id="L301" title="All 2 branches missed.">            if (this.type!= null) {</span>
+<span class="nc bnc" id="L302" title="All 2 branches missed.">                if (that.type!= null) {</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">                    if (!leftType.equals(rightType)) {</span>
+<span class="nc" id="L304">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L302">                    return false;</span>
+<span class="nc" id="L307">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L305" title="All 2 branches missed.">                if (that.type!= null) {</span>
-<span class="nc" id="L306">                    return false;</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">                if (that.type!= null) {</span>
+<span class="nc" id="L311">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L310">        return true;</span>
+<span class="nc" id="L315">        return true;</span>
     }
 
+    @Override
     public int hashCode() {
-<span class="nc" id="L314">        int currentHashCode = 1;</span>
+<span class="nc" id="L320">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L316">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L322">            currentHashCode = (currentHashCode* 31);</span>
             StringList theFieldNameExclusions;
-<span class="nc" id="L318">            theFieldNameExclusions = this.getFieldNameExclusions();</span>
-<span class="nc bnc" id="L319" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
-<span class="nc" id="L320">                currentHashCode += theFieldNameExclusions.hashCode();</span>
+<span class="nc" id="L324">            theFieldNameExclusions = this.getFieldNameExclusions();</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
+<span class="nc" id="L326">                currentHashCode += theFieldNameExclusions.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L324">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L330">            currentHashCode = (currentHashCode* 31);</span>
             StringList theTypeNameExclusions;
-<span class="nc" id="L326">            theTypeNameExclusions = this.getTypeNameExclusions();</span>
-<span class="nc bnc" id="L327" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
-<span class="nc" id="L328">                currentHashCode += theTypeNameExclusions.hashCode();</span>
+<span class="nc" id="L332">            theTypeNameExclusions = this.getTypeNameExclusions();</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
+<span class="nc" id="L334">                currentHashCode += theTypeNameExclusions.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L332">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L338">            currentHashCode = (currentHashCode* 31);</span>
             StringList theNamespaceExclusions;
-<span class="nc" id="L334">            theNamespaceExclusions = this.getNamespaceExclusions();</span>
-<span class="nc bnc" id="L335" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
-<span class="nc" id="L336">                currentHashCode += theNamespaceExclusions.hashCode();</span>
+<span class="nc" id="L340">            theNamespaceExclusions = this.getNamespaceExclusions();</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
+<span class="nc" id="L342">                currentHashCode += theNamespaceExclusions.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L340">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L346">            currentHashCode = (currentHashCode* 31);</span>
             String theXmlData;
-<span class="nc" id="L342">            theXmlData = this.getXmlData();</span>
-<span class="nc bnc" id="L343" title="All 2 branches missed.">            if (this.xmlData!= null) {</span>
-<span class="nc" id="L344">                currentHashCode += theXmlData.hashCode();</span>
+<span class="nc" id="L348">            theXmlData = this.getXmlData();</span>
+<span class="nc bnc" id="L349" title="All 2 branches missed.">            if (this.xmlData!= null) {</span>
+<span class="nc" id="L350">                currentHashCode += theXmlData.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L348">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L354">            currentHashCode = (currentHashCode* 31);</span>
             String theUri;
-<span class="nc" id="L350">            theUri = this.getUri();</span>
-<span class="nc bnc" id="L351" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc" id="L352">                currentHashCode += theUri.hashCode();</span>
+<span class="nc" id="L356">            theUri = this.getUri();</span>
+<span class="nc bnc" id="L357" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc" id="L358">                currentHashCode += theUri.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L356">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L362">            currentHashCode = (currentHashCode* 31);</span>
             InspectionType theType;
-<span class="nc" id="L358">            theType = this.getType();</span>
-<span class="nc bnc" id="L359" title="All 2 branches missed.">            if (this.type!= null) {</span>
-<span class="nc" id="L360">                currentHashCode += theType.hashCode();</span>
+<span class="nc" id="L364">            theType = this.getType();</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">            if (this.type!= null) {</span>
+<span class="nc" id="L366">                currentHashCode += theType.hashCode();</span>
             }
         }
-<span class="nc" id="L363">        return currentHashCode;</span>
+<span class="nc" id="L369">        return currentHashCode;</span>
     }
 
 }

@@ -20,14 +20,20 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+/**
+ * The top container object of Kafka Connect Document inspection response that AtlasMap design time backend
+ * service sends back to the UI in return for {@link KafkaConnectInspectionRequest}.
+ */
 @JsonRootName(&quot;KafkaConnectInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L25">public class KafkaConnectInspectionResponse implements Serializable {</span>
+<span class="fc" id="L29">public class KafkaConnectInspectionResponse implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-
+    /** The Kafka Connect Document created as a result of the inspection. */
     private KafkaConnectDocument kafkaConnectDocument;
+    /** Error message. */
     private String errorMessage;
+    /** Execution time. */
     private Long executionTime;
 
     /**
@@ -39,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public KafkaConnectDocument getKafkaConnectDocument() {
-<span class="fc" id="L42">        return this.kafkaConnectDocument;</span>
+<span class="fc" id="L48">        return this.kafkaConnectDocument;</span>
     }
 
     /**
@@ -51,8 +57,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setKafkaConnectDocument(KafkaConnectDocument value) {
-<span class="fc" id="L54">        this.kafkaConnectDocument = value;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L60">        this.kafkaConnectDocument = value;</span>
+<span class="fc" id="L61">    }</span>
     /**
      * Gets the value of the errorMessage property.
      * 
@@ -62,7 +68,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getErrorMessage() {
-<span class="fc" id="L65">        return errorMessage;</span>
+<span class="fc" id="L71">        return errorMessage;</span>
     }
 
     /**
@@ -74,8 +80,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setErrorMessage(String value) {
-<span class="nc" id="L77">        this.errorMessage = value;</span>
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L83">        this.errorMessage = value;</span>
+<span class="nc" id="L84">    }</span>
 
     /**
      * Gets the value of the executionTime property.
@@ -86,7 +92,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Long getExecutionTime() {
-<span class="fc" id="L89">        return executionTime;</span>
+<span class="fc" id="L95">        return executionTime;</span>
     }
 
     /**
@@ -98,7 +104,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setExecutionTime(Long value) {
-<span class="fc" id="L101">        this.executionTime = value;</span>
-<span class="fc" id="L102">    }</span>
+<span class="fc" id="L107">        this.executionTime = value;</span>
+<span class="fc" id="L108">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

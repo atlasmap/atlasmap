@@ -22,28 +22,40 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
+/**
+ * The utility class to access jackson {@link ObjectMapper}.
+ */
 public class Json {
 
-<span class="fc" id="L27">    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()</span>
-<span class="fc" id="L28">        .registerModule(new AtlasJsonModule())</span>
-<span class="fc" id="L29">        .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)</span>
-<span class="fc" id="L30">        .enable(SerializationFeature.INDENT_OUTPUT)</span>
-<span class="fc" id="L31">        .configure(SerializationFeature.WRAP_ROOT_VALUE, true)</span>
-<span class="fc" id="L32">        .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)</span>
-<span class="fc" id="L33">        .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)</span>
-<span class="fc" id="L34">        .setSerializationInclusion(Include.NON_NULL);</span>
+<span class="fc" id="L30">    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()</span>
+<span class="fc" id="L31">        .registerModule(new AtlasJsonModule())</span>
+<span class="fc" id="L32">        .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)</span>
+<span class="fc" id="L33">        .enable(SerializationFeature.INDENT_OUTPUT)</span>
+<span class="fc" id="L34">        .configure(SerializationFeature.WRAP_ROOT_VALUE, true)</span>
+<span class="fc" id="L35">        .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)</span>
+<span class="fc" id="L36">        .configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true)</span>
+<span class="fc" id="L37">        .setSerializationInclusion(Include.NON_NULL);</span>
 
     private Json() {
     }
 
+    /**
+     * Gets the {@link ObjectMapper} instance.
+     * @return {@link ObjectMapper}
+     */
     public static ObjectMapper mapper() {
-<span class="fc" id="L40">        return OBJECT_MAPPER;</span>
+<span class="fc" id="L47">        return OBJECT_MAPPER;</span>
     }
 
+    /**
+     * Gets the {@link ObjectMapper} instance which is initialized with the passed in class loader.
+     * @param classLoader class loader
+     * @return {@link ObjectMapper}
+     */
     public static ObjectMapper withClassLoader(ClassLoader classLoader) {
-<span class="fc" id="L44">        OBJECT_MAPPER.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));</span>
-<span class="fc" id="L45">        OBJECT_MAPPER.setHandlerInstantiator(new AtlasHandlerInstantiator(classLoader));</span>
-<span class="fc" id="L46">        return OBJECT_MAPPER;</span>
+<span class="fc" id="L56">        OBJECT_MAPPER.setTypeFactory(TypeFactory.defaultInstance().withClassLoader(classLoader));</span>
+<span class="fc" id="L57">        OBJECT_MAPPER.setHandlerInstantiator(new AtlasHandlerInstantiator(classLoader));</span>
+<span class="fc" id="L58">        return OBJECT_MAPPER;</span>
     }
 
 }

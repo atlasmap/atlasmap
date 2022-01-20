@@ -21,12 +21,15 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-
+/**
+ * The container of the {@link ActionDetail}.
+ */
 @JsonRootName(&quot;ActionDetails&quot;)
-<span class="fc" id="L26">public class ActionDetails implements Serializable {</span>
+<span class="fc" id="L28">public class ActionDetails implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
+    /** A list of {@link ActionDetail} */
     protected List&lt;ActionDetail&gt; actionDetail;
 
     /**
@@ -52,10 +55,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link ActionDetail}
      */
     public List&lt;ActionDetail&gt; getActionDetail() {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (actionDetail == null) {</span>
-<span class="fc" id="L56">            actionDetail = new ArrayList&lt;ActionDetail&gt;();</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (actionDetail == null) {</span>
+<span class="fc" id="L59">            actionDetail = new ArrayList&lt;ActionDetail&gt;();</span>
         }
-<span class="fc" id="L58">        return this.actionDetail;</span>
+<span class="fc" id="L61">        return this.actionDetail;</span>
     }
 
 }

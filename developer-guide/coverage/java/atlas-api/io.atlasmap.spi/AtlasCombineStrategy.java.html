@@ -23,24 +23,68 @@ import java.util.Map;
 @Deprecated
 public interface AtlasCombineStrategy {
 
+    /**
+     * Gets the name.
+     * @return name
+     */
     default String getName() {
-<span class="fc" id="L27">        return this.getClass().getSimpleName();</span>
+<span class="fc" id="L31">        return this.getClass().getSimpleName();</span>
     }
 
+    /**
+     * Gets the delimiter.
+     * @return delimiter
+     */
     StringDelimiter getDelimiter();
 
+    /**
+     * Sets the delimiter.
+     * @param delimiter delimiter
+     */
     void setDelimiter(StringDelimiter delimiter);
 
+    /**
+     * Gets the limit.
+     * @return limit
+     */
     Integer getLimit();
 
+    /**
+     * Sets the limit.
+     * @param limit limit
+     */
     void setLimit(Integer limit);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @return result
+     */
     String combineValues(Map&lt;Integer, String&gt; values);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @param delimiter delimiter
+     * @return result
+     */
     String combineValues(Map&lt;Integer, String&gt; values, StringDelimiter delimiter);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @param delimiter delimiter
+     * @param maxItems max items
+     * @return result
+     */
     String combineValues(Map&lt;Integer, String&gt; values, StringDelimiter delimiter, Integer maxItems);
 
+    /**
+     * Combines the values.
+     * @param values values
+     * @param delimiter delimter
+     * @return result
+     */
     String combineValues(Map&lt;Integer, String&gt; values, String delimiter);
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -39,9 +39,12 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * The {@link AtlasFieldReader} implementation for Kafka Connect.
+ */
 public class KafkaConnectFieldReader implements AtlasFieldReader {
 
-<span class="fc" id="L44">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectFieldReader.class);</span>
+<span class="fc" id="L47">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectFieldReader.class);</span>
 
     private AtlasConversionService conversionService;
     private Object root;
@@ -51,243 +54,256 @@ public class KafkaConnectFieldReader implements AtlasFieldReader {
     private KafkaConnectFieldReader() {
     }
 
-<span class="fc" id="L54">    public KafkaConnectFieldReader(AtlasConversionService conversionService) {</span>
-<span class="fc" id="L55">        this.conversionService = conversionService;</span>
-<span class="fc" id="L56">    }</span>
+    /**
+     * A constructor.
+     * @param conversionService conversion service
+     */
+<span class="fc" id="L61">    public KafkaConnectFieldReader(AtlasConversionService conversionService) {</span>
+<span class="fc" id="L62">        this.conversionService = conversionService;</span>
+<span class="fc" id="L63">    }</span>
 
     @Override
     public Field read(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L60">        Field field = session.head().getSourceField();</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (root == null) {</span>
-<span class="fc" id="L62">            AtlasUtil.addAudit(session, field,</span>
-<span class="fc" id="L63">                String.format(&quot;Cannot read a field '%s' of KafkaConnect document '%s', document is null&quot;,</span>
-<span class="fc" id="L64">                    field.getPath(), field.getDocId()),</span>
+<span class="fc" id="L67">        Field field = session.head().getSourceField();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (root == null) {</span>
+<span class="fc" id="L69">            AtlasUtil.addAudit(session, field,</span>
+<span class="fc" id="L70">                String.format(&quot;Cannot read a field '%s' of KafkaConnect document '%s', document is null&quot;,</span>
+<span class="fc" id="L71">                    field.getPath(), field.getDocId()),</span>
                 AuditStatus.ERROR, null);
-<span class="fc" id="L66">            return field;</span>
+<span class="fc" id="L73">            return field;</span>
         }
 
-<span class="fc" id="L69">        AtlasPath path = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L76">        AtlasPath path = new AtlasPath(field.getPath());</span>
          List&lt;Field&gt; fields;
-<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (path.getSegments(true).size() == 1) {</span>
-<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (field.getFieldType() == FieldType.COMPLEX) {</span>
-<span class="fc" id="L73">                FieldGroup group = (FieldGroup) field;</span>
-<span class="fc bfc" id="L74" title="All 2 branches covered.">                if (path.isCollectionRoot()) {</span>
-<span class="fc" id="L75">                    nestComplexCollection(session, (List&lt;Object&gt;) root, group, 0);</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (path.getSegments(true).size() == 1) {</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (field.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc" id="L80">                FieldGroup group = (FieldGroup) field;</span>
+<span class="fc bfc" id="L81" title="All 2 branches covered.">                if (path.isCollectionRoot()) {</span>
+<span class="fc" id="L82">                    nestComplexCollection(session, (List&lt;Object&gt;) root, group, 0);</span>
                 } else {
-<span class="fc" id="L77">                    populateChildFields(session, (Struct)root, group);</span>
+<span class="fc" id="L84">                    populateChildFields(session, (Struct)root, group);</span>
                 }
-<span class="fc" id="L79">                return group;</span>
+<span class="fc" id="L86">                return group;</span>
             } else {
-<span class="fc" id="L81">                fields = createValueFields(root, path.getRootSegment(), 0, (KafkaConnectField)field);</span>
+<span class="fc" id="L88">                fields = createValueFields(root, path.getRootSegment(), 0, (KafkaConnectField)field);</span>
             }
         } else {
-<span class="fc" id="L84">            fields = getFieldsForPath(session, root, field, path, 0);</span>
+<span class="fc" id="L91">            fields = getFieldsForPath(session, root, field, path, 0);</span>
         }
         
-<span class="fc bfc" id="L87" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
-<span class="fc" id="L88">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="fc" id="L89">            fieldGroup.getField().addAll(fields);</span>
-<span class="fc" id="L90">            session.head().setSourceField(fieldGroup);</span>
-<span class="fc" id="L91">            return fieldGroup;</span>
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        } else if (fields.size() == 1) {</span>
-<span class="fc" id="L93">            Field f = fields.get(0);</span>
-<span class="fc" id="L94">            session.head().setSourceField(f);</span>
-<span class="fc" id="L95">            return f;</span>
+<span class="fc bfc" id="L94" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="fc" id="L95">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="fc" id="L96">            fieldGroup.getField().addAll(fields);</span>
+<span class="fc" id="L97">            session.head().setSourceField(fieldGroup);</span>
+<span class="fc" id="L98">            return fieldGroup;</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        } else if (fields.size() == 1) {</span>
+<span class="fc" id="L100">            Field f = fields.get(0);</span>
+<span class="fc" id="L101">            session.head().setSourceField(f);</span>
+<span class="fc" id="L102">            return f;</span>
         } else {
-<span class="nc" id="L97">            return field;</span>
+<span class="nc" id="L104">            return field;</span>
         }
     }
 
     private void nestComplexCollection(AtlasInternalSession session, List&lt;Object&gt; collection, FieldGroup parent, int depth) throws AtlasException {
-<span class="fc" id="L102">        AtlasPath path = new AtlasPath(parent.getPath());</span>
-<span class="fc" id="L103">        SegmentContext segment = path.getSegments(true).get(depth);</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (segment.getCollectionIndex() != null) {</span>
-<span class="fc" id="L105">            int index = segment.getCollectionIndex();</span>
-<span class="fc" id="L106">            Struct struct = (Struct) collection.get(index);</span>
-<span class="fc" id="L107">            populateChildFields(session, struct, parent);</span>
-<span class="fc" id="L108">            return;</span>
+<span class="fc" id="L109">        AtlasPath path = new AtlasPath(parent.getPath());</span>
+<span class="fc" id="L110">        SegmentContext segment = path.getSegments(true).get(depth);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (segment.getCollectionIndex() != null) {</span>
+<span class="fc" id="L112">            int index = segment.getCollectionIndex();</span>
+<span class="fc" id="L113">            Struct struct = (Struct) collection.get(index);</span>
+<span class="fc" id="L114">            populateChildFields(session, struct, parent);</span>
+<span class="fc" id="L115">            return;</span>
         }
 
-<span class="fc" id="L111">        List&lt;Field&gt; processed = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">        for (int index=0; index&lt;collection.size(); index++) {</span>
-<span class="fc" id="L113">            FieldGroup itemGroup = AtlasKafkaConnectModelFactory.cloneFieldGroup(parent);</span>
-<span class="fc" id="L114">            AtlasPath.setCollectionIndexRecursively(itemGroup, depth, index);</span>
-<span class="fc" id="L115">            processed.add(itemGroup);</span>
-<span class="fc" id="L116">            Struct struct = (Struct) collection.get(index);</span>
-<span class="fc" id="L117">            populateChildFields(session, struct, itemGroup);</span>
+<span class="fc" id="L118">        List&lt;Field&gt; processed = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        for (int index=0; index&lt;collection.size(); index++) {</span>
+<span class="fc" id="L120">            FieldGroup itemGroup = AtlasKafkaConnectModelFactory.cloneFieldGroup(parent);</span>
+<span class="fc" id="L121">            AtlasPath.setCollectionIndexRecursively(itemGroup, depth, index);</span>
+<span class="fc" id="L122">            processed.add(itemGroup);</span>
+<span class="fc" id="L123">            Struct struct = (Struct) collection.get(index);</span>
+<span class="fc" id="L124">            populateChildFields(session, struct, itemGroup);</span>
         }
-<span class="fc" id="L119">        parent.getField().clear();</span>
-<span class="fc" id="L120">        parent.getField().addAll(processed);</span>
-<span class="fc" id="L121">    }</span>
+<span class="fc" id="L126">        parent.getField().clear();</span>
+<span class="fc" id="L127">        parent.getField().addAll(processed);</span>
+<span class="fc" id="L128">    }</span>
 
     private List&lt;Field&gt; createValueFields(Object parent, SegmentContext segment, int segmentIndex, KafkaConnectField parentField) throws AtlasException {
-<span class="fc" id="L124">        List&lt;Field&gt; fields = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L125" title="All 2 branches covered.">        if (segment.getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L126">            KafkaConnectField kcField = AtlasKafkaConnectModelFactory.cloneField(parentField, true);</span>
-<span class="fc" id="L127">            Object converted = conversionService.convertType(parent, parentField.getFormat(),</span>
-<span class="fc" id="L128">                parentField.getFieldType(), null);</span>
-<span class="fc" id="L129">            kcField.setValue(converted);</span>
-<span class="fc" id="L130">            kcField.setIndex(null); //reset index for subfields</span>
-<span class="fc" id="L131">            fields.add(kcField);</span>
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        } else if (segment.getCollectionIndex() != null) {</span>
-<span class="fc" id="L133">            List&lt;Object&gt; collection = (List&lt;Object&gt;) parent;</span>
-<span class="fc" id="L134">            int i = segment.getCollectionIndex();</span>
-<span class="fc" id="L135">            KafkaConnectField kcField = AtlasKafkaConnectModelFactory.cloneField(parentField, true);</span>
-<span class="fc" id="L136">            Object converted = conversionService.convertType(collection.get(i), parentField.getFormat(),</span>
-<span class="fc" id="L137">                parentField.getFieldType(), null);</span>
-<span class="fc" id="L138">            kcField.setValue(converted);</span>
-<span class="fc" id="L139">            kcField.setIndex(null); //reset index for subfields</span>
-<span class="fc" id="L140">            fields.add(kcField);</span>
-<span class="fc" id="L141">        } else {</span>
-<span class="fc" id="L142">            List&lt;Object&gt; collection = (List&lt;Object&gt;) parent;</span>
-<span class="fc bfc" id="L143" title="All 2 branches covered.">            for (int i=0; i&lt;collection.size(); i++) {</span>
-<span class="fc" id="L144">                KafkaConnectField kcField = AtlasKafkaConnectModelFactory.cloneField(parentField, true);</span>
-<span class="fc" id="L145">                Object converted = conversionService.convertType(collection.get(i), parentField.getFormat(),</span>
-<span class="fc" id="L146">                    parentField.getFieldType(), null);</span>
-<span class="fc" id="L147">                kcField.setValue(converted);</span>
-<span class="fc" id="L148">                kcField.setIndex(null); //reset index for subfields</span>
-<span class="fc" id="L149">                fields.add(kcField);</span>
-<span class="fc" id="L150">                AtlasPath path = new AtlasPath(parentField.getPath());</span>
-<span class="fc" id="L151">                path.setCollectionIndex(segmentIndex, i);</span>
-<span class="fc" id="L152">                kcField.setPath(path.toString());</span>
+<span class="fc" id="L131">        List&lt;Field&gt; fields = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (segment.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L133">            KafkaConnectField kcField = AtlasKafkaConnectModelFactory.cloneField(parentField, true);</span>
+<span class="fc" id="L134">            Object converted = conversionService.convertType(parent, parentField.getFormat(),</span>
+<span class="fc" id="L135">                parentField.getFieldType(), null);</span>
+<span class="fc" id="L136">            kcField.setValue(converted);</span>
+<span class="fc" id="L137">            kcField.setIndex(null); //reset index for subfields</span>
+<span class="fc" id="L138">            fields.add(kcField);</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">        } else if (segment.getCollectionIndex() != null) {</span>
+<span class="fc" id="L140">            List&lt;Object&gt; collection = (List&lt;Object&gt;) parent;</span>
+<span class="fc" id="L141">            int i = segment.getCollectionIndex();</span>
+<span class="fc" id="L142">            KafkaConnectField kcField = AtlasKafkaConnectModelFactory.cloneField(parentField, true);</span>
+<span class="fc" id="L143">            Object converted = conversionService.convertType(collection.get(i), parentField.getFormat(),</span>
+<span class="fc" id="L144">                parentField.getFieldType(), null);</span>
+<span class="fc" id="L145">            kcField.setValue(converted);</span>
+<span class="fc" id="L146">            kcField.setIndex(null); //reset index for subfields</span>
+<span class="fc" id="L147">            fields.add(kcField);</span>
+<span class="fc" id="L148">        } else {</span>
+<span class="fc" id="L149">            List&lt;Object&gt; collection = (List&lt;Object&gt;) parent;</span>
+<span class="fc bfc" id="L150" title="All 2 branches covered.">            for (int i=0; i&lt;collection.size(); i++) {</span>
+<span class="fc" id="L151">                KafkaConnectField kcField = AtlasKafkaConnectModelFactory.cloneField(parentField, true);</span>
+<span class="fc" id="L152">                Object converted = conversionService.convertType(collection.get(i), parentField.getFormat(),</span>
+<span class="fc" id="L153">                    parentField.getFieldType(), null);</span>
+<span class="fc" id="L154">                kcField.setValue(converted);</span>
+<span class="fc" id="L155">                kcField.setIndex(null); //reset index for subfields</span>
+<span class="fc" id="L156">                fields.add(kcField);</span>
+<span class="fc" id="L157">                AtlasPath path = new AtlasPath(parentField.getPath());</span>
+<span class="fc" id="L158">                path.setCollectionIndex(segmentIndex, i);</span>
+<span class="fc" id="L159">                kcField.setPath(path.toString());</span>
             }
         }
-<span class="fc" id="L155">        return fields;</span>
+<span class="fc" id="L162">        return fields;</span>
     }
 
     private List&lt;Field&gt; getFieldsForPath(AtlasInternalSession session, Object parent, Field field, AtlasPath path, int depth) throws AtlasException {
-<span class="fc" id="L159">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L160">        List&lt;SegmentContext&gt; segments = path.getSegments(true);</span>
-<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (parent == null) {</span>
-<span class="nc" id="L162">            return fields;</span>
+<span class="fc" id="L166">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L167">        List&lt;SegmentContext&gt; segments = path.getSegments(true);</span>
+<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (parent == null) {</span>
+<span class="nc" id="L169">            return fields;</span>
         }
 
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        if (segments.size() &lt; depth) {</span>
-<span class="nc" id="L166">            throw new AtlasException(String.format(&quot;depth '%s' exceeds segment size '%s'&quot;, depth, segments.size()));</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        if (segments.size() &lt; depth) {</span>
+<span class="nc" id="L173">            throw new AtlasException(String.format(&quot;depth '%s' exceeds segment size '%s'&quot;, depth, segments.size()));</span>
         }
-<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (segments.size() == depth) {</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (segments.size() == depth) {</span>
             //if traversed the entire path and found value
-<span class="pc bpc" id="L170" title="2 of 6 branches missed.">            if (field instanceof FieldGroup &amp;&amp; field.getFieldType() == FieldType.COMPLEX &amp;&amp; (parent instanceof Struct)) {</span>
-<span class="fc" id="L171">                FieldGroup group = (FieldGroup) field;</span>
-<span class="fc" id="L172">                populateChildFields(session, (Struct)parent, group);</span>
-<span class="fc" id="L173">                fields.add(group);</span>
-<span class="fc" id="L174">            } else {</span>
-<span class="fc" id="L175">                field.setValue(parent);</span>
-<span class="fc" id="L176">                fields.add(field);</span>
+<span class="pc bpc" id="L177" title="2 of 6 branches missed.">            if (field instanceof FieldGroup &amp;&amp; field.getFieldType() == FieldType.COMPLEX &amp;&amp; (parent instanceof Struct)) {</span>
+<span class="fc" id="L178">                FieldGroup group = (FieldGroup) field;</span>
+<span class="fc" id="L179">                populateChildFields(session, (Struct)parent, group);</span>
+<span class="fc" id="L180">                fields.add(group);</span>
+<span class="fc" id="L181">            } else {</span>
+<span class="fc" id="L182">                field.setValue(parent);</span>
+<span class="fc" id="L183">                fields.add(field);</span>
             }
-<span class="fc" id="L178">            return fields;</span>
+<span class="fc" id="L185">            return fields;</span>
         }
 
         // segments.size() &gt; depth
-<span class="fc" id="L182">        SegmentContext segmentContext = null;</span>
-<span class="fc" id="L183">        Object child = null;</span>
-<span class="fc" id="L184">        List&lt;Object&gt; collectionChild = null;</span>
-<span class="fc bfc" id="L185" title="All 4 branches covered.">        if (depth == 0 &amp;&amp; path.hasCollectionRoot()) {</span>
-<span class="fc" id="L186">            collectionChild = (List&lt;Object&gt;) parent; //if root is a collection</span>
-<span class="fc" id="L187">            segmentContext = segments.get(depth);</span>
+<span class="fc" id="L189">        SegmentContext segmentContext = null;</span>
+<span class="fc" id="L190">        Object child = null;</span>
+<span class="fc" id="L191">        List&lt;Object&gt; collectionChild = null;</span>
+<span class="fc bfc" id="L192" title="All 4 branches covered.">        if (depth == 0 &amp;&amp; path.hasCollectionRoot()) {</span>
+<span class="fc" id="L193">            collectionChild = (List&lt;Object&gt;) parent; //if root is a collection</span>
+<span class="fc" id="L194">            segmentContext = segments.get(depth);</span>
         } else {
-<span class="fc bfc" id="L189" title="All 2 branches covered.">            if (depth == 0) {</span>
-<span class="fc" id="L190">                depth = 1; //skip the root, if not a collection</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            if (depth == 0) {</span>
+<span class="fc" id="L197">                depth = 1; //skip the root, if not a collection</span>
             }
-<span class="fc" id="L192">            segmentContext = segments.get(depth);</span>
-<span class="fc" id="L193">            String fieldName = segmentContext.getName();</span>
-<span class="fc" id="L194">            child = ((Struct)parent).get(fieldName);</span>
-<span class="fc bfc" id="L195" title="All 2 branches covered.">            if (segmentContext.getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc" id="L196">                collectionChild = (List&lt;Object&gt;) child;</span>
+<span class="fc" id="L199">            segmentContext = segments.get(depth);</span>
+<span class="fc" id="L200">            String fieldName = segmentContext.getName();</span>
+<span class="fc" id="L201">            child = ((Struct)parent).get(fieldName);</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">            if (segmentContext.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L203">                collectionChild = (List&lt;Object&gt;) child;</span>
             }
         }
 
-<span class="fc bfc" id="L200" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L201">            List&lt;Field&gt; childFields = getFieldsForPath(session, child, field, path, depth + 1);</span>
-<span class="fc" id="L202">            fields.addAll(childFields);</span>
-<span class="fc" id="L203">            return fields;</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L208">            List&lt;Field&gt; childFields = getFieldsForPath(session, child, field, path, depth + 1);</span>
+<span class="fc" id="L209">            fields.addAll(childFields);</span>
+<span class="fc" id="L210">            return fields;</span>
         }
 
         // collection
-<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (segmentContext.getCollectionIndex() != null) {</span>
-<span class="pc bpc" id="L208" title="1 of 2 branches missed.">            if (collectionChild.size() &lt;= segmentContext.getCollectionIndex()) {</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (segmentContext.getCollectionIndex() != null) {</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">            if (collectionChild.size() &lt;= segmentContext.getCollectionIndex()) {</span>
                 //index out of range
-<span class="nc" id="L210">                return fields;</span>
+<span class="nc" id="L217">                return fields;</span>
             }
-<span class="fc" id="L212">            List&lt;Field&gt; arrayFields = getFieldsForPath(session, collectionChild.get(segmentContext.getCollectionIndex()), field, path, depth + 1);</span>
-<span class="fc" id="L213">            fields.addAll(arrayFields);</span>
-<span class="fc" id="L214">        } else {</span>
+<span class="fc" id="L219">            List&lt;Field&gt; arrayFields = getFieldsForPath(session, collectionChild.get(segmentContext.getCollectionIndex()), field, path, depth + 1);</span>
+<span class="fc" id="L220">            fields.addAll(arrayFields);</span>
+<span class="fc" id="L221">        } else {</span>
             //if index not included, iterate over all
-<span class="fc bfc" id="L216" title="All 2 branches covered.">            for (int i=0; i&lt;collectionChild.size(); i++) {</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            for (int i=0; i&lt;collectionChild.size(); i++) {</span>
                 Field itemField;
-<span class="fc bfc" id="L218" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L219">                    itemField = AtlasKafkaConnectModelFactory.cloneFieldGroup((FieldGroup)field);</span>
-<span class="fc" id="L220">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L226">                    itemField = AtlasKafkaConnectModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="fc" id="L227">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);</span>
                 } else {
-<span class="fc" id="L222">                    itemField = AtlasKafkaConnectModelFactory.cloneField((KafkaConnectField)field, false);</span>
-<span class="fc" id="L223">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
-<span class="fc" id="L224">                    itemPath.setCollectionIndex(depth, i);</span>
-<span class="fc" id="L225">                    itemField.setPath(itemPath.toString());</span>
+<span class="fc" id="L229">                    itemField = AtlasKafkaConnectModelFactory.cloneField((KafkaConnectField)field, false);</span>
+<span class="fc" id="L230">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L231">                    itemPath.setCollectionIndex(depth, i);</span>
+<span class="fc" id="L232">                    itemField.setPath(itemPath.toString());</span>
                  }
-<span class="fc" id="L227">                 List&lt;Field&gt; arrayFields = getFieldsForPath(</span>
-<span class="fc" id="L228">                    session, collectionChild.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);</span>
-<span class="fc" id="L229">                fields.addAll(arrayFields);</span>
+<span class="fc" id="L234">                 List&lt;Field&gt; arrayFields = getFieldsForPath(</span>
+<span class="fc" id="L235">                    session, collectionChild.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);</span>
+<span class="fc" id="L236">                fields.addAll(arrayFields);</span>
         }
         }
-<span class="fc" id="L232">        return fields;</span>
+<span class="fc" id="L239">        return fields;</span>
 
     }
 
     private void populateChildFields(AtlasInternalSession session, Struct parent, FieldGroup fieldGroup)
      throws AtlasException {
-<span class="fc" id="L238">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L239" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
-<span class="fc" id="L240">            AtlasPath childPath = new AtlasPath(child.getPath());</span>
-<span class="fc" id="L241">            Object childValue = parent.get(childPath.getLastSegment().getName());</span>
-<span class="fc bfc" id="L242" title="All 2 branches covered.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc" id="L243">                FieldGroup childGroup = populateCollectionItems(session, (List&lt;Object&gt;)childValue, child);</span>
-<span class="fc" id="L244">                newChildren.add(childGroup);</span>
-<span class="fc" id="L245">            } else {</span>
-<span class="fc bfc" id="L246" title="All 2 branches covered.">                if (child instanceof FieldGroup) {</span>
-<span class="fc" id="L247">                    populateChildFields(session, (Struct)childValue, (FieldGroup)child);</span>
+<span class="fc" id="L245">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
+<span class="fc" id="L247">            AtlasPath childPath = new AtlasPath(child.getPath());</span>
+<span class="fc" id="L248">            Object childValue = parent.get(childPath.getLastSegment().getName());</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L250">                FieldGroup childGroup = populateCollectionItems(session, (List&lt;Object&gt;)childValue, child);</span>
+<span class="fc" id="L251">                newChildren.add(childGroup);</span>
+<span class="fc" id="L252">            } else {</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">                if (child instanceof FieldGroup) {</span>
+<span class="fc" id="L254">                    populateChildFields(session, (Struct)childValue, (FieldGroup)child);</span>
                 } else {
-<span class="fc" id="L249">                    Object converted = conversionService.convertType(childValue, child.getFormat(),</span>
-<span class="fc" id="L250">                        child.getFieldType(), null);</span>
-<span class="fc" id="L251">                    child.setValue(converted);</span>
+<span class="fc" id="L256">                    Object converted = conversionService.convertType(childValue, child.getFormat(),</span>
+<span class="fc" id="L257">                        child.getFieldType(), null);</span>
+<span class="fc" id="L258">                    child.setValue(converted);</span>
                 }
-<span class="fc" id="L253">                newChildren.add(child);</span>
+<span class="fc" id="L260">                newChildren.add(child);</span>
             }
-<span class="fc" id="L255">        }</span>
-<span class="fc" id="L256">        fieldGroup.getField().clear();</span>
-<span class="fc" id="L257">        fieldGroup.getField().addAll(newChildren);</span>
-<span class="fc" id="L258">    }</span>
+<span class="fc" id="L262">        }</span>
+<span class="fc" id="L263">        fieldGroup.getField().clear();</span>
+<span class="fc" id="L264">        fieldGroup.getField().addAll(newChildren);</span>
+<span class="fc" id="L265">    }</span>
 
     private FieldGroup populateCollectionItems(AtlasInternalSession session, List&lt;Object&gt; values, Field field)
      throws AtlasException {
-<span class="fc" id="L262">        FieldGroup group = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="fc bfc" id="L263" title="All 2 branches covered.">        for (int i=0; i&lt;values.size(); i++) {</span>
-<span class="fc" id="L264">            AtlasPath itemPath = new AtlasPath(group.getPath());</span>
-<span class="fc" id="L265">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
-<span class="fc" id="L266">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
-<span class="fc bfc" id="L267" title="All 2 branches covered.">            if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L268">                FieldGroup itemGroup = AtlasKafkaConnectModelFactory.cloneFieldGroup((FieldGroup)field);</span>
-<span class="fc" id="L269">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size() - 1, i);</span>
-<span class="fc" id="L270">                populateChildFields(session, (Struct)values.get(i), itemGroup);</span>
-<span class="fc" id="L271">                group.getField().add(itemGroup);</span>
-<span class="fc" id="L272">            } else {</span>
-<span class="fc" id="L273">                KafkaConnectField itemField = AtlasKafkaConnectModelFactory.cloneField((KafkaConnectField)field, false);</span>
-<span class="fc" id="L274">                itemField.setPath(itemPath.toString());</span>
-<span class="fc" id="L275">                Object converted = conversionService.convertType(values.get(i), itemField.getFormat(),</span>
-<span class="fc" id="L276">                    itemField.getFieldType(), null);</span>
-<span class="fc" id="L277">                itemField.setValue(converted);</span>
-<span class="fc" id="L278">                group.getField().add(itemField);</span>
+<span class="fc" id="L269">        FieldGroup group = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="fc bfc" id="L270" title="All 2 branches covered.">        for (int i=0; i&lt;values.size(); i++) {</span>
+<span class="fc" id="L271">            AtlasPath itemPath = new AtlasPath(group.getPath());</span>
+<span class="fc" id="L272">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
+<span class="fc" id="L273">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">            if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L275">                FieldGroup itemGroup = AtlasKafkaConnectModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="fc" id="L276">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size() - 1, i);</span>
+<span class="fc" id="L277">                populateChildFields(session, (Struct)values.get(i), itemGroup);</span>
+<span class="fc" id="L278">                group.getField().add(itemGroup);</span>
+<span class="fc" id="L279">            } else {</span>
+<span class="fc" id="L280">                KafkaConnectField itemField = AtlasKafkaConnectModelFactory.cloneField((KafkaConnectField)field, false);</span>
+<span class="fc" id="L281">                itemField.setPath(itemPath.toString());</span>
+<span class="fc" id="L282">                Object converted = conversionService.convertType(values.get(i), itemField.getFormat(),</span>
+<span class="fc" id="L283">                    itemField.getFieldType(), null);</span>
+<span class="fc" id="L284">                itemField.setValue(converted);</span>
+<span class="fc" id="L285">                group.getField().add(itemField);</span>
             }
         }
-<span class="fc" id="L281">        return group;</span>
+<span class="fc" id="L288">        return group;</span>
     }
 
+    /**
+     * Sets the Document.
+     * @param document Document
+     * @throws AtlasException none
+     */
     public void setDocument(Object document) throws AtlasException {
-<span class="fc" id="L285">        this.root = document;</span>
-<span class="fc" id="L286">    }</span>
+<span class="fc" id="L297">        this.root = document;</span>
+<span class="fc" id="L298">    }</span>
 
+    /**
+     * Sets the schema.
+     * @param schema schema
+     */
     public void setSchema(org.apache.kafka.connect.data.Schema schema) {
-<span class="nc" id="L289">        this.schema = schema;</span>
-<span class="nc" id="L290">    }</span>
+<span class="nc" id="L305">        this.schema = schema;</span>
+<span class="nc" id="L306">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -37,126 +37,149 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
+/**
+ * Inspects Kafka Connect schema.
+ */
 public class KafkaConnectInspector {
-<span class="fc" id="L41">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectInspector.class);</span>
+<span class="fc" id="L44">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectInspector.class);</span>
 
     private ClassLoader classLoader;
     private KafkaConnectDocument output;
 
-<span class="fc" id="L46">    public KafkaConnectInspector(ClassLoader loader) {</span>
-<span class="fc" id="L47">        this.classLoader = loader;</span>
-<span class="fc" id="L48">    }</span>
+    /**
+     * A constructor.
+     * @param loader class loader
+     */
+<span class="fc" id="L53">    public KafkaConnectInspector(ClassLoader loader) {</span>
+<span class="fc" id="L54">        this.classLoader = loader;</span>
+<span class="fc" id="L55">    }</span>
 
+    /**
+     * Inspects Kafka Connect JSON schema.
+     * @param jsonSchema Kafka Connect JSON schema
+     * @param options inspection options
+     * @throws Exception unexpected error
+     */
     public void inspectJson(String jsonSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L51">        org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseJson(jsonSchema, options);</span>
-<span class="fc" id="L52">        this.output = createDocument(connectSchema);</span>
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L64">        org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseJson(jsonSchema, options);</span>
+<span class="fc" id="L65">        this.output = createDocument(connectSchema);</span>
+<span class="fc" id="L66">    }</span>
 
+    /**
+     * Inspects Kafka Connect AVRO schema.
+     * @param avroSchema Kafka Connect AVRO schema
+     * @param options inspection options
+     * @throws Exception unexpected error
+     */
     public void inspectAvro(String avroSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L56">        org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseAvro(avroSchema, options);</span>
-<span class="fc" id="L57">        this.output = createDocument(connectSchema);</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L75">        org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseAvro(avroSchema, options);</span>
+<span class="fc" id="L76">        this.output = createDocument(connectSchema);</span>
+<span class="fc" id="L77">    }</span>
 
+    /**
+     * Gets the result Document of Kafka Connect schema inspection.
+     * @return Document
+     */
     public KafkaConnectDocument getKafkaConnectDocument() {
-<span class="fc" id="L61">        return this.output;</span>
+<span class="fc" id="L84">        return this.output;</span>
     }
 
     private KafkaConnectDocument createDocument(org.apache.kafka.connect.data.Schema schema) {
-<span class="fc" id="L65">        KafkaConnectDocument doc = AtlasKafkaConnectModelFactory.createKafkaConnectDocument();</span>
-<span class="fc" id="L66">        doc.setRootSchemaType(schema.type());</span>
-<span class="fc" id="L67">        doc.setName(schema.name());</span>
-<span class="fc" id="L68">        Schema connectSchema = schema;</span>
+<span class="fc" id="L88">        KafkaConnectDocument doc = AtlasKafkaConnectModelFactory.createKafkaConnectDocument();</span>
+<span class="fc" id="L89">        doc.setRootSchemaType(schema.type());</span>
+<span class="fc" id="L90">        doc.setName(schema.name());</span>
+<span class="fc" id="L91">        Schema connectSchema = schema;</span>
         AtlasPath path;
-<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (Type.ARRAY == connectSchema.type()) {</span>
-<span class="fc" id="L71">            path = new AtlasPath(AtlasPath.PATH_SEPARATOR + AtlasPath.PATH_LIST_SUFFIX);</span>
-<span class="fc" id="L72">            doc.setCollectionType(CollectionType.LIST);</span>
-<span class="fc" id="L73">            connectSchema = connectSchema.valueSchema();</span>
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        } else if (Type.MAP == connectSchema.type()) {</span>
-<span class="nc" id="L75">            path = new AtlasPath(AtlasPath.PATH_SEPARATOR + AtlasPath.PATH_MAP_SUFFIX);</span>
-<span class="nc" id="L76">            doc.setCollectionType(CollectionType.MAP);</span>
-<span class="nc" id="L77">            connectSchema = connectSchema.valueSchema();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        if (Type.ARRAY == connectSchema.type()) {</span>
+<span class="fc" id="L94">            path = new AtlasPath(AtlasPath.PATH_SEPARATOR + AtlasPath.PATH_LIST_SUFFIX);</span>
+<span class="fc" id="L95">            doc.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L96">            connectSchema = connectSchema.valueSchema();</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        } else if (Type.MAP == connectSchema.type()) {</span>
+<span class="nc" id="L98">            path = new AtlasPath(AtlasPath.PATH_SEPARATOR + AtlasPath.PATH_MAP_SUFFIX);</span>
+<span class="nc" id="L99">            doc.setCollectionType(CollectionType.MAP);</span>
+<span class="nc" id="L100">            connectSchema = connectSchema.valueSchema();</span>
         } else {
-<span class="fc" id="L79">            path = new AtlasPath(&quot;&quot;);</span>
+<span class="fc" id="L102">            path = new AtlasPath(&quot;&quot;);</span>
         }
 
-<span class="fc" id="L82">        doc.setPath(path.toString());</span>
-<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (connectSchema.parameters() != null) {</span>
-<span class="nc" id="L84">            doc.setEnumeration(true);</span>
-<span class="nc" id="L85">            List&lt;KafkaConnectEnumField&gt; symbols = doc.getEnumFields().getKafkaConnectEnumField();</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">            for (Entry&lt;String,String&gt; entry : connectSchema.parameters().entrySet()) {</span>
-<span class="nc bnc" id="L87" title="All 2 branches missed.">                if (&quot;io.confluent&quot;.equals(entry.getKey())) {</span>
-<span class="nc" id="L88">                    continue;</span>
+<span class="fc" id="L105">        doc.setPath(path.toString());</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        if (connectSchema.parameters() != null) {</span>
+<span class="nc" id="L107">            doc.setEnumeration(true);</span>
+<span class="nc" id="L108">            List&lt;KafkaConnectEnumField&gt; symbols = doc.getEnumFields().getKafkaConnectEnumField();</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">            for (Entry&lt;String,String&gt; entry : connectSchema.parameters().entrySet()) {</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">                if (&quot;io.confluent&quot;.equals(entry.getKey())) {</span>
+<span class="nc" id="L111">                    continue;</span>
                 }
-<span class="nc" id="L90">                KafkaConnectEnumField f = new KafkaConnectEnumField();</span>
-<span class="nc" id="L91">                f.setName(entry.getValue());</span>
-<span class="nc" id="L92">                symbols.add(f);</span>
-<span class="nc" id="L93">            }</span>
-<span class="nc" id="L94">            doc.setFieldType(KafkaConnectUtil.getFieldType(connectSchema.type()));</span>
-<span class="pc bfc" id="L95" title="All 2 branches covered.">        } else if (!connectSchema.type().isPrimitive()) {</span>
-<span class="fc" id="L96">            doc.setFieldType(FieldType.COMPLEX);</span>
-<span class="fc" id="L97">            List&lt;KafkaConnectField&gt; children = populateFields(connectSchema.fields(), path);</span>
-<span class="fc" id="L98">            doc.getFields().getField().addAll(children);</span>
-<span class="fc" id="L99">        } else {</span>
-<span class="fc" id="L100">            doc.setFieldType(KafkaConnectUtil.getFieldType(connectSchema.type()));</span>
+<span class="nc" id="L113">                KafkaConnectEnumField f = new KafkaConnectEnumField();</span>
+<span class="nc" id="L114">                f.setName(entry.getValue());</span>
+<span class="nc" id="L115">                symbols.add(f);</span>
+<span class="nc" id="L116">            }</span>
+<span class="nc" id="L117">            doc.setFieldType(KafkaConnectUtil.getFieldType(connectSchema.type()));</span>
+<span class="pc bfc" id="L118" title="All 2 branches covered.">        } else if (!connectSchema.type().isPrimitive()) {</span>
+<span class="fc" id="L119">            doc.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L120">            List&lt;KafkaConnectField&gt; children = populateFields(connectSchema.fields(), path);</span>
+<span class="fc" id="L121">            doc.getFields().getField().addAll(children);</span>
+<span class="fc" id="L122">        } else {</span>
+<span class="fc" id="L123">            doc.setFieldType(KafkaConnectUtil.getFieldType(connectSchema.type()));</span>
         }
-<span class="fc" id="L102">        return doc;</span>
+<span class="fc" id="L125">        return doc;</span>
     }
 
     private List&lt;KafkaConnectField&gt; populateFields(List&lt;org.apache.kafka.connect.data.Field&gt; kcFields, AtlasPath parentPath) {
-<span class="fc" id="L106">        List&lt;KafkaConnectField&gt; answer = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L107" title="All 2 branches covered.">        for (org.apache.kafka.connect.data.Field connectField : kcFields) {</span>
+<span class="fc" id="L129">        List&lt;KafkaConnectField&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        for (org.apache.kafka.connect.data.Field connectField : kcFields) {</span>
             KafkaConnectField field;
-<span class="fc" id="L109">            AtlasPath path = parentPath.clone();</span>
-<span class="fc" id="L110">            CollectionType collectionType = CollectionType.NONE;</span>
-<span class="fc" id="L111">            Schema connectSchema = connectField.schema();</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (Type.ARRAY == connectSchema.type()) {</span>
-<span class="fc" id="L113">                path.appendField(connectField.name() + AtlasPath.PATH_LIST_SUFFIX);</span>
-<span class="fc" id="L114">                collectionType = CollectionType.LIST;</span>
-<span class="fc" id="L115">                connectSchema = connectSchema.valueSchema();</span>
-<span class="fc bfc" id="L116" title="All 2 branches covered.">            } else if (Type.MAP == connectSchema.type()) {</span>
-<span class="fc" id="L117">                path.appendField(connectField.name() + AtlasPath.PATH_MAP_SUFFIX);</span>
-<span class="fc" id="L118">                collectionType = CollectionType.MAP;</span>
-<span class="fc" id="L119">                connectSchema = connectSchema.valueSchema();</span>
+<span class="fc" id="L132">            AtlasPath path = parentPath.clone();</span>
+<span class="fc" id="L133">            CollectionType collectionType = CollectionType.NONE;</span>
+<span class="fc" id="L134">            Schema connectSchema = connectField.schema();</span>
+<span class="fc bfc" id="L135" title="All 2 branches covered.">            if (Type.ARRAY == connectSchema.type()) {</span>
+<span class="fc" id="L136">                path.appendField(connectField.name() + AtlasPath.PATH_LIST_SUFFIX);</span>
+<span class="fc" id="L137">                collectionType = CollectionType.LIST;</span>
+<span class="fc" id="L138">                connectSchema = connectSchema.valueSchema();</span>
+<span class="fc bfc" id="L139" title="All 2 branches covered.">            } else if (Type.MAP == connectSchema.type()) {</span>
+<span class="fc" id="L140">                path.appendField(connectField.name() + AtlasPath.PATH_MAP_SUFFIX);</span>
+<span class="fc" id="L141">                collectionType = CollectionType.MAP;</span>
+<span class="fc" id="L142">                connectSchema = connectSchema.valueSchema();</span>
             } else {
-<span class="fc" id="L121">                path.appendField(connectField.name());</span>
+<span class="fc" id="L144">                path.appendField(connectField.name());</span>
             }
 
-<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (connectSchema.parameters() != null) {</span>
-<span class="fc" id="L125">                KafkaConnectComplexType complex = AtlasKafkaConnectModelFactory.createKafkaConnectComplexType();</span>
-<span class="fc" id="L126">                complex.setKafkaConnectEnumFields(new KafkaConnectEnumFields());</span>
-<span class="fc" id="L127">                complex.setEnumeration(true);</span>
-<span class="fc" id="L128">                List&lt;KafkaConnectEnumField&gt; symbols = complex.getKafkaConnectEnumFields().getKafkaConnectEnumField();</span>
-<span class="fc" id="L129">                boolean first = true;</span>
-<span class="fc bfc" id="L130" title="All 2 branches covered.">                for (Entry&lt;String,String&gt; entry : connectSchema.parameters().entrySet()) {</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">            if (connectSchema.parameters() != null) {</span>
+<span class="fc" id="L148">                KafkaConnectComplexType complex = AtlasKafkaConnectModelFactory.createKafkaConnectComplexType();</span>
+<span class="fc" id="L149">                complex.setKafkaConnectEnumFields(new KafkaConnectEnumFields());</span>
+<span class="fc" id="L150">                complex.setEnumeration(true);</span>
+<span class="fc" id="L151">                List&lt;KafkaConnectEnumField&gt; symbols = complex.getKafkaConnectEnumFields().getKafkaConnectEnumField();</span>
+<span class="fc" id="L152">                boolean first = true;</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                for (Entry&lt;String,String&gt; entry : connectSchema.parameters().entrySet()) {</span>
                     // FIXME dirty hack - it seems the first entry is for some control, the others are the actual values
-<span class="fc bfc" id="L132" title="All 2 branches covered.">                    if (first) {</span>
-<span class="fc" id="L133">                        first = false;</span>
-<span class="fc" id="L134">                        continue;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                    if (first) {</span>
+<span class="fc" id="L156">                        first = false;</span>
+<span class="fc" id="L157">                        continue;</span>
                     }
-<span class="fc" id="L136">                    KafkaConnectEnumField f = new KafkaConnectEnumField();</span>
-<span class="fc" id="L137">                    f.setName(entry.getValue());</span>
-<span class="fc" id="L138">                    symbols.add(f);</span>
-<span class="fc" id="L139">                }</span>
-<span class="fc" id="L140">                field = complex;</span>
-<span class="fc bfc" id="L141" title="All 2 branches covered.">            } else if (connectSchema.type().isPrimitive()) {</span>
-<span class="fc" id="L142">                field = AtlasKafkaConnectModelFactory.createKafkaConnectField();</span>
-<span class="fc" id="L143">                field.setFieldType(KafkaConnectUtil.getFieldType(connectSchema.type()));</span>
+<span class="fc" id="L159">                    KafkaConnectEnumField f = new KafkaConnectEnumField();</span>
+<span class="fc" id="L160">                    f.setName(entry.getValue());</span>
+<span class="fc" id="L161">                    symbols.add(f);</span>
+<span class="fc" id="L162">                }</span>
+<span class="fc" id="L163">                field = complex;</span>
+<span class="fc bfc" id="L164" title="All 2 branches covered.">            } else if (connectSchema.type().isPrimitive()) {</span>
+<span class="fc" id="L165">                field = AtlasKafkaConnectModelFactory.createKafkaConnectField();</span>
+<span class="fc" id="L166">                field.setFieldType(KafkaConnectUtil.getFieldType(connectSchema.type()));</span>
             } else {
-<span class="fc" id="L145">                KafkaConnectComplexType complex = AtlasKafkaConnectModelFactory.createKafkaConnectComplexType();</span>
-<span class="fc" id="L146">                List&lt;KafkaConnectField&gt; children = populateFields(connectSchema.fields(), path);</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">                if (&quot;io.confluent.connect.avro.Union&quot;.equals(connectSchema.name())) {</span>
+<span class="fc" id="L168">                KafkaConnectComplexType complex = AtlasKafkaConnectModelFactory.createKafkaConnectComplexType();</span>
+<span class="fc" id="L169">                List&lt;KafkaConnectField&gt; children = populateFields(connectSchema.fields(), path);</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                if (&quot;io.confluent.connect.avro.Union&quot;.equals(connectSchema.name())) {</span>
                     // We don't support union until it's built into Kafka Connect Schema
-<span class="fc" id="L149">                    complex.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc" id="L172">                    complex.setStatus(FieldStatus.UNSUPPORTED);</span>
                 }
-<span class="fc" id="L151">                complex.getKafkaConnectFields().getKafkaConnectField().addAll(children);</span>
-<span class="fc" id="L152">                field = complex;</span>
+<span class="fc" id="L174">                complex.getKafkaConnectFields().getKafkaConnectField().addAll(children);</span>
+<span class="fc" id="L175">                field = complex;</span>
             }
-<span class="fc" id="L154">            field.setName(connectField.name());</span>
-<span class="fc" id="L155">            field.setPath(path.toString());</span>
-<span class="fc" id="L156">            field.setCollectionType(collectionType);</span>
-<span class="fc" id="L157">            answer.add(field);</span>
-<span class="fc" id="L158">        }</span>
-<span class="fc" id="L159">        return answer;</span>
+<span class="fc" id="L177">            field.setName(connectField.name());</span>
+<span class="fc" id="L178">            field.setPath(path.toString());</span>
+<span class="fc" id="L179">            field.setCollectionType(collectionType);</span>
+<span class="fc" id="L180">            answer.add(field);</span>
+<span class="fc" id="L181">        }</span>
+<span class="fc" id="L182">        return answer;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

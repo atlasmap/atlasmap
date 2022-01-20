@@ -25,18 +25,25 @@ import org.springframework.context.ConfigurableApplicationContext;
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
+/**
+ * SpringBoot application.
+ */
 @SpringBootApplication
-<span class="fc" id="L29">public class Application extends SpringBootServletInitializer {</span>
-<span class="fc" id="L30">    private static final Logger LOG = LoggerFactory.getLogger(Application.class);</span>
+<span class="fc" id="L32">public class Application extends SpringBootServletInitializer {</span>
+<span class="fc" id="L33">    private static final Logger LOG = LoggerFactory.getLogger(Application.class);</span>
 
+    /**
+     * The entry point.
+     * @param args args
+     */
     public static void main(String[] args) {
-<span class="nc" id="L33">        SpringApplication app = new SpringApplication(Application.class);</span>
-<span class="nc" id="L34">        ConfigurableApplicationContext context = app.run(args);</span>
-<span class="nc" id="L35">        String version = DefaultAtlasContextFactory.getInstance().getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);</span>
-<span class="nc" id="L36">        LOG.info(&quot;### AtlasMap Data Mapper UI {} started at port: {} ###&quot;,</span>
+<span class="nc" id="L40">        SpringApplication app = new SpringApplication(Application.class);</span>
+<span class="nc" id="L41">        ConfigurableApplicationContext context = app.run(args);</span>
+<span class="nc" id="L42">        String version = DefaultAtlasContextFactory.getInstance().getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);</span>
+<span class="nc" id="L43">        LOG.info(&quot;### AtlasMap Data Mapper UI {} started at port: {} ###&quot;,</span>
                 version,
-<span class="nc" id="L38">                context.getEnvironment().getProperty(&quot;local.server.port&quot;));</span>
-<span class="nc" id="L39">    }</span>
+<span class="nc" id="L45">                context.getEnvironment().getProperty(&quot;local.server.port&quot;));</span>
+<span class="nc" id="L46">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

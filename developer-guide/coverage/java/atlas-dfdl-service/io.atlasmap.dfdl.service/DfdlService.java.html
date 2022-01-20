@@ -48,39 +48,64 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+/**
+ * DFDL Service provides DFDL inspection service which generate an AtlasMap Document object from DFDL instance or DFDL schema.
+ */
 @Path(&quot;/dfdl/&quot;)
-<span class="fc" id="L52">public class DfdlService {</span>
+<span class="fc" id="L55">public class DfdlService {</span>
 
-<span class="fc" id="L54">    private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);</span>
+<span class="fc" id="L57">    private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);</span>
 
     @Context
     private ResourceContext resourceContext;
 
+    /**
+     * Serializes to a JSON.
+     * @param value value
+     * @return serialized
+     */
     protected byte[] toJson(Object value) {
         try {
-<span class="fc" id="L61">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L62">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L63">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L69">            return Json.mapper().writeValueAsBytes(value);</span>
+<span class="nc" id="L70">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L71">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
         }
     }
 
+    /**
+     * Deserializes from a JSON.
+     * @param &lt;T&gt; type
+     * @param value value
+     * @param clazz type
+     * @return deserialized
+     */
     protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
         try {
-<span class="nc" id="L69">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L70">        } catch (IOException e) {</span>
-<span class="nc" id="L71">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
+<span class="nc" id="L84">            return Json.mapper().readValue(value, clazz);</span>
+<span class="nc" id="L85">        } catch (IOException e) {</span>
+<span class="nc" id="L86">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
         }
     }
 
+    /**
+     * Simple hello service.
+     * @param from sender
+     * @return pong
+     */
     @GET
     @Path(&quot;/simple&quot;)
     @Produces(MediaType.TEXT_PLAIN)
     @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
     public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L81">        return &quot;Got it! &quot; + from;</span>
+<span class="nc" id="L101">        return &quot;Got it! &quot; + from;</span>
     }
 
+    /**
+     * Inspects a DFDL schema or instance and return a Document object.
+     * @param request {@link DfdlInspectionRequest}
+     * @return {@link DfdlInspectionResponse}
+     */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
@@ -89,46 +114,51 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;DfdlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = DfdlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = DfdlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
     public Response inspect(InputStream request) {
-<span class="nc" id="L92">        return inspect(fromJson(request, DfdlInspectionRequest.class));</span>
+<span class="nc" id="L117">        return inspect(fromJson(request, DfdlInspectionRequest.class));</span>
     }
 
+    /**
+     * Inspects a DFDL schema or instance and return a Document object.
+     * @param request request
+     * @return {@link DfdlInspectionResponse}
+     */
     public Response inspect(DfdlInspectionRequest request) {
-<span class="fc" id="L96">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L126">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L98">        DfdlInspectionResponse response = new DfdlInspectionResponse();</span>
-<span class="fc" id="L99">        XmlDocument d = null;</span>
+<span class="fc" id="L128">        DfdlInspectionResponse response = new DfdlInspectionResponse();</span>
+<span class="fc" id="L129">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
-<span class="nc" id="L104">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
+<span class="nc" id="L134">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
             } else {
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">                ClassLoader loader = resourceContext != null</span>
-<span class="nc" id="L107">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
-<span class="fc" id="L108">                    : DfdlService.class.getClassLoader();</span>
-<span class="fc" id="L109">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
+<span class="pc bpc" id="L136" title="1 of 2 branches missed.">                ClassLoader loader = resourceContext != null</span>
+<span class="nc" id="L137">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
+<span class="fc" id="L138">                    : DfdlService.class.getClassLoader();</span>
+<span class="fc" id="L139">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
 
-<span class="pc bpc" id="L111" title="1 of 3 branches missed.">                switch (request.getType()) {</span>
+<span class="pc bpc" id="L141" title="1 of 3 branches missed.">                switch (request.getType()) {</span>
                 case INSTANCE:
-<span class="fc" id="L113">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
-<span class="fc" id="L114">                    break;</span>
+<span class="fc" id="L143">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
+<span class="fc" id="L144">                    break;</span>
                 case SCHEMA:
-<span class="fc" id="L116">                    d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());</span>
-<span class="fc" id="L117">                    break;</span>
+<span class="fc" id="L146">                    d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());</span>
+<span class="fc" id="L147">                    break;</span>
                 default:
-<span class="nc" id="L119">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L149">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
                     break;
                 }
             }
-<span class="nc" id="L123">        } catch (Exception e) {</span>
-<span class="nc" id="L124">            LOG.error(&quot;Error inspecting DFDL: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L125">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L153">        } catch (Exception e) {</span>
+<span class="nc" id="L154">            LOG.error(&quot;Error inspecting DFDL: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L155">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L127">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L157">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L130">        response.setXmlDocument(d);</span>
-<span class="fc" id="L131">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L160">        response.setXmlDocument(d);</span>
+<span class="fc" id="L161">        return Response.ok().entity(toJson(response)).build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

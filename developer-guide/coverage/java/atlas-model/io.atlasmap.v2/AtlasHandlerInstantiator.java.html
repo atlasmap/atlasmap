@@ -26,48 +26,51 @@ import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.jsontype.TypeIdResolver;
 import com.fasterxml.jackson.databind.jsontype.TypeResolverBuilder;
 
+/**
+ * The jackson {@link HandlerInstantiator} for the field action.
+ */
 public class AtlasHandlerInstantiator extends HandlerInstantiator {
 
     private ClassLoader classLoader;
 
-<span class="fc" id="L33">    AtlasHandlerInstantiator(ClassLoader classLoader) {</span>
-<span class="fc" id="L34">        this.classLoader = classLoader;</span>
-<span class="fc" id="L35">    }</span>
+<span class="fc" id="L36">    AtlasHandlerInstantiator(ClassLoader classLoader) {</span>
+<span class="fc" id="L37">        this.classLoader = classLoader;</span>
+<span class="fc" id="L38">    }</span>
 
     @Override
     public JsonDeserializer&lt;?&gt; deserializerInstance(DeserializationConfig config, Annotated annotated,
             Class&lt;?&gt; deserClass) {
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        if (ActionListUpgradeDeserializer.class == deserClass) {</span>
-<span class="fc" id="L41">            return new ActionListUpgradeDeserializer(classLoader);</span>
+<span class="pc bpc" id="L43" title="1 of 2 branches missed.">        if (ActionListUpgradeDeserializer.class == deserClass) {</span>
+<span class="fc" id="L44">            return new ActionListUpgradeDeserializer(classLoader);</span>
         }
-<span class="nc" id="L43">        return null;</span>
+<span class="nc" id="L46">        return null;</span>
     }
 
     @Override
     public KeyDeserializer keyDeserializerInstance(DeserializationConfig config, Annotated annotated,
             Class&lt;?&gt; keyDeserClass) {
-<span class="nc" id="L49">        return null;</span>
+<span class="nc" id="L52">        return null;</span>
     }
 
     @Override
     public JsonSerializer&lt;?&gt; serializerInstance(SerializationConfig config, Annotated annotated,
             Class&lt;?&gt; serClass) {
-<span class="nc" id="L55">        return null;</span>
+<span class="nc" id="L58">        return null;</span>
     }
 
     @Override
     public TypeResolverBuilder&lt;?&gt; typeResolverBuilderInstance(MapperConfig&lt;?&gt; config, Annotated annotated,
             Class&lt;?&gt; builderClass) {
-<span class="nc" id="L61">        return null;</span>
+<span class="nc" id="L64">        return null;</span>
     }
 
     @Override
     public TypeIdResolver typeIdResolverInstance(MapperConfig&lt;?&gt; config, Annotated annotated,
             Class&lt;?&gt; resolverClass) {
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (ActionResolver.class == resolverClass) {</span>
-<span class="fc" id="L68">            return ActionResolver.getInstance();</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (ActionResolver.class == resolverClass) {</span>
+<span class="fc" id="L71">            return ActionResolver.getInstance();</span>
         }
-<span class="fc" id="L70">        return null;</span>
+<span class="fc" id="L73">        return null;</span>
     }
     
 }
