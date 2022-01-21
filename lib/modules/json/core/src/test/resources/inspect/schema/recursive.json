@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "Request",
+  "title": "Request",
+  "type": "object",
+  "properties": {
+      "request": {
+          "title": "1",
+          "$ref": "#/definitions/person",
+          "examples": [
+              ""
+          ]
+      },
+      "what": {
+          "title": "2",
+          "type": "string",
+          "examples": [
+              ""
+          ]
+      }
+  },
+  "requiredProperties": [
+      "what"
+  ],
+  "definitions": {
+      "person": {
+          "$id": "person",
+          "title": "person",
+          "type": "object",
+          "properties": {
+              "friend": {
+                  "title": "friend",
+                  "$ref": "#/definitions/person",
+                  "examples": [
+                      ""
+                  ]
+              }
+          },
+          "requiredProperties": []
+      }
+  }
+}

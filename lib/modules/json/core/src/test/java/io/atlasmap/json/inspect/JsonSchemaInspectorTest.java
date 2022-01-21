@@ -914,4 +914,13 @@ public class JsonSchemaInspectorTest {
         assertEquals("/org/organizationUnit", f.getPath());
         assertEquals(FieldType.STRING, f.getFieldType());
     }
+
+    @Test
+    public void inspectJsonSchemaRecursiveObject() throws Exception {
+        final String schema = new String(Files
+                .readAllBytes(Paths.get("src/test/resources/inspect/schema/recursive.json")));
+        JsonDocument document = inspectionService.inspectJsonSchema(schema);
+        List<Field> fields = document.getFields().getField();
+    }
+
 }
