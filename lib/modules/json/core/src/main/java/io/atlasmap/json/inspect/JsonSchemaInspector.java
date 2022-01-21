@@ -18,11 +18,13 @@ package io.atlasmap.json.inspect;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +74,7 @@ public class JsonSchemaInspector implements JsonInspector {
 
             Map<String, JsonNode> definitionMap = new HashMap<>();
             populateDefinitions(rootNode, definitionMap);
-            JsonField rootNodeType = getJsonFieldBuilder("", rootNode, null, definitionMap, false).build();
+            JsonField rootNodeType = getJsonFieldBuilder("", rootNode, null, definitionMap, new HashSet<>(), false).build();
 
             if (rootNodeType instanceof JsonComplexType
                     && ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().size() != 0) {
@@ -114,7 +116,7 @@ public class JsonSchemaInspector implements JsonInspector {
         });
     }
 
-    private List<JsonField> loadProperties(JsonNode node, String parentPath, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
+    private List<JsonField> loadProperties(JsonNode node, String parentPath, Map<String, JsonNode> definitionMap, Set<String> definitionTrace) throws JsonInspectionException {
         List<JsonField> answer = new ArrayList<>();
         JsonNode properties = node.get("properties");
         if (properties == null || !properties.fields().hasNext()) {
@@ -129,14 +131,14 @@ public class JsonSchemaInspector implements JsonInspector {
                 LOG.warn("Ignoring non-object field '{}'", entry);
                 continue;
             }
-            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap, false).build();
+            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap, definitionTrace, false).build();
             answer.add(type);
         }
         return answer;
     }
 
     private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath,
-            Map<String, JsonNode> definitionMap, boolean isArray) throws JsonInspectionException {
+            Map<String, JsonNode> definitionMap, Set<String> definitionTrace, boolean isArray) throws JsonInspectionException {
         LOG.trace("--> Field:[name=[{}], value=[{}], parentPath=[{}]", name, value, parentPath);
         JsonFieldBuilder builder = new JsonFieldBuilder();
         if (name != null) {
@@ -152,7 +154,14 @@ public class JsonSchemaInspector implements JsonInspector {
 
         JsonNode nodeValue = value;
         populateDefinitions(nodeValue, definitionMap);
-        nodeValue = resolveReference(nodeValue, definitionMap);
+        if (isRecursive(nodeValue, definitionTrace)) {
+            builder.type = FieldType.COMPLEX;
+            builder.status = FieldStatus.CACHED;
+            return builder;
+        } else {
+            definitionTrace = new HashSet<>(definitionTrace);
+            nodeValue = resolveReference(nodeValue, definitionMap, definitionTrace);
+        }
 
         JsonNode fieldEnum = nodeValue.get("enum");
         if (fieldEnum != null) {
@@ -176,7 +185,7 @@ public class JsonSchemaInspector implements JsonInspector {
         if (fieldType == null || fieldType.asText() == null) {
             LOG.warn("'type' is not defined for node '{}', assuming as an object", name);
             builder.type = FieldType.COMPLEX;
-            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
+            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap, definitionTrace));
             return builder;
         } else if ("array".equals(fieldType.asText())) {
             JsonNode arrayItems = nodeValue.get("items");
@@ -184,7 +193,7 @@ public class JsonSchemaInspector implements JsonInspector {
                 LOG.warn("'{}' is an array node, but no 'items' found in it. It will be ignored", name);
                 builder.status = FieldStatus.UNSUPPORTED;
             } else {
-                builder = getJsonFieldBuilder(name, arrayItems, parentPath, definitionMap, true);
+                builder = getJsonFieldBuilder(name, arrayItems, parentPath, definitionMap, definitionTrace,true);
             }
             return builder;
         }
@@ -194,13 +203,13 @@ public class JsonSchemaInspector implements JsonInspector {
         } else {
             jsonTypes.add(fieldType.asText());
         }
-        processFieldType(builder, jsonTypes, nodeValue, definitionMap);
+        processFieldType(builder, jsonTypes, nodeValue, definitionMap, definitionTrace);
         
         return builder;
     }
 
     private void processFieldType(JsonFieldBuilder builder, List<String> jsonTypes,
-            JsonNode nodeValue, Map<String, JsonNode> definitionMap) throws JsonInspectionException {
+            JsonNode nodeValue, Map<String, JsonNode> definitionMap, Set<String> definitionTrace) throws JsonInspectionException {
         String jsonType = jsonTypes.get(0);
         if (jsonTypes.size() > 1) {
             if (jsonTypes.contains("object")) {
@@ -232,7 +241,7 @@ public class JsonSchemaInspector implements JsonInspector {
                 LOG.warn("Unsupported field type '{}' found, assuming as an object", jsonType);
             }
             builder.type = FieldType.COMPLEX;
-            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap));
+            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap, definitionTrace));
         }
     }
 
@@ -267,7 +276,19 @@ public class JsonSchemaInspector implements JsonInspector {
         }
     }
 
-    private JsonNode resolveReference(JsonNode node, Map<String, JsonNode> definitionMap) {
+    private boolean isRecursive(JsonNode node, Set<String> definitionTrace) {
+        if (node.get("$ref") == null) {
+            return false;
+        }
+        String uri = node.get("$ref").asText();
+        if (uri == null || uri.isEmpty()) {
+            return false;
+        }
+
+        return definitionTrace.contains(uri);
+    }
+
+    private JsonNode resolveReference(JsonNode node, Map<String, JsonNode> definitionMap, Set<String> definitionTrace) {
         if (node.get("$ref") == null) {
             return node;
         }
@@ -280,6 +301,7 @@ public class JsonSchemaInspector implements JsonInspector {
         // internal reference precedes even if it's full URL
         JsonNode def = definitionMap.get(uri);
         if (def != null) {
+            definitionTrace.add(uri);
             return def;
         }
 
@@ -287,6 +309,7 @@ public class JsonSchemaInspector implements JsonInspector {
         try {
             JsonNode external = Json.mapper().readTree(new URI(uri).toURL().openStream());
             LOG.trace("Successfully fetched external JSON schema '{}'    ", uri);
+            definitionMap.put(uri, external);
             return external;
         } catch (Exception e) {
             LOG.debug("", e);
