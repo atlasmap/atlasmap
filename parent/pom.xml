@@ -55,7 +55,7 @@
     <javacc-maven-plugin.version>2.6</javacc-maven-plugin.version>
     <javax.activation.version>1.1.1</javax.activation.version>
     <javax.ws.rs.version>2.1.1</javax.ws.rs.version>
-    <jaxb.version>2.3.1</jaxb.version>
+    <jaxb.version>3.0.2</jaxb.version>
     <!-- Does this fix the NPE problem ?? <jetty-maven-plugin.version>9.4.2.v20170220</jetty-maven-plugin.version> -->
     <jetty-maven-plugin.version>11.0.7</jetty-maven-plugin.version>
     <jsonschema2pojo-maven-plugin.version>1.1.1</jsonschema2pojo-maven-plugin.version>
