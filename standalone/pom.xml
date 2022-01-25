@@ -170,6 +170,10 @@
     <!-- ===================================================================================== -->
 
     <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-websocket</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
       <exclusions>
@@ -190,6 +194,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-websocket</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
@@ -305,6 +313,7 @@
             <configuration>
               <arguments>
                 <argument>--logging.level.io.atlasmap=DEBUG</argument>
+                <argument>--logging.level.io.undertow=DEBUG</argument>
                 <argument>--logging.file.name=target/atlasmap-spring-boot.log</argument>
               </arguments>
               <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000

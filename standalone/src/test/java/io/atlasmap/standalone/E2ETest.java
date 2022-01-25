@@ -21,6 +21,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
+import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,12 +33,39 @@ import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.time.Duration;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
+import javax.websocket.ClientEndpoint;
+import javax.websocket.ClientEndpointConfig;
+import javax.websocket.ContainerProvider;
+import javax.websocket.Endpoint;
+import javax.websocket.EndpointConfig;
+import javax.websocket.MessageHandler;
+import javax.websocket.OnMessage;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
+import javax.websocket.ClientEndpointConfig.Configurator;
+import javax.websocket.RemoteEndpoint.Basic;
+
+import org.eclipse.lsp4j.InitializeParams;
+import org.eclipse.lsp4j.InitializeResult;
+import org.eclipse.lsp4j.MessageActionItem;
+import org.eclipse.lsp4j.MessageParams;
+import org.eclipse.lsp4j.PublishDiagnosticsParams;
+import org.eclipse.lsp4j.ShowMessageRequestParams;
+import org.eclipse.lsp4j.jsonrpc.Launcher;
+import org.eclipse.lsp4j.jsonrpc.Launcher.Builder;
+import org.eclipse.lsp4j.jsonrpc.messages.RequestMessage;
+import org.eclipse.lsp4j.services.LanguageClient;
+import org.eclipse.lsp4j.services.LanguageServer;
+import org.eclipse.lsp4j.websocket.WebSocketEndpoint;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +91,7 @@ import io.atlasmap.v2.DataSourceMetadata;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = { Application.class, CorsConfiguration.class, SecurityConfiguration.class })
+@ContextConfiguration(classes = { Application.class, CorsConfiguration.class, SecurityConfiguration.class, WebSocketConfiguration.class })
 public class E2ETest {
 
     private static final Logger LOG = LoggerFactory.getLogger(E2ETest.class);
@@ -216,4 +247,77 @@ public class E2ETest {
         fail("exported.adm was not created");
     }
 
+    @Test
+    public void testLSP() throws Exception {
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        TestClientEndpoint clientEndpoint = new TestClientEndpoint();
+        Configurator configurator = new ClientEndpointConfig.Configurator();
+        ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().configurator(configurator).build();
+        Session session = container.connectToServer(clientEndpoint, cec, new URI(String.format("ws://127.0.0.1:%s/atlas/lsp", port)));
+        InitializeResult res = clientEndpoint.getClient().getRemote().initialize(new InitializeParams()).join();
+        assertNotNull(res);
+        session.close();
+    }
+
+    class TestClientEndpoint extends WebSocketEndpoint<LanguageServer> {
+        TestLanguageClient client = new TestLanguageClient();
+
+        @Override
+        public void onOpen(Session session, EndpointConfig config) {
+            LOG.debug("LSP client: establishing a connection");
+            session.setMaxTextMessageBufferSize(8192);
+            session.setMaxBinaryMessageBufferSize(8192);;
+            super.onOpen(session, config);
+        }
+
+        @Override
+        protected void configure(Builder<LanguageServer> builder) {
+            LOG.debug("LSP client: Configuring");
+            builder.setLocalService(client);
+            builder.setRemoteInterface(LanguageServer.class);
+        }
+
+        @Override
+        protected void connect(Collection<Object> localServices, LanguageServer remoteProxy) {
+            localServices.forEach(s -> ((TestLanguageClient)s).remote = remoteProxy);
+        }
+
+        public TestLanguageClient getClient() {
+            return this.client;
+        }
+    }
+
+    class TestLanguageClient implements LanguageClient {
+        LanguageServer remote;
+
+        @Override
+        public void telemetryEvent(Object object) {
+            LOG.debug("LSP Client: telemetry event: {}", object.toString());
+        }
+
+        @Override
+        public void publishDiagnostics(PublishDiagnosticsParams diagnostics) {
+            LOG.debug("LSP Client: publish diagnostics: {}", diagnostics.toString());
+        }
+
+        @Override
+        public void showMessage(MessageParams messageParams) {
+            LOG.debug("LSP Client: show message: {}", messageParams.toString());
+        }
+
+        @Override
+        public CompletableFuture<MessageActionItem> showMessageRequest(ShowMessageRequestParams requestParams) {
+            LOG.debug("LSP Client: show message request: {}", requestParams.toString());
+            return null;
+        }
+
+        @Override
+        public void logMessage(MessageParams message) {
+            LOG.debug("LSP Client: log message: {}", message.toString());
+        }
+
+        public LanguageServer getRemote() {
+            return this.remote;
+        }
+    }
 }
