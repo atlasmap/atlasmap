@@ -78,13 +78,13 @@
     <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <mockito.version>4.2.0</mockito.version>
     <okhttp.version>4.9.3</okhttp.version>
-    <openapi-generator-maven-plugin.version>5.3.1</openapi-generator-maven-plugin.version>
+    <openapi-generator-maven-plugin.version>5.4.0</openapi-generator-maven-plugin.version>
     <osgi.include.resource.atlasmap>${osgi.include.resource}</osgi.include.resource.atlasmap>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
     <resteasy-spring-boot-starter.version>5.0.0.Final</resteasy-spring-boot-starter.version>
     <selenium.version>4.1.1</selenium.version>
-    <slf4j.version>1.7.33</slf4j.version>
+    <slf4j.version>1.7.35</slf4j.version>
     <spring.version>5.3.15</spring.version>
     <spring-boot.version>2.6.3</spring-boot.version>
     <swagger.version>2.1.12</swagger.version>
