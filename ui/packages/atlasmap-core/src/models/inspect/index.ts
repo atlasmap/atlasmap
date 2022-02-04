@@ -17,4 +17,5 @@ export * from './csv-inspection.model';
 export * from './document-inspection.model';
 export * from './java-inspection.model';
 export * from './json-inspection.model';
+export * from './kafkaconnect-inspection.model';
 export * from './xml-inspection.model';

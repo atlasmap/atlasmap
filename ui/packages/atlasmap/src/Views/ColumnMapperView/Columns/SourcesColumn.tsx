@@ -68,7 +68,7 @@ export interface ISourceColumnCallbacks
   onCustomClassSearch?: (isSource: boolean) => void;
   onCaptureDocumentID?: (id: string) => void;
   onChangeDocumentName?: (id: string, name: string) => void;
-  onImportDocument?: (selectedFile: File) => void;
+  onImportDocument?: (selectedFile: File, docType: DocumentType) => void;
   onDeleteDocument?: (id: GroupId) => void;
   onSearch: (content: string) => void;
   canDrop: (source: IAtlasmapField, target: IDragAndDropField) => boolean;

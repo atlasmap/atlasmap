@@ -63,7 +63,7 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   onCaptureDocumentID?: (id: string) => void;
   onChangeDocumentName?: (id: string, name: string) => void;
   onDeleteDocument?: (id: GroupId) => void;
-  onImportDocument?: (selectedFile: File) => void;
+  onImportDocument?: (selectedFile: File, docType: DocumentType) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onSearch: (content: string) => void;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;

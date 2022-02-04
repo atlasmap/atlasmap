@@ -220,6 +220,29 @@ export class DocumentManagementService {
     });
   }
 
+  deriveInspectionTypeFromDocType(documentType: DocumentType): InspectionType {
+    switch (documentType) {
+      case DocumentType.CSV:
+        return InspectionType.SCHEMA;
+      case DocumentType.JAVA:
+        return InspectionType.JAVA_CLASS;
+      case DocumentType.JSON_INSTANCE:
+        return InspectionType.INSTANCE;
+      case DocumentType.JSON_SCHEMA:
+        return InspectionType.SCHEMA;
+      case DocumentType.KAFKA_AVRO_SCHEMA:
+        return InspectionType.SCHEMA;
+      case DocumentType.KAFKA_JSON_SCHEMA:
+        return InspectionType.SCHEMA;
+      case DocumentType.XML_INSTANCE:
+        return InspectionType.INSTANCE;
+      case DocumentType.XML_SCHEMA:
+        return InspectionType.SCHEMA;
+      default:
+        return InspectionType.SCHEMA;
+    }
+  }
+
   /**
    * Import user uploaded Document source such as JSON/XML schema/instance, assign
    * a unique Document ID with using GUID and delegate to {@link addNonJavaDocument}
@@ -228,14 +251,14 @@ export class DocumentManagementService {
    *
    * @param selectedFile - user selected file
    * @param isSource - true is source panel, false is target
-   * @param isSchema- user specified instance/ schema (true === schema)
+   * @param documentType
    * @param inspectionParameters - CSV parameters
    *
    */
   importNonJavaDocument(
     selectedFile: File,
     isSource: boolean,
-    isSchema: boolean,
+    documentType: DocumentType,
     inspectionParameters?: { [key: string]: string }
   ): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
@@ -279,12 +302,14 @@ export class DocumentManagementService {
         resolve(false);
         return;
       }
+
+      const inspectionType = this.deriveInspectionTypeFromDocType(documentType);
       this.addNonJavaDocument(
         fileText,
         userFile + '-' + Guid.newGuid(),
         userFile,
-        docType,
-        isSchema ? InspectionType.SCHEMA : InspectionType.INSTANCE,
+        documentType,
+        inspectionType,
         isSource,
         inspectionParameters
       ).then((value) => {

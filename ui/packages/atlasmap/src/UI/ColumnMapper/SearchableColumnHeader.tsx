@@ -38,6 +38,7 @@ export const SearchableColumnHeader: FunctionComponent<
     <ColumnHeader
       title={title}
       actions={[
+        ...actions,
         <form onSubmit={onSearchSubmit} key="search-form">
           <InputGroup>
             <TextInput
@@ -59,7 +60,6 @@ export const SearchableColumnHeader: FunctionComponent<
             </Button>
           </InputGroup>
         </form>,
-        ...actions,
       ]}
     />
   );

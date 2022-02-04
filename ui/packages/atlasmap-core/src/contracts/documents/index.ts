@@ -16,4 +16,5 @@
 export * from './csv';
 export * from './java';
 export * from './json';
+export * from './kafkaconnect';
 export * from './xml';

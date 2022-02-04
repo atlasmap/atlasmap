@@ -570,7 +570,12 @@ export class MappingSerializer {
       if (doc.locale != null) {
         serializedDoc.locale = doc.locale;
       }
-      if (doc.type === DocumentType.XML || doc.type === DocumentType.XSD) {
+      if (
+        doc.type === DocumentType.XML ||
+        doc.type === DocumentType.XSD ||
+        doc.type === DocumentType.XML_INSTANCE ||
+        doc.type === DocumentType.XML_SCHEMA
+      ) {
         const xmlDoc = serializedDoc as IXmlDataSource;
         xmlDoc.jsonType = XML_DATA_SOURCE_JSON_TYPE;
         const namespaces: IXmlNamespace[] = [];
@@ -586,12 +591,25 @@ export class MappingSerializer {
           xmlDoc.template = mappingDefinition.templateText;
         }
         xmlDoc.xmlNamespaces = { xmlNamespace: namespaces };
-      } else if (doc.type === DocumentType.JSON) {
+      } else if (
+        doc.type === DocumentType.JSON ||
+        doc.type === DocumentType.JSON_INSTANCE ||
+        doc.type === DocumentType.JSON_SCHEMA
+      ) {
         const jsonDoc = serializedDoc as IJsonDataSource;
         if (!doc.isSource && mappingDefinition.templateText) {
           jsonDoc.template = mappingDefinition.templateText;
         }
         jsonDoc.jsonType = JSON_DATA_SOURCE_JSON_TYPE;
+      } else if (
+        doc.type === DocumentType.KAFKA_AVRO_SCHEMA ||
+        doc.type === DocumentType.KAFKA_JSON_SCHEMA
+      ) {
+        const kafkaConnectDoc = serializedDoc as IJsonDataSource;
+        if (!doc.isSource && mappingDefinition.templateText) {
+          kafkaConnectDoc.template = mappingDefinition.templateText;
+        }
+        kafkaConnectDoc.jsonType = JSON_DATA_SOURCE_JSON_TYPE;
       }
 
       serializedDocs.push(serializedDoc);
@@ -766,6 +784,8 @@ export class MappingSerializer {
 
       if (
         field.docDef.type === DocumentType.XML ||
+        field.docDef.type === DocumentType.XML_INSTANCE ||
+        field.docDef.type === DocumentType.XML_SCHEMA ||
         field.docDef.type === DocumentType.XSD
       ) {
         (serializedField as IXmlField).userCreated = field.userCreated;
@@ -788,13 +808,24 @@ export class MappingSerializer {
         serializedField.jsonType = CONSTANT_FIELD_JSON_TYPE;
         serializedField.name = field.name;
       } else if (field.enumeration) {
-        if (field.docDef.type === DocumentType.JSON) {
+        if (
+          field.docDef.type === DocumentType.JSON ||
+          field.docDef.type === DocumentType.JSON_INSTANCE ||
+          field.docDef.type === DocumentType.JSON_SCHEMA
+        ) {
           serializedField.jsonType = JSON_ENUM_FIELD_JSON_TYPE;
         } else if (
           field.docDef.type === DocumentType.XML ||
+          field.docDef.type === DocumentType.XML_INSTANCE ||
+          field.docDef.type === DocumentType.XML_SCHEMA ||
           field.docDef.type === DocumentType.XSD
         ) {
           serializedField.jsonType = XML_ENUM_FIELD_JSON_TYPE;
+        } else if (
+          field.docDef.type === DocumentType.KAFKA_AVRO_SCHEMA ||
+          field.docDef.type === DocumentType.KAFKA_JSON_SCHEMA
+        ) {
+          serializedField.jsonType = JSON_ENUM_FIELD_JSON_TYPE;
         } else {
           serializedField.jsonType = JAVA_ENUM_FIELD_JSON_TYPE;
         }

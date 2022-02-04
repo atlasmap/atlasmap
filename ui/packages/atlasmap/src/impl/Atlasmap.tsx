@@ -217,7 +217,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         ? (isSource: boolean) => handlers.onEnableCustomClass(isSource)
         : undefined,
       onImportDocument: allowImport
-        ? (id) => handlers.onImportDocument(id, true)
+        ? (id, docType) => handlers.onImportDocument(id, docType, true)
         : undefined,
       onSearch: searchSources,
       shouldShowMappingPreviewForField,
@@ -300,7 +300,7 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
         ? (isSource: boolean) => handlers.onEnableCustomClass(isSource)
         : undefined,
       onImportDocument: allowImport
-        ? (id) => handlers.onImportDocument(id, false)
+        ? (id, docType) => handlers.onImportDocument(id, docType, false)
         : undefined,
       onSearch: searchTargets,
       shouldShowMappingPreviewForField,

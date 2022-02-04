@@ -144,7 +144,7 @@ export class MappingPreviewService {
     body: IProcessMappingResponseContainer
   ) {
     const answer = await MappingSerializer.deserializeFieldMapping(
-      body.ProcessMappingResponse.mapping,
+      body.ProcessMappingResponse?.mapping,
       this.cfg
     );
     for (const toWrite of inputFieldMapping.targetFields) {

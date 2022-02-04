@@ -161,7 +161,7 @@ describe('DocumentManagementService', () => {
 
   test('inspectDocuments() parse JSON inspection', (done) => {
     const docDef = new DocumentInitializationModel();
-    docDef.type = DocumentType.JSON;
+    docDef.type = DocumentType.JSON_SCHEMA;
     docDef.inspectionType = InspectionType.SCHEMA;
     docDef.inspectionResult = JSON.stringify(
       atlasmapInspectionComplexObjectRootedJson
@@ -186,7 +186,7 @@ describe('DocumentManagementService', () => {
 
   test('inspectDocuments() parse XML inspection', (done) => {
     const docDef = new DocumentInitializationModel();
-    docDef.type = DocumentType.XML;
+    docDef.type = DocumentType.XML_SCHEMA;
     docDef.inspectionType = InspectionType.SCHEMA;
     docDef.inspectionResult = JSON.stringify(
       atlasmapInspectionPoExampleSchemaJson
@@ -206,7 +206,7 @@ describe('DocumentManagementService', () => {
 
   test('inspectDocuments() pick up one XML root element', (done) => {
     const docDef = new DocumentInitializationModel();
-    docDef.type = DocumentType.XML;
+    docDef.type = DocumentType.XML_SCHEMA;
     docDef.name = 'purchaseOrder';
     docDef.inspectionType = InspectionType.SCHEMA;
     docDef.inspectionResult = JSON.stringify(
@@ -215,7 +215,7 @@ describe('DocumentManagementService', () => {
     docDef.selectedRoot = 'purchaseOrder';
     cfg.addDocument(docDef);
     const docDef2 = new DocumentInitializationModel();
-    docDef2.type = DocumentType.XML;
+    docDef2.type = DocumentType.XML_SCHEMA;
     docDef2.name = 'comment';
     docDef2.inspectionType = InspectionType.SCHEMA;
     docDef2.inspectionResult = docDef.inspectionResult;
@@ -289,7 +289,7 @@ describe('DocumentManagementService', () => {
     const file = new File([new Blob([buf])], 'mock-json-schema.json');
     expect(cfg.sourceDocs.length).toBe(0);
     service
-      .importNonJavaDocument(file, true, true, {})
+      .importNonJavaDocument(file, true, DocumentType.JSON, {})
       .then((value) => {
         expect(value).toBeTruthy();
         expect(cfg.sourceDocs.length).toBe(1);

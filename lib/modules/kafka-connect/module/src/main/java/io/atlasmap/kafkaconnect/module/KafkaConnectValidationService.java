@@ -77,10 +77,12 @@ public class KafkaConnectValidationService extends BaseModuleValidationService<K
     @Override
     protected void validateModuleField(String mappingId, KafkaConnectField field, FieldDirection direction,
             List<Validation> validations) {
-        validatorMap.get("kafkaconnect.field.type.not.null").validate(field, validations, mappingId, ValidationStatus.WARN);
-
-        if (field.getPath() == null) {
-            validatorMap.get("kafkaconnect.field.path.not.null").validate(field.getPath(), validations, mappingId);
+        AtlasValidator aVal = validatorMap.get("kafkaconnect.field.type.not.null");
+        if (aVal != null) {
+            aVal.validate(field, validations, mappingId, ValidationStatus.WARN);
+            if (field.getPath() == null) {
+                validatorMap.get("kafkaconnect.field.path.not.null").validate(field.getPath(), validations, mappingId);
+            }
         }
     }
 

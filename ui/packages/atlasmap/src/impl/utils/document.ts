@@ -19,6 +19,7 @@ import {
   ConfigModel,
   DocumentDefinition,
   DocumentInspectionUtil,
+  DocumentType,
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
@@ -210,19 +211,19 @@ export async function getCustomClassNameOptions(): Promise<string[]> {
 
 /**
  * Import a CSV, instance or schema document into either the Source panel or Target
- * panel (CSV, JSON, XML, XSD).
+ * panel.
  *
  * @param selectedFile
  * @param cfg
  * @param isSource
- * @param isSchema - user-specified instance/ schema (true === schema)
+ * @param documentType
  * @param inspectionParameters - CSV parameters
  */
 export async function importInstanceSchema(
   selectedFile: File,
   cfg: ConfigModel,
   isSource: boolean,
-  isSchema: boolean,
+  documentType: DocumentType,
   inspectionParameters?: { [key: string]: string },
 ) {
   return new Promise<boolean>(async (resolve) => {
@@ -234,7 +235,7 @@ export async function importInstanceSchema(
       .importNonJavaDocument(
         selectedFile,
         isSource,
-        isSchema,
+        documentType,
         inspectionParameters,
       )
       .then(() => {
