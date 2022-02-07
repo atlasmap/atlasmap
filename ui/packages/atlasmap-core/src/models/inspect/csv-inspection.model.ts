@@ -28,6 +28,7 @@ import {
   ICsvInspectionResponseContainer,
 } from '../../contracts/documents/csv';
 
+import { CommonUtil } from '../../utils/common-util';
 import { Field } from '../field.model';
 
 export class CsvInspectionModel extends DocumentInspectionModel {
@@ -84,8 +85,10 @@ export class CsvInspectionModel extends DocumentInspectionModel {
       this.doc.name = this.doc.id;
     }
     if (this.doc.inspectionParameters) {
-      const params = new URLSearchParams(this.doc.inspectionParameters);
-      this.doc.uri = this.doc.uri + '?' + params;
+      this.doc.uri = CommonUtil.urlWithParameters(
+        this.doc.uri,
+        this.doc.inspectionParameters
+      );
     }
 
     for (const field of csvDocument.fields.field) {
