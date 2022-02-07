@@ -201,4 +201,29 @@ export class CommonUtil {
       return buffer;
     }
   }
+
+  /**
+   * Returns the given URL with the query parameters replaced with the new
+   * values.
+   *
+   * @param url - the URL
+   * @param parameters - the new parameters to set
+   */
+  static urlWithParameters(
+    url: string,
+    parameters: string[][] | Record<string, string> | string | URLSearchParams
+  ): string {
+    const newUrl = new URL(url);
+    // we can't invoke delete in a loop over uri.searchParams, results
+    // become unreliable, so we gather the keys for deletion, also the
+    // URLSearchParams.keys() method is not available for some reason
+    const keys: string[] = [];
+    newUrl.searchParams.forEach((_, k) => keys.push(k));
+    keys.forEach((k) => newUrl.searchParams.delete(k));
+
+    const params = new URLSearchParams(parameters);
+    params.forEach((v, k) => newUrl.searchParams.append(k, v));
+
+    return newUrl.toString();
+  }
 }

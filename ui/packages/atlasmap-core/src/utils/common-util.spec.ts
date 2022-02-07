@@ -41,4 +41,16 @@ describe('CommonUtil', () => {
     const noop = CommonUtil.objectize(f);
     expect(noop).toBe(f);
   });
+
+  test('urlWithParameters', () => {
+    expect(CommonUtil.urlWithParameters('url:', {})).toBe('url:');
+    expect(CommonUtil.urlWithParameters('url:', { a: '1' })).toBe('url:?a=1');
+    expect(CommonUtil.urlWithParameters('url:?a=1', { b: '2' })).toBe(
+      'url:?b=2'
+    );
+    expect(
+      CommonUtil.urlWithParameters('url:?a=1&b=2', { b: '2', c: '3' })
+    ).toBe('url:?b=2&c=3');
+    expect(CommonUtil.urlWithParameters('url:?a=1&b=2', {})).toBe('url:');
+  });
 });
