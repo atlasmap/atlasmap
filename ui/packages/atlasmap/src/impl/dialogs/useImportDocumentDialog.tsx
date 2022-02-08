@@ -13,16 +13,24 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import React, { ReactElement, useCallback, useState } from 'react';
-import { getCsvParameterOptions } from '@atlasmap/core';
+import {
+  DocumentType,
+  InspectionType,
+  getCsvParameterOptions,
+} from '@atlasmap/core';
+import React, { ReactElement, useCallback } from 'react';
 import { useAtlasmap } from '../AtlasmapProvider';
 import { useConfirmationDialog } from './useConfirmationDialog';
 import { useParametersDialog } from './useParametersDialog';
-import { useSpecifyInstanceSchemaDialog } from './useSpecifyInstanceSchemaDialog';
 
 export function useImportDocumentDialog(): [
   ReactElement,
-  (selectedFile: File, isSource: boolean) => void,
+  (
+    selectedFile: File,
+    docType: DocumentType,
+    inspType: InspectionType,
+    isSource: boolean,
+  ) => void,
 ] {
   const { configModel, documentExists, importInstanceSchema } = useAtlasmap();
   const [importDialog, openImportDialog] = useConfirmationDialog(
@@ -32,12 +40,14 @@ export function useImportDocumentDialog(): [
   const [parametersDialog, openParametersDialog] = useParametersDialog(
     'Select CSV Processing Parameters',
   );
-  const [defaultSchema, setDefaultSchema] = useState(false);
-  const [specifyInstanceSchemaDialog, openSpecifyInstanceSchema] =
-    useSpecifyInstanceSchemaDialog(defaultSchema);
 
   const importFile = useCallback(
-    (selectedFile: File, isSource: boolean) => {
+    (
+      selectedFile: File,
+      docType: DocumentType,
+      inspType: InspectionType,
+      isSource: boolean,
+    ) => {
       if (selectedFile.name) {
         const userFileSplit = selectedFile.name.split('.');
         const userFileSuffix: string =
@@ -52,33 +62,38 @@ export function useImportDocumentDialog(): [
               selectedFile,
               configModel,
               isSource,
-              false,
+              DocumentType.CSV,
+              InspectionType.UNKNOWN,
               inspectionParameters,
             );
           }, getCsvParameterOptions());
           return;
         }
-
-        setDefaultSchema(userFileSuffix === 'XSD' ? true : false);
-        openSpecifyInstanceSchema((isSchema: boolean) => {
-          importInstanceSchema(selectedFile, configModel, isSource, isSchema);
-        });
+        importInstanceSchema(
+          selectedFile,
+          configModel,
+          isSource,
+          docType,
+          inspType,
+        );
       }
     },
-    [
-      configModel,
-      importInstanceSchema,
-      openParametersDialog,
-      openSpecifyInstanceSchema,
-    ],
+    [configModel, importInstanceSchema, openParametersDialog],
   );
 
   const onImportDocument = useCallback(
-    (selectedFile: File, isSource: boolean) => {
+    (
+      selectedFile: File,
+      docType: DocumentType,
+      inspType: InspectionType,
+      isSource: boolean,
+    ) => {
       if (documentExists(selectedFile, isSource)) {
-        openImportDialog(() => importFile(selectedFile, isSource));
+        openImportDialog(() =>
+          importFile(selectedFile, docType, inspType, isSource),
+        );
       } else {
-        importFile(selectedFile, isSource);
+        importFile(selectedFile, docType, inspType, isSource);
       }
     },
     [documentExists, importFile, openImportDialog],
@@ -87,7 +102,6 @@ export function useImportDocumentDialog(): [
     <>
       {importDialog}
       {parametersDialog}
-      {specifyInstanceSchemaDialog}
     </>,
     onImportDocument,
   ];

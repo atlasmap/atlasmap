@@ -83,12 +83,15 @@ export enum FieldType {
 }
 
 export enum DocumentType {
-  JAVA = 'JAVA',
-  XML = 'XML',
-  XSD = 'XSD',
-  JSON = 'JSON',
   CORE = 'Core',
   CSV = 'CSV',
+  JAVA = 'JAVA',
+  JSON = 'JSON',
+  KAFKA_AVRO = 'KAFKA_AVRO',
+  KAFKA_JSON = 'KAFKA_JSON',
+  XML = 'XML',
+  XSD = 'XSD',
+  // Predefined Documents
   CONSTANT = 'Constants',
   PROPERTY = 'Property',
 }

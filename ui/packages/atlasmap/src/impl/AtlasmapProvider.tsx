@@ -128,11 +128,12 @@ interface IAtlasmapContext extends IDataState, INotificationsState {
 const AtlasmapContext = createContext<IAtlasmapContext | null>(null);
 
 export interface IAtlasmapProviderProps {
-  baseJavaInspectionServiceUrl: string;
-  baseXMLInspectionServiceUrl: string;
-  baseJSONInspectionServiceUrl: string;
   baseCSVInspectionServiceUrl: string;
+  baseJavaInspectionServiceUrl: string;
+  baseJSONInspectionServiceUrl: string;
+  baseKafkaConnectInspectionServiceUrl: string;
   baseMappingServiceUrl: string;
+  baseXMLInspectionServiceUrl: string;
   logLevel: string;
 
   externalDocument?: {
@@ -144,14 +145,15 @@ export interface IAtlasmapProviderProps {
   onMappingChange?: (serializedMappings: string) => void;
 }
 export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
-  baseJavaInspectionServiceUrl,
-  baseXMLInspectionServiceUrl,
-  baseJSONInspectionServiceUrl,
   baseCSVInspectionServiceUrl,
+  baseJavaInspectionServiceUrl,
+  baseJSONInspectionServiceUrl,
+  baseKafkaConnectInspectionServiceUrl,
   baseMappingServiceUrl,
+  baseXMLInspectionServiceUrl,
+  logLevel,
   externalDocument,
   onMappingChange,
-  logLevel,
   children,
 }) => {
   const [data, dispatchData] = useReducer(dataReducer, {}, initDataState);
@@ -193,6 +195,8 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
       cfg.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
       cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
+      cfg.initCfg.baseKafkaConnectInspectionServiceUrl =
+        baseKafkaConnectInspectionServiceUrl;
       cfg.initCfg.baseCSVInspectionServiceUrl = baseCSVInspectionServiceUrl;
 
       if (externalDocument) {
@@ -243,6 +247,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseCSVInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
       baseJavaInspectionServiceUrl,
+      baseKafkaConnectInspectionServiceUrl,
       baseMappingServiceUrl,
       baseXMLInspectionServiceUrl,
       externalDocument,
@@ -415,6 +420,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       baseJavaInspectionServiceUrl,
       baseXMLInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
+      baseKafkaConnectInspectionServiceUrl,
       baseCSVInspectionServiceUrl,
       baseMappingServiceUrl,
       configModel,

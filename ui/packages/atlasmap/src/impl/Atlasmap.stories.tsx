@@ -93,6 +93,10 @@ export const wiredToTheBackend = () => (
       'baseCSVInspectionServiceUrl',
       'http://localhost:8585/v2/atlas/csv/',
     )}
+    baseKafkaConnectInspectionServiceUrl={text(
+      'baseKafkaConnectInspectionServiceUrl',
+      'http://localhost:8585/v2/atlas/kafkaconnect/',
+    )}
     baseMappingServiceUrl={text(
       'baseMappingServiceUrl',
       'http://localhost:8585/v2/atlas/',
@@ -161,6 +165,10 @@ export const embeddedInSyndesis = () => {
       baseCSVInspectionServiceUrl={text(
         'baseCSVInspectionServiceUrl',
         'http://localhost:8585/v2/atlas/csv/',
+      )}
+      baseKafkaConnectInspectionServiceUrl={text(
+        'baseKafkaConnectInspectionServiceUrl',
+        'http://localhost:8585/v2/atlas/kafkaconnect/',
       )}
       baseMappingServiceUrl={text(
         'baseMappingServiceUrl',

@@ -259,7 +259,7 @@ export class DocumentDefinition {
 
     for (const field of this.fields) {
       this.populateFieldData(field);
-      if (this.allFields.indexOf(field) == -1) {
+      if (this.allFields.indexOf(field) === -1) {
         this.allFields.push(field);
       }
       this.populateChildren(field);
@@ -325,7 +325,7 @@ export class DocumentDefinition {
       childField.parentField = field;
       this.rewriteFieldPath(childField);
       this.populateFieldData(childField);
-      if (field.children.indexOf(childField) == -1) {
+      if (field.children.indexOf(childField) === -1) {
         field.children.push(childField);
       }
     }
@@ -448,7 +448,7 @@ export class DocumentDefinition {
     } else {
       for (const childField of field.children) {
         this.populateFieldData(childField);
-        if (this.allFields.indexOf(childField) == -1) {
+        if (this.allFields.indexOf(childField) === -1) {
           this.allFields.push(childField);
         }
       }

@@ -27,6 +27,22 @@
         "dataSourceType":"SOURCE"
       },
       {
+        "jsonType":"io.atlasmap.json.v2.JsonDataSource",
+        "id": "avro-complex",
+        "name": "avro-complex",
+        "description": "random desc",
+        "uri": "atlas:kafkaconnect:avro-complex-cff70039-5dd1-4bc5-a4a4-e72dcff0da77",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "json-primitive",
+        "name": "/",
+        "description": "random desc",
+        "uri": "atlas:kafkaconnect:json-primitive-cff70039-5dd1-4bc5-a4a4-e72dcff0da77",
+        "dataSourceType": "SOURCE"
+      },
+      {
         "jsonType":"io.atlasmap.xml.v2.XmlDataSource",
         "id":"SomeXmlSource",
         "name":"SomeXmlSource",
@@ -36,6 +52,22 @@
         "xmlNamespaces":{
           "xmlNamespace":[ ]
         }
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "json-complex",
+        "name": "json-complex",
+        "description": "random desc",
+        "uri": "atlas:kafkaconnect:json-complex-cff70039-5dd1-4bc5-a4a4-e72dcff0da77",
+        "dataSourceType": "TARGET"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "avro-primitive",
+        "name": "/",
+        "description": "random desc",
+        "uri": "atlas:kafkaconnect:avro-primitive-cff70039-5dd1-4bc5-a4a4-e72dcff0da77",
+        "dataSourceType": "TARGET"
       },
       {
         "jsonType":"io.atlasmap.v2.DataSource",

@@ -215,6 +215,106 @@ function createSomeXmlSourceSourceDoc() {
   return xmlSource;
 }
 
+function createAvroComplexSourceDoc() {
+  const avroSource = new DocumentDefinition();
+  avroSource.type = DocumentType.KAFKA_AVRO;
+  avroSource.name = 'avro-complex';
+  avroSource.isSource = true;
+  avroSource.id = 'avro-complex';
+  avroSource.uri =
+    'atlas:kafkaconnect:avro-complex-cff70039-5dd1-4bc5-a4a4-e72dcff0da77';
+  avroSource.description = 'random desc';
+  const xs0 = new Field();
+  xs0.name = 'xs0';
+  xs0.docDef = avroSource;
+  xs0.path = '/xs0';
+  xs0.type = FieldType.STRING;
+  avroSource.addField(xs0);
+  const xs1 = new Field();
+  xs1.name = 'xs1';
+  xs1.docDef = avroSource;
+  xs1.path = '/xs1';
+  xs1.type = FieldType.STRING;
+  avroSource.addField(xs1);
+  avroSource.initializeFromFields();
+  return avroSource;
+}
+
+function createJSONPrimitiveSourceDoc() {
+  const jsonSource = new DocumentDefinition();
+  jsonSource.type = DocumentType.KAFKA_JSON;
+  jsonSource.name = '/';
+  jsonSource.isSource = true;
+  jsonSource.id = 'json-primitive';
+  jsonSource.uri =
+    'atlas:kafkaconnect:json-primitive-cff70039-5dd1-4bc5-a4a4-e72dcff0da77';
+  jsonSource.description = 'random desc';
+  const xs0 = new Field();
+  xs0.name = 'xs0';
+  xs0.docDef = jsonSource;
+  xs0.path = '/xs0';
+  xs0.type = FieldType.STRING;
+  jsonSource.addField(xs0);
+  const xs1 = new Field();
+  xs1.name = 'xs1';
+  xs1.docDef = jsonSource;
+  xs1.path = '/xs1';
+  xs1.type = FieldType.STRING;
+  jsonSource.addField(xs1);
+  jsonSource.initializeFromFields();
+  return jsonSource;
+}
+
+function createJsonComplexTargetDoc() {
+  const jsonTarget = new DocumentDefinition();
+  jsonTarget.type = DocumentType.KAFKA_JSON;
+  jsonTarget.name = 'json-complex';
+  jsonTarget.isSource = false;
+  jsonTarget.id = 'json-complex';
+  jsonTarget.uri =
+    'atlas:kafkaconnect:json-complex-cff70039-5dd1-4bc5-a4a4-e72dcff0da77';
+  jsonTarget.description = 'random desc';
+  const xs0 = new Field();
+  xs0.name = 'xs0';
+  xs0.docDef = jsonTarget;
+  xs0.path = '/xs0';
+  xs0.type = FieldType.STRING;
+  jsonTarget.addField(xs0);
+  const xs1 = new Field();
+  xs1.name = 'xs1';
+  xs1.docDef = jsonTarget;
+  xs1.path = '/xs1';
+  xs1.type = FieldType.STRING;
+  jsonTarget.addField(xs1);
+  jsonTarget.initializeFromFields();
+  return jsonTarget;
+}
+
+function createAvroPrimitiveTargetDoc() {
+  const avroTarget = new DocumentDefinition();
+  avroTarget.type = DocumentType.KAFKA_AVRO;
+  avroTarget.name = '/';
+  avroTarget.isSource = false;
+  avroTarget.id = 'avro-primitive';
+  avroTarget.uri =
+    'atlas:kafkaconnect:avro-primitive-cff70039-5dd1-4bc5-a4a4-e72dcff0da77';
+  avroTarget.description = 'random desc';
+  const xs0 = new Field();
+  xs0.name = 'xs0';
+  xs0.docDef = avroTarget;
+  xs0.path = '/xs0';
+  xs0.type = FieldType.STRING;
+  avroTarget.addField(xs0);
+  const xs1 = new Field();
+  xs1.name = 'xs1';
+  xs1.docDef = avroTarget;
+  xs1.path = '/xs1';
+  xs1.type = FieldType.STRING;
+  avroTarget.addField(xs1);
+  avroTarget.initializeFromFields();
+  return avroTarget;
+}
+
 function createSalesforceContactTargetDoc() {
   const contact = new DocumentDefinition();
   contact.type = DocumentType.JAVA;
@@ -369,14 +469,23 @@ function createAllDocs(cfg: ConfigModel) {
   cfg.sourceDocs.push(createSomeJsonSourceSourceDoc());
   // Source JSON doc - collection
   cfg.sourceDocs.push(createJSONSchemaSourceSourceDoc());
+  // Source KafkaConnect AVRO - complex
+  cfg.sourceDocs.push(createAvroComplexSourceDoc());
+  // Source KafkaConnect JSON - primitive
+  cfg.sourceDocs.push(createJSONPrimitiveSourceDoc());
   // Source XML doc
   cfg.sourceDocs.push(createSomeXmlSourceSourceDoc());
+
   // Target Java doc
   cfg.targetDocs.push(createSalesforceContactTargetDoc());
   // Target JSON doc
   cfg.targetDocs.push(createSomeJsonTargetTargetDoc());
   // Target JSON doc - collection
   cfg.targetDocs.push(createJSONSchemaSourceTargetDoc());
+  // Target KafkaConnect JSON - complex
+  cfg.sourceDocs.push(createJsonComplexTargetDoc());
+  // Target KafkaConnect AVRO - primitive
+  cfg.sourceDocs.push(createAvroPrimitiveTargetDoc());
   // Target XML Namespace doc
   cfg.targetDocs.push(createXMLInstanceSourceTargetDoc());
 }

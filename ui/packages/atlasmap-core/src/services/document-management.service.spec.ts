@@ -289,7 +289,13 @@ describe('DocumentManagementService', () => {
     const file = new File([new Blob([buf])], 'mock-json-schema.json');
     expect(cfg.sourceDocs.length).toBe(0);
     service
-      .importNonJavaDocument(file, true, true, {})
+      .importNonJavaDocument(
+        file,
+        true,
+        DocumentType.JSON,
+        InspectionType.SCHEMA,
+        {}
+      )
       .then((value) => {
         expect(value).toBeTruthy();
         expect(cfg.sourceDocs.length).toBe(1);
