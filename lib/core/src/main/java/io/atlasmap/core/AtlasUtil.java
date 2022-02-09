@@ -640,7 +640,7 @@ public class AtlasUtil {
      * @param includePaths paths
      */
     public static void excludeNotRequestedFields(Document document, List<String> includePaths) {
-        if (includePaths == null || includePaths.isEmpty()) {
+        if (document == null || includePaths == null || includePaths.isEmpty()) {
             return;
         }
 
