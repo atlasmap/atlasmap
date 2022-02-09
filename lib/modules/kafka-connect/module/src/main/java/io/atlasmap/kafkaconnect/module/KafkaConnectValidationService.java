@@ -59,8 +59,8 @@ public class KafkaConnectValidationService extends BaseModuleValidationService<K
         NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,
                 "Filed type should not be null nor empty");
 
-        validatorMap.put("json.field.type.not.null", fieldTypeNonNullValidator);
-        validatorMap.put("json.field.path.not.null", pathNonNullValidator);
+        validatorMap.put("kafkaconnect.field.type.not.null", fieldTypeNonNullValidator);
+        validatorMap.put("kafkaconnect.field.path.not.null", pathNonNullValidator);
         validatorMap.put("input.field.type.not.null", fieldTypeNonNullValidator);
         validatorMap.put("output.field.type.not.null", fieldTypeNonNullValidator);
     }

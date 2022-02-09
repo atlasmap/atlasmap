@@ -90,6 +90,7 @@ describe('InitializationService', () => {
     c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
     c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
     c.initCfg.baseCSVInspectionServiceUrl = 'dummy';
+    c.initCfg.baseKafkaConnectInspectionServiceUrl = 'dummy';
     const sourceJson = new DocumentInitializationModel();
     sourceJson.isSource = true;
     sourceJson.type = DocumentType.JSON;

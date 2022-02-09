@@ -228,14 +228,16 @@ export class DocumentManagementService {
    *
    * @param selectedFile - user selected file
    * @param isSource - true is source panel, false is target
-   * @param isSchema- user specified instance/ schema (true === schema)
+   * @param documentType
+   * @param inspectionType
    * @param inspectionParameters - CSV parameters
    *
    */
   importNonJavaDocument(
     selectedFile: File,
     isSource: boolean,
-    isSchema: boolean,
+    documentType: DocumentType,
+    inspectionType: InspectionType,
     inspectionParameters?: { [key: string]: string }
   ): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
@@ -279,12 +281,13 @@ export class DocumentManagementService {
         resolve(false);
         return;
       }
+
       this.addNonJavaDocument(
         fileText,
         userFile + '-' + Guid.newGuid(),
         userFile,
-        docType,
-        isSchema ? InspectionType.SCHEMA : InspectionType.INSTANCE,
+        documentType,
+        inspectionType,
         isSource,
         inspectionParameters
       ).then((value) => {

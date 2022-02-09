@@ -592,6 +592,15 @@ export class MappingSerializer {
           jsonDoc.template = mappingDefinition.templateText;
         }
         jsonDoc.jsonType = JSON_DATA_SOURCE_JSON_TYPE;
+      } else if (
+        doc.type === DocumentType.KAFKA_AVRO ||
+        doc.type === DocumentType.KAFKA_JSON
+      ) {
+        const kafkaConnectDoc = serializedDoc as IJsonDataSource;
+        if (!doc.isSource && mappingDefinition.templateText) {
+          kafkaConnectDoc.template = mappingDefinition.templateText;
+        }
+        kafkaConnectDoc.jsonType = JSON_DATA_SOURCE_JSON_TYPE;
       }
 
       serializedDocs.push(serializedDoc);
@@ -795,6 +804,11 @@ export class MappingSerializer {
           field.docDef.type === DocumentType.XSD
         ) {
           serializedField.jsonType = XML_ENUM_FIELD_JSON_TYPE;
+        } else if (
+          field.docDef.type === DocumentType.KAFKA_AVRO ||
+          field.docDef.type === DocumentType.KAFKA_JSON
+        ) {
+          serializedField.jsonType = JSON_ENUM_FIELD_JSON_TYPE;
         } else {
           serializedField.jsonType = JAVA_ENUM_FIELD_JSON_TYPE;
         }

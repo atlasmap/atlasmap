@@ -33,6 +33,7 @@ describe('AtlasMap standalone', () => {
         baseJavaInspectionServiceUrl={'/v2/atlas/java/'}
         baseXMLInspectionServiceUrl={'/v2/atlas/xml/'}
         baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
+        baseKafkaConnectInspectionServiceUrl={'/v2/atlas/kafkaconnect/'}
         baseCSVInspectionServiceUrl={'/v2/atlas/csv/'}
         baseMappingServiceUrl={'/v2/atlas/'}
         logLevel={'info'}

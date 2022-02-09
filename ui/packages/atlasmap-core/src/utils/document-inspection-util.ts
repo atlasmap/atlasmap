@@ -29,6 +29,7 @@ import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentInspectionModel } from '../models/inspect/document-inspection.model';
 import { JavaInspectionModel } from '../models/inspect/java-inspection.model';
 import { JsonInspectionModel } from '../models/inspect/json-inspection.model';
+import { KafkaConnectInspectionModel } from '../models/inspect/kafkaconnect-inspection.model';
 import { XmlInspectionModel } from '../models/inspect/xml-inspection.model';
 
 export class DocumentInspectionUtil {
@@ -51,8 +52,13 @@ export class DocumentInspectionUtil {
         return new JavaInspectionModel(cfg, doc);
       case DocumentType.JSON:
         return new JsonInspectionModel(cfg, doc);
-      case DocumentType.XSD:
+      case DocumentType.KAFKA_AVRO:
+        return new KafkaConnectInspectionModel(cfg, doc);
+      case DocumentType.KAFKA_JSON:
+        return new KafkaConnectInspectionModel(cfg, doc);
       case DocumentType.XML:
+        return new XmlInspectionModel(cfg, doc);
+      case DocumentType.XSD:
         return new XmlInspectionModel(cfg, doc);
       case DocumentType.CSV:
         return new CsvInspectionModel(cfg, doc);

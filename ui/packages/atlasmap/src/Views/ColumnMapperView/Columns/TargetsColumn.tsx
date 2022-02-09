@@ -40,6 +40,7 @@ import {
   SearchableColumnHeader,
   Tree,
 } from '../../../UI';
+import { DocumentType, InspectionType } from '@atlasmap/core';
 import { IPropertiesTreeCallbacks, PropertiesTree } from './PropertiesTree';
 import React, { FunctionComponent, useCallback } from 'react';
 import {
@@ -50,7 +51,6 @@ import {
   TARGETS_WIDTH_BOUNDARY_ID,
 } from './constants';
 
-import { DocumentType } from '@atlasmap/core';
 import { PlusIcon } from '@patternfly/react-icons';
 import { TraverseFields } from './TraverseFields';
 import { commonActions } from './commonActions';
@@ -63,7 +63,11 @@ export interface ITargetsColumnCallbacks extends IPropertiesTreeCallbacks {
   onCaptureDocumentID?: (id: string) => void;
   onChangeDocumentName?: (id: string, name: string) => void;
   onDeleteDocument?: (id: GroupId) => void;
-  onImportDocument?: (selectedFile: File) => void;
+  onImportDocument?: (
+    selectedFile: File,
+    docType: DocumentType,
+    inspType: InspectionType,
+  ) => void;
   onCustomClassSearch?: (isSource: boolean) => void;
   onSearch: (content: string) => void;
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) => void;

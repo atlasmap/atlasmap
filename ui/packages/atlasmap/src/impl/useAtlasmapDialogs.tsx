@@ -41,7 +41,6 @@ import {
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
-  useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
 } from './dialogs';
 
@@ -295,9 +294,6 @@ export function useAtlasmapDialogs({
   );
   //#endregion
 
-  const [specifyInstanceSchemaDialog, onSpecifyInstanceSchema] =
-    useSpecifyInstanceSchemaDialog(false);
-
   const portal = useMemo(
     () =>
       createPortal(
@@ -306,7 +302,6 @@ export function useAtlasmapDialogs({
           {exportADMArchiveDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
-          {specifyInstanceSchemaDialog}
           {captureDocumentNameToast}
           {changeDocumentNameDialog}
           {createConstantDialog}
@@ -345,7 +340,6 @@ export function useAtlasmapDialogs({
       exportADMArchiveDialog,
       importADMArchiveDialog,
       importDocumentDialog,
-      specifyInstanceSchemaDialog,
       modalContainer,
       removeMappedFieldDialog,
       resetDialog,
@@ -370,7 +364,6 @@ export function useAtlasmapDialogs({
       onAbout,
       onImportDocument,
       onDeleteDocument,
-      onSpecifyInstanceSchema,
       onCaptureDocumentID,
       onChangeDocumentName,
       onRemoveMappedField,

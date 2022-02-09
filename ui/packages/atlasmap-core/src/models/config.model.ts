@@ -39,11 +39,12 @@ export class DataMapperInitializationModel {
   admHttpTimeout = 30000; // 30 seconds
   initializationErrorOccurred = false;
 
-  baseJavaInspectionServiceUrl?: string;
-  baseXMLInspectionServiceUrl?: string;
-  baseJSONInspectionServiceUrl?: string;
   baseCSVInspectionServiceUrl?: string;
+  baseJavaInspectionServiceUrl?: string;
+  baseJSONInspectionServiceUrl?: string;
+  baseKafkaConnectInspectionServiceUrl?: string;
   baseMappingServiceUrl?: string;
+  baseXMLInspectionServiceUrl?: string;
 
   xsrfHeaderName?: string;
   xsrfCookieName?: string;
@@ -210,6 +211,11 @@ export class ConfigModel {
             '&collectionClassName=' + docInitModel.collectionClassName;
         }
       }
+    } else if (
+      docDef.type === DocumentType.KAFKA_AVRO ||
+      docDef.type === DocumentType.KAFKA_JSON
+    ) {
+      docDef.uri = 'atlas:kafkaconnect:' + docDef.id;
     } else {
       docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
     }
