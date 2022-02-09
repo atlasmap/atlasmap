@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/168</span>
+                <span class='fraction'>0/170</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/162</span>
+                <span class='fraction'>0/164</span>
             </div>
         
             
@@ -720,7 +720,13 @@
 <a name='L662'></a><a href='#L662'>662</a>
 <a name='L663'></a><a href='#L663'>663</a>
 <a name='L664'></a><a href='#L664'>664</a>
-<a name='L665'></a><a href='#L665'>665</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L665'></a><a href='#L665'>665</a>
+<a name='L666'></a><a href='#L666'>666</a>
+<a name='L667'></a><a href='#L667'>667</a>
+<a name='L668'></a><a href='#L668'>668</a>
+<a name='L669'></a><a href='#L669'>669</a>
+<a name='L670'></a><a href='#L670'>670</a>
+<a name='L671'></a><a href='#L671'>671</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -865,6 +871,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -875,6 +882,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -911,10 +919,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -972,6 +982,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1131,6 +1142,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1514,11 +1526,12 @@ interface IAtlasmapContext extends IDataState, INotificationsState {
 const AtlasmapContext = <span class="cstat-no" title="statement not covered" >createContext&lt;IAtlasmapContext | null&gt;(null);</span>
 &nbsp;
 export interface IAtlasmapProviderProps {
-  baseJavaInspectionServiceUrl: string;
-  baseXMLInspectionServiceUrl: string;
-  baseJSONInspectionServiceUrl: string;
   baseCSVInspectionServiceUrl: string;
+  baseJavaInspectionServiceUrl: string;
+  baseJSONInspectionServiceUrl: string;
+  baseKafkaConnectInspectionServiceUrl: string;
   baseMappingServiceUrl: string;
+  baseXMLInspectionServiceUrl: string;
   logLevel: string;
 &nbsp;
   externalDocument?: {
@@ -1530,14 +1543,15 @@ export interface IAtlasmapProviderProps {
   onMappingChange?: (serializedMappings: string) =&gt; void;
 }
 export const <span class="cstat-no" title="statement not covered" >AtlasmapProvider: FunctionComponent&lt;IAtlasmapProviderProps&gt; = <span class="fstat-no" title="function not covered" >({</span></span>
-  baseJavaInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
-  baseXMLInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
-  baseJSONInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
   baseCSVInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseJavaInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseJSONInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseKafkaConnectInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
   baseMappingServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  baseXMLInspectionServiceUrl<span class="cstat-no" title="statement not covered" >,</span>
+  logLevel<span class="cstat-no" title="statement not covered" >,</span>
   externalDocument<span class="cstat-no" title="statement not covered" >,</span>
   onMappingChange<span class="cstat-no" title="statement not covered" >,</span>
-  logLevel<span class="cstat-no" title="statement not covered" >,</span>
   children<span class="cstat-no" title="statement not covered" >,</span>
 }) =&gt; {
   const [data<span class="cstat-no" title="statement not covered" >, d</span>ispatchData<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seReducer(dataReducer, {}, initDataState);</span>
@@ -1579,6 +1593,8 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 <span class="cstat-no" title="statement not covered" >      cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;</span>
 <span class="cstat-no" title="statement not covered" >      cfg.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;</span>
 <span class="cstat-no" title="statement not covered" >      cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;</span>
+<span class="cstat-no" title="statement not covered" >      cfg.initCfg.baseKafkaConnectInspectionServiceUrl =</span>
+        baseKafkaConnectInspectionServiceUrl;
 <span class="cstat-no" title="statement not covered" >      cfg.initCfg.baseCSVInspectionServiceUrl = baseCSVInspectionServiceUrl;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (externalDocument) {</span>
@@ -1629,6 +1645,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
       baseCSVInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
       baseJavaInspectionServiceUrl,
+      baseKafkaConnectInspectionServiceUrl,
       baseMappingServiceUrl,
       baseXMLInspectionServiceUrl,
       externalDocument,
@@ -1801,6 +1818,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
       baseJavaInspectionServiceUrl,
       baseXMLInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
+      baseKafkaConnectInspectionServiceUrl,
       baseCSVInspectionServiceUrl,
       baseMappingServiceUrl,
       configModel,
@@ -2055,7 +2073,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Feb 08 2022 15:12:59 GMT+0000 (Coordinated Universal Time)
+                at Wed Feb 09 2022 00:49:31 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

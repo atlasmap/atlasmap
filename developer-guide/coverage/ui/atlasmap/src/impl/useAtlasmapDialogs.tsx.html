@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/179</span>
+                <span class='fraction'>0/176</span>
             </div>
         
             
@@ -45,7 +45,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/112</span>
+                <span class='fraction'>0/110</span>
             </div>
         
             
@@ -438,14 +438,7 @@
 <a name='L380'></a><a href='#L380'>380</a>
 <a name='L381'></a><a href='#L381'>381</a>
 <a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a>
-<a name='L385'></a><a href='#L385'>385</a>
-<a name='L386'></a><a href='#L386'>386</a>
-<a name='L387'></a><a href='#L387'>387</a>
-<a name='L388'></a><a href='#L388'>388</a>
-<a name='L389'></a><a href='#L389'>389</a>
-<a name='L390'></a><a href='#L390'>390</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L383'></a><a href='#L383'>383</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -492,7 +485,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -741,14 +733,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -802,9 +790,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -877,7 +863,6 @@ import { IConstant, IDocumentName, INamespace, IProperty } from '../UI';
   usePropertyDialog,
   useRemoveMappedFieldDialog,
   useResetAtlasmapDialog,
-  useSpecifyInstanceSchemaDialog,
   useToggleExpressionModeDialog,
 } from './dialogs';
 &nbsp;
@@ -1131,9 +1116,6 @@ export interface IUseAtlasmapDialogsProps {
   );
   //#endregion
 &nbsp;
-  const [specifyInstanceSchemaDialog<span class="cstat-no" title="statement not covered" >, o</span>nSpecifyInstanceSchema<span class="cstat-no" title="statement not covered" >] =</span>
-<span class="cstat-no" title="statement not covered" >    useSpecifyInstanceSchemaDialog(false);</span>
-&nbsp;
   const portal = <span class="cstat-no" title="statement not covered" >useMemo(</span>
 <span class="fstat-no" title="function not covered" >    () =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      createPortal(</span>
@@ -1142,7 +1124,6 @@ export interface IUseAtlasmapDialogsProps {
           {exportADMArchiveDialog}
           {importDocumentDialog}
           {deleteDocumentDialog}
-          {specifyInstanceSchemaDialog}
           {captureDocumentNameToast}
           {changeDocumentNameDialog}
           {createConstantDialog}
@@ -1181,7 +1162,6 @@ export interface IUseAtlasmapDialogsProps {
       exportADMArchiveDialog,
       importADMArchiveDialog,
       importDocumentDialog,
-      specifyInstanceSchemaDialog,
       modalContainer,
       removeMappedFieldDialog,
       resetDialog,
@@ -1206,7 +1186,6 @@ export interface IUseAtlasmapDialogsProps {
       onAbout,
       onImportDocument,
       onDeleteDocument,
-      onSpecifyInstanceSchema,
       onCaptureDocumentID,
       onChangeDocumentName,
       onRemoveMappedField,
@@ -1230,7 +1209,7 @@ export interface IUseAtlasmapDialogsProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Feb 08 2022 15:12:59 GMT+0000 (Coordinated Universal Time)
+                at Wed Feb 09 2022 00:49:31 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

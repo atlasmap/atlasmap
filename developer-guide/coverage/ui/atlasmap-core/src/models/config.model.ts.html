@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.82% </span>
+                <span class="strong">80.41% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>118/146</span>
+                <span class='fraction'>119/148</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>12/20</span>
+                <span class='fraction'>15/24</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">85.19% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>114/133</span>
+                <span class='fraction'>115/135</span>
             </div>
         
             
@@ -350,7 +350,13 @@
 <a name='L292'></a><a href='#L292'>292</a>
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a>
+<a name='L301'></a><a href='#L301'>301</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,6 +396,7 @@
 <span class="cline-any cline-yes">102x</span>
 <span class="cline-any cline-yes">102x</span>
 <span class="cline-any cline-yes">102x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -488,7 +495,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">339x</span>
+<span class="cline-any cline-yes">340x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
@@ -562,6 +569,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -619,7 +631,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">971x</span>
+<span class="cline-any cline-yes">995x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
@@ -685,11 +697,12 @@ export class DataMapperInitializationModel {
   admHttpTimeout = 30000; // 30 seconds
   initializationErrorOccurred = false;
 &nbsp;
-  baseJavaInspectionServiceUrl?: string;
-  baseXMLInspectionServiceUrl?: string;
-  baseJSONInspectionServiceUrl?: string;
   baseCSVInspectionServiceUrl?: string;
+  baseJavaInspectionServiceUrl?: string;
+  baseJSONInspectionServiceUrl?: string;
+  baseKafkaConnectInspectionServiceUrl?: string;
   baseMappingServiceUrl?: string;
+  baseXMLInspectionServiceUrl?: string;
 &nbsp;
   xsrfHeaderName?: string;
   xsrfCookieName?: string;
@@ -856,6 +869,11 @@ export class ConfigModel {
             '&amp;collectionClassName=' + docInitModel.collectionClassName;
         }
       }
+    } else <span class="missing-if-branch" title="if path not taken" >I</span>if (
+      docDef.type === DocumentType.KAFKA_AVRO ||
+      docDef.type === DocumentType.KAFKA_JSON
+    ) {
+<span class="cstat-no" title="statement not covered" >      docDef.uri = 'atlas:kafkaconnect:' + docDef.id;</span>
     } else {
       docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
     }
@@ -945,7 +963,7 @@ export class ConfigModel {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Feb 08 2022 15:12:13 GMT+0000 (Coordinated Universal Time)
+                at Wed Feb 09 2022 00:48:49 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
