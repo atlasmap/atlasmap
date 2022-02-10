@@ -1,0 +1,30 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.v2.DataSource",
+        "id": "source",
+        "name": "source",
+        "description": "source",
+        "uri": "atlas:csv:source?format=Default&headers=A%2CB%2CC",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "target",
+        "name": "target",
+        "description": "target",
+        "uri": "atlas:json:target",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": []
+    },
+    "name": "UI.0",
+    "lookupTables": { "lookupTable": [] },
+    "constants": { "constant": [] },
+    "properties": { "property": [] }
+  }
+}

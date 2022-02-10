@@ -148,7 +148,26 @@ export class InitializationService {
       this.updateLoadingStatus('Loading source/target documents.');
       this.cfg.documentService.inspectDocuments().subscribe({
         next: () => {
+          // updateStatus() will nullify this.cfg.preloadedMappingJson
+          // let's store it for comparisson below
+          const preloadedMappingJson = this.cfg.preloadedMappingJson;
           this.updateStatus();
+          this.systemInitializedSource.subscribe(() => {
+            if (preloadedMappingJson) {
+              const maybeUpdatedMappingJson = JSON.stringify(
+                MappingSerializer.serializeMappings(this.cfg)
+              );
+              // inspection might change the mapping, for example the preloaded
+              // mapping could have a document URI that is no longer the same
+              // after inspection, e.g. when parameters change on the provided
+              // documents and differ from the parameters embedded in the
+              // provided mapping; in that case we need to notify that mapping
+              // has been changed
+              if (preloadedMappingJson !== maybeUpdatedMappingJson) {
+                this.cfg.mappingService.notifyMappingUpdated();
+              }
+            }
+          });
         },
       });
 
