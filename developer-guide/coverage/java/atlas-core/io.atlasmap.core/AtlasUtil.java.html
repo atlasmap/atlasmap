@@ -640,7 +640,7 @@ import io.atlasmap.v2.ValidationStatus;
      * @param includePaths paths
      */
     public static void excludeNotRequestedFields(Document document, List&lt;String&gt; includePaths) {
-<span class="fc bfc" id="L643" title="All 4 branches covered.">        if (includePaths == null || includePaths.isEmpty()) {</span>
+<span class="pc bpc" id="L643" title="1 of 6 branches missed.">        if (document == null || includePaths == null || includePaths.isEmpty()) {</span>
 <span class="fc" id="L644">            return;</span>
         }
 

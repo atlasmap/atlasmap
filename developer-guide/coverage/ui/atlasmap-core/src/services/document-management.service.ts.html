@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.67% </span>
+                <span class="strong">66.77% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>224/331</span>
+                <span class='fraction'>225/337</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">49.35% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>76/152</span>
+                <span class='fraction'>76/154</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.22% </span>
+                <span class="strong">80.43% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>37/45</span>
+                <span class='fraction'>37/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.33% </span>
+                <span class="strong">67.32% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>205/300</span>
+                <span class='fraction'>206/306</span>
             </div>
         
             
@@ -914,7 +914,17 @@
 <a name='L856'></a><a href='#L856'>856</a>
 <a name='L857'></a><a href='#L857'>857</a>
 <a name='L858'></a><a href='#L858'>858</a>
-<a name='L859'></a><a href='#L859'>859</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L859'></a><a href='#L859'>859</a>
+<a name='L860'></a><a href='#L860'>860</a>
+<a name='L861'></a><a href='#L861'>861</a>
+<a name='L862'></a><a href='#L862'>862</a>
+<a name='L863'></a><a href='#L863'>863</a>
+<a name='L864'></a><a href='#L864'>864</a>
+<a name='L865'></a><a href='#L865'>865</a>
+<a name='L866'></a><a href='#L866'>866</a>
+<a name='L867'></a><a href='#L867'>867</a>
+<a name='L868'></a><a href='#L868'>868</a>
+<a name='L869'></a><a href='#L869'>869</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1337,6 +1347,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1357,6 +1375,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1365,6 +1384,7 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2195,6 +2215,14 @@ export class DocumentManagementService {
     );
   }
 &nbsp;
+<span class="fstat-no" title="function not covered" >  private r</span>emoveDoc(docDef: DocumentDefinition, isSource: boolean) {
+<span class="cstat-no" title="statement not covered" >    if (isSource) {</span>
+<span class="cstat-no" title="statement not covered" >      CommonUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);</span>
+    } else {
+<span class="cstat-no" title="statement not covered" >      CommonUtil.removeItemFromArray(docDef, this.cfg.targetDocs);</span>
+    }
+  }
+&nbsp;
   /**
    * Add or replace the {@link DocumentDefinition} object stored in {@link ConfigModel}
    * and delegate to {@link inspectDocument} to perform an inspection.
@@ -2213,6 +2241,7 @@ export class DocumentManagementService {
       this.inspectDocument(inspectionModel)
         .then(async (doc: DocumentDefinition) =&gt; {
           <span class="missing-if-branch" title="if path not taken" >I</span>if (doc.fields.length === 0) {
+<span class="cstat-no" title="statement not covered" >            this.removeDoc(docdef, isSource);</span>
 <span class="cstat-no" title="statement not covered" >            if (isSource) {</span>
 <span class="cstat-no" title="statement not covered" >              CommonUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);</span>
             } else {
@@ -2223,6 +2252,7 @@ export class DocumentManagementService {
           resolve(true);
         })
         .catch(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >          this.removeDoc(docdef, isSource);</span>
 <span class="cstat-no" title="statement not covered" >          resolve(false);</span>
         });
     });
@@ -2637,7 +2667,7 @@ export class DocumentManagementService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Feb 09 2022 00:48:49 GMT+0000 (Coordinated Universal Time)
+                at Thu Feb 10 2022 13:26:03 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
