@@ -29,6 +29,7 @@ import atlasmapInspectionMockXmlInstance1Json from '../../../../test-resources/i
 import atlasmapInspectionMockXmlSchema1Json from '../../../../test-resources/inspected/atlasmap-inspection-mock-xml-schema-1.json';
 import atlasmapInspectionOldActionSourceJson from '../../../../test-resources/inspected/atlasmap-inspection-old-action-source.json';
 import atlasmapInspectionOldActionTargetJson from '../../../../test-resources/inspected/atlasmap-inspection-old-action-target.json';
+import atlasmappingCvsToJson from '../../../../test-resources/mapping/atlasmapping-cvs-to-json.json';
 import atlasmappingOldActionJson from '../../../../test-resources/mapping/atlasmapping-old-action.json';
 import ky from 'ky/umd';
 
@@ -228,5 +229,100 @@ describe('InitializationService', () => {
       expect(spyInitialize.calls.count()).toBe(1);
       done();
     });
+  });
+
+  test('notify of mapping changes upon inspection in initialization', (done) => {
+    const c = service.cfg;
+    c.initCfg.baseMappingServiceUrl = 'dummy';
+    c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
+    c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
+    c.initCfg.baseCSVInspectionServiceUrl = 'dummy';
+
+    const source = new DocumentInitializationModel();
+    source.isSource = true;
+    source.type = DocumentType.CSV;
+    source.inspectionType = InspectionType.INSTANCE;
+    source.id = 'source';
+    source.inspectionSource = '1,2,3';
+    source.inspectionParameters = {
+      format: 'Default',
+      headers: 'D,I,F,F,E,R,E,N,T',
+    };
+    source.inspectionResult = `{
+      "CsvInspectionResponse": {
+        "jsonType": "io.atlasmap.csv.v2.CsvInspectionResponse",
+        "csvDocument": {
+          "jsonType": "io.atlasmap.v2.Document",
+          "fields": {
+            "field": [
+              {
+                "jsonType": "io.atlasmap.csv.v2.CsvComplexType",
+                "collectionType": "LIST",
+                "path": "/<>",
+                "fieldType": "COMPLEX",
+                "name": "",
+                "csvFields": {
+                  "csvField": [
+                    {
+                      "jsonType": "io.atlasmap.csv.v2.CsvField",
+                      "path": "/<>/A",
+                      "fieldType": "STRING",
+                      "name": "A"
+                    },
+                    {
+                      "jsonType": "io.atlasmap.csv.v2.CsvField",
+                      "path": "/<>/B",
+                      "fieldType": "STRING",
+                      "name": "B"
+                    },
+                    {
+                      "jsonType": "io.atlasmap.csv.v2.CsvField",
+                      "path": "/<>/C",
+                      "fieldType": "STRING",
+                      "name": "C"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "executionTime": 0
+      }
+    }`;
+    c.addDocument(source);
+
+    const target = new DocumentInitializationModel();
+    target.isSource = false;
+    target.id = 'target';
+    target.type = DocumentType.JSON;
+    target.inspectionResult = JSON.stringify(
+      atlasmapInspectionMockJsonInstanceJson
+    );
+    c.addDocument(target);
+
+    c.preloadedMappingJson = JSON.stringify(atlasmappingCvsToJson);
+
+    spyOn(service, 'runtimeServiceActive').and.callFake(async () => {
+      c.fieldActionService.isInitialized = true;
+      return true;
+    });
+
+    let notifyMappingUpdatedSpy: jasmine.Spy;
+    const notified = new Promise<void>((resolve) => {
+      notifyMappingUpdatedSpy = spyOn(
+        c.mappingService,
+        'notifyMappingUpdated'
+      ).and.callFake(() => {
+        resolve();
+      });
+    });
+
+    service
+      .initialize()
+      .then(() => notified.then(done))
+      .catch((error) => {
+        fail(error);
+      });
   });
 });
