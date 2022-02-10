@@ -421,6 +421,14 @@ export class DocumentManagementService {
     );
   }
 
+  private removeDoc(docDef: DocumentDefinition, isSource: boolean) {
+    if (isSource) {
+      CommonUtil.removeItemFromArray(docDef, this.cfg.sourceDocs);
+    } else {
+      CommonUtil.removeItemFromArray(docDef, this.cfg.targetDocs);
+    }
+  }
+
   /**
    * Add or replace the {@link DocumentDefinition} object stored in {@link ConfigModel}
    * and delegate to {@link inspectDocument} to perform an inspection.
@@ -439,6 +447,7 @@ export class DocumentManagementService {
       this.inspectDocument(inspectionModel)
         .then(async (doc: DocumentDefinition) => {
           if (doc.fields.length === 0) {
+            this.removeDoc(docdef, isSource);
             if (isSource) {
               CommonUtil.removeItemFromArray(docdef, this.cfg.sourceDocs);
             } else {
@@ -449,6 +458,7 @@ export class DocumentManagementService {
           resolve(true);
         })
         .catch(() => {
+          this.removeDoc(docdef, isSource);
           resolve(false);
         });
     });

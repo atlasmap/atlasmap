@@ -242,19 +242,24 @@ export async function importInstanceSchema(
         inspectionType,
         inspectionParameters,
       )
-      .then(() => {
-        cfg.fileService.updateDigestFile().finally(() => {
+      .then((importOk: boolean) => {
+        if (importOk) {
+          cfg.fileService.updateDigestFile().finally(() => {
+            cfg.errorService.addError(
+              new ErrorInfo({
+                message: `${selectedFile.name} import complete.`,
+                level: ErrorLevel.INFO,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.USER,
+              }),
+            );
+            cfg.initializationService.updateStatus();
+            resolve(true);
+          });
+        } else {
           cfg.initializationService.updateStatus();
-          cfg.errorService.addError(
-            new ErrorInfo({
-              message: `${selectedFile.name} import complete.`,
-              level: ErrorLevel.INFO,
-              scope: ErrorScope.APPLICATION,
-              type: ErrorType.USER,
-            }),
-          );
-          resolve(true);
-        });
+          resolve(false);
+        }
       });
   });
 }
