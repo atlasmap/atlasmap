@@ -66,7 +66,7 @@ export const DocumentActions: FunctionComponent<IDocumentActions> = ({
         </DropdownItem>,
         <DropdownSeparator key={'sep-1'} />,
         <DropdownItem icon={<TrashIcon />} key={'delete'} onClick={onDelete}>
-          Remove instance or schema file
+          Remove document
         </DropdownItem>,
       ]}
     />
