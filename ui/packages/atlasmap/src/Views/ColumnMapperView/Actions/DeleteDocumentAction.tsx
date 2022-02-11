@@ -28,13 +28,13 @@ export const DeleteDocumentAction: FunctionComponent<
   <Tooltip
     position={'auto'}
     enableFlip={true}
-    content={<div>Remove instance or schema file</div>}
+    content={<div>Remove document</div>}
   >
     <Button
       variant="plain"
       onClick={onClick}
-      aria-label="Remove instance or schema file"
-      data-testid={`remove-${id}-instance-or-schema-file-button`}
+      aria-label="Remove document"
+      data-testid={`remove-${id}-document-button`}
     >
       <TrashIcon />
     </Button>
