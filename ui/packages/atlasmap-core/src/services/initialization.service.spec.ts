@@ -21,6 +21,7 @@ import {
 
 import { DocumentInitializationModel } from '../models/config.model';
 import { InitializationService } from '../services/initialization.service';
+import { Subject } from 'rxjs';
 import { TextEncoder } from 'text-encoding';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
 import atlasmapInspectionMockJsonInstanceJson from '../../../../test-resources/inspected/atlasmap-inspection-mock-json-instance.json';
@@ -32,6 +33,7 @@ import atlasmapInspectionOldActionTargetJson from '../../../../test-resources/in
 import atlasmappingCvsToJson from '../../../../test-resources/mapping/atlasmapping-cvs-to-json.json';
 import atlasmappingOldActionJson from '../../../../test-resources/mapping/atlasmapping-old-action.json';
 import ky from 'ky/umd';
+import { take } from 'rxjs/operators';
 
 describe('InitializationService', () => {
   let service: InitializationService;
@@ -230,24 +232,30 @@ describe('InitializationService', () => {
     });
   });
 
-  test('notify of mapping changes upon inspection in initialization', (done) => {
-    const c = service.cfg;
-    c.initCfg.baseMappingServiceUrl = 'dummy';
-    c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
-    c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
-    c.initCfg.baseCSVInspectionServiceUrl = 'dummy';
+  // repeat the test three times to test that the notifications are sent only once,
+  // i.e. that they do not exponentially accumulate, that's why we use the singleton
+  // service here, as initialization service is usually a singleton at runtime:
+  const serviceNotificationCase = new InitializationService(ky);
+  test.each([1, 2, 3])(
+    'notify of mapping changes upon inspection in initialization run(%i)',
+    (_, done: any) => {
+      const c = serviceNotificationCase.cfg;
+      c.initCfg.baseMappingServiceUrl = 'dummy';
+      c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
+      c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
+      c.initCfg.baseCSVInspectionServiceUrl = 'dummy';
 
-    const source = new DocumentInitializationModel();
-    source.isSource = true;
-    source.type = DocumentType.CSV;
-    source.inspectionType = InspectionType.INSTANCE;
-    source.id = 'source';
-    source.inspectionSource = '1,2,3';
-    source.inspectionParameters = {
-      format: 'Default',
-      headers: 'D,I,F,F,E,R,E,N,T',
-    };
-    source.inspectionResult = `{
+      const source = new DocumentInitializationModel();
+      source.isSource = true;
+      source.type = DocumentType.CSV;
+      source.inspectionType = InspectionType.INSTANCE;
+      source.id = 'source';
+      source.inspectionSource = '1,2,3';
+      source.inspectionParameters = {
+        format: 'Default',
+        headers: 'D,I,F,F,E,R,E,N,T',
+      };
+      source.inspectionResult = `{
       "CsvInspectionResponse": {
         "jsonType": "io.atlasmap.csv.v2.CsvInspectionResponse",
         "csvDocument": {
@@ -289,39 +297,44 @@ describe('InitializationService', () => {
         "executionTime": 0
       }
     }`;
-    c.addDocument(source);
+      c.addDocument(source);
 
-    const target = new DocumentInitializationModel();
-    target.isSource = false;
-    target.id = 'target';
-    target.type = DocumentType.JSON;
-    target.inspectionResult = JSON.stringify(
-      atlasmapInspectionMockJsonInstanceJson
-    );
-    c.addDocument(target);
+      const target = new DocumentInitializationModel();
+      target.isSource = false;
+      target.id = 'target';
+      target.type = DocumentType.JSON;
+      target.inspectionResult = JSON.stringify(
+        atlasmapInspectionMockJsonInstanceJson
+      );
+      c.addDocument(target);
 
-    c.preloadedMappingJson = JSON.stringify(atlasmappingCvsToJson);
+      c.preloadedMappingJson = JSON.stringify(atlasmappingCvsToJson);
 
-    spyOn(service, 'runtimeServiceActive').and.callFake(async () => {
-      c.fieldActionService.isInitialized = true;
-      return true;
-    });
+      spyOn(serviceNotificationCase, 'runtimeServiceActive').and.callFake(
+        async () => {
+          c.fieldActionService.isInitialized = true;
+          return true;
+        }
+      );
 
-    let notifyMappingUpdatedSpy: jasmine.Spy;
-    const notified = new Promise<void>((resolve) => {
-      notifyMappingUpdatedSpy = spyOn(
+      const notified = new Subject<void>();
+      const notifyMappingUpdatedSpy = spyOn(
         c.mappingService,
         'notifyMappingUpdated'
-      ).and.callFake(() => {
-        resolve();
-      });
-    });
+      ).and.callFake(() => notified.next());
 
-    service
-      .initialize()
-      .then(() => notified.then(done))
-      .catch((error) => {
-        fail(error);
-      });
-  });
+      serviceNotificationCase
+        .initialize()
+        .then(() => {
+          // we take two (at most), but we expect only one
+          notified.pipe(take(2)).subscribe(() => {
+            expect(notifyMappingUpdatedSpy.calls.count()).toBe(1);
+            done();
+          });
+        })
+        .catch((error) => {
+          fail(error);
+        });
+    }
+  );
 });
