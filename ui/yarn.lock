@@ -16944,11 +16944,11 @@ react-dev-utils@^10.2.1:
     text-table "0.2.0"
 
 react-dnd-html5-backend@^15.1.0:
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-15.1.0.tgz#f032ba51e1ac5f630864b032eca59fabd0f39043"
-  integrity sha512-1G8odVnpBuGP99M9z8a4bml0SMEfCRy9v0GXYJwcQUyGKYAsJ+R2Cm3Z0KJe7nsd8toKQf+4QkEGLCXQGnTm0A==
+  version "15.1.2"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-15.1.2.tgz#85e2c5ad57e87190495756f68f44fd89299062fb"
+  integrity sha512-mem9QbutUF+aA2YC1y47G3ECjnYV/sCYKSnu5Jd7cbg3fLMPAwbnTf/JayYdnCH5l3eg9akD9dQt+cD0UdF8QQ==
   dependencies:
-    dnd-core "15.1.0"
+    dnd-core "15.1.1"
 
 react-dnd-touch-backend@^15.1.0:
   version "15.1.0"
