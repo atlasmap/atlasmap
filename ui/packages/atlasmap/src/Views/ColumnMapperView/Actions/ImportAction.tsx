@@ -102,14 +102,15 @@ export const ImportDocumentTypeItem: FunctionComponent<{
 
   useEffect(() => {
     if (previouslyUploadedFiles.current !== files) {
-      previouslyUploadedFiles.current = files;
       if (files?.length === 1) {
-        previouslyUploadedFiles.current = null;
         onFile(
           files[0],
           importCandidate[importDocumentTypeIndex].documentType,
           importCandidate[importDocumentTypeIndex].inspectionType,
         );
+        previouslyUploadedFiles.current = null;
+      } else {
+        previouslyUploadedFiles.current = files;
       }
     }
   }, [files, importDocumentTypeIndex, onFile, onImport]);

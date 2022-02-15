@@ -138,10 +138,11 @@ export const ImportAtlasFileToolbarItem: FunctionComponent<{
 
   useEffect(() => {
     if (previouslyUploadedFiles.current !== files) {
-      previouslyUploadedFiles.current = files;
       if (files?.length === 1) {
-        previouslyUploadedFiles.current = null;
         onFile(files[0]);
+        previouslyUploadedFiles.current = null;
+      } else {
+        previouslyUploadedFiles.current = files;
       }
     }
   }, [files, onFile]);
