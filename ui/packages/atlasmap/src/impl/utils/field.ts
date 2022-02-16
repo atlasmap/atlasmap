@@ -147,7 +147,7 @@ export function getPropertyTypeIndex(
  * @param source
  * @param target
  */
-export function createMapping(source: Field | undefined, target?: Field): void {
+export async function createMapping(source: Field | undefined, target?: Field) {
   const cfg = ConfigModel.getConfig();
   const ms = initializationService.cfg.mappingService;
 
@@ -200,7 +200,7 @@ export function createMapping(source: Field | undefined, target?: Field): void {
     }
   }
   if (source) {
-    cfg.mappingService.addNewMapping(source, false);
+    await cfg.mappingService.addNewMapping(source, false);
   } else {
     cfg.mappingService.newMapping();
   }
