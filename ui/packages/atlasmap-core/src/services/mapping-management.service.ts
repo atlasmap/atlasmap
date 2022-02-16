@@ -504,16 +504,17 @@ export class MappingManagementService {
    * @param selectedField
    * @param compoundSelection - indicates a compound-selection (ctrl/cmd-M1) if true, standard mouse click if false.
    */
-  addNewMapping(selectedField: Field, compoundSelection: boolean): void {
+  async addNewMapping(selectedField: Field, compoundSelection: boolean) {
     if (!compoundSelection) {
-      this.deselectMapping();
+      this.cfg.showMappingDetailTray = false;
+      this.cfg.mappings!.activeMapping = null;
     }
     const mapping: MappingModel = new MappingModel();
     if (selectedField != null) {
       mapping.addField(selectedField, false);
       this.updateTransition(mapping);
       this.selectMapping(mapping);
-      this.notifyMappingUpdated();
+      await this.notifyMappingUpdated();
     } else {
       this.selectMapping(mapping);
     }
