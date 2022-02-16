@@ -8,6 +8,7 @@ io.atlasmap.converters.CharBufferConverter
 io.atlasmap.converters.CharSequenceConverter
 io.atlasmap.converters.DateConverter
 io.atlasmap.converters.DoubleConverter
+io.atlasmap.converters.EnumConverter
 io.atlasmap.converters.FloatConverter
 io.atlasmap.converters.GregorianCalendarConverter
 io.atlasmap.converters.IntegerConverter

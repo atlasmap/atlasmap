@@ -38,11 +38,11 @@ public class JavaEnumField extends Field implements Serializable {
 
     /**
      * Gets the value of the name property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getName() {
         return name;
@@ -50,11 +50,11 @@ public class JavaEnumField extends Field implements Serializable {
 
     /**
      * Sets the value of the name property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setName(String value) {
         this.name = value;
@@ -62,11 +62,11 @@ public class JavaEnumField extends Field implements Serializable {
 
     /**
      * Gets the value of the ordinal property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link Integer }
-     *     
+     *
      */
     public Integer getOrdinal() {
         return ordinal;
@@ -74,11 +74,11 @@ public class JavaEnumField extends Field implements Serializable {
 
     /**
      * Sets the value of the ordinal property.
-     * 
+     *
      * @param value
      *     allowed object is
      *     {@link Integer }
-     *     
+     *
      */
     public void setOrdinal(Integer value) {
         this.ordinal = value;
@@ -86,25 +86,26 @@ public class JavaEnumField extends Field implements Serializable {
 
     /**
      * Gets the value of the className property.
-     * 
+     *
      * @return
      *     possible object is
      *     {@link String }
-     *     
+     *
      */
     public String getClassName() {
         return className;
     }
 
     /**
-     * Sets the value of the className property.
-     * 
+     * Sets the value of the className property and the format property for Enum conversion purposes.
+     *
      * @param value
      *     allowed object is
      *     {@link String }
-     *     
+     *
      */
     public void setClassName(String value) {
+        this.format = value;
         this.className = value;
     }
 

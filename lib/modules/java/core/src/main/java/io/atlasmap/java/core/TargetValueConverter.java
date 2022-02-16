@@ -96,7 +96,7 @@ public class TargetValueConverter {
             if (targetField.getFieldType() == null) {
                 targetField.setFieldType(conversionService.fieldTypeFromClass(clazz));
             }
-            if (targetField.getFieldType() == FieldType.COMPLEX) {
+            if (targetField.getFieldType() == FieldType.COMPLEX || targetField.getFieldType() == FieldType.ENUM) {
                 targetClassName = clazz != null && !Modifier.isAbstract(clazz.getModifiers()) ? clazz.getName() : null;
                 if (targetField instanceof JavaField) {
                     ((JavaField)targetField).setClassName(targetClassName);
@@ -106,30 +106,26 @@ public class TargetValueConverter {
             }
         }
 
-        if (sourceField instanceof JavaEnumField || targetField instanceof JavaEnumField) {
-            if (!(sourceField instanceof JavaEnumField) || !(targetField instanceof JavaEnumField)) {
-                AtlasUtil.addAudit(session, targetField, String.format(
-                        "Value conversion between enum fields and non-enum fields is not yet supported: sourceType=%s targetType=%s targetPath=%s msg=%s",
-                        sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath()),
-                        AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);
-            }
+        if (sourceField instanceof JavaEnumField && targetField instanceof JavaEnumField) {
             populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);
             return;
         }
 
-        JavaField javaTargetField = (JavaField) targetField;
-        if (sourceValue == null) {
-            if (targetField.getFieldType() != FieldType.COMPLEX) {
-                AtlasUtil.addAudit(session, targetField, String.format(
-                        "Null sourceValue for targetDocId=%s, targetPath=%s", targetField.getDocId(), targetField.getPath()),
+        if (targetField instanceof JavaField) {
+            JavaField javaTargetField = (JavaField) targetField;
+            if (sourceValue == null) {
+                if (targetField.getFieldType() != FieldType.COMPLEX) {
+                    AtlasUtil.addAudit(session, targetField, String.format(
+                            "Null sourceValue for targetDocId=%s, targetPath=%s", targetField.getDocId(), targetField.getPath()),
                         AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);
-                targetField.setValue(null);
-                return;
-            }
-            if (javaTargetField.getClassName() != null) {
-                Object created = writerUtil.instantiateObject(writerUtil.loadClass(javaTargetField.getClassName()));
-                javaTargetField.setValue(created);
-                return;
+                    targetField.setValue(null);
+                    return;
+                }
+                if (javaTargetField.getClassName() != null) {
+                    Object created = writerUtil.instantiateObject(writerUtil.loadClass(javaTargetField.getClassName()));
+                    javaTargetField.setValue(created);
+                    return;
+                }
             }
         }
 
@@ -198,7 +194,7 @@ public class TargetValueConverter {
                 targetField.setFieldType(conversionService.fieldTypeFromClass(targetClazz));
             }
             if (conversionService.isConvertionAvailableFor(sourceValue, targetClazz)) {
-                return conversionService.convertType(sourceValue, null, targetClazz, null);
+                return conversionService.convertType(sourceValue, null, targetClazz, targetField.getFormat());
             } else {
                 return null;
             }
