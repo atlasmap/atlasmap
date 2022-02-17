@@ -48,6 +48,8 @@ public enum FieldType {
     DECIMAL("Decimal"),
     /** Double. */
     DOUBLE("Double"),
+    /** Enum. */
+    ENUM("Enum"),
     /** Float. */
     FLOAT("Float"),
     /** Integer. */
@@ -76,7 +78,7 @@ public enum FieldType {
     UNSIGNED_SHORT("Unsigned Short"),
     /** Unsupported. */
     UNSUPPORTED("Unsupported");
-  
+
     private final String value;
 
     /**

@@ -1,0 +1,60 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "fullAddress",
+          "fieldType" : "STRING",
+          "modifiers" : {
+            "modifier" : [ ]
+          }
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+          "path" : "statesLong",
+          "fieldType" : "ENUM",
+          "name" : "statesLong"
+        } ],
+        "id" : "map.fullAddress.statesLong"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "mappingType" : "MAP",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+          "path" : "statesShort",
+          "fieldType" : "ENUM",
+          "name" : "statesShort"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "path" : "department",
+          "fieldType" : "STRING",
+          "modifiers" : {
+            "modifier" : [ ]
+          }
+        } ],
+        "id" : "map.statesShort.department"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "thisis_a_valid.name"
+  }
+}

@@ -122,6 +122,26 @@ public class JavaJavaComplexTest extends AtlasMappingBaseTest {
     }
 
     @Test
+    public void testEnumAndString() throws Exception {
+        AtlasContext context = atlasContextFactory
+            .createContext(new File("src/test/resources/javaToJava/atlasmapping-enum.json").toURI());
+
+        TargetTestClass input = new TargetTestClass();
+
+        input.setFullAddress("Alabama");
+        input.setStatesShort(StateEnumClassShort.AL);
+        AtlasSession session = context.createSession();
+        session.setSourceDocument("io.atlasmap.java.test.TargetTestClass", input);
+        context.process(session);
+        assertFalse(session.hasErrors(), printAudit(session));
+        TargetTestClass object = (TargetTestClass) session.getDefaultTargetDocument();
+        assertNotNull(object);
+        assertEquals(TargetTestClass.class.getName(), object.getClass().getName());
+        assertEquals(StateEnumClassLong.Alabama, object.getStatesLong());
+        assertEquals("AL", object.getDepartment());
+    }
+
+    @Test
     public void testProcessJavaJavaComplexWithAbstractBasic() throws Exception {
         AtlasContext context = atlasContextFactory
                 .createContext(new File("src/test/resources/javaToJava/atlasmapping-complex-abstract.json").toURI());

@@ -345,11 +345,15 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     private ConverterMethodHolder getConverter(Object sourceValue, Class<?> targetType) {
         Class<?> boxedSourceClass = sourceValue.getClass();
-        if (sourceValue.getClass().isPrimitive()) {
+        if (sourceValue.getClass().isEnum()) {
+            boxedSourceClass = Enum.class;
+        } else if (sourceValue.getClass().isPrimitive()) {
             boxedSourceClass = boxOrUnboxPrimitive(boxedSourceClass);
         }
         Class<?> boxedTargetClass = targetType;
-        if (targetType.isPrimitive()) {
+        if (targetType.isEnum()) {
+            boxedTargetClass = Enum.class;
+        } else if (targetType.isPrimitive()) {
             boxedTargetClass = boxOrUnboxPrimitive(boxedTargetClass);
         }
 
@@ -580,6 +584,8 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
             return java.lang.String.class;
         case TIME:
             return java.time.LocalTime.class;
+        case ENUM:
+            return java.lang.Enum.class;
         default:
             throw new IllegalArgumentException(
                     String.format("Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService",

@@ -280,4 +280,25 @@ public class StringConverter implements AtlasConverter<String> {
         return delegate.toZonedDateTime(value);
     }
 
+    /**
+     * Converts to {@link Enum}.
+     * @param value value
+     * @param sourceFormat not supported
+     * @param targetFormat enum class name
+     * @throws AtlasConversionException not an enum
+     * @return converted
+     */
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.ENUM)
+    public Enum toEnum(String value, String sourceFormat, String targetFormat) throws AtlasConversionException {
+        Class aClass;
+        try {
+            aClass = Class.forName(targetFormat);
+        } catch (ClassNotFoundException e) {
+            throw new AtlasConversionException(e);
+        }
+        if (!aClass.isEnum()) {
+            throw new AtlasConversionException("targetFormat must be of Enum type: " + targetFormat);
+        }
+        return Enum.valueOf(aClass, value);
+    }
 }
