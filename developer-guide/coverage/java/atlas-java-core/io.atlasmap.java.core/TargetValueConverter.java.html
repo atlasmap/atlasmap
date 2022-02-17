@@ -96,7 +96,7 @@ public class TargetValueConverter {
 <span class="fc bfc" id="L96" title="All 2 branches covered.">            if (targetField.getFieldType() == null) {</span>
 <span class="fc" id="L97">                targetField.setFieldType(conversionService.fieldTypeFromClass(clazz));</span>
             }
-<span class="fc bfc" id="L99" title="All 2 branches covered.">            if (targetField.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc bfc" id="L99" title="All 4 branches covered.">            if (targetField.getFieldType() == FieldType.COMPLEX || targetField.getFieldType() == FieldType.ENUM) {</span>
 <span class="pc bpc" id="L100" title="1 of 4 branches missed.">                targetClassName = clazz != null &amp;&amp; !Modifier.isAbstract(clazz.getModifiers()) ? clazz.getName() : null;</span>
 <span class="fc bfc" id="L101" title="All 2 branches covered.">                if (targetField instanceof JavaField) {</span>
 <span class="fc" id="L102">                    ((JavaField)targetField).setClassName(targetClassName);</span>
@@ -106,36 +106,32 @@ public class TargetValueConverter {
             }
         }
 
-<span class="pc bpc" id="L109" title="1 of 4 branches missed.">        if (sourceField instanceof JavaEnumField || targetField instanceof JavaEnumField) {</span>
-<span class="pc bpc" id="L110" title="2 of 4 branches missed.">            if (!(sourceField instanceof JavaEnumField) || !(targetField instanceof JavaEnumField)) {</span>
-<span class="nc" id="L111">                AtlasUtil.addAudit(session, targetField, String.format(</span>
-                        &quot;Value conversion between enum fields and non-enum fields is not yet supported: sourceType=%s targetType=%s targetPath=%s msg=%s&quot;,
-<span class="nc" id="L113">                        sourceField.getFieldType(), targetField.getFieldType(), targetField.getPath()),</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">                        AuditStatus.ERROR, sourceValue != null ? sourceValue.toString() : null);</span>
-            }
-<span class="fc" id="L116">            populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);</span>
-<span class="fc" id="L117">            return;</span>
+<span class="fc bfc" id="L109" title="All 4 branches covered.">        if (sourceField instanceof JavaEnumField &amp;&amp; targetField instanceof JavaEnumField) {</span>
+<span class="fc" id="L110">            populateEnumValue(session, lookupTable, (JavaEnumField) sourceField, (JavaEnumField) targetField);</span>
+<span class="fc" id="L111">            return;</span>
         }
 
-<span class="fc" id="L120">        JavaField javaTargetField = (JavaField) targetField;</span>
-<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (sourceValue == null) {</span>
-<span class="pc bpc" id="L122" title="1 of 2 branches missed.">            if (targetField.getFieldType() != FieldType.COMPLEX) {</span>
-<span class="nc" id="L123">                AtlasUtil.addAudit(session, targetField, String.format(</span>
-<span class="nc" id="L124">                        &quot;Null sourceValue for targetDocId=%s, targetPath=%s&quot;, targetField.getDocId(), targetField.getPath()),</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
-<span class="nc" id="L126">                targetField.setValue(null);</span>
-<span class="nc" id="L127">                return;</span>
-            }
-<span class="pc bpc" id="L129" title="1 of 2 branches missed.">            if (javaTargetField.getClassName() != null) {</span>
-<span class="fc" id="L130">                Object created = writerUtil.instantiateObject(writerUtil.loadClass(javaTargetField.getClassName()));</span>
-<span class="fc" id="L131">                javaTargetField.setValue(created);</span>
-<span class="fc" id="L132">                return;</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (targetField instanceof JavaField) {</span>
+<span class="fc" id="L115">            JavaField javaTargetField = (JavaField) targetField;</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">            if (sourceValue == null) {</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                if (targetField.getFieldType() != FieldType.COMPLEX) {</span>
+<span class="nc" id="L118">                    AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="nc" id="L119">                            &quot;Null sourceValue for targetDocId=%s, targetPath=%s&quot;, targetField.getDocId(), targetField.getPath()),</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
+<span class="nc" id="L121">                    targetField.setValue(null);</span>
+<span class="nc" id="L122">                    return;</span>
+                }
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">                if (javaTargetField.getClassName() != null) {</span>
+<span class="fc" id="L125">                    Object created = writerUtil.instantiateObject(writerUtil.loadClass(javaTargetField.getClassName()));</span>
+<span class="fc" id="L126">                    javaTargetField.setValue(created);</span>
+<span class="fc" id="L127">                    return;</span>
+                }
             }
         }
 
-<span class="fc" id="L136">        Object targetValue = doConvertTargetValue(session, sourceValue, targetClassName, targetField);</span>
-<span class="fc" id="L137">        targetField.setValue(targetValue);</span>
-<span class="fc" id="L138">    }</span>
+<span class="fc" id="L132">        Object targetValue = doConvertTargetValue(session, sourceValue, targetClassName, targetField);</span>
+<span class="fc" id="L133">        targetField.setValue(targetValue);</span>
+<span class="fc" id="L134">    }</span>
 
     /**
      * Converts target value.
@@ -146,64 +142,64 @@ public class TargetValueConverter {
      */
     public void convertTargetValue(AtlasInternalSession session,
             Object parentObject, Field targetField) throws AtlasException {
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        targetClassName = (targetField instanceof JavaEnumField) ? ((JavaEnumField) targetField).getClassName()</span>
-<span class="fc" id="L151">                : targetClassName;</span>
-<span class="fc" id="L152">        Object targetValue = doConvertTargetValue(session, targetField.getValue(), targetClassName, targetField);</span>
-<span class="fc" id="L153">        targetField.setValue(targetValue);</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        String targetClassName = (targetField instanceof JavaField) ? ((JavaField) targetField).getClassName() : null;</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        targetClassName = (targetField instanceof JavaEnumField) ? ((JavaEnumField) targetField).getClassName()</span>
+<span class="fc" id="L147">                : targetClassName;</span>
+<span class="fc" id="L148">        Object targetValue = doConvertTargetValue(session, targetField.getValue(), targetClassName, targetField);</span>
+<span class="fc" id="L149">        targetField.setValue(targetValue);</span>
+<span class="fc" id="L150">    }</span>
 
     /**
      * Sets the class loader.
      * @param loader class loader
      */
     public void setClassLoader(ClassLoader loader) {
-<span class="nc" id="L161">        this.classLoader = loader;</span>
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L157">        this.classLoader = loader;</span>
+<span class="nc" id="L158">    }</span>
 
     private Object doConvertTargetValue(AtlasInternalSession session, Object sourceValue,
             String targetClassName, Field targetField) throws AtlasException {
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (sourceValue == null) {</span>
-<span class="fc" id="L167">            return null;</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">        if (sourceValue == null) {</span>
+<span class="fc" id="L163">            return null;</span>
         }
 
-<span class="fc" id="L170">        FieldType sourceType = conversionService.fieldTypeFromClass(sourceValue.getClass());</span>
-<span class="fc" id="L171">        FieldType targetType = targetField.getFieldType();</span>
-<span class="fc" id="L172">        Class&lt;?&gt; targetClazz = null;</span>
-<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (targetClassName == null) {</span>
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">            if (targetType != null) {</span>
-<span class="fc" id="L175">                targetClazz = conversionService.classFromFieldType(targetType);</span>
+<span class="fc" id="L166">        FieldType sourceType = conversionService.fieldTypeFromClass(sourceValue.getClass());</span>
+<span class="fc" id="L167">        FieldType targetType = targetField.getFieldType();</span>
+<span class="fc" id="L168">        Class&lt;?&gt; targetClazz = null;</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (targetClassName == null) {</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">            if (targetType != null) {</span>
+<span class="fc" id="L171">                targetClazz = conversionService.classFromFieldType(targetType);</span>
             } else {
-<span class="nc" id="L177">                AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="nc" id="L173">                AtlasUtil.addAudit(session, targetField, String.format(</span>
                                 &quot;Target field doesn't have fieldType nor className: automatic conversion won't work: targetPath=%s&quot;,
-<span class="nc" id="L179">                                targetField.getPath()),</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
+<span class="nc" id="L175">                                targetField.getPath()),</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">                        AuditStatus.WARN, sourceValue != null ? sourceValue.toString() : null);</span>
             }
-<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        } else if (conversionService.isPrimitive(targetClassName)) {</span>
-<span class="nc" id="L183">            targetClazz = conversionService.boxOrUnboxPrimitive(targetClassName);</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        } else if (conversionService.isPrimitive(targetClassName)) {</span>
+<span class="nc" id="L179">            targetClazz = conversionService.boxOrUnboxPrimitive(targetClassName);</span>
         } else {
             try {
-<span class="fc" id="L186">                targetClazz = classLoader.loadClass(targetClassName);</span>
-<span class="nc" id="L187">            } catch (ClassNotFoundException e) {</span>
-<span class="nc" id="L188">                AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L189">                        String.format(&quot;Target field class '%s' was not found: sourceType=%s targetType=%s targetPath=%s msg=%s&quot;,</span>
-<span class="nc" id="L190">                                ((JavaField)targetField).getClassName(), sourceType, targetType, targetField.getPath(), e.getMessage()),</span>
+<span class="fc" id="L182">                targetClazz = classLoader.loadClass(targetClassName);</span>
+<span class="nc" id="L183">            } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L184">                AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L185">                        String.format(&quot;Target field class '%s' was not found: sourceType=%s targetType=%s targetPath=%s msg=%s&quot;,</span>
+<span class="nc" id="L186">                                ((JavaField)targetField).getClassName(), sourceType, targetType, targetField.getPath(), e.getMessage()),</span>
                         AuditStatus.ERROR, null);
-<span class="nc" id="L192">                return null;</span>
-<span class="fc" id="L193">            }</span>
+<span class="nc" id="L188">                return null;</span>
+<span class="fc" id="L189">            }</span>
         }
 
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (targetClazz != null) {</span>
-<span class="fc bfc" id="L197" title="All 2 branches covered.">            if (targetField.getFieldType() == null) {</span>
-<span class="fc" id="L198">                targetField.setFieldType(conversionService.fieldTypeFromClass(targetClazz));</span>
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (targetClazz != null) {</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">            if (targetField.getFieldType() == null) {</span>
+<span class="fc" id="L194">                targetField.setFieldType(conversionService.fieldTypeFromClass(targetClazz));</span>
             }
-<span class="fc bfc" id="L200" title="All 2 branches covered.">            if (conversionService.isConvertionAvailableFor(sourceValue, targetClazz)) {</span>
-<span class="fc" id="L201">                return conversionService.convertType(sourceValue, null, targetClazz, null);</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">            if (conversionService.isConvertionAvailableFor(sourceValue, targetClazz)) {</span>
+<span class="fc" id="L197">                return conversionService.convertType(sourceValue, null, targetClazz, targetField.getFormat());</span>
             } else {
-<span class="fc" id="L203">                return null;</span>
+<span class="fc" id="L199">                return null;</span>
             }
         } else {
-<span class="fc" id="L206">            return sourceValue;</span>
+<span class="fc" id="L202">            return sourceValue;</span>
         }
     }
 
@@ -217,52 +213,52 @@ public class TargetValueConverter {
      */
     @SuppressWarnings(&quot;unchecked&quot;)
     private Object populateEnumValue(AtlasInternalSession session, LookupTable lookupTable, JavaEnumField sourceField, JavaEnumField targetField) {
-<span class="pc bpc" id="L220" title="1 of 4 branches missed.">        if (sourceField == null || sourceField.getValue() == null) {</span>
-<span class="pc bpc" id="L221" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L222">                LOG.debug(&quot;Input enum field or value is null, field: &quot; + sourceField);</span>
+<span class="pc bpc" id="L216" title="1 of 4 branches missed.">        if (sourceField == null || sourceField.getValue() == null) {</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L218">                LOG.debug(&quot;Input enum field or value is null, field: &quot; + sourceField);</span>
             }
-<span class="fc" id="L224">            return null;</span>
+<span class="fc" id="L220">            return null;</span>
         }
 
-<span class="fc" id="L227">        String sourceValue = ((Enum&lt;?&gt;) sourceField.getValue()).name();</span>
-<span class="fc" id="L228">        String targetValue = sourceValue;</span>
-<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (lookupTable != null) {</span>
-<span class="fc bfc" id="L230" title="All 2 branches covered.">            for (LookupEntry e : lookupTable.getLookupEntry()) {</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">                if (e.getSourceValue().equals(sourceValue)) {</span>
-<span class="fc" id="L232">                    targetValue = e.getTargetValue();</span>
-<span class="fc" id="L233">                    break;</span>
+<span class="fc" id="L223">        String sourceValue = ((Enum&lt;?&gt;) sourceField.getValue()).name();</span>
+<span class="fc" id="L224">        String targetValue = sourceValue;</span>
+<span class="fc bfc" id="L225" title="All 2 branches covered.">        if (lookupTable != null) {</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">            for (LookupEntry e : lookupTable.getLookupEntry()) {</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                if (e.getSourceValue().equals(sourceValue)) {</span>
+<span class="fc" id="L228">                    targetValue = e.getTargetValue();</span>
+<span class="fc" id="L229">                    break;</span>
                 }
-<span class="fc" id="L235">            }</span>
+<span class="fc" id="L231">            }</span>
         }
 
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L239">            LOG.debug(&quot;Mapped input enum value '&quot; + sourceValue + &quot;' to output enum value '&quot; + targetValue + &quot;'.&quot;);</span>
+<span class="pc bpc" id="L234" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L235">            LOG.debug(&quot;Mapped input enum value '&quot; + sourceValue + &quot;' to output enum value '&quot; + targetValue + &quot;'.&quot;);</span>
         }
 
-<span class="pc bpc" id="L242" title="1 of 2 branches missed.">        if (targetValue == null) {</span>
-<span class="nc" id="L243">            return null;</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (targetValue == null) {</span>
+<span class="nc" id="L239">            return null;</span>
         }
 
         @SuppressWarnings(&quot;rawtypes&quot;)
-<span class="fc" id="L247">        Class enumClass = null;</span>
+<span class="fc" id="L243">        Class enumClass = null;</span>
         try {
-<span class="fc" id="L249">            enumClass = this.classLoader.loadClass(targetField.getClassName());</span>
-<span class="nc" id="L250">        } catch (Exception e) {</span>
-<span class="nc" id="L251">            AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L252">                    String.format(&quot;Could not find class for output field class '%s': %s&quot;, targetField.getClassName(), e.getMessage()),</span>
+<span class="fc" id="L245">            enumClass = this.classLoader.loadClass(targetField.getClassName());</span>
+<span class="nc" id="L246">        } catch (Exception e) {</span>
+<span class="nc" id="L247">            AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L248">                    String.format(&quot;Could not find class for output field class '%s': %s&quot;, targetField.getClassName(), e.getMessage()),</span>
                     AuditStatus.ERROR, targetValue);
-<span class="nc" id="L254">            return null;</span>
-<span class="fc" id="L255">        }</span>
+<span class="nc" id="L250">            return null;</span>
+<span class="fc" id="L251">        }</span>
 
         try {
-<span class="fc" id="L258">            Enum&lt;?&gt; enumValue = Enum.valueOf(enumClass, targetValue);</span>
-<span class="fc" id="L259">            targetField.setValue(enumValue);</span>
-<span class="fc" id="L260">            return enumValue;</span>
-<span class="fc" id="L261">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L262">            AtlasUtil.addAudit(session, targetField,</span>
-<span class="fc" id="L263">                    String.format(&quot;No enum entry found for value '%s': %s&quot;, targetValue, e.getMessage()),</span>
+<span class="fc" id="L254">            Enum&lt;?&gt; enumValue = Enum.valueOf(enumClass, targetValue);</span>
+<span class="fc" id="L255">            targetField.setValue(enumValue);</span>
+<span class="fc" id="L256">            return enumValue;</span>
+<span class="fc" id="L257">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L258">            AtlasUtil.addAudit(session, targetField,</span>
+<span class="fc" id="L259">                    String.format(&quot;No enum entry found for value '%s': %s&quot;, targetValue, e.getMessage()),</span>
                     AuditStatus.ERROR, targetValue);
-<span class="fc" id="L265">            return null;</span>
+<span class="fc" id="L261">            return null;</span>
         }
     }
 

@@ -280,5 +280,26 @@ import io.atlasmap.v2.FieldType;
 <span class="fc" id="L280">        return delegate.toZonedDateTime(value);</span>
     }
 
+    /**
+     * Converts to {@link Enum}.
+     * @param value value
+     * @param sourceFormat not supported
+     * @param targetFormat enum class name
+     * @throws AtlasConversionException not an enum
+     * @return converted
+     */
+    @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.ENUM)
+    public Enum toEnum(String value, String sourceFormat, String targetFormat) throws AtlasConversionException {
+        Class aClass;
+        try {
+<span class="fc" id="L295">            aClass = Class.forName(targetFormat);</span>
+<span class="nc" id="L296">        } catch (ClassNotFoundException e) {</span>
+<span class="nc" id="L297">            throw new AtlasConversionException(e);</span>
+<span class="fc" id="L298">        }</span>
+<span class="pc bpc" id="L299" title="1 of 2 branches missed.">        if (!aClass.isEnum()) {</span>
+<span class="nc" id="L300">            throw new AtlasConversionException(&quot;targetFormat must be of Enum type: &quot; + targetFormat);</span>
+        }
+<span class="fc" id="L302">        return Enum.valueOf(aClass, value);</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

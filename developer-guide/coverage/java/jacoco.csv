@@ -36,7 +36,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasValidationServ
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseAtlasModule,173,271,20,28,43,80,42,42,27,33
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,521,2013,73,223,118,437,66,130,2,46
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCombineStrategy,14,212,4,34,6,57,7,28,3,13
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService,124,1045,34,191,26,235,35,123,2,25
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService,124,1060,34,196,26,240,35,126,2,25
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCompoundClassLoader,28,123,5,15,8,28,5,12,0,7
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCustomMappingProcessor,34,50,5,3,8,14,4,4,0,4
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseFunctionFactory,0,7,0,0,0,2,0,2,0,2
@@ -61,7 +61,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.converters,StringBufferConverte
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharBufferConverter,119,8,0,0,21,2,21,1,21,1
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,LocalTimeConverter,158,124,39,13,28,18,34,16,8,16
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,FloatConverter,132,292,33,51,19,56,32,32,6,16
-Unit Test Coverage Report/atlas-core,io.atlasmap.converters,StringConverter,19,108,0,0,3,20,3,19,3,19
+Unit Test Coverage Report/atlas-core,io.atlasmap.converters,StringConverter,31,119,1,1,6,24,4,20,3,20
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,StringBuilderConverter,112,15,0,0,20,3,20,2,20,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,GregorianCalendarConverter,2,53,0,0,1,10,1,9,1,9
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,ZonedDateTimeConverter,159,122,42,16,26,18,37,18,8,18
@@ -71,6 +71,7 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharSequenceConverte
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,SqlDateConverter,14,54,8,6,1,7,8,7,1,7
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,NumberConverter,431,43,28,0,70,9,36,1,22,1
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,DoubleConverter,132,318,33,57,19,54,32,35,6,16
+Unit Test Coverage Report/atlas-core,io.atlasmap.converters,EnumConverter,0,6,0,0,0,2,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CharacterConverter,57,137,14,28,5,40,13,25,4,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,CalendarConverter,3,14,2,2,0,3,2,3,0,3
 Unit Test Coverage Report/atlas-core,io.atlasmap.converters,LongConverter,57,233,17,41,6,44,18,33,6,16
@@ -132,7 +133,7 @@ Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasSchemaFactoryWrapper.n
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ValidationScope,28,81,4,0,4,11,3,3,1,3
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,StringMap,0,14,0,2,0,4,0,3,0,2
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasSchemaFactoryWrapper.ExtendedJsonSchema,7,0,0,0,2,0,1,0,1,0
-Unit Test Coverage Report/atlas-model,io.atlasmap.v2,FieldType,5,346,1,3,1,36,1,5,0,4
+Unit Test Coverage Report/atlas-model,io.atlasmap.v2,FieldType,5,357,1,3,1,37,1,5,0,4
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Constant,0,24,0,0,0,10,0,7,0,7
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,LookupTables,0,14,0,2,0,4,0,3,0,2
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Concatenate,0,21,0,0,0,8,0,5,0,5
@@ -247,7 +248,7 @@ Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldWriterU
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,StringUtil,17,96,5,15,6,20,6,8,1,3
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JavaFieldWriter,119,462,21,65,28,118,18,38,1,12
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,JdkPackages,13,931,4,8,4,14,5,7,1,5
-Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,TargetValueConverter,202,351,21,59,33,88,19,28,1,6
+Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,TargetValueConverter,173,353,16,62,30,88,15,31,1,6
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.core,ClassHelper,224,353,44,42,55,67,35,24,7,9
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,JarClassLoader,113,0,12,0,23,0,12,0,6,0
 Unit Test Coverage Report/atlas-java-core,io.atlasmap.java.inspect,ClassInspectionService,343,1926,88,238,88,421,83,119,6,33
@@ -262,7 +263,7 @@ Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,Modifier,31,177,4
 Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,JavaField,476,73,118,0,154,31,61,21,2,21
 Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,JavaClass,436,73,108,0,141,31,56,21,2,21
 Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,JavaFields,106,14,36,2,21,4,20,3,2,2
-Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,JavaEnumField,156,24,38,0,50,10,21,7,2,7
+Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,JavaEnumField,156,27,38,0,50,11,21,7,2,7
 Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,ClassInspectionRequest,435,61,106,0,144,25,58,18,5,18
 Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,ClassInspectionResponse,147,20,36,0,49,8,21,6,3,6
 Unit Test Coverage Report/atlas-java-model,io.atlasmap.java.v2,ModifierList,106,14,36,2,21,4,20,3,2,2

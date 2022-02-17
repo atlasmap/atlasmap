@@ -345,265 +345,271 @@ public class DefaultAtlasConversionService implements AtlasConversionService {
 
     private ConverterMethodHolder getConverter(Object sourceValue, Class&lt;?&gt; targetType) {
 <span class="fc" id="L347">        Class&lt;?&gt; boxedSourceClass = sourceValue.getClass();</span>
-<span class="pc bpc" id="L348" title="1 of 2 branches missed.">        if (sourceValue.getClass().isPrimitive()) {</span>
-<span class="nc" id="L349">            boxedSourceClass = boxOrUnboxPrimitive(boxedSourceClass);</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (sourceValue.getClass().isEnum()) {</span>
+<span class="fc" id="L349">            boxedSourceClass = Enum.class;</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">        } else if (sourceValue.getClass().isPrimitive()) {</span>
+<span class="nc" id="L351">            boxedSourceClass = boxOrUnboxPrimitive(boxedSourceClass);</span>
         }
-<span class="fc" id="L351">        Class&lt;?&gt; boxedTargetClass = targetType;</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (targetType.isPrimitive()) {</span>
-<span class="fc" id="L353">            boxedTargetClass = boxOrUnboxPrimitive(boxedTargetClass);</span>
+<span class="fc" id="L353">        Class&lt;?&gt; boxedTargetClass = targetType;</span>
+<span class="fc bfc" id="L354" title="All 2 branches covered.">        if (targetType.isEnum()) {</span>
+<span class="fc" id="L355">            boxedTargetClass = Enum.class;</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">        } else if (targetType.isPrimitive()) {</span>
+<span class="fc" id="L357">            boxedTargetClass = boxOrUnboxPrimitive(boxedTargetClass);</span>
         }
 
-<span class="fc" id="L356">        ConverterKey converterKey = new ConverterKey(boxedSourceClass.getCanonicalName(),</span>
-<span class="fc" id="L357">                boxedTargetClass.getCanonicalName());</span>
+<span class="fc" id="L360">        ConverterKey converterKey = new ConverterKey(boxedSourceClass.getCanonicalName(),</span>
+<span class="fc" id="L361">                boxedTargetClass.getCanonicalName());</span>
         // use custom converter first
-<span class="fc" id="L359">        ConverterMethodHolder methodHolder = customConverterMethods.get(converterKey);</span>
-<span class="pc bpc" id="L360" title="1 of 2 branches missed.">        if (methodHolder == null) {</span>
+<span class="fc" id="L363">        ConverterMethodHolder methodHolder = customConverterMethods.get(converterKey);</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">        if (methodHolder == null) {</span>
             // try the inbuilt defaults
-<span class="fc" id="L362">            methodHolder = converterMethods.get(converterKey);</span>
+<span class="fc" id="L366">            methodHolder = converterMethods.get(converterKey);</span>
         }
-<span class="fc" id="L364">        return methodHolder;</span>
+<span class="fc" id="L368">        return methodHolder;</span>
     }
 
     @Override
     public Boolean isPrimitive(String className) {
-<span class="fc bfc" id="L369" title="All 2 branches covered.">        if (className == null) {</span>
-<span class="fc" id="L370">            return false;</span>
+<span class="fc bfc" id="L373" title="All 2 branches covered.">        if (className == null) {</span>
+<span class="fc" id="L374">            return false;</span>
         }
-<span class="fc bfc" id="L372" title="All 2 branches covered.">        if (PRIMITIVE_CLASSNAMES.contains(className)) {</span>
-<span class="fc" id="L373">            return true;</span>
+<span class="fc bfc" id="L376" title="All 2 branches covered.">        if (PRIMITIVE_CLASSNAMES.contains(className)) {</span>
+<span class="fc" id="L377">            return true;</span>
         }
-<span class="fc" id="L375">        return false;</span>
+<span class="fc" id="L379">        return false;</span>
     }
 
     @Override
     public Boolean isPrimitive(Class&lt;?&gt; clazz) {
-<span class="fc bfc" id="L380" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L381">            return false;</span>
+<span class="fc bfc" id="L384" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L385">            return false;</span>
         }
-<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName())) {</span>
-<span class="fc" id="L384">            return true;</span>
+<span class="fc bfc" id="L387" title="All 2 branches covered.">        if (PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName())) {</span>
+<span class="fc" id="L388">            return true;</span>
         }
-<span class="fc" id="L386">        return false;</span>
+<span class="fc" id="L390">        return false;</span>
     }
 
     @Override
     public Boolean isPrimitive(FieldType fieldType) {
-<span class="fc bfc" id="L391" title="All 2 branches covered.">        if (fieldType == null) {</span>
-<span class="fc" id="L392">            return false;</span>
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        if (fieldType == null) {</span>
+<span class="fc" id="L396">            return false;</span>
         }
-<span class="fc" id="L394">        return PRIMITIVE_FIELDTYPES.contains(fieldType);</span>
+<span class="fc" id="L398">        return PRIMITIVE_FIELDTYPES.contains(fieldType);</span>
     }
 
     @Override
     public Boolean isBoxedPrimitive(Class&lt;?&gt; clazz) {
-<span class="fc bfc" id="L399" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L400">            return false;</span>
+<span class="fc bfc" id="L403" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L404">            return false;</span>
         }
-<span class="fc" id="L402">        return BOXED_PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName());</span>
+<span class="fc" id="L406">        return BOXED_PRIMITIVE_CLASSNAMES.contains(clazz.getCanonicalName());</span>
     }
 
     @Override
     public Class&lt;?&gt; boxOrUnboxPrimitive(String clazzName) {
-<span class="nc" id="L407">        return classFromFieldType(fieldTypeFromClass(clazzName));</span>
+<span class="nc" id="L411">        return classFromFieldType(fieldTypeFromClass(clazzName));</span>
     }
 
     @Override
     public Class&lt;?&gt; boxOrUnboxPrimitive(Class&lt;?&gt; clazz) {
-<span class="fc bfc" id="L412" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L413">            return clazz;</span>
-<span class="fc bfc" id="L414" title="All 2 branches covered.">        } else if (boolean.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L415">            return Boolean.class;</span>
-<span class="fc bfc" id="L416" title="All 2 branches covered.">        } else if (Boolean.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L417">            return boolean.class;</span>
-<span class="fc bfc" id="L418" title="All 2 branches covered.">        } else if (byte.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L419">            return Byte.class;</span>
-<span class="fc bfc" id="L420" title="All 2 branches covered.">        } else if (Byte.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L421">            return byte.class;</span>
-<span class="fc bfc" id="L422" title="All 2 branches covered.">        } else if (char.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L423">            return Character.class;</span>
-<span class="fc bfc" id="L424" title="All 2 branches covered.">        } else if (Character.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L425">            return char.class;</span>
-<span class="fc bfc" id="L426" title="All 2 branches covered.">        } else if (double.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L427">            return Double.class;</span>
-<span class="fc bfc" id="L428" title="All 2 branches covered.">        } else if (Double.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L429">            return double.class;</span>
-<span class="fc bfc" id="L430" title="All 2 branches covered.">        } else if (float.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L431">            return Float.class;</span>
-<span class="fc bfc" id="L432" title="All 2 branches covered.">        } else if (Float.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L433">            return float.class;</span>
-<span class="fc bfc" id="L434" title="All 2 branches covered.">        } else if (int.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L435">            return Integer.class;</span>
-<span class="fc bfc" id="L436" title="All 2 branches covered.">        } else if (Integer.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L437">            return int.class;</span>
-<span class="fc bfc" id="L438" title="All 2 branches covered.">        } else if (long.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L439">            return Long.class;</span>
-<span class="fc bfc" id="L440" title="All 2 branches covered.">        } else if (Long.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L441">            return long.class;</span>
-<span class="fc bfc" id="L442" title="All 2 branches covered.">        } else if (short.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L443">            return Short.class;</span>
-<span class="fc bfc" id="L444" title="All 2 branches covered.">        } else if (Short.class.getName().equals(clazz.getName())) {</span>
-<span class="fc" id="L445">            return short.class;</span>
+<span class="fc bfc" id="L416" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L417">            return clazz;</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">        } else if (boolean.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L419">            return Boolean.class;</span>
+<span class="fc bfc" id="L420" title="All 2 branches covered.">        } else if (Boolean.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L421">            return boolean.class;</span>
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        } else if (byte.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L423">            return Byte.class;</span>
+<span class="fc bfc" id="L424" title="All 2 branches covered.">        } else if (Byte.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L425">            return byte.class;</span>
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        } else if (char.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L427">            return Character.class;</span>
+<span class="fc bfc" id="L428" title="All 2 branches covered.">        } else if (Character.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L429">            return char.class;</span>
+<span class="fc bfc" id="L430" title="All 2 branches covered.">        } else if (double.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L431">            return Double.class;</span>
+<span class="fc bfc" id="L432" title="All 2 branches covered.">        } else if (Double.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L433">            return double.class;</span>
+<span class="fc bfc" id="L434" title="All 2 branches covered.">        } else if (float.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L435">            return Float.class;</span>
+<span class="fc bfc" id="L436" title="All 2 branches covered.">        } else if (Float.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L437">            return float.class;</span>
+<span class="fc bfc" id="L438" title="All 2 branches covered.">        } else if (int.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L439">            return Integer.class;</span>
+<span class="fc bfc" id="L440" title="All 2 branches covered.">        } else if (Integer.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L441">            return int.class;</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">        } else if (long.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L443">            return Long.class;</span>
+<span class="fc bfc" id="L444" title="All 2 branches covered.">        } else if (Long.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L445">            return long.class;</span>
+<span class="fc bfc" id="L446" title="All 2 branches covered.">        } else if (short.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L447">            return Short.class;</span>
+<span class="fc bfc" id="L448" title="All 2 branches covered.">        } else if (Short.class.getName().equals(clazz.getName())) {</span>
+<span class="fc" id="L449">            return short.class;</span>
         }
-<span class="fc" id="L447">        return clazz;</span>
+<span class="fc" id="L451">        return clazz;</span>
     }
 
     @Override
     public FieldType fieldTypeFromClass(Class&lt;?&gt; clazz) {
-<span class="fc bfc" id="L452" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L453">            return null;</span>
+<span class="fc bfc" id="L456" title="All 2 branches covered.">        if (clazz == null) {</span>
+<span class="fc" id="L457">            return null;</span>
         }
 
-<span class="fc" id="L456">        return fieldTypeFromClass(clazz.getName());</span>
+<span class="fc" id="L460">        return fieldTypeFromClass(clazz.getName());</span>
     }
 
     @Override
     public FieldType fieldTypeFromClass(String className) {
-<span class="fc bfc" id="L461" title="All 4 branches covered.">        if (className == null || className.isEmpty()) {</span>
-<span class="fc" id="L462">            return FieldType.NONE;</span>
+<span class="fc bfc" id="L465" title="All 4 branches covered.">        if (className == null || className.isEmpty()) {</span>
+<span class="fc" id="L466">            return FieldType.NONE;</span>
         }
 
-<span class="pc bpc" id="L465" title="2 of 20 branches missed.">        switch (className) {</span>
+<span class="pc bpc" id="L469" title="2 of 20 branches missed.">        switch (className) {</span>
         case &quot;java.lang.Object&quot;:
-<span class="fc" id="L467">            return FieldType.ANY;</span>
+<span class="fc" id="L471">            return FieldType.ANY;</span>
         case &quot;java.math.BigInteger&quot;:
-<span class="fc" id="L469">            return FieldType.BIG_INTEGER;</span>
+<span class="fc" id="L473">            return FieldType.BIG_INTEGER;</span>
         case &quot;boolean&quot;:
         case &quot;java.lang.Boolean&quot;:
-<span class="fc" id="L472">            return FieldType.BOOLEAN;</span>
+<span class="fc" id="L476">            return FieldType.BOOLEAN;</span>
         case &quot;byte&quot;:
         case &quot;java.lang.Byte&quot;:
-<span class="fc" id="L475">            return FieldType.BYTE;</span>
+<span class="fc" id="L479">            return FieldType.BYTE;</span>
         case &quot;[B&quot;:
         case &quot;[Ljava.lang.Byte&quot;:
-<span class="nc" id="L478">            return FieldType.BYTE_ARRAY;</span>
+<span class="nc" id="L482">            return FieldType.BYTE_ARRAY;</span>
         case &quot;char&quot;:
-<span class="fc" id="L480">            return FieldType.CHAR;</span>
+<span class="fc" id="L484">            return FieldType.CHAR;</span>
         case &quot;java.lang.Character&quot;:
-<span class="fc" id="L482">            return FieldType.CHAR;</span>
+<span class="fc" id="L486">            return FieldType.CHAR;</span>
         case &quot;java.math.BigDecimal&quot;:
-<span class="nc" id="L484">            return FieldType.DECIMAL;</span>
+<span class="nc" id="L488">            return FieldType.DECIMAL;</span>
         case &quot;double&quot;:
         case &quot;java.lang.Double&quot;:
-<span class="fc" id="L487">            return FieldType.DOUBLE;</span>
+<span class="fc" id="L491">            return FieldType.DOUBLE;</span>
         case &quot;float&quot;:
         case &quot;java.lang.Float&quot;:
-<span class="fc" id="L490">            return FieldType.FLOAT;</span>
+<span class="fc" id="L494">            return FieldType.FLOAT;</span>
         case &quot;int&quot;:
         case &quot;java.lang.Integer&quot;:
         case &quot;java.util.concurrent.atomic.AtomicInteger&quot;:
-<span class="fc" id="L494">            return FieldType.INTEGER;</span>
+<span class="fc" id="L498">            return FieldType.INTEGER;</span>
         case &quot;long&quot;:
         case &quot;java.lang.Long&quot;:
         case &quot;java.util.concurrent.atomic.AtomicLong&quot;:
-<span class="fc" id="L498">            return FieldType.LONG;</span>
+<span class="fc" id="L502">            return FieldType.LONG;</span>
         case &quot;java.lang.Number&quot;:
-<span class="fc" id="L500">            return FieldType.NUMBER;</span>
+<span class="fc" id="L504">            return FieldType.NUMBER;</span>
         case &quot;short&quot;:
         case &quot;java.lang.Short&quot;:
-<span class="fc" id="L503">            return FieldType.SHORT;</span>
+<span class="fc" id="L507">            return FieldType.SHORT;</span>
         case &quot;java.nio.CharBuffer&quot;:
         case &quot;java.lang.CharSequence&quot;:
         case &quot;java.lang.String&quot;:
         case &quot;java.lang.StringBuffer&quot;:
         case &quot;java.lang.StringBuilder&quot;:
-<span class="fc" id="L509">            return FieldType.STRING;</span>
+<span class="fc" id="L513">            return FieldType.STRING;</span>
         case &quot;java.sql.Date&quot;:
         case &quot;java.time.LocalDate&quot;:
         case &quot;java.time.Month&quot;:
         case &quot;java.time.MonthDay&quot;:
         case &quot;java.time.Year&quot;:
         case &quot;java.time.YearMonth&quot;:
-<span class="fc" id="L516">            return FieldType.DATE;</span>
+<span class="fc" id="L520">            return FieldType.DATE;</span>
         case &quot;java.sql.Time&quot;:
         case &quot;java.time.LocalTime&quot;:
-<span class="fc" id="L519">            return FieldType.TIME;</span>
+<span class="fc" id="L523">            return FieldType.TIME;</span>
         case &quot;java.sql.Timestamp&quot;:
         case &quot;java.time.LocalDateTime&quot;:
         case &quot;java.util.Date&quot;:
-<span class="fc" id="L523">            return FieldType.DATE_TIME;</span>
+<span class="fc" id="L527">            return FieldType.DATE_TIME;</span>
         case &quot;java.time.ZonedDateTime&quot;:
         case &quot;java.util.Calendar&quot;:
         case &quot;java.util.GregorianCalendar&quot;:
-<span class="fc" id="L527">            return FieldType.DATE_TIME_TZ;</span>
+<span class="fc" id="L531">            return FieldType.DATE_TIME_TZ;</span>
         default:
-<span class="fc" id="L529">            return FieldType.COMPLEX;</span>
+<span class="fc" id="L533">            return FieldType.COMPLEX;</span>
         }
     }
 
     @Override
     public Class&lt;?&gt; classFromFieldType(FieldType fieldType) {
-<span class="fc bfc" id="L535" title="All 2 branches covered.">        if (fieldType == null) {</span>
-<span class="fc" id="L536">            return null;</span>
+<span class="fc bfc" id="L539" title="All 2 branches covered.">        if (fieldType == null) {</span>
+<span class="fc" id="L540">            return null;</span>
         }
 
-<span class="pc bpc" id="L539" title="2 of 21 branches missed.">        switch (fieldType) {</span>
+<span class="pc bpc" id="L543" title="2 of 22 branches missed.">        switch (fieldType) {</span>
         case ANY:
-<span class="fc" id="L541">            return Object.class;</span>
+<span class="fc" id="L545">            return Object.class;</span>
         case BIG_INTEGER:
-<span class="fc" id="L543">            return BigInteger.class;</span>
+<span class="fc" id="L547">            return BigInteger.class;</span>
         case BOOLEAN:
-<span class="fc" id="L545">            return Boolean.class;</span>
+<span class="fc" id="L549">            return Boolean.class;</span>
         case BYTE:
-<span class="fc" id="L547">            return Byte.class;</span>
+<span class="fc" id="L551">            return Byte.class;</span>
         case BYTE_ARRAY:
-<span class="nc" id="L549">            return Byte[].class;</span>
+<span class="nc" id="L553">            return Byte[].class;</span>
         case CHAR:
-<span class="fc" id="L551">            return java.lang.Character.class;</span>
+<span class="fc" id="L555">            return java.lang.Character.class;</span>
         case COMPLEX:
             // COMPLEX doesn't have representative class
-<span class="fc" id="L554">            return null;</span>
+<span class="fc" id="L558">            return null;</span>
         case DATE:
-<span class="fc" id="L556">            return java.time.LocalDate.class;</span>
+<span class="fc" id="L560">            return java.time.LocalDate.class;</span>
         case DATE_TIME:
-<span class="fc" id="L558">            return Date.class;</span>
+<span class="fc" id="L562">            return Date.class;</span>
         case DATE_TZ:
         case TIME_TZ:
         case DATE_TIME_TZ:
-<span class="fc" id="L562">            return java.time.ZonedDateTime.class;</span>
+<span class="fc" id="L566">            return java.time.ZonedDateTime.class;</span>
         case DECIMAL:
-<span class="fc" id="L564">            return java.math.BigDecimal.class;</span>
+<span class="fc" id="L568">            return java.math.BigDecimal.class;</span>
         case DOUBLE:
-<span class="fc" id="L566">            return java.lang.Double.class;</span>
+<span class="fc" id="L570">            return java.lang.Double.class;</span>
         case FLOAT:
-<span class="fc" id="L568">            return java.lang.Float.class;</span>
+<span class="fc" id="L572">            return java.lang.Float.class;</span>
         case INTEGER:
-<span class="fc" id="L570">            return java.lang.Integer.class;</span>
+<span class="fc" id="L574">            return java.lang.Integer.class;</span>
         case LONG:
-<span class="fc" id="L572">            return java.lang.Long.class;</span>
+<span class="fc" id="L576">            return java.lang.Long.class;</span>
         case NONE:
-<span class="fc" id="L574">            return null;</span>
+<span class="fc" id="L578">            return null;</span>
         case NUMBER:
-<span class="fc" id="L576">            return java.lang.Number.class;</span>
+<span class="fc" id="L580">            return java.lang.Number.class;</span>
         case SHORT:
-<span class="fc" id="L578">            return java.lang.Short.class;</span>
+<span class="fc" id="L582">            return java.lang.Short.class;</span>
         case STRING:
-<span class="fc" id="L580">            return java.lang.String.class;</span>
+<span class="fc" id="L584">            return java.lang.String.class;</span>
         case TIME:
-<span class="fc" id="L582">            return java.time.LocalTime.class;</span>
+<span class="fc" id="L586">            return java.time.LocalTime.class;</span>
+        case ENUM:
+<span class="fc" id="L588">            return java.lang.Enum.class;</span>
         default:
-<span class="nc" id="L584">            throw new IllegalArgumentException(</span>
-<span class="nc" id="L585">                    String.format(&quot;Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService&quot;,</span>
+<span class="nc" id="L590">            throw new IllegalArgumentException(</span>
+<span class="nc" id="L591">                    String.format(&quot;Unsupported field type '%s': corresponding Java class needs to be added in DefaultAtlasConversionService&quot;,</span>
                             fieldType));
         }
     }
 
     @Override
     public Boolean isAssignableFieldType(FieldType source, FieldType target) {
-<span class="pc bpc" id="L592" title="2 of 4 branches missed.">        if (source == null || target == null) {</span>
-<span class="nc" id="L593">            return Boolean.FALSE;</span>
+<span class="pc bpc" id="L598" title="2 of 4 branches missed.">        if (source == null || target == null) {</span>
+<span class="nc" id="L599">            return Boolean.FALSE;</span>
         }
-<span class="fc bfc" id="L595" title="All 4 branches covered.">        if (source.equals(target) || target == FieldType.ANY) {</span>
-<span class="fc" id="L596">            return Boolean.TRUE;</span>
+<span class="fc bfc" id="L601" title="All 4 branches covered.">        if (source.equals(target) || target == FieldType.ANY) {</span>
+<span class="fc" id="L602">            return Boolean.TRUE;</span>
         }
 
         // Check umbrella field types
-<span class="fc bfc" id="L600" title="All 2 branches covered.">        if (target == FieldType.NUMBER) {</span>
-<span class="fc bfc" id="L601" title="All 16 branches covered.">            return source == FieldType.BIG_INTEGER || source == FieldType.BYTE || source == FieldType.DECIMAL</span>
+<span class="fc bfc" id="L606" title="All 2 branches covered.">        if (target == FieldType.NUMBER) {</span>
+<span class="fc bfc" id="L607" title="All 16 branches covered.">            return source == FieldType.BIG_INTEGER || source == FieldType.BYTE || source == FieldType.DECIMAL</span>
                     || source == FieldType.DOUBLE || source == FieldType.FLOAT || source == FieldType.INTEGER
                     || source == FieldType.LONG || source == FieldType.SHORT;
         }
 
-<span class="fc" id="L606">        return Boolean.FALSE;</span>
+<span class="fc" id="L612">        return Boolean.FALSE;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -48,51 +48,53 @@ package io.atlasmap.v2;
 <span class="fc" id="L48">    DECIMAL(&quot;Decimal&quot;),</span>
     /** Double. */
 <span class="fc" id="L50">    DOUBLE(&quot;Double&quot;),</span>
+    /** Enum. */
+<span class="fc" id="L52">    ENUM(&quot;Enum&quot;),</span>
     /** Float. */
-<span class="fc" id="L52">    FLOAT(&quot;Float&quot;),</span>
+<span class="fc" id="L54">    FLOAT(&quot;Float&quot;),</span>
     /** Integer. */
-<span class="fc" id="L54">    INTEGER(&quot;Integer&quot;),</span>
+<span class="fc" id="L56">    INTEGER(&quot;Integer&quot;),</span>
     /** Long. */
-<span class="fc" id="L56">    LONG(&quot;Long&quot;),</span>
+<span class="fc" id="L58">    LONG(&quot;Long&quot;),</span>
     /** None. */
-<span class="fc" id="L58">    NONE(&quot;None&quot;),</span>
+<span class="fc" id="L60">    NONE(&quot;None&quot;),</span>
     /** Number. */
-<span class="fc" id="L60">    NUMBER(&quot;Number&quot;),</span>
+<span class="fc" id="L62">    NUMBER(&quot;Number&quot;),</span>
     /** Short. */
-<span class="fc" id="L62">    SHORT(&quot;Short&quot;),</span>
+<span class="fc" id="L64">    SHORT(&quot;Short&quot;),</span>
     /** String. */
-<span class="fc" id="L64">    STRING(&quot;String&quot;),</span>
+<span class="fc" id="L66">    STRING(&quot;String&quot;),</span>
     /** Time. */
-<span class="fc" id="L66">    TIME(&quot;Time&quot;),</span>
+<span class="fc" id="L68">    TIME(&quot;Time&quot;),</span>
     /** Time TZ. */
-<span class="fc" id="L68">    TIME_TZ(&quot;TimeTZ&quot;),</span>
+<span class="fc" id="L70">    TIME_TZ(&quot;TimeTZ&quot;),</span>
     /** Unsigned Byte. */
-<span class="fc" id="L70">    UNSIGNED_BYTE(&quot;Unsigned Byte&quot;),</span>
+<span class="fc" id="L72">    UNSIGNED_BYTE(&quot;Unsigned Byte&quot;),</span>
     /** Unsigned Integer. */
-<span class="fc" id="L72">    UNSIGNED_INTEGER(&quot;Unsigned Integer&quot;),</span>
+<span class="fc" id="L74">    UNSIGNED_INTEGER(&quot;Unsigned Integer&quot;),</span>
     /** Unsigned Long. */
-<span class="fc" id="L74">    UNSIGNED_LONG(&quot;Unsigned Long&quot;),</span>
+<span class="fc" id="L76">    UNSIGNED_LONG(&quot;Unsigned Long&quot;),</span>
     /** Unsigned Short. */
-<span class="fc" id="L76">    UNSIGNED_SHORT(&quot;Unsigned Short&quot;),</span>
+<span class="fc" id="L78">    UNSIGNED_SHORT(&quot;Unsigned Short&quot;),</span>
     /** Unsupported. */
-<span class="fc" id="L78">    UNSUPPORTED(&quot;Unsupported&quot;);</span>
-  
+<span class="fc" id="L80">    UNSUPPORTED(&quot;Unsupported&quot;);</span>
+
     private final String value;
 
     /**
      * A constructor.
      * @param v value
      */
-<span class="fc" id="L86">    FieldType(String v) {</span>
-<span class="fc" id="L87">        value = v;</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L88">    FieldType(String v) {</span>
+<span class="fc" id="L89">        value = v;</span>
+<span class="fc" id="L90">    }</span>
 
     /**
      * Gets the value.
      * @return value
      */
     public String value() {
-<span class="fc" id="L95">        return value;</span>
+<span class="fc" id="L97">        return value;</span>
     }
 
     /**
@@ -101,12 +103,12 @@ package io.atlasmap.v2;
      * @return the enum
      */
     public static FieldType fromValue(String v) {
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        for (FieldType c: FieldType.values()) {</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L106">                return c;</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        for (FieldType c: FieldType.values()) {</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L108">                return c;</span>
             }
         }
-<span class="nc" id="L109">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L111">        throw new IllegalArgumentException(v);</span>
     }
 
 }
