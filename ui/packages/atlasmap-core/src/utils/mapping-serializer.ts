@@ -367,7 +367,10 @@ export class MappingSerializer {
   static async deserializeFieldMapping(
     mappingJson: IMapping,
     cfg: ConfigModel
-  ): Promise<MappingModel> {
+  ): Promise<MappingModel | undefined> {
+    if (!mappingJson) {
+      return undefined;
+    }
     const mapping = new MappingModel();
     mapping.uuid = mappingJson.id;
     mapping.sourceFields = [];
@@ -992,7 +995,9 @@ export class MappingSerializer {
               innerFieldMapping as IMapping,
               cfg
             );
-            mappings.push(mapping);
+            if (mapping) {
+              mappings.push(mapping);
+            }
           } catch (e) {
             console.error(e);
             throw e;
@@ -1004,7 +1009,9 @@ export class MappingSerializer {
             fieldMapping as IMapping,
             cfg
           );
-          mappings.push(mapping);
+          if (mapping) {
+            mappings.push(mapping);
+          }
         } catch (e) {
           console.error(e);
           throw e;

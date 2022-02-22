@@ -147,6 +147,9 @@ export class MappingPreviewService {
       body.ProcessMappingResponse?.mapping,
       this.cfg
     );
+    if (!answer) {
+      return;
+    }
     for (const toWrite of inputFieldMapping.targetFields) {
       for (const toRead of answer.targetFields) {
         // TODO: check these non null operator
@@ -167,7 +170,7 @@ export class MappingPreviewService {
     }
     this.mappingPreviewOutputSource.next(answer);
     const audits = MappingSerializer.deserializeAudits(
-      body.ProcessMappingResponse.audits,
+      body.ProcessMappingResponse?.audits,
       ErrorType.PREVIEW
     );
     // TODO: check this non null operator
