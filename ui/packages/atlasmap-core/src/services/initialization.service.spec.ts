@@ -191,11 +191,11 @@ describe('InitializationService', () => {
       const targetField = mapping?.targetFields[0];
       expect(targetField?.field).toBeTruthy();
       expect(cfg.errorService.getErrors().length).toEqual(0);
-      done();
     });
     service.initialize().catch((error) => {
       fail(error);
     });
+    done();
   });
 
   test('initializeWithADMArchiveFile()', (done) => {
