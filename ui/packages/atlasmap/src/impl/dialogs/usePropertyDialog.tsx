@@ -24,6 +24,7 @@ type PropertyCallback = (property: IProperty) => void;
 
 export function usePropertyDialog(
   title: string,
+  isEdit: boolean,
   scopeOptions: {
     value: string;
     label: string;
@@ -73,6 +74,7 @@ export function usePropertyDialog(
   const dialog = (
     <PropertyDialog
       title={title}
+      isEdit={isEdit}
       valueTypeOptions={propertyTypes.map(([value, label]) => ({
         value,
         label,
