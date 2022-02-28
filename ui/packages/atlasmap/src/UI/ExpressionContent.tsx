@@ -482,20 +482,22 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
   );
 
   /**
-   * Remove the token at the current cursor position or remove the entire
-   * identifier string if the cursor points anywhere within it.
+   * Remove the token at the current cursor position factoring adjustment or
+   * remove the entire identifier string if the cursor points anywhere within it.
    *
    * @param event - if the event was on an identifier field reference or action
    *                then inhibit the monaco editor standard processing
+   * @param adjust - columnar adjustment
    * @returns
    */
   const removeTokenAtCaretPosition = useCallback(
-    (event: IKeyboardEvent) => {
+    (event: IKeyboardEvent, adjust: number) => {
       let textLine = condExprEditor!.getValue();
       const currentPos = condExprEditor!.getPosition();
       if (!currentPos) {
         return;
       }
+      const adjustedColumn = currentPos.column + adjust;
       const lines = textLine.split('\n');
       const lineText = lines[currentPos.lineNumber - 1];
       const expTokens = lexExpression(lineText);
@@ -507,8 +509,8 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
         let t: Token = expTokens![tokenIndex];
         if (t.type === 'identifier' || t.type.startsWith('action.')) {
           if (
-            currentPos.column > t.offset &&
-            currentPos.column <= t.offset + keyword?.word.length! + 1
+            adjustedColumn > t.offset &&
+            adjustedColumn <= t.offset + keyword?.word.length!
           ) {
             deletionRange = new Range(
               currentPos.lineNumber,
@@ -602,12 +604,14 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
           searchCandidates = executeFieldSearch(searchFilter, true)!;
         }
       }
-
-      if (
-        'Backspace' === event.browserEvent.key ||
-        'Delete' === event.browserEvent.key
-      ) {
-        removeTokenAtCaretPosition(event);
+      if ('Backspace' === event.browserEvent.key) {
+        removeTokenAtCaretPosition(event, -1);
+        if (searchMode) {
+          updateSearchMode();
+        }
+      }
+      if ('Delete' === event.browserEvent.key) {
+        removeTokenAtCaretPosition(event, 0);
         if (searchMode) {
           updateSearchMode();
         }
