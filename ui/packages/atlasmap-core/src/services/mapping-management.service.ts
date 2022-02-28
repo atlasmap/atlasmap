@@ -875,6 +875,6 @@ export class MappingManagementService {
    * @param mapping
    */
   isEnumerationMapping(mapping: MappingModel): boolean {
-    return mapping.transition.mode === TransitionMode.ENUM;
+    return mapping?.transition?.mode === TransitionMode.ENUM;
   }
 }

@@ -47,6 +47,7 @@ export interface IProperty {
 export interface IPropertyDialogProps {
   title: string;
   name?: string;
+  isEdit: boolean;
   valueType?: string;
   valueTypeOptions: ValueLabelOption[];
   scope?: string;
@@ -59,6 +60,7 @@ export interface IPropertyDialogProps {
 export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   title,
   name: initialName = '',
+  isEdit,
   valueType: initialValueType = '',
   valueTypeOptions,
   scope: initialScope = '',
@@ -71,6 +73,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   const [name, setName] = useState(initialName);
   const [valueType, setValueType] = useState(initialValueType);
   const [scope, setScope] = useState(initialScope);
+  const [checkEdit, setCheckEdit] = useState(isEdit);
   const [isPropertyValid, setPropertyValid] = useState(false);
   const [isPropertyNameValid, setPropertyNameValid] = useState(
     ValidatedOptions.default,
@@ -84,7 +87,8 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
     setPropertyValid(false);
     setPropertyNameValid(ValidatedOptions.default);
     setNameAndScopeUnique(false);
-  }, [initialName, initialValueType, initialScope]);
+    setCheckEdit(isEdit);
+  }, [initialName, initialValueType, initialScope, isEdit]);
 
   const handleOnConfirm = useCallback(() => {
     onConfirm({ name, valueType, scope });
@@ -99,12 +103,18 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
   function handleOnNameChange(name: string) {
     validateProperty(name, scope);
     setName(name);
+    setCheckEdit(false);
   }
 
   function handleOnScopeChange(scope: string) {
-    if (validateProperty(name, scope)) {
-      setScope(scope);
-    }
+    validateProperty(name, scope);
+    setScope(scope);
+    setCheckEdit(false);
+  }
+
+  function handleOnTypeChange(valueType: string) {
+    validateProperty(name, scope);
+    setValueType(valueType);
   }
 
   function validateProperty(name: string, scope: string): boolean {
@@ -137,7 +147,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
     >
       <Form>
         <FormGroup label={'Name'} fieldId={'name'} isRequired={true}>
-          {!isNameAndScopeUnique ? (
+          {!isNameAndScopeUnique && !checkEdit ? (
             <Tooltip
               content={
                 <div>A property with this name and scope already exists</div>
@@ -171,7 +181,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
           <FormSelect
             value={valueType}
             aria-label={'Select value type'}
-            onChange={setValueType}
+            onChange={handleOnTypeChange}
             data-testid={'property-type-form-select'}
           >
             {valueTypeOptions.map(({ label, value }, idx) => (
@@ -180,7 +190,7 @@ export const PropertyDialog: FunctionComponent<IPropertyDialogProps> = ({
           </FormSelect>
         </FormGroup>
         <FormGroup label={'Scope'} fieldId={'scope'}>
-          {!isNameAndScopeUnique ? (
+          {!isNameAndScopeUnique && !checkEdit ? (
             <Tooltip
               content={
                 <div>A property with this name and scope already exists</div>

@@ -101,6 +101,7 @@ export function useAtlasmapDialogs({
   );
   const [createPropertyDialog, openCreatePropertyDialog] = usePropertyDialog(
     'Create Property',
+    false,
     scopeOptions,
   );
   const onCreateProperty = useCallback(
@@ -118,6 +119,7 @@ export function useAtlasmapDialogs({
   );
   const [editPropertyDialog, openEditPropertyDialog] = usePropertyDialog(
     'Edit Property',
+    true,
     scopeOptions,
   );
   const onEditProperty = useCallback(

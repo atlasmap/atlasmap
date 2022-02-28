@@ -37,6 +37,7 @@ const scopeOptions = options.map((o) => o.value);
 export const sourcePropertyDialog = () => (
   <PropertyDialog
     title={text('Title', 'Property dialog title')}
+    isEdit={false}
     isOpen={boolean('Is open', true)}
     onCancel={action('onCancel')}
     onConfirm={action('onConfirm')}
@@ -56,6 +57,7 @@ export const sourcePropertyDialog = () => (
 export const targetPropertyDialog = () => (
   <PropertyDialog
     title={text('Title', 'Property dialog title')}
+    isEdit={false}
     isOpen={boolean('Is open', true)}
     onCancel={action('onCancel')}
     onConfirm={action('onConfirm')}
