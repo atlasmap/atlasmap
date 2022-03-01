@@ -253,7 +253,7 @@ export const atlasmapTokensProvider = {
 
       // action functions, identifiers and keywords
       [
-        /[a-zA-Z0-9_\-$][\w$]*/,
+        /[a-zA-Z]+[a-zA-Z0-9_\-$][\w$]*/,
         {
           cases: {
             '@actions': { token: 'action.$0' },
