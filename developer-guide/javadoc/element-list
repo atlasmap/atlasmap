@@ -37,6 +37,7 @@ io.atlasmap.kafkaconnect.v2
 io.atlasmap.maven
 io.atlasmap.mxbean
 io.atlasmap.service
+io.atlasmap.service.lsp
 io.atlasmap.spi
 io.atlasmap.standalone
 io.atlasmap.v2
