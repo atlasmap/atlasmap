@@ -28,6 +28,7 @@
   <name>camel-atlasmap</name>
   <description>Camel component to perform AtlasMap data mapping as a part of Camel route</description>
   <properties>
+    <maven.multiModuleProjectDirectory>${project.basedir}/..</maven.multiModuleProjectDirectory>
     <osgi.export.pkg>org.apache.camel.component.atlasmap</osgi.export.pkg>
     <osgi.export.service>org.apache.camel.spi.ComponentResolver;component=atlas</osgi.export.service>
   </properties>
