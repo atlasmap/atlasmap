@@ -84,9 +84,6 @@ public class XmlInstanceInspector {
             } else {
                 mapNodeToXmlField(childNode, rootComplexType);
             }
-            if (childNode.getNamespaceURI() != null) {
-                mapNamespace(childNode);
-            }
         }
     }
 
@@ -95,12 +92,18 @@ public class XmlInstanceInspector {
             XmlNamespaces namespaces = new XmlNamespaces();
             xmlDocument.setXmlNamespaces(namespaces);
         }
-        XmlNamespace namespace = new XmlNamespace();
-        namespace.setAlias(node.getPrefix());
-        namespace.setUri(node.getNamespaceURI());
-        if (!xmlDocument.getXmlNamespaces().getXmlNamespace().contains(namespace)) {
-            xmlDocument.getXmlNamespaces().getXmlNamespace().add(namespace);
-        }
+        List<XmlNamespace> namespaces = xmlDocument.getXmlNamespaces().getXmlNamespace();
+        if (namespaces.stream().noneMatch(ns -> {
+            if (ns.getAlias() == null) {
+                return node.getPrefix() == null && ns.getUri().equals(node.getNamespaceURI());
+            }
+            return ns.getAlias().equals(node.getPrefix());
+        })) {
+            XmlNamespace namespace = new XmlNamespace();
+            namespace.setAlias(node.getPrefix());
+            namespace.setUri(node.getNamespaceURI());
+            namespaces.add(namespace);
+        };
     }
 
     private void mapParentNode(Node node, XmlComplexType parent) {
@@ -140,6 +143,9 @@ public class XmlInstanceInspector {
                     mapAttributes(e, childParent);
                 }
             }
+        }
+        if (node.getNamespaceURI() != null) {
+            mapNamespace(node);
         }
     }
 
@@ -206,6 +212,9 @@ public class XmlInstanceInspector {
         }
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             updateCollectionType(node.getParentNode(), xmlField);
+        }
+        if (node.getNamespaceURI() != null) {
+            mapNamespace(node);
         }
     }
 
