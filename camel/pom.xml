@@ -74,6 +74,12 @@
     </dependency>
     <!-- for testing -->
     <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.3.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>io.atlasmap</groupId>
       <artifactId>atlas-java-test-model</artifactId>
       <scope>test</scope>
