@@ -302,6 +302,30 @@ public class XmlInstanceInspectionTest extends BaseXmlInspectionServiceTest {
     }
 
     @Test
+    public void testInspectXmlNamespace3794() throws Exception {
+        final String instance = new String(
+                Files.readAllBytes(Paths.get("src/test/resources/inspect/namespace-3794.xml")));
+        XmlInspectionService service = new XmlInspectionService();
+        XmlDocument xmlDocument = service.inspectXmlDocument(instance);
+        assertNotNull(xmlDocument);
+        List<XmlNamespace> namespaces = xmlDocument.getXmlNamespaces().getXmlNamespace();
+        assertEquals(2, namespaces.size());
+        XmlNamespace acme = namespaces.get(0);
+        assertEquals("acme", acme.getAlias());
+        XmlNamespace soapns = namespaces.get(1);
+        assertEquals("soapenv", soapns.getAlias());
+        assertNotNull(xmlDocument.getFields());
+        assertEquals(1, xmlDocument.getFields().getField().size());
+        XmlComplexType envelope = (XmlComplexType) xmlDocument.getFields().getField().get(0);
+        assertNotNull(envelope);
+        XmlComplexType body = (XmlComplexType) envelope.getXmlFields().getXmlField().get(0);
+        assertNotNull(body);
+        XmlComplexType request = (XmlComplexType) body.getXmlFields().getXmlField().get(0);
+        assertNotNull(request);
+        assertEquals("acme:Request", request.getName());
+    }
+
+    @Test
     public void testInspectXmlNestedCollection() throws Exception {
         final String instance = new String(
                 Files.readAllBytes(Paths.get("src/test/resources/inspect/nested-collection-instance.xml")));

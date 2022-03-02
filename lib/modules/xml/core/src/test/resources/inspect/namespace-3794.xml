@@ -1,0 +1,8 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <soapenv:Body>
+      <acme:Request xmlns:acme="http://www.acme.xyz">         
+         <acme:applicationName>webapp</acme:applicationName>
+         <acme:requestNumber>123</acme:requestNumber>
+      </acme:Request>
+   </soapenv:Body>
+</soapenv:Envelope>
