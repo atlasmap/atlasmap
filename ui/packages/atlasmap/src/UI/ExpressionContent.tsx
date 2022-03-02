@@ -680,6 +680,12 @@ export const ExpressionContent: FunctionComponent<IExpressionContentProps> = ({
     insertKeywordReference();
   }
 
+  // Selecting another mapping or toggling the expression button should
+  // clear the existing editor.
+  if (mappingExpression === undefined && condExprEditor) {
+    setCondExprEditor(undefined);
+  }
+
   useEffect(() => {
     if (disabled) {
       return;
