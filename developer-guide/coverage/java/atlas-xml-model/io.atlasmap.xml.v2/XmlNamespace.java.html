@@ -130,40 +130,40 @@ import java.io.Serializable;
 
     @Override
     public boolean equals(Object object) {
-<span class="pc bpc" id="L133" title="2 of 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc bnc" id="L133" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
 <span class="nc" id="L134">            return false;</span>
         }
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        if (this == object) {</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">        if (this == object) {</span>
 <span class="nc" id="L137">            return true;</span>
         }
-<span class="fc" id="L139">        final XmlNamespace that = ((XmlNamespace) object);</span>
+<span class="nc" id="L139">        final XmlNamespace that = ((XmlNamespace) object);</span>
         {
             String leftAlias;
-<span class="fc" id="L142">            leftAlias = this.getAlias();</span>
+<span class="nc" id="L142">            leftAlias = this.getAlias();</span>
             String rightAlias;
-<span class="fc" id="L144">            rightAlias = that.getAlias();</span>
-<span class="fc bfc" id="L145" title="All 2 branches covered.">            if (this.alias!= null) {</span>
-<span class="fc bfc" id="L146" title="All 2 branches covered.">                if (that.alias!= null) {</span>
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">                    if (!leftAlias.equals(rightAlias)) {</span>
+<span class="nc" id="L144">            rightAlias = that.getAlias();</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            if (this.alias!= null) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                if (that.alias!= null) {</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">                    if (!leftAlias.equals(rightAlias)) {</span>
 <span class="nc" id="L148">                        return false;</span>
                     }
                 } else {
-<span class="fc" id="L151">                    return false;</span>
+<span class="nc" id="L151">                    return false;</span>
                 }
             } else {
-<span class="pc bpc" id="L154" title="1 of 2 branches missed.">                if (that.alias!= null) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                if (that.alias!= null) {</span>
 <span class="nc" id="L155">                    return false;</span>
                 }
             }
         }
         {
             String leftUri;
-<span class="fc" id="L161">            leftUri = this.getUri();</span>
+<span class="nc" id="L161">            leftUri = this.getUri();</span>
             String rightUri;
-<span class="fc" id="L163">            rightUri = that.getUri();</span>
-<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
+<span class="nc" id="L163">            rightUri = that.getUri();</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">            if (this.uri!= null) {</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">                if (that.uri!= null) {</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
 <span class="nc" id="L167">                        return false;</span>
                     }
                 } else {
@@ -177,10 +177,10 @@ import java.io.Serializable;
         }
         {
             String leftLocationUri;
-<span class="fc" id="L180">            leftLocationUri = this.getLocationUri();</span>
+<span class="nc" id="L180">            leftLocationUri = this.getLocationUri();</span>
             String rightLocationUri;
-<span class="fc" id="L182">            rightLocationUri = that.getLocationUri();</span>
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if (this.locationUri!= null) {</span>
+<span class="nc" id="L182">            rightLocationUri = that.getLocationUri();</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">            if (this.locationUri!= null) {</span>
 <span class="nc bnc" id="L184" title="All 2 branches missed.">                if (that.locationUri!= null) {</span>
 <span class="nc bnc" id="L185" title="All 2 branches missed.">                    if (!leftLocationUri.equals(rightLocationUri)) {</span>
 <span class="nc" id="L186">                        return false;</span>
@@ -189,17 +189,17 @@ import java.io.Serializable;
 <span class="nc" id="L189">                    return false;</span>
                 }
             } else {
-<span class="pc bpc" id="L192" title="1 of 2 branches missed.">                if (that.locationUri!= null) {</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">                if (that.locationUri!= null) {</span>
 <span class="nc" id="L193">                    return false;</span>
                 }
             }
         }
         {
             Boolean leftTargetNamespace;
-<span class="fc" id="L199">            leftTargetNamespace = this.isTargetNamespace();</span>
+<span class="nc" id="L199">            leftTargetNamespace = this.isTargetNamespace();</span>
             Boolean rightTargetNamespace;
-<span class="fc" id="L201">            rightTargetNamespace = that.isTargetNamespace();</span>
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if (this.targetNamespace!= null) {</span>
+<span class="nc" id="L201">            rightTargetNamespace = that.isTargetNamespace();</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            if (this.targetNamespace!= null) {</span>
 <span class="nc bnc" id="L203" title="All 2 branches missed.">                if (that.targetNamespace!= null) {</span>
 <span class="nc bnc" id="L204" title="All 2 branches missed.">                    if (!leftTargetNamespace.equals(rightTargetNamespace)) {</span>
 <span class="nc" id="L205">                        return false;</span>
@@ -208,12 +208,12 @@ import java.io.Serializable;
 <span class="nc" id="L208">                    return false;</span>
                 }
             } else {
-<span class="pc bpc" id="L211" title="1 of 2 branches missed.">                if (that.targetNamespace!= null) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">                if (that.targetNamespace!= null) {</span>
 <span class="nc" id="L212">                    return false;</span>
                 }
             }
         }
-<span class="fc" id="L216">        return true;</span>
+<span class="nc" id="L216">        return true;</span>
     }
 
     @Override
