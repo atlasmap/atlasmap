@@ -21,7 +21,7 @@
   <parent>
     <groupId>io.atlasmap.examples</groupId>
     <artifactId>atlasmap-examples</artifactId>
-    <version>2.3.15</version>
+    <version>2.3.x-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
