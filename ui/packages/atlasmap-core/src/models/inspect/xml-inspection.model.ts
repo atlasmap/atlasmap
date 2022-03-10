@@ -87,6 +87,7 @@ export class XmlInspectionModel extends DocumentInspectionModel {
     }
 
     if (xmlDocument?.xmlNamespaces?.xmlNamespace?.length) {
+      this.doc.namespaces = [];
       for (const serviceNS of xmlDocument.xmlNamespaces.xmlNamespace) {
         const ns: NamespaceModel = new NamespaceModel();
         ns.alias = serviceNS.alias;
