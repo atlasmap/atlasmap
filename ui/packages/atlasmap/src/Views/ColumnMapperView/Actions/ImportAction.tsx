@@ -86,75 +86,60 @@ const importCandidate: importDocumentType[] = [
   },
 ];
 
-export const ImportDocumentTypeItem: FunctionComponent<{
-  importDocumentTypeIndex: number;
-  onFile: (file: File, docType: DocumentType, inspType: InspectionType) => void;
-  onImport: (
-    file: File,
-    docType: DocumentType,
-    inspType: InspectionType,
-  ) => void;
-}> = ({ importDocumentTypeIndex, onFile, onImport }) => {
-  const { files, onClick, HiddenFileInput } = useFilePicker({
-    maxFileSize: 1,
-  });
-  const previouslyUploadedFiles = useRef<File[] | null>(null);
-
-  useEffect(() => {
-    if (previouslyUploadedFiles.current !== files) {
-      previouslyUploadedFiles.current = files;
-      if (files?.length === 1) {
-        previouslyUploadedFiles.current = null;
-        onFile(
-          files[0],
-          importCandidate[importDocumentTypeIndex].documentType,
-          importCandidate[importDocumentTypeIndex].inspectionType,
-        );
-      }
-    }
-  }, [files, importDocumentTypeIndex, onFile, onImport]);
-
-  return (
-    <DropdownItem
-      icon={<ImportIcon />}
-      onClick={onClick}
-      data-testid="import-mappings-button"
-    >
-      {importCandidate[importDocumentTypeIndex].typeName}
-      <HiddenFileInput
-        accept={importCandidate[importDocumentTypeIndex].suffix}
-        multiple={false}
-      />
-    </DropdownItem>
-  );
-};
-
 export const ImportAction: FunctionComponent<IImportActionProps> = ({
   id,
   onImport,
 }) => {
   const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
-  const runAndClose = (cb: (...args: any[]) => any) => {
-    return (...args: any[]) => {
-      cb(...args);
-      toggleOff();
-    };
-  };
+  const {
+    files: selectedFiles,
+    onClick: triggerFileSelect,
+    HiddenFileInput,
+  } = useFilePicker({
+    maxFileSize: 1,
+  });
+  const importDocumentTypeIndex = useRef<number | null>(null);
+
+  function setFileTypeAndSelectFile(importDocTypeIndex: number) {
+    triggerFileSelect();
+    importDocumentTypeIndex.current = importDocTypeIndex;
+  }
 
   let dropdownItems = [];
   let key = '';
   for (let i = 0; i < importCandidate.length; i++) {
     key = 'import-' + i;
     dropdownItems.push(
-      <ImportDocumentTypeItem
-        importDocumentTypeIndex={i}
-        onFile={runAndClose(onImport)}
-        onImport={onImport}
+      <DropdownItem
+        icon={<ImportIcon />}
+        onClick={() => setFileTypeAndSelectFile(i)}
+        data-testid={`import-document-button-` + i}
         key={key}
-      />,
+      >
+        {importCandidate[i].typeName}
+        <HiddenFileInput
+          accept={'.avro, .csv, .json, .txt, .xml, .xsd'}
+          multiple={false}
+        />
+      </DropdownItem>,
     );
   }
   dropdownItems = dropdownItems.filter((f) => f);
+
+  useEffect(() => {
+    if (selectedFiles && selectedFiles[0]) {
+      let i = importDocumentTypeIndex.current!;
+      if (importCandidate[i]) {
+        onImport(
+          selectedFiles[0],
+          importCandidate[i].documentType,
+          importCandidate[i].inspectionType,
+        );
+        importDocumentTypeIndex.current = null;
+        toggleOff();
+      }
+    }
+  }, [importDocumentTypeIndex, onImport, selectedFiles, toggleOff]);
 
   return (
     <Tooltip
