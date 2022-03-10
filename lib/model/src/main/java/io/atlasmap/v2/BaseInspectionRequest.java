@@ -26,6 +26,9 @@ public abstract class BaseInspectionRequest implements Serializable {
     /** Paths to inspect. */
     protected List<String> inspectPaths;
 
+    /** Phrase to limit the inspection **/
+    protected String searchPhrase;
+
     /**
      * Gets the paths to inspect.
      * @return paths
@@ -40,5 +43,21 @@ public abstract class BaseInspectionRequest implements Serializable {
      */
     public void setInspectPaths(List<String> inspectPaths) {
         this.inspectPaths = inspectPaths;
+    }
+
+    /**
+     * Gets the search phrase to limit the inspection.
+     * @return searchPhrase
+     */
+    public String getSearchPhrase() {
+        return searchPhrase;
+    }
+
+    /**
+     * Gets the search phrase to limit the inspection.
+     * @param searchPhrase phrase
+     */
+    public void setSearchPhrase(String searchPhrase) {
+        this.searchPhrase = searchPhrase;
     }
 }

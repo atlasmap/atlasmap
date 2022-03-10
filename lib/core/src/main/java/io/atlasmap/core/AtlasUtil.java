@@ -422,11 +422,11 @@ public class AtlasUtil {
      */
     public static String validationToString(Validation validation) {
         String output = "[Validation ";
-    
+
         if (validation == null) {
             return output + ">null< ]";
         }
-    
+
         if (validation.getScope() != null) {
             output = output + " scope=" + validation.getScope();
         }
@@ -439,7 +439,7 @@ public class AtlasUtil {
         if (validation.getMessage() != null) {
             output = output + " msg=" + validation.getMessage();
         }
-    
+
         return output + "]";
     }
 
@@ -632,27 +632,59 @@ public class AtlasUtil {
     }
 
     /**
-     * Exclude fields which are not on requested paths.
+     * Exclude fields which are not on requested paths or do not start with search phrase.
      *
      * If includePaths is null or empty it does nothing and all fields are included.
      *
+     * If searchPhrase is null or empty it does nothing and all fields are included.
+     *
      * @param document document
      * @param includePaths paths
+     * @param searchPhrase search phrase
      */
-    public static void excludeNotRequestedFields(Document document, List<String> includePaths) {
-        if (document == null || includePaths == null || includePaths.isEmpty()) {
+    public static void excludeNotRequestedFields(Document document, List<String> includePaths, String searchPhrase) {
+        if (document == null) {
+            return;
+        }
+        if ((includePaths == null || includePaths.isEmpty()) && (searchPhrase == null || searchPhrase.isEmpty())) {
             return;
         }
 
         List<Field> fields = document.getFields().getField();
+
         List<String> paths = new ArrayList<>();
-        for (String includePath: includePaths) {
-            if (!includePath.endsWith("/")) {
-                includePath += "/";
-            }
-            paths.add(includePath);
+        if (includePaths != null) {
+            paths = new ArrayList<>(includePaths);
         }
-        includePaths = paths;
+
+        if (searchPhrase != null && !searchPhrase.isEmpty()) {
+            Deque<Field> toTraverse = new ArrayDeque<>();
+            fields.stream().forEach(field -> toTraverse.push(field));
+            while(!toTraverse.isEmpty()) {
+                Field field = toTraverse.pop();
+                if (field.getName().startsWith(searchPhrase)) {
+                    paths.add(field.getPath());
+                }
+                if (field instanceof ComplexType) {
+                    ComplexType complexTypeField = (ComplexType) field;
+                    if (complexTypeField.getChildFields() != null) {
+                        List<? extends Field> subfields = complexTypeField.getChildFields();
+                        //check subfields
+                        subfields.stream().forEach(subfield -> toTraverse.push(subfield));
+                    }
+                }
+            }
+        }
+
+        // Make sure path ends with '/' so that the subfields are included
+        List<String> correctedPaths = new ArrayList<>();
+        for (String path : paths) {
+            if (!path.endsWith("/")) {
+                path += "/";
+            }
+            correctedPaths.add(path);
+        }
+        paths = correctedPaths;
 
         Deque<List<? extends Field>> stack = new ArrayDeque<>();
         stack.push(fields);
@@ -663,7 +695,7 @@ public class AtlasUtil {
                 String path = field.getPath();
                 boolean includeField = path.lastIndexOf("/") == 0; //always include root level
                 if (!includeField) {
-                    for (String includePath : includePaths) {
+                    for (String includePath : paths) {
                         int lastSeparator = path.lastIndexOf("/");
                         String parentPath = path.substring(0, lastSeparator);
                         parentPath += "/";
@@ -685,7 +717,6 @@ public class AtlasUtil {
                 } else {
                     it.remove();
                 }
-
             }
         }
     }

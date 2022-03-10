@@ -256,7 +256,7 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, null);
+        AtlasUtil.excludeNotRequestedFields(document, null, null);
 
         assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{/A/B/A{/A/B/A/A{}, }, }, }, ", fields.getField().get(0).toString());
     }
@@ -275,7 +275,7 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, Collections.emptyList());
+        AtlasUtil.excludeNotRequestedFields(document, Collections.emptyList(), null);
 
         assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{/A/B/A{/A/B/A/A{}, }, }, }, ", fields.getField().get(0).toString());
     }
@@ -294,7 +294,7 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/"));
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/"), null);
 
         assertEquals("/A{}, ", fields.getField().get(0).toString());
     }
@@ -313,7 +313,7 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/"));
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/"), null);
 
         assertEquals("/A{/A/A{}, /A/B{}, }, ", fields.getField().get(0).toString());
     }
@@ -332,7 +332,7 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/B"));
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/B"), null);
 
         assertEquals("/A{/A/A{}, /A/B{/A/B/A{}, }, }, ", fields.getField().get(0).toString());
     }
@@ -351,7 +351,7 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/A","/A/B"));
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/A","/A/B"), null);
 
         assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{/A/B/A{}, }, }, ", fields.getField().get(0).toString());
     }
@@ -370,9 +370,47 @@ public class AtlasUtilTest {
         ));
         document.setFields(fields);
 
-        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/A/B"));
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/A/B"), null);
 
         assertEquals("/A{/A/A{/A/A/A{}, /A/A/B{}, }, /A/B{}, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeAllMatchingPhrases() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/Abc",
+            newField("/Abc/A",
+                newField("/Abc/A/Ab"),
+                newField("/Abc/A/B")),
+            newField("/Abc/B",
+                newField("/Abc/B/A",
+                    newField("/Abc/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, null, "Ab");
+
+        assertEquals("/Abc{/Abc/A{/Abc/A/Ab{}, /Abc/A/B{}, }, /Abc/B{}, }, ", fields.getField().get(0).toString());
+    }
+
+    @Test
+    public void testExcludeNotRequestedFieldsShouldIncludeAllRequestedPathsAndAllMatchingPhrases() {
+        Document document = new Document();
+        Fields fields = new Fields();
+        fields.getField().add(newField("/A",
+            newField("/A/Ab",
+                newField("/A/Ab/A"),
+                newField("/A/Ab/B")),
+            newField("/A/B",
+                newField("/A/B/A",
+                    newField("/Abc/B/A/A")))
+        ));
+        document.setFields(fields);
+
+        AtlasUtil.excludeNotRequestedFields(document, Arrays.asList("/A/B"), "Ab");
+
+        assertEquals("/A{/A/Ab{/A/Ab/A{}, /A/Ab/B{}, }, /A/B{/A/B/A{}, }, }, ", fields.getField().get(0).toString());
     }
 
     private static class ComplexField extends Field implements ComplexType {
@@ -391,6 +429,12 @@ public class AtlasUtilTest {
             @Override
             public String getPath() {
                 return fieldPath;
+            }
+
+            @Override
+            public String getName() {
+                String name = fieldPath.endsWith("/") ? fieldPath.substring(0, fieldPath.length() - 1) : fieldPath;
+                return fieldPath.substring(fieldPath.lastIndexOf("/") + 1);
             }
 
             @Override
