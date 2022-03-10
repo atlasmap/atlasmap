@@ -476,6 +476,12 @@ endif::internal-generation[]
 | 
 |  
 
+| searchPhrase
+| 
+| String 
+| 
+|  
+
 | fieldNameExclusions
 | 
 | StringList 

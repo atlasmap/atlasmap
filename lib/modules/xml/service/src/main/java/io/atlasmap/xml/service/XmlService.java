@@ -149,7 +149,7 @@ public class XmlService {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 
-        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths());
+        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());
 
         response.setXmlDocument(d);
         return Response.ok().entity(toJson(response)).build();
