@@ -422,11 +422,11 @@ import io.atlasmap.v2.ValidationStatus;
      */
     public static String validationToString(Validation validation) {
 <span class="nc" id="L424">        String output = &quot;[Validation &quot;;</span>
-    
+
 <span class="nc bnc" id="L426" title="All 2 branches missed.">        if (validation == null) {</span>
 <span class="nc" id="L427">            return output + &quot;&gt;null&lt; ]&quot;;</span>
         }
-    
+
 <span class="nc bnc" id="L430" title="All 2 branches missed.">        if (validation.getScope() != null) {</span>
 <span class="nc" id="L431">            output = output + &quot; scope=&quot; + validation.getScope();</span>
         }
@@ -439,7 +439,7 @@ import io.atlasmap.v2.ValidationStatus;
 <span class="nc bnc" id="L439" title="All 2 branches missed.">        if (validation.getMessage() != null) {</span>
 <span class="nc" id="L440">            output = output + &quot; msg=&quot; + validation.getMessage();</span>
         }
-    
+
 <span class="nc" id="L443">        return output + &quot;]&quot;;</span>
     }
 
@@ -632,62 +632,93 @@ import io.atlasmap.v2.ValidationStatus;
 <span class="nc" id="L632">    }</span>
 
     /**
-     * Exclude fields which are not on requested paths.
+     * Exclude fields which are not on requested paths or do not start with search phrase.
      *
      * If includePaths is null or empty it does nothing and all fields are included.
      *
+     * If searchPhrase is null or empty it does nothing and all fields are included.
+     *
      * @param document document
      * @param includePaths paths
+     * @param searchPhrase search phrase
      */
-    public static void excludeNotRequestedFields(Document document, List&lt;String&gt; includePaths) {
-<span class="pc bpc" id="L643" title="1 of 6 branches missed.">        if (document == null || includePaths == null || includePaths.isEmpty()) {</span>
-<span class="fc" id="L644">            return;</span>
+    public static void excludeNotRequestedFields(Document document, List&lt;String&gt; includePaths, String searchPhrase) {
+<span class="pc bpc" id="L646" title="1 of 2 branches missed.">        if (document == null) {</span>
+<span class="nc" id="L647">            return;</span>
+        }
+<span class="pc bpc" id="L649" title="1 of 8 branches missed.">        if ((includePaths == null || includePaths.isEmpty()) &amp;&amp; (searchPhrase == null || searchPhrase.isEmpty())) {</span>
+<span class="fc" id="L650">            return;</span>
         }
 
-<span class="fc" id="L647">        List&lt;Field&gt; fields = document.getFields().getField();</span>
-<span class="fc" id="L648">        List&lt;String&gt; paths = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L649" title="All 2 branches covered.">        for (String includePath: includePaths) {</span>
-<span class="fc bfc" id="L650" title="All 2 branches covered.">            if (!includePath.endsWith(&quot;/&quot;)) {</span>
-<span class="fc" id="L651">                includePath += &quot;/&quot;;</span>
+<span class="fc" id="L653">        List&lt;Field&gt; fields = document.getFields().getField();</span>
+
+<span class="fc" id="L655">        List&lt;String&gt; paths = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L656" title="All 2 branches covered.">        if (includePaths != null) {</span>
+<span class="fc" id="L657">            paths = new ArrayList&lt;&gt;(includePaths);</span>
+        }
+
+<span class="pc bpc" id="L660" title="1 of 4 branches missed.">        if (searchPhrase != null &amp;&amp; !searchPhrase.isEmpty()) {</span>
+<span class="fc" id="L661">            Deque&lt;Field&gt; toTraverse = new ArrayDeque&lt;&gt;();</span>
+<span class="fc" id="L662">            fields.stream().forEach(field -&gt; toTraverse.push(field));</span>
+<span class="fc bfc" id="L663" title="All 2 branches covered.">            while(!toTraverse.isEmpty()) {</span>
+<span class="fc" id="L664">                Field field = toTraverse.pop();</span>
+<span class="fc bfc" id="L665" title="All 2 branches covered.">                if (field.getName().startsWith(searchPhrase)) {</span>
+<span class="fc" id="L666">                    paths.add(field.getPath());</span>
+                }
+<span class="pc bpc" id="L668" title="1 of 2 branches missed.">                if (field instanceof ComplexType) {</span>
+<span class="fc" id="L669">                    ComplexType complexTypeField = (ComplexType) field;</span>
+<span class="pc bpc" id="L670" title="1 of 2 branches missed.">                    if (complexTypeField.getChildFields() != null) {</span>
+<span class="fc" id="L671">                        List&lt;? extends Field&gt; subfields = complexTypeField.getChildFields();</span>
+                        //check subfields
+<span class="fc" id="L673">                        subfields.stream().forEach(subfield -&gt; toTraverse.push(subfield));</span>
+                    }
+                }
+<span class="fc" id="L676">            }</span>
+        }
+
+        // Make sure path ends with '/' so that the subfields are included
+<span class="fc" id="L680">        List&lt;String&gt; correctedPaths = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L681" title="All 2 branches covered.">        for (String path : paths) {</span>
+<span class="fc bfc" id="L682" title="All 2 branches covered.">            if (!path.endsWith(&quot;/&quot;)) {</span>
+<span class="fc" id="L683">                path += &quot;/&quot;;</span>
             }
-<span class="fc" id="L653">            paths.add(includePath);</span>
-<span class="fc" id="L654">        }</span>
-<span class="fc" id="L655">        includePaths = paths;</span>
+<span class="fc" id="L685">            correctedPaths.add(path);</span>
+<span class="fc" id="L686">        }</span>
+<span class="fc" id="L687">        paths = correctedPaths;</span>
 
-<span class="fc" id="L657">        Deque&lt;List&lt;? extends Field&gt;&gt; stack = new ArrayDeque&lt;&gt;();</span>
-<span class="fc" id="L658">        stack.push(fields);</span>
-<span class="fc bfc" id="L659" title="All 2 branches covered.">        while(!stack.isEmpty()) {</span>
-<span class="fc" id="L660">            List&lt;? extends Field&gt; fieldsToCheck = stack.pop();</span>
-<span class="fc bfc" id="L661" title="All 2 branches covered.">            for (Iterator&lt;? extends Field&gt; it = fieldsToCheck.iterator(); it.hasNext(); ) {</span>
-<span class="fc" id="L662">                Field field = it.next();</span>
-<span class="fc" id="L663">                String path = field.getPath();</span>
-<span class="fc bfc" id="L664" title="All 2 branches covered.">                boolean includeField = path.lastIndexOf(&quot;/&quot;) == 0; //always include root level</span>
-<span class="fc bfc" id="L665" title="All 2 branches covered.">                if (!includeField) {</span>
-<span class="fc bfc" id="L666" title="All 2 branches covered.">                    for (String includePath : includePaths) {</span>
-<span class="fc" id="L667">                        int lastSeparator = path.lastIndexOf(&quot;/&quot;);</span>
-<span class="fc" id="L668">                        String parentPath = path.substring(0, lastSeparator);</span>
-<span class="fc" id="L669">                        parentPath += &quot;/&quot;;</span>
-<span class="fc bfc" id="L670" title="All 2 branches covered.">                        if (includePath.startsWith(parentPath)) {</span>
-<span class="fc" id="L671">                            includeField = true;</span>
-<span class="fc" id="L672">                            break;</span>
+<span class="fc" id="L689">        Deque&lt;List&lt;? extends Field&gt;&gt; stack = new ArrayDeque&lt;&gt;();</span>
+<span class="fc" id="L690">        stack.push(fields);</span>
+<span class="fc bfc" id="L691" title="All 2 branches covered.">        while(!stack.isEmpty()) {</span>
+<span class="fc" id="L692">            List&lt;? extends Field&gt; fieldsToCheck = stack.pop();</span>
+<span class="fc bfc" id="L693" title="All 2 branches covered.">            for (Iterator&lt;? extends Field&gt; it = fieldsToCheck.iterator(); it.hasNext(); ) {</span>
+<span class="fc" id="L694">                Field field = it.next();</span>
+<span class="fc" id="L695">                String path = field.getPath();</span>
+<span class="fc bfc" id="L696" title="All 2 branches covered.">                boolean includeField = path.lastIndexOf(&quot;/&quot;) == 0; //always include root level</span>
+<span class="fc bfc" id="L697" title="All 2 branches covered.">                if (!includeField) {</span>
+<span class="fc bfc" id="L698" title="All 2 branches covered.">                    for (String includePath : paths) {</span>
+<span class="fc" id="L699">                        int lastSeparator = path.lastIndexOf(&quot;/&quot;);</span>
+<span class="fc" id="L700">                        String parentPath = path.substring(0, lastSeparator);</span>
+<span class="fc" id="L701">                        parentPath += &quot;/&quot;;</span>
+<span class="fc bfc" id="L702" title="All 2 branches covered.">                        if (includePath.startsWith(parentPath)) {</span>
+<span class="fc" id="L703">                            includeField = true;</span>
+<span class="fc" id="L704">                            break;</span>
                         }
-<span class="fc" id="L674">                    }</span>
+<span class="fc" id="L706">                    }</span>
 
                 }
-<span class="fc bfc" id="L677" title="All 2 branches covered.">                if (includeField) {</span>
-<span class="fc bfc" id="L678" title="All 2 branches covered.">                    if (field instanceof ComplexType) {</span>
-<span class="fc" id="L679">                        ComplexType complexTypeField = (ComplexType) field;</span>
-<span class="pc bpc" id="L680" title="1 of 2 branches missed.">                        if (complexTypeField.getChildFields() != null) {</span>
-<span class="fc" id="L681">                            List&lt;? extends Field&gt; subfields = complexTypeField.getChildFields();</span>
-<span class="fc" id="L682">                            stack.push(subfields); //analyze subfields</span>
+<span class="fc bfc" id="L709" title="All 2 branches covered.">                if (includeField) {</span>
+<span class="fc bfc" id="L710" title="All 2 branches covered.">                    if (field instanceof ComplexType) {</span>
+<span class="fc" id="L711">                        ComplexType complexTypeField = (ComplexType) field;</span>
+<span class="pc bpc" id="L712" title="1 of 2 branches missed.">                        if (complexTypeField.getChildFields() != null) {</span>
+<span class="fc" id="L713">                            List&lt;? extends Field&gt; subfields = complexTypeField.getChildFields();</span>
+<span class="fc" id="L714">                            stack.push(subfields); //analyze subfields</span>
                         }
-<span class="fc" id="L684">                    }</span>
+<span class="fc" id="L716">                    }</span>
                 } else {
-<span class="fc" id="L686">                    it.remove();</span>
+<span class="fc" id="L718">                    it.remove();</span>
                 }
-
-<span class="fc" id="L689">            }</span>
-<span class="fc" id="L690">        }</span>
-<span class="fc" id="L691">    }</span>
+<span class="fc" id="L720">            }</span>
+<span class="fc" id="L721">        }</span>
+<span class="fc" id="L722">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

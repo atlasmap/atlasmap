@@ -149,7 +149,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="fc" id="L149">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L152">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths());</span>
+<span class="fc" id="L152">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());</span>
 
 <span class="fc" id="L154">        response.setXmlDocument(d);</span>
 <span class="fc" id="L155">        return Response.ok().entity(toJson(response)).build();</span>

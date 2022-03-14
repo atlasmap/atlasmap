@@ -26,12 +26,15 @@ import java.util.List;
     /** Paths to inspect. */
     protected List&lt;String&gt; inspectPaths;
 
+    /** Phrase to limit the inspection **/
+    protected String searchPhrase;
+
     /**
      * Gets the paths to inspect.
      * @return paths
      */
     public List&lt;String&gt; getInspectPaths() {
-<span class="fc" id="L34">        return inspectPaths;</span>
+<span class="fc" id="L37">        return inspectPaths;</span>
     }
 
     /**
@@ -39,7 +42,23 @@ import java.util.List;
      * @param inspectPaths paths
      */
     public void setInspectPaths(List&lt;String&gt; inspectPaths) {
-<span class="fc" id="L42">        this.inspectPaths = inspectPaths;</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L45">        this.inspectPaths = inspectPaths;</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Gets the search phrase to limit the inspection.
+     * @return searchPhrase
+     */
+    public String getSearchPhrase() {
+<span class="fc" id="L53">        return searchPhrase;</span>
+    }
+
+    /**
+     * Gets the search phrase to limit the inspection.
+     * @param searchPhrase phrase
+     */
+    public void setSearchPhrase(String searchPhrase) {
+<span class="nc" id="L61">        this.searchPhrase = searchPhrase;</span>
+<span class="nc" id="L62">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
