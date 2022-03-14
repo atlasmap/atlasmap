@@ -213,6 +213,12 @@ public class AtlasRewritingXSVisitor implements XSVisitor {
         if (attrMap == null) {
             return null;
         }
+        if (XMLConstants.NULL_NS_URI.equals(namespaceUri)) {
+            Node attr = attrMap.getNamedItem(localName);
+            if (attr != null) {
+                return attr.getNodeValue();
+            }
+        }
         Node attr = attrMap.getNamedItemNS(namespaceUri, localName);
         return attr != null ? attr.getNodeValue() : null;
     }
