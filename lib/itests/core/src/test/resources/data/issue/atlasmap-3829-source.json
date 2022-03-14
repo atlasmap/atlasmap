@@ -1,0 +1,16 @@
+{
+  "createEquipment": {
+    "imei": "55555987654321",
+    "svn": "16",
+    "date": "2011-01-19",
+    "time": "13:50:00",
+    "comment": "A comment",
+    "InsertEquipmentListType": {
+      "equipmentListNumber": "2",
+      "insertReason": "23"
+    },
+    "clarifyReason": "A clarify reason",
+    "sourceOfRequest": "A source of request"
+  }
+}
+
