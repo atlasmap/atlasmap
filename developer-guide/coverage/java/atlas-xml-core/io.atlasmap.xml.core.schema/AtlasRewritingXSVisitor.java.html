@@ -66,8 +66,8 @@ public class AtlasRewritingXSVisitor implements XSVisitor {
 
     @Override
     public void attributeUse(XSAttributeUse use) {
-<span class="nc" id="L69">        attributeDecl(use.getDecl());</span>
-<span class="nc" id="L70">    }</span>
+<span class="fc" id="L69">        attributeDecl(use.getDecl());</span>
+<span class="fc" id="L70">    }</span>
 
     @Override
     public void modelGroupDecl(XSModelGroupDecl decl) {
@@ -89,9 +89,9 @@ public class AtlasRewritingXSVisitor implements XSVisitor {
 
     @Override
     public void complexType(XSComplexType complex) {
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">        for (XSAttributeUse use : complex.getAttributeUses()) {</span>
-<span class="nc" id="L93">            attributeUse(use);</span>
-<span class="nc" id="L94">        }</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for (XSAttributeUse use : complex.getAttributeUses()) {</span>
+<span class="fc" id="L93">            attributeUse(use);</span>
+<span class="fc" id="L94">        }</span>
 
 <span class="fc" id="L96">        XSContentType contentType = complex.getContentType();</span>
 <span class="fc" id="L97">        contentType.visit(this);</span>
@@ -123,22 +123,22 @@ public class AtlasRewritingXSVisitor implements XSVisitor {
 
     @Override
     public void attributeDecl(XSAttributeDecl decl) {
-<span class="nc" id="L126">        String namespaceUri = decl.getTargetNamespace();</span>
-<span class="nc" id="L127">        String localName = decl.getName();</span>
+<span class="fc" id="L126">        String namespaceUri = decl.getTargetNamespace();</span>
+<span class="fc" id="L127">        String localName = decl.getName();</span>
 
-<span class="nc" id="L129">        String attribute = getAttribute(source, namespaceUri, localName);</span>
-<span class="nc bnc" id="L130" title="All 2 branches missed.">        if (attribute != null) {</span>
+<span class="fc" id="L129">        String attribute = getAttribute(source, namespaceUri, localName);</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">        if (attribute != null) {</span>
             try {
-<span class="nc bnc" id="L132" title="All 4 branches missed.">                if (namespaceUri == null || XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
-<span class="nc" id="L133">                    ((Element)target).setAttribute(localName, attribute);</span>
+<span class="pc bpc" id="L132" title="2 of 4 branches missed.">                if (namespaceUri == null || XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
+<span class="fc" id="L133">                    ((Element)target).setAttribute(localName, attribute);</span>
                 } else {
 <span class="nc" id="L135">                    ((Element)target).setAttributeNS(namespaceUri, localName, attribute);</span>
                 }
 <span class="nc" id="L137">            } catch (Exception e) {</span>
 <span class="nc" id="L138">                throw new RuntimeException(e);</span>
-<span class="nc" id="L139">            }</span>
+<span class="fc" id="L139">            }</span>
         }
-<span class="nc" id="L141">    }</span>
+<span class="fc" id="L141">    }</span>
 
     @Override
     public void simpleType(XSSimpleType simpleType) {
@@ -203,7 +203,7 @@ public class AtlasRewritingXSVisitor implements XSVisitor {
 <span class="fc" id="L203">                      answer.add(e);</span>
                   }
 <span class="pc bpc" id="L205" title="3 of 6 branches missed.">            } else if (namespaceUri != null &amp;&amp; namespaceUri.equals(e.getNamespaceURI())</span>
-<span class="pc bpc" id="L206" title="1 of 2 branches missed.">             &amp;&amp; localName != null &amp;&amp; localName.equals(e.getLocalName())) {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">             &amp;&amp; localName != null &amp;&amp; localName.equals(e.getLocalName())) {</span>
 <span class="fc" id="L207">                 answer.add(e);</span>
              }
         }
@@ -211,15 +211,21 @@ public class AtlasRewritingXSVisitor implements XSVisitor {
     }
 
     private String getAttribute(Node node, String namespaceUri, String localName) {
-<span class="nc bnc" id="L214" title="All 2 branches missed.">        if (namespaceUri == null) {</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (namespaceUri == null) {</span>
 <span class="nc" id="L215">            namespaceUri = XMLConstants.NULL_NS_URI;</span>
         }
-<span class="nc" id="L217">        NamedNodeMap attrMap = node.getAttributes();</span>
-<span class="nc bnc" id="L218" title="All 2 branches missed.">        if (attrMap == null) {</span>
+<span class="fc" id="L217">        NamedNodeMap attrMap = node.getAttributes();</span>
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (attrMap == null) {</span>
 <span class="nc" id="L219">            return null;</span>
         }
-<span class="nc" id="L221">        Node attr = attrMap.getNamedItemNS(namespaceUri, localName);</span>
-<span class="nc bnc" id="L222" title="All 2 branches missed.">        return attr != null ? attr.getNodeValue() : null;</span>
+<span class="pc bpc" id="L221" title="1 of 2 branches missed.">        if (XMLConstants.NULL_NS_URI.equals(namespaceUri)) {</span>
+<span class="fc" id="L222">            Node attr = attrMap.getNamedItem(localName);</span>
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">            if (attr != null) {</span>
+<span class="fc" id="L224">                return attr.getNodeValue();</span>
+            }
+        }
+<span class="nc" id="L227">        Node attr = attrMap.getNamedItemNS(namespaceUri, localName);</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        return attr != null ? attr.getNodeValue() : null;</span>
     }
 
 }

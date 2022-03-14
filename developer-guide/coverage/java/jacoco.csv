@@ -299,7 +299,7 @@ Unit Test Coverage Report/atlas-json-module,io.atlasmap.json.module,JsonModule,2
 Unit Test Coverage Report/atlas-json-service,io.atlasmap.json.service,JsonService,48,102,7,10,14,22,8,9,1,7
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,AtlasXmlSchemaSetParser.NoopErrorHandler,20,10,5,1,7,3,5,2,2,2
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,AtlasXmlSchemaSetParser,49,385,7,27,17,89,9,24,2,14
-Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,AtlasRewritingXSVisitor,116,188,25,23,39,45,31,13,13,7
+Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,AtlasRewritingXSVisitor,66,251,20,32,24,64,28,18,10,10
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,XSOMClasspathEntityResolver,9,52,6,10,5,13,6,4,0,2
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,XSOMErrorHandler,8,9,0,0,3,3,2,3,2,3
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.inspect,XmlInstanceInspector,18,711,12,102,6,156,12,66,0,21
