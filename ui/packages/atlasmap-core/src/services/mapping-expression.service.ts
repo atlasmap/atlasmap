@@ -242,7 +242,12 @@ export class MappingExpressionService {
           fieldCount++;
           formattedFields.push(formattedField);
         }
-        if (formattedFields.length > 19) {
+        if (formattedFields.length > 500) {
+          const endField: string[] = [''];
+          endField[0] = '** Displayable field limit reached **';
+          endField[1] = '';
+          fieldCount++;
+          formattedFields.push(endField);
           break;
         }
       }
