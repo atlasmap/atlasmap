@@ -189,12 +189,12 @@ export class DocumentManagementService {
 
   getLibraryClassNames(): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      if (typeof this.cfg.initCfg.baseMappingServiceUrl === 'undefined') {
+      if (typeof this.cfg.initCfg.baseAtlasServiceUrl === 'undefined') {
         resolve([]);
         return;
       }
       const url: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'library/list';
+        this.cfg.initCfg.baseAtlasServiceUrl + 'library/class';
       this.cfg.logger!.debug('Library Class List Service Request: ' + url);
       this.api
         .get(url)

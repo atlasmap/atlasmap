@@ -129,11 +129,11 @@ interface IAtlasmapContext extends IDataState, INotificationsState {
 const AtlasmapContext = createContext<IAtlasmapContext | null>(null);
 
 export interface IAtlasmapProviderProps {
+  baseAtlasServiceUrl: string;
   baseCSVInspectionServiceUrl: string;
   baseJavaInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
   baseKafkaConnectInspectionServiceUrl: string;
-  baseMappingServiceUrl: string;
   baseXMLInspectionServiceUrl: string;
   logLevel: string;
 
@@ -146,11 +146,11 @@ export interface IAtlasmapProviderProps {
   onMappingChange?: (serializedMappings: string) => void;
 }
 export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
+  baseAtlasServiceUrl,
   baseCSVInspectionServiceUrl,
   baseJavaInspectionServiceUrl,
   baseJSONInspectionServiceUrl,
   baseKafkaConnectInspectionServiceUrl,
-  baseMappingServiceUrl,
   baseXMLInspectionServiceUrl,
   logLevel,
   externalDocument,
@@ -193,7 +193,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       cfg.logger?.setLevel(logLevel as LogLevelDesc);
       cfg.initCfg.dataMapperVersion = constants.version;
 
-      cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
+      cfg.initCfg.baseAtlasServiceUrl = baseAtlasServiceUrl;
       cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;
       cfg.initCfg.baseXMLInspectionServiceUrl = baseXMLInspectionServiceUrl;
       cfg.initCfg.baseJSONInspectionServiceUrl = baseJSONInspectionServiceUrl;
@@ -246,11 +246,11 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       onLoading();
     },
     [
+      baseAtlasServiceUrl,
       baseCSVInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
       baseJavaInspectionServiceUrl,
       baseKafkaConnectInspectionServiceUrl,
-      baseMappingServiceUrl,
       baseXMLInspectionServiceUrl,
       externalDocument,
       logLevel,
@@ -419,12 +419,12 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       };
     },
     [
+      baseAtlasServiceUrl,
       baseJavaInspectionServiceUrl,
       baseXMLInspectionServiceUrl,
       baseJSONInspectionServiceUrl,
       baseKafkaConnectInspectionServiceUrl,
       baseCSVInspectionServiceUrl,
-      baseMappingServiceUrl,
       configModel,
       data.pending,
       data.selectedMapping,

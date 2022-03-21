@@ -14,10 +14,10 @@
     limitations under the License.
 */
 import { LookupTableData, LookupTableUtil } from '../utils';
-import ky, { Input, Options } from 'ky';
 
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
+import { FileManagementService } from './file-management.service';
 import { InitializationService } from './initialization.service';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
@@ -25,16 +25,19 @@ import { MappingModel } from '../models/mapping.model';
 import { PaddingField } from '../models/document-definition.model';
 import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
+import ky from 'ky';
 import mockMappingJson from '../../../../test-resources/mapping/atlasmapping-mock.json';
 
 describe('MappingManagementService', () => {
   let cfg: ConfigModel;
   let service: MappingManagementService;
+  let fileService: FileManagementService;
 
   beforeEach(() => {
     const initService = new InitializationService(ky);
     cfg = initService.cfg;
     service = cfg.mappingService;
+    fileService = cfg.fileService;
   });
 
   test('check banned fields', () => {
@@ -152,16 +155,8 @@ describe('MappingManagementService', () => {
 
   test('moveMappedFieldTo', () => {
     spyOn(service, 'notifyLineRefresh').and.stub();
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     const mapping = service.cfg.mappings!.mappings[1];
     const field2 = mapping.getMappedFieldForIndex('1', true);
@@ -186,16 +181,8 @@ describe('MappingManagementService', () => {
   });
 
   test('addFieldToActiveMapping()', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     const mapping = service.cfg.mappings!.mappings[1];
     const field2 = mapping.getMappedFieldForIndex('1', true);
@@ -218,16 +205,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - one-to-one/one-to-many', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -261,16 +240,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - one-to-collection', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -292,16 +263,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - many-to-one', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -331,16 +294,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - collection-to-one', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -365,16 +320,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - for-each', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -401,16 +348,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - for-each - many-to-collection', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -430,16 +369,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - for-each - collection-to-many', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -458,16 +389,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - multiple mappings to the non-collection target should not be allowed', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -489,16 +412,8 @@ describe('MappingManagementService', () => {
   });
 
   test('isFieldAddableToActiveMapping() - multiple mappings to the collection target should be allowed', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     const srcDoc = service.cfg.sourceDocs[0];
@@ -517,16 +432,8 @@ describe('MappingManagementService', () => {
   });
 
   test('addNewMapping()', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     const doc = service.cfg.sourceDocs[0];
     const field3 = doc.getField('/sourceField3');
@@ -539,16 +446,8 @@ describe('MappingManagementService', () => {
   });
 
   test('newMapping()', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings.length).toBe(2);
     service.newMapping();
@@ -564,16 +463,8 @@ describe('MappingManagementService', () => {
   });
 
   test('{select,deselect}Mapping()', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     const mapping1 = service.cfg.mappings!.mappings[1];
     expect(service.cfg.mappings?.activeMapping).toBeNull();
@@ -584,16 +475,8 @@ describe('MappingManagementService', () => {
   });
 
   test('removeDocumentReferenceFromAllMappings()', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn(fileService, 'setMappingToService').and.stub();
+    spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings.length).toBe(2);
     service.removeDocumentReferenceFromAllMappings('SourceJson');
@@ -616,6 +499,7 @@ describe('MappingManagementService', () => {
 
   test('notifyLineRefresh()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
+    spyOn<any>(fileService, 'setMappingToService').and.stub();
     const subscription = service.lineRefresh$.subscribe({
       next() {
         subscription.unsubscribe();

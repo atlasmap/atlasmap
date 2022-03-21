@@ -16,9 +16,13 @@
 import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from './common-util';
 import { ConfigModel } from '../models/config.model';
+import { IAtlasMappingContainer } from '../contracts/mapping';
 
 export class MappingDigestUtil {
-  static generateMappingDigest(cfg: ConfigModel, mappingJson: any): ADMDigest {
+  static generateMappingDigest(
+    cfg: ConfigModel,
+    mappingJson?: IAtlasMappingContainer
+  ): ADMDigest {
     let mappingDigest: ADMDigest = {
       exportMappings: { value: '' },
       exportMeta: [],
@@ -26,9 +30,14 @@ export class MappingDigestUtil {
     };
 
     // Retrieve the JSON mappings buffer from the server.
-    const jsonBuffer = JSON.stringify(mappingJson);
-    if (jsonBuffer) {
-      mappingDigest.exportMappings.value = CommonUtil.sanitizeJSON(jsonBuffer);
+    if (mappingJson) {
+      const jsonBuffer = JSON.stringify(mappingJson);
+      if (jsonBuffer) {
+        // FIXME sanitizeJSON() does JSON.stringify(), causes the string to be double quoted.
+        // Note that it's already stringified right above.
+        mappingDigest.exportMappings.value =
+          CommonUtil.sanitizeJSON(jsonBuffer);
+      }
     }
 
     for (const doc of cfg.getAllDocs()) {

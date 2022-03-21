@@ -89,7 +89,7 @@ describe('InitializationService', () => {
 
   test('initialize() load document definitions', (done) => {
     const c = service.cfg;
-    c.initCfg.baseMappingServiceUrl = 'dummy';
+    c.initCfg.baseAtlasServiceUrl = 'dummy';
     c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
     c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
     c.initCfg.baseCSVInspectionServiceUrl = 'dummy';
@@ -146,7 +146,7 @@ describe('InitializationService', () => {
   test('initialize() load mapping definition', (done) => {
     const cfg = service.cfg;
     cfg.clearDocs();
-    cfg.initCfg.baseMappingServiceUrl = 'dummy';
+    cfg.initCfg.baseAtlasServiceUrl = 'dummy';
     cfg.initCfg.baseJSONInspectionServiceUrl = 'dummy';
     cfg.initCfg.baseXMLInspectionServiceUrl = 'dummy';
     cfg.initCfg.baseCSVInspectionServiceUrl = 'dummy';
@@ -241,7 +241,7 @@ describe('InitializationService', () => {
     'notify of mapping changes upon inspection in initialization run(%i)',
     (_, done: any) => {
       const c = serviceNotificationCase.cfg;
-      c.initCfg.baseMappingServiceUrl = 'dummy';
+      c.initCfg.baseAtlasServiceUrl = 'dummy';
       c.initCfg.baseJSONInspectionServiceUrl = 'dummy';
       c.initCfg.baseXMLInspectionServiceUrl = 'dummy';
       c.initCfg.baseCSVInspectionServiceUrl = 'dummy';

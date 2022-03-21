@@ -45,22 +45,6 @@
       <artifactId>atlas-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-model</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-module</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-xml-model</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-json-model</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
     </dependency>
@@ -81,6 +65,22 @@
       <artifactId>org.eclipse.lsp4j.websocket</artifactId>
     </dependency>
 
+    <!-- Test dependencies -->
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-java-model</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-json-model</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-xml-model</artifactId>
+      <scope>test</scope>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>

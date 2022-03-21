@@ -20,7 +20,10 @@ import { MappingDigestUtil } from './mapping-digest-util';
 describe('MappingDigestUtil', () => {
   test('generateExportBlockData()', () => {
     expect(
-      MappingDigestUtil.generateMappingDigest(ConfigModel.getConfig(), {})
+      MappingDigestUtil.generateMappingDigest(
+        ConfigModel.getConfig(),
+        undefined
+      )
     ).toBeTruthy();
   });
 });

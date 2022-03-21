@@ -85,7 +85,7 @@ export class FieldActionService {
 
       if (
         this.cfg.mappingService == null ||
-        this.cfg.initCfg.baseMappingServiceUrl == null
+        this.cfg.initCfg.baseAtlasServiceUrl == null
       ) {
         this.cfg.errorService.addError(
           new ErrorInfo({
@@ -181,8 +181,7 @@ export class FieldActionService {
   private doFetchFieldActions(): Promise<FieldActionDefinition[]> {
     return new Promise<FieldActionDefinition[]>((resolve, reject) => {
       const actionConfigs: FieldActionDefinition[] = [];
-      const url: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'fieldActions';
+      const url: string = this.cfg.initCfg.baseAtlasServiceUrl + 'fieldAction';
       this.cfg.logger!.debug('Field Action Config Request');
       this.api
         .get(url, { headers: this.headers })

@@ -28,6 +28,8 @@ import io.atlasmap.java.service.JavaService;
 import io.atlasmap.json.service.JsonService;
 import io.atlasmap.kafkaconnect.service.KafkaConnectService;
 import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.service.MappingService;
 import io.atlasmap.xml.service.XmlService;
 
 /**
@@ -36,6 +38,36 @@ import io.atlasmap.xml.service.XmlService;
 @Component
 @ApplicationPath("/v2/atlas/")
 public class JaxrsApplication extends Application {
+
+    /**
+     * Core service.
+     * @return Core service
+     * @throws AtlasException unexpected error
+     */
+    @Bean
+    public AtlasService atlasService() throws AtlasException {
+        return new AtlasService();
+    }
+
+    /**
+     * Mapping service.
+     * @return Mapping service
+     * @throws AtlasException unexpected error
+     */
+    @Bean
+    public MappingService mappingService() throws AtlasException {
+        return new MappingService(atlasService());
+    }
+
+    /**
+     * Document service.
+     * @return Document service
+     * @throws AtlasException unexpected error
+     */
+    @Bean
+    public DocumentService documentService() throws AtlasException {
+        return new DocumentService(atlasService());
+    }
 
     /**
      * Java service.
@@ -87,14 +119,4 @@ public class JaxrsApplication extends Application {
     @Bean
     public KafkaConnectService kafkaConnectService() { return new KafkaConnectService(); }
     
-    /**
-     * Core service.
-     * @return Core service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public AtlasService atlasService() throws AtlasException {
-        return new AtlasService();
-    }
-
 }

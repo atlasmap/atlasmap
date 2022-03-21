@@ -15,32 +15,27 @@
  */
 package io.atlasmap.json.service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.json.inspect.JsonInspectionService;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
-import io.atlasmap.v2.Json;
+import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -51,51 +46,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * The JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.
  */
 @Path("/json/")
-public class JsonService {
+public class JsonService extends ModuleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);
-
-    /**
-     * Serializes to a JSON.
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-            return Json.mapper().writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Deserializes from a JSON.
-     * @param <T> type
-     * @param value value
-     * @param clazz type
-     * @return deserialized
-     */
-    protected <T> T fromJson(InputStream value, Class<T>clazz) {
-        try {
-            return Json.mapper().readValue(value, clazz);
-        } catch (IOException e) {
-            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from sender
-     * @return pong
-     */
-    @GET
-    @Path("/simple")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary ="Simple", description = "Simple hello service")
-    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
-    public String simpleHelloWorld(@Parameter(description = "From") @QueryParam("from") String from) {
-        return "Got it! " + from;
-    }
 
     /**
      * Inspect a JSON schema or instance and return a Document object.
@@ -174,5 +127,17 @@ public class JsonService {
      */
     protected String cleanJsonData(String jsonData) {
         return jsonData.trim();
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Field> searchFields(String keywords) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -17,14 +17,13 @@ package io.atlasmap.csv.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,14 +32,14 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.service.ModuleService;
 import io.atlasmap.v2.Document;
-import io.atlasmap.v2.Json;
+import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -52,39 +51,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * CSV Service provides CSV inspection service which generate an AtlasMap Document object from the CSV.
  */
 @Path("/csv/")
-public class CsvService {
+public class CsvService extends ModuleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);
 
     @Context
     private ResourceContext resourceContext;
-
-    /**
-     * Seralizes to a JSON.
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-            return Json.mapper().writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from sender
-     * @return pong
-     */
-    @GET
-    @Path("/simple")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Simple", description = "Simple hello service")
-    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
-    public String simpleHelloWorld(@QueryParam("from") String from) {
-        return "Got it! " + from;
-    }
 
     /**
      * Inspect a CSV instance and return a Document object.
@@ -175,5 +147,17 @@ public class CsvService {
             LOG.debug(("Response: {}" + new ObjectMapper().writeValueAsString(response)));
         }
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Field> searchFields(String keywords) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

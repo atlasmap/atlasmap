@@ -18,12 +18,12 @@ import {
   DocumentInitializationModel,
 } from '../models/config.model';
 import { DocumentType, FieldType, InspectionType } from '../contracts/common';
-import { Input, Options } from 'ky';
 
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
+import { Input } from 'ky';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { TestUtils } from '../../test/test-util';
 import atlasmapInspectionComplexObjectRootedJson from '../../../../test-resources/inspected/atlasmap-inspection-complex-object-rooted.json';
@@ -239,7 +239,7 @@ describe('DocumentManagementService', () => {
   });
 
   test('getLibraryClassNames()', (done) => {
-    cfg.initCfg.baseMappingServiceUrl = 'dummyurl';
+    cfg.initCfg.baseAtlasServiceUrl = 'dummyurl';
     spyOn(ky, 'get').and.callFake((_url: Input) => {
       return new (class {
         json(): Promise<any> {
@@ -344,16 +344,7 @@ describe('DocumentManagementService', () => {
   });
 
   test('Constant field', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn<any>(cfg.mappingService, 'validateMappings').and.stub();
     cfg.mappings = new MappingDefinition();
     expect(cfg.constantDoc.fields.length).toBe(0);
     service.createConstant('testConst', 'testConstVal', 'STRING', false);
@@ -384,16 +375,7 @@ describe('DocumentManagementService', () => {
   });
 
   test('Property field', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
-      return new (class {
-        json(): Promise<any> {
-          return Promise.resolve(options.json);
-        }
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })();
-    });
+    spyOn<any>(cfg.mappingService, 'validateMappings').and.stub();
     cfg.mappings = new MappingDefinition();
     expect(cfg.sourcePropertyDoc.fields.length).toBe(0);
     expect(cfg.targetPropertyDoc.fields.length).toBe(0);

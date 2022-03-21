@@ -28,19 +28,235 @@ Core Service provides basic operations which is not specific to the individual d
 === Default
 
 
-[.createMappingRequest]
-==== createMappingRequest
+[.deleteAll]
+==== deleteAll
 
-`PUT /mapping/{mappingFormat}/{mappingDefinitionId}`
+`DELETE /all`
 
-Create Mapping
+Delete all
 
 ===== Description
 
-Save a mapping file on the server
+Delete all user-defined library JAR files and mapping projects
 
 
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}all/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| All user-defined libarary JARs and mapping projects were deleted successfully
+|  <<>>
+
+
+| 204
+| Unable to delete all user-defined JAR files and mapping projects
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}all/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}all/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :all/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}all/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.deleteAllMappingProjects]
+==== deleteAllMappingProjects
+
+`DELETE /project`
+
+Delete All Mapping projects
+
+===== Description
+
+Delete all mapping projects including Mapping Definitions and Documents saved on the server
+
+
+// markup not found, no include::{specDir}project/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| All mapping projects were deleted successfully
+|  <<>>
+
+
+| 204
+| Unable to delete all mapping projects
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.deleteLibraries]
+==== deleteLibraries
+
+`DELETE /library`
+
+Remove All User-Defined JAR libraries
+
+===== Description
+
+Remove all user-defined JAR files saved on the server
+
+
+// markup not found, no include::{specDir}library/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| All user-defined JAR files were removed successfully
+|  <<>>
+
+
+| 204
+| Unable to remove all user-defined JAR files
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}library/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}library/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :library/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}library/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.deleteMappingProjectById]
+==== deleteMappingProjectById
+
+`DELETE /project/{mappingDefinitionId}`
+
+Delete Mapping Project by ID
+
+===== Description
+
+Delete the mapping project including a Mapping Definition and Documents related to specified ID
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -52,11 +268,183 @@ Save a mapping file on the server
 |===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat
-| Mapping Format 
+| mappingDefinitionId
+| Mapping Definition ID 
 | X
 | null
 | 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Mapping project was removed successfully
+|  <<>>
+
+
+| 204
+| Unable to remove a mapping project for the specified ID
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getADMDigestRequest]
+==== getADMDigestRequest
+
+`GET /project/{mappingDefinitionId}/digest`
+
+Get ADM Digest file
+
+===== Description
+
+Retrieve a gzipped ADM Digest file saved on the server
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping definition ID 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+===== Content Type
+
+* application/octet-stream
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Return a gzipped ADM Digest file content
+|  <<>>
+
+
+| 204
+| ADM Digest file was not found
+|  <<>>
+
+
+| 500
+| ADM Digest file access error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/digest/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getADMRequest]
+==== getADMRequest
+
+`GET /project/{mappingDefinitionId}/adm`
+
+Get Mapping
+
+===== Description
+
+Retrieve a mapping file saved on the server
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/adm/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
 
 | mappingDefinitionId
 | Mapping ID 
@@ -66,19 +454,6 @@ Save a mapping file on the server
 
 |===
 
-====== Body Parameter
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| AtlasMapping
-| Mapping file content <<AtlasMapping>>
-| -
-| 
-| 
-
-|===
 
 
 
@@ -87,9 +462,12 @@ Save a mapping file on the server
 ===== Return Type
 
 
+<<File>>
 
--
 
+===== Content Type
+
+* application/octet-stream
 
 ===== Responses
 
@@ -100,12 +478,17 @@ Save a mapping file on the server
 
 
 | 200
-| Succeeded
+| Return an ADM file content
+|  <<File>>
+
+
+| 204
+| ADM file was not found
 |  <<>>
 
 
 | 500
-| Mapping file save error
+| ADM file access error
 |  <<>>
 
 |===
@@ -113,118 +496,20 @@ Save a mapping file on the server
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/adm/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/{mappingFormat}/{mappingDefinitionId}/PUT/PUT.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/PUT/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.createMappingRequestOld]
-==== createMappingRequestOld
-
-`PUT /mapping/{mappingFormat}`
-
-Create Mapping
-
-===== Description
-
-Save a mapping file on the server
-
-
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/adm/GET/http-response.adoc[opts=optional]
 
 
 
-===== Parameters
-
-====== Path Parameters
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| mappingFormat
-| Mapping Format 
-| X
-| null
-| 
-
-|===
-
-====== Body Parameter
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| AtlasMapping
-| Mapping file content <<AtlasMapping>>
-| -
-| 
-| 
-
-|===
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Succeeded
-|  <<>>
-
-
-| 500
-| Mapping file save error
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/PUT/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/PUT/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/{mappingFormat}/PUT/PUT.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/adm/GET/GET.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/adm/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -233,7 +518,7 @@ endif::internal-generation[]
 [.getMappingRequest]
 ==== getMappingRequest
 
-`GET /mapping/{mappingFormat}/{mappingDefinitionId}`
+`GET /project/{mappingDefinitionId}/mapping`
 
 Get Mapping
 
@@ -242,7 +527,7 @@ Get Mapping
 Retrieve a mapping file saved on the server
 
 
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/GET/spec.adoc[opts=optional]
 
 
 
@@ -254,14 +539,8 @@ Retrieve a mapping file saved on the server
 |===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat
-| Mapping Format 
-| X
-| null
-| 
-
 | mappingDefinitionId
-| Mapping ID 
+| Mapping Definition ID 
 | X
 | null
 | 
@@ -311,38 +590,38 @@ Retrieve a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/GET/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :mapping/{mappingFormat}/{mappingDefinitionId}/GET/GET.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/GET/GET.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/\{mappingDefinitionId\}/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
 
 
-[.getMappingRequestOld]
-==== getMappingRequestOld
+[.importADMArchiveRequest]
+==== importADMArchiveRequest
 
-`GET /mapping/{mappingFormat}`
+`PUT /project/{mappingDefinitionId}/adm`
 
-Get Mapping
+Import ADM archive
 
 ===== Description
 
-Retrieve a mapping file saved on the server
+Import an ADM archive file on the server
 
 
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/adm/PUT/spec.adoc[opts=optional]
 
 
 
@@ -354,10 +633,24 @@ Retrieve a mapping file saved on the server
 |===
 |Name| Description| Required| Default| Pattern
 
-| mappingFormat
-| Mapping Format 
+| mappingDefinitionId
+| Mapping definition ID 
 | X
 | null
+| 
+
+|===
+
+====== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| body
+| ADM archive file content <<binary>>
+| -
+| 
 | 
 
 |===
@@ -366,17 +659,12 @@ Retrieve a mapping file saved on the server
 
 
 
-
 ===== Return Type
 
-<<AtlasMapping>>
 
 
-===== Content Type
+-
 
-* application/json
-* application/xml
-* application/octet-stream
 
 ===== Responses
 
@@ -387,17 +675,12 @@ Retrieve a mapping file saved on the server
 
 
 | 200
-| Return a mapping file content
-|  <<AtlasMapping>>
-
-
-| 204
-| Mapping file was not found
+| Succeeded
 |  <<>>
 
 
 | 500
-| Mapping file access error
+| ADM archive file import error
 |  <<>>
 
 |===
@@ -405,20 +688,20 @@ Retrieve a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/adm/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingFormat\}/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/adm/PUT/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :mapping/{mappingFormat}/GET/GET.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/adm/PUT/PUT.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/\{mappingFormat\}/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/adm/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -427,7 +710,7 @@ endif::internal-generation[]
 [.listFieldActions]
 ==== listFieldActions
 
-`GET /fieldActions`
+`GET /fieldAction`
 
 List FieldActions
 
@@ -436,7 +719,7 @@ List FieldActions
 Retrieves a list of available field action
 
 
-// markup not found, no include::{specDir}fieldActions/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}fieldAction/GET/spec.adoc[opts=optional]
 
 
 
@@ -474,20 +757,20 @@ Retrieves a list of available field action
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}fieldActions/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}fieldAction/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}fieldActions/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}fieldAction/GET/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :fieldActions/GET/GET.json[]
+// file not found, no * wiremock data link :fieldAction/GET/GET.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}fieldActions/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}fieldAction/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -496,7 +779,7 @@ endif::internal-generation[]
 [.listLibraryClasses]
 ==== listLibraryClasses
 
-`GET /library/list`
+`GET /library/class`
 
 List Library Classes
 
@@ -505,7 +788,7 @@ List Library Classes
 Retrieves a list of available Java library class names from uploaded JARs.
 
 
-// markup not found, no include::{specDir}library/list/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}library/class/GET/spec.adoc[opts=optional]
 
 
 
@@ -544,20 +827,20 @@ Retrieves a list of available Java library class names from uploaded JARs.
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}library/list/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}library/class/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}library/list/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}library/class/GET/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :library/list/GET/GET.json[]
+// file not found, no * wiremock data link :library/class/GET/GET.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}library/list/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}library/class/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -566,7 +849,7 @@ endif::internal-generation[]
 [.listMappingBuilderClasses]
 ==== listMappingBuilderClasses
 
-`GET /mappingBuilders`
+`GET /library/class/mappingBuilder`
 
 List mapping builder classes
 
@@ -575,7 +858,7 @@ List mapping builder classes
 List mapping builder classes which defines custom mapping logic
 
 
-// markup not found, no include::{specDir}mappingBuilders/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}library/class/mappingBuilder/GET/spec.adoc[opts=optional]
 
 
 
@@ -614,133 +897,38 @@ List mapping builder classes which defines custom mapping logic
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mappingBuilders/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}library/class/mappingBuilder/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mappingBuilders/GET/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mappingBuilders/GET/GET.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mappingBuilders/GET/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.listMappings]
-==== listMappings
-
-`GET /mappings/{mappingDefinitionId}`
-
-List Mappings
-
-===== Description
-
-Retrieves a list of mapping file name saved with specified mappingDefinitionId
-
-
-// markup not found, no include::{specDir}mappings/\{mappingDefinitionId\}/GET/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}library/class/mappingBuilder/GET/http-response.adoc[opts=optional]
 
 
 
-===== Parameters
-
-====== Path Parameters
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| mappingDefinitionId
-| Mapping Definition ID 
-| X
-| null
-| 
-
-|===
-
-
-
-
-====== Query Parameters
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| filter
-|  
-| -
-| null
-| 
-
-|===
-
-
-===== Return Type
-
-<<StringMap>>
-
-
-===== Content Type
-
-* application/json
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Return a list of a pair of mapping file name and content
-|  <<StringMap>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mappings/\{mappingDefinitionId\}/GET/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mappings/\{mappingDefinitionId\}/GET/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mappings/{mappingDefinitionId}/GET/GET.json[]
+// file not found, no * wiremock data link :library/class/mappingBuilder/GET/GET.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mappings/\{mappingDefinitionId\}/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}library/class/mappingBuilder/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
 
 
-[.listMappingsOld]
-==== listMappingsOld
+[.listMappingDefinitionNames]
+==== listMappingDefinitionNames
 
-`GET /mappings`
+`GET /project`
 
-List Mappings
+List Mapping Definition names
 
 ===== Description
 
-Retrieves a list of mapping file name saved with specified mappingDefinitionId
+Retrieves a list of mapping definition names
 
 
-// markup not found, no include::{specDir}mappings/GET/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/GET/spec.adoc[opts=optional]
 
 
 
@@ -783,7 +971,7 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 
 
 | 200
-| Return a list of a pair of mapping file name and content
+| Return a list of mapping definition names
 |  <<StringMap>>
 
 |===
@@ -791,20 +979,20 @@ Retrieves a list of mapping file name saved with specified mappingDefinitionId
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mappings/GET/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/GET/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mappings/GET/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/GET/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :mappings/GET/GET.json[]
+// file not found, no * wiremock data link :project/GET/GET.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mappings/GET/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -883,7 +1071,7 @@ endif::internal-generation[]
 [.processMappingRequest]
 ==== processMappingRequest
 
-`PUT /mapping/process`
+`POST /project/{mappingDefinitionId}/mapping/process`
 
 Process Mapping
 
@@ -892,12 +1080,25 @@ Process Mapping
 Process Mapping by feeding input data
 
 
-// markup not found, no include::{specDir}mapping/process/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/process/POST/spec.adoc[opts=optional]
 
 
 
 ===== Parameters
 
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+|===
 
 ====== Body Parameter
 
@@ -948,20 +1149,20 @@ Process Mapping by feeding input data
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/process/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/process/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/process/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/process/POST/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :mapping/process/PUT/PUT.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/process/POST/POST.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/process/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/process/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -970,16 +1171,16 @@ endif::internal-generation[]
 [.removeMappingRequest]
 ==== removeMappingRequest
 
-`DELETE /mapping/{mappingDefinitionId}`
+`DELETE /project/{mappingDefinitionId}/mapping`
 
 Remove Mapping
 
 ===== Description
 
-Remove a mapping file saved on the server
+Remove mappings from mapping definition
 
 
-// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/DELETE/spec.adoc[opts=optional]
 
 
 
@@ -992,7 +1193,7 @@ Remove a mapping file saved on the server
 |Name| Description| Required| Default| Pattern
 
 | mappingDefinitionId
-| Mapping ID 
+| Mapping Definition ID 
 | X
 | null
 | 
@@ -1020,12 +1221,12 @@ Remove a mapping file saved on the server
 
 
 | 200
-| Specified mapping file was removed successfully
+| The mappings for the specified mapping definition was removed successfully
 |  <<>>
 
 
 | 204
-| Mapping file was not found
+| The specified mapping definition was not found
 |  <<>>
 
 |===
@@ -1033,182 +1234,38 @@ Remove a mapping file saved on the server
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/DELETE/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/{mappingDefinitionId}/DELETE/DELETE.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/DELETE/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.removeMappingRequestOld]
-==== removeMappingRequestOld
-
-`DELETE /mapping`
-
-Remove Mapping
-
-===== Description
-
-Remove a mapping file saved on the server
-
-
-// markup not found, no include::{specDir}mapping/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/DELETE/http-response.adoc[opts=optional]
 
 
 
-===== Parameters
-
-
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Specified mapping file was removed successfully
-|  <<>>
-
-
-| 204
-| Mapping file was not found
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/DELETE/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/DELETE/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/DELETE/DELETE.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/DELETE/DELETE.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
 
 
-[.resetAllMappings]
-==== resetAllMappings
+[.setADMDigestRequest]
+==== setADMDigestRequest
 
-`DELETE /mapping/RESET/ALL`
+`PUT /project/{mappingDefinitionId}/digest`
 
-Remove All Mappings
-
-===== Description
-
-Remove all mapping files and catalogs saved on the server
-
-
-// markup not found, no include::{specDir}mapping/RESET/ALL/DELETE/spec.adoc[opts=optional]
-
-
-
-===== Parameters
-
-
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| All mapping files were removed successfully
-|  <<>>
-
-
-| 204
-| Unable to remove all mapping files
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/RESET/ALL/DELETE/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/RESET/ALL/DELETE/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/RESET/ALL/DELETE/DELETE.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/RESET/ALL/DELETE/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.resetMappingById]
-==== resetMappingById
-
-`DELETE /mapping/RESET/{mappingDefinitionId}`
-
-Remove Mapping by ID
+Set ADM Digest
 
 ===== Description
 
-Remove mapping file and catalogs related to specified ID
+Save an ADM Digest file on the server
 
 
-// markup not found, no include::{specDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/PUT/spec.adoc[opts=optional]
 
 
 
@@ -1221,9 +1278,23 @@ Remove mapping file and catalogs related to specified ID
 |Name| Description| Required| Default| Pattern
 
 | mappingDefinitionId
-| Mapping ID 
+| Mapping definition ID 
 | X
 | null
+| 
+
+|===
+
+====== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| body
+| ADM Digest file content <<binary>>
+| -
+| 
 | 
 
 |===
@@ -1232,7 +1303,6 @@ Remove mapping file and catalogs related to specified ID
 
 
 
-
 ===== Return Type
 
 
@@ -1249,84 +1319,12 @@ Remove mapping file and catalogs related to specified ID
 
 
 | 200
-| Mapping file and Catalogs were removed successfully
+| Succeeded
 |  <<>>
 
 
-| 204
-| Unable to remove mapping file and Catalogs for the specified ID
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/RESET/{mappingDefinitionId}/DELETE/DELETE.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/RESET/\{mappingDefinitionId\}/DELETE/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.resetMappingByIdOld]
-==== resetMappingByIdOld
-
-`DELETE /mapping/RESET`
-
-Remove Mapping by ID
-
-===== Description
-
-Removes mapping file and catalogs related to specified ID
-
-
-// markup not found, no include::{specDir}mapping/RESET/DELETE/spec.adoc[opts=optional]
-
-
-
-===== Parameters
-
-
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Mapping file and Catalogs were removed successfully
-|  <<>>
-
-
-| 204
-| Unable to remove mapping file and Catalogs for the specified ID
+| 500
+| Mapping file save error
 |  <<>>
 
 |===
@@ -1334,92 +1332,20 @@ Removes mapping file and catalogs related to specified ID
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/RESET/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/RESET/DELETE/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/RESET/DELETE/DELETE.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/RESET/DELETE/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.resetUserLibs]
-==== resetUserLibs
-
-`DELETE /mapping/resetLibs`
-
-Remove All User-Defined JAR libraries
-
-===== Description
-
-Remove all user-defined JAR files saved on the server
-
-
-// markup not found, no include::{specDir}mapping/resetLibs/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/PUT/http-response.adoc[opts=optional]
 
 
 
-===== Parameters
-
-
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| All user-defined JAR files were removed successfully
-|  <<>>
-
-
-| 204
-| Unable to remove all user-defined JAR files
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/resetLibs/DELETE/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/resetLibs/DELETE/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/resetLibs/DELETE/DELETE.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/digest/PUT/PUT.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/resetLibs/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1428,7 +1354,7 @@ endif::internal-generation[]
 [.updateMappingRequest]
 ==== updateMappingRequest
 
-`POST /mapping/{mappingDefinitionId}`
+`PUT /project/{mappingDefinitionId}/mapping`
 
 Update Mapping
 
@@ -1437,7 +1363,7 @@ Update Mapping
 Update existing mapping file on the server
 
 
-// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/PUT/spec.adoc[opts=optional]
 
 
 
@@ -1499,100 +1425,20 @@ Update existing mapping file on the server
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/\{mappingDefinitionId\}/POST/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/{mappingDefinitionId}/POST/POST.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/\{mappingDefinitionId\}/POST/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.updateMappingRequestOld]
-==== updateMappingRequestOld
-
-`POST /mapping`
-
-Update Mapping
-
-===== Description
-
-Update existing mapping file on the server
-
-
-// markup not found, no include::{specDir}mapping/POST/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/PUT/http-response.adoc[opts=optional]
 
 
 
-===== Parameters
-
-
-====== Body Parameter
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| AtlasMapping
-| Mapping file content <<AtlasMapping>>
-| -
-| 
-| 
-
-|===
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Succeeded
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/POST/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/POST/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/POST/POST.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/PUT/PUT.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1681,7 +1527,7 @@ endif::internal-generation[]
 [.validateMappingRequest]
 ==== validateMappingRequest
 
-`PUT /mapping/validate/{mappingDefinitionId}`
+`POST /project/{mappingDefinitionId}/mapping/validate`
 
 Validate Mapping
 
@@ -1690,7 +1536,7 @@ Validate Mapping
 Validate mapping file
 
 
-// markup not found, no include::{specDir}mapping/validate/\{mappingDefinitionId\}/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/validate/POST/spec.adoc[opts=optional]
 
 
 
@@ -1703,7 +1549,7 @@ Validate mapping file
 |Name| Description| Required| Default| Pattern
 
 | mappingDefinitionId
-| Mapping ID 
+| Mapping Definition ID 
 | X
 | null
 | 
@@ -1754,102 +1600,20 @@ Validate mapping file
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}mapping/validate/\{mappingDefinitionId\}/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/validate/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}mapping/validate/\{mappingDefinitionId\}/PUT/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/validate/{mappingDefinitionId}/PUT/PUT.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}mapping/validate/\{mappingDefinitionId\}/PUT/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
-[.validateMappingRequestOld]
-==== validateMappingRequestOld
-
-`PUT /mapping/validate`
-
-Validate Mapping
-
-===== Description
-
-Validate mapping file
-
-
-// markup not found, no include::{specDir}mapping/validate/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/validate/POST/http-response.adoc[opts=optional]
 
 
 
-===== Parameters
-
-
-====== Body Parameter
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| AtlasMapping
-| Mapping file content <<AtlasMapping>>
-| -
-| 
-| 
-
-|===
-
-
-
-
-
-===== Return Type
-
-<<Validations>>
-
-
-===== Content Type
-
-* application/json
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Return a validation result
-|  <<Validations>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}mapping/validate/PUT/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}mapping/validate/PUT/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :mapping/validate/PUT/PUT.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/validate/POST/POST.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}mapping/validate/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/validate/POST/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]

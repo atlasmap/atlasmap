@@ -49,6 +49,10 @@
       <artifactId>atlas-json-model</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-service</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
     </dependency>
