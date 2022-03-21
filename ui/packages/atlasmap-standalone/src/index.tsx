@@ -22,11 +22,11 @@ import ReactDOM from 'react-dom';
 
 ReactDOM.render(
   <AtlasmapProvider
+    baseAtlasServiceUrl={'/v2/atlas/'}
     baseCSVInspectionServiceUrl={'/v2/atlas/csv/'}
     baseJavaInspectionServiceUrl={'/v2/atlas/java/'}
     baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
     baseKafkaConnectInspectionServiceUrl={'/v2/atlas/kafkaconnect/'}
-    baseMappingServiceUrl={'/v2/atlas/'}
     baseXMLInspectionServiceUrl={'/v2/atlas/xml/'}
     logLevel={'info'}
   >

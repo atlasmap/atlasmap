@@ -15,16 +15,13 @@
  */
 package io.atlasmap.java.service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,17 +30,15 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.java.inspect.ClassInspectionService;
 import io.atlasmap.java.v2.ClassInspectionRequest;
 import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.service.AtlasService;
-import io.atlasmap.v2.Json;
+import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -54,54 +49,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * Java Service provides Java inspection service which generate an AtlasMap Document object from Java class.
  */
 @Path("/java/")
-public class JavaService {
+public class JavaService extends ModuleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaService.class);
 
     @Context
     private ResourceContext resourceContext;
-
-    /**
-     * Serializes to JSON
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-            return Json.mapper().writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Deserializes from JSON
-     * @param <T> type
-     * @param value value
-     * @param clazz type
-     * @return deserialized
-     */
-    protected <T> T fromJson(InputStream value, Class<T>clazz) {
-        try {
-            return Json.mapper().readValue(value, clazz);
-        } catch (IOException e) {
-            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from sender name
-     * @return pong
-     */
-    @GET
-    @Path("/simple")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Simple", description ="Simple hello service")
-    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
-    public String simpleHelloWorld(@Parameter(description = "From") @QueryParam("from") String from) {
-        return "Got it! " + from;
-    }
 
     /**
      * Inspects a Java Class with specified fully qualified class name and return a Document object.
@@ -185,5 +138,17 @@ public class JavaService {
             classInspectionService.setDisablePublicGetterSetterFields(request.isDisablePublicGetterSetterFields());
         }
 
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Field> searchFields(String keywords) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -1038,6 +1038,7 @@ describe('MappingSerializer', () => {
 
   tName = 'remove a field node from a conditional expression';
   test(tName, (done) => {
+    spyOn<any>(cfg.mappingService, 'validateMappings').and.stub();
     createAllDocs(cfg);
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService

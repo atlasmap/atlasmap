@@ -23,7 +23,6 @@ import {
 import { Observable, Subject } from 'rxjs';
 
 import { ADMDigest } from '../contracts/adm-digest';
-import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { DocumentManagementService } from './document-management.service';
 import { ErrorHandlerService } from './error-handler.service';
@@ -115,7 +114,7 @@ export class InitializationService {
             type: ErrorType.INTERNAL,
           })
         );
-      } else if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+      } else if (this.cfg.initCfg.baseAtlasServiceUrl == null) {
         this.cfg.errorService.addError(
           new ErrorInfo({
             message:
@@ -192,7 +191,7 @@ export class InitializationService {
    */
   runtimeServiceActive(): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      const url: string = this.cfg.initCfg.baseMappingServiceUrl + 'ping';
+      const url: string = this.cfg.initCfg.baseAtlasServiceUrl + 'ping';
       this.cfg.logger!.debug('Runtime Service Ping Request');
       this.api
         .get(url)
@@ -214,7 +213,7 @@ export class InitializationService {
    * @returns
    */
   getRuntimeVersion(): Promise<string> {
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'version';
+    const url = this.cfg.initCfg.baseAtlasServiceUrl + 'version';
     return new Promise<string>((resolve, reject) => {
       this.api
         .get(url)
@@ -261,40 +260,33 @@ export class InitializationService {
             resolve(false);
             return;
           }
-          // Reinitialize the model mappings.
-          const digestMappingsName =
-            MappingSerializer.deserializeAtlasMappingName(
-              CommonUtil.objectize(mappingDigest.exportMappings.value)
-            );
+          // load both default and custom field actions
+          await this.cfg.fieldActionService.fetchFieldActions();
 
-          // If the live UI mappings name does not match the UI mappings name extracted from the
-          // catalog file then use the mappings from the catalog file. Otherwise use the live
-          // UI file.
-          this.cfg.fileService
-            .findMappingFiles('UI')
-            .then(async (files: string[]) => {
-              await this.cfg.fileService.setMappingDigestToService(
-                mappingDigest
-              );
-              await this.cfg.fieldActionService.fetchFieldActions();
-              if (digestMappingsName !== files[0]) {
-                await this.cfg.fileService.setMappingStringToService(
-                  mappingDigest.exportMappings.value
-                );
-              }
-              // load both default and custom field actions
-              await this.cfg.fieldActionService.fetchFieldActions();
-
-              // load mappings
-              this.fetchMappings().then((value) => {
-                resolve(value);
-              });
+          // load mappings
+          this.fetchMappings()
+            .then((value) => {
+              resolve(value);
             })
-            .catch(() => {
+            .catch((error: Error) => {
+              this.cfg.errorService.addBackendError(
+                'Internal error while reading mappings: ',
+                error.message
+              );
+              if (this.cfg.logger!.getLevel() <= log.levels.DEBUG) {
+                this.cfg.logger!.error(error.stack);
+              }
               resolve(false);
             });
         })
-        .catch(() => {
+        .catch((error: Error) => {
+          this.cfg.errorService.addBackendError(
+            'Internal error while initializing with ADMDigest file: ',
+            error.message
+          );
+          if (this.cfg.logger!.getLevel() <= log.levels.DEBUG) {
+            this.cfg.logger!.error(error.stack);
+          }
           resolve(false);
         });
     });
@@ -351,7 +343,7 @@ export class InitializationService {
       this.cfg.mappings = new MappingDefinition();
       let mappingFiles = this.cfg.mappingFiles;
       if (!this.cfg.mappingFiles || this.cfg.mappingFiles.length === 0) {
-        mappingFiles = await this.cfg.fileService.findMappingFiles('UI');
+        mappingFiles = await this.cfg.fileService.findMappingDefinitions('UI');
       }
       if (mappingFiles.length === 0) {
         resolve(false);

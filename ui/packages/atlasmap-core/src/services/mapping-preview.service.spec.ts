@@ -41,7 +41,7 @@ describe('MappingPreviewService', () => {
   test('{enable,disable}MappingPreview()', (done) => {
     spyOn<any>(cfg.mappingService, 'validateMappings').and.stub();
     const requests = [];
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+    spyOn(ky, 'post').and.callFake((_url: Input, options: Options) => {
       requests.push(options.json);
       return new (class {
         json(): Promise<any> {
@@ -53,7 +53,7 @@ describe('MappingPreviewService', () => {
       })();
     });
     TestUtils.createMockMappings(cfg);
-    service.cfg.initCfg.baseMappingServiceUrl = 'http://dummy/';
+    service.cfg.initCfg.baseAtlasServiceUrl = 'http://dummy/';
     const mapping1 = service.cfg.mappings!.mappings[1];
     setSourceFieldValues(mapping1);
     cfg.mappingService.selectMapping(mapping1);

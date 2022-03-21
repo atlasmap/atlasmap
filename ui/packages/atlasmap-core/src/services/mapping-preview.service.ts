@@ -52,7 +52,7 @@ export class MappingPreviewService {
    * Enable Mapping Preview.
    */
   enableMappingPreview(): void {
-    if (this.cfg.initCfg.baseMappingServiceUrl == null) {
+    if (this.cfg.initCfg.baseAtlasServiceUrl == null) {
       // process mapping service not configured.
       return;
     }
@@ -90,9 +90,9 @@ export class MappingPreviewService {
         `Process Mapping Preview Request: ${JSON.stringify(payload)}`
       );
       const url: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
+        this.cfg.initCfg.baseAtlasServiceUrl + '/project/0/mapping/process';
       this.api
-        .put(url, { json: payload })
+        .post(url, { json: payload })
         .json<IProcessMappingResponseContainer>()
         .then((body) => {
           this.cfg.logger!.debug(

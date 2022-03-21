@@ -15,11 +15,9 @@
  */
 package io.atlasmap.service;
 
-import static io.atlasmap.v2.MappingFileType.JSON;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -28,19 +26,12 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
-import java.net.URI;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarOutputStream;
 
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,13 +47,10 @@ import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
 import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.Audits;
 import io.atlasmap.v2.BaseMapping;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.MappingFileType;
 import io.atlasmap.v2.MappingType;
 import io.atlasmap.v2.Mappings;
 import io.atlasmap.v2.ProcessMappingRequest;
@@ -77,22 +65,24 @@ public class AtlasServiceTest {
     private static final String TEST_JAR_DIR = "target/tmp";
     private static final String TEST_JAR_PATH = TEST_JAR_DIR + "/my.jar";
 
-    private AtlasService service = null;
+    private AtlasService atlasService = null;
+    private MappingService mappingService = null;
     private ObjectMapper mapper = null;
 
     @BeforeEach
     public void setUp() throws Exception {
         File workspaceFolderWithSpace = new File(TEMP_DIR);
         System.setProperty(AtlasService.ATLASMAP_WORKSPACE, workspaceFolderWithSpace.getAbsolutePath());
-        service = new AtlasService();
+        atlasService = new AtlasService();
+        mappingService = new MappingService(atlasService);
         mapper = Json.mapper();
     }
 
     @AfterEach
     public void tearDown() {
-        service.resetUserLibs();
-        service.resetAllMappings();
-        service = null;
+        atlasService.deleteLibraries();
+        atlasService.deleteAllMappingProjects();
+        atlasService = null;
         mapper = null;
         AtlasUtil.deleteDirectory(new File(TEST_JAR_DIR));
         AtlasUtil.deleteDirectory(new File(TEMP_DIR));
@@ -100,27 +90,9 @@ public class AtlasServiceTest {
 
     @Test
     public void testVersion() throws Exception {
-        Response resp = service.version();
+        Response resp = atlasService.version();
         String body = resp.getEntity().toString();
         assertNotNull(body, body);
-    }
-
-    @Test
-    public void testListMappings() throws Exception {
-        Response resp = service.listMappings(
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mappings"), null, null);
-        StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
-        LOG.info("Found " + sMap.getStringMapEntry().size() + " objects");
-        for (StringMapEntry s : sMap.getStringMapEntry()) {
-            LOG.info("\t n: " + s.getName() + " v: " + s.getValue());
-        }
-    }
-
-    @Test
-    public void testGetMapping() {
-        Response resp = service.getMappingRequest(JSON, 3);
-        assertEquals(204, resp.getStatus());
-        assertNull(resp.getEntity());
     }
 
     @Test
@@ -144,111 +116,33 @@ public class AtlasServiceTest {
 
     @Test
     public void testJarUpload() throws Exception {
-        createJarFile(false, false);
+        Util.createJarFile(TEST_JAR_DIR, TEST_JAR_PATH, false, false);
         FileInputStream jarIn = new FileInputStream(TEST_JAR_PATH);
-        Response resUL = service.uploadLibrary(jarIn);
+        Response resUL = atlasService.uploadLibrary(jarIn);
         assertEquals(200, resUL.getStatus());
-        Response resFA = service.listFieldActions(null);
+        Response resFA = atlasService.listFieldActions(null);
         assertEquals(200, resFA.getStatus());
         String responseJson = new String((byte[])resFA.getEntity());
         assertTrue(responseJson.contains("myCustomFieldAction"));
-        Response resMB = service.listMappingBuilderClasses(null);
+        Response resMB = atlasService.listMappingBuilderClasses(null);
         assertEquals(200, resMB.getStatus());
         ArrayNode builders = (ArrayNode) new ObjectMapper().readTree((byte[])resMB.getEntity()).get("ArrayList");
         assertEquals(1, builders.size());
         assertEquals("io.atlasmap.service.my.MyCustomMappingBuilder", builders.get(0).asText());
 
         BufferedInputStream in = new BufferedInputStream(new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
-        Response resVD = service.validateMappingRequest(in, 0, null);
+        Response resVD = mappingService.validateMappingRequest(in, 0, null);
         assertEquals(200, resVD.getStatus());
-    }
-
-    private void createJarFile(boolean skipModel, boolean skipProcessor) throws Exception {
-        new File(TEST_JAR_DIR).mkdirs();
-        JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-        int answer = compiler.run(System.in, System.out, System.err,
-                "-d", TEST_JAR_DIR,
-                "src/test/resources/upload/io/atlasmap/service/my/MyCustomMappingBuilder.java",
-                "src/test/resources/upload/io/atlasmap/service/my/MyFieldActions.java",
-                "src/test/resources/upload/io/atlasmap/service/my/MyFieldActionsModel.java");
-        assertEquals(0, answer);
-        File jarFile = new File(TEST_JAR_PATH);
-        if (jarFile.exists()) {
-            jarFile.delete();
-        }
-        JarOutputStream jarOut = new JarOutputStream(new FileOutputStream(jarFile));
-        jarOut.putNextEntry(new JarEntry("io/"));
-        jarOut.closeEntry();
-        jarOut.putNextEntry(new JarEntry("io/atlasmap/"));
-        jarOut.closeEntry();
-        jarOut.putNextEntry(new JarEntry("io/atlasmap/service/"));
-        jarOut.closeEntry();
-        jarOut.putNextEntry(new JarEntry("io/atlasmap/service/my/"));
-        jarOut.closeEntry();
-        JarEntry classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActions.class");
-        jarOut.putNextEntry(classEntry);
-        byte[] buffer = new byte[1024];
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(TEST_JAR_DIR + "/io/atlasmap/service/my/MyFieldActions.class"));
-        int count = -1;
-        while ((count = in.read(buffer)) != -1) {
-            jarOut.write(buffer, 0, count);
-        }
-        in.close();
-        jarOut.closeEntry();
-        classEntry = new JarEntry("io/atlasmap/service/my/MyFieldActionsModel.class");
-        jarOut.putNextEntry(classEntry);
-        in = new BufferedInputStream(new FileInputStream("target/tmp/io/atlasmap/service/my/MyFieldActionsModel.class"));
-        count = -1;
-        while ((count = in.read(buffer)) != -1) {
-            jarOut.write(buffer, 0, count);
-        }
-        in.close();
-        jarOut.closeEntry();
-        classEntry = new JarEntry("io/atlasmap/service/my/MyCustomMappingBuilder.class");
-        jarOut.putNextEntry(classEntry);
-        in = new BufferedInputStream(new FileInputStream(TEST_JAR_DIR + "/io/atlasmap/service/my/MyCustomMappingBuilder.class"));
-        count = -1;
-        while ((count = in.read(buffer)) != -1) {
-            jarOut.write(buffer, 0, count);
-        }
-        in.close();
-        jarOut.closeEntry();
-
-        jarOut.putNextEntry(new JarEntry("META-INF/"));
-        jarOut.closeEntry();
-        jarOut.putNextEntry(new JarEntry("META-INF/services/"));
-        jarOut.closeEntry();
-        if (!skipProcessor) {
-            JarEntry svcEntry = new JarEntry("META-INF/services/io.atlasmap.spi.AtlasFieldAction");
-            jarOut.putNextEntry(svcEntry);
-            in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.spi.AtlasFieldAction"));
-            while ((count = in.read(buffer)) != -1) {
-                jarOut.write(buffer, 0, count);
-            }
-            in.close();
-            jarOut.closeEntry();
-        }
-        if (!skipModel) {
-            JarEntry svcEntry = new JarEntry("META-INF/services/io.atlasmap.v2.Action");
-            jarOut.putNextEntry(svcEntry);
-            in = new BufferedInputStream(new FileInputStream("src/test/resources/upload/META-INF/services/io.atlasmap.v2.Action"));
-            while ((count = in.read(buffer)) != -1) {
-                jarOut.write(buffer, 0, count);
-            }
-            in.close();
-            jarOut.closeEntry();
-        }
-        jarOut.close();
     }
 
     @Test
     public void testJarUploadNoModelLoader() throws Exception {
         assumeFalse(isWindowsJDK8());
 
-        createJarFile(true, false);
+        Util.createJarFile(TEST_JAR_DIR, TEST_JAR_PATH, true, false);
         FileInputStream jarIn = new FileInputStream(TEST_JAR_PATH);
         WebApplicationException e = assertThrows(WebApplicationException.class, () -> {
-            service.uploadLibrary(jarIn);
+            atlasService.uploadLibrary(jarIn);
         });
         assertTrue(e.getMessage().contains("META-INF/services"), e.getMessage());
     }
@@ -257,11 +151,11 @@ public class AtlasServiceTest {
     public void testJarUploadNoProcessorLoader() throws Exception {
         assumeFalse(isWindowsJDK8());
 
-        createJarFile(false, true);
+        Util.createJarFile(TEST_JAR_DIR, TEST_JAR_PATH, false, true);
         FileInputStream jarIn = new FileInputStream(TEST_JAR_PATH);
-        Response resUL = service.uploadLibrary(jarIn);
+        Response resUL = atlasService.uploadLibrary(jarIn);
         assertEquals(200, resUL.getStatus());
-        Response resFA = service.listFieldActions(null);
+        Response resFA = atlasService.listFieldActions(null);
         assertEquals(200, resFA.getStatus());
         String responseJson = new String((byte[])resFA.getEntity());
         assertFalse(responseJson.contains("myCustomFieldAction"));
@@ -276,10 +170,10 @@ public class AtlasServiceTest {
         method.invoke(action, "param");
         ProcessMappingRequest request = new ProcessMappingRequest();
         request.setMapping(m);
-        Response resMR = service.processMappingRequest(new ByteArrayInputStream(mapper.writeValueAsBytes(request)), null);
+        Response resMR = mappingService.processMappingRequest(new ByteArrayInputStream(mapper.writeValueAsBytes(request)), 0, null);
         assertEquals(200, resMR.getStatus());
         ProcessMappingResponse pmr = Json.mapper().readValue((byte[])resMR.getEntity(), ProcessMappingResponse.class);
-        assertEquals(1, pmr.getAudits().getAudit().size(), printAudit(pmr.getAudits()));
+        assertEquals(1, pmr.getAudits().getAudit().size(), Util.printAudit(pmr.getAudits()));
         Audit audit = pmr.getAudits().getAudit().get(0);
         assertEquals(AuditStatus.WARN, audit.getStatus());
         assertTrue(audit.getMessage().contains("Couldn't find metadata for a FieldAction 'MyFieldActionsModel'"));
@@ -292,90 +186,26 @@ public class AtlasServiceTest {
     }
 
     @Test
+    public void testListMappingDefinitionNames() throws Exception {
+        Response resp = atlasService.listMappingDefinitionNames(
+                Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project"), null);
+        StringMap sMap = Json.mapper().readValue((byte[])resp.getEntity(), StringMap.class);
+        LOG.info("Found " + sMap.getStringMapEntry().size() + " objects");
+        for (StringMapEntry s : sMap.getStringMapEntry()) {
+            LOG.info("\t n: " + s.getName() + " v: " + s.getValue());
+        }
+    }
+
+    @Test
     public void testADMUpload() throws Exception {
         InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-schema-source-to-xml-schema-target.adm");
-        Response res = service.createMappingRequest(in, MappingFileType.ZIP, 0,
-            generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/ZIP/0"));
+        Response res = atlasService.importADMArchiveRequest(in, 0,
+            Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project/0/adm"));
         assertEquals(200, res.getStatus());
-        res = service.getMappingRequest(MappingFileType.JSON, 0);
+        res = mappingService.getMappingRequest(0);
         assertEquals(200, res.getStatus());
         AtlasMapping mappings = mapper.readValue((byte[])res.getEntity(), AtlasMapping.class);
         assertEquals(4, mappings.getMappings().getMapping().size());
-    }
-
-    @Test
-    public void testProcessMapping() throws Exception {
-        Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request.json"),
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
-        ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
-        assertEquals(0, resp.getAudits().getAudit().size(), printAudit(resp.getAudits()));
-        FieldGroup group = (FieldGroup) resp.getMapping().getOutputField().get(0);
-        assertEquals("/addressList<>/city", group.getPath());
-        Field f = group.getField().get(0);
-        assertEquals("/addressList<0>/city", f.getPath());
-        assertEquals("testZzz", f.getValue());
-    }
-
-    @Test
-    public void testProcessMapping2977() throws Exception {
-        Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-2977.json"),
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
-        ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
-        assertEquals(0, resp.getAudits().getAudit().size(), printAudit(resp.getAudits()));
-        Field field = resp.getMapping().getOutputField().get(0);
-        assertEquals("/ns:XmlOE/ns:Address/ns:addressLine1", field.getPath());
-        assertEquals("Boston", field.getValue());
-    }
-
-    @Test
-    public void testProcessMapping3064() throws Exception {
-        Response res = service.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-3064.json"),
-                generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/mapping/process"));
-        ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
-        assertEquals(0, resp.getAudits().getAudit().size(), printAudit(resp.getAudits()));
-        Field field = resp.getMapping().getInputField().get(0);
-        assertEquals("/primitives/stringPrimitive", field.getPath());
-    }
-
-    @Test
-    public void testProcessMappingCustomAction() throws Exception {
-        createJarFile(false, false);
-        FileInputStream jarIn = new FileInputStream(TEST_JAR_PATH);
-        Response resUL = service.uploadLibrary(jarIn);
-        assertEquals(200, resUL.getStatus());
-        Response resFA = service.listFieldActions(null);
-        assertEquals(200, resFA.getStatus());
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream("src/test/resources/mappings/atlasmapping-custom-action.json"));
-        AtlasMapping am = mapper.readValue(in, AtlasMapping.class);
-        Mapping m = (Mapping) am.getMappings().getMapping().get(0);
-        Field f = m.getInputField().get(0);
-        f.setValue("foo");
-        Action action = f.getActions().get(0);
-        Method method = action.getClass().getDeclaredMethod("setParam", new Class[] {String.class});
-        method.invoke(action, "param");
-        ProcessMappingRequest request = new ProcessMappingRequest();
-        request.setMapping(m);
-        Response resMR = service.processMappingRequest(new ByteArrayInputStream(mapper.writeValueAsBytes(request)), null);
-        assertEquals(200, resMR.getStatus());
-        ProcessMappingResponse pmr = Json.mapper().readValue((byte[])resMR.getEntity(), ProcessMappingResponse.class);
-        assertEquals(0, pmr.getAudits().getAudit().size(), printAudit(pmr.getAudits()));
-        assertEquals("param foo", pmr.getMapping().getOutputField().get(0).getValue());
-    }
-
-    protected UriInfo generateTestUriInfo(String baseUri, String absoluteUri) throws Exception {
-        return new TestUriInfo(new URI(baseUri), new URI(absoluteUri));
-    }
-
-    protected String printAudit(Audits audits) {
-        StringBuilder buf = new StringBuilder("Audits: ");
-        for (Audit a : audits.getAudit()) {
-            buf.append('[');
-            buf.append(a.getStatus());
-            buf.append(", message=");
-            buf.append(a.getMessage());
-            buf.append("], ");
-        }
-        return buf.toString();
     }
 
 }

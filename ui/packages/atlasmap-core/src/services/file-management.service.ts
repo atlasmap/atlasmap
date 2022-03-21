@@ -40,8 +40,8 @@ export enum FileName {
 }
 
 export enum FileType {
-  DIGEST = 'GZ',
-  ADM = 'ZIP',
+  DIGEST = 'digest',
+  ADM = 'adm',
   JAR = 'JAR',
 }
 
@@ -64,19 +64,19 @@ export class FileManagementService {
     }
   }
 
-  findMappingFiles(filter: string): Promise<string[]> {
+  findMappingDefinitions(filter: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const url =
-        this.cfg.initCfg.baseMappingServiceUrl +
-        'mappings' +
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project' +
         (filter == null ? '' : '?filter=' + filter);
-      this.cfg.logger!.debug('Mapping List Request');
+      this.cfg.logger!.debug('Mapping Definition List Request');
       this.api
         .get(url)
         .json<IStringMapContainer>()
         .then((body) => {
           this.cfg.logger!.debug(
-            `Mapping List Response: ${JSON.stringify(body)}`
+            `Mapping Definition List Response: ${JSON.stringify(body)}`
           );
           const entries = body.StringMap.stringMapEntry;
           resolve(entries.map((item) => item.name));
@@ -84,7 +84,7 @@ export class FileManagementService {
         .catch((error: any) => {
           if (error.status !== HTTP_STATUS_NO_CONTENT) {
             this.cfg.errorService.addBackendError(
-              'Error occurred while accessing the current mapping files from the runtime service.',
+              'Error occurred while accessing the current mapping definition files from the runtime service.',
               error
             );
             reject(error);
@@ -127,7 +127,7 @@ export class FileManagementService {
     fileType: string
   ): Promise<Uint8Array | null> {
     return new Promise<Uint8Array | null>((resolve, reject) => {
-      const url = `${this.cfg.initCfg.baseMappingServiceUrl}mapping/${fileType}/`;
+      const url = `${this.cfg.initCfg.baseAtlasServiceUrl}project/0/${fileType}`;
       this.cfg.logger!.debug(`Get Current ${fileName} Request: ${url}`);
       const headers = {
         'Content-Type': 'application/octet-stream',
@@ -160,25 +160,23 @@ export class FileManagementService {
   }
 
   /**
-   * Delete mapping files on the runtime.
+   * Delete mapping project on the runtime.
    */
   resetMappings(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/RESET';
-      this.cfg.logger!.debug('Reset Mappings Request');
+      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'project/0';
+      this.cfg.logger!.debug('Delete Mapping Project Request');
       this.api
         .delete(url)
-        .arrayBuffer()
-        .then((res: any) => {
+        .then((res) => {
           this.cfg.logger!.debug(
-            `Reset Mappings Response: ${JSON.stringify(res)}`
+            `Delete Mapping Project Response: ${JSON.stringify(res)}`
           );
           resolve(true);
-          return res;
         })
         .catch((error: any) => {
           this.cfg.errorService.addBackendError(
-            'Error occurred while resetting mappings.',
+            'Error occurred while deleting mapping project.',
             error
           );
           resolve(false);
@@ -191,19 +189,17 @@ export class FileManagementService {
    */
   resetLibs(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/resetLibs';
-      this.cfg.logger!.debug('Reset Libs Request');
+      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'library';
+      this.cfg.logger!.debug('Delete Libraries Request');
       this.api
         .delete(url)
-        .arrayBuffer()
-        .then((res: any) => {
-          this.cfg.logger!.debug(`Reset Libs Response: ${JSON.stringify(res)}`);
+        .then((res) => {
+          this.cfg.logger!.debug(`Delete Libraries Response: ${res.status}`);
           resolve(true);
-          return res;
         })
         .catch((error: any) => {
           this.cfg.errorService.addBackendError(
-            'Error occurred while resetting user-defined JAR libraries.',
+            'Error occurred while deleting user-defined JAR libraries.',
             error
           );
           resolve(false);
@@ -217,27 +213,19 @@ export class FileManagementService {
   resetAll(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       this.cfg.errorService.resetAll();
-      this.cfg.fileService
-        .resetMappings()
-        .then(async () => {
+      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'all';
+      this.cfg.logger!.debug('Delete All Request');
+      this.api
+        .delete(url)
+        .then((res) => {
+          this.cfg.logger!.debug(`Delete All Response: ${res.status}`);
           this.cfg.mappings = null;
           this.cfg.clearDocs();
-          this.cfg.fileService
-            .resetLibs()
-            .then((value) => {
-              resolve(value);
-            })
-            .catch((error) => {
-              this.cfg.errorService.addBackendError(
-                `Failed to remove jar files: ${error.message}`,
-                error
-              );
-              resolve(false);
-            });
+          resolve(true);
         })
         .catch((error) => {
           this.cfg.errorService.addBackendError(
-            `Failed to remove mappings: ${error.message}`,
+            `Failed to delete libraries and mapping projects: ${error.message}`,
             error
           );
           resolve(false);
@@ -254,34 +242,22 @@ export class FileManagementService {
   setMappingToService(
     atlasMappingContainer: IAtlasMappingContainer
   ): Promise<boolean> {
-    const jsonBuffer = JSON.stringify(atlasMappingContainer);
-    return this.setMappingStringToService(jsonBuffer);
-  }
-
-  /**
-   * Commit the specified AtlasMapping JSON user mapping string to the runtime service.  The mappings
-   * are kept separate so they can be updated with minimal overhead.
-   *
-   * @param buffer - The stringified AtlasMapping JSON
-   */
-  setMappingStringToService(jsonBuffer: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON';
+      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'project/0/mapping';
       const headers = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
         'Response-Type': 'application/json',
       };
       this.cfg.logger!.debug(
-        `Set Mapping Request (set mapping): ${jsonBuffer}`
+        `Set Mapping Request (set mapping): ${JSON.stringify(
+          atlasMappingContainer
+        )}`
       );
       this.api
-        .put(url, { headers, body: jsonBuffer })
-        .arrayBuffer()
+        .put(url, { headers, json: atlasMappingContainer })
         .then((res) => {
-          this.cfg.logger!.debug(
-            `Set Mapping Response: ${JSON.stringify(res)}`
-          );
+          this.cfg.logger!.debug(`Set Mapping Response: ${res.status}`);
           resolve(true);
         })
         .catch((error: any) => {
@@ -316,7 +292,7 @@ export class FileManagementService {
         return;
       }
       // Update .../target/mappings/adm-catalog-files.gz
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/GZ/0';
+      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'project/0/digest';
       const fileContent: Blob = new Blob([compressedBuffer], {
         type: 'application/octet-stream',
       });
@@ -331,7 +307,7 @@ export class FileManagementService {
   private setADMArchiveFileToService(
     compressedBuffer: BlobPart
   ): Promise<boolean> {
-    const url = this.cfg.initCfg.baseMappingServiceUrl + 'mapping/ZIP/';
+    const url = this.cfg.initCfg.baseAtlasServiceUrl + 'project/0/adm';
     const fileContent: Blob = new Blob([compressedBuffer], {
       type: 'application/octet-stream',
     });
@@ -353,11 +329,8 @@ export class FileManagementService {
       this.cfg.logger!.debug(`Set ${fileName} Request`);
       this.api
         .put(url, { body: compressedBuffer })
-        .arrayBuffer()
         .then((res) => {
-          this.cfg.logger!.debug(
-            `Set ${fileName} Response: ${JSON.stringify(res)}`
-          );
+          this.cfg.logger!.debug(`Set ${fileName} Response: ${res.status}`);
           resolve(true);
         })
         .catch((error: any) => {
@@ -378,7 +351,7 @@ export class FileManagementService {
    */
   importJarFile(binaryBuffer: BlobPart): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
-      const url = this.cfg.initCfg.baseMappingServiceUrl + 'library';
+      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'library';
       const fileContent: Blob = new Blob([binaryBuffer], {
         type: 'application/octet-stream',
       });
@@ -405,15 +378,7 @@ export class FileManagementService {
   updateDigestFile(): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       try {
-        let mappingJson = undefined;
-        // Retrieve the JSON mappings buffer from the server.
-        if (this.cfg.mappings) {
-          mappingJson = await this.getCurrentMappingJson();
-        }
-        const mappingDigest = MappingDigestUtil.generateMappingDigest(
-          this.cfg,
-          mappingJson
-        );
+        const mappingDigest = MappingDigestUtil.generateMappingDigest(this.cfg);
 
         // Save mapping digest file to the runtime.
         this.setMappingDigestToService(mappingDigest).then((value) => {
@@ -533,7 +498,7 @@ export class FileManagementService {
       }
       this.cfg.mappingFiles[0] = this.cfg.mappings.name!;
       const baseURL: string =
-        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/JSON/';
+        this.cfg.initCfg.baseAtlasServiceUrl + 'project/0/mapping/';
       this.cfg.logger!.debug('Get Current Mapping Request');
       this.api
         .get(baseURL)

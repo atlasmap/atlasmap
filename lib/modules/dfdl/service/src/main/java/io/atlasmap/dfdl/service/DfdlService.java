@@ -15,16 +15,13 @@
  */
 package io.atlasmap.dfdl.service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,13 +30,12 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.atlasmap.dfdl.inspect.DfdlInspectionService;
 import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
 import io.atlasmap.service.AtlasService;
-import io.atlasmap.v2.Json;
+import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.Field;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,54 +48,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * DFDL Service provides DFDL inspection service which generate an AtlasMap Document object from DFDL instance or DFDL schema.
  */
 @Path("/dfdl/")
-public class DfdlService {
+public class DfdlService extends ModuleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);
 
     @Context
     private ResourceContext resourceContext;
-
-    /**
-     * Serializes to a JSON.
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-            return Json.mapper().writeValueAsBytes(value);
-        } catch (JsonProcessingException e) {
-            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Deserializes from a JSON.
-     * @param <T> type
-     * @param value value
-     * @param clazz type
-     * @return deserialized
-     */
-    protected <T> T fromJson(InputStream value, Class<T>clazz) {
-        try {
-            return Json.mapper().readValue(value, clazz);
-        } catch (IOException e) {
-            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from sender
-     * @return pong
-     */
-    @GET
-    @Path("/simple")
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Simple", description = "Simple hello service")
-    @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = String.class)), description = "Return a response"))
-    public String simpleHelloWorld(@QueryParam("from") String from) {
-        return "Got it! " + from;
-    }
 
     /**
      * Inspects a DFDL schema or instance and return a Document object.
@@ -159,5 +113,17 @@ public class DfdlService {
 
         response.setXmlDocument(d);
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<Field> searchFields(String keywords) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

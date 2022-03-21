@@ -176,7 +176,8 @@ describe('MappingExpressionService', () => {
   });
 
   test('test adding a field to an expression makes it into the mapping', () => {
-    spyOn(ky, 'put').and.callFake((_url: Input, options: Options) => {
+    spyOn(cfg.fileService, 'setMappingToService').and.stub();
+    spyOn(ky, 'post').and.callFake((_url: Input, options: Options) => {
       return new (class {
         json(): Promise<any> {
           return Promise.resolve(options.json);

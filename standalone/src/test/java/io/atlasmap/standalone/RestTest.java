@@ -56,7 +56,7 @@ public class RestTest {
     @Test
     public void getFieldActions() throws IOException {
         Request request = new Request.Builder()
-            .url("http://127.0.0.1:" + port + "/v2/atlas/fieldActions")
+            .url("http://127.0.0.1:" + port + "/v2/atlas/fieldAction")
             .header("ATLASMAP-XSRF-TOKEN", "awesome")
             .build();
         try (Response response = CLIENT.newCall(request).execute()) {

@@ -77,6 +77,10 @@ export default obj;
 
 export const wiredToTheBackend = () => (
   <AtlasmapProvider
+    baseAtlasServiceUrl={text(
+      'baseAtlasServiceUrl',
+      'http://localhost:8585/v2/atlas/',
+    )}
     baseJavaInspectionServiceUrl={text(
       'baseJavaInspectionServiceUrl',
       'http://localhost:8585/v2/atlas/java/',
@@ -96,10 +100,6 @@ export const wiredToTheBackend = () => (
     baseKafkaConnectInspectionServiceUrl={text(
       'baseKafkaConnectInspectionServiceUrl',
       'http://localhost:8585/v2/atlas/kafkaconnect/',
-    )}
-    baseMappingServiceUrl={text(
-      'baseMappingServiceUrl',
-      'http://localhost:8585/v2/atlas/',
     )}
     logLevel={text('logLevel', 'info')}
     onMappingChange={action('onMappingChange')}
@@ -150,6 +150,10 @@ export const embeddedInSyndesis = () => {
   }
   return (
     <AtlasmapProvider
+      baseAtlasServiceUrl={text(
+        'baseAtlasServiceUrl',
+        'http://localhost:8585/v2/atlas/',
+      )}
       baseJavaInspectionServiceUrl={text(
         'baseJavaInspectionServiceUrl',
         'http://localhost:8585/v2/atlas/java/',
@@ -169,10 +173,6 @@ export const embeddedInSyndesis = () => {
       baseKafkaConnectInspectionServiceUrl={text(
         'baseKafkaConnectInspectionServiceUrl',
         'http://localhost:8585/v2/atlas/kafkaconnect/',
-      )}
-      baseMappingServiceUrl={text(
-        'baseMappingServiceUrl',
-        'http://localhost:8585/v2/atlas/',
       )}
       logLevel={text('logLevel', 'info')}
       externalDocument={externalDocument}

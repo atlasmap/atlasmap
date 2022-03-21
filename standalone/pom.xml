@@ -313,7 +313,6 @@
             <configuration>
               <arguments>
                 <argument>--logging.level.io.atlasmap=DEBUG</argument>
-                <argument>--logging.level.io.undertow=DEBUG</argument>
                 <argument>--logging.file.name=target/atlasmap-spring-boot.log</argument>
               </arguments>
               <jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000

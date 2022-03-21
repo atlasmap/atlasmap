@@ -66,7 +66,7 @@ describe('FileManagementService', () => {
       })()
     );
     service
-      .findMappingFiles('UI')
+      .findMappingDefinitions('UI')
       .then((value) => {
         expect(value.length).toBe(2);
         expect(value[0]).toBe('dummyMappingFile1');
@@ -78,7 +78,7 @@ describe('FileManagementService', () => {
       });
   });
 
-  test('findMappingFiles() server error', (done) => {
+  test('findMappingDefinitions() server error', (done) => {
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
         json(): Promise<any> {
@@ -87,7 +87,7 @@ describe('FileManagementService', () => {
       })()
     );
     service
-      .findMappingFiles('UI')
+      .findMappingDefinitions('UI')
       .then(() => {
         fail('expected to be rejected');
       })
@@ -95,7 +95,9 @@ describe('FileManagementService', () => {
         expect(error).toMatch('expected error');
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('current mapping files')).toBeGreaterThan(0);
+        expect(
+          err.message.indexOf('current mapping definition files')
+        ).toBeGreaterThan(0);
         done();
       });
   });
@@ -185,13 +187,9 @@ describe('FileManagementService', () => {
   });
 
   test('resetMappings()', (done) => {
-    mockedKy.delete = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
     service.resetMappings().then((value) => {
       expect(value).toBeTruthy();
       done();
@@ -199,34 +197,29 @@ describe('FileManagementService', () => {
   });
 
   test('resetMappings() server error', (done) => {
-    mockedKy.delete = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.reject('expected error');
-        }
-      })()
-    );
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.reject('expected error'));
     service
       .resetMappings()
-      .then(() => {
+      .then((answer) => {
+        expect(answer).toBeFalsy();
         const err = service.cfg.errorService.getErrors()[0];
         expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('resetting mappings')).toBeGreaterThan(0);
+        expect(err.message.indexOf('deleting mapping project')).toBeGreaterThan(
+          0
+        );
         done();
       })
-      .catch((error) => {
-        fail(error);
+      .catch((err) => {
+        fail('unexpected rejection: ' + err);
       });
   });
 
   test('resetLibs()', (done) => {
-    mockedKy.delete = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
     service.resetLibs().then((value) => {
       expect(value).toBeTruthy();
       done();
@@ -234,13 +227,9 @@ describe('FileManagementService', () => {
   });
 
   test('resetLibs() server error', (done) => {
-    mockedKy.delete = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.reject('expected error');
-        }
-      })()
-    );
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.reject('expected error'));
     service
       .resetLibs()
       .then(() => {
@@ -255,13 +244,7 @@ describe('FileManagementService', () => {
   });
 
   test('setMappingToService()', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
     const mappingJson = { AtlasMapping: { jsonType: MAPPING_JSON_TYPE } };
     service
       .setMappingToService(mappingJson)
@@ -275,13 +258,7 @@ describe('FileManagementService', () => {
   });
 
   test('setMappingToService() server error', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.reject('expected error');
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.reject('expected error'));
     const mappingJson = { AtlasMapping: { jsonType: MAPPING_JSON_TYPE } };
     service
       .setMappingToService(mappingJson)
@@ -299,14 +276,11 @@ describe('FileManagementService', () => {
       });
   });
 
-  test('importADMArchive()', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+  test('importADMArchive() dummy', (done) => {
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
+    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
     const binary = new TextEncoder().encode('dummy binary');
     service
       .importADMArchive(new File([new Blob([binary])], 'dummy.adm'))
@@ -317,13 +291,7 @@ describe('FileManagementService', () => {
   });
 
   test('setDigestFileToService()', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
     const digest = {} as ADMDigest;
     service
       .setMappingDigestToService(digest)
@@ -337,13 +305,7 @@ describe('FileManagementService', () => {
   });
 
   test('setDigestFileToService() server error', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.reject('expected error');
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.reject('expected error'));
     const digest = {} as ADMDigest;
     service.setMappingDigestToService(digest).then((value) => {
       expect(value).toBeFalsy();
@@ -357,13 +319,7 @@ describe('FileManagementService', () => {
   });
 
   test('importJarFile()', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<Buffer> {
-          return Promise.resolve(Buffer.from(''));
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
     const binary = new TextEncoder().encode('dummy binary');
     service.importJarFile(binary).then((value) => {
       expect(value).toBeTruthy();
@@ -373,13 +329,7 @@ describe('FileManagementService', () => {
 
   test('exportADMArchive()', (done) => {
     // put digest file
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
     // get ADM archive file
     mockedKy.get = jest.fn().mockReturnValue(
       new (class {
@@ -437,14 +387,11 @@ describe('FileManagementService', () => {
           `${__dirname}/../../../../test-resources/adm/mockdoc.adm`
         )
       );
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
     // put ADM archive file
-    mockedKy.put = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new ArrayBuffer(0));
-        }
-      })()
-    );
+    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
     mockedInitService.prototype.initialize = jest
       .fn()
       .mockImplementation(() => {});

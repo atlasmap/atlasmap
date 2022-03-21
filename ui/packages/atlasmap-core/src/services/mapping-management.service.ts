@@ -603,7 +603,7 @@ export class MappingManagementService {
   ): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       if (
-        this.cfg.initCfg.baseMappingServiceUrl === null ||
+        this.cfg.initCfg.baseAtlasServiceUrl === null ||
         this.cfg.mappings === null
       ) {
         // validation service not configured or required
@@ -613,14 +613,15 @@ export class MappingManagementService {
 
       this.cfg.errorService.clearValidationErrors();
       const url: string =
-        this.cfg.initCfg.baseMappingServiceUrl +
-        'mapping/validate/' +
-        this.cfg.mappingDefinitionId;
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping/validate';
       this.cfg.logger!.debug(
         `Validation Service Request: ${JSON.stringify(payload)}\n`
       );
       this.api
-        .put(url, { json: payload })
+        .post(url, { json: payload })
         .json<IValidationsContainer>()
         .then((body) => {
           this.cfg.logger!.debug(

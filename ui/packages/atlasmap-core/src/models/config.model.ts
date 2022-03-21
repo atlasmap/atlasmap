@@ -39,11 +39,12 @@ export class DataMapperInitializationModel {
   admHttpTimeout = 30000; // 30 seconds
   initializationErrorOccurred = false;
 
+  baseAtlasServiceUrl?: string;
+
   baseCSVInspectionServiceUrl?: string;
   baseJavaInspectionServiceUrl?: string;
   baseJSONInspectionServiceUrl?: string;
   baseKafkaConnectInspectionServiceUrl?: string;
-  baseMappingServiceUrl?: string;
   baseXMLInspectionServiceUrl?: string;
 
   xsrfHeaderName?: string;
