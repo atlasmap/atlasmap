@@ -52,6 +52,7 @@ export interface IAtlasMapping {
   properties?: IProperties;
   name?: string;
   jsonType: string;
+  version?: string;
 }
 
 /**

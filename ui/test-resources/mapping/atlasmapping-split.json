@@ -60,6 +60,7 @@
     "properties": {
       "constant": []
     },
-    "name": "UI.950612"
+    "name": "UI.950612",
+    "version":"1.2.3-SNAPSHOT"
   }
 }
