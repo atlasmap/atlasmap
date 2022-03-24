@@ -168,7 +168,6 @@ export const ConstantDialog: FunctionComponent<IConstantDialogProps> = ({
             value={value}
             onChange={handleOnValueChange}
             id={'constvalue'}
-            autoFocus={true}
             isRequired={true}
             data-testid={'constant-value-text-input'}
           />
