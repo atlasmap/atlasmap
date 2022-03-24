@@ -49,6 +49,9 @@ public class AtlasMapping implements Serializable {
     /** name */
     protected String name;
 
+    /** version */
+    protected String version;
+
     /**
      * Gets the value of the dataSource property.
      * 
@@ -198,4 +201,27 @@ public class AtlasMapping implements Serializable {
         this.name = value;
     }
 
+    /**
+     * Gets the value of the version property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
+     * Sets the value of the version property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setVersion(String value) {
+        this.version = value;
+    }
 }

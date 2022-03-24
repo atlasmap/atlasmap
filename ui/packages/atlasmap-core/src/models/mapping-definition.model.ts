@@ -23,6 +23,7 @@ import { TransitionMode } from './transition.model';
 
 export class MappingDefinition {
   name: string | null = null;
+  version: string | null = null;
   mappings: MappingModel[] = [];
   activeMapping: MappingModel | null = null;
   parsedDocs: DocumentDefinition[] = [];

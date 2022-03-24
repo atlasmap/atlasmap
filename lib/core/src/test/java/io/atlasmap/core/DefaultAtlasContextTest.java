@@ -62,6 +62,30 @@ import io.atlasmap.v2.Validations;
 public class DefaultAtlasContextTest extends BaseDefaultAtlasContextTest {
 
     @Test
+    public void testMappingsVersion() throws AtlasException {
+        Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.MAP);
+
+        // Test ok version mismatch.
+        recreateSession();
+        mapping.setVersion("1.2.3-SNAPSHOT");
+        String v = mapping.getVersion();
+        assertEquals(v, "1.2.3-SNAPSHOT");
+        mapping.getMappings().getMapping().add(m);
+        populateSourceField(m, FieldType.STRING, "foo");
+        prepareTargetField(m, "/target");
+        context.processValidation(session);
+        assertFalse(session.hasWarns(), printAudit(session));
+
+        // Test bad version mismatch.
+        recreateSession();
+        mapping.setVersion("99.2.3-SNAPSHOT");
+        populateSourceField(m, FieldType.STRING, "foo");
+        prepareTargetField(m, "/target");
+        context.processValidation(session);
+        assertTrue(session.hasWarns(), printAudit(session));;
+    }
+
+    @Test
     public void testMap() throws AtlasException {
         Mapping m = (Mapping) AtlasModelFactory.createMapping(MappingType.MAP);
         mapping.getMappings().getMapping().add(m);
