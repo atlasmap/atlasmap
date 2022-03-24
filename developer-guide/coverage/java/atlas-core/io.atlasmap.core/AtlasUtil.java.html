@@ -319,9 +319,9 @@ import io.atlasmap.v2.ValidationStatus;
      */
     public static void addAudit(AtlasInternalSession session, Field field,
             String message, AuditStatus status, String value) {
-<span class="pc bpc" id="L322" title="1 of 2 branches missed.">        String docId = field != null ? field.getDocId() : null;</span>
+<span class="fc bfc" id="L322" title="All 2 branches covered.">        String docId = field != null ? field.getDocId() : null;</span>
 <span class="pc bpc" id="L323" title="1 of 2 branches missed.">        String docName = session != null ? getDocumentNameById(session, docId) : null;</span>
-<span class="pc bpc" id="L324" title="1 of 2 branches missed.">        String path = field != null ? field.getPath() : null;</span>
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        String path = field != null ? field.getPath() : null;</span>
 <span class="fc" id="L325">        session.getAudits().getAudit().add(</span>
 <span class="fc" id="L326">                createAudit(status, docId, docName, path, value, message));</span>
 <span class="fc" id="L327">    }</span>

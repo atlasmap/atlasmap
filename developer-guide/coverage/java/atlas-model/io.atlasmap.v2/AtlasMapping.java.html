@@ -49,6 +49,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     /** name */
     protected String name;
 
+    /** version */
+    protected String version;
+
     /**
      * Gets the value of the dataSource property.
      * 
@@ -72,10 +75,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      * @return A list of {@link DataSource}
      */
     public List&lt;DataSource&gt; getDataSource() {
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (dataSource == null) {</span>
-<span class="fc" id="L76">            dataSource = new ArrayList&lt;DataSource&gt;();</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (dataSource == null) {</span>
+<span class="fc" id="L79">            dataSource = new ArrayList&lt;DataSource&gt;();</span>
         }
-<span class="fc" id="L78">        return this.dataSource;</span>
+<span class="fc" id="L81">        return this.dataSource;</span>
     }
 
     /**
@@ -87,7 +90,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mappings getMappings() {
-<span class="fc" id="L90">        return mappings;</span>
+<span class="fc" id="L93">        return mappings;</span>
     }
 
     /**
@@ -99,8 +102,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMappings(Mappings value) {
-<span class="fc" id="L102">        this.mappings = value;</span>
-<span class="fc" id="L103">    }</span>
+<span class="fc" id="L105">        this.mappings = value;</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Gets the value of the lookupTables property.
@@ -111,7 +114,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public LookupTables getLookupTables() {
-<span class="fc" id="L114">        return lookupTables;</span>
+<span class="fc" id="L117">        return lookupTables;</span>
     }
 
     /**
@@ -123,8 +126,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setLookupTables(LookupTables value) {
-<span class="fc" id="L126">        this.lookupTables = value;</span>
-<span class="fc" id="L127">    }</span>
+<span class="fc" id="L129">        this.lookupTables = value;</span>
+<span class="fc" id="L130">    }</span>
 
     /**
      * Gets the value of the constants property.
@@ -135,7 +138,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Constants getConstants() {
-<span class="fc" id="L138">        return constants;</span>
+<span class="fc" id="L141">        return constants;</span>
     }
 
     /**
@@ -147,8 +150,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setConstants(Constants value) {
-<span class="fc" id="L150">        this.constants = value;</span>
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L153">        this.constants = value;</span>
+<span class="fc" id="L154">    }</span>
 
     /**
      * Gets the value of the properties property.
@@ -159,7 +162,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Properties getProperties() {
-<span class="fc" id="L162">        return properties;</span>
+<span class="fc" id="L165">        return properties;</span>
     }
 
     /**
@@ -171,8 +174,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setProperties(Properties value) {
-<span class="fc" id="L174">        this.properties = value;</span>
-<span class="fc" id="L175">    }</span>
+<span class="fc" id="L177">        this.properties = value;</span>
+<span class="fc" id="L178">    }</span>
 
     /**
      * Gets the value of the name property.
@@ -183,7 +186,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getName() {
-<span class="fc" id="L186">        return name;</span>
+<span class="fc" id="L189">        return name;</span>
     }
 
     /**
@@ -195,8 +198,31 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L198">        this.name = value;</span>
-<span class="fc" id="L199">    }</span>
+<span class="fc" id="L201">        this.name = value;</span>
+<span class="fc" id="L202">    }</span>
 
+    /**
+     * Gets the value of the version property.
+     *
+     * @return
+     *     possible object is
+     *     {@link String }
+     *
+     */
+    public String getVersion() {
+<span class="fc" id="L213">        return version;</span>
+    }
+
+    /**
+     * Sets the value of the version property.
+     *
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *
+     */
+    public void setVersion(String value) {
+<span class="fc" id="L225">        this.version = value;</span>
+<span class="fc" id="L226">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

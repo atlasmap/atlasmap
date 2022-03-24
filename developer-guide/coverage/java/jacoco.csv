@@ -27,14 +27,14 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasFunctionResolv
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContextFactory,162,699,20,58,34,204,23,64,4,44
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext.PreviewModule,16,143,2,32,10,36,11,21,9,6
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,PropertyModule,65,95,6,10,12,33,7,15,1,13
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,AtlasUtil,217,909,63,141,63,225,53,83,6,26
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,AtlasUtil,215,911,61,143,63,225,51,85,6,26
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,ADMArchiveHandler,209,757,24,72,49,192,23,57,0,32
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext.new HashMap() {...},0,10,0,0,0,2,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,TemplateCombineStrategy,11,89,8,12,3,18,7,5,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService.ConverterMethodHolder,0,21,0,0,0,7,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasValidationService.Validators,0,428,0,0,0,53,0,26,0,26
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseAtlasModule,173,271,20,28,43,80,42,42,27,33
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,521,2013,73,223,118,437,66,130,2,46
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,526,2113,78,234,119,455,71,134,2,47
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCombineStrategy,14,212,4,34,6,57,7,28,3,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService,124,1060,34,196,26,240,35,126,2,25
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCompoundClassLoader,28,123,5,15,8,28,5,12,0,7
@@ -173,7 +173,7 @@ Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ValidationStatus,28,70,4,0,
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,FieldGroup,0,14,0,2,0,4,0,3,0,2
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ConvertDistanceUnit,0,17,0,0,0,7,0,5,0,5
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Count,0,3,0,0,0,1,0,1,0,1
-Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasMapping,0,49,0,2,0,19,0,13,0,12
+Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasMapping,0,56,0,2,0,22,0,15,0,14
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,DataSource,8,44,0,0,4,18,2,13,2,13
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ProcessMappingResponse,4,20,0,0,2,8,1,6,1,6
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,SeparateByUnderscore,0,3,0,0,0,1,0,1,0,1
