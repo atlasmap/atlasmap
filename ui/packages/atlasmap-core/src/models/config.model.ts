@@ -32,7 +32,7 @@ import { MappingManagementService } from '../services/mapping-management.service
 import { MappingPreviewService } from '../services/mapping-preview.service';
 
 export class DataMapperInitializationModel {
-  dataMapperVersion = '0.9.2017.07.28';
+  dataMapperVersion = '';
   initialized = false;
   loadingStatus = 'Loading.';
   admHttpTimeout = 30000; // 30 seconds

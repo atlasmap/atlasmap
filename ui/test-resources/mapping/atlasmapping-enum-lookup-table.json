@@ -67,6 +67,7 @@
     "properties" : {
       "property" : [ ]
     },
-    "name" : "UI.0"
+    "name" : "UI.0",
+    "version":"1.2.3-SNAPSHOT"
   }
 }

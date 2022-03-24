@@ -231,6 +231,24 @@ export class InitializationService {
   }
 
   /**
+   * Return the UI version as a string.
+   *
+   * @returns UI version
+   */
+  getUIVersion(): string {
+    return this.cfg.initCfg.dataMapperVersion;
+  }
+
+  /**
+   * Set the UI version.
+   *
+   * @param uiVersion - version to set
+   */
+  setUIVersion(uiVersion: string) {
+    this.cfg.initCfg.dataMapperVersion = uiVersion;
+  }
+
+  /**
    * Initialize with the {@link ADMDigest} mapping digest from either an imported ADM archive
    * file or from the DM runtime digest file is presented to update the canvas.
    *

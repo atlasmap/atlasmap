@@ -13,6 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import * as constants from '../atlasmap.json';
 import {
   DataActionPayload,
   IDataState,
@@ -187,6 +188,7 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
       initializationService.resetConfig();
       const cfg = initializationService.cfg;
       cfg.logger?.setLevel(logLevel as LogLevelDesc);
+      cfg.initCfg.dataMapperVersion = constants.version;
 
       cfg.initCfg.baseMappingServiceUrl = baseMappingServiceUrl;
       cfg.initCfg.baseJavaInspectionServiceUrl = baseJavaInspectionServiceUrl;

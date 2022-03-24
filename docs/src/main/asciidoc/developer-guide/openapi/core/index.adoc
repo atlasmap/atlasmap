@@ -2142,9 +2142,21 @@ endif::internal-generation[]
 | 
 |  
 
+<<<<<<< HEAD
 | jsonType 
 | X 
 | String  
+=======
+| version
+| 
+| String 
+| 
+|  
+
+| jsonType
+| X
+| String 
+>>>>>>> 25b20c1cfa1 (fix: Add version info to mapping - check in UI and in default Atlas context. (#3862))
 | 
 |  
 

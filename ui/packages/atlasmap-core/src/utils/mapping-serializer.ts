@@ -145,6 +145,7 @@ export class MappingSerializer {
         dataSource: serializedDataSources,
         mappings: { mapping: jsonMappings },
         name: cfg.mappings!.name ? cfg.mappings!.name : undefined,
+        version: cfg.mappings!.version!,
         lookupTables: { lookupTable: serializedLookupTables },
         constants: { constant: constantDescriptions },
         properties: {
@@ -292,10 +293,33 @@ export class MappingSerializer {
     return jsonMapping;
   }
 
-  static deserializeMappingServiceJSON(
+  static extractCheckVersion(json: IAtlasMappingContainer, cfg: ConfigModel) {
+    const currentVersion = cfg.initializationService.getUIVersion();
+    const mappingVersion = this.deserializeAtlasMappingVersion(json);
+    const mappingVersionComps = mappingVersion.split('.');
+    const currentVersionComps = currentVersion.split('.');
+    if (
+      (mappingVersion.length > 0 &&
+        (currentVersionComps.length < 2 || mappingVersionComps.length < 2)) ||
+      +currentVersionComps[0] < +mappingVersionComps[0] ||
+      +currentVersionComps[1] < +mappingVersionComps[1]
+    ) {
+      cfg.errorService.addError(
+        new ErrorInfo({
+          message: `Mappings file version mismatch.  Expected ${currentVersion}, detected ${mappingVersion}`,
+          level: ErrorLevel.ERROR,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.USER,
+        })
+      );
+    }
+    cfg.mappings!.version = currentVersion;
+  }
+
+  static async deserializeMappingServiceJSON(
     json: IAtlasMappingContainer,
     cfg: ConfigModel
-  ): void {
+  ) {
     // Process constants and properties before mappings.
     for (const field of MappingSerializer.deserializeConstants(json)) {
       cfg.constantDoc.addField(field);
@@ -318,6 +342,7 @@ export class MappingSerializer {
       cfg.mappings = new MappingDefinition();
     }
     cfg.mappings.name = this.deserializeAtlasMappingName(json);
+    this.extractCheckVersion(json, cfg);
     cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(
       MappingSerializer.deserializeDocs(json, cfg.mappings)!
     ); // TODO: check this non null operator
@@ -337,6 +362,21 @@ export class MappingSerializer {
   static deserializeAtlasMappingName(json: IAtlasMappingContainer): string {
     if (json?.AtlasMapping?.name) {
       return json.AtlasMapping.name;
+    } else {
+      return '';
+    }
+  }
+
+  /**
+   * Return the AtlasMap mappings version from the specified JSON buffer or an empty
+   * string.
+   *
+   * @param json JSON buffer
+   * @returns version string or empty string
+   */
+  static deserializeAtlasMappingVersion(json: IAtlasMappingContainer): string {
+    if (json?.AtlasMapping?.version) {
+      return json.AtlasMapping.version;
     } else {
       return '';
     }

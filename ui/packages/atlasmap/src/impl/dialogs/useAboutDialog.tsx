@@ -21,7 +21,6 @@ import { useToggle } from '../utils';
 
 export function useAboutDialog(): [ReactElement, () => void] {
   const { getRuntimeVersion, getUIVersion } = useAtlasmap();
-  const uiVersion = getUIVersion();
   const [runtimeVersion, setRuntimeVersion]: [
     string,
     (version: string) => void,
@@ -33,7 +32,7 @@ export function useAboutDialog(): [ReactElement, () => void] {
       title="AtlasMap Data Mapper"
       isOpen={state}
       onClose={toggleOff}
-      uiVersion={uiVersion}
+      uiVersion={getUIVersion()}
       runtimeVersion={runtimeVersion}
     />
   );
