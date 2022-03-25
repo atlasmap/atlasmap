@@ -15,32 +15,27 @@
  */
 package io.atlasmap.json.service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.json.inspect.JsonInspectionService;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
-import io.atlasmap.v2.Json;
+import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -51,51 +46,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * The JSON Service provides JSON inspection service which generate an AtlasMap Document object from JSON instance or JSON schema.
  */
 @Path(&quot;/json/&quot;)
-<span class="fc" id="L54">public class JsonService {</span>
+<span class="fc" id="L49">public class JsonService extends ModuleService {</span>
 
-<span class="fc" id="L56">    private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);</span>
-
-    /**
-     * Serializes to a JSON.
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-<span class="fc" id="L65">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L66">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L67">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
-        }
-    }
-
-    /**
-     * Deserializes from a JSON.
-     * @param &lt;T&gt; type
-     * @param value value
-     * @param clazz type
-     * @return deserialized
-     */
-    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
-        try {
-<span class="fc" id="L80">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L81">        } catch (IOException e) {</span>
-<span class="nc" id="L82">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from sender
-     * @return pong
-     */
-    @GET
-    @Path(&quot;/simple&quot;)
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary =&quot;Simple&quot;, description = &quot;Simple hello service&quot;)
-    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
-    public String simpleHelloWorld(@Parameter(description = &quot;From&quot;) @QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L97">        return &quot;Got it! &quot; + from;</span>
-    }
+<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(JsonService.class);</span>
 
     /**
      * Inspect a JSON schema or instance and return a Document object.
@@ -110,48 +63,48 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;JsonInspectionRequest object&quot;,  content = @Content(schema = @Schema(implementation = JsonInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = JsonInspectionResponse.class)), description = &quot;Return a Document object represented by JsonDocument&quot;))
     public Response inspect(InputStream requestIn) {
-<span class="fc" id="L113">        JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);</span>
-<span class="fc" id="L114">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L66">        JsonInspectionRequest request = fromJson(requestIn, JsonInspectionRequest.class);</span>
+<span class="fc" id="L67">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L116">        JsonInspectionResponse response = new JsonInspectionResponse();</span>
-<span class="fc" id="L117">        JsonDocument d = null;</span>
+<span class="fc" id="L69">        JsonInspectionResponse response = new JsonInspectionResponse();</span>
+<span class="fc" id="L70">        JsonDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L121" title="2 of 4 branches missed.">            if (request.getType() == null || request.getJsonData() == null) {</span>
-<span class="nc" id="L122">                response.setErrorMessage(</span>
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">            if (request.getType() == null || request.getJsonData() == null) {</span>
+<span class="nc" id="L75">                response.setErrorMessage(</span>
                         &quot;Json data and Instance or Schema inspection type must be specified in request&quot;);
             } else {
-<span class="fc" id="L125">                JsonInspectionService s = new JsonInspectionService();</span>
+<span class="fc" id="L78">                JsonInspectionService s = new JsonInspectionService();</span>
 
-<span class="fc" id="L127">                String jsonData = cleanJsonData(request.getJsonData());</span>
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                if (!validJsonData(jsonData)) {</span>
-<span class="nc" id="L129">                    response.setErrorMessage(&quot;Invalid json payload specified&quot;);</span>
+<span class="fc" id="L80">                String jsonData = cleanJsonData(request.getJsonData());</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">                if (!validJsonData(jsonData)) {</span>
+<span class="nc" id="L82">                    response.setErrorMessage(&quot;Invalid json payload specified&quot;);</span>
                 } else {
-<span class="pc bpc" id="L131" title="2 of 3 branches missed.">                    switch (request.getType()) {</span>
+<span class="pc bpc" id="L84" title="2 of 3 branches missed.">                    switch (request.getType()) {</span>
                     case INSTANCE:
-<span class="nc" id="L133">                        d = s.inspectJsonDocument(jsonData);</span>
-<span class="nc" id="L134">                        break;</span>
+<span class="nc" id="L86">                        d = s.inspectJsonDocument(jsonData);</span>
+<span class="nc" id="L87">                        break;</span>
                     case SCHEMA:
-<span class="fc" id="L136">                        d = s.inspectJsonSchema(jsonData);</span>
-<span class="fc" id="L137">                        break;</span>
+<span class="fc" id="L89">                        d = s.inspectJsonSchema(jsonData);</span>
+<span class="fc" id="L90">                        break;</span>
                     default:
-<span class="nc" id="L139">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L92">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
                         break;
                     }
                 }
             }
-<span class="nc" id="L144">        } catch (Exception e) {</span>
-<span class="nc" id="L145">            LOG.error(&quot;Error inspecting json: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L146">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L97">        } catch (Exception e) {</span>
+<span class="nc" id="L98">            LOG.error(&quot;Error inspecting json: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L99">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L148">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L101">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L151">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());</span>
+<span class="fc" id="L104">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());</span>
 
-<span class="fc" id="L153">        response.setJsonDocument(d);</span>
-<span class="fc" id="L154">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L106">        response.setJsonDocument(d);</span>
+<span class="fc" id="L107">        return Response.ok().entity(toJson(response)).build();</span>
     }
 
     /**
@@ -160,11 +113,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
      * @return true if valid, or false
      */
     protected boolean validJsonData(String jsonData) {
-<span class="pc bpc" id="L163" title="2 of 4 branches missed.">        if (jsonData == null || jsonData.isEmpty()) {</span>
-<span class="nc" id="L164">            return false;</span>
+<span class="pc bpc" id="L116" title="2 of 4 branches missed.">        if (jsonData == null || jsonData.isEmpty()) {</span>
+<span class="nc" id="L117">            return false;</span>
         }
 
-<span class="fc bfc" id="L167" title="All 4 branches covered.">        return jsonData.startsWith(&quot;{&quot;) || jsonData.startsWith(&quot;[&quot;);</span>
+<span class="fc bfc" id="L120" title="All 4 branches covered.">        return jsonData.startsWith(&quot;{&quot;) || jsonData.startsWith(&quot;[&quot;);</span>
     }
 
     /**
@@ -173,7 +126,19 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
      * @return trimmed
      */
     protected String cleanJsonData(String jsonData) {
-<span class="fc" id="L176">        return jsonData.trim();</span>
+<span class="fc" id="L129">        return jsonData.trim();</span>
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L135">        return null;</span>
+    }
+
+    @Override
+    public List&lt;Field&gt; searchFields(String keywords) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L141">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

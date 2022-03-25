@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/17</span>
+                <span class='fraction'>15/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
@@ -105,7 +105,16 @@
 <a name='L47'></a><a href='#L47'>47</a>
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
-<a name='L50'></a><a href='#L50'>50</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L50'></a><a href='#L50'>50</a>
+<a name='L51'></a><a href='#L51'>51</a>
+<a name='L52'></a><a href='#L52'>52</a>
+<a name='L53'></a><a href='#L53'>53</a>
+<a name='L54'></a><a href='#L54'>54</a>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,18 +133,27 @@
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
@@ -172,9 +190,13 @@
 import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from './common-util';
 import { ConfigModel } from '../models/config.model';
+import { IAtlasMappingContainer } from '../contracts/mapping';
 &nbsp;
 export class MappingDigestUtil {
-  static generateMappingDigest(cfg: ConfigModel, mappingJson: any): ADMDigest {
+  static generateMappingDigest(
+    cfg: ConfigModel,
+    mappingJson?: IAtlasMappingContainer
+  ): ADMDigest {
     let mappingDigest: ADMDigest = {
       exportMappings: { value: '' },
       exportMeta: [],
@@ -182,9 +204,14 @@ export class MappingDigestUtil {
     };
 &nbsp;
     // Retrieve the JSON mappings buffer from the server.
-    const jsonBuffer = JSON.stringify(mappingJson);
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (jsonBuffer) {
-      mappingDigest.exportMappings.value = CommonUtil.sanitizeJSON(jsonBuffer);
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (mappingJson) {
+      const jsonBuffer = <span class="cstat-no" title="statement not covered" >JSON.stringify(mappingJson);</span>
+<span class="cstat-no" title="statement not covered" >      if (jsonBuffer) {</span>
+        // FIXME sanitizeJSON() does JSON.stringify(), causes the string to be double quoted.
+        // Note that it's already stringified right above.
+<span class="cstat-no" title="statement not covered" >        mappingDigest.exportMappings.value =</span>
+          CommonUtil.sanitizeJSON(jsonBuffer);
+      }
     }
 &nbsp;
     for (const doc of cfg.getAllDocs()) {
@@ -210,7 +237,7 @@ export class MappingDigestUtil {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Mar 24 2022 22:40:35 GMT+0000 (Coordinated Universal Time)
+                at Fri Mar 25 2022 15:23:15 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

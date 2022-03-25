@@ -15,26 +15,22 @@
  */
 package io.atlasmap.xml.service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.atlasmap.core.AtlasUtil;
-import io.atlasmap.v2.Json;
+import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.Field;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
@@ -50,51 +46,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.
  */
 @Path(&quot;/xml/&quot;)
-<span class="fc" id="L53">public class XmlService {</span>
+<span class="fc" id="L49">public class XmlService extends ModuleService {</span>
 
-<span class="fc" id="L55">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
-
-    /**
-     * Serializes to a JSON.
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-<span class="fc" id="L64">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L65">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L66">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
-        }
-    }
-
-    /**
-     * Deserializes from a JSON.
-     * @param &lt;T&gt; type
-     * @param value value
-     * @param clazz type
-     * @return deserialized
-     */
-    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
-        try {
-<span class="fc" id="L79">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L80">        } catch (IOException e) {</span>
-<span class="nc" id="L81">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from from
-     * @return pong
-     */
-    @GET
-    @Path(&quot;/simple&quot;)
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
-    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
-    public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L96">        return &quot;Got it! &quot; + from;</span>
-    }
+<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
 
     /**
      * Inspects a XML schema or instance and return a Document object.
@@ -109,7 +63,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;XmlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = XmlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;,  content = @Content(schema = @Schema(implementation = XmlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
     public Response inspect(InputStream request) {
-<span class="fc" id="L112">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
+<span class="fc" id="L66">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
     }
 
     /**
@@ -118,41 +72,53 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
      * @return {@link XmlInspectionResponse}
      */
     public Response inspect(XmlInspectionRequest request) {
-<span class="fc" id="L121">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L75">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L123">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
-<span class="fc" id="L124">        XmlDocument d = null;</span>
+<span class="fc" id="L77">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
+<span class="fc" id="L78">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
-<span class="nc" id="L129">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
+<span class="nc" id="L83">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
             } else {
-<span class="fc" id="L131">                XmlInspectionService s = new XmlInspectionService();</span>
+<span class="fc" id="L85">                XmlInspectionService s = new XmlInspectionService();</span>
 
-<span class="pc bpc" id="L133" title="2 of 3 branches missed.">                switch (request.getType()) {</span>
+<span class="pc bpc" id="L87" title="2 of 3 branches missed.">                switch (request.getType()) {</span>
                 case INSTANCE:
-<span class="nc" id="L135">                    d = s.inspectXmlDocument(request.getXmlData());</span>
-<span class="nc" id="L136">                    break;</span>
+<span class="nc" id="L89">                    d = s.inspectXmlDocument(request.getXmlData());</span>
+<span class="nc" id="L90">                    break;</span>
                 case SCHEMA:
-<span class="fc" id="L138">                    d = s.inspectSchema(request.getXmlData());</span>
-<span class="fc" id="L139">                    break;</span>
+<span class="fc" id="L92">                    d = s.inspectSchema(request.getXmlData());</span>
+<span class="fc" id="L93">                    break;</span>
                 default:
-<span class="nc" id="L141">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L95">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
                     break;
                 }
             }
-<span class="nc" id="L145">        } catch (Exception e) {</span>
-<span class="nc" id="L146">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L147">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L99">        } catch (Exception e) {</span>
+<span class="nc" id="L100">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L101">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L149">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L103">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L152">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());</span>
+<span class="fc" id="L106">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());</span>
 
-<span class="fc" id="L154">        response.setXmlDocument(d);</span>
-<span class="fc" id="L155">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L108">        response.setXmlDocument(d);</span>
+<span class="fc" id="L109">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L115">        return null;</span>
+    }
+
+    @Override
+    public List&lt;Field&gt; searchFields(String keywords) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L121">        return null;</span>
     }
 }
 

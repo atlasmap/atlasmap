@@ -15,16 +15,13 @@
  */
 package io.atlasmap.dfdl.service;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -33,13 +30,12 @@ import javax.ws.rs.core.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.atlasmap.dfdl.inspect.DfdlInspectionService;
 import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
 import io.atlasmap.service.AtlasService;
-import io.atlasmap.v2.Json;
+import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.Field;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -52,54 +48,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * DFDL Service provides DFDL inspection service which generate an AtlasMap Document object from DFDL instance or DFDL schema.
  */
 @Path(&quot;/dfdl/&quot;)
-<span class="fc" id="L55">public class DfdlService {</span>
+<span class="fc" id="L51">public class DfdlService extends ModuleService {</span>
 
-<span class="fc" id="L57">    private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);</span>
+<span class="fc" id="L53">    private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);</span>
 
     @Context
     private ResourceContext resourceContext;
-
-    /**
-     * Serializes to a JSON.
-     * @param value value
-     * @return serialized
-     */
-    protected byte[] toJson(Object value) {
-        try {
-<span class="fc" id="L69">            return Json.mapper().writeValueAsBytes(value);</span>
-<span class="nc" id="L70">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L71">            throw new WebApplicationException(e, Response.Status.INTERNAL_SERVER_ERROR);</span>
-        }
-    }
-
-    /**
-     * Deserializes from a JSON.
-     * @param &lt;T&gt; type
-     * @param value value
-     * @param clazz type
-     * @return deserialized
-     */
-    protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
-        try {
-<span class="nc" id="L84">            return Json.mapper().readValue(value, clazz);</span>
-<span class="nc" id="L85">        } catch (IOException e) {</span>
-<span class="nc" id="L86">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
-        }
-    }
-
-    /**
-     * Simple hello service.
-     * @param from sender
-     * @return pong
-     */
-    @GET
-    @Path(&quot;/simple&quot;)
-    @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary = &quot;Simple&quot;, description = &quot;Simple hello service&quot;)
-    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = String.class)), description = &quot;Return a response&quot;))
-    public String simpleHelloWorld(@QueryParam(&quot;from&quot;) String from) {
-<span class="nc" id="L101">        return &quot;Got it! &quot; + from;</span>
-    }
 
     /**
      * Inspects a DFDL schema or instance and return a Document object.
@@ -114,7 +68,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;DfdlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = DfdlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = DfdlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
     public Response inspect(InputStream request) {
-<span class="nc" id="L117">        return inspect(fromJson(request, DfdlInspectionRequest.class));</span>
+<span class="nc" id="L71">        return inspect(fromJson(request, DfdlInspectionRequest.class));</span>
     }
 
     /**
@@ -123,42 +77,54 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
      * @return {@link DfdlInspectionResponse}
      */
     public Response inspect(DfdlInspectionRequest request) {
-<span class="fc" id="L126">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L80">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L128">        DfdlInspectionResponse response = new DfdlInspectionResponse();</span>
-<span class="fc" id="L129">        XmlDocument d = null;</span>
+<span class="fc" id="L82">        DfdlInspectionResponse response = new DfdlInspectionResponse();</span>
+<span class="fc" id="L83">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
-<span class="nc" id="L134">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
+<span class="nc" id="L88">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
             } else {
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">                ClassLoader loader = resourceContext != null</span>
-<span class="nc" id="L137">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
-<span class="fc" id="L138">                    : DfdlService.class.getClassLoader();</span>
-<span class="fc" id="L139">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                ClassLoader loader = resourceContext != null</span>
+<span class="nc" id="L91">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
+<span class="fc" id="L92">                    : DfdlService.class.getClassLoader();</span>
+<span class="fc" id="L93">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
 
-<span class="pc bpc" id="L141" title="1 of 3 branches missed.">                switch (request.getType()) {</span>
+<span class="pc bpc" id="L95" title="1 of 3 branches missed.">                switch (request.getType()) {</span>
                 case INSTANCE:
-<span class="fc" id="L143">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
-<span class="fc" id="L144">                    break;</span>
+<span class="fc" id="L97">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
+<span class="fc" id="L98">                    break;</span>
                 case SCHEMA:
-<span class="fc" id="L146">                    d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());</span>
-<span class="fc" id="L147">                    break;</span>
+<span class="fc" id="L100">                    d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());</span>
+<span class="fc" id="L101">                    break;</span>
                 default:
-<span class="nc" id="L149">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L103">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
                     break;
                 }
             }
-<span class="nc" id="L153">        } catch (Exception e) {</span>
-<span class="nc" id="L154">            LOG.error(&quot;Error inspecting DFDL: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L155">            response.setErrorMessage(e.getMessage());</span>
+<span class="nc" id="L107">        } catch (Exception e) {</span>
+<span class="nc" id="L108">            LOG.error(&quot;Error inspecting DFDL: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L109">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L157">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L111">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L160">        response.setXmlDocument(d);</span>
-<span class="fc" id="L161">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L114">        response.setXmlDocument(d);</span>
+<span class="fc" id="L115">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    @Override
+    public Field getField(String path, boolean recursive) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L121">        return null;</span>
+    }
+
+    @Override
+    public List&lt;Field&gt; searchFields(String keywords) {
+        // TODO Auto-generated method stub
+<span class="nc" id="L127">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

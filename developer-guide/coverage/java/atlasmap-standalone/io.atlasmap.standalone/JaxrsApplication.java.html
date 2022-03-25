@@ -28,6 +28,8 @@ import io.atlasmap.java.service.JavaService;
 import io.atlasmap.json.service.JsonService;
 import io.atlasmap.kafkaconnect.service.KafkaConnectService;
 import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.service.MappingService;
 import io.atlasmap.xml.service.XmlService;
 
 /**
@@ -35,7 +37,37 @@ import io.atlasmap.xml.service.XmlService;
  */
 @Component
 @ApplicationPath(&quot;/v2/atlas/&quot;)
-<span class="fc" id="L38">public class JaxrsApplication extends Application {</span>
+<span class="fc" id="L40">public class JaxrsApplication extends Application {</span>
+
+    /**
+     * Core service.
+     * @return Core service
+     * @throws AtlasException unexpected error
+     */
+    @Bean
+    public AtlasService atlasService() throws AtlasException {
+<span class="fc" id="L49">        return new AtlasService();</span>
+    }
+
+    /**
+     * Mapping service.
+     * @return Mapping service
+     * @throws AtlasException unexpected error
+     */
+    @Bean
+    public MappingService mappingService() throws AtlasException {
+<span class="fc" id="L59">        return new MappingService(atlasService());</span>
+    }
+
+    /**
+     * Document service.
+     * @return Document service
+     * @throws AtlasException unexpected error
+     */
+    @Bean
+    public DocumentService documentService() throws AtlasException {
+<span class="fc" id="L69">        return new DocumentService(atlasService());</span>
+    }
 
     /**
      * Java service.
@@ -43,7 +75,7 @@ import io.atlasmap.xml.service.XmlService;
      */
     @Bean
     public JavaService javaService() {
-<span class="fc" id="L46">        return new JavaService();</span>
+<span class="fc" id="L78">        return new JavaService();</span>
     }
 
     /**
@@ -52,7 +84,7 @@ import io.atlasmap.xml.service.XmlService;
      */
     @Bean
     public JsonService jsonService() {
-<span class="fc" id="L55">        return new JsonService();</span>
+<span class="fc" id="L87">        return new JsonService();</span>
     }
 
     /**
@@ -61,7 +93,7 @@ import io.atlasmap.xml.service.XmlService;
      */
     @Bean
     public XmlService xmlService() {
-<span class="fc" id="L64">        return new XmlService();</span>
+<span class="fc" id="L96">        return new XmlService();</span>
     }
 
     /**
@@ -70,7 +102,7 @@ import io.atlasmap.xml.service.XmlService;
      */
     @Bean
     public DfdlService dfdlService() {
-<span class="fc" id="L73">        return new DfdlService();</span>
+<span class="fc" id="L105">        return new DfdlService();</span>
     }
 
     /**
@@ -78,24 +110,14 @@ import io.atlasmap.xml.service.XmlService;
      * @return CSV service.
      */
     @Bean
-<span class="fc" id="L81">    public CsvService csvService() { return new CsvService(); }</span>
+<span class="fc" id="L113">    public CsvService csvService() { return new CsvService(); }</span>
 
     /**
      * Kafka Connect service.
      * @return Kafka Connect service.
      */
     @Bean
-<span class="fc" id="L88">    public KafkaConnectService kafkaConnectService() { return new KafkaConnectService(); }</span>
+<span class="fc" id="L120">    public KafkaConnectService kafkaConnectService() { return new KafkaConnectService(); }</span>
     
-    /**
-     * Core service.
-     * @return Core service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public AtlasService atlasService() throws AtlasException {
-<span class="fc" id="L97">        return new AtlasService();</span>
-    }
-
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

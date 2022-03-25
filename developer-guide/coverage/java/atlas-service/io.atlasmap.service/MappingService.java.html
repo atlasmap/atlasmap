@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MappingService.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-service</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.service</a> &gt; <span class="el_source">MappingService.java</span></div><h1>MappingService.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.service;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceContext;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasContext;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.api.AtlasPreviewContext;
+import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.ProcessMappingRequest;
+import io.atlasmap.v2.ProcessMappingResponse;
+import io.atlasmap.v2.Validations;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+/**
+ * Provides backend REST services for handling mappings.
+ * @see AtlasService
+ * @see DocumentService
+ */
+@Path(&quot;/project/{mappingDefinitionId}/mapping&quot;)
+public class MappingService extends BaseAtlasService {
+<span class="fc" id="L67">    private static final Logger LOG = LoggerFactory.getLogger(MappingService.class);</span>
+
+    @Context
+    private ResourceContext resourceContext;
+    private AtlasService atlasService;
+    private final AtlasPreviewContext previewContext;
+
+    /**
+     * A constructor.
+     */
+<span class="nc" id="L77">    public MappingService() {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (resourceContext == null) {</span>
+<span class="nc" id="L79">            throw new IllegalStateException(&quot;JAX-RS ResourceContext is not injected&quot;);</span>
+        }
+<span class="nc" id="L81">        this.atlasService = resourceContext.getResource(AtlasService.class);</span>
+<span class="nc" id="L82">        this.previewContext = this.atlasService.getContextFactory().createPreviewContext();</span>
+<span class="nc" id="L83">    }</span>
+
+    /**
+     * A constructor.
+     * @param parent parent {@link AtlasService}
+     */
+<span class="fc" id="L89">    public MappingService(AtlasService parent) {</span>
+<span class="fc" id="L90">        this.atlasService = parent;</span>
+<span class="fc" id="L91">        this.previewContext = this.atlasService.getContextFactory().createPreviewContext();</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Remove mappings defined in a given mapping definition.
+     * @param mappingDefinitionId mapping definition ID
+     * @return empty response
+     */
+    @DELETE
+    @Path(&quot;/&quot;)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Remove Mapping&quot;, description = &quot;Remove mappings from mapping definition&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;The mappings for the specified mapping definition was removed successfully&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;The specified mapping definition was not found&quot;)})
+    public Response removeMappingRequest(@Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+        try {
+<span class="nc" id="L108">            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="nc" id="L109">            AtlasMapping def = handler.getMappingDefinition();</span>
+<span class="nc" id="L110">            def.getMappings().getMapping().clear();</span>
+<span class="nc" id="L111">            handler.persist();</span>
+<span class="nc" id="L112">        } catch (AtlasException e) {</span>
+<span class="nc" id="L113">            LOG.error(&quot;Error removing mappings from a mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
+<span class="nc" id="L114">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L115">        }</span>
+<span class="nc" id="L116">        return Response.ok().build();</span>
+    }
+
+    /**
+     * Retrieve a mapping file saved on the server.
+     * @param mappingDefinitionId mapping definition ID
+     * @return file
+     */
+    @GET
+    @Path(&quot;/&quot;)
+    @Produces({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML,MediaType.APPLICATION_OCTET_STREAM})
+    @Operation(summary = &quot;Get Mapping&quot;, description = &quot;Retrieve a mapping file saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)), description = &quot;Return a mapping file content&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Mapping file was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Mapping file access error&quot;)})
+    public Response getMappingRequest(
+      @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+<span class="fc" id="L134">        LOG.debug(&quot;getMappingRequest: {}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L135">        ADMArchiveHandler admHandler = this.atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
+
+<span class="fc" id="L137">        byte[] serialized = null;</span>
+        try {
+<span class="fc" id="L139">            serialized = admHandler.getMappingDefinitionBytes();</span>
+<span class="nc" id="L140">        } catch (Exception e) {</span>
+<span class="nc" id="L141">            LOG.error(&quot;Error retrieving mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
+<span class="nc" id="L142">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L143">        }</span>
+<span class="pc bpc" id="L144" title="3 of 4 branches missed.">        if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
+<span class="nc" id="L145">            LOG.debug(new String(serialized));</span>
+        }
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (serialized == null) {</span>
+<span class="fc" id="L148">            LOG.debug(&quot;Mapping definition not found for ID:{}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L149">            return Response.noContent().build();</span>
+        }
+<span class="fc" id="L151">        return Response.ok().entity(serialized).build();</span>
+    }
+
+        /**
+     * Updates existing mapping file on the server.
+     * @param mapping mapping
+     * @param mappingDefinitionId mapping definition ID
+     * @param uriInfo URI info
+     * @return empty response
+     */
+    @PUT
+    @Path(&quot;/&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Update Mapping&quot;, description = &quot;Update existing mapping file on the server&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, description = &quot;Succeeded&quot;))
+    public Response updateMappingRequest(
+            InputStream mapping,
+            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+            @Context UriInfo uriInfo) {
+<span class="fc" id="L171">        ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="fc" id="L172">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
+        try {
+<span class="fc" id="L174">            handler.setMappingDefinitionBytes(mapping);</span>
+<span class="fc" id="L175">            handler.persist();</span>
+<span class="fc" id="L176">            builder.path(handler.getMappingDefinition().getName());</span>
+<span class="nc" id="L177">        } catch (AtlasException e) {</span>
+<span class="nc" id="L178">            LOG.error(&quot;Error saving Mapping Definition file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L179">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L180">        }</span>
+
+<span class="fc" id="L182">        return Response.ok().location(builder.build()).build();</span>
+    }
+
+    /**
+     * Validates the mapping file.
+     * @param mapping mapping
+     * @param mappingDefinitionId mapping definition ID
+     * @param uriInfo URI info
+     * @return {@link Validations} validation result
+     */
+    @POST
+    @Path(&quot;/validate&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Validate Mapping&quot;, description = &quot;Validate mapping file&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation =  Validations.class)), description = &quot;Return a validation result&quot;))
+    public Response validateMappingRequest(InputStream mapping,
+                                           @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+                                           @Context UriInfo uriInfo) {
+        try {
+<span class="fc" id="L203">            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);</span>
+<span class="fc" id="L204">            LOG.debug(&quot;Validate mappings: {}&quot;, atlasMapping.getName());</span>
+<span class="fc" id="L205">            return validateMapping(mappingDefinitionId, atlasMapping, uriInfo);</span>
+<span class="nc" id="L206">        } catch (AtlasException | IOException e) {</span>
+<span class="nc" id="L207">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Performs mapping validation.
+     * @param mappingDefinitionId mapping definition ID
+     * @param mapping mapping
+     * @param uriInfo URI info
+     * @return {@link Validations} validation result
+     * @throws IOException unexpected error
+     * @throws AtlasException unexpected error
+     */
+    private Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
+        AtlasSession session;
+<span class="fc" id="L222">        synchronized (atlasService.getContextFactory()) {</span>
+<span class="fc" id="L223">            AtlasContext context = atlasService.getContextFactory().createContext(mapping);</span>
+<span class="fc" id="L224">            session = context.createSession();</span>
+<span class="fc" id="L225">            context.processValidation(session);</span>
+<span class="fc" id="L226">        }</span>
+
+<span class="fc" id="L228">        Validations validations = session.getValidations();</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (session.getValidations() == null) {</span>
+<span class="nc" id="L230">            validations = new Validations();</span>
+        }
+
+<span class="fc" id="L233">        return Response.ok().entity(toJson(validations)).build();</span>
+    }
+
+    /**
+     * Processes mapping by feeding input data.
+     * @param request request
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param uriInfo URI info
+     * @return {@link ProcessMappingResponse} which holds the result of the mappings
+     */
+    @POST
+    @Path(&quot;/process&quot;)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = &quot;Process Mapping&quot;, description = &quot;Process Mapping by feeding input data&quot;)
+    @RequestBody(description = &quot;Mapping file content&quot;, content = @Content(schema = @Schema(implementation = AtlasMapping.class)))
+    @ApiResponses({
+            @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = ProcessMappingResponse.class)), description = &quot;Return a mapping result&quot;),
+            @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Skipped empty mapping execution&quot;) })
+    public Response processMappingRequest(InputStream request,
+            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+            @Context UriInfo uriInfo) {
+<span class="fc" id="L255">        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        if (pmr.getAtlasMapping() != null) {</span>
+<span class="nc" id="L257">            throw new WebApplicationException(&quot;Whole mapping execution is not yet supported&quot;);</span>
+        }
+<span class="fc" id="L259">        Mapping mapping = pmr.getMapping();</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        if (mapping == null) {</span>
+<span class="nc" id="L261">            return Response.noContent().build();</span>
+        }
+<span class="fc" id="L263">        Audits audits = null;</span>
+        try {
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L266">                LOG.debug(&quot;Preview request: {}&quot;, new String(toJson(mapping)));</span>
+            }
+<span class="fc" id="L268">            audits = previewContext.processPreview(mapping);</span>
+<span class="nc" id="L269">        } catch (AtlasException e) {</span>
+<span class="nc" id="L270">            throw new WebApplicationException(&quot;Unable to process mapping preview&quot;, e);</span>
+<span class="fc" id="L271">        }</span>
+<span class="fc" id="L272">        ProcessMappingResponse response = new ProcessMappingResponse();</span>
+<span class="fc" id="L273">        response.setMapping(mapping);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (audits != null) {</span>
+<span class="fc" id="L275">            response.setAudits(audits);</span>
+        }
+<span class="fc" id="L277">        byte[] serialized = toJson(response);</span>
+<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L279">            LOG.debug(&quot;Preview outcome: {}&quot;, new String(serialized));</span>
+        }
+<span class="fc" id="L281">        return Response.ok().entity(serialized).build();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
