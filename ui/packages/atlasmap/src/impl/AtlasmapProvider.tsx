@@ -45,8 +45,11 @@ import {
   createMapping,
   createNamespace,
   createProperty,
+  delDocsAndMappingsAtlasmap,
   deleteAtlasFile,
   deleteConstant,
+  deleteLibrariesAtlasmap,
+  deleteMappingsAtlasmap,
   deleteNamespace,
   deleteProperty,
   deselectMapping,
@@ -123,6 +126,9 @@ export interface IExternalDocumentProps {
 }
 interface IAtlasmapContext extends IDataState, INotificationsState {
   onLoading: () => void;
+  onDelDocsAndMappings: () => void;
+  onDeleteLibraries: () => void;
+  onDeleteMappings: () => void;
   onReset: () => void;
   markNotificationRead: (id: string) => void;
 }
@@ -163,6 +169,27 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
     {},
     initNotificationsState,
   );
+
+  const onDelDocsAndMappings = () => {
+    dispatchData({ type: 'delete' });
+    dispatchNotifications({
+      type: 'delete',
+    });
+  };
+
+  const onDeleteLibraries = () => {
+    dispatchData({ type: 'delete' });
+    dispatchNotifications({
+      type: 'delete',
+    });
+  };
+
+  const onDeleteMappings = () => {
+    dispatchData({ type: 'delete' });
+    dispatchNotifications({
+      type: 'delete',
+    });
+  };
 
   const onReset = () => {
     dispatchData({ type: 'reset' });
@@ -457,6 +484,9 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         ...data,
         ...notifications,
         onLoading,
+        onDelDocsAndMappings,
+        onDeleteLibraries,
+        onDeleteMappings,
         onReset,
         markNotificationRead,
       }}
@@ -477,7 +507,14 @@ export function useAtlasmap() {
 
   const configModel = initializationService.cfg;
 
-  const { onLoading, onReset, ...state } = context;
+  const {
+    onLoading,
+    onReset,
+    onDelDocsAndMappings,
+    onDeleteLibraries,
+    onDeleteMappings,
+    ...state
+  } = context;
 
   const searchSources = useCallback(
     (term: string) =>
@@ -509,6 +546,21 @@ export function useAtlasmap() {
       toggleExpandGroup(group, expand),
     [],
   );
+
+  const handleDelDocsAndMappingsAtlasmap = useCallback(() => {
+    onDelDocsAndMappings();
+    delDocsAndMappingsAtlasmap();
+  }, [onDelDocsAndMappings]);
+
+  const handleDeleteLibrariesAtlasmap = useCallback(() => {
+    onDeleteLibraries();
+    deleteLibrariesAtlasmap();
+  }, [onDeleteLibraries]);
+
+  const handleDeleteMappingsAtlasmap = useCallback(() => {
+    onDeleteMappings();
+    deleteMappingsAtlasmap();
+  }, [onDeleteMappings]);
 
   const handleResetAtlasmap = useCallback(() => {
     onReset();
@@ -597,6 +649,9 @@ export function useAtlasmap() {
     importADMArchiveFile: handleImportADMArchiveFile,
     importJarFile: handleImportJarFile,
     onToggleExpandGroup: handleOnToggleExpandGroup,
+    delDocsAndMappingsAtlasmap: handleDelDocsAndMappingsAtlasmap,
+    deleteLibrariesAtlasmap: handleDeleteLibrariesAtlasmap,
+    deleteMappingsAtlasmap: handleDeleteMappingsAtlasmap,
     resetAtlasmap: handleResetAtlasmap,
     getUIVersion: getUIVersion,
     getRuntimeVersion: getRuntimeVersion,

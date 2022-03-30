@@ -28,6 +28,7 @@ import {
   PficonDragdropIcon,
   PlusIcon,
   TableIcon,
+  TimesCircleIcon,
   TrashIcon,
 } from '@patternfly/react-icons';
 import {
@@ -50,11 +51,17 @@ export interface IAtlasmapToolbarItemProps {
   showImportAtlasFileToolbarItem: boolean;
   showImportJarFileToolbarItem: boolean;
   showExportAtlasFileToolbarItem: boolean;
-  showResetToolbarItem: boolean;
+  showDeleteResetToolbarItem: boolean;
   onImportAtlasFile: (file: File) => void;
   onImportJarFile: (file: File) => void;
   onExportAtlasFile: () => void;
+  onDeleteDocsAndMappings: () => void;
+  onDeleteLibraries: () => void;
+  onDeleteMappings: () => void;
   onResetAtlasmap: () => void;
+  docsExist?: boolean;
+  librariesExist?: boolean;
+  mappingsExist?: boolean;
 }
 export const AtlasmapToolbarItem: FunctionComponent<
   IAtlasmapToolbarItemProps
@@ -62,11 +69,17 @@ export const AtlasmapToolbarItem: FunctionComponent<
   showImportAtlasFileToolbarItem,
   showImportJarFileToolbarItem,
   showExportAtlasFileToolbarItem,
-  showResetToolbarItem,
+  showDeleteResetToolbarItem,
   onImportAtlasFile,
   onImportJarFile,
   onExportAtlasFile,
+  onDeleteDocsAndMappings,
+  onDeleteLibraries,
+  onDeleteMappings,
   onResetAtlasmap,
+  docsExist,
+  librariesExist,
+  mappingsExist,
 }) => {
   const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
   const runAndClose = (cb: (...args: any[]) => any) => {
@@ -100,7 +113,28 @@ export const AtlasmapToolbarItem: FunctionComponent<
     showExportAtlasFileToolbarItem && (
       <DropdownSeparator key="export-separator" />
     ),
-    showResetToolbarItem && (
+    showDeleteResetToolbarItem && (
+      <DeleteDocsAndMappingsToolbarItem
+        docsExist={docsExist!}
+        onClick={runAndClose(onDeleteDocsAndMappings)}
+        key="del-docs-mappings"
+      />
+    ),
+    false /* showDeleteResetToolbarItem #3867 */ && (
+      <DeleteLibrariesToolbarItem
+        librariesExist={librariesExist!}
+        onClick={runAndClose(onDeleteLibraries)}
+        key="del-libs"
+      />
+    ),
+    showDeleteResetToolbarItem && (
+      <DeleteMappingsToolbarItem
+        mappingsExist={mappingsExist!}
+        onClick={runAndClose(onDeleteMappings)}
+        key="del-mappings"
+      />
+    ),
+    showDeleteResetToolbarItem && (
       <ResetToolbarItem
         onClick={runAndClose(onResetAtlasmap)}
         key="reset-catalog"
@@ -200,11 +234,53 @@ export const ExportAtlasFileToolbarItem: FunctionComponent<{
   </DropdownItem>
 );
 
+export const DeleteDocsAndMappingsToolbarItem: FunctionComponent<{
+  docsExist: boolean;
+  onClick: () => void;
+}> = ({ docsExist, onClick }) => (
+  <DropdownItem
+    icon={<TrashIcon />}
+    isDisabled={!docsExist}
+    onClick={onClick}
+    data-testid="del-docs-mappings-button"
+  >
+    Delete documents and mappings
+  </DropdownItem>
+);
+
+export const DeleteLibrariesToolbarItem: FunctionComponent<{
+  librariesExist: boolean;
+  onClick: () => void;
+}> = ({ librariesExist, onClick }) => (
+  <DropdownItem
+    icon={<TrashIcon />}
+    isDisabled={!librariesExist}
+    onClick={onClick}
+    data-testid="del-libs-button"
+  >
+    Delete user-defined Java libraries
+  </DropdownItem>
+);
+
+export const DeleteMappingsToolbarItem: FunctionComponent<{
+  mappingsExist: boolean;
+  onClick: () => void;
+}> = ({ mappingsExist, onClick }) => (
+  <DropdownItem
+    icon={<TrashIcon />}
+    isDisabled={!mappingsExist}
+    onClick={onClick}
+    data-testid="del-mappings"
+  >
+    Delete mappings
+  </DropdownItem>
+);
+
 export const ResetToolbarItem: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => (
   <DropdownItem
-    icon={<TrashIcon />}
+    icon={<TimesCircleIcon />}
     onClick={onClick}
     data-testid="reset-all-button"
   >

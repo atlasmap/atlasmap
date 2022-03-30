@@ -220,7 +220,7 @@ export class FileManagementService {
         .then((res) => {
           this.cfg.logger!.debug(`Delete All Response: ${res.status}`);
           this.cfg.mappings = null;
-          this.cfg.clearDocs();
+          this.cfg.clearDocs(true);
           resolve(true);
         })
         .catch((error) => {

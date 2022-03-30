@@ -93,7 +93,37 @@ export function importJarFile(selectedFile: File, cfg: ConfigModel) {
 }
 
 /**
- * Remove all documents and imported JARs from the server.
+ * Remove all imported documents and mappings, keeping any imported
+ * libraries intact.
+ */
+export async function delDocsAndMappingsAtlasmap() {
+  const cfg = ConfigModel.getConfig();
+  await cfg.mappingService.removeAllMappings();
+  cfg.clearDocs(false);
+  await cfg.mappingService.notifyMappingUpdated();
+  await cfg.fileService.updateDigestFile();
+}
+
+/**
+ * Remove all imported Java libraries, keeping all documents and mappings
+ * intact.
+ */
+export function deleteLibrariesAtlasmap() {
+  const cfg = ConfigModel.getConfig();
+  cfg.fileService.resetLibs();
+}
+
+/**
+ * Remove all mappings, keeping any imported documents and libraries intact.
+ */
+export async function deleteMappingsAtlasmap() {
+  const cfg = ConfigModel.getConfig();
+  await cfg.mappingService.removeAllMappings();
+  await cfg.mappingService.notifyMappingUpdated();
+}
+
+/**
+ * Remove all documents, mappings and imported JARs from the server.
  */
 export function resetAtlasmap() {
   const cfg = ConfigModel.getConfig();

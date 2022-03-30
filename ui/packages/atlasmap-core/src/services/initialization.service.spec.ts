@@ -43,7 +43,7 @@ describe('InitializationService', () => {
   });
 
   afterEach(() => {
-    service.cfg.clearDocs();
+    service.cfg.clearDocs(true);
     if (service.cfg.mappings) {
       service.cfg.mappings.mappings = [];
     }
@@ -145,7 +145,7 @@ describe('InitializationService', () => {
 
   test('initialize() load mapping definition', (done) => {
     const cfg = service.cfg;
-    cfg.clearDocs();
+    cfg.clearDocs(true);
     cfg.initCfg.baseAtlasServiceUrl = 'dummy';
     cfg.initCfg.baseJSONInspectionServiceUrl = 'dummy';
     cfg.initCfg.baseXMLInspectionServiceUrl = 'dummy';

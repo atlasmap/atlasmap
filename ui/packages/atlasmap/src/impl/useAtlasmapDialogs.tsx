@@ -28,10 +28,14 @@ import {
   useChangeDocumentNameDialog,
   useConstantDialog,
   useCustomClassDialog,
+  useDelDocsAndMappingsAtlasmapDialog,
   useDeleteConstantDialog,
   useDeleteDocumentDialog,
+  useDeleteLibrariesAtlasmapDialog,
   useDeleteMappingDialog,
+  useDeleteMappingsAtlasmapDialog,
   useDeletePropertyDialog,
+  useDeleteResetAtlasmapDialog,
   useEditMappingEnumerationDialog,
   useExportADMArchiveDialog,
   useImportADMArchiveDialog,
@@ -40,7 +44,6 @@ import {
   useParametersDialog,
   usePropertyDialog,
   useRemoveMappedFieldDialog,
-  useResetAtlasmapDialog,
   useToggleExpressionModeDialog,
 } from './dialogs';
 
@@ -154,7 +157,13 @@ export function useAtlasmapDialogs({
     useImportADMArchiveDialog();
   const [exportADMArchiveDialog, onExportADMArchive] =
     useExportADMArchiveDialog();
-  const [resetDialog, onResetAtlasmap] = useResetAtlasmapDialog();
+  const [delDocsAndMappingsDialog, onDelDocsAndMappingsAtlasmap] =
+    useDelDocsAndMappingsAtlasmapDialog();
+  const [deleteLibrariesDialog, onDeleteLibrariesAtlasmap] =
+    useDeleteLibrariesAtlasmapDialog();
+  const [deleteMappingsDialog, onDeleteMappingsAtlasmap] =
+    useDeleteMappingsAtlasmapDialog();
+  const [resetDialog, onResetAtlasmap] = useDeleteResetAtlasmapDialog();
   const [aboutDialog, onAbout] = useAboutDialog();
   const [toggleExpressionModeDialog, onToggleExpressionMode] =
     useToggleExpressionModeDialog();
@@ -312,6 +321,9 @@ export function useAtlasmapDialogs({
           {createPropertyDialog}
           {deletePropertyDialog}
           {editPropertyDialog}
+          {delDocsAndMappingsDialog}
+          {deleteLibrariesDialog}
+          {deleteMappingsDialog}
           {resetDialog}
           {aboutDialog}
           {removeMappedFieldDialog}
@@ -332,6 +344,9 @@ export function useAtlasmapDialogs({
       createPropertyDialog,
       deleteConstantDialog,
       deleteDocumentDialog,
+      delDocsAndMappingsDialog,
+      deleteLibrariesDialog,
+      deleteMappingsDialog,
       captureDocumentNameToast,
       changeDocumentNameDialog,
       deleteMappingDialog,
@@ -362,6 +377,9 @@ export function useAtlasmapDialogs({
       onCreateProperty,
       onDeleteProperty,
       onEditProperty,
+      onDelDocsAndMappingsAtlasmap,
+      onDeleteLibrariesAtlasmap,
+      onDeleteMappingsAtlasmap,
       onResetAtlasmap,
       onAbout,
       onImportDocument,
