@@ -23,5 +23,6 @@ public final class DfdlConstants {
     public static final String OPTION_PREFIX = "atlas.dfdl";
     /** Option name for the example. */
     public static final String OPTION_EXAMPLE_DATA = "atlas.dfdl.example";
-
+    /** Option name for dfdlSchemaName. */
+    public static final String OPTION_DFDL_SCHEMA_NAME = "dfdlSchemaName";
 }

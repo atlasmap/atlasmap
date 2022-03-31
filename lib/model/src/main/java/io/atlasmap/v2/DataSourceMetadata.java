@@ -23,7 +23,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The Data Source metadata.
+ * @see ADMDigest
  */
+@Deprecated
 public class DataSourceMetadata implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -19,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 
 import javax.ws.rs.core.Response;
@@ -27,21 +29,26 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionRequest;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionResponse;
-import io.atlasmap.kafkaconnect.v2.KafkaConnectSchemaType;
-import io.atlasmap.v2.FieldType;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Json;
 
 public class KafkaConnectServiceTest {
 
     private KafkaConnectService kafkaConnectService = null;
+    private DocumentService documentService;
 
     @BeforeEach
-    public void setUp() {
-        kafkaConnectService = new KafkaConnectService();
+    public void setUp() throws AtlasException {
+        AtlasService atlas = new AtlasService();
+        documentService = new DocumentService(atlas);
+        kafkaConnectService = new KafkaConnectService(atlas, documentService);
     }
 
     @AfterEach
@@ -52,11 +59,15 @@ public class KafkaConnectServiceTest {
     @Test
     public void testAvroSchema() throws Exception {
         KafkaConnectInspectionRequest request = new KafkaConnectInspectionRequest();
+        request.setDocumentId("test");
+        request.setDataSourceType(DataSourceType.SOURCE);
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("avro-complex.json");
         request.setSchemaData(new String(is.readAllBytes()));
         request.getOptions().put(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE, "AVRO");
         request.getOptions().put(KafkaConnectConstants.OPTIONS_IS_KEY, "true");
-        Response res = kafkaConnectService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = kafkaConnectService.importKafkaConnectDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         KafkaConnectInspectionResponse inspectionResponse = Json.mapper().readValue((byte[])entity, KafkaConnectInspectionResponse.class);
@@ -64,6 +75,11 @@ public class KafkaConnectServiceTest {
         KafkaConnectDocument doc = inspectionResponse.getKafkaConnectDocument();
         assertNotNull(doc);
         assertEquals(org.apache.kafka.connect.data.Schema.Type.STRUCT, doc.getRootSchemaType());
+        assertEquals(9, doc.getFields().getField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        KafkaConnectDocument inspected = Json.mapper().readValue((File)res.getEntity(), KafkaConnectDocument.class);
+        assertEquals(9, inspected.getFields().getField().size());
     }
 
 

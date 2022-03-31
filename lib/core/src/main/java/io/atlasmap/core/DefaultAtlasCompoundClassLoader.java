@@ -24,6 +24,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.spi.CompoundClassLoader;
+
 /**
  * The default implementation of {@link CompoundClassLoader}.
  */

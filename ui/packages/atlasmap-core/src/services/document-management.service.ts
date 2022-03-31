@@ -15,24 +15,25 @@
 */
 import {
   CollectionType,
+  DataSourceType,
   DocumentType,
   FIELD_PATH_SEPARATOR,
   FieldType,
   InspectionType,
 } from '../contracts/common';
+import { DocumentCatalog, DocumentMetadata } from '../contracts';
 import {
   ErrorInfo,
   ErrorLevel,
   ErrorScope,
   ErrorType,
 } from '../models/error.model';
-
 import {
   HTTP_STATUS_NO_CONTENT,
   constantTypes,
   propertyTypes,
 } from '../common/config.types';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription, forkJoin } from 'rxjs';
 
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
@@ -864,5 +865,211 @@ export class DocumentManagementService {
     }
     answer += name;
     return answer;
+  }
+
+  /**
+   * Fetch Documents from backend and reflect into UI model objects.
+   * @returns Promise to return a boolean which is false if any error occurs
+   */
+  fetchDocuments(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      let url: string = `${this.cfg.initCfg.baseAtlasServiceUrl}project/${this.cfg.mappingDefinitionId}/document`;
+      this.cfg.logger!.debug('Fetch Document Catalog Service Request: ' + url);
+      this.api
+        .get(url)
+        .json<{ DocumentCatalog: DocumentCatalog }>()
+        .then((body: { DocumentCatalog: DocumentCatalog }) => {
+          this.cfg.logger!.debug(
+            `Fetch Document Catalog Service Response: ${JSON.stringify(body)}`
+          );
+          const operations: Promise<any>[] = [];
+          const srcDocs: { meta: DocumentMetadata; inspected: any }[] = [];
+          const tgtDocs: { meta: DocumentMetadata; inspected: any }[] = [];
+          for (let i = 0; i < body.DocumentCatalog?.sources?.length; i++) {
+            const meta = body.DocumentCatalog.sources[i];
+            const operation = this.fetchDocumentInspectionResult(meta).then(
+              (inspected) => {
+                srcDocs[i] = { meta, inspected };
+              }
+            );
+            operations.push(operation);
+          }
+          for (let i = 0; i < body.DocumentCatalog?.targets?.length; i++) {
+            const meta = body.DocumentCatalog.targets[i];
+            const operation = this.fetchDocumentInspectionResult(meta).then(
+              (inspected) => {
+                tgtDocs[i] = { meta, inspected };
+              }
+            );
+            operations.push(operation);
+          }
+          let errorOccurred = false;
+          forkJoin(operations).subscribe({
+            complete: () => {
+              this.cfg.sourceDocs = [];
+              srcDocs.forEach((d) => this.loadDocument(d.meta, d.inspected));
+              this.cfg.targetDocs = [];
+              tgtDocs.forEach((d) => this.loadDocument(d.meta, d.inspected));
+              resolve(!errorOccurred);
+            },
+            error: () => {
+              errorOccurred = true;
+            },
+          });
+        });
+    });
+  }
+
+  /**
+   * Fetches Document inspection result for the specified Document from backend.
+   * @param meta DocumentMetadata
+   * @returns Promise to return the Document inspection result
+   */
+  private fetchDocumentInspectionResult(meta: DocumentMetadata): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const url =
+        `${this.cfg.initCfg.baseAtlasServiceUrl}project/${this.cfg.mappingDefinitionId}` +
+        `/document/${meta.dataSourceType}/${meta.id}/inspected`;
+      this.cfg.logger!.debug(
+        'Fetch Document inspection result Service Request: ' + url
+      );
+      this.api
+        .get(url)
+        .json<any>()
+        .then((inspected: any) => {
+          this.cfg.logger!.debug(
+            `Fetch Document inspection result Response: ${JSON.stringify(
+              inspected
+            )}`
+          );
+          resolve(inspected);
+        })
+        .catch((error: any) => {
+          this.cfg.errorService.addBackendError(
+            `Could not retrieve Document inspection result for "${meta.name}(${meta.id})": ${error}`
+          );
+          reject();
+        });
+    });
+  }
+
+  private loadDocument(meta: DocumentMetadata, inspected: any) {
+    const docDef = DocumentInspectionUtil.addDocument(this.cfg, meta);
+    const model = DocumentInspectionUtil.fromDocumentDefinition(
+      this.cfg,
+      docDef
+    );
+    model.parseResponse(inspected);
+    docDef.initializeFromFields();
+    docDef.initialized = true;
+  }
+
+  /**
+   * Send a request to set the Document Name of an existing Document to the backend.
+   * @param isSource true if it's source Document, or false
+   * @param docId Document ID
+   * @param name new Document Name
+   * @returns true if succeed, or false
+   */
+  setDocumentName(
+    isSource: boolean,
+    docId: string,
+    name: string
+  ): Promise<boolean> {
+    const url =
+      `${this.cfg.initCfg.baseAtlasServiceUrl}project/${this.cfg.mappingDefinitionId}` +
+      `/document/${
+        isSource ? DataSourceType.SOURCE : DataSourceType.TARGET
+      }/${docId}/name`;
+    this.cfg.logger!.debug(
+      `Set Document Name Request: isSource=${isSource}, docId=${docId}, name=${name}`
+    );
+    return new Promise((resolve) => {
+      this.api
+        .put(url, { body: name })
+        .then((response: Response) => {
+          this.cfg.logger!.debug(
+            `Set Document Name Response: ${response}: isSource=${isSource}, docId=${docId}, name=${name}`
+          );
+          if (response.ok) {
+            resolve(this.fetchDocuments());
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((error: Error) => {
+          this.cfg.errorService.addBackendError(
+            `Failed to set Document Name: ${error}: isSource=${isSource}, docId=${docId}, name=${name}`
+          );
+          resolve(false);
+        });
+    });
+  }
+
+  /**
+   * Send a request to delete the Document to the backend. The mappings that refer to the deleted
+   * Document will be also deleted.
+   * @param docDef DocumentDefinition
+   * @returns true if succeed, or false
+   */
+  deleteDocument(docDef: DocumentDefinition): Promise<boolean> {
+    const url =
+      `${this.cfg.initCfg.baseAtlasServiceUrl}project/${this.cfg.mappingDefinitionId}` +
+      `/document/${
+        docDef.isSource ? DataSourceType.SOURCE : DataSourceType.TARGET
+      }/${docDef.id}`;
+    this.cfg.logger!.debug(
+      `Delete Document Request: isSource=${docDef.isSource}, docId=${docDef.id}`
+    );
+    return new Promise((resolve) => {
+      this.api
+        .delete(url)
+        .then(async (response: Response) => {
+          this.cfg.logger!.debug(
+            `Delete Document Response: ${response}: isSource=${docDef.isSource}, docId=${docDef.id}`
+          );
+          if (response.ok) {
+            resolve(
+              (await this.fetchDocuments()) &&
+                this.cfg.mappingService.notifyFetchMapping()
+            );
+          } else {
+            resolve(false);
+          }
+        })
+        .catch((error: Error) => {
+          this.cfg.errorService.addBackendError(
+            `Failed to delete Document: ${error}: isSource=${docDef.isSource}, docId=${docDef.id}`
+          );
+          resolve(false);
+        });
+    });
+  }
+
+  /**
+   * Simple liveness check of the Document specific backend service.
+   * @param url URL
+   * @param documentType Document type, such as Java, CSV, JSON, and etc.
+   * @returns true if succeeded, or false
+   */
+  ping(url: string, documentType: string): Promise<boolean> {
+    this.cfg.logger!.debug(`${documentType} Service Ping Request`);
+    return new Promise((resolve) => {
+      this.api
+        .get(url)
+        .text()
+        .then((body) => {
+          this.cfg.logger!.debug(
+            `${documentType} Service Ping Response: ${body}`
+          );
+          resolve(body === 'pong');
+        })
+        .catch((error: Error) => {
+          this.cfg.logger!.debug(
+            `${documentType} Service Ping failed: ${error}`
+          );
+          resolve(false);
+        });
+    });
   }
 }

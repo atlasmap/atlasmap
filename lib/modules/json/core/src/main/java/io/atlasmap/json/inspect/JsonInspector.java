@@ -15,6 +15,8 @@
  */
 package io.atlasmap.json.inspect;
 
+import java.io.InputStream;
+
 import io.atlasmap.json.v2.JsonDocument;
 
 /**
@@ -30,6 +32,6 @@ public interface JsonInspector {
      * @return inspected
      * @throws JsonInspectionException invalid JSON data
      */
-    JsonDocument inspect(String inspectee) throws JsonInspectionException;
+    JsonDocument inspect(InputStream inspectee) throws JsonInspectionException;
 
 }

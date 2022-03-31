@@ -15,6 +15,7 @@
  */
 package io.atlasmap.core;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
@@ -217,11 +218,11 @@ public class ConstantModule implements AtlasModule {
     }
 
     @Override
-    public void setDataSourceMetadata(DataSourceMetadata meta) {
+    public void setDocumentMetadata(DocumentMetadata meta) {
     }
 
     @Override
-    public DataSourceMetadata getDataSourceMetadata() {
+    public DocumentMetadata getDocumentMetadata() {
         return null;
     }
 
@@ -247,6 +248,15 @@ public class ConstantModule implements AtlasModule {
     @Override
     public void setDataSource(DataSource ds) {
         // no-op
+    }
+
+    @Override
+    public void setDocumentSpecificationFile(File specFile) {
+    }
+
+    @Override
+    public File getDocumentSpecificationFile() {
+        return null;
     }
 
 }

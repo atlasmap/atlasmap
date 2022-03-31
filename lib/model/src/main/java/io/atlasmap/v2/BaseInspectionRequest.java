@@ -26,8 +26,18 @@ import java.util.Map;
  */
 public abstract class BaseInspectionRequest implements Serializable {
 
+    /** Document ID. */
+    private String documentId;
+    /** Document Name. */
+    private String documentName;
+    /** Document Description. */
+    private String documentDescription;
     /** URI. */
     private String uri;
+    /** DataSource type */
+    private DataSourceType dataSourceType;
+    /** Document type */
+    private DocumentType documentType;
     /** Inspection type. */
     private InspectionType inspectionType;
     /** Inspection options. */
@@ -44,13 +54,62 @@ public abstract class BaseInspectionRequest implements Serializable {
     private String searchPhrase;
 
     /**
+     * Gets the Document ID.
+     * @return Document ID
+     */
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    /**
+     * Sets the Document ID.
+     * @param documentId Document ID
+     */
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
+    }
+
+    /**
+     * Gets the Document name.
+     * @return Document name
+     */
+    public String getDocumentName() {
+        return documentName;
+    }
+
+    /**
+     * Sets the Document name.
+     * @param documentName Document name
+     */
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
+    }
+
+    /**
+     * Gets the Document description.
+     * @return Document description
+     */
+    public String getDocumentDescription() {
+        return documentDescription;
+    }
+
+    /**
+     * Sets the Document description.
+     * @param documentDescription Document description
+     */
+    public void setDocumentDescription(String documentDescription) {
+        this.documentDescription = documentDescription;
+    }
+
+    /**
      * Gets the value of the uri property.
      *
      * @return
      *     possible object is
      *     {@link String }
-     *
+     * @deprecated https://github.com/atlasmap/atlasmap/issues/3907
      */
+    @Deprecated
     public String getUri() {
         return uri;
     }
@@ -61,10 +120,43 @@ public abstract class BaseInspectionRequest implements Serializable {
      * @param value
      *     allowed object is
      *     {@link String }
-     *
+     * @deprecated https://github.com/atlasmap/atlasmap/issues/3907
      */
+    @Deprecated
     public void setUri(String value) {
         this.uri = value;
+    }
+
+    /**
+     * Gets the DataSourceType.
+     * @return DataSourceType
+     */
+    public DataSourceType getDataSourceType() {
+        return dataSourceType;
+    }
+
+    /**
+     * Sets the DataSourceType.
+     * @param dataSourceType DataSourceType
+     */
+    public void setDataSourceType(DataSourceType dataSourceType) {
+        this.dataSourceType = dataSourceType;
+    }
+
+    /**
+     * Gets the DocumentType.
+     * @return DocumentType
+     */
+    public DocumentType getDocumentType() {
+        return documentType;
+    }
+
+    /**
+     * Sets the DocumentType.
+     * @param documentType DocumentType
+     */
+    public void setDocumentType(DocumentType documentType) {
+        this.documentType = documentType;
     }
 
     /**
@@ -190,6 +282,8 @@ public abstract class BaseInspectionRequest implements Serializable {
     /**
      * Gets the paths to inspect.
      * @return paths
+     * 
+     * @deprecated https://github.com/atlasmap/atlasmap/issues/3909
      */
     public List<String> getInspectPaths() {
         return inspectPaths;
@@ -198,6 +292,8 @@ public abstract class BaseInspectionRequest implements Serializable {
     /**
      * Sets the paths to inspect.
      * @param inspectPaths paths
+     * 
+     * @deprecated https://github.com/atlasmap/atlasmap/issues/3909
      */
     public void setInspectPaths(List<String> inspectPaths) {
         this.inspectPaths = inspectPaths;
@@ -206,6 +302,8 @@ public abstract class BaseInspectionRequest implements Serializable {
     /**
      * Gets the search phrase to limit the inspection.
      * @return searchPhrase
+     * 
+     * @deprecated https://github.com/atlasmap/atlasmap/issues/3908
      */
     public String getSearchPhrase() {
         return searchPhrase;
@@ -214,6 +312,8 @@ public abstract class BaseInspectionRequest implements Serializable {
     /**
      * Gets the search phrase to limit the inspection.
      * @param searchPhrase phrase
+     * 
+     * @deprecated https://github.com/atlasmap/atlasmap/issues/3908
      */
     public void setSearchPhrase(String searchPhrase) {
         this.searchPhrase = searchPhrase;

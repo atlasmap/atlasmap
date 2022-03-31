@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.core;
+package io.atlasmap.spi;
 
 /**
  * The compound class loader that holds multiple class loaders for delegation.

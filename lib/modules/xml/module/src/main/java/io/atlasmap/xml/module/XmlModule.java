@@ -16,6 +16,8 @@
 package io.atlasmap.xml.module;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +72,7 @@ public class XmlModule extends BaseAtlasModule {
     private static final Logger LOG = LoggerFactory.getLogger(XmlModule.class);
 
     private XmlIOHelper ioHelper;
+    private XSSchemaSet xsSchemaSet;
 
     @Override
     public void init() throws AtlasException {
@@ -370,14 +373,11 @@ public class XmlModule extends BaseAtlasModule {
     }
 
     private Document enforceSchema(Document doc) {
-        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA
-            || getDataSourceMetadata().getSpecification() == null || getDataSourceMetadata().getSpecification().length == 0) {
-            return doc;
-        }
         try {
-            byte[] bytes = getDataSourceMetadata().getSpecification();
-            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());
-            XSSchemaSet schemaSet = schemaParser.parse(new ByteArrayInputStream(bytes));
+            XSSchemaSet schemaSet = getXsSchemaSet();
+            if (schemaSet == null) {
+                return doc;
+            }
             Element sourceRoot = doc.getDocumentElement();
             String namespaceUri = sourceRoot.getNamespaceURI();
             if (namespaceUri == null) {
@@ -407,4 +407,19 @@ public class XmlModule extends BaseAtlasModule {
         }
     }
 
+    private XSSchemaSet getXsSchemaSet() throws AtlasException {
+        if (getDocumentMetadata() == null || getDocumentMetadata().getInspectionType() != InspectionType.SCHEMA
+            || getDocumentSpecificationFile() == null || !getDocumentSpecificationFile().exists()) {
+            return null;
+        }
+        if (this.xsSchemaSet == null) {
+            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());
+            try {
+                this.xsSchemaSet = schemaParser.parse(new FileInputStream(getDocumentSpecificationFile()));
+            } catch (FileNotFoundException e) {
+                throw new AtlasException("Couldn't load the specification file", e);
+            }
+        }
+        return this.xsSchemaSet;
+    }
 }

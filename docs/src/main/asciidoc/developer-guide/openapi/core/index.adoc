@@ -283,6 +283,103 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.deleteDocumentRequest]
+==== deleteDocumentRequest
+
+`DELETE /project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}`
+
+Delete Document
+
+===== Description
+
+Delete the Document
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+| dataSourceType
+| DataSource Type 
+| X
+| null
+| 
+
+| documentId
+| Document ID 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 204
+| Document was not found
+|  <<>>
+
+
+| 500
+| Document access error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.deleteLibraries]
 ==== deleteLibraries
 
@@ -440,99 +537,6 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
-[.getADMDigestRequest]
-==== getADMDigestRequest
-
-`GET /project/{mappingDefinitionId}/digest`
-
-Get ADM Digest file
-
-===== Description
-
-Retrieve a gzipped ADM Digest file saved on the server
-
-
-// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/GET/spec.adoc[opts=optional]
-
-
-
-===== Parameters
-
-====== Path Parameters
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| mappingDefinitionId
-| Mapping definition ID 
-| X
-| null
-| 
-
-|===
-
-
-
-
-
-
-===== Return Type
-
-
-
--
-
-===== Content Type
-
-* application/octet-stream
-
-===== Responses
-
-.http response codes
-[cols="2,3,1"]
-|===
-| Code | Message | Datatype
-
-
-| 200
-| Return a gzipped ADM Digest file content
-|  <<>>
-
-
-| 204
-| ADM Digest file was not found
-|  <<>>
-
-
-| 500
-| ADM Digest file access error
-|  <<>>
-
-|===
-
-===== Samples
-
-
-// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/GET/http-request.adoc[opts=optional]
-
-
-// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/GET/http-response.adoc[opts=optional]
-
-
-
-// file not found, no * wiremock data link :project/{mappingDefinitionId}/digest/GET/GET.json[]
-
-
-ifdef::internal-generation[]
-===== Implementation
-
-// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/GET/implementation.adoc[opts=optional]
-
-
-endif::internal-generation[]
-
-
 [.getADMRequest]
 ==== getADMRequest
 
@@ -621,6 +625,195 @@ ifdef::internal-generation[]
 ===== Implementation
 
 // markup not found, no include::{specDir}project/\{mappingDefinitionId\}/adm/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getDocumentCatalogRequest]
+==== getDocumentCatalogRequest
+
+`GET /project/{mappingDefinitionId}/document`
+
+Get DocumentCatalog
+
+===== Description
+
+Retrieve a Document catalog file saved on the server
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+<<DocumentCatalog>>
+
+
+===== Content Type
+
+* application/json
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Return a DocumentCatalog content
+|  <<DocumentCatalog>>
+
+
+| 204
+| Document catalog file was not found
+|  <<>>
+
+
+| 500
+| Document catalog file access error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/document/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/GET/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.getDocumentInspectionResultRequest]
+==== getDocumentInspectionResultRequest
+
+`GET /project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}/inspected`
+
+Get Document inspection result
+
+===== Description
+
+Get the Document inspection result
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/inspected/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+| dataSourceType
+| DataSource Type 
+| X
+| null
+| 
+
+| documentId
+| Document ID 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 404
+| Document inspection result was not found
+|  <<>>
+
+
+| 500
+| Document inspection result access error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/inspected/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/inspected/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}/inspected/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/inspected/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -1455,19 +1648,19 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
-[.setADMDigestRequest]
-==== setADMDigestRequest
+[.setDocumentNameRequest]
+==== setDocumentNameRequest
 
-`PUT /project/{mappingDefinitionId}/digest`
+`PUT /project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}/name`
 
-Set ADM Digest
+Set Document Name
 
 ===== Description
 
-Save an ADM Digest file on the server
+Set the Document Name of an existing Document
 
 
-// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/PUT/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/name/PUT/spec.adoc[opts=optional]
 
 
 
@@ -1480,7 +1673,19 @@ Save an ADM Digest file on the server
 |Name| Description| Required| Default| Pattern
 
 | mappingDefinitionId
-| Mapping definition ID 
+| Mapping Definition ID 
+| X
+| null
+| 
+
+| dataSourceType
+| DataSource Type 
+| X
+| null
+| 
+
+| documentId
+| Document ID 
 | X
 | null
 | 
@@ -1494,7 +1699,7 @@ Save an ADM Digest file on the server
 |Name| Description| Required| Default| Pattern
 
 | body
-| ADM Digest file content <<binary>>
+|  <<string>>
 | -
 | 
 | 
@@ -1520,13 +1725,13 @@ Save an ADM Digest file on the server
 | Code | Message | Datatype
 
 
-| 200
-| Succeeded
+| 204
+| Document was not found
 |  <<>>
 
 
 | 500
-| Mapping file save error
+| Document access error
 |  <<>>
 
 |===
@@ -1534,20 +1739,20 @@ Save an ADM Digest file on the server
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/PUT/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/name/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/digest/PUT/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/name/PUT/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :project/{mappingDefinitionId}/digest/PUT/PUT.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}/name/PUT/PUT.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/digest/PUT/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/name/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -2364,6 +2569,110 @@ endif::internal-generation[]
 |===
 
 
+[#DocumentCatalog]
+=== _DocumentCatalog_ 
+
+
+
+[.fields-DocumentCatalog]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| sources
+| 
+| List  of <<DocumentMetadata>>
+| 
+|  
+
+| targets
+| 
+| List  of <<DocumentMetadata>>
+| 
+|  
+
+|===
+
+
+[#DocumentMetadata]
+=== _DocumentMetadata_ 
+
+
+
+[.fields-DocumentMetadata]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| id
+| 
+| String 
+| 
+|  
+
+| name
+| 
+| String 
+| 
+|  
+
+| description
+| 
+| String 
+| 
+|  
+
+| uri
+| 
+| String 
+| 
+|  
+
+| dataSourceType
+| 
+| String 
+| 
+|  _Enum:_ SOURCE, TARGET, 
+
+| documentType
+| 
+| String 
+| 
+|  _Enum:_ CORE, CSV, DFDL, JAVA, JSON, KAFKA_AVRO, KAFKA_JSON, XML, XSD, CONSTANT, PROPERTY, 
+
+| inspectionType
+| 
+| String 
+| 
+|  _Enum:_ SCHEMA, INSTANCE, JAVA_CLASS, 
+
+| inspectionParameters
+| 
+| Map  of <<string>>
+| 
+|  
+
+| fieldNameExclusions
+| 
+| StringList 
+| 
+|  
+
+| typeNameExclusions
+| 
+| StringList 
+| 
+|  
+
+| namespaceExclusions
+| 
+| StringList 
+| 
+|  
+
+|===
+
+
 [#Field]
 === _Field_ 
 
@@ -2923,6 +3232,25 @@ endif::internal-generation[]
 | String 
 | 
 |  _Enum:_ SOURCE, TARGET, 
+
+|===
+
+
+[#StringList]
+=== _StringList_ 
+
+
+
+[.fields-StringList]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| string
+| 
+| List  of <<string>>
+| 
+|  
 
 |===
 

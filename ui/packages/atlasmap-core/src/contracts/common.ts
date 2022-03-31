@@ -82,6 +82,9 @@ export enum FieldType {
   UNSUPPORTED = 'UNSUPPORTED',
 }
 
+/**
+ * The Document type such as 'JAVA', 'JSON' and 'XML'.
+ */
 export enum DocumentType {
   CORE = 'Core',
   CSV = 'CSV',
@@ -96,6 +99,9 @@ export enum DocumentType {
   PROPERTY = 'Property',
 }
 
+/**
+ * The Document inspection type such as 'JAVA_CLASS', 'SCHEMA' and 'INSTANCE'
+ */
 export enum InspectionType {
   JAVA_CLASS = 'JAVA_CLASS',
   SCHEMA = 'SCHEMA',
@@ -118,6 +124,9 @@ export interface IDataSource {
  * The serialized inspection request.
  */
 export interface IInspectionRequest {
+  documentId?: string;
+  documentName?: string;
+  documentDescription?: string;
   jsonType: string;
   fieldNameExclusions?: IStringList;
   typeNameExclusions?: IStringList;

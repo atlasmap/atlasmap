@@ -28,24 +28,49 @@ CSV Service provides CSV inspection service which generate an AtlasMap Document 
 === Default
 
 
-[.inspect]
-==== inspect
+[.importCsvDocument]
+==== importCsvDocument
 
-`POST /csv/inspect`
+`POST /csv/project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}`
 
-Inspect CSV
+Import CSV
 
 ===== Description
 
-Inspect a CSV instance and return a Document object
+Import a CSV instance and return a Document object
 
 
-// markup not found, no include::{specDir}csv/inspect/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}csv/project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/POST/spec.adoc[opts=optional]
 
 
 
 ===== Parameters
 
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+| dataSourceType
+| DataSource Type 
+| X
+| null
+| 
+
+| documentId
+| Document ID 
+| X
+| null
+| 
+
+|===
 
 ====== Body Parameter
 
@@ -54,7 +79,7 @@ Inspect a CSV instance and return a Document object
 |Name| Description| Required| Default| Pattern
 
 | CsvInspectionRequest
-| JsonInspectionRequest object <<CsvInspectionRequest>>
+| CsvInspectionRequest object <<CsvInspectionRequest>>
 | -
 | 
 | 
@@ -91,20 +116,90 @@ Inspect a CSV instance and return a Document object
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}csv/inspect/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}csv/project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/POST/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}csv/inspect/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}csv/project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/POST/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :csv/inspect/POST/POST.json[]
+// file not found, no * wiremock data link :csv/project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}/POST/POST.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}csv/inspect/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}csv/project/\{mappingDefinitionId\}/document/\{dataSourceType\}/\{documentId\}/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.ping]
+==== ping
+
+`GET /csv/ping`
+
+Ping
+
+===== Description
+
+Simple liveness check method used in liveness checks. Must not be protected via authetication.
+
+
+// markup not found, no include::{specDir}csv/ping/GET/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+
+
+
+
+
+
+===== Return Type
+
+
+<<String>>
+
+
+===== Content Type
+
+* text/plain
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| Return &#39;pong&#39;
+|  <<String>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}csv/ping/GET/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}csv/ping/GET/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :csv/ping/GET/GET.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}csv/ping/GET/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
@@ -143,11 +238,41 @@ endif::internal-generation[]
 |===
 | Field Name| Required| Type| Description| Format
 
+| documentId
+| 
+| String 
+| 
+|  
+
+| documentName
+| 
+| String 
+| 
+|  
+
+| documentDescription
+| 
+| String 
+| 
+|  
+
 | uri
 | 
 | String 
 | 
 |  
+
+| dataSourceType
+| 
+| String 
+| 
+|  _Enum:_ SOURCE, TARGET, 
+
+| documentType
+| 
+| String 
+| 
+|  _Enum:_ CORE, CSV, DFDL, JAVA, JSON, KAFKA_AVRO, KAFKA_JSON, XML, XSD, CONSTANT, PROPERTY, 
 
 | inspectionType
 | 

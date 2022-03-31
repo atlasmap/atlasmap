@@ -15,6 +15,7 @@
  */
 package io.atlasmap.core;
 
+import java.io.File;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.net.URI;
@@ -28,6 +29,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -61,9 +63,9 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.CopyTo;
 import io.atlasmap.v2.CustomMapping;
 import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceKey;
-import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -91,7 +93,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private Map<String, AtlasModule> sourceModules = new HashMap<>();
     private Map<String, AtlasModule> targetModules = new HashMap<>();
     private Map<String, LookupTable> lookupTables = new HashMap<>();
-    private Map<DataSourceKey, DataSourceMetadata> dataSourceMetadataMap;
     private boolean initialized;
 
     /**
@@ -140,7 +141,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         this.admHandler = new ADMArchiveHandler(factory.getClassLoader());
         this.admHandler.setIgnoreLibrary(true);
         this.admHandler.load(format, stream);
-        this.dataSourceMetadataMap = this.admHandler.getDataSourceMetadataMap();
     }
 
     /**
@@ -184,7 +184,6 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
             this.admHandler = new ADMArchiveHandler(factory.getClassLoader());
             this.admHandler.setIgnoreLibrary(true);
             this.admHandler.load(Paths.get(this.atlasMappingUri));
-            this.dataSourceMetadataMap = this.admHandler.getDataSourceMetadataMap();
         }
         if (this.admHandler == null || this.admHandler.getMappingDefinition() == null) {
             LOG.warn("AtlasMap context cannot initialize without mapping definition, ignoring:"
@@ -263,11 +262,19 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
                 } else if (ds.getDataSourceType() == DataSourceType.TARGET) {
                     getTargetModules().put(docId, module);
                 }
-                if (this.dataSourceMetadataMap != null) {
-                    DataSourceKey dskey = new DataSourceKey(ds.getDataSourceType() == DataSourceType.SOURCE, docId);
-                    DataSourceMetadata meta = this.dataSourceMetadataMap.get(dskey);
-                    if (meta != null) {
-                        module.setDataSourceMetadata(meta);
+                if (this.admHandler.getDocumentCatalog() != null) {
+                    List<DocumentMetadata> docs = ds.getDataSourceType() == DataSourceType.SOURCE
+                        ? this.admHandler.getDocumentCatalog().getSources()
+                        : this.admHandler.getDocumentCatalog().getTargets();
+                    final String did = docId;
+                    Optional<DocumentMetadata> meta = docs.stream().filter(m -> did.equals(m.getId())).findFirst();
+                    if (meta.isPresent()) {
+                        module.setDocumentMetadata(meta.get());
+                    }
+                    DocumentKey docKey = new DocumentKey(ds.getDataSourceType(), docId);
+                    File specFile = this.admHandler.getDocumentSpecificationFile(docKey);
+                    if (specFile != null) {
+                        module.setDocumentSpecificationFile(specFile);
                     }
                 }
                 module.init();

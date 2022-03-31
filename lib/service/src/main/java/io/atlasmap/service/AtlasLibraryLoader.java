@@ -42,14 +42,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.core.CompoundClassLoader;
+import io.atlasmap.spi.ReloadableClassLoader;
 
 /**
  * The class loader to achieve dynamic loading for which is required for design time
  * backend, such as custom field action, Java Document and custom mapping. The user uploaded
  * jar is dynamically added and classpath is updated to reflect them in UI on the fly.
  */
-public class AtlasLibraryLoader extends CompoundClassLoader {
+public class AtlasLibraryLoader extends ReloadableClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasLibraryLoader.class);
 
     private File saveDir;
@@ -198,6 +198,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
     /**
      * Reloads all jars in the save directory.
      */
+    @Override
     public synchronized void reload() {
         List<URL> urls = new LinkedList<>();
         File[] files = saveDir.listFiles();

@@ -65,9 +65,6 @@ public class MappingServiceTest {
 
     @AfterEach
     public void tearDown() {
-        atlasService.deleteLibraries();
-        atlasService.deleteAllMappingProjects();
-        atlasService = null;
         mapper = null;
         AtlasUtil.deleteDirectory(new File(TEST_JAR_DIR));
         AtlasUtil.deleteDirectory(new File(TEMP_DIR));

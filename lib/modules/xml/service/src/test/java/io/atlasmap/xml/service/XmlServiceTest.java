@@ -25,18 +25,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Json;
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class XmlServiceTest {
 
     private XmlService xmlService = null;
+    private DocumentService documentService;
 
     final String sourceXml = "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\n" +
         "  <xs:element name=\"root\"><xs:complexType><xs:sequence>\n" +
@@ -61,8 +68,10 @@ public class XmlServiceTest {
         "</xs:schema>";
 
     @BeforeEach
-    public void setUp() {
-        xmlService = new XmlService();
+    public void setUp() throws AtlasException {
+        AtlasService atlas = new AtlasService();
+        documentService = new DocumentService(atlas);
+        xmlService = new XmlService(atlas, documentService);
     }
 
     @AfterEach
@@ -85,9 +94,12 @@ public class XmlServiceTest {
                 + "    </xs:complexType>\n" + "  </xs:element>\n" + "</xs:schema>";
 
         XmlInspectionRequest request = new XmlInspectionRequest();
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(source);
-        Response res = xmlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = xmlService.importXmlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[])entity, XmlInspectionResponse.class);
@@ -96,15 +108,23 @@ public class XmlServiceTest {
         XmlComplexType root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
         assertNotNull(root);
         assertEquals(8, root.getXmlFields().getXmlField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        xmlDoc = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
+        assertEquals(8, root.getXmlFields().getXmlField().size());
     }
 
     @Test
     public void testAllLevelsIncludedIfIncludePathsEmpty() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         request.setInspectPaths(new ArrayList<>());
-        Response res = xmlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = xmlService.importXmlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, XmlInspectionResponse.class);
@@ -117,17 +137,25 @@ public class XmlServiceTest {
         assertEquals(3, level1Field.getXmlFields().getXmlField().size());
         XmlComplexType level2Field = (XmlComplexType) level1Field.getXmlFields().getXmlField().get(1);
         assertEquals(1, level2Field.getXmlFields().getXmlField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        xmlDoc = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
+        assertEquals(9, root.getXmlFields().getXmlField().size());
     }
 
     @Test
     public void testRootLevelIncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root");
         request.setInspectPaths(includePaths);
-        Response res = xmlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = xmlService.importXmlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, XmlInspectionResponse.class);
@@ -138,17 +166,25 @@ public class XmlServiceTest {
         assertEquals(9, root.getXmlFields().getXmlField().size());
         XmlComplexType level1Field = (XmlComplexType) root.getXmlFields().getXmlField().get(7);
         assertEquals(0, level1Field.getXmlFields().getXmlField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        xmlDoc = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
+        assertEquals(9, root.getXmlFields().getXmlField().size());
     }
 
     @Test
     public void testLevel1IncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root/level1Field");
         request.setInspectPaths(includePaths);
-        Response res = xmlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = xmlService.importXmlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, XmlInspectionResponse.class);
@@ -163,17 +199,25 @@ public class XmlServiceTest {
         assertEquals(0, level2Field.getXmlFields().getXmlField().size());
         XmlComplexType level2Field2 = (XmlComplexType) level1Field.getXmlFields().getXmlField().get(2);
         assertEquals(0, level2Field2.getXmlFields().getXmlField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        xmlDoc = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
+        assertEquals(9, root.getXmlFields().getXmlField().size());
     }
 
     @Test
     public void testLevel2IncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root/level1Field/level2Field");
         request.setInspectPaths(includePaths);
-        Response res = xmlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = xmlService.importXmlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, XmlInspectionResponse.class);
@@ -188,17 +232,25 @@ public class XmlServiceTest {
         assertEquals(1, level2Field.getXmlFields().getXmlField().size());
         XmlComplexType level2Field2 = (XmlComplexType) level1Field.getXmlFields().getXmlField().get(2);
         assertEquals(0, level2Field2.getXmlFields().getXmlField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        xmlDoc = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
+        assertEquals(9, root.getXmlFields().getXmlField().size());
     }
 
     @Test
     public void testLevel2Field2IncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root/level1Field/level2Field2");
         request.setInspectPaths(includePaths);
-        Response res = xmlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = xmlService.importXmlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         XmlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, XmlInspectionResponse.class);
@@ -213,5 +265,10 @@ public class XmlServiceTest {
         assertEquals(0, level2Field.getXmlFields().getXmlField().size());
         XmlComplexType level2Field2 = (XmlComplexType) level1Field.getXmlFields().getXmlField().get(2);
         assertEquals(1, level2Field2.getXmlFields().getXmlField().size());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        xmlDoc = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        root = (XmlComplexType) xmlDoc.getFields().getField().get(0);
+        assertEquals(9, root.getXmlFields().getXmlField().size());
     }
 }

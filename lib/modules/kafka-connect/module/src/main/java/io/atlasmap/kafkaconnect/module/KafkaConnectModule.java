@@ -15,6 +15,8 @@
  */
 package io.atlasmap.kafkaconnect.module;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +41,7 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
@@ -94,7 +96,7 @@ public class KafkaConnectModule extends BaseAtlasModule {
         Object sourceDocument = session.getSourceDocument(getDocId());
         KafkaConnectFieldReader fieldReader = new KafkaConnectFieldReader(getConversionService());
         fieldReader.setDocument(sourceDocument);
-        fieldReader.setSchema(extractSchema(getDataSourceMetadata()));
+        fieldReader.setSchema(extractSchema(getDocumentMetadata(), getDocumentSpecificationFile()));
         session.setFieldReader(getDocId(), fieldReader);
 
         if (LOG.isDebugEnabled()) {
@@ -102,21 +104,19 @@ public class KafkaConnectModule extends BaseAtlasModule {
         }
     }
 
-    private org.apache.kafka.connect.data.Schema extractSchema(DataSourceMetadata meta) throws AtlasException {
-        if (meta == null || meta.getSpecification() == null) {
+    private org.apache.kafka.connect.data.Schema extractSchema(DocumentMetadata meta, File specFile) throws AtlasException {
+        if (specFile == null || !specFile.exists()) {
             return null;
         }
-        byte[] bytes = meta.getSpecification();
-        String schema = new String(bytes);
         String typeStr = meta.getInspectionParameters().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);
         KafkaConnectSchemaType type = KafkaConnectSchemaType.valueOf(typeStr);
         HashMap<String, Object> options = KafkaConnectUtil.repackParserOptions(meta.getInspectionParameters());
         try {
             switch (type) {
                 case JSON:
-                    return KafkaConnectUtil.parseJson(schema, options);
+                    return KafkaConnectUtil.parseJson(new FileInputStream(specFile), options);
                 case AVRO:
-                    return KafkaConnectUtil.parseAvro(schema, options);
+                    return KafkaConnectUtil.parseAvro(new FileInputStream(specFile), options);
                 default:
                     LOG.warn("Ignoring unsupported KafkaConnect schema type '{}'", type);
                     return null;
@@ -129,7 +129,7 @@ public class KafkaConnectModule extends BaseAtlasModule {
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
         KafkaConnectFieldWriter writer = new KafkaConnectFieldWriter(getConversionService());
-        writer.setSchema(extractSchema(getDataSourceMetadata()));
+        writer.setSchema(extractSchema(getDocumentMetadata(), getDocumentSpecificationFile()));
         session.setFieldWriter(getDocId(), writer);
 
         if (LOG.isDebugEnabled()) {

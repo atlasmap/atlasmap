@@ -68,7 +68,7 @@ public class RestTest {
     @Test
     public void testJsonInspect() throws IOException {
         Request request = new Request.Builder()
-            .url("http://127.0.0.1:" + port + "/v2/atlas/json/inspect")
+            .url("http://127.0.0.1:" + port + "/v2/atlas/json/project/0/document/SOURCE/test")
             .header("ATLASMAP-XSRF-TOKEN", "awesome")
             .post(RequestBody.create(resource("atlasmap-json-inspection.json"), APPLICATION_JSON))
             .build();
@@ -82,7 +82,7 @@ public class RestTest {
     @Test
     public void testJsonInspectWithoutXsrfProtectionToken() throws Exception {
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:" + port + "/v2/atlas/json/inspect")
+                .url("http://127.0.0.1:" + port + "/v2/atlas/json/project/0/document/SOURCE/test")
                 .post(RequestBody.create(resource("atlasmap-json-inspection.json"), APPLICATION_JSON))
                 .build();
         try (Response response = CLIENT.newCall(request).execute()) {

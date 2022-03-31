@@ -13,18 +13,20 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
+import { DataSourceType, IField } from '../../contracts/common';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import { Input, Options } from 'ky';
 
 import { ConfigModel } from '../config.model';
 import { DocumentDefinition } from '../document-definition.model';
 import { Field } from '../field.model';
-import { IField } from '../../contracts/common';
 
 /**
  * Encapsulates Document inspection context.
  */
 export abstract class DocumentInspectionModel {
+  baseUrl: string | undefined;
+  documentTypeName: string;
   request: DocumentInspectionRequestModel;
 
   constructor(public cfg: ConfigModel, public doc: DocumentDefinition) {}
@@ -32,7 +34,30 @@ export abstract class DocumentInspectionModel {
   /**
    * Validates if the online inspection is available for this type of Document.
    */
-  abstract isOnlineInspectionCapable(): boolean;
+  async isOnlineInspectionCapable(): Promise<boolean> {
+    return new Promise(async (resolve) => {
+      if (this.baseUrl) {
+        const answer = await this.cfg.documentService.ping(
+          this.baseUrl + 'ping',
+          this.documentTypeName
+        );
+        if (answer) {
+          resolve(true);
+          return;
+        }
+      }
+      this.cfg.errorService.addError(
+        new ErrorInfo({
+          message: `${this.documentTypeName} Service is not configured. Document will not be loaded: ${this.doc.name}`,
+          level: ErrorLevel.WARN,
+          scope: ErrorScope.APPLICATION,
+          type: ErrorType.INTERNAL,
+          object: this.doc,
+        })
+      );
+      resolve(false);
+    });
+  }
 
   /**
    * Parse inspection response returned from backend.
@@ -92,7 +117,15 @@ export abstract class DocumentInspectionModel {
 }
 
 export abstract class DocumentInspectionRequestModel {
-  constructor(protected cfg: ConfigModel, protected doc: DocumentDefinition) {}
+  constructor(
+    protected cfg: ConfigModel,
+    protected doc: DocumentDefinition,
+    protected baseUrl?: string
+  ) {
+    this.url = `${baseUrl}project/${cfg.mappingDefinitionId}/document/${
+      doc.isSource ? DataSourceType.SOURCE : DataSourceType.TARGET
+    }/${doc.id}`;
+  }
   url: Input;
   options: DocumentInspectionRequestOptions;
 }

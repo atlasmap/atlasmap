@@ -18,7 +18,6 @@ resourceClasses:
 - io.atlasmap.service.AtlasService
 - io.atlasmap.service.MappingService
 - io.atlasmap.service.DocumentService
-- io.atlasmap.expression.service.ExpressionService
 openAPI:
    info:
       title: "AtlasMap Design Time Service API :: Core"

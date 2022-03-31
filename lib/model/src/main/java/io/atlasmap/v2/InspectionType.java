@@ -16,7 +16,7 @@
 package io.atlasmap.v2;
 
 /**
- * The enumeration of inspection type.
+ * The enumeration of inspection type such as {@link #SCHEMA}, {@link #INSTANCE} and {@link #JAVA_CLASS}.
  */
 public enum InspectionType {
     /** Schema. */

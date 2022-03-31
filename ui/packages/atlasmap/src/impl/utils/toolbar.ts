@@ -101,7 +101,7 @@ export async function delDocsAndMappingsAtlasmap() {
   await cfg.mappingService.removeAllMappings();
   cfg.clearDocs(false);
   await cfg.mappingService.notifyMappingUpdated();
-  await cfg.fileService.updateDigestFile();
+  await cfg.documentService.fetchDocuments();
 }
 
 /**

@@ -20,12 +20,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -39,39 +42,42 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.spi.ReloadableClassLoader;
 import io.atlasmap.v2.ADMDigest;
 import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.DataSourceKey;
 import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentCatalog;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Json;
 
 /**
  * <div>
  * The API for handling ADM archive. It encapsulates ADM archive structure
- * and format and isolate file/stream I/O from other part.
+ * and format and isolate file/stream I/O and serialization/deserializatiopn from other part.
  * ADM archive is a zipped archive file or its exploded directory which contains
  * <ul>
  * <li>Mapping Definition file (atlasmapping-UI.n.json)</li>
- * <li>Gzipped digest file which contains all non-Java document metadata
- *  and mapping definition in a single JSON file (adm-catalog-files-n.gz)</li>
+ * <li>Document Catalog file (document-catalog.json</li>
+ * <li>Document specification files (e.g. specification/SOURCE/some-json-doc-id/0)
+ * <li>Document inspection result files (e.g. inspected/SOURCE/some-json-doc-id/inspected.json)
  * <li>Java libraries (jar files in lib/ directory)</li>
  * </ul>
+ * In addition to above, older version of ADM archive has a gzipped digest file {@link ADMDigest}
+ * which contains all document metadata and mapping definition in a single JSON file (adm-catalog-files-n.gz).
+ * The digest file is deprecated and newer version of AtlasMap converts it into Document catalog
+ * file and Document specifications automatically.
  * </div>
  * {@link #load(Path)} {@link #export(OutputStream)}
  *
  * <div>
- * This handler follows lazy loading strategy as much as
- * possible, i.e. defer to serialize/deserialize until it is really required.
- * Also note that at this moment Java library directory is not managed by this class.
+ * Note that at this moment Java library directory is not managed by this class.
  * Only when it imports/exports ADM archive file, library jars are extracted/bundled
  * if {@link #isIgnoreLibrary} is set to {@code false}.
  * </div>
  *
- * <div>
- * TODO <a href="https://github.com/atlasmap/atlasmap/issues/1476">
- * https://github.com/atlasmap/atlasmap/issues/1476</a>
- * A gzipped digest file have to be splitted into individual schemas and a catalog file.
- * </div>
  */
 public class ADMArchiveHandler {
 
@@ -79,21 +85,25 @@ public class ADMArchiveHandler {
     private static final String MAPPING_DEFINITION_FILTER = "atlasmapping";
     private static final String MAPPING_DEFINITION_TEMPLATE = "atlasmapping-UI.%s.json";
     private static final String GZIPPED_ADM_DIGEST_FILTER = "adm-catalog-files";
-    private static final String GZIPPED_ADM_DIGEST_TEMPLATE = "adm-catalog-files-%s.gz";
+    private static final String DOCUMENT_CATALOG_FILTER = "document-catalog";
+    private static final String DOCUMENT_CATALOG_NAME = "document-catalog.json";
+    private static final String LIB_DIRECTORY = "lib";
+    private static final String SPECIFICATION_DIRECTORY = "specification";
+    private static final String INSPECTED_DIRECTORY = "inspected";
+    private static final String INSPECTED_FILE = "inspected.json";
 
-    private byte[] buffer = new byte[2048];
-    private byte[] gzippedAdmDigestBytes = null;
-    private byte[] mappingDefinitionBytes = null;
     private ObjectMapper jsonMapper;
     private ObjectMapper jsonMapperForDigest;
 
     private AtlasMapping mappingDefinition = null;
+    private AtlasMappingHandler atlasMappingHandler = null;
     private String mappingDefinitionId = "0";
-    private Map<DataSourceKey, DataSourceMetadata> dataSourceMetadata;
+    private DocumentCatalog documentCatalog = new DocumentCatalog();
     private boolean ignoreLibrary = false;
+    private ReloadableClassLoader libraryLoader;
     private Path persistDirectory;
     private Path libraryDirectory;
-
+    
     /**
      * A constructor.
      */
@@ -106,6 +116,9 @@ public class ADMArchiveHandler {
      * @param loader class loader
      */
     public ADMArchiveHandler(ClassLoader loader) {
+        if (loader instanceof ReloadableClassLoader) {
+            this.libraryLoader = (ReloadableClassLoader) loader;
+        }
         this.jsonMapper = Json.withClassLoader(loader);
         this.jsonMapperForDigest = this.jsonMapper.copy();
         this.jsonMapperForDigest.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false);
@@ -113,7 +126,7 @@ public class ADMArchiveHandler {
 
     /**
      * Load an ADM archive file, an exploded directory or mapping definition JSON file.
-     * @param path {@code java.nio.file.Path} of the ADM archive file or an exploded directory
+     * @param path {@link java.nio.file.Path} of the ADM archive file or an exploded directory
      * @throws AtlasException If it fails to load
      */
     public void load(Path path) throws AtlasException {
@@ -130,7 +143,7 @@ public class ADMArchiveHandler {
             loadADMFile(file);
         } else {
             try (FileInputStream fin = new FileInputStream(file)) {
-                this.mappingDefinitionBytes = readIntoByteArray(fin);
+                setMappingDefinitionFromStream(fin);
             } catch (Exception e) {
                 throw new AtlasException(
                         String.format("Invalid mapping definition file: '%s'", path.toString()), e);
@@ -158,7 +171,7 @@ public class ADMArchiveHandler {
             loadADMStream(in);
         } else {
             try {
-                this.mappingDefinitionBytes = readIntoByteArray(in);
+                setMappingDefinitionFromStream(in);
             } catch (Exception e) {
                 throw new AtlasException("Invalid mapping definition from stream", e);
             }
@@ -175,32 +188,54 @@ public class ADMArchiveHandler {
         try (ZipOutputStream zipOut = new ZipOutputStream(out)) {
             ZipEntry catEntry = null;
 
-            if (this.getMappingDefinitionBytes() != null) {
+            if (getMappingDefinition() != null) {
                 String mappingFileName = getMappingDefinitionFileName();
                 LOG.debug("  Creating mapping definition file '{}'", mappingFileName);
                 catEntry = new ZipEntry(mappingFileName);
                 zipOut.putNextEntry(catEntry);
-                zipOut.write(getMappingDefinitionBytes(), 0, getMappingDefinitionBytes().length);
+                jsonMapper.writeValue(zipOut, getMappingDefinition());
                 zipOut.closeEntry();
             }
 
-            if (getGzippedADMDigestBytes() != null) {
-                LOG.debug("  Creating gzipped ADM digest file '{}'", getGzippedADMDigestFileName());
-                catEntry = new ZipEntry(getGzippedADMDigestFileName());
+            if (getDocumentCatalog() != null) {
+                LOG.debug("  Creating Document catalog JSON file '{}'", DOCUMENT_CATALOG_NAME);
+                catEntry = new ZipEntry(DOCUMENT_CATALOG_NAME);
                 zipOut.putNextEntry(catEntry);
-                zipOut.write(getGzippedADMDigestBytes(), 0, getGzippedADMDigestBytes().length);
-                zipOut.closeEntry();
-
-                zipOut.putNextEntry(new ZipEntry("lib/"));
+                byte[] serialized = getSerializedDocumentCatalog();
+                zipOut.write(serialized, 0, serialized.length);
                 zipOut.closeEntry();
             }
+
+            zipOut.putNextEntry(new ZipEntry(SPECIFICATION_DIRECTORY + "/"));
+            zipOut.closeEntry();
+            Path specDir = getPersistDirectory().resolve(SPECIFICATION_DIRECTORY);
+            Path sourceSpecDir = specDir.resolve(DataSourceType.SOURCE.value());
+            String entryPath = SPECIFICATION_DIRECTORY + "/" + DataSourceType.SOURCE.value();
+            putDocumentResources(sourceSpecDir, entryPath, zipOut);
+            Path targetSpecDir = specDir.resolve(DataSourceType.TARGET.value());
+            entryPath = SPECIFICATION_DIRECTORY + "/" + DataSourceType.TARGET.value();
+            putDocumentResources(targetSpecDir, entryPath, zipOut);
+            zipOut.putNextEntry(new ZipEntry(INSPECTED_DIRECTORY+ "/"));
+            zipOut.closeEntry();
+            Path inspectedDir = getPersistDirectory().resolve(INSPECTED_DIRECTORY);
+            Path sourceInspectedDir = inspectedDir.resolve(DataSourceType.SOURCE.value());
+            entryPath = INSPECTED_DIRECTORY + "/" + DataSourceType.SOURCE.value();
+            putDocumentResources(sourceInspectedDir, entryPath, zipOut);
+            Path targetInspectedDir = inspectedDir.resolve(DataSourceType.TARGET.value());
+            entryPath = INSPECTED_DIRECTORY + "/" + DataSourceType.TARGET.value();
+            putDocumentResources(targetInspectedDir, entryPath, zipOut);
 
             if (!isIgnoreLibrary() && libraryDirectory != null && libraryDirectory.toFile().isDirectory()) {
+                zipOut.putNextEntry(new ZipEntry(LIB_DIRECTORY + "/"));
+                zipOut.closeEntry();
                 for (File jarFile : libraryDirectory.toFile().listFiles()) {
-                    LOG.debug("  Creating jar file entry '{}'", "lib/" + jarFile.getName());
-                    ZipEntry libEntry = new ZipEntry("lib/" + jarFile.getName());
+                    String path = LIB_DIRECTORY + "/" + jarFile.getName();
+                    LOG.debug("  Creating jar file entry '{}'", path);
+                    ZipEntry libEntry = new ZipEntry(path);
                     zipOut.putNextEntry(libEntry);
-                    redirectStream(new FileInputStream(jarFile), zipOut);
+                    try (FileInputStream fis = new FileInputStream(jarFile)) {
+                        fis.transferTo(zipOut);
+                    }
                     zipOut.closeEntry();
                 }
             }
@@ -209,44 +244,47 @@ public class ADMArchiveHandler {
         }
     }
 
+    private void putDocumentResources(Path sourceParentPath, String targetParentPath, ZipOutputStream zipOut) throws Exception {
+        if (!sourceParentPath.toFile().exists()) {
+            return;
+        }
+        for (File dir : sourceParentPath.toFile().listFiles(f -> f.isDirectory())) {
+            Path docDir = sourceParentPath.resolve(dir.getName());
+            String docDirEntryPath = targetParentPath + "/" + dir.getName();
+            zipOut.putNextEntry(new ZipEntry(docDirEntryPath + "/"));
+            zipOut.closeEntry();
+            for (File f : docDir.toFile().listFiles(f -> f.isFile())) {
+                String fileEntryPath = docDirEntryPath + "/" + f.getName();
+                LOG.debug("  Creating file entry '{}'", fileEntryPath);
+                zipOut.putNextEntry(new ZipEntry(fileEntryPath));
+                try (FileInputStream fis = new FileInputStream(f)) {
+                    fis.transferTo(zipOut);
+                }
+                zipOut.closeEntry();
+            }
+        }
+    }
+
     /**
      * Persist ADM archive into a directory.
      * @throws AtlasException If it fails to persist
      */
     public void persist() throws AtlasException {
-        if (this.persistDirectory == null) {
-            throw new AtlasException("Persist Directory must be set");
-        }
-
-        Path mdPath = this.persistDirectory.resolve(getMappingDefinitionFileName());
-        if (getMappingDefinitionBytes() != null) {
+        Path mdPath = getPersistDirectory().resolve(getMappingDefinitionFileName());
+        if (getMappingDefinition()  != null) {
             try {
-                this.mappingDefinition = jsonMapper.readValue(getMappingDefinitionBytes(), AtlasMapping.class);
-            } catch (Exception e) {
-                LOG.warn("Invalid serialized mapping definition content detected, discarding");
-                if (LOG.isDebugEnabled()) {
-                    String str = String.format("Mapping Definition: [%s]: ",
-                        getMappingDefinitionBytes() != null ? new String(getMappingDefinitionBytes()) : "");
-                    LOG.warn(str, e);
-                }
-                this.mappingDefinitionBytes = null;
-                this.mappingDefinition = null;
-            }
-        }
-        if (this.mappingDefinition  != null) {
-            try {
-                jsonMapper.writeValue(mdPath.toFile(), this.mappingDefinition);
+                jsonMapper.writeValue(mdPath.toFile(), getMappingDefinition());
             } catch (Exception e) {
                 LOG.warn("Failed to persist mapping definition", e);
             }
         }
 
-        if (getGzippedADMDigestBytes() != null) {
-            Path digestPath = this.persistDirectory.resolve(getGzippedADMDigestFileName());
-            try (FileOutputStream out = new FileOutputStream(digestPath.toFile())) {
-                out.write(getGzippedADMDigestBytes());
+        Path catalogPath = getPersistDirectory().resolve(DOCUMENT_CATALOG_NAME);
+        if (getDocumentCatalog() != null) {
+            try {
+                jsonMapper.writeValue(catalogPath.toFile(), getDocumentCatalog());
             } catch (Exception e) {
-                LOG.warn("Failed to persist gzipped ADM digest file");
+                LOG.warn("Failed to persist Document catalog file", e);
             }
         }
     }
@@ -256,19 +294,32 @@ public class ADMArchiveHandler {
      * @return mapping definition
      */
     public AtlasMapping getMappingDefinition() {
-        if (this.mappingDefinition == null && this.mappingDefinitionBytes != null) {
-            try {
-                this.mappingDefinition = jsonMapper.readValue(this.mappingDefinitionBytes,
-                    AtlasMapping.class);
-            } catch (Exception e) {
-                LOG.warn("Invalid serialized mapping definition content detected, discarding");
-                this.mappingDefinitionBytes = null;
-                if (LOG.isDebugEnabled()) {
-                    LOG.warn("", e);
-                }
-            }
-        }
         return this.mappingDefinition;
+    }
+
+    /**
+     * Gets the {@link AtlasMappingHandler}.
+     * @return handler
+     */
+    public AtlasMappingHandler getAtlasMappingHandler() {
+        return this.atlasMappingHandler;
+    }
+
+    /**
+     * Gets the serialized {@link AtlasMapping} in byte array.
+     * @return serialized
+     */
+    public byte[] getSerializedMappingDefinition() throws AtlasException {
+        if (getMappingDefinition() == null) {
+            return null;
+        }
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            jsonMapper.writeValue(bos, getMappingDefinition());
+            return bos.toByteArray();
+        } catch (Exception e) {
+            throw new AtlasException("Failed to serialize mapping definition", e);
+        }
     }
 
     /**
@@ -276,8 +327,8 @@ public class ADMArchiveHandler {
      * @param mapping mapping definition
      */
     public void setMappingDefinition(AtlasMapping mapping) {
-        this.mappingDefinitionBytes = null;
         this.mappingDefinition = mapping;
+        this.atlasMappingHandler = new AtlasMappingHandler(mapping);
     }
 
     /**
@@ -285,64 +336,23 @@ public class ADMArchiveHandler {
      * @param is serialized mapping definition JSON
      * @throws AtlasException unexpected error
      */
-    public void setMappingDefinitionBytes(InputStream is) throws AtlasException {
+    public void setMappingDefinitionFromStream(InputStream is) throws AtlasException {
         try {
-            this.mappingDefinition = null;
-            this.mappingDefinitionBytes = readIntoByteArray(is);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(this.jsonMapper.writeValueAsString(getMappingDefinition()));
-            }
+            setMappingDefinition(jsonMapper.readValue(is, AtlasMapping.class));
         } catch (Exception e) {
             throw new AtlasException(e);
         }
-    }
-
-    /**
-     * Gets the serialized mapping definition JSON as a byte array.
-     * @return serialized mapping definition JSON
-     * @throws AtlasException unexpected error
-     */
-    public byte[] getMappingDefinitionBytes() throws AtlasException {
-        try {
-            if (this.mappingDefinitionBytes == null && this.mappingDefinition != null) {
-                this.mappingDefinitionBytes = jsonMapper.writeValueAsBytes(this.mappingDefinition);
-            }
-            return this.mappingDefinitionBytes;
-        } catch (Exception e) {
-            throw new AtlasException(e);
-        }
-    }
-
-    /**
-     * Sets the gzipped ADM Digest JSON from InputStream.
-     * @param is gzipped ADM Digest JSON
-     * @throws AtlasException unexpected error
-     */
-    public void setGzippedADMDigest(InputStream is) throws AtlasException {
-        try {
-            this.gzippedAdmDigestBytes = readIntoByteArray(is);
-        } catch (Exception e) {
-            throw new AtlasException(e);
-        }
-    }
-
-    /**
-     * Gets the gzipped ADM Digest JSON as a byte array.
-     * @return gzipped ADM Digest JSON
-     */
-    public byte[] getGzippedADMDigestBytes() {
-        return this.gzippedAdmDigestBytes;
     }
 
     /**
      * Looks up the DataSource metadata associated with the specified Document ID.
-     * @param isSource true if it's a source Document, or false
+     * @param dstype DataSourceType to indicate SOURCE or TARGET
      * @param documentId Document ID
      * @return DataSource metadata
      * @throws AtlasException unexpected error
      */
-    public DataSourceMetadata getDataSourceMetadata(boolean isSource, String documentId) throws AtlasException {
-        return getDataSourceMetadata(new DataSourceKey(isSource, documentId));
+    public DocumentMetadata getDocumentMetadata(DataSourceType dstype, String documentId) throws AtlasException {
+        return getDocumentMetadata(new DocumentKey(dstype, documentId));
     }
 
     /**
@@ -351,40 +361,87 @@ public class ADMArchiveHandler {
      * @return DataSource metadata
      * @throws AtlasException unexpected error
      */
-    public DataSourceMetadata getDataSourceMetadata(DataSourceKey key) throws AtlasException {
-        if (getDataSourceMetadataMap() == null) {
+    public DocumentMetadata getDocumentMetadata(DocumentKey key) throws AtlasException {
+        if (getDocumentCatalog() == null) {
             return null;
         }
-        return getDataSourceMetadataMap().get(key);
+        List<DocumentMetadata> docs = key.getDataSourceType() == DataSourceType.SOURCE
+            ? getDocumentCatalog().getSources()
+            : getDocumentCatalog().getTargets();
+        Optional<DocumentMetadata> answer = docs.stream().filter(m -> key.getDocumentId().equals(m.getId())).findFirst();
+        if (answer.isPresent()) {
+            return answer.get();
+        }
+        return null;
     }
 
     /**
-     * Gets a map of DataSource metadata.
-     * @return a map of DataSource metadata.
+     * Sets the InspectionRequest object as a Document metadata.
+     * @param documentKey DocumentKey
+     * @param metadata DocumentMetadata
+     */
+    public void setDocumentMetadata(DocumentKey documentKey, DocumentMetadata metadata) throws AtlasException {
+        if (getDocumentCatalog() == null) {
+            setDocumentCatalog(new DocumentCatalog());
+        }
+        List<DocumentMetadata> docs = documentKey.getDataSourceType() == DataSourceType.SOURCE
+            ? getDocumentCatalog().getSources()
+            : getDocumentCatalog().getTargets();
+        Optional<DocumentMetadata> meta = docs.stream().filter(m -> documentKey.getDocumentId().equals(m.getId())).findFirst();
+        if (meta.isPresent()) {
+            int index = docs.indexOf(meta.get());
+            docs.set(index, metadata);
+        } else {
+            docs.add(metadata);
+        }
+    }
+
+    /**
+     * Sets the DocumentCatalog.
+     * @param catalog catalog
+     */
+    public void setDocumentCatalog(DocumentCatalog catalog) {
+        this.documentCatalog = catalog;
+    }
+
+    /**
+     * Gets a map of Document metadata.
+     * @return a map of Document metadata.
      * @throws AtlasException unexpected error
      */
-    public Map<DataSourceKey, DataSourceMetadata> getDataSourceMetadataMap() throws AtlasException {
-        if (this.dataSourceMetadata == null) {
-            if (this.gzippedAdmDigestBytes == null) {
-                return null;
-            }
-            try (GZIPInputStream in = new GZIPInputStream(new ByteArrayInputStream(this.gzippedAdmDigestBytes))) {
-                ADMDigest digest = jsonMapperForDigest.readValue(in, ADMDigest.class);
-                this.dataSourceMetadata = new HashMap<>();
-                for (int i=0; i<digest.getExportMeta().length; i++) {
-                    DataSourceMetadata meta = digest.getExportMeta()[i];
-                    String spec = digest.getExportBlockData()[i].getValue();
-                    if (meta.getId() == null) {
-                        meta.setId(meta.getName());
-                    }
-                    meta.setSpecification(spec != null ? spec.getBytes() : null);
-                    this.dataSourceMetadata.put(new DataSourceKey(meta.getIsSource(), meta.getId()), meta);
-                }
-            } catch (Exception e) {
-                throw new AtlasException(e);
-            }
+    public DocumentCatalog getDocumentCatalog() throws AtlasException {
+        return this.documentCatalog;
+    }
+
+    /**
+     * Serializes the {@link DocumentCatalog} into JSON and return as a byte array.
+     * @return serialized {@link DocumentCatalog}
+     * @throws AtlasException unexpected error
+     */
+    public byte[] getSerializedDocumentCatalog() throws AtlasException {
+        if (getDocumentCatalog() == null) {
+            return null;
         }
-        return Collections.unmodifiableMap(this.dataSourceMetadata);
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            jsonMapper.writeValue(bos, getDocumentCatalog());
+            return bos.toByteArray();
+        } catch (Exception e) {
+            throw new AtlasException("Failed to serialize Document catalog", e);
+        }
+    }
+
+    /**
+     * Sets a map of Document metadata from InputStream.
+     * @param is Document catalog InputStream
+     * @throws AtlasException unexpected error
+     */
+    public void setDocumentCatalogFromStream(InputStream is) throws AtlasException {
+        try {
+            this.documentCatalog = jsonMapper.readValue(is, DocumentCatalog.class);
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
     }
 
     /**
@@ -408,11 +465,28 @@ public class ADMArchiveHandler {
     /**
      * Clears all contents.
      */
-    public void clear() {
-        this.mappingDefinitionBytes = null;
+    public void clear() throws AtlasException {
         this.mappingDefinition = null;
-        this.gzippedAdmDigestBytes = null;
-        this.dataSourceMetadata = null;
+        this.atlasMappingHandler = null;
+        this.documentCatalog = null;
+        if (getPersistDirectory().resolve(SPECIFICATION_DIRECTORY).toFile().exists()) {
+            for (File f : getPersistDirectory().resolve(SPECIFICATION_DIRECTORY).toFile().listFiles()) {
+                AtlasUtil.deleteDirectory(f);
+            }
+            
+        }
+        if (getPersistDirectory().resolve(INSPECTED_DIRECTORY).toFile().exists()) {
+            for (File f : getPersistDirectory().resolve(INSPECTED_DIRECTORY).toFile().listFiles()) {
+                AtlasUtil.deleteDirectory(f);
+            }
+            
+        }
+        if (getPersistDirectory().resolve(getMappingDefinitionFileName()).toFile().exists()) {
+            getPersistDirectory().resolve(getMappingDefinitionFileName()).toFile().delete();
+        }
+        if (getPersistDirectory().resolve(DOCUMENT_CATALOG_NAME).toFile().exists()) {
+            getPersistDirectory().resolve(DOCUMENT_CATALOG_NAME).toFile().delete();
+        }
     }
 
     /**
@@ -442,6 +516,23 @@ public class ADMArchiveHandler {
     }
 
     /**
+     * Gets the persistent directory.
+     * @return persistent directory path
+     * @throws AtlasException unexpected error
+     */
+    public Path getPersistDirectory() throws AtlasException {
+        if (this.persistDirectory == null) {
+            try {
+                this.persistDirectory = Files.createTempDirectory("atlasmap");
+                this.persistDirectory.toFile().deleteOnExit();
+            } catch (IOException e) {
+                throw new AtlasException("Failed to create a temporary directory to extract the ADM file", e);
+            }
+        }
+        return this.persistDirectory;
+    }
+
+    /**
      * Sets the library directory.
      * @param dir library directory path
      * @throws AtlasException unexpected error
@@ -460,14 +551,6 @@ public class ADMArchiveHandler {
     }
 
     /**
-     * Gets the file name of the gzipped ADM Dugest JSON.
-     * @return file name
-     */
-    public String getGzippedADMDigestFileName() {
-        return String.format(GZIPPED_ADM_DIGEST_TEMPLATE, this.mappingDefinitionId);
-    }
-
-    /**
      * Gets the file name of the mapping definition JSON.
      * @return file name
      */
@@ -476,7 +559,169 @@ public class ADMArchiveHandler {
     }
 
     /**
-     * Loads ADM Archive from a exploded directory.
+     * Sets the Document specification.
+     * @param documentKey DocumentKey
+     * @param name file name
+     * @param specification Document specification
+     */
+    public void setDocumentSpecification(DocumentKey documentKey, String name, InputStream specification) throws AtlasException {
+        Path dsTypePath = getPersistDirectory().resolve(SPECIFICATION_DIRECTORY).resolve(documentKey.getDataSourceType().value());
+        ensureDirectory(dsTypePath);
+        Path docPath = dsTypePath.resolve(documentKey.getDocumentId());
+        AtlasUtil.deleteDirectory(docPath.toFile());
+        ensureDirectory(docPath);
+        Path filePath = docPath.resolve(name);
+        try (FileOutputStream fos = new FileOutputStream(filePath.toFile(), false)) {
+            specification.transferTo(fos);
+        } catch (Exception e) {
+            LOG.warn(String.format("Failed to save a specification file '%s', ignoring...", filePath.toString()), e);
+        }
+    }
+
+    /**
+     * Sets the Document specification.
+     * @param documentKey DocumentKey
+     * @param specification Document specification
+     */
+    public void setDocumentSpecification(DocumentKey documentKey, InputStream specification) throws AtlasException {
+        setDocumentSpecification(documentKey, "0", specification);
+    }
+
+    /**
+     * Sets the Document specification.
+     * @param dsType DataSourceType indicating SOURCE or TARGET
+     * @param docId Document ID
+     * @param in input stream
+     * @throws AtlasException
+     */
+    public void setDocumentSpecificationFile(String dsType, String docId, InputStream in) throws AtlasException {
+        setDocumentSpecification(new DocumentKey(DataSourceType.fromValue(dsType), docId), in);
+    }
+
+    /**
+     * Gets the Document specification file handler.
+     * @param docKey DocumentKey
+     * @return file handler
+     */
+    public File getDocumentSpecificationFile(DocumentKey docKey) throws AtlasException {
+        File specDir = getDocumentSpecificationDirectory(docKey);
+        if (!specDir.exists() || !specDir.isDirectory() || specDir.list().length != 1) {
+            return null;
+        }
+        return specDir.listFiles()[0];
+    }
+  
+    private File getDocumentSpecificationDirectory(DocumentKey docKey) throws AtlasException {
+        return getPersistDirectory()
+            .resolve(SPECIFICATION_DIRECTORY)
+            .resolve(docKey.getDataSourceType().value())
+            .resolve(docKey.getDocumentId())
+            .toFile();
+    }
+
+    /**
+     * Sets the Document inspection result.
+     * @param documentKey DocumentKey
+     * @param resultObject Document inspection result object
+     * @throws AtlasException unexpected error
+     */
+    public void setDocumentInspectionResult(DocumentKey documentKey, Serializable resultObject) throws AtlasException {
+        Path docPath = getPersistDirectory()
+            .resolve(INSPECTED_DIRECTORY)
+            .resolve(documentKey.getDataSourceType().value())
+            .resolve(documentKey.getDocumentId());
+        AtlasUtil.deleteDirectory(docPath.toFile());
+        ensureDirectory(docPath);
+        Path filePath = docPath.resolve(INSPECTED_FILE);
+        try (FileOutputStream fos = new FileOutputStream(filePath.toFile(), false)) {
+            jsonMapper.writeValue(fos, resultObject);
+        } catch (Exception e) {
+            LOG.warn(String.format("Failed to save an inspection result JSON file '%s', ignoring...", filePath.toString()), e);
+        }
+    }
+
+    /**
+     * Store the serialized Document inspection result into a file.
+     * @param dsType DataSourceType
+     * @param docId Document ID
+     * @param in serialized Document inspection result
+     * @throws AtlasException unexpected error
+     */
+    public void setDocumentInspectionResultFile(String dsType, String docId, InputStream in) throws AtlasException {
+        setDocumentInspectionResultFile(new DocumentKey(DataSourceType.fromValue(dsType), docId), in);
+    }
+
+    /**
+     * Store the serialized Document inspection result into a file.
+     * @param documentKey DocumentKey to identify the Document
+     * @param in serialized Document inspection result
+     * @throws AtlasException unexpected error
+     */
+    public void setDocumentInspectionResultFile(DocumentKey documentKey, InputStream in) throws AtlasException {
+        Path docPath = getPersistDirectory()
+            .resolve(INSPECTED_DIRECTORY)
+            .resolve(documentKey.getDataSourceType().value())
+            .resolve(documentKey.getDocumentId());
+        ensureDirectory(docPath);
+        Path filePath = docPath.resolve(INSPECTED_FILE);
+        try (FileOutputStream fos = new FileOutputStream(filePath.toFile(), false)) {
+            in.transferTo(fos);
+        } catch (Exception e) {
+            LOG.warn(String.format("Failed to save an inspection result JSON file '%s', ignoring...", filePath.toString()), e);
+        }
+    }
+
+    /**
+     * Gets the {@link File} which represents the persisted Document inspection result file.
+     * @param documentKey DocumentKey to identify the Document
+     * @return {@link File} for the persisted Document inspection result file
+     * @throws AtlasException unexpected error
+     */
+    public File getDocumentInspectionResultFile(DocumentKey documentKey) throws AtlasException {
+        File inspectedDir = getDocumentInspectionResultDirectory(documentKey);
+        if (!inspectedDir.exists() || !inspectedDir.isDirectory() || inspectedDir.list().length != 1) {
+            return null;
+        }
+        return inspectedDir.listFiles()[0];
+    }
+
+    private File getDocumentInspectionResultDirectory(DocumentKey documentKey) throws AtlasException {
+        return getPersistDirectory()
+            .resolve(INSPECTED_DIRECTORY)
+            .resolve(documentKey.getDataSourceType().value())
+            .resolve(documentKey.getDocumentId())
+            .toFile();
+    }
+
+    /**
+     * Deletes the Document specification, inspection result and metadata from the {@link DocumentCatalog}.
+     * This also invokes {@link AtlasMappingHandler#removeDocumentReference(DocumentKey)} to remove
+     * all the Document references from the Mapping Definition.
+     * @param dsType SOURCE or TARGET
+     * @param documentId Document ID of the Document to be deleted
+     */
+    public void deleteDocument(DataSourceType dsType, String documentId) throws AtlasException {
+        DocumentCatalog catalog = getDocumentCatalog();
+        List<DocumentMetadata> docs = dsType == DataSourceType.SOURCE ? catalog.getSources() : catalog.getTargets();
+        Optional<DocumentMetadata> todelete = docs.stream().filter(m -> m.getId().equals(documentId)).findAny();
+        if (!todelete.isPresent()) {
+            return;
+        }
+        docs.remove(todelete.get());
+        DocumentKey docKey = new DocumentKey(dsType, documentId);
+        File specDir = getDocumentSpecificationDirectory(docKey);
+        if (specDir != null && specDir.exists()) {
+            AtlasUtil.deleteDirectory(specDir);
+        }
+        File inspectedDir = getDocumentInspectionResultDirectory(docKey);
+        if (inspectedDir != null && specDir.exists()) {
+            AtlasUtil.deleteDirectory(inspectedDir);
+        }
+        getAtlasMappingHandler().removeDocumentReference(docKey);
+    }
+
+    /**
+     * Loads ADM Archive from an exploded directory.
      * @param dir directory path.
      * @throws AtlasException unexpected error
      */
@@ -486,25 +731,25 @@ public class ADMArchiveHandler {
         File mappingDefinitionFile = dir.toPath().resolve(getMappingDefinitionFileName()).toFile();
         if (mappingDefinitionFile.exists() && mappingDefinitionFile.isFile()) {
             try (InputStream mappingdefis = new FileInputStream(mappingDefinitionFile)) {
-                this.mappingDefinitionBytes = readIntoByteArray(mappingdefis);
+                setMappingDefinitionFromStream(mappingdefis);
             } catch (Exception e) {
                 throw new AtlasException("Failed to read mapping definition file", e);
             }
         }
 
-        File digestFile = dir.toPath().resolve(getGzippedADMDigestFileName()).toFile();
-        if (digestFile.exists() && digestFile.isFile()) {
-            try (InputStream digestis = new FileInputStream(digestFile)) {
-                this.gzippedAdmDigestBytes = readIntoByteArray(digestis);
+        File catalogFile = dir.toPath().resolve(DOCUMENT_CATALOG_NAME).toFile();
+        if (catalogFile.exists() && catalogFile.isFile()) {
+            try (InputStream catalogis = new FileInputStream(catalogFile)) {
+                setDocumentCatalogFromStream(catalogis);
             } catch (Exception e) {
-                throw new AtlasException("Failed to read digest file", e);
+                throw new AtlasException("Failed to read document catalog file", e);
             }
         }
     }
 
     private void loadADMFile(File file) throws AtlasException {
-        try {
-            loadADMStream(new FileInputStream(file));
+        try (FileInputStream fis = new FileInputStream(file)) {
+            loadADMStream(fis);
         } catch (AtlasException ae) {
             throw ae;
         } catch (Exception e) {
@@ -515,24 +760,41 @@ public class ADMArchiveHandler {
     private void loadADMStream(InputStream in) throws AtlasException {
         String catEntryName;
         ZipEntry catEntry;
-        ZipInputStream zipIn = null;
-        try {
-            zipIn = new ZipInputStream(in);
+        try (ZipInputStream zipIn = new ZipInputStream(in)) {
             boolean mappingDefinitionFound = false;
+            boolean libraryFound = false;
             while ((catEntry = zipIn.getNextEntry()) != null) {
-                catEntryName = catEntry.getName();
+                if (catEntry.isDirectory()) {
+                    continue;
+                }
+                catEntryName = cleanSeparator(catEntry.getName());
                 LOG.debug("  Extracting ADM file entry '{}'", catEntryName);
                 if (catEntryName.contains(GZIPPED_ADM_DIGEST_FILTER)) {
-                    this.gzippedAdmDigestBytes = readIntoByteArray(zipIn);
+                    extractFromGzippedADMDigest(zipIn);
+                } else if (catEntryName.contains(DOCUMENT_CATALOG_FILTER)) {
+                    setDocumentCatalogFromStream(zipIn);
+                } else if (catEntryName.startsWith(SPECIFICATION_DIRECTORY)) {
+                    String[] segments = catEntryName.split("/");
+                    if (segments.length != 4) {
+                        continue;
+                    }
+                    setDocumentSpecificationFile(segments[1], segments[2], zipIn);
+                } else if (catEntryName.startsWith(INSPECTED_DIRECTORY)) {
+                    String[] segments = catEntryName.split("/");
+                    if (segments.length != 4) {
+                        continue;
+                    }
+                    setDocumentInspectionResultFile(segments[1], segments[2], zipIn);
                 } else if (!isIgnoreLibrary() && catEntryName.contains(".jar")) {
                     if (this.libraryDirectory == null) {
                         throw new AtlasException("Library directory is not specified");
                     }
-                    int separatorPos = catEntryName.replaceAll("\\\\", "/").lastIndexOf("/");
+                    int separatorPos = catEntryName.lastIndexOf("/");
                     String name = separatorPos == -1 ? catEntryName : catEntryName.substring(separatorPos + 1);
                     Path libPath = this.libraryDirectory.resolve(name);
-                    try (FileOutputStream fos = new FileOutputStream(libPath.toFile())) {
-                        redirectStream(zipIn, fos);
+                    try (FileOutputStream fos = new FileOutputStream(libPath.toFile(), false)) {
+                        zipIn.transferTo(fos);
+                        libraryFound = true;
                     } catch (Exception e) {
                         LOG.warn(String.format("Failed to save a jar file '%s', ignoring...", name), e);
                     }
@@ -540,33 +802,91 @@ public class ADMArchiveHandler {
                     if (mappingDefinitionFound) {
                         throw new AtlasException("Multiple mapping definition files are found in a same .adm archive");
                     }
-                    this.mappingDefinitionBytes = readIntoByteArray(zipIn);
+                    ensureDirectory(getPersistDirectory());
+                    Path mdPath = getPersistDirectory().resolve(getMappingDefinitionFileName());
+                    zipIn.transferTo(new FileOutputStream(mdPath.toFile()));
                     mappingDefinitionFound = true;
                 } else {
                     LOG.debug("Ignoring file '{}' in .adm archive", catEntryName);
                 }
             }
+            if (libraryFound && this.libraryLoader != null) {
+                this.libraryLoader.reload();
+            }
+            // MappingDefinition potentially needs the custom Java classes to be loaded to deserialize
+            if (mappingDefinitionFound) {
+                Path mdPath = getPersistDirectory().resolve(getMappingDefinitionFileName());
+                setMappingDefinitionFromStream(new FileInputStream(mdPath.toFile()));
+            }
         } catch (Exception e) {
             throw new AtlasException(e);
-        } finally {
-            try {
-                zipIn.close();
-            } catch (Exception e) {}
         }
     }
 
-    private void redirectStream(InputStream in, OutputStream out) throws Exception {
-        int len = 0;
-        while ((len = in.read(buffer)) > 0) {
-            out.write(buffer, 0, len);
+    private String cleanSeparator(String path) {
+        return path != null ? path.replaceAll("\\\\", "/") : null;
+    }
+
+    /**
+     * Extracts Document metadata and specification from gzipped ADMDigest. It will be converted to
+     * the DocumentCatalog and individual specification/inspected files.
+     * @param in gzipped ADMDigest JSON file
+     * @deprecated {@link ADMDigest} is kept for backward compatibility. It is recommended to convert the ADM
+     * file with the newer version of AtlasMap UI to avoid auto conversion happens everytime the ADM file is loaded.
+     */
+    @Deprecated
+    private void extractFromGzippedADMDigest(InputStream in) throws AtlasException {
+        try {
+            GZIPInputStream gzipped = new GZIPInputStream(in);
+            ADMDigest digest = jsonMapperForDigest.readValue(gzipped, ADMDigest.class);
+            setDocumentCatalog(new DocumentCatalog());
+            for (int i=0; i<digest.getExportMeta().length; i++) {
+                DataSourceMetadata meta = digest.getExportMeta()[i];
+                String spec = digest.getExportBlockData()[i].getValue();
+                if (meta.getId() == null) {
+                    meta.setId(meta.getName());
+                }
+                DocumentMetadata docMeta = createDocumentMetadataFrom(meta);
+                DocumentKey docKey = new DocumentKey(docMeta.getDataSourceType(), meta.getId());
+                setDocumentMetadata(docKey, docMeta);
+                if (spec != null) {
+                    setDocumentSpecification(docKey, new ByteArrayInputStream(spec.getBytes()));
+                }
+            }
+        } catch (Exception e) {
+            throw new AtlasException(e);
         }
     }
 
-    private byte[] readIntoByteArray(InputStream in) throws Exception {
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            redirectStream(in, baos);
-            return baos.toByteArray();
+    private DocumentMetadata createDocumentMetadataFrom(DataSourceMetadata meta) {
+        DocumentMetadata answer = new DocumentMetadata();
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        String docTypeStr = meta.getDocumentType();
+        if (docTypeStr != null) {
+            answer.setDocumentType(DocumentType.fromValue(docTypeStr.toUpperCase()));
+        } else {
+            // old adm file has DocumentType as DataSourceType
+            docTypeStr = meta.getDataSourceType();
+            if (docTypeStr != null) {
+                try {
+                    answer.setDocumentType(DocumentType.fromValue(docTypeStr.toUpperCase()));
+                } catch (IllegalArgumentException e) {}
+            }
         }
+        answer.setInspectionType(meta.getInspectionType());
+        answer.setDataSourceType(meta.getIsSource() ? DataSourceType.SOURCE : DataSourceType.TARGET);
+        answer.setInspectionParameters(meta.getInspectionParameters());
+        if (answer.getDocumentType() == DocumentType.JAVA) {
+            if (answer.getInspectionParameters() == null) {
+                answer.setInspectionParameters(new HashMap<>());
+            }
+            if (!answer.getInspectionParameters().containsKey("className")) {
+                // old adm file has the FQCN of the Java Document only as a Document ID
+                answer.getInspectionParameters().put("className", answer.getId());
+            }
+        }
+        return answer;
     }
 
     private boolean ensureDirectory(Path dir) throws AtlasException {

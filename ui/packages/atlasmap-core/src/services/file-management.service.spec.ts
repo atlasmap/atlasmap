@@ -17,7 +17,6 @@ import { DocumentDefinition, MappingDefinition } from '../models';
 import { DocumentType, InspectionType } from '../contracts/common';
 import { TextDecoder, TextEncoder } from 'text-encoding';
 
-import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { DocumentInitializationModel } from '../models/config.model';
 import { ErrorLevel } from '../models/error.model';
@@ -29,7 +28,6 @@ import fs from 'fs';
 import ky from 'ky/umd';
 import log from 'loglevel';
 import { mocked } from 'ts-jest/utils';
-import pako from 'pako';
 
 describe('FileManagementService', () => {
   jest.mock('./initialization.service');
@@ -40,8 +38,6 @@ describe('FileManagementService', () => {
   jest.mock('file-saver');
   jest.mock('../utils/common-util');
   const mockedCommonUtil = mocked(CommonUtil, true);
-  jest.mock('pako');
-  const mockedPako = mocked(pako);
 
   beforeEach(() => {
     const initService = new InitializationService(ky);
@@ -98,49 +94,6 @@ describe('FileManagementService', () => {
         expect(
           err.message.indexOf('current mapping definition files')
         ).toBeGreaterThan(0);
-        done();
-      });
-  });
-
-  test('getCurrentMappingDigest()', (done) => {
-    mockedKy.get = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.resolve(new TextEncoder().encode('test text'));
-        }
-      })()
-    );
-    mockedPako.inflate = jest.fn().mockReturnValue('dummy');
-    mockedCommonUtil.objectize = jest.fn().mockReturnValue({} as ADMDigest);
-    service
-      .getCurrentMappingDigest()
-      .then((value) => {
-        expect(value?.exportMappings).toBeUndefined();
-        done();
-      })
-      .catch((error) => {
-        fail(error);
-      });
-  });
-
-  test('getCurrentMappingDigest() server error', (done) => {
-    mockedKy.get = jest.fn().mockReturnValue(
-      new (class {
-        arrayBuffer(): Promise<ArrayBuffer> {
-          return Promise.reject('expected error');
-        }
-      })()
-    );
-    service
-      .getCurrentMappingDigest()
-      .then(() => {
-        fail('expected to be rejected');
-      })
-      .catch((error) => {
-        expect(error).toMatch('expected error');
-        const err = service.cfg.errorService.getErrors()[0];
-        expect(err.level).toBe(ErrorLevel.ERROR);
-        expect(err.message.indexOf('Mapping digest file')).toBeGreaterThan(0);
         done();
       });
   });
@@ -288,34 +241,6 @@ describe('FileManagementService', () => {
         expect(value).toBeTruthy();
         done();
       });
-  });
-
-  test('setDigestFileToService()', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(Promise.resolve({ status: 200 }));
-    const digest = {} as ADMDigest;
-    service
-      .setMappingDigestToService(digest)
-      .then((value) => {
-        expect(value).toBeTruthy();
-        done();
-      })
-      .catch((error) => {
-        fail(error);
-      });
-  });
-
-  test('setDigestFileToService() server error', (done) => {
-    mockedKy.put = jest.fn().mockReturnValue(Promise.reject('expected error'));
-    const digest = {} as ADMDigest;
-    service.setMappingDigestToService(digest).then((value) => {
-      expect(value).toBeFalsy();
-      const err = service.cfg.errorService.getErrors()[0];
-      expect(err.level).toBe(ErrorLevel.ERROR);
-      expect(
-        err.message.indexOf('Unable to update the Mapping digest file')
-      ).toBeGreaterThanOrEqual(0);
-      done();
-    });
   });
 
   test('importJarFile()', (done) => {

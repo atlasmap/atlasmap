@@ -13,7 +13,6 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType, IStringContainer } from '../contracts/common';
 import {
   ErrorInfo,
   ErrorLevel,
@@ -22,12 +21,12 @@ import {
 } from '../models/error.model';
 import { Observable, Subject } from 'rxjs';
 
-import { ADMDigest } from '../contracts/adm-digest';
 import { ConfigModel } from '../models/config.model';
 import { DocumentManagementService } from './document-management.service';
 import { ErrorHandlerService } from './error-handler.service';
 import { FieldActionService } from './field-action.service';
 import { FileManagementService } from './file-management.service';
+import { IStringContainer } from '../contracts/common';
 import { LookupTableUtil } from '../utils/lookup-table-util';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingExpressionService } from './mapping-expression.service';
@@ -179,7 +178,7 @@ export class InitializationService {
           },
         });
 
-      this.initializeWithMappingDigest().finally(() => {
+      this.initializeWithBackend().finally(() => {
         this.updateStatus();
       });
       resolve(true);
@@ -249,41 +248,23 @@ export class InitializationService {
   }
 
   /**
-   * Initialize with the {@link ADMDigest} mapping digest from either an imported ADM archive
-   * file or from the DM runtime digest file is presented to update the canvas.
+   * Initialize with the data backend holds. It retrives documents and mappings
+   * from backend to update the canvas.
    *
    * @param mappingDigest - {@link ADMDigest} mapping digest
    */
-  private async initializeWithMappingDigest(): Promise<boolean> {
+  private async initializeWithBackend(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      this.cfg.fileService
-        .getCurrentMappingDigest()
-        .then(async (mappingDigest: ADMDigest | null) => {
-          // If digest is null then no compressed mappings digest file is available on the server.
-          if (!mappingDigest) {
-            if (this.cfg.mappings === null) {
-              this.cfg.mappings = new MappingDefinition();
-            }
-
-            // load field actions - do this even with no documents so the default field actions are loaded.
-            await this.cfg.fieldActionService.fetchFieldActions();
-            await this.updateStatus();
-            resolve(true);
-            return;
-          }
-
-          await this.addDocumentsFromMappingDigest(mappingDigest);
-
-          if (!mappingDigest || !mappingDigest.exportMappings) {
-            resolve(false);
-            return;
-          }
+      this.cfg.documentService
+        .fetchDocuments()
+        .then(async (_answer) => {
           // load both default and custom field actions
           await this.cfg.fieldActionService.fetchFieldActions();
 
           // load mappings
           this.loadMappings()
             .then((value) => {
+              this.updateInitComplete();
               resolve(value);
             })
             .catch((error: Error) => {
@@ -307,42 +288,6 @@ export class InitializationService {
           }
           resolve(false);
         });
-    });
-  }
-
-  private async addDocumentsFromMappingDigest(
-    mappingDigest: ADMDigest
-  ): Promise<boolean> {
-    return new Promise<any>(async (resolve) => {
-      this.cfg.errorService.resetAll();
-
-      let fragIndex = 0;
-
-      // Reinitialize the model documents.
-      for (let metaFragment of mappingDigest.exportMeta) {
-        const fragData = mappingDigest.exportBlockData[fragIndex].value;
-        const docID = metaFragment.id ? metaFragment.id : metaFragment.name;
-        const docType = metaFragment.dataSourceType
-          ? (metaFragment.dataSourceType.toUpperCase() as DocumentType)
-          : (metaFragment.documentType?.toUpperCase() as DocumentType);
-        const isSource =
-          typeof metaFragment.isSource === 'string'
-            ? (metaFragment.isSource as string).toLowerCase() === 'true'
-            : metaFragment.isSource;
-        await this.cfg.documentService.addDocument(
-          fragData,
-          docID,
-          metaFragment.name,
-          docType,
-          metaFragment.inspectionType,
-          isSource,
-          metaFragment.inspectionParameters
-        );
-        await this.updateStatus();
-        fragIndex++;
-      }
-      await this.cfg.mappingService.notifyMappingUpdated();
-      resolve(true);
     });
   }
 

@@ -27,30 +27,15 @@ import {
   DocumentInspectionRequestModel,
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import { FieldType, IDocument } from '../../contracts/common';
 
 import { CommonUtil } from '../../utils/common-util';
 import { Field } from '../field.model';
 
 export class CsvInspectionModel extends DocumentInspectionModel {
-  request = new CsvInspectionRequestModel(this.cfg, this.doc);
-
-  isOnlineInspectionCapable(): boolean {
-    if (this.cfg.initCfg.baseCSVInspectionServiceUrl == null) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: `CSV inspection service is not configured. Document will not be loaded: ${this.doc.name}`,
-          level: ErrorLevel.WARN,
-          scope: ErrorScope.APPLICATION,
-          type: ErrorType.INTERNAL,
-          object: this.doc,
-        })
-      );
-      return false;
-    }
-    return true;
-  }
+  documentTypeName = 'CSV';
+  baseUrl = this.cfg.initCfg.baseCSVInspectionServiceUrl;
+  request = new CsvInspectionRequestModel(this.cfg, this.doc, this.baseUrl);
 
   parseResponse(responseJson: any): void {
     if (typeof responseJson.CsvInspectionResponse !== 'undefined') {
@@ -120,7 +105,6 @@ export class CsvInspectionModel extends DocumentInspectionModel {
 }
 
 export class CsvInspectionRequestModel extends DocumentInspectionRequestModel {
-  url = this.cfg.initCfg.baseCSVInspectionServiceUrl + 'inspect';
   options = new CsvInspectionRequestOptions(this.cfg, this.doc);
 }
 

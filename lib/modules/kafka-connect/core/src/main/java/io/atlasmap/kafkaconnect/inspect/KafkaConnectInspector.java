@@ -15,6 +15,7 @@
  */
 package io.atlasmap.kafkaconnect.inspect;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.apache.kafka.connect.data.Schema.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath;
 import io.atlasmap.kafkaconnect.core.KafkaConnectUtil;
 import io.atlasmap.kafkaconnect.v2.AtlasKafkaConnectModelFactory;
@@ -58,22 +60,30 @@ public class KafkaConnectInspector {
      * Inspects Kafka Connect JSON schema.
      * @param jsonSchema Kafka Connect JSON schema
      * @param options inspection options
-     * @throws Exception unexpected error
+     * @throws AtlasException unexpected error
      */
-    public void inspectJson(String jsonSchema, HashMap<String, ?> options) throws Exception {
-        org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseJson(jsonSchema, options);
-        this.output = createDocument(connectSchema);
+    public void inspectJson(InputStream jsonSchema, HashMap<String, ?> options) throws AtlasException {
+        try {
+            org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseJson(jsonSchema, options);
+            this.output = createDocument(connectSchema);
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
     }
 
     /**
      * Inspects Kafka Connect AVRO schema.
      * @param avroSchema Kafka Connect AVRO schema
      * @param options inspection options
-     * @throws Exception unexpected error
+     * @throws AtlasException unexpected error
      */
-    public void inspectAvro(String avroSchema, HashMap<String, ?> options) throws Exception {
-        org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseAvro(avroSchema, options);
-        this.output = createDocument(connectSchema);
+    public void inspectAvro(InputStream avroSchema, HashMap<String, ?> options) throws AtlasException {
+        try {
+            org.apache.kafka.connect.data.Schema connectSchema = KafkaConnectUtil.parseAvro(avroSchema, options);
+            this.output = createDocument(connectSchema);
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
     }
 
     /**

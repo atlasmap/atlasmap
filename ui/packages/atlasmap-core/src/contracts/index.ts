@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-export * from './adm-digest';
+export * from './document-catalog';
 export * from './AtlasmapLanguage';
 export * from './common';
 export * from './documents';

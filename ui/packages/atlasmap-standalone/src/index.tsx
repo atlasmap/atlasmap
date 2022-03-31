@@ -28,7 +28,7 @@ ReactDOM.render(
     baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
     baseKafkaConnectInspectionServiceUrl={'/v2/atlas/kafkaconnect/'}
     baseXMLInspectionServiceUrl={'/v2/atlas/xml/'}
-    logLevel={'info'}
+    logLevel={'debug'}
   >
     <App />
   </AtlasmapProvider>,

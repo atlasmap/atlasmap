@@ -14,16 +14,23 @@
     limitations under the License.
 */
 
-import { ConfigModel } from '../models';
-import { MappingDigestUtil } from './mapping-digest-util';
+import { DataSourceType, DocumentType, InspectionType } from './common';
 
-describe('MappingDigestUtil', () => {
-  test('generateExportBlockData()', () => {
-    expect(
-      MappingDigestUtil.generateMappingDigest(
-        ConfigModel.getConfig(),
-        undefined
-      )
-    ).toBeTruthy();
-  });
-});
+export interface DocumentCatalog {
+  sources: DocumentMetadata[];
+  targets: DocumentMetadata[];
+}
+
+export interface DocumentMetadata {
+  id: string;
+  name: string;
+  description: string;
+  uri: string;
+  dataSourceType: DataSourceType;
+  documentType: DocumentType;
+  inspectionType: InspectionType;
+  inspectionParameters?: { [key: string]: string };
+  fieldNameExclusions?: string[];
+  typeNameExclusions?: string[];
+  namespaceExclusions?: string[];
+}

@@ -17,6 +17,5 @@ export * from './common-util';
 export * from './document-inspection-util';
 export * from './guid';
 export * from './lookup-table-util';
-export * from './mapping-digest-util';
 export * from './mapping-serializer';
 export * from './mapping-util';

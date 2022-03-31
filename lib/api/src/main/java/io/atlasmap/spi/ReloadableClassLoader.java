@@ -13,31 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.v2;
+package io.atlasmap.spi;
 
 /**
- * The value container.
- * @see ADMDigest
+ * Represents the reloadable class loader with {@link #reload()}. It allows dynamic reloading
+ * of the classpath.
  */
-@Deprecated
-public class ValueContainer {
-
-    private String value;
+public abstract class ReloadableClassLoader extends CompoundClassLoader {
 
     /**
-     * Gets the value.
-     * @return value
+     * Reloads the classpath.
      */
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * Sets the value.
-     * @param value value
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+    public abstract void reload();
 
 }
