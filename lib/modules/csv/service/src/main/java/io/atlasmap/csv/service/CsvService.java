@@ -16,6 +16,8 @@
 package io.atlasmap.csv.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -24,25 +26,35 @@ import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
 import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
 import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Document;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -57,41 +69,62 @@ public class CsvService extends ModuleService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);
 
-    @Context
-    private ResourceContext resourceContext;
+    /**
+     * A constructor.
+     * @param atlasService AtlasService
+     * @param documentService DocumentService
+     */
+    public CsvService(AtlasService atlasService, DocumentService documentService) {
+        super(atlasService, documentService);
+        getDocumentService().registerModuleService(DocumentType.CSV, this);
+    }
 
     /**
-     * Inspect a CSV instance and return a Document object.
+     * Imports a CSV instance and return a Document object.
      * @param requestIn request
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dataSourceType DataSourceType
+     * @param documentId Document ID
+     * @param uriInfo URI info
      * @return {@link CsvInspectionResponse}
      * @throws IOException unexpected error
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path("/inspect")
-    @Operation(summary = "Inspect CSV", description = "Inspect a CSV instance and return a Document object")
-    @RequestBody(description = "JsonInspectionRequest object",  content = @Content(schema = @Schema(implementation = CsvInspectionRequest.class)))
+    @Path("/project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}")
+    @Operation(summary = "Import CSV", description = "Import a CSV instance and return a Document object")
+    @RequestBody(description = "CsvInspectionRequest object",  content = @Content(schema = @Schema(implementation = CsvInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = "Return a Document object"))
-    public Response inspect(InputStream requestIn) throws IOException  {
+    public Response importCsvDocument(
+            InputStream requestIn,
+            @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
+            @Parameter(description = "DataSource Type") @PathParam("dataSourceType") DataSourceType dataSourceType,
+            @Parameter(description = "Document ID") @PathParam("documentId") String documentId,
+            @Context UriInfo uriInfo
+        ) throws IOException  {
         long startTime = System.currentTimeMillis();
 
         CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);
+        DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);
         Map<String,String> options = request.getOptions();
         CsvInspectionResponse response = new CsvInspectionResponse();
         try {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Options: {}", options);
             }
-            CsvConfig csvConfig = CsvConfig.newConfig(options);
-            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
-            csvFieldReader.setDocument(new ByteArrayInputStream(request.getCsvData().getBytes()));
-
-            Document document = csvFieldReader.readSchema();
-            response.setCsvDocument(document);
+            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), documentId, metadata);
+            InputStream specification = new ByteArrayInputStream(request.getCsvData().getBytes());
+            storeDocumentSpecification(mappingDefinitionId, metadata.getDataSourceType(), documentId, specification);
+            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);
+            DocumentKey docKey = new DocumentKey(metadata.getDataSourceType(), documentId);
+            File specFile = admHandler.getDocumentSpecificationFile(docKey);
+            performDocumentInspection(mappingDefinitionId, metadata, specFile);
+            File f = admHandler.getDocumentInspectionResultFile(docKey);
+            response.setCsvDocument(fromJson(new FileInputStream(f), Document.class));
         } catch (Exception e) {
-            LOG.error("Error inspecting CSV: " + e.getMessage(), e);
+            LOG.error("Error importing CSV: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
         } finally {
             response.setExecutionTime(System.currentTimeMillis() - startTime);
@@ -101,6 +134,20 @@ public class CsvService extends ModuleService {
             LOG.debug(("Response: {}" + new ObjectMapper().writeValueAsString(response)));
         }
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    @Override
+    public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
+            throws AtlasException {
+        try {
+            CsvConfig csvConfig = CsvConfig.newConfig(meta.getInspectionParameters());
+            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
+            csvFieldReader.setDocument(new FileInputStream(spec));
+            Document document = csvFieldReader.readSchema();
+            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), document);
+        } catch (Exception e) {
+            throw new AtlasException(e);
+        }
     }
 
     @Override
@@ -114,4 +161,10 @@ public class CsvService extends ModuleService {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    protected Logger getLogger() {
+        return CsvService.LOG;
+    }
+
 }

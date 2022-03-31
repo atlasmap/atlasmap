@@ -16,14 +16,22 @@
 package io.atlasmap.v2;
 
 /**
- * The enumeration of {@link DataSource} type which indicates {@link #SOURCE} or {@link #TARGET}.
+ * The enumeration of the Document type such as {@link #JAVA}, {@link #JSON}, {@link #XML} and etc.
  */
-public enum DataSourceType {
+public enum DocumentType {
 
-    /** Source. */
-    SOURCE("SOURCE"),
-    /** Target. */
-    TARGET("TARGET");
+    CORE("Core"),
+    CSV ("CSV"),
+    DFDL("DFDL"),
+    JAVA("JAVA"),
+    JSON("JSON"),
+    KAFKA_AVRO("KAFKA_AVRO"),
+    KAFKA_JSON("KAFKA_JSON"),
+    XML("XML"),
+    XSD("XSD"),
+    // Predefined Documents
+    CONSTANT("Constants"),
+    PROPERTY("Property");
 
     private final String value;
 
@@ -31,7 +39,7 @@ public enum DataSourceType {
      * A constructor.
      * @param v value
      */
-    DataSourceType(String v) {
+    DocumentType(String v) {
         value = v;
     }
 
@@ -48,8 +56,8 @@ public enum DataSourceType {
      * @param v value
      * @return the enum
      */
-    public static DataSourceType fromValue(String v) {
-        for (DataSourceType c: DataSourceType.values()) {
+    public static DocumentType fromValue(String v) {
+        for (DocumentType c: DocumentType.values()) {
             if (c.value.equals(v)) {
                 return c;
             }

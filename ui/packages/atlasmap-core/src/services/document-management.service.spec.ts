@@ -17,13 +17,20 @@ import {
   ConfigModel,
   DocumentInitializationModel,
 } from '../models/config.model';
-import { DocumentType, FieldType, InspectionType } from '../contracts/common';
+import {
+  DataSourceType,
+  DocumentType,
+  FieldType,
+  InspectionType,
+} from '../contracts/common';
+import { Input, Options } from 'ky';
 
+import { DocumentCatalog } from '../contracts/document-catalog';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
-import { Input } from 'ky';
+import { JsonInspectionModel } from '../models/inspect/json-inspection.model';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { TestUtils } from '../../test/test-util';
 import atlasmapInspectionComplexObjectRootedJson from '../../../../test-resources/inspected/atlasmap-inspection-complex-object-rooted.json';
@@ -263,6 +270,13 @@ describe('DocumentManagementService', () => {
 
   test('importNonJavaDocument()', (done) => {
     cfg.initCfg.baseJSONInspectionServiceUrl = 'json';
+    spyOn(ky, 'get').and.callFake((_url: Input, _options: Options) => {
+      return new (class {
+        text(): Promise<string> {
+          return Promise.resolve('pong');
+        }
+      })();
+    });
     spyOn(ky, 'post').and.callFake((_url: Input) => {
       return new (class {
         json(): Promise<any> {
@@ -309,6 +323,13 @@ describe('DocumentManagementService', () => {
 
   test('importJavaDocument()', (done) => {
     cfg.initCfg.baseJavaInspectionServiceUrl = 'java';
+    spyOn(ky, 'get').and.callFake((_url: Input, _options: Options) => {
+      return new (class {
+        text(): Promise<string> {
+          return Promise.resolve('pong');
+        }
+      })();
+    });
     spyOn(ky, 'post').and.callFake((_url: Input) => {
       return new (class {
         json(): Promise<any> {
@@ -341,6 +362,76 @@ describe('DocumentManagementService', () => {
       .catch((error) => {
         fail(error);
       });
+  });
+
+  test('fetchDocuments()', (done) => {
+    spyOn(ky, 'get').and.callFake((_url: Input, _options: Options) => {
+      return new (class {
+        json(): Promise<{ DocumentCatalog: DocumentCatalog }> {
+          return Promise.resolve({
+            DocumentCatalog: {
+              sources: [
+                {
+                  id: 'test',
+                  name: 'test',
+                  uri: 'test',
+                  description: '',
+                  dataSourceType: DataSourceType.SOURCE,
+                  inspectionType: InspectionType.SCHEMA,
+                  documentType: DocumentType.JSON,
+                },
+              ],
+              targets: [
+                {
+                  id: 'test',
+                  name: 'test',
+                  uri: 'test',
+                  description: '',
+                  dataSourceType: DataSourceType.SOURCE,
+                  inspectionType: InspectionType.SCHEMA,
+                  documentType: DocumentType.JSON,
+                },
+              ],
+            },
+          });
+        }
+      })();
+    });
+    spyOn<any>(JsonInspectionModel.prototype, 'parseResponse').and.stub();
+    service.fetchDocuments().then((value) => {
+      expect(value).toBeTruthy();
+      done();
+    });
+  });
+
+  test('setDocumentName()', (done) => {
+    spyOn<any>(service, 'fetchDocuments').and.returnValue(
+      Promise.resolve(true)
+    );
+    spyOn<any>(ky, 'put').and.returnValue(
+      Promise.resolve({ ok: true, status: 200 })
+    );
+    service.setDocumentName(true, 'test', 'test-mod').then((value) => {
+      expect(value).toBeTruthy();
+      done();
+    });
+  });
+
+  test('deleteDocument()', (done) => {
+    spyOn<any>(service, 'fetchDocuments').and.returnValue(
+      Promise.resolve(true)
+    );
+    spyOn<any>(cfg.mappingService, 'notifyFetchMapping').and.returnValue(
+      Promise.resolve(true)
+    );
+    spyOn<any>(ky, 'delete').and.returnValue(
+      Promise.resolve({ ok: true, status: 200 })
+    );
+    const docDef = new DocumentDefinition();
+    service.deleteDocument(docDef).then((value) => {
+      expect(value).toBeTruthy();
+      done();
+    });
   });
 
   test('Constant field', () => {

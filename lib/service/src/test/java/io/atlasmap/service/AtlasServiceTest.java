@@ -65,8 +65,8 @@ public class AtlasServiceTest {
     private static final String TEST_JAR_DIR = "target/tmp";
     private static final String TEST_JAR_PATH = TEST_JAR_DIR + "/my.jar";
 
-    private AtlasService atlasService = null;
-    private MappingService mappingService = null;
+    private AtlasService atlasService;
+    private MappingService mappingService;
     private ObjectMapper mapper = null;
 
     @BeforeEach

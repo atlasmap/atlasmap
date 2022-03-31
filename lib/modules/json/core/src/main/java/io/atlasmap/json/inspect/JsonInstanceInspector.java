@@ -16,6 +16,7 @@
 package io.atlasmap.json.inspect;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -60,11 +61,11 @@ public class JsonInstanceInspector implements JsonInspector {
     }
 
     @Override
-    public JsonDocument inspect(String instance) throws JsonInspectionException {
+    public JsonDocument inspect(InputStream instance) throws JsonInspectionException {
         if (LOG.isTraceEnabled()) {
             LOG.trace("Start JSON instance inspection: {}", instance);
         }
-        if (instance == null || instance.isEmpty()) {
+        if (instance == null) {
             throw new IllegalArgumentException("JSON instance cannot be null");
         }
         try {

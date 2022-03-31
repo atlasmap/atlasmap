@@ -15,6 +15,9 @@
  */
 package io.atlasmap.json.inspect;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+
 import io.atlasmap.json.v2.JsonDocument;
 
 /**
@@ -35,9 +38,19 @@ public class JsonInspectionService {
         String cleanDocument = cleanJsonDocument(sourceDocument);
 
         if (cleanDocument.startsWith("{") || cleanDocument.startsWith("[")) {
-            return JsonInstanceInspector.instance().inspect(cleanDocument);
+            return inspectJsonDocument(new ByteArrayInputStream(cleanDocument.getBytes()));
         }
         throw new JsonInspectionException("JSON data must begin with either '{' or '['");
+    }
+
+    /**
+     * Inspects the JSON instance.
+     * @param sourceDocument JSON instance InputStream
+     * @return inspected
+     * @throws JsonInspectionException invalid JSON data
+     */
+    public JsonDocument inspectJsonDocument(InputStream sourceDocument) throws JsonInspectionException {
+        return JsonInstanceInspector.instance().inspect(sourceDocument);
     }
 
     /**
@@ -53,9 +66,13 @@ public class JsonInspectionService {
         String cleanDocument = cleanJsonDocument(jsonSchema);
 
         if (cleanDocument.startsWith("{") || cleanDocument.startsWith("[")) {
-            return JsonSchemaInspector.instance().inspect(cleanDocument);
+            return inspectJsonSchema(new ByteArrayInputStream(cleanDocument.getBytes()));
         }
         throw new JsonInspectionException("JSON schema must begin with either '{' or '['");
+    }
+
+    public JsonDocument inspectJsonSchema(InputStream sourceDocument) throws JsonInspectionException {
+        return JsonSchemaInspector.instance().inspect(sourceDocument);
     }
 
     /**

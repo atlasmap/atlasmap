@@ -19,7 +19,6 @@ import {
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
 import { EnumValue, Field } from '../field.model';
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import {
   IJsonComplexType,
   IJsonDocument,
@@ -36,23 +35,9 @@ import { FieldType } from '../../contracts/common';
  * Encapsulates JSON inspection context.
  */
 export class JsonInspectionModel extends DocumentInspectionModel {
-  request = new JsonInspectionRequestModel(this.cfg, this.doc);
-
-  isOnlineInspectionCapable(): boolean {
-    if (this.cfg.initCfg.baseJSONInspectionServiceUrl == null) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: `JSON inspection service is not configured. Document will not be loaded: ${this.doc.name}`,
-          level: ErrorLevel.WARN,
-          scope: ErrorScope.APPLICATION,
-          type: ErrorType.INTERNAL,
-          object: this.doc,
-        })
-      );
-      return false;
-    }
-    return true;
-  }
+  documentTypeName = 'JSON';
+  baseUrl = this.cfg.initCfg.baseJSONInspectionServiceUrl;
+  request = new JsonInspectionRequestModel(this.cfg, this.doc, this.baseUrl);
 
   parseResponse(responseJson: any): void {
     if (typeof responseJson.JsonInspectionResponse !== 'undefined') {
@@ -130,7 +115,6 @@ export class JsonInspectionModel extends DocumentInspectionModel {
 }
 
 export class JsonInspectionRequestModel extends DocumentInspectionRequestModel {
-  url = this.cfg.initCfg.baseJSONInspectionServiceUrl + 'inspect';
   options = new JsonInspectionRequestOptions(this.cfg, this.doc);
 }
 

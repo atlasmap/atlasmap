@@ -17,40 +17,49 @@ package io.atlasmap.java.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 
-import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Response;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.java.v2.ClassInspectionRequest;
 import io.atlasmap.java.v2.ClassInspectionResponse;
+import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Json;
 
 @ExtendWith(MockitoExtension.class)
 public class JavaServiceTest {
 
-    @Mock
-    private ResourceContext mockResourceContext;
-    @InjectMocks
     private JavaService javaService;
+    private DocumentService documentService;
+
+    @BeforeEach
+    public void before() throws AtlasException {
+        AtlasService atlas = new AtlasService();
+        documentService = new DocumentService(atlas);
+        this.javaService = new JavaService(atlas, documentService);
+    }
 
     @Test
-    public void testGetClass() throws Exception {
-        when(mockResourceContext.getResource(AtlasService.class)).thenReturn(new AtlasService());
+    public void testImportJavaDocument() throws Exception {
         ClassInspectionRequest request = new ClassInspectionRequest();
+        request.setDocumentId("test");
+        request.setDataSourceType(DataSourceType.SOURCE);
         request.setClassName(ClassInspectionRequest.class.getName());
         byte[] bytes = Json.mapper().writeValueAsBytes(request);
-        Response res = javaService.inspectClass(new ByteArrayInputStream(bytes));
+        Response res = javaService.importJavaDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         ClassInspectionResponse inspectionResponse = Json.mapper().readValue((byte[]) entity, ClassInspectionResponse.class);
@@ -59,7 +68,8 @@ public class JavaServiceTest {
         assertEquals(ClassInspectionRequest.class.getName(), inspectionResponse.getJavaClass().getClassName());
         request.setClassName(AtlasSession.class.getName());
         bytes = Json.mapper().writeValueAsBytes(request);
-        res = javaService.inspectClass(new ByteArrayInputStream(bytes));
+        res = javaService.importJavaDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
+        assertEquals(200, res.getStatus());
         entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         inspectionResponse = Json.mapper().readValue((byte[]) entity, ClassInspectionResponse.class);
@@ -69,6 +79,9 @@ public class JavaServiceTest {
         inspectionResponse.getJavaClass().getJavaFields().getJavaField()
                 .stream().filter(f -> "properties".equals(f.getName()))
                 .forEach(f -> assertEquals("/properties", f.getPath(), "Invalid path: " + f.getPath()));
-                
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        JavaClass inspected = Json.mapper().readValue((File)res.getEntity(), JavaClass.class);
+        assertEquals(AtlasSession.class.getName(), inspected.getClassName());
     }
 }

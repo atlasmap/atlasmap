@@ -49,6 +49,7 @@ import io.atlasmap.spi.AtlasModuleInfo;
 import io.atlasmap.spi.AtlasModuleInfoRegistry;
 import io.atlasmap.spi.AtlasPropertyStrategy;
 import io.atlasmap.spi.AtlasSeparateStrategy;
+import io.atlasmap.spi.CompoundClassLoader;
 import io.atlasmap.v2.AtlasMapping;
 
 /**

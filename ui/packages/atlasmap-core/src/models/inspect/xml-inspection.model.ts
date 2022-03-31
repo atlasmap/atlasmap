@@ -19,7 +19,6 @@ import {
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
 import { EnumValue, Field } from '../field.model';
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import { FieldType, IField } from '../../contracts/common';
 import {
   IXmlComplexType,
@@ -34,23 +33,9 @@ import {
 import { NamespaceModel } from '../document-definition.model';
 
 export class XmlInspectionModel extends DocumentInspectionModel {
-  request = new XmlInspectionRequestModel(this.cfg, this.doc);
-
-  isOnlineInspectionCapable(): boolean {
-    if (this.cfg.initCfg.baseXMLInspectionServiceUrl == null) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: `XML inspection service is not configured. Document will not be loaded: ${this.doc.name}`,
-          level: ErrorLevel.WARN,
-          scope: ErrorScope.APPLICATION,
-          type: ErrorType.INTERNAL,
-          object: this.doc,
-        })
-      );
-      return false;
-    }
-    return true;
-  }
+  documentTypeName = 'XML';
+  baseUrl = this.cfg.initCfg.baseXMLInspectionServiceUrl;
+  request = new XmlInspectionRequestModel(this.cfg, this.doc, this.baseUrl);
 
   parseResponse(responseJson: any): void {
     if (typeof responseJson.XmlInspectionResponse !== 'undefined') {
@@ -156,7 +141,6 @@ export class XmlInspectionModel extends DocumentInspectionModel {
 }
 
 export class XmlInspectionRequestModel extends DocumentInspectionRequestModel {
-  url = this.cfg.initCfg.baseXMLInspectionServiceUrl + 'inspect';
   options = new XmlInspectionRequestOptions(this.cfg, this.doc);
 }
 

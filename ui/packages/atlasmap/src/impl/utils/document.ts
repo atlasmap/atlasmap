@@ -15,7 +15,6 @@
 */
 import {
   CollectionType,
-  CommonUtil,
   ConfigModel,
   DocumentDefinition,
   DocumentInspectionUtil,
@@ -42,10 +41,7 @@ export async function changeDocumentName(
   isSource: boolean,
 ) {
   const cfg = ConfigModel.getConfig();
-  const docDef = getDocDef(docId, cfg, isSource);
-  docDef.name = newDocName;
-  await cfg.fileService.updateDigestFile();
-  cfg.mappingService.refreshMappingUI();
+  await cfg.documentService.setDocumentName(isSource, docId, newDocName);
 }
 
 /**
@@ -138,14 +134,7 @@ export async function removeDocumentRef(
   cfg: ConfigModel,
 ): Promise<boolean> {
   return new Promise<boolean>(async (resolve) => {
-    cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);
-    if (docDef.isSource) {
-      CommonUtil.removeItemFromArray(docDef, cfg.sourceDocs);
-    } else {
-      CommonUtil.removeItemFromArray(docDef, cfg.targetDocs);
-    }
-    await cfg.mappingService.notifyMappingUpdated();
-    await cfg.fileService.updateDigestFile();
+    await cfg.documentService.deleteDocument(docDef);
     resolve(true);
   });
 }
@@ -244,7 +233,7 @@ export async function importInstanceSchema(
       )
       .then((importOk: boolean) => {
         if (importOk) {
-          cfg.fileService.updateDigestFile().finally(() => {
+          cfg.documentService.fetchDocuments().finally(() => {
             cfg.errorService.addError(
               new ErrorInfo({
                 message: `${selectedFile.name} import complete.`,
@@ -291,7 +280,7 @@ export function enableCustomClass(
         selectedCollection as CollectionType,
       )
       .then(() => {
-        cfg.fileService.updateDigestFile().finally(() => {
+        cfg.documentService.fetchDocuments().finally(() => {
           cfg.initializationService.updateStatus();
           resolve(true);
         });
@@ -360,5 +349,5 @@ export async function setDocCSVParams(
   const docDef = getDocDef(docId, cfg, isSource);
   docDef.inspectionParameters = parameters;
   await cfg.mappingService.notifyMappingUpdated();
-  await cfg.fileService.updateDigestFile();
+  await cfg.documentService.fetchDocuments();
 }

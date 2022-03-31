@@ -18,6 +18,7 @@ package io.atlasmap.csv.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 
@@ -27,20 +28,28 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.csv.v2.CsvComplexType;
 import io.atlasmap.csv.v2.CsvConstants;
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.Document;
 import io.atlasmap.v2.Json;
 
 public class CsvServiceTest {
 
     private CsvService csvService = null;
+    private DocumentService documentService;
 
     @BeforeEach
-    public void setUp() {
-        csvService = new CsvService();
+    public void setUp() throws AtlasException {
+        AtlasService atlas = new AtlasService();
+        documentService = new DocumentService(atlas);
+        csvService = new CsvService(atlas, documentService);
     }
 
     @AfterEach
@@ -61,8 +70,7 @@ public class CsvServiceTest {
         req.getOptions().put(CsvConstants.OPTION_DELIMITER, ",");
         req.getOptions().put(CsvConstants.OPTION_FIRST_RECORD_AS_HEADER, "true");
         InputStream inputStream = new ByteArrayInputStream(Json.mapper().writeValueAsBytes(req));
-
-        Response res = csvService.inspect(inputStream);
+        Response res = csvService.importCsvDocument(inputStream, 0, DataSourceType.SOURCE, "test", null);
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
@@ -83,7 +91,7 @@ public class CsvServiceTest {
         req.setCsvData(source);
         InputStream inputStream = new ByteArrayInputStream(Json.mapper().writeValueAsBytes(req));
 
-        Response res = csvService.inspect(inputStream);
+        Response res = csvService.importCsvDocument(inputStream, 0, DataSourceType.SOURCE, "test", null);
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
@@ -102,7 +110,7 @@ public class CsvServiceTest {
         req.getOptions().put(CsvConstants.OPTION_DELIMITER, ",");
         req.getOptions().put(CsvConstants.OPTION_FIRST_RECORD_AS_HEADER, "true");
         inputStream = new ByteArrayInputStream(Json.mapper().writeValueAsBytes(req));
-        Response res = csvService.inspect(inputStream);
+        Response res = csvService.importCsvDocument(inputStream, 0, DataSourceType.SOURCE, "test", null);
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         CsvInspectionResponse csvInspectionResponse = Json.mapper().readValue((byte[])entity, CsvInspectionResponse.class);
@@ -114,5 +122,10 @@ public class CsvServiceTest {
         assertEquals("sourceCsvDecimal", fields.get(2).getName());
         assertEquals("sourceCsvDate", fields.get(3).getName());
         assertEquals("sourceCsvBoolean", fields.get(4).getName());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        Document inspected = Json.mapper().readValue((File)res.getEntity(), Document.class);
+        complexType = (CsvComplexType) inspected.getFields().getField().get(0);
+        assertEquals(5, complexType.getCsvFields().getCsvField().size());
     }
 }

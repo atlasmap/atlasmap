@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -53,6 +54,9 @@ import javax.websocket.Session;
 import javax.websocket.WebSocketContainer;
 import javax.websocket.ClientEndpointConfig.Configurator;
 import javax.websocket.RemoteEndpoint.Basic;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.eclipse.lsp4j.InitializeParams;
 import org.eclipse.lsp4j.InitializeResult;
@@ -87,6 +91,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
+import io.atlasmap.v2.Json;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -230,17 +239,23 @@ public class E2ETest {
                     continue;
                 }
                 ADMArchiveHandler handler = new ADMArchiveHandler(getClass().getClassLoader());
-                handler.setLibraryDirectory(Paths.get(DLDIR + File.separator + "lib"));
-                handler.load(Paths.get(DLDIR + File.separator + exportAdmFileName));
+                handler.setPersistDirectory(Paths.get(DLDIR).resolve("persist"));
+                handler.setLibraryDirectory(Paths.get(DLDIR).resolve("lib"));
+                handler.load(Paths.get(DLDIR).resolve(exportAdmFileName));
+                handler.persist();
                 assertEquals("UI.0", handler.getMappingDefinition().getName());
-                DataSourceMetadata sourceMeta = handler.getDataSourceMetadata(true, "JSONSchemaSource");
-                assertEquals(true, sourceMeta.getIsSource());
+                DocumentKey sourceKey = new DocumentKey(DataSourceType.SOURCE, "JSONSchemaSource");
+                DocumentMetadata sourceMeta = handler.getDocumentMetadata(sourceKey);
+                assertEquals(DataSourceType.SOURCE, sourceMeta.getDataSourceType());
                 assertEquals("JSONSchemaSource", sourceMeta.getName());
-                assertEquals("JSON", sourceMeta.getDataSourceType());
-                DataSourceMetadata targetMeta = handler.getDataSourceMetadata(false, "XMLSchemaSource");
-                assertEquals(false, targetMeta.getIsSource());
+                assertEquals(DocumentType.JSON, sourceMeta.getDocumentType());
+                new ObjectMapper().readTree(new FileInputStream(handler.getDocumentSpecificationFile(sourceKey)));
+                DocumentKey targetKey = new DocumentKey(DataSourceType.TARGET, "XMLSchemaSource");
+                DocumentMetadata targetMeta = handler.getDocumentMetadata(targetKey);
+                assertEquals(DataSourceType.TARGET, targetMeta.getDataSourceType());
                 assertEquals("XMLSchemaSource", targetMeta.getName());
-                assertEquals("XML", targetMeta.getDataSourceType());
+                assertEquals(DocumentType.XML, targetMeta.getDocumentType());
+                DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new FileInputStream(handler.getDocumentSpecificationFile(targetKey)));
                 return;
             };
         }

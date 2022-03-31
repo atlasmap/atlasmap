@@ -23,24 +23,19 @@ import {
   IAtlasMappingContainer,
   IStringMapContainer,
 } from '../contracts/mapping';
-import { gzip, inflate } from 'pako';
 
-import { ADMDigest } from '../contracts/adm-digest';
 import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { HTTP_STATUS_NO_CONTENT } from '../common/config.types';
-import { MappingDigestUtil } from '../utils/mapping-digest-util';
 import ky from 'ky';
 import log from 'loglevel';
 
 export enum FileName {
-  DIGEST = 'Mapping digest file',
   ADM = 'ADM archive file',
   JAR = 'Jar file',
 }
 
 export enum FileType {
-  DIGEST = 'digest',
   ADM = 'adm',
   JAR = 'JAR',
 }
@@ -93,31 +88,6 @@ export class FileManagementService {
     });
   }
 
-  /**
-   * Retrieve the current user data mappings digest file from the server as a GZIP compressed byte array buffer.
-   */
-  getCurrentMappingDigest(): Promise<ADMDigest | null> {
-    return new Promise<ADMDigest | null>((resolve, reject) => {
-      this.getCurrentFile(FileName.DIGEST, FileType.DIGEST)
-        .then((gzipped) => {
-          if (!gzipped) {
-            resolve(null);
-            return;
-          }
-          const gunzipped = inflate(gzipped);
-          const stringified = new Uint8Array(gunzipped).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            ''
-          );
-          const admDigest = CommonUtil.objectize(stringified);
-          resolve(admDigest);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  }
-
   getCurrentADMArchive(): Promise<Uint8Array | null> {
     return this.getCurrentFile(FileName.ADM, FileType.ADM);
   }
@@ -127,7 +97,7 @@ export class FileManagementService {
     fileType: string
   ): Promise<Uint8Array | null> {
     return new Promise<Uint8Array | null>((resolve, reject) => {
-      const url = `${this.cfg.initCfg.baseAtlasServiceUrl}project/0/${fileType}`;
+      const url = `${this.cfg.initCfg.baseAtlasServiceUrl}project/${this.cfg.mappingDefinitionId}/${fileType}`;
       this.cfg.logger!.debug(`Get Current ${fileName} Request: ${url}`);
       const headers = {
         'Content-Type': 'application/octet-stream',
@@ -270,40 +240,6 @@ export class FileManagementService {
     });
   }
 
-  setMappingDigestToService(mappingDigest: ADMDigest): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
-      // Compress the JSON buffer - write out as binary.
-      const strBuffer = JSON.stringify(mappingDigest);
-      const binBuffer = CommonUtil.str2bytes(strBuffer);
-      let compressedBuffer: Uint8Array;
-      try {
-        compressedBuffer = gzip(binBuffer);
-      } catch (error1) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: 'Unable to compress the current data mappings.',
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: error1,
-          })
-        );
-        resolve(false);
-        return;
-      }
-      // Update .../target/mappings/adm-catalog-files.gz
-      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'project/0/digest';
-      const fileContent: Blob = new Blob([compressedBuffer], {
-        type: 'application/octet-stream',
-      });
-      this.setBinaryFileToService(fileContent, url, FileName.DIGEST).then(
-        (value) => {
-          resolve(value);
-        }
-      );
-    });
-  }
-
   private setADMArchiveFileToService(
     compressedBuffer: BlobPart
   ): Promise<boolean> {
@@ -371,79 +307,45 @@ export class FileManagementService {
   }
 
   /**
-   * Generate mapping digest file from current state and push it to the runtime.
+   * Export the ADM archive file with current mappings.
    *
-   * @returns {@link Promise}
-   */
-  updateDigestFile(): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
-      try {
-        const mappingDigest = MappingDigestUtil.generateMappingDigest(this.cfg);
-
-        // Save mapping digest file to the runtime.
-        this.setMappingDigestToService(mappingDigest).then((value) => {
-          resolve(value);
-        });
-      } catch (error) {
-        this.cfg.errorService.addError(
-          new ErrorInfo({
-            message: 'Unable to update mapping digest file.',
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: error,
-          })
-        );
-        resolve(false);
-        return;
-      }
-    });
-  }
-
-  /**
-   * Update the current mapping files and export the ADM archive file with current mappings.
-   *
-   * Establish the mapping digest file content in JSON format (mappings + schema + instance-schema),
-   * compress it (GZIP), update the runtime, then fetch the full ADM archive ZIP file from the runtime
-   * and export it.
+   * Fetch the full ADM archive ZIP file from the runtime and export it.
    *
    * @param event
    */
   exportADMArchive(mappingsFileName: string): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      this.updateDigestFile().then(() => {
-        // Fetch the full ADM archive file from the runtime (ZIP) and export it to to the local
-        // downloads area.
-        this.getCurrentADMArchive().then(async (value: Uint8Array | null) => {
-          // If value is null then no compressed mappings digest file is available on the server.
-          if (value === null) {
-            resolve(false);
-            return;
-          }
-          // Tack on a .adm suffix if one wasn't already specified.
-          if (mappingsFileName.split('.').pop() !== 'adm') {
-            mappingsFileName = mappingsFileName.concat('.adm');
-          }
-          const fileContent = new Blob([value], {
-            type: 'application/octet-stream',
-          });
-          CommonUtil.writeFile(fileContent, mappingsFileName)
-            .then((value2) => {
-              resolve(value2);
-            })
-            .catch((error) => {
-              this.cfg.errorService.addError(
-                new ErrorInfo({
-                  message: 'Unable to save the current data mappings.',
-                  level: ErrorLevel.ERROR,
-                  scope: ErrorScope.APPLICATION,
-                  type: ErrorType.INTERNAL,
-                  object: error,
-                })
-              );
-              resolve(false);
-            });
+      // Fetch the full ADM archive file from the runtime (ZIP) and export it to to the local
+      // downloads area.
+      this.getCurrentADMArchive().then(async (value: Uint8Array | null) => {
+        // If value is null then no compressed mappings digest file is available on the server.
+        if (value === null) {
+          resolve(false);
+          return;
+        }
+        // Tack on a .adm suffix if one wasn't already specified.
+        if (mappingsFileName.split('.').pop() !== 'adm') {
+          mappingsFileName = mappingsFileName.concat('.adm');
+        }
+        const fileContent = new Blob([value], {
+          type: 'application/octet-stream',
         });
+        CommonUtil.writeFile(fileContent, mappingsFileName)
+          .then((value2) => {
+            resolve(value2);
+          })
+          .catch((error) => {
+            this.cfg.errorService.addError(
+              new ErrorInfo({
+                message: 'Unable to save the current data mappings.',
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.APPLICATION,
+                type: ErrorType.INTERNAL,
+                object: error,
+              })
+            );
+            resolve(false);
+          });
       });
     });
   }

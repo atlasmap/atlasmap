@@ -15,6 +15,7 @@
  */
 package io.atlasmap.kafkaconnect.core;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +82,7 @@ public class KafkaConnectUtil {
      * @throws Exception unexpected error
      * @see JsonConverter
      */
-    public static org.apache.kafka.connect.data.Schema parseJson(String jsonSchema, HashMap<String, ?> options) throws Exception {
+    public static org.apache.kafka.connect.data.Schema parseJson(InputStream jsonSchema, HashMap<String, ?> options) throws Exception {
         try (JsonConverter converter = new JsonConverter()) {
             converter.configure(options);
             JsonNode parsed = new ObjectMapper().readTree(jsonSchema);
@@ -98,8 +99,8 @@ public class KafkaConnectUtil {
      * @see AvroSchemaUtils
      * @see AvroData
      */
-    public static org.apache.kafka.connect.data.Schema parseAvro(String avroSchema, HashMap<String, ?> options) throws Exception {
-        org.apache.avro.Schema schema = AvroSchemaUtils.parse(avroSchema);
+    public static org.apache.kafka.connect.data.Schema parseAvro(InputStream avroSchema, HashMap<String, ?> options) throws Exception {
+        org.apache.avro.Schema schema = AvroSchemaUtils.parse(new String(avroSchema.readAllBytes()));
         AvroData avro = new AvroData(0);
         return avro.toConnectSchema(schema);
     }

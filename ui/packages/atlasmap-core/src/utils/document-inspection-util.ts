@@ -15,6 +15,7 @@
 */
 import {
   CollectionType,
+  DataSourceType,
   DocumentType,
   InspectionType,
 } from '../contracts/common';
@@ -27,6 +28,7 @@ import { CommonUtil } from './common-util';
 import { CsvInspectionModel } from '../models/inspect/csv-inspection.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentInspectionModel } from '../models/inspect/document-inspection.model';
+import { DocumentMetadata } from 'src/contracts';
 import { JavaInspectionModel } from '../models/inspect/java-inspection.model';
 import { JsonInspectionModel } from '../models/inspect/json-inspection.model';
 import { KafkaConnectInspectionModel } from '../models/inspect/kafkaconnect-inspection.model';
@@ -183,6 +185,48 @@ export class DocumentInspectionUtil {
       } else {
         CommonUtil.removeItemFromArray(existing, cfg.targetDocs);
       }
+    }
+  }
+
+  static addDocument(
+    cfg: ConfigModel,
+    meta: DocumentMetadata
+  ): DocumentDefinition {
+    const model: DocumentInitializationModel =
+      new DocumentInitializationModel();
+    model.name = meta.name;
+    model.id = meta.id;
+    model.description = meta.description;
+    model.type = meta.documentType;
+    model.inspectionType = meta.inspectionType;
+    if (meta.inspectionParameters) {
+      model.inspectionParameters = meta.inspectionParameters;
+    } else {
+      model.inspectionParameters = { '': '' };
+    }
+    model.isSource = meta.dataSourceType === DataSourceType.SOURCE;
+    DocumentInspectionUtil.removeDocumentIfAlreadyExists(
+      cfg,
+      model.id,
+      model.isSource
+    );
+    return cfg.addDocument(model);
+  }
+
+  static updateDocumentMetadata(cfg: ConfigModel, meta: DocumentMetadata) {
+    const doc = cfg.getDocForIdentifier(
+      meta.id,
+      meta.dataSourceType === DataSourceType.SOURCE
+    );
+    if (!doc) {
+      return;
+    }
+    doc.name = meta.name;
+    doc.description = meta.description;
+    doc.type = meta.documentType;
+    doc.inspectionType = meta.inspectionType;
+    if (meta.inspectionParameters) {
+      doc.inspectionParameters = meta.inspectionParameters;
     }
   }
 }

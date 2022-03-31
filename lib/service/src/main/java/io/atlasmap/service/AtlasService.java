@@ -17,9 +17,13 @@ package io.atlasmap.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -81,6 +85,7 @@ public class AtlasService extends BaseAtlasService {
     private String baseFolder = "";
     private String mappingFolder = "";
     private String libFolder = "";
+    private Map<Integer, SoftReference<ADMArchiveHandler>> admHandlerMap = new ConcurrentHashMap<>();
 
     /**
      * A constructor.
@@ -153,8 +158,8 @@ public class AtlasService extends BaseAtlasService {
 
         details.getActionDetail().addAll(atlasContextFactory.getFieldActionService().listActionDetails());
         byte[] serialized = toJson(details);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(new String(serialized));
+        if (LOG.isTraceEnabled()) {
+            LOG.trace(new String(serialized));
         }
         return Response.ok().entity(serialized).build();
     }
@@ -184,7 +189,7 @@ public class AtlasService extends BaseAtlasService {
                 } catch (Exception e) {
                     continue;
                 }
-                ADMArchiveHandler handler = loadExplodedMappingDirectory(mappingDefinitionId);
+                ADMArchiveHandler handler = getADMArchiveHandler(mappingDefinitionId);
                 AtlasMapping map = handler.getMappingDefinition();
                 if (map == null) {
                     continue;
@@ -408,72 +413,6 @@ public class AtlasService extends BaseAtlasService {
     }
 
     /**
-     * Retrieve a gzipped ADM Digest file saved on the server.
-     * @param mappingDefinitionId mapping definition ID
-     * @return file
-     */
-    @GET
-    @Path("/project/{mappingDefinitionId}/digest")
-    @Produces({ MediaType.APPLICATION_OCTET_STREAM })
-    @Operation(summary = "Get ADM Digest file", description = "Retrieve a gzipped ADM Digest file saved on the server")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM), description = "Return a gzipped ADM Digest file content"),
-            @ApiResponse(responseCode = "204", description = "ADM Digest file was not found"),
-            @ApiResponse(responseCode = "500", description = "ADM Digest file access error") })
-    public Response getADMDigestRequest(
-            @Parameter(description = "Mapping definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
-        LOG.debug("getADMDigestRequest: {}", mappingDefinitionId);
-        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);
-
-        try {
-            if (admHandler.getGzippedADMDigestBytes() == null) {
-                LOG.debug("ADM Digest file not found for ID:{}", mappingDefinitionId);
-                return Response.noContent().build();
-            }
-            return Response.ok().entity(admHandler.getGzippedADMDigestBytes()).build();
-        } catch (Exception e) {
-            LOG.error("Error getting compressed ADM digest file.\n" + e.getMessage(), e);
-            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    /**
-     * Saves an ADM Digest file on the server.
-     * @param mapping request payload
-     * @param mappingDefinitionId mapping definition ID
-     * @param uriInfo URI info
-     * @return empty response
-     */
-    @PUT
-    @Path("/project/{mappingDefinitionId}/digest")
-    @Consumes({ MediaType.APPLICATION_OCTET_STREAM })
-    @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Set ADM Digest", description = "Save an ADM Digest file on the server")
-    @RequestBody(description = "ADM Digest file content", content = @Content(schema = @Schema(type = "binary"), mediaType = MediaType.APPLICATION_OCTET_STREAM))
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Succeeded"),
-            @ApiResponse(responseCode = "500", description = "Mapping file save error") })
-    public Response setADMDigestRequest(InputStream mapping,
-            @Parameter(description = "Mapping definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
-            @Context UriInfo uriInfo) {
-        LOG.debug("setADMDigestRequest with definition ID '{}'", mappingDefinitionId);
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);
-
-        LOG.debug("  setADMDigestRequest '{}' - ID: {}", admHandler.getGzippedADMDigestFileName(),
-                mappingDefinitionId);
-        try {
-            admHandler.setGzippedADMDigest(mapping);
-            admHandler.persist();
-        } catch (AtlasException e) {
-            LOG.error("Error saving gzipped ADM digest file.\n" + e.getMessage(), e);
-            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
-        }
-        builder.path(admHandler.getGzippedADMDigestFileName());
-        return Response.ok().location(builder.build()).build();
-    }
-
-    /**
     * Retrieve an ADM file saved on the server.
     * @param mappingDefinitionId mapping definition ID
     * @return file
@@ -489,7 +428,7 @@ public class AtlasService extends BaseAtlasService {
     public Response getADMRequest(
             @Parameter(description = "Mapping ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
         LOG.debug("getMappingRequest: {}", mappingDefinitionId);
-        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);
+        ADMArchiveHandler admHandler = getADMArchiveHandler(mappingDefinitionId);
 
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             admHandler.setIgnoreLibrary(false);
@@ -523,19 +462,22 @@ public class AtlasService extends BaseAtlasService {
             @Context UriInfo uriInfo) {
         LOG.debug("importADMArchiveRequest with definition ID '{}'", mappingDefinitionId);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-        ADMArchiveHandler admHandler = loadExplodedMappingDirectory(mappingDefinitionId);
+        ADMArchiveHandler admHandler = getADMArchiveHandler(mappingDefinitionId);
 
         LOG.debug("  importADMArchiveRequest - ID:'{}'", mappingDefinitionId);
         try {
             admHandler.setIgnoreLibrary(false);
             admHandler.setLibraryDirectory(Paths.get(libFolder));
             admHandler.load(mapping);
-            getLibraryLoader().reload();
             admHandler.persist();
             LOG.debug("  importADMArchiveRequest complete - ID:'{}'", mappingDefinitionId);
         } catch (Exception e) {
             LOG.error("Error importing ADM archive.\n" + e.getMessage(), e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        } finally {
+            try {
+                mapping.close();
+            } catch (IOException e) {}
         }
         builder.path("atlasmap-" + mappingDefinitionId + ".adm");
         return Response.ok().location(builder.build()).build();
@@ -545,7 +487,11 @@ public class AtlasService extends BaseAtlasService {
         return this.mappingFolder + File.separator + mappingDefinitionId;
     }
 
-    ADMArchiveHandler loadExplodedMappingDirectory(Integer mappingDefinitionId) {
+    public ADMArchiveHandler getADMArchiveHandler(Integer mappingDefinitionId) {
+        SoftReference<ADMArchiveHandler> handlerRef = this.admHandlerMap.get(mappingDefinitionId);
+        if (handlerRef != null && handlerRef.get() != null) {
+            return handlerRef.get();
+        }
         java.nio.file.Path mappingDirPath = Paths.get(getMappingSubDirectory(mappingDefinitionId));
         File mappingDirFile = mappingDirPath.toFile();
         if (!mappingDirFile.exists()) {
@@ -560,6 +506,7 @@ public class AtlasService extends BaseAtlasService {
             LOG.error("Unexpected error while loading mapping directory.\n" + e.getMessage(), e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
+        this.admHandlerMap.put(mappingDefinitionId, new SoftReference<>(admHandler));
         return admHandler;
     }
 

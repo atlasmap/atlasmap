@@ -15,10 +15,12 @@
  */
 package io.atlasmap.standalone;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import io.atlasmap.api.AtlasException;
@@ -39,84 +41,24 @@ import io.atlasmap.xml.service.XmlService;
 @ApplicationPath("/v2/atlas/")
 public class JaxrsApplication extends Application {
 
-    /**
-     * Core service.
-     * @return Core service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public AtlasService atlasService() throws AtlasException {
-        return new AtlasService();
+    @Override
+    public Set<Object> getSingletons() {
+        Set<Object> set = new HashSet<>();
+        try {
+            AtlasService atlasService = new AtlasService();
+            set.add(atlasService);
+            DocumentService documentService = new DocumentService(atlasService);
+            set.add(documentService);
+            set.add(new MappingService(atlasService));
+            set.add(new CsvService(atlasService, documentService));
+            set.add(new DfdlService(atlasService, documentService));
+            set.add(new JavaService(atlasService, documentService));
+            set.add(new JsonService(atlasService, documentService));
+            set.add(new KafkaConnectService(atlasService, documentService));
+            set.add(new XmlService(atlasService, documentService));
+        } catch (AtlasException e) {
+            throw new IllegalStateException(e);
+        }
+        return set;
     }
-
-    /**
-     * Mapping service.
-     * @return Mapping service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public MappingService mappingService() throws AtlasException {
-        return new MappingService(atlasService());
-    }
-
-    /**
-     * Document service.
-     * @return Document service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public DocumentService documentService() throws AtlasException {
-        return new DocumentService(atlasService());
-    }
-
-    /**
-     * Java service.
-     * @return Java service
-     */
-    @Bean
-    public JavaService javaService() {
-        return new JavaService();
-    }
-
-    /**
-     * JSON service.
-     * @return JSON service
-     */
-    @Bean
-    public JsonService jsonService() {
-        return new JsonService();
-    }
-
-    /**
-     * XML service.
-     * @return XML service
-     */
-    @Bean
-    public XmlService xmlService() {
-        return new XmlService();
-    }
-
-    /**
-     * DFDL service.
-     * @return DFDL service.
-     */
-    @Bean
-    public DfdlService dfdlService() {
-        return new DfdlService();
-    }
-
-    /**
-     * CSV service.
-     * @return CSV service.
-     */
-    @Bean
-    public CsvService csvService() { return new CsvService(); }
-
-    /**
-     * Kafka Connect service.
-     * @return Kafka Connect service.
-     */
-    @Bean
-    public KafkaConnectService kafkaConnectService() { return new KafkaConnectService(); }
-    
 }

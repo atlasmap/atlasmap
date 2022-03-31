@@ -45,9 +45,10 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
+import io.atlasmap.spi.CompoundClassLoader;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.SimpleField;
 
@@ -500,11 +501,11 @@ public class DefaultAtlasContextFactoryTest {
         }
 
         @Override
-        public void setDataSourceMetadata(DataSourceMetadata meta) {
+        public void setDocumentMetadata(DocumentMetadata meta) {
         }
 
         @Override
-        public DataSourceMetadata getDataSourceMetadata() {
+        public DocumentMetadata getDocumentMetadata() {
             return null;
         }
 
@@ -520,6 +521,15 @@ public class DefaultAtlasContextFactoryTest {
 
         @Override
         public void setDataSource(DataSource ds) {
+        }
+
+        @Override
+        public void setDocumentSpecificationFile(File specFile) {
+        }
+
+        @Override
+        public File getDocumentSpecificationFile() {
+            return null;
         }
     }
 }

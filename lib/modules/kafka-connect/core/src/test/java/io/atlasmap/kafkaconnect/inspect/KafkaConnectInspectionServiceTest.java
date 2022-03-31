@@ -52,7 +52,7 @@ public class KafkaConnectInspectionServiceTest {
     @Test
     public void testJsonPrimitive() throws Exception {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-primitive.json");
-        KafkaConnectDocument doc = service.inspectJson(new String(is.readAllBytes()), options);
+        KafkaConnectDocument doc = service.inspectJson(is, options);
         assertNotNull(doc);
         assertEquals("primitive", doc.getName());
         assertEquals("/", doc.getPath());
@@ -62,7 +62,7 @@ public class KafkaConnectInspectionServiceTest {
     @Test
     public void testJsonComplex() throws Exception {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-complex.json");
-        KafkaConnectDocument doc = service.inspectJson(new String(is.readAllBytes()), options);
+        KafkaConnectDocument doc = service.inspectJson(is, options);
         assertNotNull(doc);
         assertEquals("struct", doc.getName());
         assertEquals("/", doc.getPath());
@@ -83,7 +83,7 @@ public class KafkaConnectInspectionServiceTest {
     @Test
     public void testAvroPrimitive() throws Exception {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("avro-primitive.json");
-        KafkaConnectDocument doc = service.inspectAvro(new String(is.readAllBytes()), options);
+        KafkaConnectDocument doc = service.inspectAvro(is, options);
         assertNotNull(doc);
         assertNull(doc.getName());
         assertEquals("/", doc.getPath());
@@ -93,7 +93,7 @@ public class KafkaConnectInspectionServiceTest {
     @Test
     public void testAvroComplex() throws Exception {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("avro-complex.json");
-        KafkaConnectDocument doc = service.inspectAvro(new String(is.readAllBytes()), options);
+        KafkaConnectDocument doc = service.inspectAvro(is, options);
         assertNotNull(doc);
         assertEquals("root", doc.getName());
         assertEquals("/", doc.getPath());
@@ -185,7 +185,7 @@ public class KafkaConnectInspectionServiceTest {
     @Test
     public void testAvroTopmostArray() throws Exception {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("avro-topmost-array.json");
-        KafkaConnectDocument doc = service.inspectAvro(new String(is.readAllBytes()), options);
+        KafkaConnectDocument doc = service.inspectAvro(is, options);
         assertNotNull(doc);
         assertNull(doc.getName());
         assertEquals("/<>", doc.getPath());

@@ -20,7 +20,6 @@ import {
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
 import { EnumValue, Field } from '../field.model';
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import {
   IClassInspectionRequestContainer,
   IClassInspectionResponseContainer,
@@ -37,23 +36,9 @@ import { DocumentDefinition } from '../document-definition.model';
  * Encapsulates Java class inspection context.
  */
 export class JavaInspectionModel extends DocumentInspectionModel {
-  request = new JavaInspectionRequestModel(this.cfg, this.doc);
-
-  isOnlineInspectionCapable(): boolean {
-    if (this.cfg.initCfg.baseJavaInspectionServiceUrl == null) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: `Java inspection service is not configured. Document will not be loaded: ${this.doc.name}`,
-          level: ErrorLevel.WARN,
-          scope: ErrorScope.APPLICATION,
-          type: ErrorType.INTERNAL,
-          object: this.doc,
-        })
-      );
-      return false;
-    }
-    return true;
-  }
+  documentTypeName = 'Java';
+  baseUrl = this.cfg.initCfg.baseJavaInspectionServiceUrl;
+  request = new JavaInspectionRequestModel(this.cfg, this.doc, this.baseUrl);
 
   parseResponse(responseJson: any): void {
     let javaClass: IJavaClass;
@@ -143,7 +128,6 @@ export class JavaInspectionModel extends DocumentInspectionModel {
 }
 
 export class JavaInspectionRequestModel extends DocumentInspectionRequestModel {
-  url = this.cfg.initCfg.baseJavaInspectionServiceUrl + 'class';
   options = new JavaInspectionRequestOptions(this.cfg, this.doc);
 }
 

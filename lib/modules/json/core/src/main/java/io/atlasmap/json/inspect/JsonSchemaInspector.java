@@ -15,6 +15,7 @@
  */
 package io.atlasmap.json.inspect;
 
+import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,8 +67,8 @@ public class JsonSchemaInspector implements JsonInspector {
         return myself;
     }
 
-    public JsonDocument inspect(String schema) throws JsonInspectionException {
-        if (schema == null || schema.isEmpty()) {
+    public JsonDocument inspect(InputStream schema) throws JsonInspectionException {
+        if (schema == null) {
             throw new IllegalArgumentException("JSON schema cannot be null");
         }
 

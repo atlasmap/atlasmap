@@ -20,7 +20,6 @@ import {
 } from './document-inspection.model';
 import { DocumentType, FieldType } from '../../contracts/common';
 import { EnumValue, Field } from '../field.model';
-import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import {
   IKafkaConnectComplexType,
   IKafkaConnectDocument,
@@ -35,23 +34,13 @@ import {
  * Encapsulates Kafka Connect inspection context.
  */
 export class KafkaConnectInspectionModel extends DocumentInspectionModel {
-  request = new KafkaConnectInspectionRequestModel(this.cfg, this.doc);
-
-  isOnlineInspectionCapable(): boolean {
-    if (this.cfg.initCfg.baseKafkaConnectInspectionServiceUrl == null) {
-      this.cfg.errorService.addError(
-        new ErrorInfo({
-          message: `Kafka Connect inspection service is not configured. Document will not be loaded: ${this.doc.name}`,
-          level: ErrorLevel.WARN,
-          scope: ErrorScope.APPLICATION,
-          type: ErrorType.INTERNAL,
-          object: this.doc,
-        })
-      );
-      return false;
-    }
-    return true;
-  }
+  documentTypeName = 'Kafka Connect';
+  baseUrl = this.cfg.initCfg.baseKafkaConnectInspectionServiceUrl;
+  request = new KafkaConnectInspectionRequestModel(
+    this.cfg,
+    this.doc,
+    this.baseUrl
+  );
 
   parseResponse(responseKafkaConnect: any): void {
     if (
@@ -146,7 +135,6 @@ export class KafkaConnectInspectionModel extends DocumentInspectionModel {
 }
 
 export class KafkaConnectInspectionRequestModel extends DocumentInspectionRequestModel {
-  url = this.cfg.initCfg.baseKafkaConnectInspectionServiceUrl + 'inspect';
   options = new KafkaConnectInspectionRequestOptions(this.cfg, this.doc);
 }
 

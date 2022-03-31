@@ -30,7 +30,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -73,29 +72,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class MappingService extends BaseAtlasService {
     private static final Logger LOG = LoggerFactory.getLogger(MappingService.class);
 
-    @Context
-    private ResourceContext resourceContext;
     private AtlasService atlasService;
-    private final AtlasPreviewContext previewContext;
+    private AtlasPreviewContext previewContext;
 
     /**
      * A constructor.
+     * @param atlasService AtlasService
      */
-    public MappingService() {
-        if (resourceContext == null) {
-            throw new IllegalStateException("JAX-RS ResourceContext is not injected");
-        }
-        this.atlasService = resourceContext.getResource(AtlasService.class);
-        this.previewContext = this.atlasService.getContextFactory().createPreviewContext();
-    }
-
-    /**
-     * A constructor.
-     * @param parent parent {@link AtlasService}
-     */
-    public MappingService(AtlasService parent) {
-        this.atlasService = parent;
-        this.previewContext = this.atlasService.getContextFactory().createPreviewContext();
+    public MappingService(AtlasService atlasService) {
+        this.atlasService = atlasService;
+        this.previewContext = atlasService.getContextFactory().createPreviewContext();
     }
 
     /**
@@ -182,7 +168,7 @@ public class MappingService extends BaseAtlasService {
         LOG.debug("changeMappedFieldIndex: ID: {}, mappingId: {}, dataSourceType: {}, fieldIndex: {}, index: {}",
             mappingDefinitionId, mappingId,  dataSourceType, fieldIndex, index);
         try {
-            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
             AtlasMapping def = handler.getMappingDefinition();
             List<BaseMapping> mappings = def.getMappings().getMapping();
             Mapping objectMapping = this.getMappingByID(mappings, mappingId);
@@ -236,7 +222,7 @@ public class MappingService extends BaseAtlasService {
         @Parameter(description = "Mapping Index") @PathParam("mappingIndex") Integer mappingIndex) {
         LOG.debug("removeMappingRequest: ID: {}, mappingIndex: {}", mappingDefinitionId, mappingIndex);
         try {
-            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
             AtlasMapping def = handler.getMappingDefinition();
             def.getMappings().getMapping().remove(mappingIndex.intValue());
             handler.setMappingDefinition(def);
@@ -263,7 +249,7 @@ public class MappingService extends BaseAtlasService {
     public Response removeAllMappingsRequest(@Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
         LOG.debug("removeAllMappingsRequest: {}", mappingDefinitionId);
         try {
-            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
             AtlasMapping def = handler.getMappingDefinition();
             def.getMappings().getMapping().clear();
             handler.setMappingDefinition(def);
@@ -291,11 +277,11 @@ public class MappingService extends BaseAtlasService {
     public Response getMappingRequest(
       @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
         LOG.debug("getMappingRequest: {}", mappingDefinitionId);
-        ADMArchiveHandler admHandler = this.atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+        ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);
 
         byte[] serialized = null;
         try {
-            serialized = admHandler.getMappingDefinitionBytes();
+            serialized = admHandler.getSerializedMappingDefinition();
         } catch (Exception e) {
             LOG.error("Error retrieving mapping definition file for ID:" + mappingDefinitionId, e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
@@ -327,10 +313,10 @@ public class MappingService extends BaseAtlasService {
             InputStream mapping,
             @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
             @Context UriInfo uriInfo) {
-        ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+        ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
         UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         try {
-            handler.setMappingDefinitionBytes(mapping);
+            handler.setMappingDefinitionFromStream(mapping);
             handler.persist();
             builder.path(handler.getMappingDefinition().getName());
         } catch (AtlasException e) {

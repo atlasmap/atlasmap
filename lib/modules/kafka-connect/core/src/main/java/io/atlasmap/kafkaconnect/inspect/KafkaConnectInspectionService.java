@@ -15,8 +15,10 @@
  */
 package io.atlasmap.kafkaconnect.inspect;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
 
 /**
@@ -38,9 +40,9 @@ public class KafkaConnectInspectionService {
      * @param jsonSchema Kafka Connect JSON schema
      * @param options inspection options
      * @return inspected
-     * @throws Exception unexpected error
+     * @throws AtlasException unexpected error
      */
-    public KafkaConnectDocument inspectJson(String jsonSchema, HashMap<String, ?> options) throws Exception {
+    public KafkaConnectDocument inspectJson(InputStream jsonSchema, HashMap<String, ?> options) throws AtlasException {
         inspector.inspectJson(jsonSchema, options);
         return inspector.getKafkaConnectDocument();
     }
@@ -50,9 +52,9 @@ public class KafkaConnectInspectionService {
      * @param avroSchema Kafka Connect AVRO schema
      * @param options inspection options
      * @return inspected
-     * @throws Exception unexpected error
+     * @throws AtlasException unexpected error
      */
-    public KafkaConnectDocument inspectAvro(String avroSchema, HashMap<String, ?> options) throws Exception {
+    public KafkaConnectDocument inspectAvro(InputStream avroSchema, HashMap<String, ?> options) throws AtlasException {
         inspector.inspectAvro(avroSchema, options);
         return inspector.getKafkaConnectDocument();
     }

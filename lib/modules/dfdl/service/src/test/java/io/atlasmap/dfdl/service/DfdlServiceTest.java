@@ -18,15 +18,22 @@ package io.atlasmap.dfdl.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+
 import javax.ws.rs.core.Response;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.dfdl.core.schema.CsvDfdlSchemaGenerator;
 import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.InspectionType;
@@ -37,10 +44,13 @@ import io.atlasmap.xml.v2.XmlField;
 public class DfdlServiceTest {
 
     private DfdlService dfdlService = null;
+    private DocumentService documentService;
 
     @BeforeEach
-    public void setUp() {
-        dfdlService = new DfdlService();
+    public void setUp() throws AtlasException {
+        AtlasService atlas = new AtlasService();
+        documentService = new DocumentService(atlas);
+        dfdlService = new DfdlService(atlas, documentService);
     }
 
     @AfterEach
@@ -61,7 +71,8 @@ public class DfdlServiceTest {
         request.setDfdlSchemaName("csv");
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.HEADER.value(), source);
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.DELIMITER.value(), ",");
-        Response res = dfdlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = dfdlService.importDfdlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         DfdlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[])entity, DfdlInspectionResponse.class);
@@ -82,6 +93,11 @@ public class DfdlServiceTest {
         XmlField header3 = (XmlField) record.getXmlFields().getXmlField().get(2);
         assertEquals("header3", header3.getName());
         assertEquals(FieldType.STRING, header3.getFieldType());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        XmlDocument inspected = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        file = (XmlComplexType) inspected.getFields().getField().get(0);
+        assertEquals(2, file.getXmlFields().getXmlField().size());
     }
 
     @Test
@@ -97,7 +113,8 @@ public class DfdlServiceTest {
         request.setDfdlSchemaName("csv");
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.EXAMPLE.value(), source);
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.DELIMITER.value(), ",");
-        Response res = dfdlService.inspect(request);
+        byte[] bytes = Json.mapper().writeValueAsBytes(request);
+        Response res = dfdlService.importDfdlDocument(new ByteArrayInputStream(bytes), 0, DataSourceType.SOURCE, "test", null);
         Object entity = res.getEntity();
         assertEquals(byte[].class, entity.getClass());
         DfdlInspectionResponse inspectionResponse = Json.mapper().readValue((byte[])entity, DfdlInspectionResponse.class);
@@ -121,6 +138,11 @@ public class DfdlServiceTest {
         XmlField header3 = (XmlField) record.getXmlFields().getXmlField().get(2);
         assertEquals("header3", header3.getName());
         assertEquals(FieldType.STRING, header3.getFieldType());
+        res = documentService.getDocumentInspectionResultRequest(0, DataSourceType.SOURCE, "test");
+        assertEquals(200, res.getStatus());
+        XmlDocument inspected = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
+        file = (XmlComplexType) inspected.getFields().getField().get(0);
+        assertEquals(2, file.getXmlFields().getXmlField().size());
     }
 
 }

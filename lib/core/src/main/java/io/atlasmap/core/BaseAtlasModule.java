@@ -15,6 +15,7 @@
  */
 package io.atlasmap.core;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +38,8 @@ import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -58,7 +59,8 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     private AtlasCollectionHelper collectionHelper = null;
     private ClassLoader classLoader;
     private DataSource dataSource;
-    private DataSourceMetadata dataSourceMetadata;
+    private DocumentMetadata documentMetadata;
+    private File specFile;
 
     @Override
     public void init() throws AtlasException {
@@ -308,13 +310,23 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
     }
 
     @Override
-    public void setDataSourceMetadata(DataSourceMetadata meta) {
-        this.dataSourceMetadata = meta;
+    public void setDocumentMetadata(DocumentMetadata meta) {
+        this.documentMetadata = meta;
     }
 
     @Override
-    public DataSourceMetadata getDataSourceMetadata() {
-        return this.dataSourceMetadata;
+    public DocumentMetadata getDocumentMetadata() {
+        return this.documentMetadata;
+    }
+
+    @Override
+    public void setDocumentSpecificationFile(File specFile) {
+        this.specFile = specFile;
+    }
+
+    @Override
+    public File getDocumentSpecificationFile() {
+        return this.specFile;
     }
 
     @Override

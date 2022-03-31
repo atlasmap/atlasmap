@@ -19,7 +19,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The ADM digest model class.
+ * @deprecated Document metadata, specification and mapping definition are stored separately.
+ * This is kept only for backward compatibility.
  */
+@Deprecated
 public class ADMDigest {
 
     @JsonProperty("exportMappings")

@@ -1220,6 +1220,13 @@ describe('MappingSerializer', () => {
 
   tName = 'process a CSV mapping';
   test(tName, (done) => {
+    spyOn(ky, 'get').and.callFake((_url: Input, _options: Options) => {
+      return new (class {
+        text(): Promise<string> {
+          return Promise.resolve('pong');
+        }
+      })();
+    });
     cfg.preloadedFieldActionMetadata = atlasmapFieldActionJson;
     return cfg.fieldActionService
       .fetchFieldActions()
@@ -1288,7 +1295,7 @@ describe('MappingSerializer', () => {
         expect(docInspModel).toBeDefined();
 
         const csvInspModel = new CsvInspectionModel(cfg, docModelTarget.doc);
-        expect(csvInspModel.isOnlineInspectionCapable()).toBe(true);
+        expect(await csvInspModel.isOnlineInspectionCapable()).toBe(true);
 
         // Find a CSV field mapping.
         for (fieldMapping of mappingJson?.AtlasMapping?.mappings

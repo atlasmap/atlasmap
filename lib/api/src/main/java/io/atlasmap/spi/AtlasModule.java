@@ -15,12 +15,13 @@
  */
 package io.atlasmap.spi;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 
 /**
@@ -266,16 +267,16 @@ public interface AtlasModule {
     Field cloneField(Field field) throws AtlasException;
 
     /**
-     * Sets the data source metadata.
-     * @param meta data source metadata.
+     * Sets the Document metadata.
+     * @param meta Document metadata.
      */
-    void setDataSourceMetadata(DataSourceMetadata meta);
+    void setDocumentMetadata(DocumentMetadata meta);
 
     /**
-     * Gets the data source metadata.
-     * @return data sourec metadata
+     * Gets the Document metadata.
+     * @return Document metadata
      */
-    DataSourceMetadata getDataSourceMetadata();
+    DocumentMetadata getDocumentMetadata();
 
     /**
      * Creates a field.
@@ -283,4 +284,15 @@ public interface AtlasModule {
      */
     Field createField();
 
+    /**
+     * Sets the Document specification file handler.
+     * @param specFile spec file handler
+     */
+    void setDocumentSpecificationFile(File specFile);
+
+    /**
+     * Gets the Document specification file handler.
+     * @return Document specification file handler
+     */
+    File getDocumentSpecificationFile();
 }
