@@ -15,10 +15,6 @@
  */
 package io.atlasmap.dfdl.v2;
 
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -30,38 +26,11 @@ import io.atlasmap.xml.v2.XmlInspectionRequest;
  */
 @JsonRootName("DfdlInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class DfdlInspectionRequest extends XmlInspectionRequest implements Serializable {
+public class DfdlInspectionRequest extends XmlInspectionRequest {
 
     private static final long serialVersionUID = 1L;
-
     /** DFDL schema name. */
-    protected String dfdlSchemaName;
-    /** Inspection options. */
-    protected Map<String, String> options = new HashMap<>();
-
-    /**
-     * Gets the value of the options property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Map }
-     *     
-     */
-    public Map<String, String> getOptions() {
-        return this.options;
-    }
-
-    /**
-     * Sets the value of the options property.
-     * 
-     * @param options
-     *     allowed object is
-     *     {@link Map }
-     *     
-     */
-    public void setOptions(Map<String, String> options) {
-        this.options = options;
-    }
+    private String dfdlSchemaName;
 
     /**
      * Gets the value of the dfdlSchemaName property.
@@ -93,23 +62,6 @@ public class DfdlInspectionRequest extends XmlInspectionRequest implements Seria
             return false;
         }
         final DfdlInspectionRequest that = ((DfdlInspectionRequest) object);
-        Map<String, String> leftOptions;
-        leftOptions = this.getOptions();
-        Map<String, String> rightOptions;
-        rightOptions = that.getOptions();
-        if (leftOptions !=  null) {
-            if (rightOptions != null) {
-                if (!leftOptions.equals(rightOptions)) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            if (rightOptions != null) {
-                return false;
-            }
-        }
         String leftDfdl;
         leftDfdl = this.getDfdlSchemaName();
         String rightDfdl;
@@ -133,11 +85,6 @@ public class DfdlInspectionRequest extends XmlInspectionRequest implements Seria
     @Override
     public int hashCode() {
         int currentHashCode = super.hashCode();
-        currentHashCode = (currentHashCode* 31);
-        Map<String, String> theOptions = this.getOptions();
-        if (this.options != null) {
-            currentHashCode += theOptions.hashCode();
-        }
         currentHashCode = (currentHashCode* 31);
         String theDfdl = this.getDfdlSchemaName();
         if (theDfdl != null) {

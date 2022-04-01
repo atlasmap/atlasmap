@@ -53,8 +53,8 @@ Inspect a CSV instance and return a Document object
 |===
 |Name| Description| Required| Default| Pattern
 
-| body
-| Csv <<string>>
+| CsvInspectionRequest
+| JsonInspectionRequest object <<CsvInspectionRequest>>
 | -
 | 
 | 
@@ -63,97 +63,6 @@ Inspect a CSV instance and return a Document object
 
 
 
-====== Query Parameters
-
-[cols="2,3,1,1,1"]
-|===
-|Name| Description| Required| Default| Pattern
-
-| format
-|  
-| -
-| null
-| 
-
-| delimiter
-|  
-| -
-| null
-| 
-
-| firstRecordAsHeader
-|  
-| -
-| null
-| 
-
-| skipRecordHeader
-|  
-| -
-| null
-| 
-
-| headers
-|  
-| -
-| null
-| 
-
-| commentMarker
-|  
-| -
-| null
-| 
-
-| escape
-|  
-| -
-| null
-| 
-
-| ignoreEmptyLines
-|  
-| -
-| null
-| 
-
-| ignoreHeaderCase
-|  
-| -
-| null
-| 
-
-| ignoreSurroundingSpaces
-|  
-| -
-| null
-| 
-
-| nullString
-|  
-| -
-| null
-| 
-
-| quote
-|  
-| -
-| null
-| 
-
-| allowDuplicateHeaderNames
-|  
-| -
-| null
-| 
-
-| allowMissingColumnNames
-|  
-| -
-| null
-| 
-
-|===
 
 
 ===== Return Type
@@ -217,6 +126,79 @@ endif::internal-generation[]
 
 | @type
 | 
+| String 
+| 
+|  
+
+|===
+
+
+[#CsvInspectionRequest]
+=== _CsvInspectionRequest_ 
+
+
+
+[.fields-CsvInspectionRequest]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| uri
+| 
+| String 
+| 
+|  
+
+| inspectionType
+| 
+| String 
+| 
+|  _Enum:_ SCHEMA, INSTANCE, JAVA_CLASS, 
+
+| options
+| 
+| Map  of <<string>>
+| 
+|  
+
+| fieldNameExclusions
+| 
+| StringList 
+| 
+|  
+
+| typeNameExclusions
+| 
+| StringList 
+| 
+|  
+
+| namespaceExclusions
+| 
+| StringList 
+| 
+|  
+
+| inspectPaths
+| 
+| List  of <<string>>
+| 
+|  
+
+| searchPhrase
+| 
+| String 
+| 
+|  
+
+| csvData
+| 
+| String 
+| 
+|  
+
+| jsonType
+| X
 | String 
 | 
 |  
@@ -474,6 +456,25 @@ endif::internal-generation[]
 | field
 | 
 | List  of <<Field>>
+| 
+|  
+
+|===
+
+
+[#StringList]
+=== _StringList_ 
+
+
+
+[.fields-StringList]
+[cols="2,1,2,4,1"]
+|===
+| Field Name| Required| Type| Description| Format
+
+| string
+| 
+| List  of <<string>>
 | 
 |  
 

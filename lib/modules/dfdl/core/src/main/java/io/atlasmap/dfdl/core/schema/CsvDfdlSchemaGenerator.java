@@ -37,8 +37,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.dfdl.core.DfdlConstants;
 import io.atlasmap.dfdl.core.DfdlSchemaGenerator;
+import io.atlasmap.dfdl.v2.DfdlConstants;
 import io.atlasmap.xml.core.XmlIOHelper;
 
 /**

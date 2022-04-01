@@ -514,6 +514,24 @@ endif::internal-generation[]
 |===
 | Field Name| Required| Type| Description| Format
 
+| uri
+| 
+| String 
+| 
+|  
+
+| inspectionType
+| 
+| String 
+| 
+|  _Enum:_ SCHEMA, INSTANCE, JAVA_CLASS, 
+
+| options
+| 
+| Map  of <<string>>
+| 
+|  
+
 | fieldNameExclusions
 | 
 | StringList 
@@ -532,7 +550,13 @@ endif::internal-generation[]
 | 
 |  
 
-| uri
+| inspectPaths
+| 
+| List  of <<string>>
+| 
+|  
+
+| searchPhrase
 | 
 | String 
 | 
@@ -541,12 +565,6 @@ endif::internal-generation[]
 | schemaData
 | 
 | String 
-| 
-|  
-
-| options
-| 
-| Map  of <<string>>
 | 
 |  
 

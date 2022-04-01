@@ -154,6 +154,7 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
       ClassInspectionRequest: {
         jsonType: JAVA_INSPECTION_REQUEST_JSON_TYPE,
         className: this.doc.inspectionSource,
+        inspectionType: this.doc.inspectionType,
         disablePrivateOnlyFields: this.cfg.initCfg.disablePrivateOnlyFields,
         disableProtectedOnlyFields: this.cfg.initCfg.disableProtectedOnlyFields,
         disablePublicOnlyFields: this.cfg.initCfg.disablePublicOnlyFields,
@@ -183,11 +184,11 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
       };
     }
     if (
-      this.cfg.initCfg.classNameExclusions &&
-      this.cfg.initCfg.classNameExclusions.length
+      this.cfg.initCfg.typeNameExclusions &&
+      this.cfg.initCfg.typeNameExclusions.length
     ) {
-      request.ClassInspectionRequest.classNameExclusions = {
-        string: this.cfg.initCfg.classNameExclusions,
+      request.ClassInspectionRequest.typeNameExclusions = {
+        string: this.cfg.initCfg.typeNameExclusions,
       };
     }
   }

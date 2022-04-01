@@ -15,6 +15,21 @@
  */
 package io.atlasmap.csv.core;
 
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_ALLOW_DUPLICATE_HEADER_NAMES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_ALLOW_MISSING_COLUMN_NAMES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_COMMENT_MARKER;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_DELIMITER;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_ESCAPE;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_FIRST_RECORD_AS_HEADER;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_FORMAT;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_HEADERS;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_IGNORE_EMPTY_LINES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_IGNORE_HEADER_CASE;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_IGNORE_SURROUNDING_SPACES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_NULL_STRING;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_QUOTE;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_SKIP_HEADER_RECORD;
+
 import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
@@ -68,48 +83,48 @@ public class CsvConfig {
      * @return config
      */
     public static CsvConfig newConfig(Map<String, String> config) {
-        CsvConfig csvConfig = new CsvConfig(config.get("format"));
-        String delimiter = config.get("delimiter");
+        CsvConfig csvConfig = new CsvConfig(config.get(OPTION_FORMAT));
+        String delimiter = config.get(OPTION_DELIMITER);
 
         for (Map.Entry<String, String> entry: config.entrySet()) {
             switch (entry.getKey()) {
-                case "delimiter":
+                case OPTION_DELIMITER:
                     csvConfig.delimiter = delimiter.charAt(0);
                     break;
-                case "firstRecordAsHeader":
+                case OPTION_FIRST_RECORD_AS_HEADER:
                     csvConfig.firstRecordAsHeader = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
-                case "skipHeaderRecord":
+                case OPTION_SKIP_HEADER_RECORD:
                     csvConfig.skipHeaderRecord = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
-                case "commentMarker":
+                case OPTION_COMMENT_MARKER:
                     csvConfig.commentMarker = entry.getValue().charAt(0);
                     break;
-                case "headers":
+                case OPTION_HEADERS:
                     csvConfig.headers = entry.getValue();
                     break;
-                case "escape":
+                case OPTION_ESCAPE:
                     csvConfig.escape = entry.getValue().charAt(0);
                     break;
-                case "ignoreEmptyLines":
+                case OPTION_IGNORE_EMPTY_LINES:
                     csvConfig.ignoreEmptyLines = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
-                case "ignoreHeaderCase":
+                case OPTION_IGNORE_HEADER_CASE:
                     csvConfig.ignoreHeaderCase = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
-                case "ignoreSurroundingSpaces":
+                case OPTION_IGNORE_SURROUNDING_SPACES:
                     csvConfig.ignoreSurroundingSpaces = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
-                case "nullString":
+                case OPTION_NULL_STRING:
                     csvConfig.nullString = entry.getValue();
                     break;
-                case "quote":
+                case OPTION_QUOTE:
                     csvConfig.quote = entry.getValue().charAt(0);
                     break;
-                case "allowDuplicateHeaderNames":
+                case OPTION_ALLOW_DUPLICATE_HEADER_NAMES:
                     csvConfig.allowDuplicateHeaderNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
-                case "allowMissingColumnNames":
+                case OPTION_ALLOW_MISSING_COLUMN_NAMES:
                     csvConfig.allowMissingColumnNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());
                     break;
             }

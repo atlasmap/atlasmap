@@ -15,15 +15,11 @@
  */
 package io.atlasmap.java.v2;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.BaseInspectionRequest;
 import io.atlasmap.v2.CollectionType;
-import io.atlasmap.v2.StringList;
 
 /**
  * The top container object of Java Document inspection request that AtlasMap UI sends
@@ -31,80 +27,26 @@ import io.atlasmap.v2.StringList;
  */
 @JsonRootName("ClassInspectionRequest")
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = "jsonType")
-public class ClassInspectionRequest extends BaseInspectionRequest implements Serializable {
+public class ClassInspectionRequest extends BaseInspectionRequest {
 
     private static final long serialVersionUID = 1L;
 
-    /** field name exclusions. */
-    protected StringList fieldNameExclusions;
-    /** class name exclusions. */
-    protected StringList classNameExclusions;
     /** classpath string. */
-    protected String classpath;
+    private String classpath;
     /** class name. */
-    protected String className;
+    private String className;
     /** collection type of the Document root. */
-    protected CollectionType collectionType;
+    private CollectionType collectionType;
     /** collection class name of the Document root. */
-    protected String collectionClassName;
+    private String collectionClassName;
     /** if private fields are disabled or not. */
-    protected Boolean disablePrivateOnlyFields;
+    private Boolean disablePrivateOnlyFields;
     /** if proteceted fields are disabled or not. */
-    protected Boolean disableProtectedOnlyFields;
+    private Boolean disableProtectedOnlyFields;
     /** if public fields are disabled or not. */
-    protected Boolean disablePublicOnlyFields;
+    private Boolean disablePublicOnlyFields;
     /** if the fields that have public getter/setter are disabled or not. */
-    protected Boolean disablePublicGetterSetterFields;
-    /** Paths to inspect. */
-    protected List<String> inspectPaths;
-
-    /**
-     * Gets the value of the fieldNameExclusions property.
-     *
-     * @return
-     *     possible object is
-     *     {@link StringList }
-     *
-     */
-    public StringList getFieldNameExclusions() {
-        return fieldNameExclusions;
-    }
-
-    /**
-     * Sets the value of the fieldNameExclusions property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link StringList }
-     *
-     */
-    public void setFieldNameExclusions(StringList value) {
-        this.fieldNameExclusions = value;
-    }
-
-    /**
-     * Gets the value of the classNameExclusions property.
-     *
-     * @return
-     *     possible object is
-     *     {@link StringList }
-     *
-     */
-    public StringList getClassNameExclusions() {
-        return classNameExclusions;
-    }
-
-    /**
-     * Sets the value of the classNameExclusions property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link StringList }
-     *
-     */
-    public void setClassNameExclusions(StringList value) {
-        this.classNameExclusions = value;
-    }
+    private Boolean disablePublicGetterSetterFields;
 
     /**
      * Gets the value of the classpath property.
@@ -298,52 +240,12 @@ public class ClassInspectionRequest extends BaseInspectionRequest implements Ser
         this.disablePublicGetterSetterFields = value;
     }
 
+    @Override
     public boolean equals(Object object) {
-        if ((object == null)||(this.getClass()!= object.getClass())) {
+        if (!super.equals(object)) {
             return false;
         }
-        if (this == object) {
-            return true;
-        }
         final ClassInspectionRequest that = ((ClassInspectionRequest) object);
-        {
-            StringList leftFieldNameExclusions;
-            leftFieldNameExclusions = this.getFieldNameExclusions();
-            StringList rightFieldNameExclusions;
-            rightFieldNameExclusions = that.getFieldNameExclusions();
-            if (this.fieldNameExclusions!= null) {
-                if (that.fieldNameExclusions!= null) {
-                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else {
-                if (that.fieldNameExclusions!= null) {
-                    return false;
-                }
-            }
-        }
-        {
-            StringList leftClassNameExclusions;
-            leftClassNameExclusions = this.getClassNameExclusions();
-            StringList rightClassNameExclusions;
-            rightClassNameExclusions = that.getClassNameExclusions();
-            if (this.classNameExclusions!= null) {
-                if (that.classNameExclusions!= null) {
-                    if (!leftClassNameExclusions.equals(rightClassNameExclusions)) {
-                        return false;
-                    }
-                } else {
-                    return false;
-                }
-            } else {
-                if (that.classNameExclusions!= null) {
-                    return false;
-                }
-            }
-        }
         {
             String leftClasspath;
             leftClasspath = this.getClasspath();
@@ -499,24 +401,9 @@ public class ClassInspectionRequest extends BaseInspectionRequest implements Ser
         return true;
     }
 
+    @Override
     public int hashCode() {
-        int currentHashCode = 1;
-        {
-            currentHashCode = (currentHashCode* 31);
-            StringList theFieldNameExclusions;
-            theFieldNameExclusions = this.getFieldNameExclusions();
-            if (this.fieldNameExclusions!= null) {
-                currentHashCode += theFieldNameExclusions.hashCode();
-            }
-        }
-        {
-            currentHashCode = (currentHashCode* 31);
-            StringList theClassNameExclusions;
-            theClassNameExclusions = this.getClassNameExclusions();
-            if (this.classNameExclusions!= null) {
-                currentHashCode += theClassNameExclusions.hashCode();
-            }
-        }
+        int currentHashCode = (super.hashCode() * 31);
         {
             currentHashCode = (currentHashCode* 31);
             String theClasspath;

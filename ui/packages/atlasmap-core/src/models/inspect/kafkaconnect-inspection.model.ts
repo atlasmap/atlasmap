@@ -26,6 +26,7 @@ import {
   IKafkaConnectDocument,
   IKafkaConnectDocumentContainer,
   IKafkaConnectField,
+  IKafkaConnectInspectionRequestContainer,
   IKafkaConnectInspectionResponse,
   IKafkaConnectInspectionResponseContainer,
   KAFKACONNECT_INSPECTION_REQUEST_JSON_TYPE,
@@ -151,9 +152,10 @@ export class KafkaConnectInspectionRequestModel extends DocumentInspectionReques
 
 export class KafkaConnectInspectionRequestOptions extends DocumentInspectionRequestOptions {
   documentType = this?.doc.type === DocumentType.KAFKA_AVRO ? 'AVRO' : 'JSON';
-  json = {
+  json: IKafkaConnectInspectionRequestContainer = {
     KafkaConnectInspectionRequest: {
       jsonType: KAFKACONNECT_INSPECTION_REQUEST_JSON_TYPE,
+      inspectionType: this.doc.inspectionType,
       schemaData: this.doc.inspectionSource,
       options: { schemaType: this.documentType },
     },

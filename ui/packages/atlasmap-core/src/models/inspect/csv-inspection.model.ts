@@ -14,19 +14,21 @@
     limitations under the License.
 */
 import {
+  CSV_INSPECTION_REQUEST_JSON_TYPE,
+  ICsvComplexType,
+  ICsvDocumentContainer,
+  ICsvField,
+  ICsvInspectionRequestContainer,
+  ICsvInspectionResponse,
+  ICsvInspectionResponseContainer,
+} from '../../contracts/documents/csv';
+import {
   DocumentInspectionModel,
   DocumentInspectionRequestModel,
   DocumentInspectionRequestOptions,
 } from './document-inspection.model';
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
 import { FieldType, IDocument } from '../../contracts/common';
-import {
-  ICsvComplexType,
-  ICsvDocumentContainer,
-  ICsvField,
-  ICsvInspectionResponse,
-  ICsvInspectionResponseContainer,
-} from '../../contracts/documents/csv';
 
 import { CommonUtil } from '../../utils/common-util';
 import { Field } from '../field.model';
@@ -123,6 +125,13 @@ export class CsvInspectionRequestModel extends DocumentInspectionRequestModel {
 }
 
 export class CsvInspectionRequestOptions extends DocumentInspectionRequestOptions {
-  body = this.doc.inspectionSource;
-  searchParams: { [key: string]: string } = this.doc.inspectionParameters;
+  json: ICsvInspectionRequestContainer = {
+    CsvInspectionRequest: {
+      jsonType: CSV_INSPECTION_REQUEST_JSON_TYPE,
+      inspectionType: this.doc.inspectionType,
+      csvData: this.doc.inspectionSource,
+      options: this.doc.inspectionParameters,
+      inspectPaths: this.doc.inspectionPaths,
+    },
+  };
 }

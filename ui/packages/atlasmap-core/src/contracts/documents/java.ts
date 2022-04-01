@@ -13,7 +13,12 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { CollectionType, IField, IStringList } from '../common';
+import {
+  CollectionType,
+  IField,
+  IInspectionRequest,
+  IStringList,
+} from '../common';
 
 /**
  * The Java class inspection data model contracts between frontend and backend.
@@ -36,10 +41,7 @@ export interface IClassInspectionRequestContainer {
 /**
  * The serialized Java class inspection request.
  */
-export interface IClassInspectionRequest {
-  jsonType: string;
-  fieldNameExclusions?: IStringList;
-  classNameExclusions?: IStringList;
+export interface IClassInspectionRequest extends IInspectionRequest {
   classpath?: string;
   className: string;
   collectionType?: CollectionType;

@@ -63,7 +63,7 @@ export function useImportDocumentDialog(): [
               configModel,
               isSource,
               DocumentType.CSV,
-              InspectionType.UNKNOWN,
+              InspectionType.INSTANCE,
               inspectionParameters,
             );
           }, getCsvParameterOptions());

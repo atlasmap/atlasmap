@@ -71,7 +71,7 @@ public class JsonService extends ModuleService {
 
         try {
 
-            if (request.getType() == null || request.getJsonData() == null) {
+            if (request.getInspectionType() == null || request.getJsonData() == null) {
                 response.setErrorMessage(
                         "Json data and Instance or Schema inspection type must be specified in request");
             } else {
@@ -81,7 +81,7 @@ public class JsonService extends ModuleService {
                 if (!validJsonData(jsonData)) {
                     response.setErrorMessage("Invalid json payload specified");
                 } else {
-                    switch (request.getType()) {
+                    switch (request.getInspectionType()) {
                     case INSTANCE:
                         d = s.inspectJsonDocument(jsonData);
                         break;
@@ -89,7 +89,7 @@ public class JsonService extends ModuleService {
                         d = s.inspectJsonSchema(jsonData);
                         break;
                     default:
-                        response.setErrorMessage("Unsupported inspection type: " + request.getType());
+                        response.setErrorMessage("Unsupported inspection type: " + request.getInspectionType());
                         break;
                     }
                 }

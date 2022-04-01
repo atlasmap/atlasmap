@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.atlasmap.dfdl.core;
+package io.atlasmap.dfdl.v2;
 
 /**
  * The collection of constants for DFDL module.
