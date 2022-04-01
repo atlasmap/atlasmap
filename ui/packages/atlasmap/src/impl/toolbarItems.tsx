@@ -113,7 +113,7 @@ export const AtlasmapToolbarItem: FunctionComponent<
     showExportAtlasFileToolbarItem && (
       <DropdownSeparator key="export-separator" />
     ),
-    showDeleteResetToolbarItem && (
+    false /* showDeleteResetToolbarItem #3866 */ && (
       <DeleteDocsAndMappingsToolbarItem
         docsExist={docsExist!}
         onClick={runAndClose(onDeleteDocsAndMappings)}

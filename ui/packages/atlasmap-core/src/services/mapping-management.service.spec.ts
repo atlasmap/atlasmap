@@ -27,11 +27,14 @@ import { TestUtils } from '../../test/test-util';
 import { TransitionMode } from '../models/transition.model';
 import ky from 'ky';
 import mockMappingJson from '../../../../test-resources/mapping/atlasmapping-mock.json';
+import { mocked } from 'ts-jest/utils';
 
 describe('MappingManagementService', () => {
   let cfg: ConfigModel;
   let service: MappingManagementService;
   let fileService: FileManagementService;
+  jest.mock('ky');
+  const mockedKy = mocked(ky, true);
 
   beforeEach(() => {
     const initService = new InitializationService(ky);
@@ -122,6 +125,9 @@ describe('MappingManagementService', () => {
 
   test('removeAllMappings()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
     TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings[0]);
     service

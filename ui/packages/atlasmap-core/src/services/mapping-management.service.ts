@@ -156,17 +156,33 @@ export class MappingManagementService {
   }
 
   /**
-   * Remove all mappings from the current session.
+   * Remove all mappings from the current session (UI and backend service).
    */
-  async removeAllMappings(): Promise<boolean> {
-    return new Promise<boolean>(async (resolve) => {
-      // TODO: check these non null operator on the mappings
-      for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-        this.cfg.mappings!.removeMapping(mapping);
-        this.deselectMapping();
-      }
-      await this.notifyMappingUpdated();
-      resolve(true);
+  removeAllMappings(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      const url: string =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping';
+      this.api
+        .delete(url)
+        .then(async (res: Response) => {
+          this.cfg.logger!.debug(`Delete Mappings Response: ${res.ok}`);
+          for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
+            this.cfg.mappings!.removeMapping(mapping);
+          }
+          this.deselectMapping();
+          await this.notifyMappingUpdated();
+          resolve(true);
+        })
+        .catch((error: any) => {
+          this.cfg.errorService.addBackendError(
+            'Error occurred while deleting mappings.',
+            error
+          );
+          resolve(false);
+        });
     });
   }
 
@@ -548,8 +564,9 @@ export class MappingManagementService {
 
   deselectMapping(): void {
     this.cfg.showMappingDetailTray = false;
-    this.cfg.mappings!.activeMapping = null; // TODO: check this non null operator
-    this.notifyMappingUpdated();
+    if (this.cfg.mappings) {
+      this.cfg.mappings!.activeMapping = null;
+    }
   }
 
   /**
