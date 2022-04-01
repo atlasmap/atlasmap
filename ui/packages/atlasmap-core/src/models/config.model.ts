@@ -60,7 +60,7 @@ export class DataMapperInitializationModel {
 
   /* inspection service filtering flags */
   fieldNameExclusions: string[] = [];
-  classNameExclusions: string[] = [];
+  typeNameExclusions: string[] = [];
   disablePrivateOnlyFields = false;
   disableProtectedOnlyFields = false;
   disablePublicOnlyFields = false;

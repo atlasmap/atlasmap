@@ -44,6 +44,7 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
+import io.atlasmap.v2.InspectionType;
 import io.atlasmap.v2.Length;
 import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
@@ -502,7 +503,7 @@ public abstract class BaseMarshallerTest {
 
     public XmlInspectionRequest generateInspectionRequest() {
         XmlInspectionRequest xmlInspectionRequest = new XmlInspectionRequest();
-        xmlInspectionRequest.setType(InspectionType.INSTANCE);
+        xmlInspectionRequest.setInspectionType(InspectionType.INSTANCE);
 
         final String xmlData = "<data>\n" + "     <intField a='1'>32000</intField>\n"
                 + "     <longField>12421</longField>\n" + "     <stringField>abc</stringField>\n"

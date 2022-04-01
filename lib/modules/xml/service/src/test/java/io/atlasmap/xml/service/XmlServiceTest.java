@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.v2.Json;
-import io.atlasmap.xml.v2.InspectionType;
+import io.atlasmap.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
@@ -85,7 +85,7 @@ public class XmlServiceTest {
                 + "    </xs:complexType>\n" + "  </xs:element>\n" + "</xs:schema>";
 
         XmlInspectionRequest request = new XmlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(source);
         Response res = xmlService.inspect(request);
         Object entity = res.getEntity();
@@ -101,7 +101,7 @@ public class XmlServiceTest {
     @Test
     public void testAllLevelsIncludedIfIncludePathsEmpty() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         request.setInspectPaths(new ArrayList<>());
         Response res = xmlService.inspect(request);
@@ -122,7 +122,7 @@ public class XmlServiceTest {
     @Test
     public void testRootLevelIncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root");
@@ -143,7 +143,7 @@ public class XmlServiceTest {
     @Test
     public void testLevel1IncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root/level1Field");
@@ -168,7 +168,7 @@ public class XmlServiceTest {
     @Test
     public void testLevel2IncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root/level1Field/level2Field");
@@ -193,7 +193,7 @@ public class XmlServiceTest {
     @Test
     public void testLevel2Field2IncludedIfIncludePathSpecified() throws Exception {
         XmlInspectionRequest request = new XmlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setXmlData(sourceXml);
         List<String> includePaths = new ArrayList<>();
         includePaths.add("/root/level1Field/level2Field2");

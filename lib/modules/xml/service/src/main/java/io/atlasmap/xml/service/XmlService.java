@@ -79,12 +79,12 @@ public class XmlService extends ModuleService {
 
         try {
 
-            if (request.getType() == null) {
+            if (request.getInspectionType() == null) {
                 response.setErrorMessage("Instance or Schema type must be specified in request");
             } else {
                 XmlInspectionService s = new XmlInspectionService();
 
-                switch (request.getType()) {
+                switch (request.getInspectionType()) {
                 case INSTANCE:
                     d = s.inspectXmlDocument(request.getXmlData());
                     break;
@@ -92,7 +92,7 @@ public class XmlService extends ModuleService {
                     d = s.inspectSchema(request.getXmlData());
                     break;
                 default:
-                    response.setErrorMessage("Unsupported inspection type: " + request.getType());
+                    response.setErrorMessage("Unsupported inspection type: " + request.getInspectionType());
                     break;
                 }
             }

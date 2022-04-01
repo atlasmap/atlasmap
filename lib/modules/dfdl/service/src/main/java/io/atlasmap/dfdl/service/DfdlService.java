@@ -84,7 +84,7 @@ public class DfdlService extends ModuleService {
 
         try {
 
-            if (request.getType() == null) {
+            if (request.getInspectionType() == null) {
                 response.setErrorMessage("Instance or Schema type must be specified in request");
             } else {
                 ClassLoader loader = resourceContext != null
@@ -92,7 +92,7 @@ public class DfdlService extends ModuleService {
                     : DfdlService.class.getClassLoader();
                 DfdlInspectionService s = new DfdlInspectionService(loader);
 
-                switch (request.getType()) {
+                switch (request.getInspectionType()) {
                 case INSTANCE:
                     d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());
                     break;
@@ -100,7 +100,7 @@ public class DfdlService extends ModuleService {
                     d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());
                     break;
                 default:
-                    response.setErrorMessage("Unsupported inspection type: " + request.getType());
+                    response.setErrorMessage("Unsupported inspection type: " + request.getInspectionType());
                     break;
                 }
             }

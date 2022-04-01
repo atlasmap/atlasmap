@@ -29,7 +29,7 @@ import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Json;
-import io.atlasmap.xml.v2.InspectionType;
+import io.atlasmap.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlComplexType;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlField;
@@ -57,7 +57,7 @@ public class DfdlServiceTest {
             + "l3r1,l3r2,l3r3\n";
 
         DfdlInspectionRequest request = new DfdlInspectionRequest();
-        request.setType(InspectionType.SCHEMA);
+        request.setInspectionType(InspectionType.SCHEMA);
         request.setDfdlSchemaName("csv");
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.HEADER.value(), source);
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.DELIMITER.value(), ",");
@@ -93,7 +93,7 @@ public class DfdlServiceTest {
             + "l3r1,l3r2,l3r3\n";
 
         DfdlInspectionRequest request = new DfdlInspectionRequest();
-        request.setType(InspectionType.INSTANCE);
+        request.setInspectionType(InspectionType.INSTANCE);
         request.setDfdlSchemaName("csv");
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.EXAMPLE.value(), source);
         request.getOptions().put(CsvDfdlSchemaGenerator.Options.DELIMITER.value(), ",");

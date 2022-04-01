@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { IDataSource, IDocument, IField } from '../common';
+import { IDataSource, IDocument, IField, IInspectionRequest } from '../common';
 
 /**
  * The XML inspection data model contracts between frontend and backend.
@@ -27,6 +27,21 @@ export const XML_ENUM_FIELD_JSON_TYPE =
   XML_MODEL_PACKAGE_PREFIX + '.XmlEnumField';
 export const XML_INSPECTION_REQUEST_JSON_TYPE =
   XML_MODEL_PACKAGE_PREFIX + '.XmlInspectionRequest';
+
+/**
+ * The root object that carries {@link IXmlInspectionRequest}
+ * when it's sent to backend.
+ */
+export interface IXmlInspectionRequestContainer {
+  XmlInspectionRequest: IXmlInspectionRequest;
+}
+
+/**
+ * The serialized XML inspection request.
+ */
+export interface IXmlInspectionRequest extends IInspectionRequest {
+  xmlData?: string;
+}
 
 /**
  * The root object that carries {@link IXmlInspectionResponse}

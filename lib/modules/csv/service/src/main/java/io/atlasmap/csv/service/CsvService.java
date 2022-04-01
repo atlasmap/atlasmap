@@ -15,15 +15,16 @@
  */
 package io.atlasmap.csv.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
 import io.atlasmap.service.ModuleService;
 import io.atlasmap.v2.Document;
@@ -60,21 +62,7 @@ public class CsvService extends ModuleService {
 
     /**
      * Inspect a CSV instance and return a Document object.
-     * @param request request
-     * @param format format
-     * @param delimiter delimiter
-     * @param firstRecordAsHeader first record as header
-     * @param skipHeaderRecord skip header record
-     * @param headers headers
-     * @param commentMarker comment marker
-     * @param escape escape
-     * @param ignoreEmptyLines ignore empty lines
-     * @param ignoreHeaderCase ignore header case
-     * @param ignoreSurroundingSpaces ignore surrounding spaces
-     * @param nullString null string
-     * @param quote quote
-     * @param allowDuplicateHeaderNames allow duplicate header names
-     * @param allowMissingColumnNames allow missing column names
+     * @param requestIn request
      * @return {@link CsvInspectionResponse}
      * @throws IOException unexpected error
      */
@@ -83,63 +71,29 @@ public class CsvService extends ModuleService {
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("/inspect")
     @Operation(summary = "Inspect CSV", description = "Inspect a CSV instance and return a Document object")
-    @RequestBody(description = "Csv", content = @Content(mediaType = "text/csv", schema = @Schema(implementation = String.class)))
+    @RequestBody(description = "JsonInspectionRequest object",  content = @Content(schema = @Schema(implementation = CsvInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = "Return a Document object"))
-    public Response inspect(InputStream request, @QueryParam("format") String format, @QueryParam("delimiter") String delimiter,
-                            @QueryParam("firstRecordAsHeader") Boolean firstRecordAsHeader,
-                            @QueryParam("skipRecordHeader") Boolean skipHeaderRecord,
-                            @QueryParam("headers") String headers,
-                            @QueryParam("commentMarker") String commentMarker,
-                            @QueryParam("escape") String escape,
-                            @QueryParam("ignoreEmptyLines") Boolean ignoreEmptyLines,
-                            @QueryParam("ignoreHeaderCase") Boolean ignoreHeaderCase,
-                            @QueryParam("ignoreSurroundingSpaces") Boolean ignoreSurroundingSpaces,
-                            @QueryParam("nullString") String nullString,
-                            @QueryParam("quote") String quote,
-                            @QueryParam("allowDuplicateHeaderNames") Boolean allowDuplicateHeaderNames,
-                            @QueryParam("allowMissingColumnNames") Boolean allowMissingColumnNames) throws IOException  {
+    public Response inspect(InputStream requestIn) throws IOException  {
         long startTime = System.currentTimeMillis();
 
+        CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);
+        Map<String,String> options = request.getOptions();
         CsvInspectionResponse response = new CsvInspectionResponse();
         try {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("Options: delimiter={}, firstRecordAsHeader={}", delimiter, firstRecordAsHeader);
+                LOG.debug("Options: {}", options);
             }
-            CsvConfig csvConfig = new CsvConfig(format);
-            if (delimiter != null) {
-                csvConfig.setDelimiter(delimiter.charAt(0));
-            }
-            csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);
-            csvConfig.setSkipHeaderRecord(skipHeaderRecord);
-            csvConfig.setHeaders(headers);
-            if (commentMarker != null) {
-                csvConfig.setCommentMarker(commentMarker.charAt(0));
-            }
-            if (escape != null) {
-                csvConfig.setEscape(escape.charAt(0));
-            }
-            csvConfig.setIgnoreEmptyLines(ignoreEmptyLines);
-            csvConfig.setIgnoreHeaderCase(ignoreHeaderCase);
-            csvConfig.setIgnoreSurroundingSpaces(ignoreSurroundingSpaces);
-            csvConfig.setNullString(nullString);
-            if (quote != null) {
-                csvConfig.setQuote(quote.charAt(0));
-            }
-            csvConfig.setAllowDuplicateHeaderNames(allowDuplicateHeaderNames);
-            csvConfig.setAllowMissingColumnNames(allowMissingColumnNames);
-
+            CsvConfig csvConfig = CsvConfig.newConfig(options);
             CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);
-            csvFieldReader.setDocument(request);
+            csvFieldReader.setDocument(new ByteArrayInputStream(request.getCsvData().getBytes()));
 
             Document document = csvFieldReader.readSchema();
             response.setCsvDocument(document);
-            request.close();
         } catch (Exception e) {
             LOG.error("Error inspecting CSV: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
         } finally {
-            request.close();;
             response.setExecutionTime(System.currentTimeMillis() - startTime);
         }
 

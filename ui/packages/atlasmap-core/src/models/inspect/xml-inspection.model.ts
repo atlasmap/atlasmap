@@ -26,6 +26,7 @@ import {
   IXmlDocument,
   IXmlDocumentContainer,
   IXmlField,
+  IXmlInspectionRequestContainer,
   IXmlInspectionResponse,
   IXmlInspectionResponseContainer,
   XML_INSPECTION_REQUEST_JSON_TYPE,
@@ -160,10 +161,10 @@ export class XmlInspectionRequestModel extends DocumentInspectionRequestModel {
 }
 
 export class XmlInspectionRequestOptions extends DocumentInspectionRequestOptions {
-  json = {
+  json: IXmlInspectionRequestContainer = {
     XmlInspectionRequest: {
       jsonType: XML_INSPECTION_REQUEST_JSON_TYPE,
-      type: this.doc.inspectionType,
+      inspectionType: this.doc.inspectionType,
       xmlData: this.doc.inspectionSource,
       inspectPaths: this.doc.inspectionPaths,
     },

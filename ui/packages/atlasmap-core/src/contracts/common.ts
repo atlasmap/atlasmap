@@ -100,7 +100,6 @@ export enum InspectionType {
   JAVA_CLASS = 'JAVA_CLASS',
   SCHEMA = 'SCHEMA',
   INSTANCE = 'INSTANCE',
-  UNKNOWN = 'UNKNOWN',
 }
 
 /** The serialized DataSource held by {@link IAtlasMapping}. */
@@ -113,6 +112,20 @@ export interface IDataSource {
   characterEncoding?: string;
   locale?: string;
   jsonType: string;
+}
+
+/**
+ * The serialized inspection request.
+ */
+export interface IInspectionRequest {
+  jsonType: string;
+  fieldNameExclusions?: IStringList;
+  typeNameExclusions?: IStringList;
+  namespaceExclusions?: IStringList;
+  uri?: string;
+  inspectionType: InspectionType;
+  options?: { [key: string]: string };
+  inspectPaths?: string[];
 }
 
 /**

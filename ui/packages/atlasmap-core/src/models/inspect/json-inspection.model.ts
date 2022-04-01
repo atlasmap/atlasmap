@@ -25,6 +25,7 @@ import {
   IJsonDocument,
   IJsonDocumentContainer,
   IJsonField,
+  IJsonInspectionRequestContainer,
   IJsonInspectionResponse,
   IJsonInspectionResponseContainer,
   JSON_INSPECTION_REQUEST_JSON_TYPE,
@@ -134,10 +135,10 @@ export class JsonInspectionRequestModel extends DocumentInspectionRequestModel {
 }
 
 export class JsonInspectionRequestOptions extends DocumentInspectionRequestOptions {
-  json = {
+  json: IJsonInspectionRequestContainer = {
     JsonInspectionRequest: {
       jsonType: JSON_INSPECTION_REQUEST_JSON_TYPE,
-      type: this.doc.inspectionType,
+      inspectionType: this.doc.inspectionType,
       jsonData: this.doc.inspectionSource,
       inspectPaths: this.doc.inspectionPaths,
     },

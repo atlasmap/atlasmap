@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.v2.Json;
+import io.atlasmap.v2.InspectionType;
 
 
 public class AtlasJsonModelFactoryTest {
@@ -41,7 +42,7 @@ public class AtlasJsonModelFactoryTest {
     @Test
     public void testCreateJsonInspection() throws Exception {
         JsonInspectionRequest request = new JsonInspectionRequest();
-        request.setType(InspectionType.INSTANCE);
+        request.setInspectionType(InspectionType.INSTANCE);
         request.setJsonData("{\n" + "  \"id\": \"0001\",\n" + "  \"type\": \"donut\",\n" + "  \"name\": \"Cake\",\n"
                 + "  \"ppu\": 0.55,\n" + "  \"batters\":\n" + "  {\n" + "    \"batter\":\n" + "    [\n"
                 + "      { \"id\": \"1001\", \"type\": \"Regular\" },\n"

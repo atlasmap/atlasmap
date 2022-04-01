@@ -16,7 +16,7 @@
 package io.atlasmap.xml.v2;
 
 /**
- * @deprecated Migrate to {@code io.atlasmap.v2.InspectionType}.
+ * @deprecated Migrate to {@link io.atlasmap.v2.InspectionType}.
  */
 @Deprecated
 public enum InspectionType {

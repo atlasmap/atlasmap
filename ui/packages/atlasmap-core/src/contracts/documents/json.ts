@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { IDocument, IField, IStringList, InspectionType } from '../common';
+import { IDocument, IField, IInspectionRequest } from '../common';
 
 /**
  * The JSON inspection data model contracts between frontend and backend.
@@ -38,13 +38,8 @@ export interface IJsonInspectionRequestContainer {
 /**
  * The serialized JSON inspection request.
  */
-export interface IJsonInspectionRequest {
-  fieldNameExclusions?: IStringList;
-  typeNameExclusions?: IStringList;
-  namespaceExclusions?: IStringList;
+export interface IJsonInspectionRequest extends IInspectionRequest {
   jsonData?: string;
-  uri?: string;
-  type: InspectionType;
 }
 
 /**

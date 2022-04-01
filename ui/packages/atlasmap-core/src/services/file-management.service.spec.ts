@@ -354,7 +354,7 @@ describe('FileManagementService', () => {
 
     const srcCSVDoc = new DocumentDefinition();
     srcCSVDoc.name = 'dummy CSV source document';
-    srcCSVDoc.inspectionType = InspectionType.UNKNOWN;
+    srcCSVDoc.inspectionType = InspectionType.INSTANCE;
     srcCSVDoc.inspectionSource = 'dummy CSV';
     srcCSVDoc.initModel = new DocumentInitializationModel();
     srcCSVDoc.initModel.isSource = true;

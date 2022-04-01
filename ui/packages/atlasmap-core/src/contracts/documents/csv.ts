@@ -14,11 +14,29 @@
     limitations under the License.
 */
 
-import { IDocument, IField, IParameter } from '../common';
+import { IDocument, IField, IInspectionRequest, IParameter } from '../common';
 
 /**
  * The CSV inspection data model contracts between frontend and backend.
  */
+export const CSV_MODEL_PACKAGE_PREFIX = 'io.atlasmap.csv.v2';
+export const CSV_INSPECTION_REQUEST_JSON_TYPE =
+  CSV_MODEL_PACKAGE_PREFIX + '.CsvInspectionRequest';
+
+/**
+ * The root object that carries {@link ICsvInspectionRequest}
+ * when it's sent to backend.
+ */
+export interface ICsvInspectionRequestContainer {
+  CsvInspectionRequest: ICsvInspectionRequest;
+}
+
+/**
+ * The serialized CSV inspection request.
+ */
+export interface ICsvInspectionRequest extends IInspectionRequest {
+  csvData?: string;
+}
 
 /**
  * The root object that carries {@link ICsvInspectionResponse}

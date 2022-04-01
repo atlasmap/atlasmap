@@ -14,7 +14,7 @@
     limitations under the License.
 */
 
-import { IDocument, IField, IStringList } from '../common';
+import { IDocument, IField, IInspectionRequest } from '../common';
 /**
  * The KafkaConnect inspection data model contracts between frontend and backend.
  */
@@ -33,13 +33,8 @@ export interface IKafkaConnectInspectionRequestContainer {
 /**
  * The serialized Kafka Connect inspection request.
  */
-export interface IKafkaConnectInspectionRequest {
-  fieldNameExclusions?: IStringList;
-  typeNameExclusions?: IStringList;
-  namespaceExclusions?: IStringList;
-  uri?: string;
+export interface IKafkaConnectInspectionRequest extends IInspectionRequest {
   schemaData?: string;
-  options?: Map<string, string>;
 }
 
 /**

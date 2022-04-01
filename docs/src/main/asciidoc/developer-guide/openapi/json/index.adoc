@@ -362,15 +362,21 @@ endif::internal-generation[]
 |===
 | Field Name| Required| Type| Description| Format
 
-| inspectPaths
+| uri
 | 
-| List  of <<string>>
+| String 
 | 
 |  
 
-| searchPhrase
+| inspectionType
 | 
 | String 
+| 
+|  _Enum:_ SCHEMA, INSTANCE, JAVA_CLASS, 
+
+| options
+| 
+| Map  of <<string>>
 | 
 |  
 
@@ -392,23 +398,23 @@ endif::internal-generation[]
 | 
 |  
 
+| inspectPaths
+| 
+| List  of <<string>>
+| 
+|  
+
+| searchPhrase
+| 
+| String 
+| 
+|  
+
 | jsonData
 | 
 | String 
 | 
 |  
-
-| uri
-| 
-| String 
-| 
-|  
-
-| type
-| 
-| String 
-| 
-|  _Enum:_ ALL, INSTANCE, SCHEMA, NONE, 
 
 | jsonType
 | X

@@ -68,7 +68,7 @@ const importCandidate: importDocumentType[] = [
   },
   {
     documentType: DocumentType.CSV,
-    inspectionType: InspectionType.UNKNOWN,
+    inspectionType: InspectionType.INSTANCE,
     typeName: 'CSV',
     suffix: '.csv',
   },
