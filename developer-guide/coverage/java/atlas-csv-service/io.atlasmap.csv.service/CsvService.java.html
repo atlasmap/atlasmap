@@ -15,15 +15,16 @@
  */
 package io.atlasmap.csv.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -36,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
 import io.atlasmap.service.ModuleService;
 import io.atlasmap.v2.Document;
@@ -51,30 +53,16 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * CSV Service provides CSV inspection service which generate an AtlasMap Document object from the CSV.
  */
 @Path(&quot;/csv/&quot;)
-<span class="fc" id="L54">public class CsvService extends ModuleService {</span>
+<span class="fc" id="L56">public class CsvService extends ModuleService {</span>
 
-<span class="fc" id="L56">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
+<span class="fc" id="L58">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
 
     @Context
     private ResourceContext resourceContext;
 
     /**
      * Inspect a CSV instance and return a Document object.
-     * @param request request
-     * @param format format
-     * @param delimiter delimiter
-     * @param firstRecordAsHeader first record as header
-     * @param skipHeaderRecord skip header record
-     * @param headers headers
-     * @param commentMarker comment marker
-     * @param escape escape
-     * @param ignoreEmptyLines ignore empty lines
-     * @param ignoreHeaderCase ignore header case
-     * @param ignoreSurroundingSpaces ignore surrounding spaces
-     * @param nullString null string
-     * @param quote quote
-     * @param allowDuplicateHeaderNames allow duplicate header names
-     * @param allowMissingColumnNames allow missing column names
+     * @param requestIn request
      * @return {@link CsvInspectionResponse}
      * @throws IOException unexpected error
      */
@@ -83,82 +71,48 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @Produces({ MediaType.APPLICATION_JSON })
     @Path(&quot;/inspect&quot;)
     @Operation(summary = &quot;Inspect CSV&quot;, description = &quot;Inspect a CSV instance and return a Document object&quot;)
-    @RequestBody(description = &quot;Csv&quot;, content = @Content(mediaType = &quot;text/csv&quot;, schema = @Schema(implementation = String.class)))
+    @RequestBody(description = &quot;JsonInspectionRequest object&quot;,  content = @Content(schema = @Schema(implementation = CsvInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = &quot;Return a Document object&quot;))
-    public Response inspect(InputStream request, @QueryParam(&quot;format&quot;) String format, @QueryParam(&quot;delimiter&quot;) String delimiter,
-                            @QueryParam(&quot;firstRecordAsHeader&quot;) Boolean firstRecordAsHeader,
-                            @QueryParam(&quot;skipRecordHeader&quot;) Boolean skipHeaderRecord,
-                            @QueryParam(&quot;headers&quot;) String headers,
-                            @QueryParam(&quot;commentMarker&quot;) String commentMarker,
-                            @QueryParam(&quot;escape&quot;) String escape,
-                            @QueryParam(&quot;ignoreEmptyLines&quot;) Boolean ignoreEmptyLines,
-                            @QueryParam(&quot;ignoreHeaderCase&quot;) Boolean ignoreHeaderCase,
-                            @QueryParam(&quot;ignoreSurroundingSpaces&quot;) Boolean ignoreSurroundingSpaces,
-                            @QueryParam(&quot;nullString&quot;) String nullString,
-                            @QueryParam(&quot;quote&quot;) String quote,
-                            @QueryParam(&quot;allowDuplicateHeaderNames&quot;) Boolean allowDuplicateHeaderNames,
-                            @QueryParam(&quot;allowMissingColumnNames&quot;) Boolean allowMissingColumnNames) throws IOException  {
-<span class="fc" id="L102">        long startTime = System.currentTimeMillis();</span>
+    public Response inspect(InputStream requestIn) throws IOException  {
+<span class="fc" id="L78">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L104">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
+<span class="fc" id="L80">        CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);</span>
+<span class="fc" id="L81">        Map&lt;String,String&gt; options = request.getOptions();</span>
+<span class="fc" id="L82">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
         try {
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L107">                LOG.debug(&quot;Options: delimiter={}, firstRecordAsHeader={}&quot;, delimiter, firstRecordAsHeader);</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L85">                LOG.debug(&quot;Options: {}&quot;, options);</span>
             }
-<span class="fc" id="L109">            CsvConfig csvConfig = new CsvConfig(format);</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (delimiter != null) {</span>
-<span class="fc" id="L111">                csvConfig.setDelimiter(delimiter.charAt(0));</span>
-            }
-<span class="fc" id="L113">            csvConfig.setFirstRecordAsHeader(firstRecordAsHeader);</span>
-<span class="fc" id="L114">            csvConfig.setSkipHeaderRecord(skipHeaderRecord);</span>
-<span class="fc" id="L115">            csvConfig.setHeaders(headers);</span>
-<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (commentMarker != null) {</span>
-<span class="nc" id="L117">                csvConfig.setCommentMarker(commentMarker.charAt(0));</span>
-            }
-<span class="pc bpc" id="L119" title="1 of 2 branches missed.">            if (escape != null) {</span>
-<span class="nc" id="L120">                csvConfig.setEscape(escape.charAt(0));</span>
-            }
-<span class="fc" id="L122">            csvConfig.setIgnoreEmptyLines(ignoreEmptyLines);</span>
-<span class="fc" id="L123">            csvConfig.setIgnoreHeaderCase(ignoreHeaderCase);</span>
-<span class="fc" id="L124">            csvConfig.setIgnoreSurroundingSpaces(ignoreSurroundingSpaces);</span>
-<span class="fc" id="L125">            csvConfig.setNullString(nullString);</span>
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">            if (quote != null) {</span>
-<span class="nc" id="L127">                csvConfig.setQuote(quote.charAt(0));</span>
-            }
-<span class="fc" id="L129">            csvConfig.setAllowDuplicateHeaderNames(allowDuplicateHeaderNames);</span>
-<span class="fc" id="L130">            csvConfig.setAllowMissingColumnNames(allowMissingColumnNames);</span>
+<span class="fc" id="L87">            CsvConfig csvConfig = CsvConfig.newConfig(options);</span>
+<span class="fc" id="L88">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
+<span class="fc" id="L89">            csvFieldReader.setDocument(new ByteArrayInputStream(request.getCsvData().getBytes()));</span>
 
-<span class="fc" id="L132">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
-<span class="fc" id="L133">            csvFieldReader.setDocument(request);</span>
-
-<span class="fc" id="L135">            Document document = csvFieldReader.readSchema();</span>
-<span class="fc" id="L136">            response.setCsvDocument(document);</span>
-<span class="fc" id="L137">            request.close();</span>
-<span class="nc" id="L138">        } catch (Exception e) {</span>
-<span class="nc" id="L139">            LOG.error(&quot;Error inspecting CSV: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L140">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L91">            Document document = csvFieldReader.readSchema();</span>
+<span class="fc" id="L92">            response.setCsvDocument(document);</span>
+<span class="nc" id="L93">        } catch (Exception e) {</span>
+<span class="nc" id="L94">            LOG.error(&quot;Error inspecting CSV: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L95">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L142">            request.close();;</span>
-<span class="fc" id="L143">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L97">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L147">            LOG.debug((&quot;Response: {}&quot; + new ObjectMapper().writeValueAsString(response)));</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L101">            LOG.debug((&quot;Response: {}&quot; + new ObjectMapper().writeValueAsString(response)));</span>
         }
-<span class="fc" id="L149">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L103">        return Response.ok().entity(toJson(response)).build();</span>
     }
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L155">        return null;</span>
+<span class="nc" id="L109">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L161">        return null;</span>
+<span class="nc" id="L115">        return null;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

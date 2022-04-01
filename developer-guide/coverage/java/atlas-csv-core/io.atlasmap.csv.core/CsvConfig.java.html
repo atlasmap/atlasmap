@@ -15,6 +15,21 @@
  */
 package io.atlasmap.csv.core;
 
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_ALLOW_DUPLICATE_HEADER_NAMES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_ALLOW_MISSING_COLUMN_NAMES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_COMMENT_MARKER;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_DELIMITER;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_ESCAPE;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_FIRST_RECORD_AS_HEADER;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_FORMAT;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_HEADERS;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_IGNORE_EMPTY_LINES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_IGNORE_HEADER_CASE;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_IGNORE_SURROUNDING_SPACES;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_NULL_STRING;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_QUOTE;
+import static io.atlasmap.csv.v2.CsvConstants.OPTION_SKIP_HEADER_RECORD;
+
 import java.util.Map;
 
 import org.apache.commons.csv.CSVFormat;
@@ -25,7 +40,7 @@ import org.slf4j.LoggerFactory;
  * The CSV configuration.
  */
 public class CsvConfig {
-<span class="fc" id="L28">    private static final Logger LOG = LoggerFactory.getLogger(CsvConfig.class);</span>
+<span class="fc" id="L43">    private static final Logger LOG = LoggerFactory.getLogger(CsvConfig.class);</span>
 
     private String format;
     private Character delimiter;
@@ -46,21 +61,21 @@ public class CsvConfig {
      * A constructor.
      */
     public CsvConfig() {
-<span class="fc" id="L49">        this(null);</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L64">        this(null);</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * A constructor.
      * @param format format
      */
-<span class="fc" id="L56">    public CsvConfig(String format) {</span>
-<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (format == null) {</span>
-<span class="fc" id="L58">            this.format = &quot;Default&quot;;</span>
+<span class="fc" id="L71">    public CsvConfig(String format) {</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (format == null) {</span>
+<span class="fc" id="L73">            this.format = &quot;Default&quot;;</span>
         } else {
-<span class="nc" id="L60">            this.format = format;</span>
+<span class="nc" id="L75">            this.format = format;</span>
         }
-<span class="fc" id="L62">        this.delimiter = CSVFormat.valueOf(this.format).getDelimiter();</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L77">        this.delimiter = CSVFormat.valueOf(this.format).getDelimiter();</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Gets the new config from the specified options.
@@ -68,53 +83,53 @@ public class CsvConfig {
      * @return config
      */
     public static CsvConfig newConfig(Map&lt;String, String&gt; config) {
-<span class="fc" id="L71">        CsvConfig csvConfig = new CsvConfig(config.get(&quot;format&quot;));</span>
-<span class="fc" id="L72">        String delimiter = config.get(&quot;delimiter&quot;);</span>
+<span class="fc" id="L86">        CsvConfig csvConfig = new CsvConfig(config.get(OPTION_FORMAT));</span>
+<span class="fc" id="L87">        String delimiter = config.get(OPTION_DELIMITER);</span>
 
-<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; entry: config.entrySet()) {</span>
-<span class="pc bpc" id="L75" title="13 of 14 branches missed.">            switch (entry.getKey()) {</span>
-                case &quot;delimiter&quot;:
-<span class="nc" id="L77">                    csvConfig.delimiter = delimiter.charAt(0);</span>
-<span class="nc" id="L78">                    break;</span>
-                case &quot;firstRecordAsHeader&quot;:
-<span class="pc bpc" id="L80" title="2 of 4 branches missed.">                    csvConfig.firstRecordAsHeader = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
-<span class="fc" id="L81">                    break;</span>
-                case &quot;skipHeaderRecord&quot;:
-<span class="nc bnc" id="L83" title="All 4 branches missed.">                    csvConfig.skipHeaderRecord = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
-<span class="nc" id="L84">                    break;</span>
-                case &quot;commentMarker&quot;:
-<span class="nc" id="L86">                    csvConfig.commentMarker = entry.getValue().charAt(0);</span>
-<span class="nc" id="L87">                    break;</span>
-                case &quot;headers&quot;:
-<span class="nc" id="L89">                    csvConfig.headers = entry.getValue();</span>
-<span class="nc" id="L90">                    break;</span>
-                case &quot;escape&quot;:
-<span class="nc" id="L92">                    csvConfig.escape = entry.getValue().charAt(0);</span>
-<span class="nc" id="L93">                    break;</span>
-                case &quot;ignoreEmptyLines&quot;:
-<span class="nc bnc" id="L95" title="All 4 branches missed.">                    csvConfig.ignoreEmptyLines = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
-<span class="nc" id="L96">                    break;</span>
-                case &quot;ignoreHeaderCase&quot;:
-<span class="nc bnc" id="L98" title="All 4 branches missed.">                    csvConfig.ignoreHeaderCase = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (Map.Entry&lt;String, String&gt; entry: config.entrySet()) {</span>
+<span class="pc bpc" id="L90" title="12 of 14 branches missed.">            switch (entry.getKey()) {</span>
+                case OPTION_DELIMITER:
+<span class="fc" id="L92">                    csvConfig.delimiter = delimiter.charAt(0);</span>
+<span class="fc" id="L93">                    break;</span>
+                case OPTION_FIRST_RECORD_AS_HEADER:
+<span class="pc bpc" id="L95" title="2 of 4 branches missed.">                    csvConfig.firstRecordAsHeader = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="fc" id="L96">                    break;</span>
+                case OPTION_SKIP_HEADER_RECORD:
+<span class="nc bnc" id="L98" title="All 4 branches missed.">                    csvConfig.skipHeaderRecord = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
 <span class="nc" id="L99">                    break;</span>
-                case &quot;ignoreSurroundingSpaces&quot;:
-<span class="nc bnc" id="L101" title="All 4 branches missed.">                    csvConfig.ignoreSurroundingSpaces = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+                case OPTION_COMMENT_MARKER:
+<span class="nc" id="L101">                    csvConfig.commentMarker = entry.getValue().charAt(0);</span>
 <span class="nc" id="L102">                    break;</span>
-                case &quot;nullString&quot;:
-<span class="nc" id="L104">                    csvConfig.nullString = entry.getValue();</span>
+                case OPTION_HEADERS:
+<span class="nc" id="L104">                    csvConfig.headers = entry.getValue();</span>
 <span class="nc" id="L105">                    break;</span>
-                case &quot;quote&quot;:
-<span class="nc" id="L107">                    csvConfig.quote = entry.getValue().charAt(0);</span>
+                case OPTION_ESCAPE:
+<span class="nc" id="L107">                    csvConfig.escape = entry.getValue().charAt(0);</span>
 <span class="nc" id="L108">                    break;</span>
-                case &quot;allowDuplicateHeaderNames&quot;:
-<span class="nc bnc" id="L110" title="All 4 branches missed.">                    csvConfig.allowDuplicateHeaderNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+                case OPTION_IGNORE_EMPTY_LINES:
+<span class="nc bnc" id="L110" title="All 4 branches missed.">                    csvConfig.ignoreEmptyLines = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
 <span class="nc" id="L111">                    break;</span>
-                case &quot;allowMissingColumnNames&quot;:
-<span class="nc bnc" id="L113" title="All 4 branches missed.">                    csvConfig.allowMissingColumnNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+                case OPTION_IGNORE_HEADER_CASE:
+<span class="nc bnc" id="L113" title="All 4 branches missed.">                    csvConfig.ignoreHeaderCase = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L114">                    break;</span>
+                case OPTION_IGNORE_SURROUNDING_SPACES:
+<span class="nc bnc" id="L116" title="All 4 branches missed.">                    csvConfig.ignoreSurroundingSpaces = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L117">                    break;</span>
+                case OPTION_NULL_STRING:
+<span class="nc" id="L119">                    csvConfig.nullString = entry.getValue();</span>
+<span class="nc" id="L120">                    break;</span>
+                case OPTION_QUOTE:
+<span class="nc" id="L122">                    csvConfig.quote = entry.getValue().charAt(0);</span>
+<span class="nc" id="L123">                    break;</span>
+                case OPTION_ALLOW_DUPLICATE_HEADER_NAMES:
+<span class="nc bnc" id="L125" title="All 4 branches missed.">                    csvConfig.allowDuplicateHeaderNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
+<span class="nc" id="L126">                    break;</span>
+                case OPTION_ALLOW_MISSING_COLUMN_NAMES:
+<span class="nc bnc" id="L128" title="All 4 branches missed.">                    csvConfig.allowMissingColumnNames = entry.getValue() == null || Boolean.valueOf(entry.getValue());</span>
                     break;
             }
-<span class="fc" id="L116">        }</span>
-<span class="fc" id="L117">        return csvConfig;</span>
+<span class="fc" id="L131">        }</span>
+<span class="fc" id="L132">        return csvConfig;</span>
     }
 
     /**
@@ -123,21 +138,21 @@ public class CsvConfig {
      */
     CSVFormat newCsvFormat() {
         CSVFormat csvFormat;
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        csvFormat = (format != null) ? CSVFormat.valueOf(format) : CSVFormat.DEFAULT;</span>
-<span class="pc bpc" id="L127" title="1 of 2 branches missed.">        csvFormat = (delimiter != null) ? csvFormat.withDelimiter(delimiter) : csvFormat;</span>
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        csvFormat = (Boolean.TRUE.equals(firstRecordAsHeader)) ? csvFormat.withFirstRecordAsHeader() : csvFormat;</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">        csvFormat = (skipHeaderRecord != null) ? csvFormat.withSkipHeaderRecord(skipHeaderRecord) : csvFormat;</span>
-<span class="fc bfc" id="L130" title="All 2 branches covered.">        csvFormat = (headers != null) ? csvFormat.withHeader(getParsedHeaders()) : csvFormat;</span>
-<span class="pc bpc" id="L131" title="1 of 2 branches missed.">        csvFormat = (commentMarker != null) ? csvFormat.withCommentMarker(commentMarker): csvFormat;</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        csvFormat = (escape != null) ? csvFormat.withEscape(escape): csvFormat;</span>
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        csvFormat = (ignoreEmptyLines != null) ? csvFormat.withIgnoreEmptyLines(ignoreEmptyLines): csvFormat;</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">        csvFormat = (ignoreHeaderCase != null) ? csvFormat.withIgnoreHeaderCase(ignoreHeaderCase): csvFormat;</span>
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        csvFormat = (ignoreSurroundingSpaces != null) ? csvFormat.withIgnoreSurroundingSpaces(ignoreSurroundingSpaces): csvFormat;</span>
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">        csvFormat = (nullString != null) ? csvFormat.withNullString(nullString): csvFormat;</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        csvFormat = (quote != null) ? csvFormat.withQuote(quote): csvFormat;</span>
-<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        csvFormat = (allowDuplicateHeaderNames != null) ? csvFormat.withAllowDuplicateHeaderNames(allowDuplicateHeaderNames): csvFormat;</span>
-<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        csvFormat = (allowMissingColumnNames != null) ? csvFormat.withAllowMissingColumnNames(allowMissingColumnNames): csvFormat;</span>
-<span class="fc" id="L140">        return csvFormat;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        csvFormat = (format != null) ? CSVFormat.valueOf(format) : CSVFormat.DEFAULT;</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        csvFormat = (delimiter != null) ? csvFormat.withDelimiter(delimiter) : csvFormat;</span>
+<span class="fc bfc" id="L143" title="All 2 branches covered.">        csvFormat = (Boolean.TRUE.equals(firstRecordAsHeader)) ? csvFormat.withFirstRecordAsHeader() : csvFormat;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        csvFormat = (skipHeaderRecord != null) ? csvFormat.withSkipHeaderRecord(skipHeaderRecord) : csvFormat;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        csvFormat = (headers != null) ? csvFormat.withHeader(getParsedHeaders()) : csvFormat;</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        csvFormat = (commentMarker != null) ? csvFormat.withCommentMarker(commentMarker): csvFormat;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        csvFormat = (escape != null) ? csvFormat.withEscape(escape): csvFormat;</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        csvFormat = (ignoreEmptyLines != null) ? csvFormat.withIgnoreEmptyLines(ignoreEmptyLines): csvFormat;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        csvFormat = (ignoreHeaderCase != null) ? csvFormat.withIgnoreHeaderCase(ignoreHeaderCase): csvFormat;</span>
+<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        csvFormat = (ignoreSurroundingSpaces != null) ? csvFormat.withIgnoreSurroundingSpaces(ignoreSurroundingSpaces): csvFormat;</span>
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        csvFormat = (nullString != null) ? csvFormat.withNullString(nullString): csvFormat;</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">        csvFormat = (quote != null) ? csvFormat.withQuote(quote): csvFormat;</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        csvFormat = (allowDuplicateHeaderNames != null) ? csvFormat.withAllowDuplicateHeaderNames(allowDuplicateHeaderNames): csvFormat;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        csvFormat = (allowMissingColumnNames != null) ? csvFormat.withAllowMissingColumnNames(allowMissingColumnNames): csvFormat;</span>
+<span class="fc" id="L155">        return csvFormat;</span>
     }
 
     /**
@@ -145,7 +160,7 @@ public class CsvConfig {
      * @return format
      */
     public String getFormat() {
-<span class="nc" id="L148">        return format;</span>
+<span class="nc" id="L163">        return format;</span>
     }
 
     /**
@@ -153,15 +168,15 @@ public class CsvConfig {
      * @param delimiter delimiter
      */
     public void setDelimiter(Character delimiter) {
-<span class="fc" id="L156">        this.delimiter = delimiter;</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L171">        this.delimiter = delimiter;</span>
+<span class="fc" id="L172">    }</span>
 
     /**
      * Gets the delimiter.
      * @return delimiter
      */
     public char getDelimiter() {
-<span class="nc" id="L164">        return delimiter;</span>
+<span class="nc" id="L179">        return delimiter;</span>
     }
 
     /**
@@ -169,15 +184,15 @@ public class CsvConfig {
      * @param firstRecordAsHeader true to use the first record as a header, or false
      */
     public void setFirstRecordAsHeader(Boolean firstRecordAsHeader) {
-<span class="fc" id="L172">        this.firstRecordAsHeader = firstRecordAsHeader;</span>
-<span class="fc" id="L173">    }</span>
+<span class="fc" id="L187">        this.firstRecordAsHeader = firstRecordAsHeader;</span>
+<span class="fc" id="L188">    }</span>
 
     /**
      * Gets if it uses the first record as a header.
      * @return true if the first record as a header, or false
      */
     public boolean isFirstRecordAsHeader() {
-<span class="fc" id="L180">        return Boolean.TRUE.equals(firstRecordAsHeader);</span>
+<span class="fc" id="L195">        return Boolean.TRUE.equals(firstRecordAsHeader);</span>
     }
 
     /**
@@ -185,7 +200,7 @@ public class CsvConfig {
      * @return true if the first record as a header, or false
      */
     public Boolean getFirstRecordAsHeader() {
-<span class="nc" id="L188">        return firstRecordAsHeader;</span>
+<span class="nc" id="L203">        return firstRecordAsHeader;</span>
     }
 
     /**
@@ -193,15 +208,15 @@ public class CsvConfig {
      * @param skipHeaderRecord true to skip the header, or false
      */
     public void setSkipHeaderRecord(Boolean skipHeaderRecord) {
-<span class="fc" id="L196">        this.skipHeaderRecord = skipHeaderRecord;</span>
-<span class="fc" id="L197">    }</span>
+<span class="fc" id="L211">        this.skipHeaderRecord = skipHeaderRecord;</span>
+<span class="fc" id="L212">    }</span>
 
     /**
      * Gets if it skips the header record.
      * @return true if it skips the header record, or false
      */
     public Boolean getSkipHeaderRecord() {
-<span class="fc" id="L204">        return skipHeaderRecord;</span>
+<span class="fc" id="L219">        return skipHeaderRecord;</span>
     }
 
     /**
@@ -209,15 +224,15 @@ public class CsvConfig {
      * @param headers header
      */
     public void setHeaders(String headers) {
-<span class="fc" id="L212">        this.headers = headers;</span>
-<span class="fc" id="L213">    }</span>
+<span class="fc" id="L227">        this.headers = headers;</span>
+<span class="fc" id="L228">    }</span>
 
     /**
      * Gets the header.
      * @return header
      */
     public String getHeaders() {
-<span class="fc" id="L220">        return headers;</span>
+<span class="fc" id="L235">        return headers;</span>
     }
 
     /**
@@ -225,7 +240,7 @@ public class CsvConfig {
      * @return parsed header
      */
     public String[] getParsedHeaders() {
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        return headers != null ? headers.split(delimiter.toString()) : null;</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        return headers != null ? headers.split(delimiter.toString()) : null;</span>
     }
 
     /**
@@ -233,15 +248,15 @@ public class CsvConfig {
      * @param commentMarker comment marker character
      */
     public void setCommentMarker(Character commentMarker) {
-<span class="nc" id="L236">        this.commentMarker = commentMarker;</span>
-<span class="nc" id="L237">    }</span>
+<span class="nc" id="L251">        this.commentMarker = commentMarker;</span>
+<span class="nc" id="L252">    }</span>
 
     /**
      * Gets the comment marker character.
      * @return comment marker character
      */
     public Character getCommentMarker() {
-<span class="nc" id="L244">        return commentMarker;</span>
+<span class="nc" id="L259">        return commentMarker;</span>
     }
 
     /**
@@ -249,7 +264,7 @@ public class CsvConfig {
      * @return escape character
      */
     public Character getEscape() {
-<span class="nc" id="L252">        return escape;</span>
+<span class="nc" id="L267">        return escape;</span>
     }
 
     /**
@@ -257,15 +272,15 @@ public class CsvConfig {
      * @param escape escape character
      */
     public void setEscape(Character escape) {
-<span class="nc" id="L260">        this.escape = escape;</span>
-<span class="nc" id="L261">    }</span>
+<span class="nc" id="L275">        this.escape = escape;</span>
+<span class="nc" id="L276">    }</span>
 
     /**
      * gets if it ignores the empty lines.
      * @return true if it ignores the empty lines, or false
      */
     public Boolean getIgnoreEmptyLines() {
-<span class="nc" id="L268">        return ignoreEmptyLines;</span>
+<span class="nc" id="L283">        return ignoreEmptyLines;</span>
     }
 
     /**
@@ -273,15 +288,15 @@ public class CsvConfig {
      * @param ignoreEmptyLines true to ignore the empty lines, or false
      */
     public void setIgnoreEmptyLines(Boolean ignoreEmptyLines) {
-<span class="fc" id="L276">        this.ignoreEmptyLines = ignoreEmptyLines;</span>
-<span class="fc" id="L277">    }</span>
+<span class="nc" id="L291">        this.ignoreEmptyLines = ignoreEmptyLines;</span>
+<span class="nc" id="L292">    }</span>
 
     /**
      * Gets if it ignores the header case.
      * @return true if it ignores the header case, or false
      */
     public Boolean getIgnoreHeaderCase() {
-<span class="fc" id="L284">        return ignoreHeaderCase;</span>
+<span class="fc" id="L299">        return ignoreHeaderCase;</span>
     }
 
     /**
@@ -289,15 +304,15 @@ public class CsvConfig {
      * @param ignoreHeaderCase true to ignore header case, or false
      */
     public void setIgnoreHeaderCase(Boolean ignoreHeaderCase) {
-<span class="fc" id="L292">        this.ignoreHeaderCase = ignoreHeaderCase;</span>
-<span class="fc" id="L293">    }</span>
+<span class="fc" id="L307">        this.ignoreHeaderCase = ignoreHeaderCase;</span>
+<span class="fc" id="L308">    }</span>
 
     /**
      * Gets if it ignores the surrouunding spaces.
      * @return true if it ignores the surrounding spaces, or false
      */
     public Boolean getIgnoreSurroundingSpaces() {
-<span class="nc" id="L300">        return ignoreSurroundingSpaces;</span>
+<span class="nc" id="L315">        return ignoreSurroundingSpaces;</span>
     }
 
     /**
@@ -305,15 +320,15 @@ public class CsvConfig {
      * @param ignoreSurroundingSpaces true to ignore the surrounding spaces, or false
      */
     public void setIgnoreSurroundingSpaces(Boolean ignoreSurroundingSpaces) {
-<span class="fc" id="L308">        this.ignoreSurroundingSpaces = ignoreSurroundingSpaces;</span>
-<span class="fc" id="L309">    }</span>
+<span class="nc" id="L323">        this.ignoreSurroundingSpaces = ignoreSurroundingSpaces;</span>
+<span class="nc" id="L324">    }</span>
 
     /**
      * Gets the null string.
      * @return null string
      */
     public String getNullString() {
-<span class="nc" id="L316">        return nullString;</span>
+<span class="nc" id="L331">        return nullString;</span>
     }
 
     /**
@@ -321,15 +336,15 @@ public class CsvConfig {
      * @param nullString null string
      */
     public void setNullString(String nullString) {
-<span class="fc" id="L324">        this.nullString = nullString;</span>
-<span class="fc" id="L325">    }</span>
+<span class="nc" id="L339">        this.nullString = nullString;</span>
+<span class="nc" id="L340">    }</span>
 
     /**
      * Gets the quote character.
      * @return quote character
      */
     public Character getQuote() {
-<span class="nc" id="L332">        return quote;</span>
+<span class="nc" id="L347">        return quote;</span>
     }
 
     /**
@@ -337,15 +352,15 @@ public class CsvConfig {
      * @param quote quote character
      */
     public void setQuote(Character quote) {
-<span class="nc" id="L340">        this.quote = quote;</span>
-<span class="nc" id="L341">    }</span>
+<span class="nc" id="L355">        this.quote = quote;</span>
+<span class="nc" id="L356">    }</span>
 
     /**
      * Gets if it allows the duplicate header names.
      * @return true if it allows duplicate the header names, or false
      */
     public Boolean getAllowDuplicateHeaderNames() {
-<span class="nc" id="L348">        return allowDuplicateHeaderNames;</span>
+<span class="nc" id="L363">        return allowDuplicateHeaderNames;</span>
     }
 
     /**
@@ -353,15 +368,15 @@ public class CsvConfig {
      * @param allowDuplicateHeaderNames true to allow the duplicate header names, or false
      */
     public void setAllowDuplicateHeaderNames(Boolean allowDuplicateHeaderNames) {
-<span class="fc" id="L356">        this.allowDuplicateHeaderNames = allowDuplicateHeaderNames;</span>
-<span class="fc" id="L357">    }</span>
+<span class="nc" id="L371">        this.allowDuplicateHeaderNames = allowDuplicateHeaderNames;</span>
+<span class="nc" id="L372">    }</span>
 
     /**
      * Gets if it allows the missing column names.
      * @return true if it allows the missing column names, or false
      */
     public Boolean getAllowMissingColumnNames() {
-<span class="nc" id="L364">        return allowMissingColumnNames;</span>
+<span class="nc" id="L379">        return allowMissingColumnNames;</span>
     }
 
     /**
@@ -369,7 +384,7 @@ public class CsvConfig {
      * @param allowMissingColumnNames true to allow the missing column names, or false
      */
     public void setAllowMissingColumnNames(Boolean allowMissingColumnNames) {
-<span class="fc" id="L372">        this.allowMissingColumnNames = allowMissingColumnNames;</span>
-<span class="fc" id="L373">    }</span>
+<span class="nc" id="L387">        this.allowMissingColumnNames = allowMissingColumnNames;</span>
+<span class="nc" id="L388">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import io.atlasmap.api.AtlasException;
-import io.atlasmap.dfdl.core.DfdlConstants;
 import io.atlasmap.dfdl.core.DfdlSchemaResolver;
+import io.atlasmap.dfdl.v2.DfdlConstants;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.xml.module.XmlModule;
 

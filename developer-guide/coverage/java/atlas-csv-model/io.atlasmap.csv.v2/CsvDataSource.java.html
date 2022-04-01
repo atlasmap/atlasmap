@@ -15,14 +15,12 @@
  */
 package io.atlasmap.csv.v2;
 
-import java.io.Serializable;
-
 import io.atlasmap.v2.DataSource;
 
 /**
  * The {@link DataSource} implementation for CSV Document.
  */
-<span class="fc" id="L25">public class CsvDataSource extends DataSource implements Serializable {</span>
+<span class="fc" id="L23">public class CsvDataSource extends DataSource {</span>
 
     private static final long serialVersionUID = 1L;
     /** Template. */
@@ -37,7 +35,7 @@ import io.atlasmap.v2.DataSource;
      *
      */
     public String getTemplate() {
-<span class="fc" id="L40">        return template;</span>
+<span class="fc" id="L38">        return template;</span>
     }
 
     /**
@@ -49,56 +47,56 @@ import io.atlasmap.v2.DataSource;
      *
      */
     public void setTemplate(String value) {
-<span class="nc" id="L52">        this.template = value;</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L50">        this.template = value;</span>
+<span class="nc" id="L51">    }</span>
 
     @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L57" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L58">            return false;</span>
+<span class="nc bnc" id="L55" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L56">            return false;</span>
         }
-<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L61">            return true;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L59">            return true;</span>
         }
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L64">            return false;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L62">            return false;</span>
         }
-<span class="nc" id="L66">        final CsvDataSource that = ((CsvDataSource) object);</span>
+<span class="nc" id="L64">        final CsvDataSource that = ((CsvDataSource) object);</span>
         {
             String leftTemplate;
-<span class="nc" id="L69">            leftTemplate = this.getTemplate();</span>
+<span class="nc" id="L67">            leftTemplate = this.getTemplate();</span>
             String rightTemplate;
-<span class="nc" id="L71">            rightTemplate = that.getTemplate();</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (this.template!= null) {</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">                if (that.template!= null) {</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">                    if (!leftTemplate.equals(rightTemplate)) {</span>
-<span class="nc" id="L75">                        return false;</span>
+<span class="nc" id="L69">            rightTemplate = that.getTemplate();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">            if (this.template!= null) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                if (that.template!= null) {</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                    if (!leftTemplate.equals(rightTemplate)) {</span>
+<span class="nc" id="L73">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L78">                    return false;</span>
+<span class="nc" id="L76">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">                if (that.template!= null) {</span>
-<span class="nc" id="L82">                    return false;</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (that.template!= null) {</span>
+<span class="nc" id="L80">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L86">        return true;</span>
+<span class="nc" id="L84">        return true;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L91">        int currentHashCode = 1;</span>
-<span class="nc" id="L92">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L89">        int currentHashCode = 1;</span>
+<span class="nc" id="L90">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L94">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L92">            currentHashCode = (currentHashCode* 31);</span>
             String theTemplate;
-<span class="nc" id="L96">            theTemplate = this.getTemplate();</span>
-<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (this.template!= null) {</span>
-<span class="nc" id="L98">                currentHashCode += theTemplate.hashCode();</span>
+<span class="nc" id="L94">            theTemplate = this.getTemplate();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            if (this.template!= null) {</span>
+<span class="nc" id="L96">                currentHashCode += theTemplate.hashCode();</span>
             }
         }
-<span class="nc" id="L101">        return currentHashCode;</span>
+<span class="nc" id="L99">        return currentHashCode;</span>
     }
 
 }

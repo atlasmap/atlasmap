@@ -71,7 +71,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
         try {
 
-<span class="pc bpc" id="L74" title="2 of 4 branches missed.">            if (request.getType() == null || request.getJsonData() == null) {</span>
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">            if (request.getInspectionType() == null || request.getJsonData() == null) {</span>
 <span class="nc" id="L75">                response.setErrorMessage(</span>
                         &quot;Json data and Instance or Schema inspection type must be specified in request&quot;);
             } else {
@@ -81,7 +81,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="pc bpc" id="L81" title="1 of 2 branches missed.">                if (!validJsonData(jsonData)) {</span>
 <span class="nc" id="L82">                    response.setErrorMessage(&quot;Invalid json payload specified&quot;);</span>
                 } else {
-<span class="pc bpc" id="L84" title="2 of 3 branches missed.">                    switch (request.getType()) {</span>
+<span class="pc bpc" id="L84" title="2 of 3 branches missed.">                    switch (request.getInspectionType()) {</span>
                     case INSTANCE:
 <span class="nc" id="L86">                        d = s.inspectJsonDocument(jsonData);</span>
 <span class="nc" id="L87">                        break;</span>
@@ -89,7 +89,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="fc" id="L89">                        d = s.inspectJsonSchema(jsonData);</span>
 <span class="fc" id="L90">                        break;</span>
                     default:
-<span class="nc" id="L92">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L92">                        response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getInspectionType());</span>
                         break;
                     }
                 }

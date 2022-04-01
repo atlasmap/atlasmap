@@ -84,7 +84,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
         try {
 
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (request.getType() == null) {</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">            if (request.getInspectionType() == null) {</span>
 <span class="nc" id="L88">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
             } else {
 <span class="pc bpc" id="L90" title="1 of 2 branches missed.">                ClassLoader loader = resourceContext != null</span>
@@ -92,7 +92,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="fc" id="L92">                    : DfdlService.class.getClassLoader();</span>
 <span class="fc" id="L93">                DfdlInspectionService s = new DfdlInspectionService(loader);</span>
 
-<span class="pc bpc" id="L95" title="1 of 3 branches missed.">                switch (request.getType()) {</span>
+<span class="pc bpc" id="L95" title="1 of 3 branches missed.">                switch (request.getInspectionType()) {</span>
                 case INSTANCE:
 <span class="fc" id="L97">                    d = s.inspectDfdlInstance(request.getDfdlSchemaName(), request.getOptions());</span>
 <span class="fc" id="L98">                    break;</span>
@@ -100,7 +100,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 <span class="fc" id="L100">                    d = s.inspectDfdlSchema(request.getDfdlSchemaName(), request.getOptions());</span>
 <span class="fc" id="L101">                    break;</span>
                 default:
-<span class="nc" id="L103">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getType());</span>
+<span class="nc" id="L103">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getInspectionType());</span>
                     break;
                 }
             }

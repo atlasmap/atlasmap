@@ -15,13 +15,10 @@
  */
 package io.atlasmap.json.v2;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.BaseInspectionRequest;
-import io.atlasmap.v2.StringList;
 
 /**
  * The top container object of JSON Document inspection request that AtlasMap UI sends
@@ -29,93 +26,10 @@ import io.atlasmap.v2.StringList;
  */
 @JsonRootName(&quot;JsonInspectionRequest&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L32">public class JsonInspectionRequest extends BaseInspectionRequest implements Serializable {</span>
+<span class="fc" id="L29">public class JsonInspectionRequest extends BaseInspectionRequest {</span>
 
-    private static final long serialVersionUID = 1L;
-    /** Field name exclusions. */
-    protected StringList fieldNameExclusions;
-    /** Type name exclusions. */
-    protected StringList typeNameExclusions;
-    /** Namespace exclusions. */
-    protected StringList namespaceExclusions;
     /** Raw JSON schema/instance data to inspect. */
-    protected String jsonData;
-    /** URI. */
-    protected String uri;
-    /** Inspection type. */
-    protected InspectionType type;
-
-    /**
-     * Gets the value of the fieldNameExclusions property.
-     *
-     * @return
-     *     possible object is
-     *     {@link StringList }
-     *
-     */
-    public StringList getFieldNameExclusions() {
-<span class="fc" id="L57">        return fieldNameExclusions;</span>
-    }
-
-    /**
-     * Sets the value of the fieldNameExclusions property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link StringList }
-     *
-     */
-    public void setFieldNameExclusions(StringList value) {
-<span class="nc" id="L69">        this.fieldNameExclusions = value;</span>
-<span class="nc" id="L70">    }</span>
-
-    /**
-     * Gets the value of the typeNameExclusions property.
-     *
-     * @return
-     *     possible object is
-     *     {@link StringList }
-     *
-     */
-    public StringList getTypeNameExclusions() {
-<span class="fc" id="L81">        return typeNameExclusions;</span>
-    }
-
-    /**
-     * Sets the value of the typeNameExclusions property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link StringList }
-     *
-     */
-    public void setTypeNameExclusions(StringList value) {
-<span class="nc" id="L93">        this.typeNameExclusions = value;</span>
-<span class="nc" id="L94">    }</span>
-
-    /**
-     * Gets the value of the namespaceExclusions property.
-     *
-     * @return
-     *     possible object is
-     *     {@link StringList }
-     *
-     */
-    public StringList getNamespaceExclusions() {
-<span class="fc" id="L105">        return namespaceExclusions;</span>
-    }
-
-    /**
-     * Sets the value of the namespaceExclusions property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link StringList }
-     *
-     */
-    public void setNamespaceExclusions(StringList value) {
-<span class="nc" id="L117">        this.namespaceExclusions = value;</span>
-<span class="nc" id="L118">    }</span>
+    private String jsonData;
 
     /**
      * Gets the value of the jsonData property.
@@ -126,7 +40,7 @@ import io.atlasmap.v2.StringList;
      *
      */
     public String getJsonData() {
-<span class="fc" id="L129">        return jsonData;</span>
+<span class="fc" id="L43">        return jsonData;</span>
     }
 
     /**
@@ -138,235 +52,44 @@ import io.atlasmap.v2.StringList;
      *
      */
     public void setJsonData(String value) {
-<span class="fc" id="L141">        this.jsonData = value;</span>
-<span class="fc" id="L142">    }</span>
-
-    /**
-     * Gets the value of the uri property.
-     *
-     * @return
-     *     possible object is
-     *     {@link String }
-     *
-     */
-    public String getUri() {
-<span class="fc" id="L153">        return uri;</span>
-    }
-
-    /**
-     * Sets the value of the uri property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *
-     */
-    public void setUri(String value) {
-<span class="nc" id="L165">        this.uri = value;</span>
-<span class="nc" id="L166">    }</span>
-
-    /**
-     * Gets the value of the type property.
-     *
-     * @return
-     *     possible object is
-     *     {@link InspectionType }
-     *
-     */
-    public InspectionType getType() {
-<span class="fc" id="L177">        return type;</span>
-    }
-
-    /**
-     * Sets the value of the type property.
-     *
-     * @param value
-     *     allowed object is
-     *     {@link InspectionType }
-     *
-     */
-    public void setType(InspectionType value) {
-<span class="fc" id="L189">        this.type = value;</span>
-<span class="fc" id="L190">    }</span>
+<span class="fc" id="L55">        this.jsonData = value;</span>
+<span class="fc" id="L56">    }</span>
 
     @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L194" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L195">            return false;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L61">            return false;</span>
         }
-<span class="nc bnc" id="L197" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L198">            return true;</span>
-        }
-<span class="nc" id="L200">        final JsonInspectionRequest that = ((JsonInspectionRequest) object);</span>
-        {
-            StringList leftFieldNameExclusions;
-<span class="nc" id="L203">            leftFieldNameExclusions = this.getFieldNameExclusions();</span>
-            StringList rightFieldNameExclusions;
-<span class="nc" id="L205">            rightFieldNameExclusions = that.getFieldNameExclusions();</span>
-<span class="nc bnc" id="L206" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
-<span class="nc bnc" id="L207" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
-<span class="nc bnc" id="L208" title="All 2 branches missed.">                    if (!leftFieldNameExclusions.equals(rightFieldNameExclusions)) {</span>
-<span class="nc" id="L209">                        return false;</span>
-                    }
-                } else {
-<span class="nc" id="L212">                    return false;</span>
+<span class="nc" id="L63">        final JsonInspectionRequest that = ((JsonInspectionRequest) object);</span>
+        String leftJsonData;
+<span class="nc" id="L65">        leftJsonData = this.getJsonData();</span>
+        String rightJsonData;
+<span class="nc" id="L67">        rightJsonData = that.getJsonData();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (this.jsonData != null) {</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (that.jsonData != null) {</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                if (!leftJsonData.equals(rightJsonData)) {</span>
+<span class="nc" id="L71">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L215" title="All 2 branches missed.">                if (that.fieldNameExclusions!= null) {</span>
-<span class="nc" id="L216">                    return false;</span>
-                }
+<span class="nc" id="L74">                return false;</span>
+            }
+        } else {
+<span class="nc bnc" id="L77" title="All 2 branches missed.">            if (that.jsonData != null) {</span>
+<span class="nc" id="L78">                return false;</span>
             }
         }
-        {
-            StringList leftTypeNameExclusions;
-<span class="nc" id="L222">            leftTypeNameExclusions = this.getTypeNameExclusions();</span>
-            StringList rightTypeNameExclusions;
-<span class="nc" id="L224">            rightTypeNameExclusions = that.getTypeNameExclusions();</span>
-<span class="nc bnc" id="L225" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
-<span class="nc bnc" id="L226" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
-<span class="nc bnc" id="L227" title="All 2 branches missed.">                    if (!leftTypeNameExclusions.equals(rightTypeNameExclusions)) {</span>
-<span class="nc" id="L228">                        return false;</span>
-                    }
-                } else {
-<span class="nc" id="L231">                    return false;</span>
-                }
-            } else {
-<span class="nc bnc" id="L234" title="All 2 branches missed.">                if (that.typeNameExclusions!= null) {</span>
-<span class="nc" id="L235">                    return false;</span>
-                }
-            }
-        }
-        {
-            StringList leftNamespaceExclusions;
-<span class="nc" id="L241">            leftNamespaceExclusions = this.getNamespaceExclusions();</span>
-            StringList rightNamespaceExclusions;
-<span class="nc" id="L243">            rightNamespaceExclusions = that.getNamespaceExclusions();</span>
-<span class="nc bnc" id="L244" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
-<span class="nc bnc" id="L245" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
-<span class="nc bnc" id="L246" title="All 2 branches missed.">                    if (!leftNamespaceExclusions.equals(rightNamespaceExclusions)) {</span>
-<span class="nc" id="L247">                        return false;</span>
-                    }
-                } else {
-<span class="nc" id="L250">                    return false;</span>
-                }
-            } else {
-<span class="nc bnc" id="L253" title="All 2 branches missed.">                if (that.namespaceExclusions!= null) {</span>
-<span class="nc" id="L254">                    return false;</span>
-                }
-            }
-        }
-        {
-            String leftJsonData;
-<span class="nc" id="L260">            leftJsonData = this.getJsonData();</span>
-            String rightJsonData;
-<span class="nc" id="L262">            rightJsonData = that.getJsonData();</span>
-<span class="nc bnc" id="L263" title="All 2 branches missed.">            if (this.jsonData!= null) {</span>
-<span class="nc bnc" id="L264" title="All 2 branches missed.">                if (that.jsonData!= null) {</span>
-<span class="nc bnc" id="L265" title="All 2 branches missed.">                    if (!leftJsonData.equals(rightJsonData)) {</span>
-<span class="nc" id="L266">                        return false;</span>
-                    }
-                } else {
-<span class="nc" id="L269">                    return false;</span>
-                }
-            } else {
-<span class="nc bnc" id="L272" title="All 2 branches missed.">                if (that.jsonData!= null) {</span>
-<span class="nc" id="L273">                    return false;</span>
-                }
-            }
-        }
-        {
-            String leftUri;
-<span class="nc" id="L279">            leftUri = this.getUri();</span>
-            String rightUri;
-<span class="nc" id="L281">            rightUri = that.getUri();</span>
-<span class="nc bnc" id="L282" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc bnc" id="L283" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc bnc" id="L284" title="All 2 branches missed.">                    if (!leftUri.equals(rightUri)) {</span>
-<span class="nc" id="L285">                        return false;</span>
-                    }
-                } else {
-<span class="nc" id="L288">                    return false;</span>
-                }
-            } else {
-<span class="nc bnc" id="L291" title="All 2 branches missed.">                if (that.uri!= null) {</span>
-<span class="nc" id="L292">                    return false;</span>
-                }
-            }
-        }
-        {
-            InspectionType leftType;
-<span class="nc" id="L298">            leftType = this.getType();</span>
-            InspectionType rightType;
-<span class="nc" id="L300">            rightType = that.getType();</span>
-<span class="nc bnc" id="L301" title="All 2 branches missed.">            if (this.type!= null) {</span>
-<span class="nc bnc" id="L302" title="All 2 branches missed.">                if (that.type!= null) {</span>
-<span class="nc bnc" id="L303" title="All 2 branches missed.">                    if (!leftType.equals(rightType)) {</span>
-<span class="nc" id="L304">                        return false;</span>
-                    }
-                } else {
-<span class="nc" id="L307">                    return false;</span>
-                }
-            } else {
-<span class="nc bnc" id="L310" title="All 2 branches missed.">                if (that.type!= null) {</span>
-<span class="nc" id="L311">                    return false;</span>
-                }
-            }
-        }
-<span class="nc" id="L315">        return true;</span>
+<span class="nc" id="L81">        return true;</span>
     }
 
     @Override
     public int hashCode() {
-<span class="nc" id="L320">        int currentHashCode = 1;</span>
-        {
-<span class="nc" id="L322">            currentHashCode = (currentHashCode* 31);</span>
-            StringList theFieldNameExclusions;
-<span class="nc" id="L324">            theFieldNameExclusions = this.getFieldNameExclusions();</span>
-<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (this.fieldNameExclusions!= null) {</span>
-<span class="nc" id="L326">                currentHashCode += theFieldNameExclusions.hashCode();</span>
-            }
+<span class="nc" id="L86">        int currentHashCode = (super.hashCode() * 31);</span>
+        String theJsonData;
+<span class="nc" id="L88">        theJsonData = this.getJsonData();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (this.jsonData != null) {</span>
+<span class="nc" id="L90">            currentHashCode += theJsonData.hashCode();</span>
         }
-        {
-<span class="nc" id="L330">            currentHashCode = (currentHashCode* 31);</span>
-            StringList theTypeNameExclusions;
-<span class="nc" id="L332">            theTypeNameExclusions = this.getTypeNameExclusions();</span>
-<span class="nc bnc" id="L333" title="All 2 branches missed.">            if (this.typeNameExclusions!= null) {</span>
-<span class="nc" id="L334">                currentHashCode += theTypeNameExclusions.hashCode();</span>
-            }
-        }
-        {
-<span class="nc" id="L338">            currentHashCode = (currentHashCode* 31);</span>
-            StringList theNamespaceExclusions;
-<span class="nc" id="L340">            theNamespaceExclusions = this.getNamespaceExclusions();</span>
-<span class="nc bnc" id="L341" title="All 2 branches missed.">            if (this.namespaceExclusions!= null) {</span>
-<span class="nc" id="L342">                currentHashCode += theNamespaceExclusions.hashCode();</span>
-            }
-        }
-        {
-<span class="nc" id="L346">            currentHashCode = (currentHashCode* 31);</span>
-            String theJsonData;
-<span class="nc" id="L348">            theJsonData = this.getJsonData();</span>
-<span class="nc bnc" id="L349" title="All 2 branches missed.">            if (this.jsonData!= null) {</span>
-<span class="nc" id="L350">                currentHashCode += theJsonData.hashCode();</span>
-            }
-        }
-        {
-<span class="nc" id="L354">            currentHashCode = (currentHashCode* 31);</span>
-            String theUri;
-<span class="nc" id="L356">            theUri = this.getUri();</span>
-<span class="nc bnc" id="L357" title="All 2 branches missed.">            if (this.uri!= null) {</span>
-<span class="nc" id="L358">                currentHashCode += theUri.hashCode();</span>
-            }
-        }
-        {
-<span class="nc" id="L362">            currentHashCode = (currentHashCode* 31);</span>
-            InspectionType theType;
-<span class="nc" id="L364">            theType = this.getType();</span>
-<span class="nc bnc" id="L365" title="All 2 branches missed.">            if (this.type!= null) {</span>
-<span class="nc" id="L366">                currentHashCode += theType.hashCode();</span>
-            }
-        }
-<span class="nc" id="L369">        return currentHashCode;</span>
+<span class="nc" id="L92">        return currentHashCode;</span>
     }
 
 }
