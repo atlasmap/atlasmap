@@ -42,6 +42,9 @@ export interface IUseContextToolbarHandlers {
   onImportADMArchiveFile: (file: File) => void;
   onImportJarFile: (file: File) => void;
   onExportAtlasFile: () => void;
+  onDeleteDocsAndMappings: () => void;
+  onDeleteLibraries: () => void;
+  onDeleteMappings: () => void;
   onResetAtlasmap: () => void;
   onAbout: () => void;
 }
@@ -50,7 +53,7 @@ export interface IUseContextToolbarData {
   showImportAtlasFileToolbarItem?: boolean;
   showImportJarFileToolbarItem?: boolean;
   showExportAtlasFileToolbarItem?: boolean;
-  showResetToolbarItem?: boolean;
+  showDeleteResetToolbarItem?: boolean;
 
   showColumnMapperViewToolbarItem?: boolean;
   showMappingTableViewToolbarItem?: boolean;
@@ -61,13 +64,17 @@ export interface IUseContextToolbarData {
   showToggleMappedFieldsToolbarItem?: boolean;
   showToggleUnmappedFieldsToolbarItem?: boolean;
   showAddNewMappingToolbarItem?: boolean;
+
+  docsExist?: boolean;
+  librariesExist?: boolean;
+  mappingsExist?: boolean;
 }
 
 export function useContextToolbar({
   showImportAtlasFileToolbarItem = true,
   showImportJarFileToolbarItem = true,
   showExportAtlasFileToolbarItem = true,
-  showResetToolbarItem = true,
+  showDeleteResetToolbarItem = true,
 
   showColumnMapperViewToolbarItem = true,
   showMappingTableViewToolbarItem = true,
@@ -78,10 +85,16 @@ export function useContextToolbar({
   showToggleMappedFieldsToolbarItem = true,
   showToggleUnmappedFieldsToolbarItem = true,
   showAddNewMappingToolbarItem = true,
+  docsExist,
+  librariesExist,
+  mappingsExist,
 
   onImportADMArchiveFile,
   onImportJarFile,
   onExportAtlasFile,
+  onDeleteDocsAndMappings,
+  onDeleteLibraries,
+  onDeleteMappings,
   onResetAtlasmap,
   onAbout,
 }: IUseContextToolbarData & IUseContextToolbarHandlers) {
@@ -109,17 +122,23 @@ export function useContextToolbar({
         {(showImportAtlasFileToolbarItem ||
           showImportJarFileToolbarItem ||
           showExportAtlasFileToolbarItem ||
-          showResetToolbarItem) && (
+          showDeleteResetToolbarItem) && (
           <ToolbarGroup variant="button-group" spacer={{ default: 'spacerMd' }}>
             <AtlasmapToolbarItem
               showImportAtlasFileToolbarItem={showImportAtlasFileToolbarItem}
               showImportJarFileToolbarItem={showImportJarFileToolbarItem}
               showExportAtlasFileToolbarItem={showExportAtlasFileToolbarItem}
-              showResetToolbarItem={showResetToolbarItem}
+              showDeleteResetToolbarItem={showDeleteResetToolbarItem}
               onImportAtlasFile={onImportADMArchiveFile}
               onImportJarFile={onImportJarFile}
               onExportAtlasFile={onExportAtlasFile}
+              onDeleteDocsAndMappings={onDeleteDocsAndMappings}
+              onDeleteLibraries={onDeleteLibraries}
+              onDeleteMappings={onDeleteMappings}
               onResetAtlasmap={onResetAtlasmap}
+              docsExist={docsExist}
+              librariesExist={librariesExist}
+              mappingsExist={mappingsExist}
             />
           </ToolbarGroup>
         )}
@@ -198,10 +217,13 @@ export function useContextToolbar({
       showImportAtlasFileToolbarItem,
       showImportJarFileToolbarItem,
       showExportAtlasFileToolbarItem,
-      showResetToolbarItem,
+      showDeleteResetToolbarItem,
       onImportADMArchiveFile,
       onImportJarFile,
       onExportAtlasFile,
+      onDeleteDocsAndMappings,
+      onDeleteLibraries,
+      onDeleteMappings,
       onResetAtlasmap,
       onAbout,
       showColumnMapperViewToolbarItem,
@@ -210,6 +232,9 @@ export function useContextToolbar({
       activeView,
       showToggleMappingPreviewToolbarItem,
       showMappingPreview,
+      docsExist,
+      librariesExist,
+      mappingsExist,
       toggleShowMappingPreview,
       showToggleTypesToolbarItem,
       showTypes,

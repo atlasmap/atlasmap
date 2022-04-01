@@ -18,7 +18,7 @@ import { IAtlasmapDocument, IAtlasmapMapping } from '../../Views';
 import { IAtlasmapField } from './../../Views/models';
 
 export interface DataAction {
-  type: 'reset' | 'loading' | 'update' | 'error';
+  type: 'delete' | 'reset' | 'loading' | 'update' | 'error';
   payload?: DataActionPayload;
 }
 

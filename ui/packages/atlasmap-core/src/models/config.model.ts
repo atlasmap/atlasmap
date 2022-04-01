@@ -249,14 +249,17 @@ export class ConfigModel {
   }
 
   /**
-   * Clear source/target/mapping documents from the model.  Reset constant and property document definitions.
+   * Clear source/target/mapping documents from the model.  Reset constant and
+   * property document definitions if requested.
    */
-  clearDocs(): void {
+  clearDocs(clearConstProps: boolean): void {
     this.sourceDocs = [];
     this.targetDocs = [];
-    this.sourcePropertyDoc.clearFields();
-    this.targetPropertyDoc.clearFields();
-    this.constantDoc.clearFields();
+    if (clearConstProps) {
+      this.sourcePropertyDoc.clearFields();
+      this.targetPropertyDoc.clearFields();
+      this.constantDoc.clearFields();
+    }
     this.mappingFiles = [];
   }
 

@@ -15,6 +15,10 @@
 */
 import { INotification } from '../../Views';
 
+export interface DeleteNotificationsAction {
+  type: 'delete';
+}
+
 export interface ResetNotificationsAction {
   type: 'reset';
 }
@@ -48,7 +52,8 @@ export function notificationsReducer(
   action:
     | ResetNotificationsAction
     | UpdateNotificationsAction
-    | DismissNotificationAction,
+    | DismissNotificationAction
+    | DeleteNotificationsAction,
 ): INotificationsState {
   switch (action.type) {
     case 'reset':

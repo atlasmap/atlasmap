@@ -43,7 +43,7 @@ import { useSidebar } from './useSidebar';
 export interface IAtlasmapProps {
   allowImport?: boolean;
   allowExport?: boolean;
-  allowReset?: boolean;
+  allowDeleteReset?: boolean;
   allowDelete?: boolean;
   allowCustomJavaClasses?: boolean;
   modalsContainerId?: string;
@@ -53,7 +53,7 @@ export interface IAtlasmapProps {
 export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
   allowImport = true,
   allowExport = true,
-  allowReset = true,
+  allowDeleteReset = true,
   allowDelete = true,
   allowCustomJavaClasses = true,
   modalsContainerId = 'modals',
@@ -110,11 +110,17 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       showImportAtlasFileToolbarItem: allowImport,
       showImportJarFileToolbarItem: allowImport,
       showExportAtlasFileToolbarItem: allowExport,
-      showResetToolbarItem: allowReset,
+      showDeleteResetToolbarItem: allowDeleteReset,
+      docsExist: sources.length > 2 || targets.length > 1,
+      librariesExist: false, // #3867
+      mappingsExist: mappings.length > 0,
       ...toolbarOptions,
       onImportADMArchiveFile: handlers.onImportADMArchive,
       onImportJarFile: (file) => importJarFile(file),
       onExportAtlasFile: handlers.onExportADMArchive,
+      onDeleteDocsAndMappings: handlers.onDelDocsAndMappingsAtlasmap,
+      onDeleteLibraries: handlers.onDeleteLibrariesAtlasmap,
+      onDeleteMappings: handlers.onDeleteMappingsAtlasmap,
       onResetAtlasmap: handlers.onResetAtlasmap,
       onAbout: handlers.onAbout,
     });

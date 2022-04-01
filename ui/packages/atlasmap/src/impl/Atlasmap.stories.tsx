@@ -107,7 +107,7 @@ export const wiredToTheBackend = () => (
     <Atlasmap
       allowImport={boolean('allow Import', true)}
       allowExport={boolean('allow Export', true)}
-      allowReset={boolean('allow Reset', true)}
+      allowDeleteReset={boolean('allow Delete and Reset', true)}
       allowDelete={boolean('allow Delete', true)}
       allowCustomJavaClasses={boolean('allow Custom Java Classes', true)}
       toolbarOptions={{
@@ -181,7 +181,7 @@ export const embeddedInSyndesis = () => {
       <Atlasmap
         allowImport={false}
         allowExport={false}
-        allowReset={false}
+        allowDeleteReset={false}
         allowDelete={false}
         allowCustomJavaClasses={false}
       />
