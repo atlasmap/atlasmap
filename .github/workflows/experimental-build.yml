@@ -13,7 +13,6 @@ jobs:
   build_maven:
     if: ${{ github.repository == 'atlasmap/atlasmap' }}
     runs-on: ubuntu-latest
-    continue-on-error: true
     strategy:
       matrix:
         java: [ '18' ]
@@ -21,13 +20,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Java versions
-      continue-on-error: true
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
         distribution: 'temurin'
     - name: Cache Maven repo
-      continue-on-error: true
       uses: actions/cache@v2
       with:
         path: ~/.m2/repository
@@ -35,17 +32,13 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Build from root with Maven
-      continue-on-error: true
       run: mvn --batch-mode -Pcoverage -Dwebdriver.chrome.driver=/usr/bin/chromedriver clean install
     - name: Build lib with Maven
-      continue-on-error: true
       working-directory: lib
       run: mvn --batch-mode clean install
     - name: Build docs
-      continue-on-error: true
       working-directory: docs
       run: mvn -Phtml,pdf package
     - name: Build aggregated javadoc
-      continue-on-error: true
       working-directory: docs
       run: mvn -f pom-javadoc.xml  -Dfailonerror=true -pl \!io.atlasmap:atlasmap-lib-all -pl \!io.atlasmap.com.sun.xsom:xsom javadoc:aggregate
