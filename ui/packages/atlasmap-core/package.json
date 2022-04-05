@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/core",
   "description": "AtlasMap UI core library",
-  "version": "2.3.17",
+  "version": "2.3.18",
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
