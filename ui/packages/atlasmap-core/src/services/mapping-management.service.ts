@@ -160,12 +160,13 @@ export class MappingManagementService {
       const url: string =
         this.cfg.initCfg.baseAtlasServiceUrl +
         'project/' +
-        this.cfg.mappingDefinitionId;
+        this.cfg.mappingDefinitionId +
+        '/mapping';
       this.api
         .delete(url)
         .then(async (res: Response) => {
           this.cfg.logger!.debug(`Delete Mappings Response: ${res.ok}`);
-          // Re-load the mappings from the backend service.
+          // Re-load the empty mappings from the backend service.
           await this.notifyFetchMapping();
           if (this.cfg.mappings!.mappings.length > 0) {
             this.cfg.errorService.addError(
@@ -179,7 +180,6 @@ export class MappingManagementService {
             resolve(false);
           }
           this.deselectMapping();
-          await this.notifyMappingUpdated();
           resolve(true);
         })
         .catch((error: any) => {
@@ -722,17 +722,15 @@ export class MappingManagementService {
     return new Promise<boolean>(async (resolve) => {
       if (this.cfg.mappings === null) {
         this.cfg.mappings = new MappingDefinition();
+      } else {
+        this.cfg.mappings.mappings = [];
       }
       this.cfg.mappingService
         .fetchMappings(this.cfg.mappings)
         .then((value: boolean) => {
-          // A false return value indicates there are no mappings to be retrieved.
-          if (!value) {
-            this.cfg.mappings!.mappings = [];
-          }
           this.mappingUpdatedSource.next();
           this.notifyLineRefresh();
-          resolve(true);
+          resolve(value);
         });
     });
   }

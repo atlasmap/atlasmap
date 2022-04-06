@@ -497,11 +497,14 @@ export class FileManagementService {
         return;
       }
       this.cfg.mappingFiles[0] = this.cfg.mappings.name!;
-      const baseURL: string =
-        this.cfg.initCfg.baseAtlasServiceUrl + 'project/0/mapping/';
+      const url: string =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping';
       this.cfg.logger!.debug('Get Current Mapping Request');
       this.api
-        .get(baseURL)
+        .get(url)
         .json<IAtlasMappingContainer>()
         .then((body) => {
           this.cfg.logger!.debug(
