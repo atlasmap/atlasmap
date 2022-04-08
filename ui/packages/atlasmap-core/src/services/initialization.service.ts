@@ -282,7 +282,7 @@ export class InitializationService {
           await this.cfg.fieldActionService.fetchFieldActions();
 
           // load mappings
-          this.fetchMappings()
+          this.loadMappings()
             .then((value) => {
               resolve(value);
             })
@@ -347,11 +347,11 @@ export class InitializationService {
   }
 
   /**
-   * Fetch mapping files and initialize user mappings in the canvas.
+   * Get mapping files and initialize user mappings in the canvas.
    *
    * @param mappingFiles
    */
-  private fetchMappings(): Promise<boolean> {
+  private loadMappings(): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       if (this.cfg.mappings != null) {
         resolve(true);
@@ -367,15 +367,13 @@ export class InitializationService {
         resolve(false);
       }
 
-      this.cfg.mappingService
-        .fetchMappings(mappingFiles, this.cfg.mappings)
-        .then(() => {
-          this.cfg.initCfg.mappingInitialized = true;
-          this.updateStatus();
-          this.cfg.mappingService
-            .notifyMappingUpdated()
-            .then(() => resolve(true));
-        });
+      this.cfg.mappingService.fetchMappings(this.cfg.mappings).then(() => {
+        this.cfg.initCfg.mappingInitialized = true;
+        this.updateStatus();
+        this.cfg.mappingService
+          .notifyMappingUpdated()
+          .then(() => resolve(true));
+      });
     });
   }
 

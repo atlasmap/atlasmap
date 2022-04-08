@@ -93,10 +93,7 @@ export class MappingManagementService {
    * @param mappingDefinition {@link MappingDefinition}
    * @returns
    */
-  fetchMappings(
-    _mappingFiles: string[],
-    mappingDefinition: MappingDefinition
-  ): Promise<boolean> {
+  fetchMappings(mappingDefinition: MappingDefinition): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       this.cfg.fileService
         .getCurrentMappingJson()
@@ -156,10 +153,10 @@ export class MappingManagementService {
   }
 
   /**
-   * Remove all mappings from the current session (UI and backend service).
+   * Remove all mappings from the current session.
    */
   removeAllMappings(): Promise<boolean> {
-    return new Promise<boolean>((resolve) => {
+    return new Promise<boolean>(async (resolve) => {
       const url: string =
         this.cfg.initCfg.baseAtlasServiceUrl +
         'project/' +
@@ -169,11 +166,20 @@ export class MappingManagementService {
         .delete(url)
         .then(async (res: Response) => {
           this.cfg.logger!.debug(`Delete Mappings Response: ${res.ok}`);
-          for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-            this.cfg.mappings!.removeMapping(mapping);
+          // Re-load the empty mappings from the backend service.
+          await this.notifyFetchMapping();
+          if (this.cfg.mappings!.mappings.length > 0) {
+            this.cfg.errorService.addError(
+              new ErrorInfo({
+                message: 'Error detected deleting all mappings',
+                level: ErrorLevel.ERROR,
+                scope: ErrorScope.MAPPING,
+                type: ErrorType.USER,
+              })
+            );
+            resolve(false);
           }
           this.deselectMapping();
-          await this.notifyMappingUpdated();
           resolve(true);
         })
         .catch((error: any) => {
@@ -705,6 +711,28 @@ export class MappingManagementService {
     setTimeout(() => {
       this.lineRefreshSource.next();
     }, 1);
+  }
+
+  /**
+   * Fetch mappings from the backend service and refresh the UI.
+   *
+   * @returns
+   */
+  notifyFetchMapping(): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      if (this.cfg.mappings === null) {
+        this.cfg.mappings = new MappingDefinition();
+      } else {
+        this.cfg.mappings.mappings = [];
+      }
+      this.cfg.mappingService
+        .fetchMappings(this.cfg.mappings)
+        .then((value: boolean) => {
+          this.mappingUpdatedSource.next();
+          this.notifyLineRefresh();
+          resolve(value);
+        });
+    });
   }
 
   /**

@@ -104,10 +104,12 @@ public class MappingService extends BaseAtlasService {
         @ApiResponse(responseCode = "200", description = "The mappings for the specified mapping definition was removed successfully"),
         @ApiResponse(responseCode = "204", description = "The specified mapping definition was not found")})
     public Response removeMappingRequest(@Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
+        LOG.debug("removeMappingRequest: {}", mappingDefinitionId);
         try {
             ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
             AtlasMapping def = handler.getMappingDefinition();
             def.getMappings().getMapping().clear();
+            handler.setMappingDefinition(def);
             handler.persist();
         } catch (AtlasException e) {
             LOG.error("Error removing mappings from a mapping definition file for ID:" + mappingDefinitionId, e);

@@ -68,7 +68,7 @@ describe('MappingManagementService', () => {
     TestUtils.createMockDocs(service.cfg);
     service.cfg.mappings = new MappingDefinition();
     service
-      .fetchMappings([''], service.cfg.mappings)
+      .fetchMappings(service.cfg.mappings)
       .then((value) => {
         expect(value).toBeTruthy();
         expect(service.cfg.mappings?.mappings.length).toBeGreaterThan(0);
