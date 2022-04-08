@@ -104,16 +104,18 @@ public class MappingService extends BaseAtlasService {
         @ApiResponse(responseCode = &quot;200&quot;, description = &quot;The mappings for the specified mapping definition was removed successfully&quot;),
         @ApiResponse(responseCode = &quot;204&quot;, description = &quot;The specified mapping definition was not found&quot;)})
     public Response removeMappingRequest(@Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+<span class="nc" id="L107">        LOG.debug(&quot;removeMappingRequest: {}&quot;, mappingDefinitionId);</span>
         try {
-<span class="nc" id="L108">            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
-<span class="nc" id="L109">            AtlasMapping def = handler.getMappingDefinition();</span>
-<span class="nc" id="L110">            def.getMappings().getMapping().clear();</span>
-<span class="nc" id="L111">            handler.persist();</span>
-<span class="nc" id="L112">        } catch (AtlasException e) {</span>
-<span class="nc" id="L113">            LOG.error(&quot;Error removing mappings from a mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
-<span class="nc" id="L114">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
-<span class="nc" id="L115">        }</span>
-<span class="nc" id="L116">        return Response.ok().build();</span>
+<span class="nc" id="L109">            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="nc" id="L110">            AtlasMapping def = handler.getMappingDefinition();</span>
+<span class="nc" id="L111">            def.getMappings().getMapping().clear();</span>
+<span class="nc" id="L112">            handler.setMappingDefinition(def);</span>
+<span class="nc" id="L113">            handler.persist();</span>
+<span class="nc" id="L114">        } catch (AtlasException e) {</span>
+<span class="nc" id="L115">            LOG.error(&quot;Error removing mappings from a mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
+<span class="nc" id="L116">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="nc" id="L117">        }</span>
+<span class="nc" id="L118">        return Response.ok().build();</span>
     }
 
     /**
@@ -131,24 +133,24 @@ public class MappingService extends BaseAtlasService {
         @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Mapping file access error&quot;)})
     public Response getMappingRequest(
       @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
-<span class="fc" id="L134">        LOG.debug(&quot;getMappingRequest: {}&quot;, mappingDefinitionId);</span>
-<span class="fc" id="L135">        ADMArchiveHandler admHandler = this.atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="fc" id="L136">        LOG.debug(&quot;getMappingRequest: {}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L137">        ADMArchiveHandler admHandler = this.atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
 
-<span class="fc" id="L137">        byte[] serialized = null;</span>
+<span class="fc" id="L139">        byte[] serialized = null;</span>
         try {
-<span class="fc" id="L139">            serialized = admHandler.getMappingDefinitionBytes();</span>
-<span class="nc" id="L140">        } catch (Exception e) {</span>
-<span class="nc" id="L141">            LOG.error(&quot;Error retrieving mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
-<span class="nc" id="L142">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
-<span class="fc" id="L143">        }</span>
-<span class="pc bpc" id="L144" title="3 of 4 branches missed.">        if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
-<span class="nc" id="L145">            LOG.debug(new String(serialized));</span>
+<span class="fc" id="L141">            serialized = admHandler.getMappingDefinitionBytes();</span>
+<span class="nc" id="L142">        } catch (Exception e) {</span>
+<span class="nc" id="L143">            LOG.error(&quot;Error retrieving mapping definition file for ID:&quot; + mappingDefinitionId, e);</span>
+<span class="nc" id="L144">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L145">        }</span>
+<span class="pc bpc" id="L146" title="3 of 4 branches missed.">        if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
+<span class="nc" id="L147">            LOG.debug(new String(serialized));</span>
         }
-<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (serialized == null) {</span>
-<span class="fc" id="L148">            LOG.debug(&quot;Mapping definition not found for ID:{}&quot;, mappingDefinitionId);</span>
-<span class="fc" id="L149">            return Response.noContent().build();</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (serialized == null) {</span>
+<span class="fc" id="L150">            LOG.debug(&quot;Mapping definition not found for ID:{}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L151">            return Response.noContent().build();</span>
         }
-<span class="fc" id="L151">        return Response.ok().entity(serialized).build();</span>
+<span class="fc" id="L153">        return Response.ok().entity(serialized).build();</span>
     }
 
         /**
@@ -168,18 +170,18 @@ public class MappingService extends BaseAtlasService {
             InputStream mapping,
             @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
             @Context UriInfo uriInfo) {
-<span class="fc" id="L171">        ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
-<span class="fc" id="L172">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
+<span class="fc" id="L173">        ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);</span>
+<span class="fc" id="L174">        UriBuilder builder = uriInfo.getAbsolutePathBuilder();</span>
         try {
-<span class="fc" id="L174">            handler.setMappingDefinitionBytes(mapping);</span>
-<span class="fc" id="L175">            handler.persist();</span>
-<span class="fc" id="L176">            builder.path(handler.getMappingDefinition().getName());</span>
-<span class="nc" id="L177">        } catch (AtlasException e) {</span>
-<span class="nc" id="L178">            LOG.error(&quot;Error saving Mapping Definition file.\n&quot; + e.getMessage(), e);</span>
-<span class="nc" id="L179">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
-<span class="fc" id="L180">        }</span>
+<span class="fc" id="L176">            handler.setMappingDefinitionBytes(mapping);</span>
+<span class="fc" id="L177">            handler.persist();</span>
+<span class="fc" id="L178">            builder.path(handler.getMappingDefinition().getName());</span>
+<span class="nc" id="L179">        } catch (AtlasException e) {</span>
+<span class="nc" id="L180">            LOG.error(&quot;Error saving Mapping Definition file.\n&quot; + e.getMessage(), e);</span>
+<span class="nc" id="L181">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L182">        }</span>
 
-<span class="fc" id="L182">        return Response.ok().location(builder.build()).build();</span>
+<span class="fc" id="L184">        return Response.ok().location(builder.build()).build();</span>
     }
 
     /**
@@ -200,11 +202,11 @@ public class MappingService extends BaseAtlasService {
                                            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
                                            @Context UriInfo uriInfo) {
         try {
-<span class="fc" id="L203">            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);</span>
-<span class="fc" id="L204">            LOG.debug(&quot;Validate mappings: {}&quot;, atlasMapping.getName());</span>
-<span class="fc" id="L205">            return validateMapping(mappingDefinitionId, atlasMapping, uriInfo);</span>
-<span class="nc" id="L206">        } catch (AtlasException | IOException e) {</span>
-<span class="nc" id="L207">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L205">            AtlasMapping atlasMapping = fromJson(mapping, AtlasMapping.class);</span>
+<span class="fc" id="L206">            LOG.debug(&quot;Validate mappings: {}&quot;, atlasMapping.getName());</span>
+<span class="fc" id="L207">            return validateMapping(mappingDefinitionId, atlasMapping, uriInfo);</span>
+<span class="nc" id="L208">        } catch (AtlasException | IOException e) {</span>
+<span class="nc" id="L209">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
         }
     }
 
@@ -219,18 +221,18 @@ public class MappingService extends BaseAtlasService {
      */
     private Response validateMapping(Integer mappingDefinitionId, AtlasMapping mapping, UriInfo uriInfo) throws IOException, AtlasException {
         AtlasSession session;
-<span class="fc" id="L222">        synchronized (atlasService.getContextFactory()) {</span>
-<span class="fc" id="L223">            AtlasContext context = atlasService.getContextFactory().createContext(mapping);</span>
-<span class="fc" id="L224">            session = context.createSession();</span>
-<span class="fc" id="L225">            context.processValidation(session);</span>
-<span class="fc" id="L226">        }</span>
+<span class="fc" id="L224">        synchronized (atlasService.getContextFactory()) {</span>
+<span class="fc" id="L225">            AtlasContext context = atlasService.getContextFactory().createContext(mapping);</span>
+<span class="fc" id="L226">            session = context.createSession();</span>
+<span class="fc" id="L227">            context.processValidation(session);</span>
+<span class="fc" id="L228">        }</span>
 
-<span class="fc" id="L228">        Validations validations = session.getValidations();</span>
-<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (session.getValidations() == null) {</span>
-<span class="nc" id="L230">            validations = new Validations();</span>
+<span class="fc" id="L230">        Validations validations = session.getValidations();</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        if (session.getValidations() == null) {</span>
+<span class="nc" id="L232">            validations = new Validations();</span>
         }
 
-<span class="fc" id="L233">        return Response.ok().entity(toJson(validations)).build();</span>
+<span class="fc" id="L235">        return Response.ok().entity(toJson(validations)).build();</span>
     }
 
     /**
@@ -252,33 +254,33 @@ public class MappingService extends BaseAtlasService {
     public Response processMappingRequest(InputStream request,
             @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
             @Context UriInfo uriInfo) {
-<span class="fc" id="L255">        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);</span>
-<span class="pc bpc" id="L256" title="1 of 2 branches missed.">        if (pmr.getAtlasMapping() != null) {</span>
-<span class="nc" id="L257">            throw new WebApplicationException(&quot;Whole mapping execution is not yet supported&quot;);</span>
+<span class="fc" id="L257">        ProcessMappingRequest pmr = fromJson(request, ProcessMappingRequest.class);</span>
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">        if (pmr.getAtlasMapping() != null) {</span>
+<span class="nc" id="L259">            throw new WebApplicationException(&quot;Whole mapping execution is not yet supported&quot;);</span>
         }
-<span class="fc" id="L259">        Mapping mapping = pmr.getMapping();</span>
-<span class="pc bpc" id="L260" title="1 of 2 branches missed.">        if (mapping == null) {</span>
-<span class="nc" id="L261">            return Response.noContent().build();</span>
+<span class="fc" id="L261">        Mapping mapping = pmr.getMapping();</span>
+<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        if (mapping == null) {</span>
+<span class="nc" id="L263">            return Response.noContent().build();</span>
         }
-<span class="fc" id="L263">        Audits audits = null;</span>
+<span class="fc" id="L265">        Audits audits = null;</span>
         try {
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L266">                LOG.debug(&quot;Preview request: {}&quot;, new String(toJson(mapping)));</span>
+<span class="pc bpc" id="L267" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L268">                LOG.debug(&quot;Preview request: {}&quot;, new String(toJson(mapping)));</span>
             }
-<span class="fc" id="L268">            audits = previewContext.processPreview(mapping);</span>
-<span class="nc" id="L269">        } catch (AtlasException e) {</span>
-<span class="nc" id="L270">            throw new WebApplicationException(&quot;Unable to process mapping preview&quot;, e);</span>
-<span class="fc" id="L271">        }</span>
-<span class="fc" id="L272">        ProcessMappingResponse response = new ProcessMappingResponse();</span>
-<span class="fc" id="L273">        response.setMapping(mapping);</span>
-<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (audits != null) {</span>
-<span class="fc" id="L275">            response.setAudits(audits);</span>
+<span class="fc" id="L270">            audits = previewContext.processPreview(mapping);</span>
+<span class="nc" id="L271">        } catch (AtlasException e) {</span>
+<span class="nc" id="L272">            throw new WebApplicationException(&quot;Unable to process mapping preview&quot;, e);</span>
+<span class="fc" id="L273">        }</span>
+<span class="fc" id="L274">        ProcessMappingResponse response = new ProcessMappingResponse();</span>
+<span class="fc" id="L275">        response.setMapping(mapping);</span>
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">        if (audits != null) {</span>
+<span class="fc" id="L277">            response.setAudits(audits);</span>
         }
-<span class="fc" id="L277">        byte[] serialized = toJson(response);</span>
-<span class="pc bpc" id="L278" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L279">            LOG.debug(&quot;Preview outcome: {}&quot;, new String(serialized));</span>
+<span class="fc" id="L279">        byte[] serialized = toJson(response);</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L281">            LOG.debug(&quot;Preview outcome: {}&quot;, new String(serialized));</span>
         }
-<span class="fc" id="L281">        return Response.ok().entity(serialized).build();</span>
+<span class="fc" id="L283">        return Response.ok().entity(serialized).build();</span>
     }
 
 }
