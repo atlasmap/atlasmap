@@ -2746,9 +2746,9 @@
   integrity sha512-Pr6JDDKWOnWChkifXKWglKEPo3Q+1CgiUTUrvk4ZbnD7mhq5e/TFxxInB9CPzi278bvnc2YlPyTjpaAcCN0yGw==
 
 "@patternfly/react-styles@^4.11.8", "@patternfly/react-styles@^4.48.19":
-  version "4.48.19"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.48.19.tgz#23bb4521a586275ed14d89c2c60fe8765e45b3bb"
-  integrity sha512-8+t8wqYGWkmyhxLty/kQXCY44rnW0y60nUMG7QKNzF1bAFJIpR8jKuVnHArM1h+MI9D53e8OVjKORH83hUAzJw==
+  version "4.52.16"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-styles/-/react-styles-4.52.16.tgz#7925013717eb5246529935d965d1ecdaf6240b60"
+  integrity sha512-i/xj+r0qVlhSoxrFOePxXoC8BudDPsEma0qwP+3Ry4hSZhN6XhSRSqjA5xmaLkgbfWCAiT/+mR9ilCaguxoLTA==
 
 "@patternfly/react-table@^4.30.3":
   version "4.67.19"
