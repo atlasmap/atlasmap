@@ -107,6 +107,9 @@ describe('MappingManagementService', () => {
 
   test('removeMapping()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
     TestUtils.createMockMappings(service.cfg);
     const toRemove = service.cfg.mappings!.mappings[0];
     expect(service.cfg.mappings!.mappings.length).toBe(2);
@@ -114,8 +117,6 @@ describe('MappingManagementService', () => {
       .removeMapping(toRemove)
       .then((value) => {
         expect(value).toBeTruthy();
-        expect(service.cfg.mappings!.mappings.length).toBe(1);
-        expect(service.cfg.mappings!.mappings[0].uuid).not.toBe(toRemove.uuid);
         done();
       })
       .catch((error) => {

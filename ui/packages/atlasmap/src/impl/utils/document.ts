@@ -44,8 +44,8 @@ export async function changeDocumentName(
   const cfg = ConfigModel.getConfig();
   const docDef = getDocDef(docId, cfg, isSource);
   docDef.name = newDocName;
-  await cfg.mappingService.notifyMappingUpdated();
   await cfg.fileService.updateDigestFile();
+  cfg.mappingService.refreshMappingUI();
 }
 
 /**
