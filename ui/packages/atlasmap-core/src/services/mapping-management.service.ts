@@ -133,22 +133,47 @@ export class MappingManagementService {
   }
 
   /**
-   * Remove the specified mapping model from the mappings array and update the runtime.
+   * Remove the specified mapping from the backend service.
    *
-   * @param mappingModel
+   * @param - mappingModel mapping to remove
+   * @returns - resolve(true) if the mapping is removed, resolve(false) otherwise
    */
-  async removeMapping(mappingModel: MappingModel): Promise<boolean> {
+  removeMapping(mappingModel: MappingModel): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
-      const mappingWasRemoved: boolean =
-        this.cfg.mappings!.removeMapping(mappingModel); // TODO: check this non null operator
-      if (mappingWasRemoved) {
-        this.deselectMapping();
-        await this.notifyMappingUpdated();
-      } else {
-        this.deselectMapping();
+      const url: string =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping/';
+      const removeIndex = this.cfg.mappings!.mappings.indexOf(mappingModel);
+      if (removeIndex === -1) {
+        this.cfg.errorService.addError(
+          new ErrorInfo({
+            message: `Error detected deleting mapping ${mappingModel.uuid}`,
+            level: ErrorLevel.ERROR,
+            scope: ErrorScope.MAPPING,
+            type: ErrorType.USER,
+          })
+        );
+        resolve(false);
       }
-      this.cfg.mappings!.activeMapping = null;
-      resolve(true);
+      this.api
+        .delete(url + removeIndex)
+        .then(async (res: Response) => {
+          this.cfg.logger!.debug(`Delete Mapping Response: ${res.ok}`);
+          // Re-load the mappings from the backend service.
+          await this.notifyFetchMapping();
+          this.deselectMapping();
+          this.cfg.mappings!.activeMapping = null;
+          resolve(true);
+        })
+        .catch((error: any) => {
+          this.cfg.errorService.addBackendError(
+            `Error occurred while deleting mapping ${mappingModel.uuid}.`,
+            error
+          );
+          resolve(false);
+        });
     });
   }
 
@@ -714,6 +739,14 @@ export class MappingManagementService {
   }
 
   /**
+   * Trigger a source/target panel and mapping lines refresh.
+   */
+  refreshMappingUI(): void {
+    this.mappingUpdatedSource.next();
+    this.notifyLineRefresh();
+  }
+
+  /**
    * Fetch mappings from the backend service and refresh the UI.
    *
    * @returns
@@ -728,8 +761,7 @@ export class MappingManagementService {
       this.cfg.mappingService
         .fetchMappings(this.cfg.mappings)
         .then((value: boolean) => {
-          this.mappingUpdatedSource.next();
-          this.notifyLineRefresh();
+          this.refreshMappingUI();
           resolve(value);
         });
     });

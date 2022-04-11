@@ -23,7 +23,7 @@ export function useDeleteMappingDialog(): [
   ReactElement,
   (mapping: IAtlasmapMapping) => void,
 ] {
-  const { removeMapping, deselectMapping } = useAtlasmap();
+  const { removeMapping } = useAtlasmap();
   const [deleteMappingDialog, openDeleteMappingDialog] = useConfirmationDialog(
     'Remove Mapping?',
     'Are you sure you want to remove the current mapping?',
@@ -32,10 +32,9 @@ export function useDeleteMappingDialog(): [
     (mapping: IAtlasmapMapping) => {
       openDeleteMappingDialog(() => {
         removeMapping(mapping.mapping);
-        deselectMapping();
       });
     },
-    [deselectMapping, openDeleteMappingDialog, removeMapping],
+    [openDeleteMappingDialog, removeMapping],
   );
 
   return [deleteMappingDialog, onDeleteMapping];

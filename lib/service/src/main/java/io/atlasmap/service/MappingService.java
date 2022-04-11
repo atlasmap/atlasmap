@@ -92,19 +92,49 @@ public class MappingService extends BaseAtlasService {
     }
 
     /**
-     * Remove mappings defined in a given mapping definition.
+     * Remove a specific mapping defined in a given mapping definition.
+     * @param mappingDefinitionId mapping definition ID
+     * @param mappingIndex mapping index to remove
+     * @return empty response
+     */
+    @DELETE
+    @Path("/{mappingIndex}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Remove Mapping", description = "Remove a specific mapping from the mapping definition")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "The mapping at the specified index within the specified mapping definition was removed successfully"),
+        @ApiResponse(responseCode = "204", description = "The specified mapping definition was not found")})
+    public Response removeMappingRequest(
+        @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
+        @Parameter(description = "Mapping Index") @PathParam("mappingIndex") Integer mappingIndex) {
+        LOG.debug("removeMappingRequest: ID: {}, mappingIndex: {}", mappingDefinitionId, mappingIndex);
+        try {
+            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+            AtlasMapping def = handler.getMappingDefinition();
+            def.getMappings().getMapping().remove(mappingIndex.intValue());
+            handler.setMappingDefinition(def);
+            handler.persist();
+        } catch (AtlasException e) {
+            LOG.error("Error removing mapping from a mapping definition file for ID: " + mappingDefinitionId, e);
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return Response.ok().build();
+    }
+
+    /**
+     * Remove all mappings defined in a given mapping definition.
      * @param mappingDefinitionId mapping definition ID
      * @return empty response
      */
     @DELETE
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Remove Mapping", description = "Remove mappings from mapping definition")
+    @Operation(summary = "Remove All Mappings", description = "Remove all mappings from a mapping definition")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "The mappings for the specified mapping definition was removed successfully"),
+        @ApiResponse(responseCode = "200", description = "All mappings for the specified mapping definition were removed successfully"),
         @ApiResponse(responseCode = "204", description = "The specified mapping definition was not found")})
-    public Response removeMappingRequest(@Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
-        LOG.debug("removeMappingRequest: {}", mappingDefinitionId);
+    public Response removeAllMappingsRequest(@Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
+        LOG.debug("removeAllMappingsRequest: {}", mappingDefinitionId);
         try {
             ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
             AtlasMapping def = handler.getMappingDefinition();
@@ -112,7 +142,7 @@ public class MappingService extends BaseAtlasService {
             handler.setMappingDefinition(def);
             handler.persist();
         } catch (AtlasException e) {
-            LOG.error("Error removing mappings from a mapping definition file for ID:" + mappingDefinitionId, e);
+            LOG.error("Error removing all mappings from the mapping definition file for ID:" + mappingDefinitionId, e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
         return Response.ok().build();

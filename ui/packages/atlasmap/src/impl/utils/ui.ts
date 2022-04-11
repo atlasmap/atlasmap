@@ -700,5 +700,5 @@ export function selectMapping(mapping: IAtlasmapMapping) {
 export function deselectMapping() {
   const cfg = ConfigModel.getConfig();
   initializationService.cfg.mappingService.deselectMapping();
-  cfg.mappingService.notifyMappingUpdated();
+  cfg.mappingService.refreshMappingUI();
 }
