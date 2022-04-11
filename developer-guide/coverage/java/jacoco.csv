@@ -240,7 +240,7 @@ Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ProcessMappingRequest,4,13,
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Validation,11,52,0,4,5,16,2,13,2,11
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,ConvertAreaUnit,0,17,0,0,0,7,0,5,0,5
 Unit Test Coverage Report/atlas-service,io.atlasmap.service,AtlasLibraryLoader.new Enumeration() {...},0,23,0,0,0,4,0,3,0,3
-Unit Test Coverage Report/atlas-service,io.atlasmap.service,MappingService,144,176,11,9,33,48,11,8,2,7
+Unit Test Coverage Report/atlas-service,io.atlasmap.service,MappingService,187,176,11,9,44,48,12,8,3,7
 Unit Test Coverage Report/atlas-service,io.atlasmap.service,AtlasLibraryLoader,200,443,30,52,48,95,28,29,3,13
 Unit Test Coverage Report/atlas-service,io.atlasmap.service,DocumentService,18,10,2,0,5,4,2,2,1,2
 Unit Test Coverage Report/atlas-service,io.atlasmap.service,AtlasService,244,529,25,23,57,132,20,24,2,18
