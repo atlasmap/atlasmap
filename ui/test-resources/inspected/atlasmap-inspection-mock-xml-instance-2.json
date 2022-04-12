@@ -1,0 +1,17 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/foo",
+        "fieldType" : "COMPLEX",
+        "name" : "foo",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ ]
+        }
+      } ]
+    }
+  }
+}

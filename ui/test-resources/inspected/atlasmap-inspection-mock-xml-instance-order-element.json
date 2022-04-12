@@ -1,0 +1,127 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/ns:XmlOE",
+        "fieldType" : "COMPLEX",
+        "name" : "ns:XmlOE",
+        "typeName" : "http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "ns:orderId",
+            "path" : "/ns:XmlOE/ns:orderId",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "ns:orderId",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "NONE",
+            "path" : "/ns:XmlOE/ns:Address",
+            "fieldType" : "COMPLEX",
+            "name" : "ns:Address",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:addressLine1",
+                "path" : "/ns:XmlOE/ns:Address/ns:addressLine1",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:addressLine1",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:addressLine2",
+                "path" : "/ns:XmlOE/ns:Address/ns:addressLine2",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:addressLine2",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:city",
+                "path" : "/ns:XmlOE/ns:Address/ns:city",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:city",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:state",
+                "path" : "/ns:XmlOE/ns:Address/ns:state",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:state",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:zipCode",
+                "path" : "/ns:XmlOE/ns:Address/ns:zipCode",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:zipCode",
+                "attribute" : false
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "NONE",
+            "path" : "/ns:XmlOE/ns:Contact",
+            "fieldType" : "COMPLEX",
+            "name" : "ns:Contact",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:firstName",
+                "path" : "/ns:XmlOE/ns:Contact/ns:firstName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:firstName",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:lastName",
+                "path" : "/ns:XmlOE/ns:Contact/ns:lastName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:lastName",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:phoneNumber",
+                "path" : "/ns:XmlOE/ns:Contact/ns:phoneNumber",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:phoneNumber",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "ns:zipCode",
+                "path" : "/ns:XmlOE/ns:Contact/ns:zipCode",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "ns:zipCode",
+                "attribute" : false
+              } ]
+            }
+          } ]
+        }
+      } ]
+    },
+    "xmlNamespaces" : {
+      "xmlNamespace" : [ {
+        "alias" : "xsi",
+        "uri" : "http://www.w3.org/2001/XMLSchema-instance"
+      }, {
+        "alias" : "ns",
+        "uri" : "http://atlasmap.io/xml/test/v2"
+      } ]
+    }
+  }
+}

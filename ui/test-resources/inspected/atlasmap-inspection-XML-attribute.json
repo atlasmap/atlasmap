@@ -1,0 +1,32 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/myelement",
+        "fieldType" : "COMPLEX",
+        "name" : "myelement",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/myelement/@mychild",
+            "fieldType" : "STRING",
+            "name" : "mychild",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/myelement/mychild",
+            "fieldType" : "STRING",
+            "name" : "mychild",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          } ]
+        }
+      } ]
+    }
+  }
+}

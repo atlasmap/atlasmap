@@ -1,0 +1,69 @@
+{
+  "JsonDocument" : {
+    "jsonType" : "io.atlasmap.json.v2.JsonDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/post-office-box",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "post-office-box"
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/extended-address",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "extended-address"
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/street-address",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "street-address"
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/locality",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "locality"
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "path" : "/region",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "region",
+        "jsonFields" : {
+          "jsonField" : [ ]
+        },
+        "jsonEnumFields" : {
+          "jsonEnumField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonEnumField",
+            "name" : "NA"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonEnumField",
+            "name" : "EMEA"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonEnumField",
+            "name" : "LATAM"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonEnumField",
+            "name" : "APAC"
+          } ]
+        },
+        "enumeration" : true
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/postal-code",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "postal-code"
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/country-name",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "country-name"
+      } ]
+    }
+  }
+}

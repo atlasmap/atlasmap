@@ -1,0 +1,96 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/data",
+        "fieldType" : "COMPLEX",
+        "name" : "data",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "1",
+            "path" : "/data/@intAttr",
+            "fieldType" : "INTEGER",
+            "name" : "intAttr",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/intField",
+            "fieldType" : "INTEGER",
+            "name" : "intField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/longField",
+            "fieldType" : "INTEGER",
+            "name" : "longField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/stringField",
+            "fieldType" : "STRING",
+            "name" : "stringField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/booleanField",
+            "fieldType" : "STRING",
+            "name" : "booleanField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/doubleField",
+            "fieldType" : "FLOAT",
+            "name" : "doubleField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/shortField",
+            "fieldType" : "INTEGER",
+            "name" : "shortField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/floatField",
+            "fieldType" : "STRING",
+            "name" : "floatField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/data/charField",
+            "fieldType" : "STRING",
+            "name" : "charField",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          } ]
+        }
+      } ]
+    }
+  }
+}

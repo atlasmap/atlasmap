@@ -1,0 +1,59 @@
+{
+  "JsonDocument" : {
+    "jsonType" : "io.atlasmap.json.v2.JsonDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "collectionType" : "LIST",
+        "path" : "/firstArray<>",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "firstArray",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "firstArrayValue",
+            "path" : "/firstArray<>/value",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "value"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+            "collectionType" : "LIST",
+            "path" : "/firstArray<>/secondArray<>",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "secondArray",
+            "jsonFields" : {
+              "jsonField" : [ {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "secondArrayValue",
+                "path" : "/firstArray<>/secondArray<>/value",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "value"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+                "collectionType" : "LIST",
+                "path" : "/firstArray<>/secondArray<>/thirdArray<>",
+                "status" : "SUPPORTED",
+                "fieldType" : "COMPLEX",
+                "name" : "thirdArray",
+                "jsonFields" : {
+                  "jsonField" : [ {
+                    "jsonType" : "io.atlasmap.json.v2.JsonField",
+                    "value" : "thirdArrayValue",
+                    "path" : "/firstArray<>/secondArray<>/thirdArray<>/value",
+                    "status" : "SUPPORTED",
+                    "fieldType" : "STRING",
+                    "name" : "value"
+                  } ]
+                }
+              } ]
+            }
+          } ]
+        }
+      } ]
+    }
+  }
+}

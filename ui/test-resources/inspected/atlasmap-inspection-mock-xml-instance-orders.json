@@ -1,0 +1,89 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/orders",
+        "fieldType" : "COMPLEX",
+        "name" : "orders",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "12525.00",
+            "path" : "/orders/@totalCost",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "totalCost",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "LIST",
+            "path" : "/orders/order<>",
+            "fieldType" : "COMPLEX",
+            "name" : "order",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "12312",
+                "collectionType" : "LIST",
+                "path" : "/orders/order<>/id<>",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "id",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "a",
+                "path" : "/orders/order<>/@y:custId",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "y:custId",
+                "attribute" : true
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "LIST",
+            "path" : "/orders/q:order<>",
+            "fieldType" : "COMPLEX",
+            "name" : "q:order",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "12312",
+                "path" : "/orders/q:order<>/id",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "id",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "x",
+                "path" : "/orders/q:order<>/@y:custId",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "y:custId",
+                "attribute" : true
+              } ]
+            }
+          } ]
+        }
+      } ]
+    },
+    "xmlNamespaces" : {
+      "xmlNamespace" : [ {
+        "uri" : "http://www.example.com/x/"
+      }, {
+        "alias" : "y",
+        "uri" : "http://www.example.com/y/"
+      }, {
+        "alias" : "q",
+        "uri" : "http://www.example.com/q/"
+      } ]
+    }
+  }
+}

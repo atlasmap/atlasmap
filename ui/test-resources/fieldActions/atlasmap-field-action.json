@@ -1,0 +1,1709 @@
+{
+  "ActionDetails" : {
+    "actionDetail" : [ {
+      "name" : "Trim",
+      "className" : "io.atlasmap.v2.Trim",
+      "method" : "trim",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Trim",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Trim"
+          }
+        }
+      }
+    }, {
+      "name" : "Normalize",
+      "className" : "io.atlasmap.v2.Normalize",
+      "method" : "normalize",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Normalize",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Normalize"
+          }
+        }
+      }
+    }, {
+      "name" : "Capitalize",
+      "className" : "io.atlasmap.v2.Capitalize",
+      "method" : "capitalize",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Capitalize",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Capitalize"
+          }
+        }
+      }
+    }, {
+      "name" : "Lowercase",
+      "className" : "io.atlasmap.v2.Lowercase",
+      "method" : "lowercase",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Lowercase",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Lowercase"
+          }
+        }
+      }
+    }, {
+      "name" : "GenerateUUID",
+      "className" : "io.atlasmap.v2.GenerateUUID",
+      "method" : "genareteUUID",
+      "targetType" : "STRING",
+      "multiplicity" : "ZERO_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "GenerateUUID",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "GenerateUUID"
+          }
+        }
+      }
+    }, {
+      "name" : "LowercaseChar",
+      "className" : "io.atlasmap.v2.LowercaseChar",
+      "method" : "lowercaseChar",
+      "sourceType" : "CHAR",
+      "targetType" : "CHAR",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "LowercaseChar",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "LowercaseChar"
+          }
+        }
+      }
+    }, {
+      "name" : "RemoveFileExtension",
+      "className" : "io.atlasmap.v2.RemoveFileExtension",
+      "method" : "removeFileExtension",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "RemoveFileExtension",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "RemoveFileExtension"
+          }
+        }
+      }
+    }, {
+      "name" : "SeparateByDash",
+      "className" : "io.atlasmap.v2.SeparateByDash",
+      "method" : "separateByDash",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "SeparateByDash",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "SeparateByDash"
+          }
+        }
+      }
+    }, {
+      "name" : "SeparateByUnderscore",
+      "className" : "io.atlasmap.v2.SeparateByUnderscore",
+      "method" : "separateByUnderscore",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "SeparateByUnderscore",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "SeparateByUnderscore"
+          }
+        }
+      }
+    }, {
+      "name" : "UppercaseChar",
+      "className" : "io.atlasmap.v2.UppercaseChar",
+      "method" : "uppercaseChar",
+      "sourceType" : "CHAR",
+      "targetType" : "CHAR",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "UppercaseChar",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "UppercaseChar"
+          }
+        }
+      }
+    }, {
+      "name" : "FileExtension",
+      "className" : "io.atlasmap.v2.FileExtension",
+      "method" : "fileExtension",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "FileExtension",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "FileExtension"
+          }
+        }
+      }
+    }, {
+      "name" : "TrimLeft",
+      "className" : "io.atlasmap.v2.TrimLeft",
+      "method" : "trimLeft",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "TrimLeft",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "TrimLeft"
+          }
+        }
+      }
+    }, {
+      "name" : "TrimRight",
+      "className" : "io.atlasmap.v2.TrimRight",
+      "method" : "trimRight",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "TrimRight",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "TrimRight"
+          }
+        }
+      }
+    }, {
+      "name" : "Uppercase",
+      "className" : "io.atlasmap.v2.Uppercase",
+      "method" : "uppercase",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Uppercase",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Uppercase"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "string",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Append",
+      "className" : "io.atlasmap.v2.Append",
+      "method" : "append",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Append",
+        "properties" : {
+          "string" : {
+            "type" : "string",
+            "description" : "The string to append after input string",
+            "title" : "String",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Append"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "string",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "IndexOf",
+      "className" : "io.atlasmap.v2.IndexOf",
+      "method" : "indexOf",
+      "sourceType" : "STRING",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "IndexOf",
+        "properties" : {
+          "string" : {
+            "type" : "string",
+            "description" : "The string to look for",
+            "title" : "String",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "IndexOf"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "string",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "StartsWith",
+      "className" : "io.atlasmap.v2.StartsWith",
+      "method" : "startsWith",
+      "sourceType" : "STRING",
+      "targetType" : "BOOLEAN",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "StartsWith",
+        "properties" : {
+          "string" : {
+            "type" : "string",
+            "description" : "The string to look for",
+            "title" : "String",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "StartsWith"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "string",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "LastIndexOf",
+      "className" : "io.atlasmap.v2.LastIndexOf",
+      "method" : "lastIndexOf",
+      "sourceType" : "STRING",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "LastIndexOf",
+        "properties" : {
+          "string" : {
+            "type" : "string",
+            "description" : "The string to look for",
+            "title" : "String",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "LastIndexOf"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "match",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "newString",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "ReplaceFirst",
+      "className" : "io.atlasmap.v2.ReplaceFirst",
+      "method" : "replaceFirst",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ReplaceFirst",
+        "properties" : {
+          "match" : {
+            "type" : "string",
+            "description" : "The string to match",
+            "title" : "Match",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "newString" : {
+            "type" : "string",
+            "description" : "The string to replace with",
+            "title" : "New string",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ReplaceFirst"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "match",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "newString",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "ReplaceAll",
+      "className" : "io.atlasmap.v2.ReplaceAll",
+      "method" : "replaceAll",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ReplaceAll",
+        "properties" : {
+          "match" : {
+            "type" : "string",
+            "description" : "The string to match",
+            "title" : "Match",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "newString" : {
+            "type" : "string",
+            "description" : "The string to replace with",
+            "title" : "New string",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ReplaceAll"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "collapseRepeatingDelimiters",
+          "fieldType" : "BOOLEAN"
+        }, {
+          "values" : [ ],
+          "name" : "delimiter",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Split",
+      "className" : "io.atlasmap.v2.Split",
+      "method" : "split",
+      "sourceType" : "ANY",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_MANY",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Split",
+        "properties" : {
+          "delimiter" : {
+            "type" : "string",
+            "description" : "The delimiter string to split with",
+            "title" : "Delimiter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "collapseRepeatingDelimiters" : {
+            "type" : "boolean",
+            "description" : "Check to collapse repeating delimiters"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Split"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "count",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "Repeat",
+      "className" : "io.atlasmap.v2.Repeat",
+      "method" : "repeat",
+      "sourceType" : "ANY",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_MANY",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Repeat",
+        "properties" : {
+          "count" : {
+            "type" : "integer",
+            "description" : "count "
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Repeat"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "template",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Format",
+      "className" : "io.atlasmap.v2.Format",
+      "method" : "format",
+      "sourceType" : "ANY",
+      "targetType" : "STRING",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Format",
+        "properties" : {
+          "template" : {
+            "type" : "string",
+            "description" : "The template string",
+            "title" : "Template",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Format"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "string",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "EndsWith",
+      "className" : "io.atlasmap.v2.EndsWith",
+      "method" : "endsWith",
+      "sourceType" : "STRING",
+      "targetType" : "BOOLEAN",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "EndsWith",
+        "properties" : {
+          "string" : {
+            "type" : "string",
+            "description" : "The string to look for",
+            "title" : "String",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "EndsWith"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "string",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Prepend",
+      "className" : "io.atlasmap.v2.Prepend",
+      "method" : "prepend",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Prepend",
+        "properties" : {
+          "string" : {
+            "type" : "string",
+            "description" : "The prefix string to add to the front of the value",
+            "title" : "String",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Prepend"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "padCharacter",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "padCount",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "PadStringRight",
+      "className" : "io.atlasmap.v2.PadStringRight",
+      "method" : "padStringRight",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "PadStringRight",
+        "properties" : {
+          "padCharacter" : {
+            "type" : "string",
+            "description" : "The character to fill padding",
+            "title" : "Padding character",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "padCount" : {
+            "type" : "integer",
+            "description" : "The number of padding character to fill"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "PadStringRight"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "padCharacter",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "padCount",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "PadStringLeft",
+      "className" : "io.atlasmap.v2.PadStringLeft",
+      "method" : "padStringLeft",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "PadStringLeft",
+        "properties" : {
+          "padCharacter" : {
+            "type" : "string",
+            "description" : "The character to fill padding",
+            "title" : "Padding character",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "padCount" : {
+            "type" : "integer",
+            "description" : "The number of padding character to fill"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "PadStringLeft"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "endIndex",
+          "fieldType" : "INTEGER"
+        }, {
+          "values" : [ ],
+          "name" : "match",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "startIndex",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "SubStringAfter",
+      "className" : "io.atlasmap.v2.SubStringAfter",
+      "method" : "subStringAfter",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "SubStringAfter",
+        "properties" : {
+          "startIndex" : {
+            "type" : "integer",
+            "description" : "The start index to substring"
+          },
+          "endIndex" : {
+            "type" : "integer",
+            "description" : "The end index to substring"
+          },
+          "match" : {
+            "type" : "string",
+            "description" : "The string to match",
+            "title" : "Match",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "SubStringAfter"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "endIndex",
+          "fieldType" : "INTEGER"
+        }, {
+          "values" : [ ],
+          "name" : "match",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "startIndex",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "SubStringBefore",
+      "className" : "io.atlasmap.v2.SubStringBefore",
+      "method" : "subStringBefore",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "SubStringBefore",
+        "properties" : {
+          "startIndex" : {
+            "type" : "integer",
+            "description" : "The start index to substring"
+          },
+          "endIndex" : {
+            "type" : "integer",
+            "description" : "The end index to substring"
+          },
+          "match" : {
+            "type" : "string",
+            "description" : "The string to match",
+            "title" : "Match",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "SubStringBefore"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "delimiter",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ ],
+          "name" : "delimitingEmptyValues",
+          "fieldType" : "BOOLEAN"
+        } ]
+      },
+      "name" : "Concatenate",
+      "className" : "io.atlasmap.v2.Concatenate",
+      "method" : "concatenate",
+      "sourceType" : "ANY",
+      "targetType" : "STRING",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Concatenate",
+        "properties" : {
+          "delimiter" : {
+            "type" : "string",
+            "description" : "The delimiter string to concatenate input strings with",
+            "title" : "Delimiter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "delimitingEmptyValues" : {
+            "type" : "boolean",
+            "description" : "Determines if delimiters are added around empty values"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Concatenate"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "endIndex",
+          "fieldType" : "INTEGER"
+        }, {
+          "values" : [ ],
+          "name" : "startIndex",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "SubString",
+      "className" : "io.atlasmap.v2.SubString",
+      "method" : "subString",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "SubString",
+        "properties" : {
+          "startIndex" : {
+            "type" : "integer",
+            "description" : "The start index to substring"
+          },
+          "endIndex" : {
+            "type" : "integer",
+            "description" : "The end index to substring"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "SubString"
+          }
+        }
+      }
+    }, {
+      "name" : "Add",
+      "className" : "io.atlasmap.v2.Add",
+      "method" : "add",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Add",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Add"
+          }
+        }
+      }
+    }, {
+      "name" : "Floor",
+      "className" : "io.atlasmap.v2.Floor",
+      "method" : "floor",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Floor",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Floor"
+          }
+        }
+      }
+    }, {
+      "name" : "Multiply",
+      "className" : "io.atlasmap.v2.Multiply",
+      "method" : "multiply",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Multiply",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Multiply"
+          }
+        }
+      }
+    }, {
+      "name" : "Round",
+      "className" : "io.atlasmap.v2.Round",
+      "method" : "round",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Round",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Round"
+          }
+        }
+      }
+    }, {
+      "name" : "Subtract",
+      "className" : "io.atlasmap.v2.Subtract",
+      "method" : "subtract",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Subtract",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Subtract"
+          }
+        }
+      }
+    }, {
+      "name" : "Divide",
+      "className" : "io.atlasmap.v2.Divide",
+      "method" : "divide",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Divide",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Divide"
+          }
+        }
+      }
+    }, {
+      "name" : "Ceiling",
+      "className" : "io.atlasmap.v2.Ceiling",
+      "method" : "ceiling",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Ceiling",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Ceiling"
+          }
+        }
+      }
+    }, {
+      "name" : "Average",
+      "className" : "io.atlasmap.v2.Average",
+      "method" : "average",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Average",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Average"
+          }
+        }
+      }
+    }, {
+      "name" : "AbsoluteValue",
+      "className" : "io.atlasmap.v2.AbsoluteValue",
+      "method" : "absoluteValue",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "AbsoluteValue",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "AbsoluteValue"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ "Kilogram (kg)", "Pound (lb)" ],
+          "name" : "fromUnit",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ "Kilogram (kg)", "Pound (lb)" ],
+          "name" : "toUnit",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "ConvertMassUnit",
+      "className" : "io.atlasmap.v2.ConvertMassUnit",
+      "method" : "convertMassUnit",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ConvertMassUnit",
+        "properties" : {
+          "fromUnit" : {
+            "type" : "string",
+            "description" : "The mass unit to convert from",
+            "title" : "From",
+            "enum" : [ "Kilogram (kg)", "Pound (lb)" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "toUnit" : {
+            "type" : "string",
+            "description" : "The mass unit to convert to",
+            "title" : "To",
+            "enum" : [ "Kilogram (kg)", "Pound (lb)" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ConvertMassUnit"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ "Meter (m)", "Mile (mi)", "Yard (yd)", "Foot (ft)", "Inch (in)" ],
+          "name" : "fromUnit",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ "Meter (m)", "Mile (mi)", "Yard (yd)", "Foot (ft)", "Inch (in)" ],
+          "name" : "toUnit",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "ConvertDistanceUnit",
+      "className" : "io.atlasmap.v2.ConvertDistanceUnit",
+      "method" : "convertDistanceUnit",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ConvertDistanceUnit",
+        "properties" : {
+          "fromUnit" : {
+            "type" : "string",
+            "description" : "The distance unit to convert from",
+            "title" : "From",
+            "enum" : [ "Meter (m)", "Mile (mi)", "Yard (yd)", "Foot (ft)", "Inch (in)" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "toUnit" : {
+            "type" : "string",
+            "description" : "The distance unit to convert to",
+            "title" : "To",
+            "enum" : [ "Meter (m)", "Mile (mi)", "Yard (yd)", "Foot (ft)", "Inch (in)" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ConvertDistanceUnit"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ "Square Meter", "Square Mile", "Square Foot" ],
+          "name" : "fromUnit",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ "Square Meter", "Square Mile", "Square Foot" ],
+          "name" : "toUnit",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "ConvertAreaUnit",
+      "className" : "io.atlasmap.v2.ConvertAreaUnit",
+      "method" : "convertAreaUnit",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ConvertAreaUnit",
+        "properties" : {
+          "fromUnit" : {
+            "type" : "string",
+            "description" : "The area unit to convert from",
+            "title" : "From",
+            "enum" : [ "Square Meter", "Square Mile", "Square Foot" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "toUnit" : {
+            "type" : "string",
+            "description" : "The area unit to convert to",
+            "title" : "To",
+            "enum" : [ "Square Meter", "Square Mile", "Square Foot" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ConvertAreaUnit"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ "Cubic Meter", "Liter", "Cubic Foot", "Gallon (US Fluid)" ],
+          "name" : "fromUnit",
+          "fieldType" : "STRING"
+        }, {
+          "values" : [ "Cubic Meter", "Liter", "Cubic Foot", "Gallon (US Fluid)" ],
+          "name" : "toUnit",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "ConvertVolumeUnit",
+      "className" : "io.atlasmap.v2.ConvertVolumeUnit",
+      "method" : "convertVolumeUnit",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ConvertVolumeUnit",
+        "properties" : {
+          "fromUnit" : {
+            "type" : "string",
+            "description" : "The volume unit to convert from",
+            "title" : "From",
+            "enum" : [ "Cubic Meter", "Liter", "Cubic Foot", "Gallon (US Fluid)" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "toUnit" : {
+            "type" : "string",
+            "description" : "The volume unit to convert to",
+            "title" : "To",
+            "enum" : [ "Cubic Meter", "Liter", "Cubic Foot", "Gallon (US Fluid)" ],
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ConvertVolumeUnit"
+          }
+        }
+      }
+    }, {
+      "name" : "Minimum",
+      "className" : "io.atlasmap.v2.Minimum",
+      "method" : "minimum",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Minimum",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Minimum"
+          }
+        }
+      }
+    }, {
+      "name" : "Maximum",
+      "className" : "io.atlasmap.v2.Maximum",
+      "method" : "maximum",
+      "sourceType" : "NUMBER",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Maximum",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Maximum"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "index",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "CopyTo",
+      "className" : "io.atlasmap.v2.CopyTo",
+      "method" : "copyTo",
+      "sourceType" : "ANY",
+      "targetType" : "ANY",
+      "multiplicity" : "ONE_TO_MANY",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "CopyTo",
+        "properties" : {
+          "index" : {
+            "type" : "string",
+            "description" : "The comma-separated indexes of the item in target collections.",
+            "title" : "Indexes",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "CopyTo"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "value",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Equals",
+      "className" : "io.atlasmap.v2.Equals",
+      "method" : "equals",
+      "sourceType" : "ANY",
+      "targetType" : "BOOLEAN",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Equals",
+        "properties" : {
+          "value" : {
+            "type" : "string",
+            "description" : "The string to compare with",
+            "title" : "value",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Equals"
+          }
+        }
+      }
+    }, {
+      "name" : "Length",
+      "className" : "io.atlasmap.v2.Length",
+      "method" : "length",
+      "sourceType" : "ANY",
+      "targetType" : "INTEGER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Length",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Length"
+          }
+        }
+      }
+    }, {
+      "name" : "Count",
+      "className" : "io.atlasmap.v2.Count",
+      "method" : "count",
+      "sourceType" : "ANY",
+      "targetType" : "INTEGER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Count",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "Count"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "value",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Contains",
+      "className" : "io.atlasmap.v2.Contains",
+      "method" : "contains",
+      "sourceType" : "ANY",
+      "targetType" : "BOOLEAN",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Contains",
+        "properties" : {
+          "value" : {
+            "type" : "string",
+            "description" : "The string to compare with",
+            "title" : "value",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Contains"
+          }
+        }
+      }
+    }, {
+      "name" : "IsNull",
+      "className" : "io.atlasmap.v2.IsNull",
+      "method" : "isNull",
+      "sourceType" : "ANY",
+      "targetType" : "BOOLEAN",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "IsNull",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "IsNull"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "index",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "ItemAt",
+      "className" : "io.atlasmap.v2.ItemAt",
+      "method" : "itemAt",
+      "sourceType" : "ANY",
+      "targetType" : "ANY",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "ItemAt",
+        "properties" : {
+          "index" : {
+            "type" : "integer",
+            "description" : "The collection index to pick an item from"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "ItemAt"
+          }
+        }
+      }
+    }, {
+      "name" : "CurrentTime",
+      "className" : "io.atlasmap.v2.CurrentTime",
+      "method" : "currentTime",
+      "targetType" : "DATE_TIME_TZ",
+      "multiplicity" : "ZERO_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "CurrentTime",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "CurrentTime"
+          }
+        }
+      }
+    }, {
+      "name" : "DayOfMonth",
+      "className" : "io.atlasmap.v2.DayOfMonth",
+      "method" : "dayOfMonth",
+      "sourceType" : "ANY_DATE",
+      "targetType" : "INTEGER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "DayOfMonth",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "DayOfMonth"
+          }
+        }
+      }
+    }, {
+      "name" : "DayOfYear",
+      "className" : "io.atlasmap.v2.DayOfYear",
+      "method" : "dayOfYear",
+      "sourceType" : "ANY_DATE",
+      "targetType" : "INTEGER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "DayOfYear",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "DayOfYear"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "days",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "AddDays",
+      "className" : "io.atlasmap.v2.AddDays",
+      "method" : "addDays",
+      "sourceType" : "ANY_DATE",
+      "targetType" : "DATE_TIME_TZ",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "AddDays",
+        "properties" : {
+          "days" : {
+            "type" : "integer",
+            "description" : "The number of days to add"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "AddDays"
+          }
+        }
+      }
+    }, {
+      "name" : "DayOfWeek",
+      "className" : "io.atlasmap.v2.DayOfWeek",
+      "method" : "dayOfWeek",
+      "sourceType" : "ANY_DATE",
+      "targetType" : "INTEGER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "DayOfWeek",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "DayOfWeek"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "seconds",
+          "fieldType" : "INTEGER"
+        } ]
+      },
+      "name" : "AddSeconds",
+      "className" : "io.atlasmap.v2.AddSeconds",
+      "method" : "addSeconds",
+      "sourceType" : "ANY_DATE",
+      "targetType" : "DATE_TIME_TZ",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "AddSeconds",
+        "properties" : {
+          "seconds" : {
+            "type" : "integer",
+            "description" : "The number of seconds to add"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "AddSeconds"
+          }
+        }
+      }
+    }, {
+      "name" : "CurrentDateTime",
+      "className" : "io.atlasmap.v2.CurrentDateTime",
+      "method" : "currentDateTime",
+      "targetType" : "DATE_TIME_TZ",
+      "multiplicity" : "ZERO_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "CurrentDateTime",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "CurrentDateTime"
+          }
+        }
+      }
+    }, {
+      "name" : "CurrentDate",
+      "className" : "io.atlasmap.v2.CurrentDate",
+      "method" : "currentDate",
+      "targetType" : "DATE_TIME_TZ",
+      "multiplicity" : "ZERO_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "CurrentDate",
+        "properties" : {
+          "@type" : {
+            "type" : "string",
+            "const" : "CurrentDate"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "expression",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "Expression",
+      "className" : "io.atlasmap.v2.Expression",
+      "method" : "process",
+      "sourceType" : "ANY",
+      "targetType" : "ANY",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "Expression",
+        "properties" : {
+          "expression" : {
+            "type" : "string",
+            "description" : "The expression string to evaluate",
+            "title" : "Expression",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "Expression"
+          }
+        }
+      }
+    }, {
+      "name" : "io.atlasmap.maven.test.DummyOneToOne",
+      "custom" : true,
+      "className" : "io.atlasmap.maven.test.DummyOneToOne",
+      "method" : "dummyOneToOne",
+      "sourceType" : "STRING",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "io.atlasmap.maven.test.DummyOneToOne",
+        "properties" : {
+          "dummyParameter" : {
+            "type" : "string",
+            "description" : "The dummy action parameter",
+            "title" : "Dummy parameter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "io.atlasmap.maven.test.DummyOneToOne"
+          }
+        }
+      }
+    }, {
+      "name" : "io.atlasmap.maven.test.DummyOneToMany",
+      "custom" : true,
+      "className" : "io.atlasmap.maven.test.DummyOneToMany",
+      "method" : "dummyOneToMany",
+      "sourceType" : "STRING",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ONE_TO_MANY",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "io.atlasmap.maven.test.DummyOneToMany",
+        "properties" : {
+          "dummyParameter" : {
+            "type" : "string",
+            "description" : "The dummy action parameter",
+            "title" : "Dummy parameter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "io.atlasmap.maven.test.DummyOneToMany"
+          }
+        }
+      }
+    }, {
+      "name" : "io.atlasmap.maven.test.DummyManyToOne",
+      "custom" : true,
+      "className" : "io.atlasmap.maven.test.DummyManyToOne",
+      "method" : "dummyManyToOne",
+      "sourceType" : "STRING",
+      "targetType" : "NUMBER",
+      "multiplicity" : "MANY_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "io.atlasmap.maven.test.DummyManyToOne",
+        "properties" : {
+          "dummyParameter" : {
+            "type" : "string",
+            "description" : "The dummy action parameter",
+            "title" : "Dummy parameter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "io.atlasmap.maven.test.DummyManyToOne"
+          }
+        }
+      }
+    }, {
+      "name" : "io.atlasmap.maven.test.DummyZeroToOne",
+      "custom" : true,
+      "className" : "io.atlasmap.maven.test.DummyZeroToOne",
+      "method" : "dummyZeroToOne",
+      "targetType" : "NUMBER",
+      "multiplicity" : "ZERO_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "io.atlasmap.maven.test.DummyZeroToOne",
+        "properties" : {
+          "dummyParameter" : {
+            "type" : "string",
+            "description" : "The dummy action parameter",
+            "title" : "Dummy parameter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "io.atlasmap.maven.test.DummyZeroToOne"
+          }
+        }
+      }
+    }, {
+      "parameters" : {
+        "parameter" : [ {
+          "values" : [ ],
+          "name" : "paulsParam",
+          "fieldType" : "STRING"
+        } ]
+      },
+      "name" : "io.atlasmap.maven.test.PaulsFieldActionsModel",
+      "custom" : true,
+      "className" : "io.atlasmap.maven.test.PaulsFieldActionsModel",
+      "method" : "myCustomFieldAction",
+      "sourceType" : "STRING",
+      "targetType" : "STRING",
+      "multiplicity" : "ONE_TO_ONE",
+      "actionSchema" : {
+        "type" : "object",
+        "id" : "io.atlasmap.maven.test.PaulsFieldActionsModel",
+        "properties" : {
+          "paulsParam" : {
+            "type" : "string",
+            "description" : "Paul's custom field action parameter to display",
+            "title" : "Paul's custom field action string parameter",
+            "atlas-field-type" : "STRING",
+            "atlas-collection-type" : "NONE"
+          },
+          "@type" : {
+            "type" : "string",
+            "const" : "io.atlasmap.maven.test.PaulsFieldActionsModel"
+          }
+        }
+      }
+    } ]
+  }
+}

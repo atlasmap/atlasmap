@@ -1,0 +1,39 @@
+{
+  "JsonDocument" : {
+    "jsonType" : "io.atlasmap.json.v2.JsonDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "collectionType" : "LIST",
+        "path" : "/<>",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/<>/id",
+            "status" : "SUPPORTED",
+            "fieldType" : "BIG_INTEGER",
+            "name" : "id"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/<>/task",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "task"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/<>/completed",
+            "status" : "SUPPORTED",
+            "fieldType" : "BIG_INTEGER",
+            "name" : "completed"
+          } ]
+        },
+        "jsonEnumFields" : {
+          "jsonEnumField" : [ ]
+        }
+      } ]
+    }
+  }
+}
