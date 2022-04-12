@@ -1,0 +1,117 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/XMLOrder",
+        "fieldType" : "COMPLEX",
+        "name" : "XMLOrder",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "orderId",
+            "path" : "/XMLOrder/orderId",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "orderId",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "NONE",
+            "path" : "/XMLOrder/Address",
+            "fieldType" : "COMPLEX",
+            "name" : "Address",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "addressLine1",
+                "path" : "/XMLOrder/Address/addressLine1",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "addressLine1",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "addressLine2",
+                "path" : "/XMLOrder/Address/addressLine2",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "addressLine2",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "city",
+                "path" : "/XMLOrder/Address/city",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "city",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "state",
+                "path" : "/XMLOrder/Address/state",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "state",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "zipCode",
+                "path" : "/XMLOrder/Address/zipCode",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "zipCode",
+                "attribute" : false
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "NONE",
+            "path" : "/XMLOrder/Contact",
+            "fieldType" : "COMPLEX",
+            "name" : "Contact",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "firstName",
+                "path" : "/XMLOrder/Contact/firstName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "firstName",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "lastName",
+                "path" : "/XMLOrder/Contact/lastName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "lastName",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "phoneNumber",
+                "path" : "/XMLOrder/Contact/phoneNumber",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "phoneNumber",
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "zipCode",
+                "path" : "/XMLOrder/Contact/zipCode",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "zipCode",
+                "attribute" : false
+              } ]
+            }
+          } ]
+        }
+      } ]
+    }
+  }
+}

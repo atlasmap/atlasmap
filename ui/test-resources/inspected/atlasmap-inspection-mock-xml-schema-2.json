@@ -1,0 +1,19 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlField",
+        "path" : "/tns:aGlobalElement",
+        "name" : "tns:aGlobalElement",
+        "attribute" : false
+      } ]
+    },
+    "xmlNamespaces" : {
+      "xmlNamespace" : [ {
+        "alias" : "tns",
+        "uri" : "http://example.com/"
+      } ]
+    }
+  }
+}

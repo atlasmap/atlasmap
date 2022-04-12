@@ -161,6 +161,10 @@
         <groupId>io.atlasmap</groupId>
         <artifactId>atlasmap-maven-plugin</artifactId>
         <version>${project.version}</version>
+	<!--
+		https://github.com/atlasmap/atlasmap/issues/3938
+		run "mvn atlasmap:generate-inspections" and "mvn atlasmap:generate-field-actions"
+		explicitly to update those files.
         <executions>
           <execution>
             <id>generate-inspections</id>
@@ -177,6 +181,7 @@
             </goals>
           </execution>
         </executions>
+	-->
         <configuration>
           <outputDir>${project.basedir}/test-resources/inspected</outputDir>
           <fieldActionOutputDir>${project.basedir}/test-resources/fieldActions</fieldActionOutputDir>

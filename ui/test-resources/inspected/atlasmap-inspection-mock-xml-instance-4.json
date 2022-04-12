@@ -1,0 +1,35 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/foo",
+        "fieldType" : "COMPLEX",
+        "name" : "foo",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "NONE",
+            "path" : "/foo/bar",
+            "fieldType" : "COMPLEX",
+            "name" : "bar",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "somevalue",
+                "path" : "/foo/bar/jason",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "jason",
+                "attribute" : false
+              } ]
+            }
+          } ]
+        }
+      } ]
+    }
+  }
+}

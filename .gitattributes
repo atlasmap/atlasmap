@@ -1,0 +1,2 @@
+ui/test-resources/inspected/atlasmap-inspection-fhir-patient.json filter=lfs diff=lfs merge=lfs -text
+ui/test-resources/inspected/atlasmap-inspection-fhir-rafal-170.json filter=lfs diff=lfs merge=lfs -text

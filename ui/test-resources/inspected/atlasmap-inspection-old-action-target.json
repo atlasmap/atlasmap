@@ -1,0 +1,20 @@
+{
+  "JsonDocument" : {
+    "jsonType" : "io.atlasmap.json.v2.JsonDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/id",
+        "status" : "SUPPORTED",
+        "fieldType" : "BIG_INTEGER",
+        "name" : "id"
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonField",
+        "path" : "/task",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "task"
+      } ]
+    }
+  }
+}

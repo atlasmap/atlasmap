@@ -1,0 +1,166 @@
+{
+  "JsonDocument" : {
+    "jsonType" : "io.atlasmap.json.v2.JsonDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "path" : "/order",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "order",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+            "path" : "/order/address",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "address",
+            "jsonFields" : {
+              "jsonField" : [ {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "123 any st",
+                "path" : "/order/address/street",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "street"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "Austin",
+                "path" : "/order/address/city",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "city"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "TX",
+                "path" : "/order/address/state",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "state"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "78626",
+                "path" : "/order/address/zip",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "zip"
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+            "path" : "/order/contact",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "contact",
+            "jsonFields" : {
+              "jsonField" : [ {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "james",
+                "path" : "/order/contact/firstName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "firstName"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "smith",
+                "path" : "/order/contact/lastName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "lastName"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "value" : "512-123-1234",
+                "path" : "/order/contact/phone",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "phone"
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "123",
+            "path" : "/order/orderId",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "orderId"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "",
+            "path" : "/order/customerName",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "customerName"
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "path" : "/primitives",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "primitives",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "some value",
+            "path" : "/primitives/stringPrimitive",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "stringPrimitive"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : true,
+            "path" : "/primitives/booleanPrimitive",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "booleanPrimitive"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : 24,
+            "path" : "/primitives/numberPrimitive",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "numberPrimitive"
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "collectionType" : "LIST",
+        "path" : "/addressList<>",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "addressList",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "123 any st",
+            "path" : "/addressList<>/street",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "street"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "Austin",
+            "path" : "/addressList<>/city",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "city"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "TX",
+            "path" : "/addressList<>/state",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "state"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "value" : "78626",
+            "path" : "/addressList<>/zip",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "zip"
+          } ]
+        }
+      } ]
+    }
+  }
+}

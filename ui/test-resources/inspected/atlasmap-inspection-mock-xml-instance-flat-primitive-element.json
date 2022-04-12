@@ -1,0 +1,96 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/ns:XmlFPE",
+        "fieldType" : "COMPLEX",
+        "name" : "ns:XmlFPE",
+        "typeName" : "http://atlasmap.io/xml/test/v2 atlas-xml-test-model-v2.xsd ",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "http://atlasmap.io/xml/test/v2",
+            "path" : "/ns:XmlFPE/@targetNamespace",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "targetNamespace",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "false",
+            "path" : "/ns:XmlFPE/booleanField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "booleanField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "99",
+            "path" : "/ns:XmlFPE/byteField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "byteField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "a",
+            "path" : "/ns:XmlFPE/charField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "charField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "50000000.0",
+            "path" : "/ns:XmlFPE/doubleField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "doubleField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "40000000.0",
+            "path" : "/ns:XmlFPE/floatField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "floatField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "2",
+            "path" : "/ns:XmlFPE/intField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "intField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "30000",
+            "path" : "/ns:XmlFPE/longField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "longField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "1",
+            "path" : "/ns:XmlFPE/shortField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "shortField",
+            "attribute" : false
+          } ]
+        }
+      } ]
+    },
+    "xmlNamespaces" : {
+      "xmlNamespace" : [ {
+        "alias" : "xsi",
+        "uri" : "http://www.w3.org/2001/XMLSchema-instance"
+      } ]
+    }
+  }
+}

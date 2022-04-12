@@ -1,0 +1,125 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/data",
+        "fieldType" : "COMPLEX",
+        "name" : "data",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "1",
+            "path" : "/data/@a",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "a",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "32000",
+            "path" : "/data/intField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "intField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "12421",
+            "path" : "/data/longField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "longField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "abc",
+            "path" : "/data/stringField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "stringField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "true",
+            "path" : "/data/booleanField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "booleanField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "2",
+            "path" : "/data/@b",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "b",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "12.0",
+            "path" : "/data/doubleField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "doubleField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "1000",
+            "path" : "/data/shortField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "shortField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "234.5f",
+            "path" : "/data/floatField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "floatField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "value" : "A",
+            "path" : "/data/charField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "charField",
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "NONE",
+            "path" : "/data/outer",
+            "fieldType" : "COMPLEX",
+            "name" : "outer",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                "collectionType" : "NONE",
+                "path" : "/data/outer/inner",
+                "fieldType" : "COMPLEX",
+                "name" : "inner",
+                "attribute" : false,
+                "xmlFields" : {
+                  "xmlField" : [ {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "value" : "val",
+                    "path" : "/data/outer/inner/value",
+                    "status" : "SUPPORTED",
+                    "fieldType" : "STRING",
+                    "name" : "value",
+                    "attribute" : false
+                  } ]
+                }
+              } ]
+            }
+          } ]
+        }
+      } ]
+    }
+  }
+}

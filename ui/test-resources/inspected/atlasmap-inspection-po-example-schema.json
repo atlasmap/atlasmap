@@ -1,0 +1,246 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/tns:purchaseOrder",
+        "fieldType" : "COMPLEX",
+        "name" : "tns:purchaseOrder",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/tns:purchaseOrder/@orderDate",
+            "fieldType" : "DATE",
+            "name" : "orderDate",
+            "attribute" : true
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "path" : "/tns:purchaseOrder/shipTo",
+            "fieldType" : "COMPLEX",
+            "name" : "shipTo",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "US",
+                "path" : "/tns:purchaseOrder/shipTo/@country",
+                "fieldType" : "STRING",
+                "name" : "country",
+                "attribute" : true
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/shipTo/name",
+                "fieldType" : "STRING",
+                "name" : "name",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/shipTo/street",
+                "fieldType" : "STRING",
+                "name" : "street",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/shipTo/city",
+                "fieldType" : "STRING",
+                "name" : "city",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/shipTo/state",
+                "fieldType" : "STRING",
+                "name" : "state",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/shipTo/zip",
+                "fieldType" : "DECIMAL",
+                "name" : "zip",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "path" : "/tns:purchaseOrder/billTo",
+            "fieldType" : "COMPLEX",
+            "name" : "billTo",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "value" : "US",
+                "path" : "/tns:purchaseOrder/billTo/@country",
+                "fieldType" : "STRING",
+                "name" : "country",
+                "attribute" : true
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/billTo/name",
+                "fieldType" : "STRING",
+                "name" : "name",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/billTo/street",
+                "fieldType" : "STRING",
+                "name" : "street",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/billTo/city",
+                "fieldType" : "STRING",
+                "name" : "city",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/billTo/state",
+                "fieldType" : "STRING",
+                "name" : "state",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              }, {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/tns:purchaseOrder/billTo/zip",
+                "fieldType" : "DECIMAL",
+                "name" : "zip",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+            "path" : "/tns:purchaseOrder/tns:comment",
+            "fieldType" : "STRING",
+            "name" : "tns:comment",
+            "restrictions" : {
+              "restriction" : [ ]
+            },
+            "attribute" : false
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "path" : "/tns:purchaseOrder/items",
+            "fieldType" : "COMPLEX",
+            "name" : "items",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                "collectionType" : "LIST",
+                "path" : "/tns:purchaseOrder/items/item<>",
+                "fieldType" : "COMPLEX",
+                "name" : "item",
+                "attribute" : false,
+                "xmlFields" : {
+                  "xmlField" : [ {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:purchaseOrder/items/item<>/@partNum",
+                    "fieldType" : "STRING",
+                    "name" : "partNum",
+                    "restrictions" : {
+                      "restriction" : [ {
+                        "type" : "PATTERN",
+                        "value" : "\\d{3}-[A-Z]{2}"
+                      } ]
+                    },
+                    "typeName" : "SKU",
+                    "attribute" : true
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:purchaseOrder/items/item<>/productName",
+                    "fieldType" : "STRING",
+                    "name" : "productName",
+                    "restrictions" : {
+                      "restriction" : [ ]
+                    },
+                    "attribute" : false
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:purchaseOrder/items/item<>/quantity",
+                    "fieldType" : "BIG_INTEGER",
+                    "name" : "quantity",
+                    "restrictions" : {
+                      "restriction" : [ {
+                        "type" : "MAX_EXCLUSIVE",
+                        "value" : "99"
+                      } ]
+                    },
+                    "attribute" : false
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:purchaseOrder/items/item<>/USPrice",
+                    "fieldType" : "DECIMAL",
+                    "name" : "USPrice",
+                    "restrictions" : {
+                      "restriction" : [ ]
+                    },
+                    "attribute" : false
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:purchaseOrder/items/item<>/tns:comment",
+                    "fieldType" : "STRING",
+                    "name" : "tns:comment",
+                    "restrictions" : {
+                      "restriction" : [ ]
+                    },
+                    "attribute" : false
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:purchaseOrder/items/item<>/shipDate",
+                    "fieldType" : "DATE",
+                    "name" : "shipDate",
+                    "restrictions" : {
+                      "restriction" : [ ]
+                    },
+                    "attribute" : false
+                  } ]
+                }
+              } ]
+            }
+          } ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.xml.v2.XmlField",
+        "path" : "/tns:comment",
+        "fieldType" : "STRING",
+        "name" : "tns:comment",
+        "attribute" : false
+      } ]
+    },
+    "xmlNamespaces" : {
+      "xmlNamespace" : [ {
+        "alias" : "tns",
+        "uri" : "http://tempuri.org/po.xsd"
+      } ]
+    }
+  }
+}

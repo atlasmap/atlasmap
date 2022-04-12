@@ -1,0 +1,192 @@
+{
+  "JsonDocument" : {
+    "jsonType" : "io.atlasmap.json.v2.JsonDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "path" : "/order",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "order",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+            "path" : "/order/address",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "address",
+            "jsonFields" : {
+              "jsonField" : [ {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/address/street",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "street"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/address/city",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "city"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/address/state",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "state"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/address/zip",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "zip"
+              } ]
+            },
+            "jsonEnumFields" : {
+              "jsonEnumField" : [ ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+            "path" : "/order/contact",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "contact",
+            "jsonFields" : {
+              "jsonField" : [ {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/contact/firstName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "firstName"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/contact/lastName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "lastName"
+              }, {
+                "jsonType" : "io.atlasmap.json.v2.JsonField",
+                "path" : "/order/contact/phone",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "phone"
+              } ]
+            },
+            "jsonEnumFields" : {
+              "jsonEnumField" : [ ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/order/orderId",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "orderId"
+          } ]
+        },
+        "jsonEnumFields" : {
+          "jsonEnumField" : [ ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "path" : "/primitives",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "primitives",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/primitives/stringPrimitive",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "stringPrimitive"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/primitives/booleanPrimitive",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "booleanPrimitive"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/primitives/numberPrimitive",
+            "status" : "SUPPORTED",
+            "fieldType" : "NUMBER",
+            "name" : "numberPrimitive"
+          } ]
+        },
+        "jsonEnumFields" : {
+          "jsonEnumField" : [ ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "path" : "/primitiveArrays",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "primitiveArrays",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "collectionType" : "LIST",
+            "path" : "/primitiveArrays/stringArray<>",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "stringArray"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "collectionType" : "LIST",
+            "path" : "/primitiveArrays/booleanArray<>",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "booleanArray"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "collectionType" : "LIST",
+            "path" : "/primitiveArrays/numberArray<>",
+            "status" : "SUPPORTED",
+            "fieldType" : "NUMBER",
+            "name" : "numberArray"
+          } ]
+        },
+        "jsonEnumFields" : {
+          "jsonEnumField" : [ ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.json.v2.JsonComplexType",
+        "collectionType" : "LIST",
+        "path" : "/addressList<>",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "addressList",
+        "jsonFields" : {
+          "jsonField" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/addressList<>/street",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "street"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/addressList<>/city",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "city"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/addressList<>/state",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "state"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "path" : "/addressList<>/zip",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "zip"
+          } ]
+        },
+        "jsonEnumFields" : {
+          "jsonEnumField" : [ ]
+        }
+      } ]
+    }
+  }
+}

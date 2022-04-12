@@ -1,0 +1,54 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/shiporder",
+        "fieldType" : "COMPLEX",
+        "name" : "shiporder",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "path" : "/shiporder/shipto",
+            "fieldType" : "COMPLEX",
+            "name" : "shipto",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/shiporder/shipto/name",
+                "fieldType" : "STRING",
+                "name" : "name",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              } ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "collectionType" : "LIST",
+            "path" : "/shiporder/item<>",
+            "fieldType" : "COMPLEX",
+            "name" : "item",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                "path" : "/shiporder/item<>/title",
+                "fieldType" : "STRING",
+                "name" : "title",
+                "restrictions" : {
+                  "restriction" : [ ]
+                },
+                "attribute" : false
+              } ]
+            }
+          } ]
+        }
+      } ]
+    }
+  }
+}

@@ -1,0 +1,1756 @@
+{
+  "JavaClass" : {
+    "jsonType" : "io.atlasmap.java.v2.JavaClass",
+    "collectionType" : "NONE",
+    "path" : "/",
+    "fieldType" : "COMPLEX",
+    "modifiers" : {
+      "modifier" : [ "PUBLIC" ]
+    },
+    "className" : "io.atlasmap.java.test.TargetTestClass",
+    "canonicalClassName" : "io.atlasmap.java.test.TargetTestClass",
+    "primitive" : false,
+    "synthetic" : false,
+    "javaEnumFields" : {
+      "javaEnumField" : [ ]
+    },
+    "javaFields" : {
+      "javaField" : [ {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/name",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "name",
+        "modifiers" : {
+          "modifier" : [ "PRIVATE" ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getName",
+        "setMethod" : "setName",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/fullAddress",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "fullAddress",
+        "modifiers" : {
+          "modifier" : [ "PRIVATE" ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getFullAddress",
+        "setMethod" : "setFullAddress",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/department",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "department",
+        "modifiers" : {
+          "modifier" : [ "PRIVATE" ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getDepartment",
+        "setMethod" : "setDepartment",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/address",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "address",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetAddress",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetAddress",
+        "getMethod" : "getAddress",
+        "setMethod" : "setAddress",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/address/serialVersionUID",
+            "status" : "EXCLUDED",
+            "fieldType" : "LONG",
+            "name" : "serialVersionUID",
+            "modifiers" : {
+              "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/address/addressLine1",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "addressLine1",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getAddressLine1",
+            "setMethod" : "setAddressLine1",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/address/addressLine2",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "addressLine2",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getAddressLine2",
+            "setMethod" : "setAddressLine2",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/address/city",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "city",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getCity",
+            "setMethod" : "setCity",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/address/state",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "state",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getState",
+            "setMethod" : "setState",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/address/zipCode",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "zipCode",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getZipCode",
+            "setMethod" : "setZipCode",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.TargetAddress",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/contact",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "contact",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetContact",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetContact",
+        "getMethod" : "getContact",
+        "setMethod" : "setContact",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/contact/serialVersionUID",
+            "status" : "EXCLUDED",
+            "fieldType" : "LONG",
+            "name" : "serialVersionUID",
+            "modifiers" : {
+              "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/contact/firstName",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "firstName",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getFirstName",
+            "setMethod" : "setFirstName",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/contact/lastName",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "lastName",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getLastName",
+            "setMethod" : "setLastName",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/contact/phoneNumber",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "phoneNumber",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getPhoneNumber",
+            "setMethod" : "setPhoneNumber",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/contact/zipCode",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "zipCode",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getZipCode",
+            "setMethod" : "setZipCode",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.TargetContact",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/order",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "order",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetOrder",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetOrder",
+        "getMethod" : "getOrder",
+        "setMethod" : "setOrder",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/order/serialVersionUID",
+            "status" : "EXCLUDED",
+            "fieldType" : "LONG",
+            "name" : "serialVersionUID",
+            "modifiers" : {
+              "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "path" : "/order/contact",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "contact",
+            "modifiers" : {
+              "modifier" : [ "ABSTRACT", "PUBLIC", "PRIVATE" ]
+            },
+            "className" : "io.atlasmap.java.test.BaseContact",
+            "canonicalClassName" : "io.atlasmap.java.test.BaseContact",
+            "getMethod" : "getContact",
+            "setMethod" : "setContact",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/contact/serialVersionUID",
+                "status" : "EXCLUDED",
+                "fieldType" : "LONG",
+                "name" : "serialVersionUID",
+                "modifiers" : {
+                  "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+                },
+                "className" : "long",
+                "canonicalClassName" : "long",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/contact/firstName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "firstName",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getFirstName",
+                "setMethod" : "setFirstName",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/contact/lastName",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "lastName",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getLastName",
+                "setMethod" : "setLastName",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/contact/phoneNumber",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "phoneNumber",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getPhoneNumber",
+                "setMethod" : "setPhoneNumber",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/contact/zipCode",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "zipCode",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getZipCode",
+                "setMethod" : "setZipCode",
+                "primitive" : true,
+                "synthetic" : false
+              } ]
+            },
+            "packageName" : "io.atlasmap.java.test",
+            "annotation" : false,
+            "annonymous" : false,
+            "enumeration" : false,
+            "localClass" : false,
+            "memberClass" : false,
+            "uri" : "atlas:java?className=io.atlasmap.java.test.BaseContact",
+            "interface" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "path" : "/order/address",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "address",
+            "modifiers" : {
+              "modifier" : [ "ABSTRACT", "PUBLIC", "PRIVATE" ]
+            },
+            "className" : "io.atlasmap.java.test.BaseAddress",
+            "canonicalClassName" : "io.atlasmap.java.test.BaseAddress",
+            "getMethod" : "getAddress",
+            "setMethod" : "setAddress",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/address/serialVersionUID",
+                "status" : "EXCLUDED",
+                "fieldType" : "LONG",
+                "name" : "serialVersionUID",
+                "modifiers" : {
+                  "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+                },
+                "className" : "long",
+                "canonicalClassName" : "long",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/address/addressLine1",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "addressLine1",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getAddressLine1",
+                "setMethod" : "setAddressLine1",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/address/addressLine2",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "addressLine2",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getAddressLine2",
+                "setMethod" : "setAddressLine2",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/address/city",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "city",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getCity",
+                "setMethod" : "setCity",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/address/state",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "state",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getState",
+                "setMethod" : "setState",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/address/zipCode",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "zipCode",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getZipCode",
+                "setMethod" : "setZipCode",
+                "primitive" : true,
+                "synthetic" : false
+              } ]
+            },
+            "packageName" : "io.atlasmap.java.test",
+            "annotation" : false,
+            "annonymous" : false,
+            "enumeration" : false,
+            "localClass" : false,
+            "memberClass" : false,
+            "uri" : "atlas:java?className=io.atlasmap.java.test.BaseAddress",
+            "interface" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/order/orderId",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "orderId",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.Integer",
+            "canonicalClassName" : "java.lang.Integer",
+            "getMethod" : "getOrderId",
+            "setMethod" : "setOrderId",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/order/created",
+            "status" : "SUPPORTED",
+            "fieldType" : "DATE_TIME",
+            "name" : "created",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.util.Date",
+            "canonicalClassName" : "java.util.Date",
+            "getMethod" : "getCreated",
+            "setMethod" : "setCreated",
+            "primitive" : false,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "path" : "/order/someStaticClass",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "someStaticClass",
+            "modifiers" : {
+              "modifier" : [ "PUBLIC", "STATIC", "PRIVATE" ]
+            },
+            "className" : "io.atlasmap.java.test.BaseOrder$SomeStaticClass",
+            "canonicalClassName" : "io.atlasmap.java.test.BaseOrder.SomeStaticClass",
+            "getMethod" : "getSomeStaticClass",
+            "setMethod" : "setSomeStaticClass",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/order/someStaticClass/someField",
+                "status" : "SUPPORTED",
+                "fieldType" : "STRING",
+                "name" : "someField",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.String",
+                "canonicalClassName" : "java.lang.String",
+                "getMethod" : "getSomeField",
+                "setMethod" : "setSomeField",
+                "primitive" : true,
+                "synthetic" : false
+              } ]
+            },
+            "packageName" : "io.atlasmap.java.test",
+            "annotation" : false,
+            "annonymous" : false,
+            "enumeration" : false,
+            "localClass" : false,
+            "memberClass" : true,
+            "uri" : "atlas:java?className=io.atlasmap.java.test.BaseOrder%24SomeStaticClass",
+            "interface" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.TargetOrder",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/orderArray",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "orderArray",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetOrderArray",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetOrderArray",
+        "getMethod" : "getOrderArray",
+        "setMethod" : "setOrderArray",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/orderArray/orders[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "COMPLEX",
+            "name" : "orders",
+            "modifiers" : {
+              "modifier" : [ "ABSTRACT", "PUBLIC", "PRIVATE" ]
+            },
+            "className" : "io.atlasmap.java.test.BaseOrder",
+            "canonicalClassName" : "io.atlasmap.java.test.BaseOrder",
+            "getMethod" : "getOrders",
+            "setMethod" : "setOrders",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/orderArray/orders[]/serialVersionUID",
+                "status" : "EXCLUDED",
+                "fieldType" : "LONG",
+                "name" : "serialVersionUID",
+                "modifiers" : {
+                  "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+                },
+                "className" : "long",
+                "canonicalClassName" : "long",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaClass",
+                "path" : "/orderArray/orders[]/contact",
+                "status" : "CACHED",
+                "fieldType" : "COMPLEX",
+                "name" : "contact",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "io.atlasmap.java.test.BaseContact",
+                "canonicalClassName" : "io.atlasmap.java.test.BaseContact",
+                "getMethod" : "getContact",
+                "setMethod" : "setContact",
+                "primitive" : false,
+                "synthetic" : false,
+                "javaEnumFields" : {
+                  "javaEnumField" : [ ]
+                },
+                "javaFields" : {
+                  "javaField" : [ ]
+                }
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaClass",
+                "path" : "/orderArray/orders[]/address",
+                "status" : "CACHED",
+                "fieldType" : "COMPLEX",
+                "name" : "address",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "io.atlasmap.java.test.BaseAddress",
+                "canonicalClassName" : "io.atlasmap.java.test.BaseAddress",
+                "getMethod" : "getAddress",
+                "setMethod" : "setAddress",
+                "primitive" : false,
+                "synthetic" : false,
+                "javaEnumFields" : {
+                  "javaEnumField" : [ ]
+                },
+                "javaFields" : {
+                  "javaField" : [ ]
+                }
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/orderArray/orders[]/orderId",
+                "status" : "SUPPORTED",
+                "fieldType" : "INTEGER",
+                "name" : "orderId",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.lang.Integer",
+                "canonicalClassName" : "java.lang.Integer",
+                "getMethod" : "getOrderId",
+                "setMethod" : "setOrderId",
+                "primitive" : true,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaField",
+                "path" : "/orderArray/orders[]/created",
+                "status" : "SUPPORTED",
+                "fieldType" : "DATE_TIME",
+                "name" : "created",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "java.util.Date",
+                "canonicalClassName" : "java.util.Date",
+                "getMethod" : "getCreated",
+                "setMethod" : "setCreated",
+                "primitive" : false,
+                "synthetic" : false
+              }, {
+                "jsonType" : "io.atlasmap.java.v2.JavaClass",
+                "path" : "/orderArray/orders[]/someStaticClass",
+                "status" : "CACHED",
+                "fieldType" : "COMPLEX",
+                "name" : "someStaticClass",
+                "modifiers" : {
+                  "modifier" : [ "PRIVATE" ]
+                },
+                "className" : "io.atlasmap.java.test.BaseOrder$SomeStaticClass",
+                "canonicalClassName" : "io.atlasmap.java.test.BaseOrder.SomeStaticClass",
+                "getMethod" : "getSomeStaticClass",
+                "setMethod" : "setSomeStaticClass",
+                "primitive" : false,
+                "synthetic" : false,
+                "javaEnumFields" : {
+                  "javaEnumField" : [ ]
+                },
+                "javaFields" : {
+                  "javaField" : [ ]
+                }
+              } ]
+            },
+            "packageName" : "io.atlasmap.java.test",
+            "annotation" : false,
+            "annonymous" : false,
+            "enumeration" : false,
+            "localClass" : false,
+            "memberClass" : false,
+            "uri" : "atlas:java?className=io.atlasmap.java.test.BaseOrder",
+            "interface" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/orderArray/numberOrders",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "numberOrders",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.Integer",
+            "canonicalClassName" : "java.lang.Integer",
+            "getMethod" : "getNumberOrders",
+            "setMethod" : "setNumberOrders",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/orderArray/orderBatchNumber",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "orderBatchNumber",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "java.lang.Integer",
+            "canonicalClassName" : "java.lang.Integer",
+            "getMethod" : "getOrderBatchNumber",
+            "setMethod" : "setOrderBatchNumber",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.TargetOrderArray",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/listOrders",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "listOrders",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TestListOrders",
+        "canonicalClassName" : "io.atlasmap.java.test.TestListOrders",
+        "getMethod" : "getListOrders",
+        "setMethod" : "setListOrders",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "collectionType" : "LIST",
+            "path" : "/listOrders/orders<>",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "orders",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "parameterizedTypes" : {
+              "string" : [ "io.atlasmap.java.test.BaseOrder" ]
+            },
+            "className" : "io.atlasmap.java.test.BaseOrder",
+            "canonicalClassName" : "io.atlasmap.java.test.BaseOrder",
+            "collectionClassName" : "java.util.List",
+            "getMethod" : "getOrders",
+            "setMethod" : "setOrders",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            }
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "collectionType" : "LIST",
+            "path" : "/listOrders/orderIds<>",
+            "status" : "SUPPORTED",
+            "fieldType" : "LONG",
+            "name" : "orderIds",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "parameterizedTypes" : {
+              "string" : [ "java.lang.Long" ]
+            },
+            "className" : "java.lang.Long",
+            "canonicalClassName" : "java.lang.Long",
+            "collectionClassName" : "java.util.List",
+            "getMethod" : "getOrderIds",
+            "setMethod" : "setOrderIds",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.TestListOrders",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/primitives",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "primitives",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetFlatPrimitiveClass",
+        "getMethod" : "getPrimitives",
+        "setMethod" : "setPrimitives",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/intField",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "intField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getIntField",
+            "setMethod" : "setIntField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/shortField",
+            "status" : "SUPPORTED",
+            "fieldType" : "SHORT",
+            "name" : "shortField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "short",
+            "canonicalClassName" : "short",
+            "getMethod" : "getShortField",
+            "setMethod" : "setShortField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/longField",
+            "status" : "SUPPORTED",
+            "fieldType" : "LONG",
+            "name" : "longField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "getMethod" : "getLongField",
+            "setMethod" : "setLongField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/doubleField",
+            "status" : "SUPPORTED",
+            "fieldType" : "DOUBLE",
+            "name" : "doubleField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "double",
+            "canonicalClassName" : "double",
+            "getMethod" : "getDoubleField",
+            "setMethod" : "setDoubleField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/floatField",
+            "status" : "SUPPORTED",
+            "fieldType" : "FLOAT",
+            "name" : "floatField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "float",
+            "canonicalClassName" : "float",
+            "getMethod" : "getFloatField",
+            "setMethod" : "setFloatField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/booleanField",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "booleanField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isBooleanField",
+            "setMethod" : "setBooleanField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/charField",
+            "status" : "SUPPORTED",
+            "fieldType" : "CHAR",
+            "name" : "charField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "char",
+            "canonicalClassName" : "char",
+            "getMethod" : "getCharField",
+            "setMethod" : "setCharField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/byteField",
+            "status" : "SUPPORTED",
+            "fieldType" : "BYTE",
+            "name" : "byteField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "byte",
+            "canonicalClassName" : "byte",
+            "getMethod" : "getByteField",
+            "setMethod" : "setByteField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedBooleanField",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "boxedBooleanField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Boolean",
+            "canonicalClassName" : "java.lang.Boolean",
+            "getMethod" : "getBoxedBooleanField",
+            "setMethod" : "setBoxedBooleanField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedByteField",
+            "status" : "SUPPORTED",
+            "fieldType" : "BYTE",
+            "name" : "boxedByteField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Byte",
+            "canonicalClassName" : "java.lang.Byte",
+            "getMethod" : "getBoxedByteField",
+            "setMethod" : "setBoxedByteField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedCharField",
+            "status" : "SUPPORTED",
+            "fieldType" : "CHAR",
+            "name" : "boxedCharField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Character",
+            "canonicalClassName" : "java.lang.Character",
+            "getMethod" : "getBoxedCharField",
+            "setMethod" : "setBoxedCharField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedDoubleField",
+            "status" : "SUPPORTED",
+            "fieldType" : "DOUBLE",
+            "name" : "boxedDoubleField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Double",
+            "canonicalClassName" : "java.lang.Double",
+            "getMethod" : "getBoxedDoubleField",
+            "setMethod" : "setBoxedDoubleField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedFloatField",
+            "status" : "SUPPORTED",
+            "fieldType" : "FLOAT",
+            "name" : "boxedFloatField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Float",
+            "canonicalClassName" : "java.lang.Float",
+            "getMethod" : "getBoxedFloatField",
+            "setMethod" : "setBoxedFloatField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedIntField",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "boxedIntField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Integer",
+            "canonicalClassName" : "java.lang.Integer",
+            "getMethod" : "getBoxedIntField",
+            "setMethod" : "setBoxedIntField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedLongField",
+            "status" : "SUPPORTED",
+            "fieldType" : "LONG",
+            "name" : "boxedLongField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Long",
+            "canonicalClassName" : "java.lang.Long",
+            "getMethod" : "getBoxedLongField",
+            "setMethod" : "setBoxedLongField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedShortField",
+            "status" : "SUPPORTED",
+            "fieldType" : "SHORT",
+            "name" : "boxedShortField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Short",
+            "canonicalClassName" : "java.lang.Short",
+            "getMethod" : "getBoxedShortField",
+            "setMethod" : "setBoxedShortField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/primitives/boxedStringField",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "boxedStringField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getBoxedStringField",
+            "setMethod" : "setBoxedStringField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/intArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "intArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getIntArrayField",
+            "setMethod" : "setIntArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/shortArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "SHORT",
+            "name" : "shortArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "short",
+            "canonicalClassName" : "short",
+            "getMethod" : "getShortArrayField",
+            "setMethod" : "setShortArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/longArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "LONG",
+            "name" : "longArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "getMethod" : "getLongArrayField",
+            "setMethod" : "setLongArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/doubleArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "DOUBLE",
+            "name" : "doubleArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "double",
+            "canonicalClassName" : "double",
+            "getMethod" : "getDoubleArrayField",
+            "setMethod" : "setDoubleArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/floatArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "FLOAT",
+            "name" : "floatArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "float",
+            "canonicalClassName" : "float",
+            "getMethod" : "getFloatArrayField",
+            "setMethod" : "setFloatArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/booleanArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "booleanArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "getBooleanArrayField",
+            "setMethod" : "setBooleanArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/charArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "CHAR",
+            "name" : "charArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "char",
+            "canonicalClassName" : "char",
+            "getMethod" : "getCharArrayField",
+            "setMethod" : "setCharArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/byteArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "BYTE",
+            "name" : "byteArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "byte",
+            "canonicalClassName" : "byte",
+            "getMethod" : "getByteArrayField",
+            "setMethod" : "setByteArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedIntArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "boxedIntArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Integer",
+            "canonicalClassName" : "java.lang.Integer",
+            "getMethod" : "getBoxedIntArrayField",
+            "setMethod" : "setBoxedIntArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedShortArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "SHORT",
+            "name" : "boxedShortArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Short",
+            "canonicalClassName" : "java.lang.Short",
+            "getMethod" : "getBoxedShortArrayField",
+            "setMethod" : "setBoxedShortArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedLongArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "LONG",
+            "name" : "boxedLongArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Long",
+            "canonicalClassName" : "java.lang.Long",
+            "getMethod" : "getBoxedLongArrayField",
+            "setMethod" : "setBoxedLongArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedDoubleArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "DOUBLE",
+            "name" : "boxedDoubleArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Double",
+            "canonicalClassName" : "java.lang.Double",
+            "getMethod" : "getBoxedDoubleArrayField",
+            "setMethod" : "setBoxedDoubleArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedFloatArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "FLOAT",
+            "name" : "boxedFloatArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Float",
+            "canonicalClassName" : "java.lang.Float",
+            "getMethod" : "getBoxedFloatArrayField",
+            "setMethod" : "setBoxedFloatArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedBooleanArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "boxedBooleanArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Boolean",
+            "canonicalClassName" : "java.lang.Boolean",
+            "getMethod" : "getBoxedBooleanArrayField",
+            "setMethod" : "setBoxedBooleanArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedCharArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "CHAR",
+            "name" : "boxedCharArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Character",
+            "canonicalClassName" : "java.lang.Character",
+            "getMethod" : "getBoxedCharArrayField",
+            "setMethod" : "setBoxedCharArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedByteArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "BYTE",
+            "name" : "boxedByteArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.Byte",
+            "canonicalClassName" : "java.lang.Byte",
+            "getMethod" : "getBoxedByteArrayField",
+            "setMethod" : "setBoxedByteArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/primitives/boxedStringArrayField[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "boxedStringArrayField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getBoxedStringArrayField",
+            "setMethod" : "setBoxedStringArrayField",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "collectionType" : "LIST",
+            "path" : "/primitives/boxedIntListField<>",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "boxedIntListField",
+            "modifiers" : {
+              "modifier" : [ "PROTECTED" ]
+            },
+            "parameterizedTypes" : {
+              "string" : [ "java.lang.Integer" ]
+            },
+            "className" : "java.lang.Integer",
+            "canonicalClassName" : "java.lang.Integer",
+            "collectionClassName" : "java.util.List",
+            "getMethod" : "getBoxedIntListField",
+            "setMethod" : "setBoxedIntListField",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.TargetFlatPrimitiveClass",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/statesLong",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "statesLong",
+        "modifiers" : {
+          "modifier" : [ "FINAL", "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.StateEnumClassLong",
+        "canonicalClassName" : "io.atlasmap.java.test.StateEnumClassLong",
+        "getMethod" : "getStatesLong",
+        "setMethod" : "setStatesLong",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Alabama",
+            "ordinal" : 0
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Arizona",
+            "ordinal" : 1
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "California",
+            "ordinal" : 2
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Colorado",
+            "ordinal" : 3
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Florida",
+            "ordinal" : 4
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Massachusetts",
+            "ordinal" : 5
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "NewHampshire",
+            "ordinal" : 6
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "NewYork",
+            "ordinal" : 7
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Texas",
+            "ordinal" : 8
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "Virginia",
+            "ordinal" : 9
+          } ]
+        },
+        "javaFields" : {
+          "javaField" : [ ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : true,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.StateEnumClassLong",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/statesShort",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "statesShort",
+        "modifiers" : {
+          "modifier" : [ "FINAL", "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.StateEnumClassShort",
+        "canonicalClassName" : "io.atlasmap.java.test.StateEnumClassShort",
+        "getMethod" : "getStatesShort",
+        "setMethod" : "setStatesShort",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "AL",
+            "ordinal" : 0
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "AZ",
+            "ordinal" : 1
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "CA",
+            "ordinal" : 2
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "CO",
+            "ordinal" : 3
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "FL",
+            "ordinal" : 4
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "MA",
+            "ordinal" : 5
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "NH",
+            "ordinal" : 6
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "NY",
+            "ordinal" : 7
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "TX",
+            "ordinal" : 8
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaEnumField",
+            "status" : "SUPPORTED",
+            "name" : "VA",
+            "ordinal" : 9
+          } ]
+        },
+        "javaFields" : {
+          "javaField" : [ ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : true,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.StateEnumClassShort",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/emptyComplexField",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "emptyComplexField",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC", "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.EmptyComplexField",
+        "canonicalClassName" : "io.atlasmap.java.test.EmptyComplexField",
+        "getMethod" : "getEmptyComplexField",
+        "setMethod" : "setEmptyComplexField",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/emptyComplexField/serialVersionUID",
+            "status" : "EXCLUDED",
+            "fieldType" : "LONG",
+            "name" : "serialVersionUID",
+            "modifiers" : {
+              "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "io.atlasmap.java.test",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=io.atlasmap.java.test.EmptyComplexField",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "collectionType" : "LIST",
+        "path" : "/contactList<>",
+        "status" : "CACHED",
+        "fieldType" : "COMPLEX",
+        "name" : "contactList",
+        "modifiers" : {
+          "modifier" : [ "PRIVATE" ]
+        },
+        "parameterizedTypes" : {
+          "string" : [ "io.atlasmap.java.test.TargetContact" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetContact",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetContact",
+        "collectionClassName" : "java.util.LinkedList",
+        "getMethod" : "getContactList",
+        "setMethod" : "setContactList",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "arrayDimensions" : 1,
+        "collectionType" : "ARRAY",
+        "path" : "/contactArray[]",
+        "status" : "CACHED",
+        "fieldType" : "COMPLEX",
+        "name" : "contactArray",
+        "modifiers" : {
+          "modifier" : [ "PRIVATE" ]
+        },
+        "className" : "io.atlasmap.java.test.TargetContact",
+        "canonicalClassName" : "io.atlasmap.java.test.TargetContact",
+        "getMethod" : "getContactArray",
+        "setMethod" : "setContactArray",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ ]
+        }
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/created",
+        "status" : "SUPPORTED",
+        "fieldType" : "DATE_TIME",
+        "name" : "created",
+        "modifiers" : {
+          "modifier" : [ "PRIVATE" ]
+        },
+        "className" : "java.util.Date",
+        "canonicalClassName" : "java.util.Date",
+        "getMethod" : "getCreated",
+        "setMethod" : "setCreated",
+        "primitive" : false,
+        "synthetic" : false
+      } ]
+    },
+    "packageName" : "io.atlasmap.java.test",
+    "annotation" : false,
+    "annonymous" : false,
+    "enumeration" : false,
+    "localClass" : false,
+    "memberClass" : false,
+    "uri" : "atlas:java?className=io.atlasmap.java.test.TargetTestClass",
+    "interface" : false
+  }
+}
