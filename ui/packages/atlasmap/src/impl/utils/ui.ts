@@ -486,7 +486,7 @@ export function handleActionChange(
  * @param currentIndex
  * @param target
  */
-export function handleIndexChange(
+export async function handleIndexChange(
   isSource: boolean,
   currentIndex: number,
   target: number | Field,
@@ -504,6 +504,13 @@ export function handleIndexChange(
     return;
   }
   let newIndex: number | null = 0;
+  const activeMappingIndex = cfg.mappingService.getMappingIndexByID(
+    cfg,
+    activeMapping.uuid,
+  );
+  if (activeMappingIndex === -1) {
+    return;
+  }
 
   // If the target is an actual index value then check for the need to add padding.
   if (typeof target === 'number') {
@@ -532,6 +539,14 @@ export function handleIndexChange(
     newIndex = activeMapping.getIndexForMappedField(field);
   }
   cfg.mappingService.moveMappedFieldTo(activeMapping, sourceField, newIndex!);
+
+  // Modify the field indicies in the backend service.
+  await cfg.mappingService.changeMappedFieldIndex(
+    isSource,
+    activeMappingIndex,
+    currentIndex,
+    newIndex! - 1,
+  );
 }
 
 export function handleNewTransformation(isSource: boolean, index: number) {

@@ -459,7 +459,7 @@ export class MappingSerializer {
       ) {
         mapping.transition.mode = TransitionMode.ONE_TO_MANY;
       }
-      if (cfg.mappings) {
+      if (cfg.mappings !== undefined) {
         try {
           await MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
         } catch (e) {

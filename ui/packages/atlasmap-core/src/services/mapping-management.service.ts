@@ -254,7 +254,57 @@ export class MappingManagementService {
     );
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
     this.clearExtraPaddingFields(mappedFields, true);
-    this.notifyMappingUpdated();
+  }
+
+  /**
+   * Change the value of the specified current index to the specified target
+   * index for the specified mapped field (source/target).
+   *
+   * @param sourceMapping
+   * @param mappingIndex
+   * @param currentFieldIndex
+   * @param targetFieldIndex
+   */
+  changeMappedFieldIndex(
+    sourceMapping: boolean,
+    mappingIndex: number,
+    currentFieldIndex: number,
+    targetFieldIndex: number
+  ): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      if (mappingIndex < 0) {
+        resolve(false);
+        return;
+      }
+      const url: string =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping/' +
+        mappingIndex +
+        '/inptu/' +
+        sourceMapping +
+        '/current/' +
+        currentFieldIndex +
+        '/target/' +
+        targetFieldIndex;
+      this.api
+        .post(url)
+        .then(async (res: Response) => {
+          this.cfg.logger!.debug(
+            `Change Mapped Field Index Response: ${res.ok}`
+          );
+          await this.notifyFetchMapping();
+          resolve(true);
+        })
+        .catch((error: any) => {
+          this.cfg.errorService.addBackendError(
+            'Error occurred while changing mapping index.',
+            error
+          );
+          resolve(false);
+        });
+    });
   }
 
   /**
@@ -954,5 +1004,25 @@ export class MappingManagementService {
    */
   isEnumerationMapping(mapping: MappingModel): boolean {
     return mapping?.transition?.mode === TransitionMode.ENUM;
+  }
+
+  /**
+   * Return the mappings index for the specified mapping uuid, -1 if not found.
+   *
+   * @param cfg
+   * @param uuid
+   * @returns mappings index
+   */
+  getMappingIndexByID(cfg: ConfigModel, uuid: string): number {
+    let indexValue = -1;
+    if (cfg.mappings && cfg.mappings.mappings) {
+      for (let j = 0; j < cfg.mappings.mappings.length; j++) {
+        if (cfg.mappings.mappings[j].uuid === uuid) {
+          indexValue = j;
+          break;
+        }
+      }
+    }
+    return indexValue;
   }
 }

@@ -17,6 +17,8 @@ package io.atlasmap.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -45,6 +47,9 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audits;
+import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Mapping;
 import io.atlasmap.v2.ProcessMappingRequest;
 import io.atlasmap.v2.ProcessMappingResponse;
@@ -89,6 +94,105 @@ public class MappingService extends BaseAtlasService {
     public MappingService(AtlasService parent) {
         this.atlasService = parent;
         this.previewContext = this.atlasService.getContextFactory().createPreviewContext();
+    }
+
+    /**
+     * Return the field from the specified list of mapped fields whose index property matches the
+     * specified field index.
+     *
+     * @param mappedFields
+     * @param fieldIndex
+     *
+     * @return field
+     */
+    private Field getFieldByIndex(List<Field> mappedFields, int fieldIndex) {
+        for (Field field : mappedFields) {
+            if (field.getIndex().intValue() == fieldIndex) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the ordinal position of the mapped field with the specified index property.
+     *
+     * @param mappedFields
+     * @param fieldIndex
+     *
+     * @return ordinal position
+     */
+    private int getOrdinalPosition(List<Field> mappedFields, int fieldIndex) {
+        int ordinalPosition = 0;
+        for (Field field : mappedFields) {
+            if (field.getIndex().intValue() == fieldIndex) {
+                break;
+            }
+            ordinalPosition++;
+        }
+        return ordinalPosition;
+    }
+
+    /**
+     * Change the value of the specified current index to the specified target index for the specified
+     * mapped field (source/target).
+     *
+     * @param mappingDefinitionId
+     * @param mappingIndex
+     * @param sourceMapping
+     * @param currentFieldIndex
+     * @param targetFieldIndex
+     *
+     * @return empty response
+     */
+    @POST
+    @Path("/{mappingIndex}/inptu/{sourceMapping}/current/{currentFieldIndex}/target/{targetFieldIndex}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Change Mapped Field Index", description = "Change the mapped field's index value")
+    @ApiResponses(
+        @ApiResponse(responseCode = "200", description = "The mapped field formerly at index {currentFieldIndex} is now at {targetFieldIndex}."))
+    public Response changeMappedFieldIndex(
+        @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
+        @Parameter(description = "Mapping Index") @PathParam("mappingIndex") Integer mappingIndex,
+        @Parameter(description = "Source Mapping") @PathParam("sourceMapping") Boolean sourceMapping,
+        @Parameter(description = "Current Mapped Field Index") @PathParam("currentFieldIndex") Integer currentFieldIndex,
+        @Parameter(description = "Target Mapped Field Index") @PathParam("targetFieldIndex") Integer targetFieldIndex) {
+        LOG.debug("changeMappedFieldIndex: ID: {}, mappingIndex: {}, sourceMapping: {}, currentFieldIndex: {}, targetFieldIndex: {}",
+            mappingDefinitionId, mappingIndex,  sourceMapping, currentFieldIndex, targetFieldIndex);
+        try {
+            ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
+            AtlasMapping def = handler.getMappingDefinition();
+            List<BaseMapping> mappings = def.getMappings().getMapping();
+            Mapping objectMapping = (Mapping) mappings.get(mappingIndex.intValue());
+            List<Field> mappedFields;
+            if (sourceMapping) {
+                FieldGroup fg = objectMapping.getInputFieldGroup();
+                if (fg != null) {
+                    mappedFields = fg.getField();
+                } else {
+                    mappedFields = objectMapping.getInputField();
+                }
+            } else {
+                mappedFields = objectMapping.getOutputField();
+            }
+            Field objectField = getFieldByIndex(mappedFields, currentFieldIndex.intValue());
+            if (objectField == null) {
+                throw new WebApplicationException("Unable to detect field at index " + currentFieldIndex.intValue(),
+                    null, Status.INTERNAL_SERVER_ERROR);
+            }
+            Field targetField = getFieldByIndex(mappedFields, targetFieldIndex.intValue());
+            if (targetField != null) {
+                Collections.swap(mappedFields, getOrdinalPosition(mappedFields, currentFieldIndex),
+                    getOrdinalPosition(mappedFields, targetFieldIndex));
+                targetField.setIndex(targetFieldIndex.intValue() - 1);
+            }
+            objectField.setIndex(targetFieldIndex);
+            handler.setMappingDefinition(def);
+            handler.persist();
+        } catch (AtlasException e) {
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return Response.ok().build();
     }
 
     /**

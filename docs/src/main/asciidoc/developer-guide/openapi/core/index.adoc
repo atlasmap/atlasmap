@@ -28,6 +28,110 @@ Core Service provides basic operations which is not specific to the individual d
 === Default
 
 
+[.changeMappedFieldIndex]
+==== changeMappedFieldIndex
+
+`POST /project/{mappingDefinitionId}/mapping/{mappingIndex}/inptu/{sourceMapping}/current/{currentFieldIndex}/target/{targetFieldIndex}`
+
+Change Mapped Field Index
+
+===== Description
+
+Change the mapped field's index value
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+| mappingIndex
+| Mapping Index 
+| X
+| null
+| 
+
+| sourceMapping
+| Source Mapping 
+| X
+| null
+| 
+
+| currentFieldIndex
+| Current Mapped Field Index 
+| X
+| null
+| 
+
+| targetFieldIndex
+| Target Mapped Field Index 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| The mapped field formerly at index {currentFieldIndex} is now at {targetFieldIndex}.
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/{mappingIndex}/inptu/{sourceMapping}/current/{currentFieldIndex}/target/{targetFieldIndex}/POST/POST.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.deleteAll]
 ==== deleteAll
 
