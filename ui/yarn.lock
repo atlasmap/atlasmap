@@ -6253,10 +6253,10 @@ camelcase@^4.1.0:
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
   integrity sha1-1UVjW+HjPFQmScaRc+Xeas+uNN0=
 
-camelcase@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.2.0.tgz#924af881c9d525ac9d87f40d964e5cea982a1809"
-  integrity sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
+camelcase@^6.0.0, camelcase@^6.2.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-6.3.0.tgz#5685b95eb209ac9c0c177467778c9c84df58ba9a"
+  integrity sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==
 
 caniuse-api@^3.0.0:
   version "3.0.0"
@@ -19336,13 +19336,13 @@ type@^2.0.0:
   integrity sha512-180WMDQaIMm3+7hGXWf12GtdniDEy7nYcyFMKJn/eZz/6tSLXrUN9V0wKSbMjej0I1WHWbpREDEKHtqPQa9NNw==
 
 typed-css-modules@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/typed-css-modules/-/typed-css-modules-0.7.0.tgz#88b892a39ba7b8dd0ef2afb6cf728fff6c588f6c"
-  integrity sha512-eNaAHKiao0ON0tkLE8ITma9Fx9MUDQjJwL+P9iCinGAIHSt2XKFVSx0A6GWLrbX/yNQjzzUmuJFikobSymZXng==
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/typed-css-modules/-/typed-css-modules-0.7.1.tgz#176db04c29ac8772f68cf1dd5441102505c98cd9"
+  integrity sha512-WaWHnLa3HBTCuOCDRDB3wfqoH9ouTxdLGQwzVBxV5x+nbPIr5ZkCrCb4yfU4D1bkzNprrTKTU2ETkYVOLGFmVA==
   dependencies:
     "@types/css-modules-loader-core" "^1.1.0"
-    camelcase "^5.3.1"
-    chalk "^2.1.0"
+    camelcase "^6.0.0"
+    chalk "^4.0.0"
     chokidar "^3.4.0"
     css-modules-loader-core "^1.1.0"
     glob "^7.1.2"
