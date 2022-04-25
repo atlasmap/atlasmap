@@ -13,15 +13,15 @@
     "dist"
   ],
   "scripts": {
-    "start": "tsdx watch",
+    "start": "webpack-cli serve --mode development --hot",
     "prebuild": "node ./atlasmap.prebuild.js",
-    "build:tsdx": "tsdx build",
-    "build:module": "npm-run-all prebuild build:tsdx",
+    "build:yarn": "webpack-cli build --mode production",
+    "build:module": "npm-run-all prebuild build:yarn",
     "build:storybook": "build-storybook --quiet",
     "build": "npm-run-all build:module lint test",
-    "test": "tsdx test --runInBand",
-    "test:coverage": "tsdx test --coverage --runInBand",
-    "lint": "tsdx lint src test",
+    "test": "jest --runInBand",
+    "test:coverage": "jest test --coverage --runInBand",
+    "lint": "eslint --ext .ts,.tsx,.js ./src",
     "format": "yarn lint --fix",
     "storybook": "start-storybook -p 6006"
   },
@@ -62,14 +62,14 @@
     "postcss-url": "^10.1.3",
     "prettier": "^2.5.0",
     "react-spring": "^9.1.2",
-    "rollup-plugin-postcss": "^4.0.0",
     "source-map-loader": "volune/source-map-loader#fixes",
     "style-loader": "^2.0.0",
+    "ts-loader": "8.2.0",
     "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "tsdx": "^0.13.1",
     "typed-css-modules": "^0.7.0",
     "typescript": "^3.9.10",
-    "typescript-plugin-css-modules": "^3.2.0"
+    "typescript-plugin-css-modules": "^3.2.0",
+    "webpack-cli": "^4.9.2"
   },
   "peerDependencies": {
     "@patternfly/react-core": "^4.147.0",
@@ -105,7 +105,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "eslint --ext .ts,.tsx,.js ./src"
     }
   },
   "prettier": {
@@ -150,8 +150,6 @@
     },
     "extends": [
       "prettier",
-      "prettier/react",
-      "prettier/@typescript-eslint",
       "plugin:react/recommended"
     ],
     "plugins": [
@@ -186,6 +184,11 @@
       "react/jsx-uses-vars": 2,
       "react/prop-types": 0,
       "sort-imports": "error"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
     }
   }
 }

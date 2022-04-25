@@ -13,12 +13,12 @@
     "dist"
   ],
   "scripts": {
-    "start": "tsdx watch",
-    "build:module": "tsdx build",
+    "start": "webpack-cli serve --mode development --hot",
+    "build:module": "webpack-cli build --mode production",
     "build": "npm-run-all build:module lint test",
-    "test": "tsdx test --runInBand",
-    "test:coverage": "tsdx test --coverage --runInBand",
-    "lint": "tsdx lint src test",
+    "test": "jest --runInBand",
+    "test:coverage": "jest --coverage --runInBand",
+    "lint": "eslint --ext .ts,.tsx,.js ./src",
     "format": "yarn lint --fix"
   },
   "devDependencies": {
@@ -29,14 +29,15 @@
     "@types/text-encoding": "^0.0.36",
     "babel-jest": "^24.9.0",
     "canvas": "^2.8.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-header": "^3.1.1",
+    "file-loader": "^6.2.0",
     "husky": "^4.2.3",
     "jest-esm-transformer": "^1.0.0",
     "jest-matchmedia-mock": "^1.1.0",
     "prettier": "^2.5.0",
     "text-encoding": "^0.7.0",
     "ts-jest": "^24.3.0",
-    "tsdx": "^0.13.1",
     "typescript": "~3.9.9"
   },
   "peerDependencies": {
@@ -55,7 +56,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "tsdx lint"
+      "pre-commit": "eslint --ext .ts,.tsx,.js ./src"
     }
   },
   "prettier": {
@@ -101,8 +102,7 @@
       "sourceType": "module"
     },
     "extends": [
-      "prettier",
-      "prettier/@typescript-eslint"
+      "prettier"
     ],
     "plugins": [
       "@typescript-eslint",
