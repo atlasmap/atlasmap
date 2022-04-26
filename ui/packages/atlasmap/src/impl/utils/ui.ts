@@ -504,13 +504,6 @@ export async function handleIndexChange(
     return;
   }
   let newIndex: number | null = 0;
-  const activeMappingIndex = cfg.mappingService.getMappingIndexByID(
-    cfg,
-    activeMapping.uuid,
-  );
-  if (activeMappingIndex === -1) {
-    return;
-  }
 
   // If the target is an actual index value then check for the need to add padding.
   if (typeof target === 'number') {
@@ -543,7 +536,7 @@ export async function handleIndexChange(
   // Modify the field indicies in the backend service.
   await cfg.mappingService.changeMappedFieldIndex(
     isSource,
-    activeMappingIndex,
+    activeMapping.uuid,
     currentIndex,
     newIndex! - 1,
   );

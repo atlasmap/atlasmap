@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { DataSourceType, FieldType } from '../contracts/common';
 import {
   ErrorInfo,
   ErrorLevel,
@@ -32,7 +33,6 @@ import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { FieldAction } from '../models/field-action.model';
-import { FieldType } from '../contracts/common';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
@@ -257,39 +257,41 @@ export class MappingManagementService {
   }
 
   /**
-   * Change the value of the specified current index to the specified target
+   * Change the value of the specified current mapping to the specified target
    * index for the specified mapped field (source/target).
    *
    * @param sourceMapping
-   * @param mappingIndex
+   * @param mappingId
    * @param currentFieldIndex
    * @param targetFieldIndex
    */
   changeMappedFieldIndex(
     sourceMapping: boolean,
-    mappingIndex: number,
+    mappingId: string,
     currentFieldIndex: number,
     targetFieldIndex: number
   ): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
-      if (mappingIndex < 0) {
+      if (!mappingId) {
         resolve(false);
         return;
       }
+      const dataSourceType = sourceMapping
+        ? DataSourceType.SOURCE
+        : DataSourceType.TARGET;
       const url: string =
         this.cfg.initCfg.baseAtlasServiceUrl +
         'project/' +
         this.cfg.mappingDefinitionId +
         '/mapping/' +
-        mappingIndex +
-        '/inptu/' +
-        sourceMapping +
+        mappingId +
+        '/field/' +
+        dataSourceType +
         '/current/' +
         currentFieldIndex +
-        '/target/' +
-        targetFieldIndex;
+        '/targetFieldIndex';
       this.api
-        .post(url)
+        .put(url, { body: targetFieldIndex.toString() })
         .then(async (res: Response) => {
           this.cfg.logger!.debug(
             `Change Mapped Field Index Response: ${res.ok}`
@@ -1004,25 +1006,5 @@ export class MappingManagementService {
    */
   isEnumerationMapping(mapping: MappingModel): boolean {
     return mapping?.transition?.mode === TransitionMode.ENUM;
-  }
-
-  /**
-   * Return the mappings index for the specified mapping uuid, -1 if not found.
-   *
-   * @param cfg
-   * @param uuid
-   * @returns mappings index
-   */
-  getMappingIndexByID(cfg: ConfigModel, uuid: string): number {
-    let indexValue = -1;
-    if (cfg.mappings && cfg.mappings.mappings) {
-      for (let j = 0; j < cfg.mappings.mappings.length; j++) {
-        if (cfg.mappings.mappings[j].uuid === uuid) {
-          indexValue = j;
-          break;
-        }
-      }
-    }
-    return indexValue;
   }
 }

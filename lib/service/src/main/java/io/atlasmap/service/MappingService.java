@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -134,38 +135,59 @@ public class MappingService extends BaseAtlasService {
     }
 
     /**
+     * Return the mapping element for the specified mapping uuid.
+     *
+     * @param uuid
+     * @returns mapping element
+     */
+    private Mapping getMappingByID(List<BaseMapping> mappings, String uuid) {
+        Mapping objectMapping = null;
+        if (mappings != null) {
+            for (ListIterator<BaseMapping> iter = mappings.listIterator(); iter.hasNext();) {
+                Mapping element = (Mapping)iter.next();
+                if (element.getId().equals(uuid)) {
+                    objectMapping = element;
+                    break;
+                }
+            }
+        }
+        return objectMapping;
+    }
+
+    /**
      * Change the value of the specified current index to the specified target index for the specified
      * mapped field (source/target).
      *
      * @param mappingDefinitionId
-     * @param mappingIndex
-     * @param sourceMapping
+     * @param mappingId
+     * @param dataSourceType
      * @param currentFieldIndex
      * @param targetFieldIndex
      *
      * @return empty response
      */
-    @POST
-    @Path("/{mappingIndex}/inptu/{sourceMapping}/current/{currentFieldIndex}/target/{targetFieldIndex}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PUT
+    @Path("/{mappingId}/field/{dataSourceType}/current/{currentFieldIndex}/targetFieldIndex")
+    @Produces({MediaType.TEXT_PLAIN})
     @Operation(summary = "Change Mapped Field Index", description = "Change the mapped field's index value")
     @ApiResponses(
         @ApiResponse(responseCode = "200", description = "The mapped field formerly at index {currentFieldIndex} is now at {targetFieldIndex}."))
     public Response changeMappedFieldIndex(
         @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
-        @Parameter(description = "Mapping Index") @PathParam("mappingIndex") Integer mappingIndex,
-        @Parameter(description = "Source Mapping") @PathParam("sourceMapping") Boolean sourceMapping,
+        @Parameter(description = "Mapping ID") @PathParam("mappingId") String mappingId,
+        @Parameter(description = "Source or Target Mapping") @PathParam("dataSourceType") String dataSourceType,
         @Parameter(description = "Current Mapped Field Index") @PathParam("currentFieldIndex") Integer currentFieldIndex,
-        @Parameter(description = "Target Mapped Field Index") @PathParam("targetFieldIndex") Integer targetFieldIndex) {
-        LOG.debug("changeMappedFieldIndex: ID: {}, mappingIndex: {}, sourceMapping: {}, currentFieldIndex: {}, targetFieldIndex: {}",
-            mappingDefinitionId, mappingIndex,  sourceMapping, currentFieldIndex, targetFieldIndex);
+        Integer targetFieldIndex) {
+        LOG.debug("changeMappedFieldIndex: ID: {}, mappingId: {}, dataSourceType: {}, currentFieldIndex: {}, targetFieldIndex: {}",
+            mappingDefinitionId, mappingId,  dataSourceType, currentFieldIndex, targetFieldIndex);
         try {
             ADMArchiveHandler handler = atlasService.loadExplodedMappingDirectory(mappingDefinitionId);
             AtlasMapping def = handler.getMappingDefinition();
             List<BaseMapping> mappings = def.getMappings().getMapping();
-            Mapping objectMapping = (Mapping) mappings.get(mappingIndex.intValue());
+            Mapping objectMapping = this.getMappingByID(mappings, mappingId);
+
             List<Field> mappedFields;
-            if (sourceMapping) {
+            if (dataSourceType.equals("SOURCE")) {
                 FieldGroup fg = objectMapping.getInputFieldGroup();
                 if (fg != null) {
                     mappedFields = fg.getField();

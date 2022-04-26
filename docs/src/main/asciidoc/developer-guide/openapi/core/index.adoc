@@ -31,7 +31,7 @@ Core Service provides basic operations which is not specific to the individual d
 [.changeMappedFieldIndex]
 ==== changeMappedFieldIndex
 
-`POST /project/{mappingDefinitionId}/mapping/{mappingIndex}/inptu/{sourceMapping}/current/{currentFieldIndex}/target/{targetFieldIndex}`
+`PUT /project/{mappingDefinitionId}/mapping/{mappingId}/field/{dataSourceType}/current/{currentFieldIndex}/targetFieldIndex`
 
 Change Mapped Field Index
 
@@ -40,7 +40,7 @@ Change Mapped Field Index
 Change the mapped field's index value
 
 
-// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/current/\{currentFieldIndex\}/targetFieldIndex/PUT/spec.adoc[opts=optional]
 
 
 
@@ -58,14 +58,14 @@ Change the mapped field's index value
 | null
 | 
 
-| mappingIndex
-| Mapping Index 
+| mappingId
+| Mapping ID 
 | X
 | null
 | 
 
-| sourceMapping
-| Source Mapping 
+| dataSourceType
+| Source or Target Mapping 
 | X
 | null
 | 
@@ -76,14 +76,21 @@ Change the mapped field's index value
 | null
 | 
 
-| targetFieldIndex
-| Target Mapped Field Index 
-| X
-| null
+|===
+
+====== Body Parameter
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| body
+|  <<integer>>
+| -
+| 
 | 
 
 |===
-
 
 
 
@@ -113,20 +120,20 @@ Change the mapped field's index value
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/current/\{currentFieldIndex\}/targetFieldIndex/PUT/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/current/\{currentFieldIndex\}/targetFieldIndex/PUT/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/{mappingIndex}/inptu/{sourceMapping}/current/{currentFieldIndex}/target/{targetFieldIndex}/POST/POST.json[]
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/{mappingId}/field/{dataSourceType}/current/{currentFieldIndex}/targetFieldIndex/PUT/PUT.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingIndex\}/inptu/\{sourceMapping\}/current/\{currentFieldIndex\}/target/\{targetFieldIndex\}/POST/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/current/\{currentFieldIndex\}/targetFieldIndex/PUT/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]
