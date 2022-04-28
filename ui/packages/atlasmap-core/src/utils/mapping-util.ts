@@ -257,17 +257,19 @@ with ID ${mappedField.mappingField.docId}`,
         }
       }
 
-      const zeroBasedIndex = +mappedField.mappingField.index!; // TODO: check this non null operator
-      mappedFields = mapping.getMappedFields(isSource);
-      if (zeroBasedIndex <= mappedFieldIndex) {
-        mappedFields[mappedFieldIndex] = mappedField;
-      } else {
-        cfg.mappingService.addPlaceholders(
-          zeroBasedIndex - mappedFieldIndex,
-          mapping,
-          mappedFieldIndex,
-          isSource
-        );
+      if (mappedField.mappingField.index) {
+        const zeroBasedIndex = +mappedField.mappingField.index; // TODO: check this non null operator
+        mappedFields = mapping.getMappedFields(isSource);
+        if (zeroBasedIndex <= mappedFieldIndex) {
+          mappedFields[mappedFieldIndex] = mappedField;
+        } else {
+          cfg.mappingService.addPlaceholders(
+            zeroBasedIndex - mappedFieldIndex,
+            mapping,
+            mappedFieldIndex,
+            isSource
+          );
+        }
       }
     }
   }
