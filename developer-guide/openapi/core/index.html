@@ -455,27 +455,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#default">1.1. Default</a>
 <ul class="sectlevel3">
-<li><a href="#deleteall">1.1.1. deleteAll</a></li>
-<li><a href="#deleteallmappingprojects">1.1.2. deleteAllMappingProjects</a></li>
-<li><a href="#deletelibraries">1.1.3. deleteLibraries</a></li>
-<li><a href="#deletemappingprojectbyid">1.1.4. deleteMappingProjectById</a></li>
-<li><a href="#getadmdigestrequest">1.1.5. getADMDigestRequest</a></li>
-<li><a href="#getadmrequest">1.1.6. getADMRequest</a></li>
-<li><a href="#getmappingrequest">1.1.7. getMappingRequest</a></li>
-<li><a href="#importadmarchiverequest">1.1.8. importADMArchiveRequest</a></li>
-<li><a href="#listfieldactions">1.1.9. listFieldActions</a></li>
-<li><a href="#listlibraryclasses">1.1.10. listLibraryClasses</a></li>
-<li><a href="#listmappingbuilderclasses">1.1.11. listMappingBuilderClasses</a></li>
-<li><a href="#listmappingdefinitionnames">1.1.12. listMappingDefinitionNames</a></li>
-<li><a href="#ping">1.1.13. ping</a></li>
-<li><a href="#processmappingrequest">1.1.14. processMappingRequest</a></li>
-<li><a href="#removeallmappingsrequest">1.1.15. removeAllMappingsRequest</a></li>
-<li><a href="#removemappingrequest">1.1.16. removeMappingRequest</a></li>
-<li><a href="#setadmdigestrequest">1.1.17. setADMDigestRequest</a></li>
-<li><a href="#updatemappingrequest">1.1.18. updateMappingRequest</a></li>
-<li><a href="#uploadlibrary">1.1.19. uploadLibrary</a></li>
-<li><a href="#validatemappingrequest">1.1.20. validateMappingRequest</a></li>
-<li><a href="#version">1.1.21. version</a></li>
+<li><a href="#changemappedfieldindex">1.1.1. changeMappedFieldIndex</a></li>
+<li><a href="#deleteall">1.1.2. deleteAll</a></li>
+<li><a href="#deleteallmappingprojects">1.1.3. deleteAllMappingProjects</a></li>
+<li><a href="#deletelibraries">1.1.4. deleteLibraries</a></li>
+<li><a href="#deletemappingprojectbyid">1.1.5. deleteMappingProjectById</a></li>
+<li><a href="#getadmdigestrequest">1.1.6. getADMDigestRequest</a></li>
+<li><a href="#getadmrequest">1.1.7. getADMRequest</a></li>
+<li><a href="#getmappingrequest">1.1.8. getMappingRequest</a></li>
+<li><a href="#importadmarchiverequest">1.1.9. importADMArchiveRequest</a></li>
+<li><a href="#listfieldactions">1.1.10. listFieldActions</a></li>
+<li><a href="#listlibraryclasses">1.1.11. listLibraryClasses</a></li>
+<li><a href="#listmappingbuilderclasses">1.1.12. listMappingBuilderClasses</a></li>
+<li><a href="#listmappingdefinitionnames">1.1.13. listMappingDefinitionNames</a></li>
+<li><a href="#ping">1.1.14. ping</a></li>
+<li><a href="#processmappingrequest">1.1.15. processMappingRequest</a></li>
+<li><a href="#removeallmappingsrequest">1.1.16. removeAllMappingsRequest</a></li>
+<li><a href="#removemappingrequest">1.1.17. removeMappingRequest</a></li>
+<li><a href="#setadmdigestrequest">1.1.18. setADMDigestRequest</a></li>
+<li><a href="#updatemappingrequest">1.1.19. updateMappingRequest</a></li>
+<li><a href="#uploadlibrary">1.1.20. uploadLibrary</a></li>
+<li><a href="#validatemappingrequest">1.1.21. validateMappingRequest</a></li>
+<li><a href="#version">1.1.22. version</a></li>
 </ul>
 </li>
 </ul>
@@ -532,23 +533,103 @@ Core Service provides basic operations which is not specific to the individual d
 <div class="sectionbody">
 <div class="sect2 Default">
 <h3 id="default">1.1. Default</h3>
-<div class="sect3 deleteAll">
-<h4 id="deleteall">1.1.1. deleteAll</h4>
+<div class="sect3 changeMappedFieldIndex">
+<h4 id="changemappedfieldindex">1.1.1. changeMappedFieldIndex</h4>
 <div class="paragraph">
-<p><code>DELETE /all</code></p>
+<p><code>PUT /project/{mappingDefinitionId}/mapping/{mappingId}/field/{dataSourceType}/{fieldIndex}/index</code></p>
 </div>
 <div class="paragraph">
-<p>Delete all</p>
+<p>Change Mapped Field Index</p>
 </div>
 <div class="sect4">
 <h5 id="description">Description</h5>
 <div class="paragraph">
-<p>Delete all user-defined library JAR files and mapping projects</p>
+<p>Change the mapped field&#8217;s index value</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="parameters">Parameters</h5>
-
+<div class="sect5">
+<h6 id="path-parameters">Path Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mappingId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">dataSourceType</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Source or Target Mapping</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fieldIndex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Current Mapped Field Index</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect5">
+<h6 id="body-parameter">Body Parameter</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#integer">[integer]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect4">
 <h5 id="return-type">Return Type</h5>
@@ -575,12 +656,7 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">All user-defined libarary JARs and mapping projects were deleted successfully</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unable to delete all user-defined JAR files and mapping projects</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The mapped field formerly at index {fieldIndex} is now at {index}.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
 </tr>
 </tbody>
@@ -591,18 +667,18 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
-<div class="sect3 deleteAllMappingProjects">
-<h4 id="deleteallmappingprojects">1.1.2. deleteAllMappingProjects</h4>
+<div class="sect3 deleteAll">
+<h4 id="deleteall">1.1.2. deleteAll</h4>
 <div class="paragraph">
-<p><code>DELETE /project</code></p>
+<p><code>DELETE /all</code></p>
 </div>
 <div class="paragraph">
-<p>Delete All Mapping projects</p>
+<p>Delete all</p>
 </div>
 <div class="sect4">
 <h5 id="description-2">Description</h5>
 <div class="paragraph">
-<p>Delete all mapping projects including Mapping Definitions and Documents saved on the server</p>
+<p>Delete all user-defined library JAR files and mapping projects</p>
 </div>
 </div>
 <div class="sect4">
@@ -634,12 +710,12 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">All mapping projects were deleted successfully</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All user-defined libarary JARs and mapping projects were deleted successfully</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Unable to delete all mapping projects</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unable to delete all user-defined JAR files and mapping projects</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
 </tr>
 </tbody>
@@ -650,18 +726,18 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
-<div class="sect3 deleteLibraries">
-<h4 id="deletelibraries">1.1.3. deleteLibraries</h4>
+<div class="sect3 deleteAllMappingProjects">
+<h4 id="deleteallmappingprojects">1.1.3. deleteAllMappingProjects</h4>
 <div class="paragraph">
-<p><code>DELETE /library</code></p>
+<p><code>DELETE /project</code></p>
 </div>
 <div class="paragraph">
-<p>Remove All User-Defined JAR libraries</p>
+<p>Delete All Mapping projects</p>
 </div>
 <div class="sect4">
 <h5 id="description-3">Description</h5>
 <div class="paragraph">
-<p>Remove all user-defined JAR files saved on the server</p>
+<p>Delete all mapping projects including Mapping Definitions and Documents saved on the server</p>
 </div>
 </div>
 <div class="sect4">
@@ -693,6 +769,65 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">All mapping projects were deleted successfully</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unable to delete all mapping projects</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="samples-3">Samples</h5>
+
+</div>
+</div>
+<div class="sect3 deleteLibraries">
+<h4 id="deletelibraries">1.1.4. deleteLibraries</h4>
+<div class="paragraph">
+<p><code>DELETE /library</code></p>
+</div>
+<div class="paragraph">
+<p>Remove All User-Defined JAR libraries</p>
+</div>
+<div class="sect4">
+<h5 id="description-4">Description</h5>
+<div class="paragraph">
+<p>Remove all user-defined JAR files saved on the server</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters-4">Parameters</h5>
+
+</div>
+<div class="sect4">
+<h5 id="return-type-4">Return Type</h5>
+<div class="paragraph">
+<p>-</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="responses-4">Responses</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. http response codes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+<th class="tableblock halign-left valign-top">Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">All user-defined JAR files were removed successfully</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
 </tr>
@@ -705,12 +840,12 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-3">Samples</h5>
+<h5 id="samples-4">Samples</h5>
 
 </div>
 </div>
 <div class="sect3 deleteMappingProjectById">
-<h4 id="deletemappingprojectbyid">1.1.4. deleteMappingProjectById</h4>
+<h4 id="deletemappingprojectbyid">1.1.5. deleteMappingProjectById</h4>
 <div class="paragraph">
 <p><code>DELETE /project/{mappingDefinitionId}</code></p>
 </div>
@@ -718,15 +853,15 @@ Core Service provides basic operations which is not specific to the individual d
 <p>Delete Mapping Project by ID</p>
 </div>
 <div class="sect4">
-<h5 id="description-4">Description</h5>
+<h5 id="description-5">Description</h5>
 <div class="paragraph">
 <p>Delete the mapping project including a Mapping Definition and Documents related to specified ID</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-4">Parameters</h5>
+<h5 id="parameters-5">Parameters</h5>
 <div class="sect5">
-<h6 id="path-parameters">Path Parameters</h6>
+<h6 id="path-parameters-2">Path Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -757,15 +892,15 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="return-type-4">Return Type</h5>
+<h5 id="return-type-5">Return Type</h5>
 <div class="paragraph">
 <p>-</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="responses-4">Responses</h5>
+<h5 id="responses-5">Responses</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. http response codes</caption>
+<caption class="title">Table 5. http response codes</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 50%;">
@@ -793,12 +928,12 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-4">Samples</h5>
+<h5 id="samples-5">Samples</h5>
 
 </div>
 </div>
 <div class="sect3 getADMDigestRequest">
-<h4 id="getadmdigestrequest">1.1.5. getADMDigestRequest</h4>
+<h4 id="getadmdigestrequest">1.1.6. getADMDigestRequest</h4>
 <div class="paragraph">
 <p><code>GET /project/{mappingDefinitionId}/digest</code></p>
 </div>
@@ -806,15 +941,15 @@ Core Service provides basic operations which is not specific to the individual d
 <p>Get ADM Digest file</p>
 </div>
 <div class="sect4">
-<h5 id="description-5">Description</h5>
+<h5 id="description-6">Description</h5>
 <div class="paragraph">
 <p>Retrieve a gzipped ADM Digest file saved on the server</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-5">Parameters</h5>
+<h5 id="parameters-6">Parameters</h5>
 <div class="sect5">
-<h6 id="path-parameters-2">Path Parameters</h6>
+<h6 id="path-parameters-3">Path Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -845,7 +980,7 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="return-type-5">Return Type</h5>
+<h5 id="return-type-6">Return Type</h5>
 <div class="paragraph">
 <p>-</p>
 </div>
@@ -861,9 +996,9 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="responses-5">Responses</h5>
+<h5 id="responses-6">Responses</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. http response codes</caption>
+<caption class="title">Table 6. http response codes</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 50%;">
@@ -896,117 +1031,14 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-5">Samples</h5>
-
-</div>
-</div>
-<div class="sect3 getADMRequest">
-<h4 id="getadmrequest">1.1.6. getADMRequest</h4>
-<div class="paragraph">
-<p><code>GET /project/{mappingDefinitionId}/adm</code></p>
-</div>
-<div class="paragraph">
-<p>Get Mapping</p>
-</div>
-<div class="sect4">
-<h5 id="description-6">Description</h5>
-<div class="paragraph">
-<p>Retrieve a mapping file saved on the server</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="parameters-6">Parameters</h5>
-<div class="sect5">
-<h6 id="path-parameters-3">Path Parameters</h6>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 37.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Pattern</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping ID</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect4">
-<h5 id="return-type-6">Return Type</h5>
-<div class="paragraph">
-<p><a href="#File">[File]</a></p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="content-type-2">Content Type</h5>
-<div class="ulist">
-<ul>
-<li>
-<p>application/octet-stream</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="responses-6">Responses</h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. http response codes</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 50%;">
-<col style="width: 16.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Code</th>
-<th class="tableblock halign-left valign-top">Message</th>
-<th class="tableblock halign-left valign-top">Datatype</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return an ADM file content</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#File">[File]</a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ADM file was not found</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">ADM file access error</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
 <h5 id="samples-6">Samples</h5>
 
 </div>
 </div>
-<div class="sect3 getMappingRequest">
-<h4 id="getmappingrequest">1.1.7. getMappingRequest</h4>
+<div class="sect3 getADMRequest">
+<h4 id="getadmrequest">1.1.7. getADMRequest</h4>
 <div class="paragraph">
-<p><code>GET /project/{mappingDefinitionId}/mapping</code></p>
+<p><code>GET /project/{mappingDefinitionId}/adm</code></p>
 </div>
 <div class="paragraph">
 <p>Get Mapping</p>
@@ -1041,7 +1073,7 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping ID</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -1052,6 +1084,109 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 <div class="sect4">
 <h5 id="return-type-7">Return Type</h5>
+<div class="paragraph">
+<p><a href="#File">[File]</a></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="content-type-2">Content Type</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>application/octet-stream</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="responses-7">Responses</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. http response codes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+<th class="tableblock halign-left valign-top">Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return an ADM file content</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#File">[File]</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADM file was not found</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ADM file access error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="samples-7">Samples</h5>
+
+</div>
+</div>
+<div class="sect3 getMappingRequest">
+<h4 id="getmappingrequest">1.1.8. getMappingRequest</h4>
+<div class="paragraph">
+<p><code>GET /project/{mappingDefinitionId}/mapping</code></p>
+</div>
+<div class="paragraph">
+<p>Get Mapping</p>
+</div>
+<div class="sect4">
+<h5 id="description-8">Description</h5>
+<div class="paragraph">
+<p>Retrieve a mapping file saved on the server</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters-8">Parameters</h5>
+<div class="sect5">
+<h6 id="path-parameters-5">Path Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="return-type-8">Return Type</h5>
 <div class="paragraph">
 <p><a href="#AtlasMapping"><em>AtlasMapping</em></a></p>
 </div>
@@ -1073,9 +1208,9 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="responses-7">Responses</h5>
+<h5 id="responses-8">Responses</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. http response codes</caption>
+<caption class="title">Table 8. http response codes</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 50%;">
@@ -1108,12 +1243,12 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-7">Samples</h5>
+<h5 id="samples-8">Samples</h5>
 
 </div>
 </div>
 <div class="sect3 importADMArchiveRequest">
-<h4 id="importadmarchiverequest">1.1.8. importADMArchiveRequest</h4>
+<h4 id="importadmarchiverequest">1.1.9. importADMArchiveRequest</h4>
 <div class="paragraph">
 <p><code>PUT /project/{mappingDefinitionId}/adm</code></p>
 </div>
@@ -1121,15 +1256,15 @@ Core Service provides basic operations which is not specific to the individual d
 <p>Import ADM archive</p>
 </div>
 <div class="sect4">
-<h5 id="description-8">Description</h5>
+<h5 id="description-9">Description</h5>
 <div class="paragraph">
 <p>Import an ADM archive file on the server</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-8">Parameters</h5>
+<h5 id="parameters-9">Parameters</h5>
 <div class="sect5">
-<h6 id="path-parameters-5">Path Parameters</h6>
+<h6 id="path-parameters-6">Path Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1159,7 +1294,7 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect5">
-<h6 id="body-parameter">Body Parameter</h6>
+<h6 id="body-parameter-2">Body Parameter</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1190,15 +1325,15 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="return-type-8">Return Type</h5>
+<h5 id="return-type-9">Return Type</h5>
 <div class="paragraph">
 <p>-</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="responses-8">Responses</h5>
+<h5 id="responses-9">Responses</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. http response codes</caption>
+<caption class="title">Table 9. http response codes</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 50%;">
@@ -1226,12 +1361,12 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-8">Samples</h5>
+<h5 id="samples-9">Samples</h5>
 
 </div>
 </div>
 <div class="sect3 listFieldActions">
-<h4 id="listfieldactions">1.1.9. listFieldActions</h4>
+<h4 id="listfieldactions">1.1.10. listFieldActions</h4>
 <div class="paragraph">
 <p><code>GET /fieldAction</code></p>
 </div>
@@ -1239,73 +1374,9 @@ Core Service provides basic operations which is not specific to the individual d
 <p>List FieldActions</p>
 </div>
 <div class="sect4">
-<h5 id="description-9">Description</h5>
-<div class="paragraph">
-<p>Retrieves a list of available field action</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="parameters-9">Parameters</h5>
-
-</div>
-<div class="sect4">
-<h5 id="return-type-9">Return Type</h5>
-<div class="paragraph">
-<p><a href="#ActionDetails"><em>ActionDetails</em></a></p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="content-type-4">Content Type</h5>
-<div class="ulist">
-<ul>
-<li>
-<p>application/json</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="responses-9">Responses</h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. http response codes</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 50%;">
-<col style="width: 16.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Code</th>
-<th class="tableblock halign-left valign-top">Message</th>
-<th class="tableblock halign-left valign-top">Datatype</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return a list of field action detail</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ActionDetails"><em>ActionDetails</em></a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="samples-9">Samples</h5>
-
-</div>
-</div>
-<div class="sect3 listLibraryClasses">
-<h4 id="listlibraryclasses">1.1.10. listLibraryClasses</h4>
-<div class="paragraph">
-<p><code>GET /library/class</code></p>
-</div>
-<div class="paragraph">
-<p>List Library Classes</p>
-</div>
-<div class="sect4">
 <h5 id="description-10">Description</h5>
 <div class="paragraph">
-<p>Retrieves a list of available Java library class names from uploaded JARs.</p>
+<p>Retrieves a list of available field action</p>
 </div>
 </div>
 <div class="sect4">
@@ -1315,11 +1386,11 @@ Core Service provides basic operations which is not specific to the individual d
 <div class="sect4">
 <h5 id="return-type-10">Return Type</h5>
 <div class="paragraph">
-<p><a href="#ArrayList&lt;String">[ArrayList&lt;String]</a>&gt;</p>
+<p><a href="#ActionDetails"><em>ActionDetails</em></a></p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="content-type-5">Content Type</h5>
+<h5 id="content-type-4">Content Type</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1347,8 +1418,8 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return a list of loadable class names</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ArrayList&lt;String">[ArrayList&lt;String]</a>&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return a list of field action detail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ActionDetails"><em>ActionDetails</em></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1358,18 +1429,18 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
-<div class="sect3 listMappingBuilderClasses">
-<h4 id="listmappingbuilderclasses">1.1.11. listMappingBuilderClasses</h4>
+<div class="sect3 listLibraryClasses">
+<h4 id="listlibraryclasses">1.1.11. listLibraryClasses</h4>
 <div class="paragraph">
-<p><code>GET /library/class/mappingBuilder</code></p>
+<p><code>GET /library/class</code></p>
 </div>
 <div class="paragraph">
-<p>List mapping builder classes</p>
+<p>List Library Classes</p>
 </div>
 <div class="sect4">
 <h5 id="description-11">Description</h5>
 <div class="paragraph">
-<p>List mapping builder classes which defines custom mapping logic</p>
+<p>Retrieves a list of available Java library class names from uploaded JARs.</p>
 </div>
 </div>
 <div class="sect4">
@@ -1383,7 +1454,7 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="content-type-6">Content Type</h5>
+<h5 id="content-type-5">Content Type</h5>
 <div class="ulist">
 <ul>
 <li>
@@ -1422,8 +1493,72 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
+<div class="sect3 listMappingBuilderClasses">
+<h4 id="listmappingbuilderclasses">1.1.12. listMappingBuilderClasses</h4>
+<div class="paragraph">
+<p><code>GET /library/class/mappingBuilder</code></p>
+</div>
+<div class="paragraph">
+<p>List mapping builder classes</p>
+</div>
+<div class="sect4">
+<h5 id="description-12">Description</h5>
+<div class="paragraph">
+<p>List mapping builder classes which defines custom mapping logic</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters-12">Parameters</h5>
+
+</div>
+<div class="sect4">
+<h5 id="return-type-12">Return Type</h5>
+<div class="paragraph">
+<p><a href="#ArrayList&lt;String">[ArrayList&lt;String]</a>&gt;</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="content-type-6">Content Type</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>application/json</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="responses-12">Responses</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. http response codes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+<th class="tableblock halign-left valign-top">Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return a list of loadable class names</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ArrayList&lt;String">[ArrayList&lt;String]</a>&gt;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="samples-12">Samples</h5>
+
+</div>
+</div>
 <div class="sect3 listMappingDefinitionNames">
-<h4 id="listmappingdefinitionnames">1.1.12. listMappingDefinitionNames</h4>
+<h4 id="listmappingdefinitionnames">1.1.13. listMappingDefinitionNames</h4>
 <div class="paragraph">
 <p><code>GET /project</code></p>
 </div>
@@ -1431,13 +1566,13 @@ Core Service provides basic operations which is not specific to the individual d
 <p>List Mapping Definition names</p>
 </div>
 <div class="sect4">
-<h5 id="description-12">Description</h5>
+<h5 id="description-13">Description</h5>
 <div class="paragraph">
 <p>Retrieves a list of mapping definition names</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-12">Parameters</h5>
+<h5 id="parameters-13">Parameters</h5>
 <div class="sect5">
 <h6 id="query-parameters">Query Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
@@ -1470,7 +1605,7 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="return-type-12">Return Type</h5>
+<h5 id="return-type-13">Return Type</h5>
 <div class="paragraph">
 <p><a href="#StringMap"><em>StringMap</em></a></p>
 </div>
@@ -1481,70 +1616,6 @@ Core Service provides basic operations which is not specific to the individual d
 <ul>
 <li>
 <p>application/json</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="responses-12">Responses</h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. http response codes</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 50%;">
-<col style="width: 16.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Code</th>
-<th class="tableblock halign-left valign-top">Message</th>
-<th class="tableblock halign-left valign-top">Datatype</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return a list of mapping definition names</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#StringMap"><em>StringMap</em></a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="samples-12">Samples</h5>
-
-</div>
-</div>
-<div class="sect3 ping">
-<h4 id="ping">1.1.13. ping</h4>
-<div class="paragraph">
-<p><code>GET /ping</code></p>
-</div>
-<div class="paragraph">
-<p>Ping</p>
-</div>
-<div class="sect4">
-<h5 id="description-13">Description</h5>
-<div class="paragraph">
-<p>Simple liveness check method used in liveness checks. Must not be protected via authetication.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="parameters-13">Parameters</h5>
-
-</div>
-<div class="sect4">
-<h5 id="return-type-13">Return Type</h5>
-<div class="paragraph">
-<p><a href="#String">[String]</a></p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="content-type-8">Content Type</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>/</strong></p>
 </li>
 </ul>
 </div>
@@ -1568,8 +1639,8 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return &#39;pong&#39;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#String">[String]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return a list of mapping definition names</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#StringMap"><em>StringMap</em></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1579,95 +1650,36 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
-<div class="sect3 processMappingRequest">
-<h4 id="processmappingrequest">1.1.14. processMappingRequest</h4>
+<div class="sect3 ping">
+<h4 id="ping">1.1.14. ping</h4>
 <div class="paragraph">
-<p><code>POST /project/{mappingDefinitionId}/mapping/process</code></p>
+<p><code>GET /ping</code></p>
 </div>
 <div class="paragraph">
-<p>Process Mapping</p>
+<p>Ping</p>
 </div>
 <div class="sect4">
 <h5 id="description-14">Description</h5>
 <div class="paragraph">
-<p>Process Mapping by feeding input data</p>
+<p>Simple liveness check method used in liveness checks. Must not be protected via authetication.</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="parameters-14">Parameters</h5>
-<div class="sect5">
-<h6 id="path-parameters-6">Path Parameters</h6>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 37.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Pattern</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect5">
-<h6 id="body-parameter-2">Body Parameter</h6>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 37.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Pattern</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AtlasMapping</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping file content <a href="#AtlasMapping"><em>AtlasMapping</em></a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
+
 </div>
 <div class="sect4">
 <h5 id="return-type-14">Return Type</h5>
 <div class="paragraph">
-<p><a href="#ProcessMappingResponse"><em>ProcessMappingResponse</em></a></p>
+<p><a href="#String">[String]</a></p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="content-type-9">Content Type</h5>
+<h5 id="content-type-8">Content Type</h5>
 <div class="ulist">
 <ul>
 <li>
-<p>application/json</p>
+<p><strong>/</strong></p>
 </li>
 </ul>
 </div>
@@ -1691,13 +1703,8 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return a mapping result</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ProcessMappingResponse"><em>ProcessMappingResponse</em></a></p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Skipped empty mapping execution</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return &#39;pong&#39;</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#String">[String]</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -1707,18 +1714,18 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
-<div class="sect3 removeAllMappingsRequest">
-<h4 id="removeallmappingsrequest">1.1.15. removeAllMappingsRequest</h4>
+<div class="sect3 processMappingRequest">
+<h4 id="processmappingrequest">1.1.15. processMappingRequest</h4>
 <div class="paragraph">
-<p><code>DELETE /project/{mappingDefinitionId}/mapping</code></p>
+<p><code>POST /project/{mappingDefinitionId}/mapping/process</code></p>
 </div>
 <div class="paragraph">
-<p>Remove All Mappings</p>
+<p>Process Mapping</p>
 </div>
 <div class="sect4">
 <h5 id="description-15">Description</h5>
 <div class="paragraph">
-<p>Remove all mappings from a mapping definition</p>
+<p>Process Mapping by feeding input data</p>
 </div>
 </div>
 <div class="sect4">
@@ -1753,17 +1760,145 @@ Core Service provides basic operations which is not specific to the individual d
 </tbody>
 </table>
 </div>
+<div class="sect5">
+<h6 id="body-parameter-3">Body Parameter</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AtlasMapping</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping file content <a href="#AtlasMapping"><em>AtlasMapping</em></a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect4">
 <h5 id="return-type-15">Return Type</h5>
 <div class="paragraph">
-<p>-</p>
+<p><a href="#ProcessMappingResponse"><em>ProcessMappingResponse</em></a></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="content-type-9">Content Type</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>application/json</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect4">
 <h5 id="responses-15">Responses</h5>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 15. http response codes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+<th class="tableblock halign-left valign-top">Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return a mapping result</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#ProcessMappingResponse"><em>ProcessMappingResponse</em></a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">204</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Skipped empty mapping execution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="samples-15">Samples</h5>
+
+</div>
+</div>
+<div class="sect3 removeAllMappingsRequest">
+<h4 id="removeallmappingsrequest">1.1.16. removeAllMappingsRequest</h4>
+<div class="paragraph">
+<p><code>DELETE /project/{mappingDefinitionId}/mapping</code></p>
+</div>
+<div class="paragraph">
+<p>Remove All Mappings</p>
+</div>
+<div class="sect4">
+<h5 id="description-16">Description</h5>
+<div class="paragraph">
+<p>Remove all mappings from a mapping definition</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters-16">Parameters</h5>
+<div class="sect5">
+<h6 id="path-parameters-8">Path Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="return-type-16">Return Type</h5>
+<div class="paragraph">
+<p>-</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="responses-16">Responses</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 16. http response codes</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 50%;">
@@ -1791,12 +1926,12 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-15">Samples</h5>
+<h5 id="samples-16">Samples</h5>
 
 </div>
 </div>
 <div class="sect3 removeMappingRequest">
-<h4 id="removemappingrequest">1.1.16. removeMappingRequest</h4>
+<h4 id="removemappingrequest">1.1.17. removeMappingRequest</h4>
 <div class="paragraph">
 <p><code>DELETE /project/{mappingDefinitionId}/mapping/{mappingIndex}</code></p>
 </div>
@@ -1804,15 +1939,15 @@ Core Service provides basic operations which is not specific to the individual d
 <p>Remove Mapping</p>
 </div>
 <div class="sect4">
-<h5 id="description-16">Description</h5>
+<h5 id="description-17">Description</h5>
 <div class="paragraph">
 <p>Remove a specific mapping from the mapping definition</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-16">Parameters</h5>
+<h5 id="parameters-17">Parameters</h5>
 <div class="sect5">
-<h6 id="path-parameters-8">Path Parameters</h6>
+<h6 id="path-parameters-9">Path Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1850,15 +1985,15 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="return-type-16">Return Type</h5>
+<h5 id="return-type-17">Return Type</h5>
 <div class="paragraph">
 <p>-</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="responses-16">Responses</h5>
+<h5 id="responses-17">Responses</h5>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. http response codes</caption>
+<caption class="title">Table 17. http response codes</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 50%;">
@@ -1886,12 +2021,12 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-16">Samples</h5>
+<h5 id="samples-17">Samples</h5>
 
 </div>
 </div>
 <div class="sect3 setADMDigestRequest">
-<h4 id="setadmdigestrequest">1.1.17. setADMDigestRequest</h4>
+<h4 id="setadmdigestrequest">1.1.18. setADMDigestRequest</h4>
 <div class="paragraph">
 <p><code>PUT /project/{mappingDefinitionId}/digest</code></p>
 </div>
@@ -1899,15 +2034,15 @@ Core Service provides basic operations which is not specific to the individual d
 <p>Set ADM Digest</p>
 </div>
 <div class="sect4">
-<h5 id="description-17">Description</h5>
+<h5 id="description-18">Description</h5>
 <div class="paragraph">
 <p>Save an ADM Digest file on the server</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-17">Parameters</h5>
+<h5 id="parameters-18">Parameters</h5>
 <div class="sect5">
-<h6 id="path-parameters-9">Path Parameters</h6>
+<h6 id="path-parameters-10">Path Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1937,7 +2072,7 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect5">
-<h6 id="body-parameter-3">Body Parameter</h6>
+<h6 id="body-parameter-4">Body Parameter</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -1959,124 +2094,6 @@ Core Service provides basic operations which is not specific to the individual d
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ADM Digest file content <a href="#binary">[binary]</a></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
-<td class="tableblock halign-left valign-top"></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect4">
-<h5 id="return-type-17">Return Type</h5>
-<div class="paragraph">
-<p>-</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="responses-17">Responses</h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 17. http response codes</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 50%;">
-<col style="width: 16.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Code</th>
-<th class="tableblock halign-left valign-top">Message</th>
-<th class="tableblock halign-left valign-top">Datatype</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Succeeded</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping file save error</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="samples-17">Samples</h5>
-
-</div>
-</div>
-<div class="sect3 updateMappingRequest">
-<h4 id="updatemappingrequest">1.1.18. updateMappingRequest</h4>
-<div class="paragraph">
-<p><code>PUT /project/{mappingDefinitionId}/mapping</code></p>
-</div>
-<div class="paragraph">
-<p>Update Mapping</p>
-</div>
-<div class="sect4">
-<h5 id="description-18">Description</h5>
-<div class="paragraph">
-<p>Update existing mapping file on the server</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="parameters-18">Parameters</h5>
-<div class="sect5">
-<h6 id="path-parameters-10">Path Parameters</h6>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 37.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Pattern</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect5">
-<h6 id="body-parameter-4">Body Parameter</h6>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 25%;">
-<col style="width: 37.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-<col style="width: 12.5%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-<th class="tableblock halign-left valign-top">Required</th>
-<th class="tableblock halign-left valign-top">Default</th>
-<th class="tableblock halign-left valign-top">Pattern</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AtlasMapping</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping file content <a href="#AtlasMapping"><em>AtlasMapping</em></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -2113,6 +2130,11 @@ Core Service provides basic operations which is not specific to the individual d
 <td class="tableblock halign-left valign-top"><p class="tableblock">Succeeded</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping file save error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -2121,22 +2143,52 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
-<div class="sect3 uploadLibrary">
-<h4 id="uploadlibrary">1.1.19. uploadLibrary</h4>
+<div class="sect3 updateMappingRequest">
+<h4 id="updatemappingrequest">1.1.19. updateMappingRequest</h4>
 <div class="paragraph">
-<p><code>PUT /library</code></p>
+<p><code>PUT /project/{mappingDefinitionId}/mapping</code></p>
 </div>
 <div class="paragraph">
-<p>Upload Library</p>
+<p>Update Mapping</p>
 </div>
 <div class="sect4">
 <h5 id="description-19">Description</h5>
 <div class="paragraph">
-<p>Upload a Java library archive file</p>
+<p>Update existing mapping file on the server</p>
 </div>
 </div>
 <div class="sect4">
 <h5 id="parameters-19">Parameters</h5>
+<div class="sect5">
+<h6 id="path-parameters-11">Path Parameters</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mappingDefinitionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping Definition ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
 <div class="sect5">
 <h6 id="body-parameter-5">Body Parameter</h6>
 <table class="tableblock frame-all grid-all stretch">
@@ -2158,8 +2210,8 @@ Core Service provides basic operations which is not specific to the individual d
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#object">[object]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AtlasMapping</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mapping file content <a href="#AtlasMapping"><em>AtlasMapping</em></a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -2193,7 +2245,7 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Library upload successful.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Succeeded</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
 </tr>
 </tbody>
@@ -2204,8 +2256,91 @@ Core Service provides basic operations which is not specific to the individual d
 
 </div>
 </div>
+<div class="sect3 uploadLibrary">
+<h4 id="uploadlibrary">1.1.20. uploadLibrary</h4>
+<div class="paragraph">
+<p><code>PUT /library</code></p>
+</div>
+<div class="paragraph">
+<p>Upload Library</p>
+</div>
+<div class="sect4">
+<h5 id="description-20">Description</h5>
+<div class="paragraph">
+<p>Upload a Java library archive file</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters-20">Parameters</h5>
+<div class="sect5">
+<h6 id="body-parameter-6">Body Parameter</h6>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 37.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+<th class="tableblock halign-left valign-top">Default</th>
+<th class="tableblock halign-left valign-top">Pattern</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">body</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#object">[object]</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="return-type-20">Return Type</h5>
+<div class="paragraph">
+<p>-</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="responses-20">Responses</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 20. http response codes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+<th class="tableblock halign-left valign-top">Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Library upload successful.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;&lt;&gt;&gt;</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="samples-20">Samples</h5>
+
+</div>
+</div>
 <div class="sect3 validateMappingRequest">
-<h4 id="validatemappingrequest">1.1.20. validateMappingRequest</h4>
+<h4 id="validatemappingrequest">1.1.21. validateMappingRequest</h4>
 <div class="paragraph">
 <p><code>POST /project/{mappingDefinitionId}/mapping/validate</code></p>
 </div>
@@ -2213,15 +2348,15 @@ Core Service provides basic operations which is not specific to the individual d
 <p>Validate Mapping</p>
 </div>
 <div class="sect4">
-<h5 id="description-20">Description</h5>
+<h5 id="description-21">Description</h5>
 <div class="paragraph">
 <p>Validate mapping file</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="parameters-20">Parameters</h5>
+<h5 id="parameters-21">Parameters</h5>
 <div class="sect5">
-<h6 id="path-parameters-11">Path Parameters</h6>
+<h6 id="path-parameters-12">Path Parameters</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2251,7 +2386,7 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect5">
-<h6 id="body-parameter-6">Body Parameter</h6>
+<h6 id="body-parameter-7">Body Parameter</h6>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -2282,7 +2417,7 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 </div>
 <div class="sect4">
-<h5 id="return-type-20">Return Type</h5>
+<h5 id="return-type-21">Return Type</h5>
 <div class="paragraph">
 <p><a href="#Validations"><em>Validations</em></a></p>
 </div>
@@ -2293,70 +2428,6 @@ Core Service provides basic operations which is not specific to the individual d
 <ul>
 <li>
 <p>application/json</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect4">
-<h5 id="responses-20">Responses</h5>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 20. http response codes</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 50%;">
-<col style="width: 16.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Code</th>
-<th class="tableblock halign-left valign-top">Message</th>
-<th class="tableblock halign-left valign-top">Datatype</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Return a validation result</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Validations"><em>Validations</em></a></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="samples-20">Samples</h5>
-
-</div>
-</div>
-<div class="sect3 version">
-<h4 id="version">1.1.21. version</h4>
-<div class="paragraph">
-<p><code>GET /version</code></p>
-</div>
-<div class="paragraph">
-<p>Version</p>
-</div>
-<div class="sect4">
-<h5 id="description-21">Description</h5>
-<div class="paragraph">
-<p>Retrieves AtlasMap core library version.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="parameters-21">Parameters</h5>
-
-</div>
-<div class="sect4">
-<h5 id="return-type-21">Return Type</h5>
-<div class="paragraph">
-<p><a href="#String">[String]</a></p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="content-type-11">Content Type</h5>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>/</strong></p>
 </li>
 </ul>
 </div>
@@ -2380,6 +2451,70 @@ Core Service provides basic operations which is not specific to the individual d
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Return a validation result</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#Validations"><em>Validations</em></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="samples-21">Samples</h5>
+
+</div>
+</div>
+<div class="sect3 version">
+<h4 id="version">1.1.22. version</h4>
+<div class="paragraph">
+<p><code>GET /version</code></p>
+</div>
+<div class="paragraph">
+<p>Version</p>
+</div>
+<div class="sect4">
+<h5 id="description-22">Description</h5>
+<div class="paragraph">
+<p>Retrieves AtlasMap core library version.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="parameters-22">Parameters</h5>
+
+</div>
+<div class="sect4">
+<h5 id="return-type-22">Return Type</h5>
+<div class="paragraph">
+<p><a href="#String">[String]</a></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="content-type-11">Content Type</h5>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>/</strong></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="responses-22">Responses</h5>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 22. http response codes</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 50%;">
+<col style="width: 16.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Code</th>
+<th class="tableblock halign-left valign-top">Message</th>
+<th class="tableblock halign-left valign-top">Datatype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Return &#39;pong&#39;</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#String">[String]</a></p></td>
 </tr>
@@ -2387,7 +2522,7 @@ Core Service provides basic operations which is not specific to the individual d
 </table>
 </div>
 <div class="sect4">
-<h5 id="samples-21">Samples</h5>
+<h5 id="samples-22">Samples</h5>
 
 </div>
 </div>
@@ -3993,7 +4128,7 @@ Core Service provides basic operations which is not specific to the individual d
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-04-25 15:33:52 UTC
+Last updated 2022-04-28 19:50:30 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

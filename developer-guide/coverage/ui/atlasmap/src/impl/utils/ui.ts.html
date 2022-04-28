@@ -22,9 +22,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.18% </span>
+                <span class="strong">16.12% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/241</span>
+                <span class='fraction'>39/242</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.74% </span>
+                <span class="strong">16.67% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/233</span>
+                <span class='fraction'>39/234</span>
             </div>
         
             
@@ -760,7 +760,15 @@
 <a name='L702'></a><a href='#L702'>702</a>
 <a name='L703'></a><a href='#L703'>703</a>
 <a name='L704'></a><a href='#L704'>704</a>
-<a name='L705'></a><a href='#L705'>705</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L705'></a><a href='#L705'>705</a>
+<a name='L706'></a><a href='#L706'>706</a>
+<a name='L707'></a><a href='#L707'>707</a>
+<a name='L708'></a><a href='#L708'>708</a>
+<a name='L709'></a><a href='#L709'>709</a>
+<a name='L710'></a><a href='#L710'>710</a>
+<a name='L711'></a><a href='#L711'>711</a>
+<a name='L712'></a><a href='#L712'>712</a>
+<a name='L713'></a><a href='#L713'>713</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1294,6 +1302,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -1952,24 +1968,24 @@ export function <span class="fstat-no" title="function not covered" >handleActio
  * @param currentIndex
  * @param target
  */
-export function <span class="fstat-no" title="function not covered" >handleIndexChange(</span>
+export async function <span class="fstat-no" title="function not covered" >handleIndexChange(</span>
   isSource: boolean,
   currentIndex: number,
   target: number | Field,
 ) {
-  const cfg = <span class="cstat-no" title="statement not covered" >ConfigModel.getConfig();</span>
-  const activeMapping<span class="cstat-no" title="statement not covered" > = cfg.mappings?.activeMapping;</span>
+  const <span class="cstat-no" title="statement not covered" >cfg = ConfigModel.getConfig();</span>
+  const <span class="cstat-no" title="statement not covered" >activeMapping = cfg.mappings?.activeMapping;</span>
 <span class="cstat-no" title="statement not covered" >  if (!activeMapping) {</span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
-  const sourceField = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForIndex(</span>
+  const <span class="cstat-no" title="statement not covered" >sourceField = activeMapping.getMappedFieldForIndex(</span>
     '' + (currentIndex + 1),
     isSource,
   );
 <span class="cstat-no" title="statement not covered" >  if (!sourceField) {</span>
 <span class="cstat-no" title="statement not covered" >    return;</span>
   }
-  let newIndex: number | null = <span class="cstat-no" title="statement not covered" >0;</span>
+  let <span class="cstat-no" title="statement not covered" >newIndex: number | null = 0;</span>
 &nbsp;
   // If the target is an actual index value then check for the need to add padding.
 <span class="cstat-no" title="statement not covered" >  if (typeof target === 'number') {</span>
@@ -1977,8 +1993,8 @@ export function <span class="fstat-no" title="function not covered" >handleIndex
 <span class="cstat-no" title="statement not covered" >    if (target &lt;= 0 || !activeMapping) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
-    const mappedFields = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFields(isSource);</span>
-    const maxIndex = <span class="cstat-no" title="statement not covered" >mappedFields.length;</span>
+    const <span class="cstat-no" title="statement not covered" >mappedFields = activeMapping.getMappedFields(isSource);</span>
+    const <span class="cstat-no" title="statement not covered" >maxIndex = mappedFields.length;</span>
 <span class="cstat-no" title="statement not covered" >    if (target &gt; maxIndex) {</span>
       // Add place-holders for each index value between the previous max index
       // and the insertion index.
@@ -1991,13 +2007,21 @@ export function <span class="fstat-no" title="function not covered" >handleIndex
     }
     // If the target is a dropped field then extract the mapped field to determine the index.
   } else {
-    const field = <span class="cstat-no" title="statement not covered" >activeMapping.getMappedFieldForField(target!);</span>
+    const <span class="cstat-no" title="statement not covered" >field = activeMapping.getMappedFieldForField(target!);</span>
 <span class="cstat-no" title="statement not covered" >    if (!field) {</span>
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
 <span class="cstat-no" title="statement not covered" >    newIndex = activeMapping.getIndexForMappedField(field);</span>
   }
 <span class="cstat-no" title="statement not covered" >  cfg.mappingService.moveMappedFieldTo(activeMapping, sourceField, newIndex!);</span>
+&nbsp;
+  // Modify the field indicies in the backend service.
+<span class="cstat-no" title="statement not covered" >  await cfg.mappingService.changeMappedFieldIndex(</span>
+    isSource,
+    activeMapping.uuid,
+    currentIndex,
+    newIndex! - 1,
+  );
 }
 &nbsp;
 export function <span class="fstat-no" title="function not covered" >handleNewTransformation(</span>isSource: boolean, index: number) {
@@ -2175,7 +2199,7 @@ export function <span class="fstat-no" title="function not covered" >deselectMap
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Apr 25 2022 15:31:41 GMT+0000 (Coordinated Universal Time)
+                at Thu Apr 28 2022 19:48:06 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

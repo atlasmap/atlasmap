@@ -391,8 +391,8 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
             }
 
             private Object convertSourceObject(Object sourceObject) throws AtlasConversionException {
-<span class="pc bpc" id="L394" title="1 of 2 branches missed.">                if (sourceObject == null) {</span>
-<span class="nc" id="L395">                    return null;</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">                if (sourceObject == null) {</span>
+<span class="fc" id="L395">                    return null;</span>
                 }
 
                 Class&lt;?&gt; paramType;
@@ -929,7 +929,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
     private Field processOneToMany(Action action, ActionProcessor processor, FieldType sourceType, Field field)
             throws AtlasException {
 <span class="fc" id="L931">        Object value = field.getValue();</span>
-<span class="pc bpc" id="L932" title="2 of 4 branches missed.">        if (value != null &amp;&amp; isAssignableFieldType(processor.getActionDetail().getSourceType(), sourceType)) {</span>
+<span class="pc bpc" id="L932" title="1 of 4 branches missed.">        if (value != null &amp;&amp; isAssignableFieldType(processor.getActionDetail().getSourceType(), sourceType)) {</span>
 <span class="fc" id="L933">            value = getConversionService().convertType(value, sourceType, processor.getActionDetail().getSourceType());</span>
         }
 <span class="fc" id="L935">        value = processor.process(action, value);</span>
@@ -939,13 +939,13 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
 <span class="fc" id="L939">        answer.setCollectionType(CollectionType.LIST);</span>
 <span class="fc" id="L940">        answer.setFieldType(processor.getActionDetail().getTargetType());</span>
         List&lt;Object&gt; values;
-<span class="pc bpc" id="L942" title="2 of 4 branches missed.">        if (value != null &amp;&amp; value.getClass().isArray()) {</span>
+<span class="pc bpc" id="L942" title="1 of 4 branches missed.">        if (value != null &amp;&amp; value.getClass().isArray()) {</span>
 <span class="fc" id="L943">            values = Arrays.asList((Object[]) value);</span>
-<span class="nc bnc" id="L944" title="All 4 branches missed.">        } else if ((value instanceof Collection) &amp;&amp; !(value instanceof List)) {</span>
+<span class="pc bpc" id="L944" title="3 of 4 branches missed.">        } else if ((value instanceof Collection) &amp;&amp; !(value instanceof List)) {</span>
 <span class="nc" id="L945">            values = Arrays.asList(((Collection&lt;?&gt;) value).toArray());</span>
         } else {
-<span class="nc" id="L947">            values = new LinkedList&lt;&gt;();</span>
-<span class="nc bnc" id="L948" title="All 2 branches missed.">            if (value != null) {</span>
+<span class="fc" id="L947">            values = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L948" title="1 of 2 branches missed.">            if (value != null) {</span>
 <span class="nc" id="L949">                values.add(value);</span>
             }
         }
