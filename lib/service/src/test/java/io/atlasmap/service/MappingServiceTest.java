@@ -115,6 +115,16 @@ public class MappingServiceTest {
     }
 
     @Test
+    public void testProcessMappingChangeMappingIndex3935() throws Exception {
+        Response res = mappingService.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-3935.json"),
+                0, Util.generateTestUriInfo("http://localhost:8686/v2/atlas",
+                "http://localhost:8686/v2/atlas/project/0/mapping/mapping.xxxxxx/field/TARGET/0/index"));
+        ProcessMappingResponse resp = Json.mapper().readValue((byte[])res.getEntity(), ProcessMappingResponse.class);
+        Field field = resp.getMapping().getOutputField().get(0);
+        assertEquals(0, field.getIndex());
+    }
+
+    @Test
     public void testProcessMappingCustomAction() throws Exception {
         Util.createJarFile(TEST_JAR_DIR, TEST_JAR_PATH, false, false);
         FileInputStream jarIn = new FileInputStream(TEST_JAR_PATH);

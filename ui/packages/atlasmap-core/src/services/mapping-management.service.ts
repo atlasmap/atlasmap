@@ -14,6 +14,7 @@
     limitations under the License.
 */
 
+import { DataSourceType, FieldType } from '../contracts/common';
 import {
   ErrorInfo,
   ErrorLevel,
@@ -32,7 +33,6 @@ import { CommonUtil } from '../utils/common-util';
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { FieldAction } from '../models/field-action.model';
-import { FieldType } from '../contracts/common';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
@@ -254,7 +254,59 @@ export class MappingManagementService {
     );
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
     this.clearExtraPaddingFields(mappedFields, true);
-    this.notifyMappingUpdated();
+  }
+
+  /**
+   * Change the value of the specified current mapping to the specified target
+   * index for the specified mapped field (source/target).
+   *
+   * @param sourceMapping
+   * @param mappingId
+   * @param currentFieldIndex
+   * @param targetFieldIndex
+   */
+  changeMappedFieldIndex(
+    sourceMapping: boolean,
+    mappingId: string,
+    currentFieldIndex: number,
+    targetFieldIndex: number
+  ): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      if (!mappingId) {
+        resolve(false);
+        return;
+      }
+      const dataSourceType = sourceMapping
+        ? DataSourceType.SOURCE
+        : DataSourceType.TARGET;
+      const url: string =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping/' +
+        mappingId +
+        '/field/' +
+        dataSourceType +
+        '/' +
+        currentFieldIndex +
+        '/index';
+      this.api
+        .put(url, { body: targetFieldIndex.toString() })
+        .then(async (res: Response) => {
+          this.cfg.logger!.debug(
+            `Change Mapped Field Index Response: ${res.ok}`
+          );
+          await this.notifyFetchMapping();
+          resolve(true);
+        })
+        .catch((error: any) => {
+          this.cfg.errorService.addBackendError(
+            'Error occurred while changing mapping index.',
+            error
+          );
+          resolve(false);
+        });
+    });
   }
 
   /**
