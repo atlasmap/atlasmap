@@ -19336,9 +19336,9 @@ type@^2.0.0:
   integrity sha512-180WMDQaIMm3+7hGXWf12GtdniDEy7nYcyFMKJn/eZz/6tSLXrUN9V0wKSbMjej0I1WHWbpREDEKHtqPQa9NNw==
 
 typed-css-modules@^0.7.0:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/typed-css-modules/-/typed-css-modules-0.7.1.tgz#176db04c29ac8772f68cf1dd5441102505c98cd9"
-  integrity sha512-WaWHnLa3HBTCuOCDRDB3wfqoH9ouTxdLGQwzVBxV5x+nbPIr5ZkCrCb4yfU4D1bkzNprrTKTU2ETkYVOLGFmVA==
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/typed-css-modules/-/typed-css-modules-0.7.2.tgz#dafadb33777d5bf1a621e01def8d614e7a6af7bd"
+  integrity sha512-R3guXrQ8ry/yhlfvNmkVY4J3+FtKaEdwqrvgSvFpVY0ieYQHqhhBW0RwfE4hnG4m29Ef/4IE0tBsk/UKplmJkA==
   dependencies:
     "@types/css-modules-loader-core" "^1.1.0"
     camelcase "^6.0.0"
