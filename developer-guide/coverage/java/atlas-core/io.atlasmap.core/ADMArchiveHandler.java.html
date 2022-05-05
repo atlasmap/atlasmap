@@ -280,7 +280,7 @@ public class ADMArchiveHandler {
         }
 
 <span class="fc" id="L282">        Path catalogPath = getPersistDirectory().resolve(DOCUMENT_CATALOG_NAME);</span>
-<span class="fc bfc" id="L283" title="All 2 branches covered.">        if (getDocumentCatalog() != null) {</span>
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        if (getDocumentCatalog() != null) {</span>
             try {
 <span class="fc" id="L285">                jsonMapper.writeValue(catalogPath.toFile(), getDocumentCatalog());</span>
 <span class="nc" id="L286">            } catch (Exception e) {</span>
@@ -419,8 +419,8 @@ public class ADMArchiveHandler {
      * @throws AtlasException unexpected error
      */
     public byte[] getSerializedDocumentCatalog() throws AtlasException {
-<span class="fc bfc" id="L422" title="All 2 branches covered.">        if (getDocumentCatalog() == null) {</span>
-<span class="fc" id="L423">            return null;</span>
+<span class="pc bpc" id="L422" title="1 of 2 branches missed.">        if (getDocumentCatalog() == null) {</span>
+<span class="nc" id="L423">            return null;</span>
         }
         try {
 <span class="fc" id="L426">            ByteArrayOutputStream bos = new ByteArrayOutputStream();</span>
