@@ -36,6 +36,9 @@ jobs:
     - name: Build lib with Maven
       working-directory: lib
       run: mvn --batch-mode clean install
+    - name: Test atlasmap-maven-plugin
+      working-directory: atlasmap-maven-plugin
+      run: sh test.sh
     - name: Build docs
       working-directory: docs
       run: mvn -Phtml,pdf package
