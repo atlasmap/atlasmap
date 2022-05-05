@@ -96,8 +96,7 @@ import {
   mappingExpressionRemoveField,
   newMapping,
   onFieldPreviewChange,
-  removeFromCurrentMapping,
-  removeMappedFieldFromCurrentMapping,
+  removeFieldFromCurrentMapping,
   removeMapping,
   resetAtlasmap,
   selectMapping,
@@ -327,6 +326,12 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
 
   const convertMappings = useCallback(
     function convertMappingsCb() {
+      if (configModel.mappings!.activeMapping) {
+        configModel.mappings!.activeMapping =
+          configModel.mappings!.mappings.find(
+            (mp) => mp!.uuid === configModel.mappings!.activeMapping!.uuid,
+          )!;
+      }
       return fromMappingDefinitionToIMappings(configModel.mappings);
     },
     [configModel],
@@ -370,10 +375,10 @@ export const AtlasmapProvider: FunctionComponent<IAtlasmapProviderProps> = ({
         sources: convertSources(),
         constants: convertConstants(),
         sourceProperties: convertSourceProperties(),
-        targets: convertTargets(),
         targetProperties: convertTargetProperties(),
         mappings: convertMappings(),
         selectedMapping: convertSelectedMapping(),
+        targets: convertTargets(),
         flatSources: convertSourcesToFlatArray(),
         flatTargets: convertTargetsToFlatArray(),
       });
@@ -574,7 +579,7 @@ export function useAtlasmap() {
 
   const onRemoveFromMapping = useCallback((node: IAtlasmapField) => {
     const field = node.amField;
-    removeFromCurrentMapping(field);
+    removeFieldFromCurrentMapping(field);
   }, []);
 
   const onCreateMapping = useCallback(
@@ -681,8 +686,7 @@ export function useAtlasmap() {
     toggleShowUnmappedFields,
     onFieldPreviewChange,
     addToCurrentMapping,
-    removeFromCurrentMapping,
-    removeMappedFieldFromCurrentMapping,
+    removeFieldFromCurrentMapping,
     fromMappedFieldToIMappingField,
     createMapping,
     newMapping,

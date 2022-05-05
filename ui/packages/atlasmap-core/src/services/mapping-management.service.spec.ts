@@ -481,27 +481,40 @@ describe('MappingManagementService', () => {
     expect(service.cfg.mappings?.activeMapping).toBeNull();
   });
 
-  test('removeDocumentReferenceFromAllMappings()', () => {
+  test('removeDocumentReferenceFromAllMappings()', (done) => {
     spyOn(fileService, 'setMappingToService').and.stub();
     spyOn<any>(service, 'validateMappings').and.stub();
     TestUtils.createMockMappings(service.cfg);
     expect(service.cfg.mappings?.mappings.length).toBe(2);
-    service.removeDocumentReferenceFromAllMappings('SourceJson');
-    expect(service.cfg.mappings!.mappings.length).toBe(0);
+    service
+      .removeDocumentReferenceFromAllMappings('SourceJson')
+      .then((value) => {
+        expect(value).toBeTruthy();
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
-  test('removeFieldFromAllMappings()', () => {
+  test('removeFieldFromAllMappings()', (done) => {
     spyOn<any>(service, 'validateMappings').and.stub();
+    mockedKy.delete = jest
+      .fn()
+      .mockReturnValue(Promise.resolve({ status: 200 }));
     TestUtils.createMockMappings(service.cfg);
-    expect(service.cfg.mappings?.mappings.length).toBe(2);
+    expect(service.cfg.mappings!.mappings.length).toBe(2);
     const doc = service.cfg.sourceDocs[0];
     const field = doc.getField('/sourceField');
-    service.removeFieldFromAllMappings(field!);
-    // **WARN** mapping is not removed even if there's no source field,
-    // inconsistent with removeDocumentReferenceFromAllMappings()
-    expect(service.cfg.mappings?.mappings.length).toBe(2);
-    const mapping = service.cfg.mappings?.mappings[0];
-    expect(mapping?.isFullyMapped()).toBeFalsy();
+    service
+      .removeFieldFromAllMappings(field!)
+      .then((value) => {
+        expect(value).toBeTruthy();
+        done();
+      })
+      .catch((error) => {
+        fail(error);
+      });
   });
 
   test('notifyLineRefresh()', (done) => {

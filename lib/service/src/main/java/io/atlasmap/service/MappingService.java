@@ -142,6 +142,29 @@ public class MappingService extends BaseAtlasService {
     }
 
     /**
+     * Extract the list of mapped fields from the specified mapping.
+     *
+     * @param objectMapping - specified mapping
+     * @param dataSourceType - source/target
+     *
+     * @return - list of mapped fields.
+     */
+    private List<Field> getMappedFields(Mapping objectMapping, DataSourceType dataSourceType) {
+        List<Field> mappedFields = null;
+        if (dataSourceType == DataSourceType.SOURCE) {
+            FieldGroup fg = objectMapping.getInputFieldGroup();
+            if (fg != null) {
+                mappedFields = fg.getField();
+            } else {
+                mappedFields = objectMapping.getInputField();
+            }
+        } else {
+            mappedFields = objectMapping.getOutputField();
+        }
+        return mappedFields;
+    }
+
+    /**
      * Change the value of the specified current index to the specified target index for the specified
      * mapped field (source/target).
      *
@@ -172,19 +195,9 @@ public class MappingService extends BaseAtlasService {
             AtlasMapping def = handler.getMappingDefinition();
             List<BaseMapping> mappings = def.getMappings().getMapping();
             Mapping objectMapping = this.getMappingByID(mappings, mappingId);
-
-            List<Field> mappedFields;
-            if (dataSourceType == DataSourceType.SOURCE) {
-                FieldGroup fg = objectMapping.getInputFieldGroup();
-                if (fg != null) {
-                    mappedFields = fg.getField();
-                } else {
-                    mappedFields = objectMapping.getInputField();
-                }
-            } else {
-                mappedFields = objectMapping.getOutputField();
-            }
+            List<Field> mappedFields = this.getMappedFields(objectMapping, dataSourceType);
             Field objectField = getFieldByIndex(mappedFields, fieldIndex.intValue());
+
             if (objectField == null) {
                 throw new WebApplicationException("Unable to detect field at index " + fieldIndex.intValue(),
                     null, Status.INTERNAL_SERVER_ERROR);
@@ -199,6 +212,48 @@ public class MappingService extends BaseAtlasService {
             handler.setMappingDefinition(def);
             handler.persist();
         } catch (AtlasException e) {
+            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
+        }
+        return Response.ok().build();
+    }
+
+    /**
+     * Remove the specified field from the specified mapping in the mapping definition.
+     *
+     * @param mappingDefinitionId - mapping definition identifier (session)
+     * @param mappingId - mapping identifier within the specified session
+     * @param dataSourceType - source/ target
+     * @param fieldIndex - field index to be removed
+     *
+     * @return empty response
+     */
+    @DELETE
+    @Path("/{mappingId}/field/{dataSourceType}/{fieldIndex}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(summary = "Remove Field From Mapping",
+        description = "Remove the specific field from the specified mapping in the mapping definition")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "The mapping at the specified index within the specified mapping definition was removed successfully"),
+        @ApiResponse(responseCode = "204", description = "The specified mapping definition was not found")})
+    public Response removeFieldMappingRequest(
+        @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
+        @Parameter(description = "Mapping ID") @PathParam("mappingId") String mappingId,
+        @Parameter(description = "Source or Target Mapping") @PathParam("dataSourceType") DataSourceType dataSourceType,
+        @Parameter(description = "Field Index") @PathParam("fieldIndex") Integer fieldIndex) {
+        LOG.debug("removeFieldMappingRequest: ID: {}, mappingId: {}, dataSourceType: {}, fieldIndex: {}",
+            mappingDefinitionId, mappingId, dataSourceType, fieldIndex);
+        try {
+            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
+            AtlasMapping def = handler.getMappingDefinition();
+            List<BaseMapping> mappings = def.getMappings().getMapping();
+            Mapping objectMapping = this.getMappingByID(mappings, mappingId);
+
+            List<Field> mappedFields = this.getMappedFields(objectMapping, dataSourceType);
+            mappedFields.remove(getOrdinalPosition(mappedFields, fieldIndex));
+            handler.setMappingDefinition(def);
+            handler.persist();
+        } catch (AtlasException e) {
+            LOG.error("Error removing mapping from a mapping definition file for ID: " + mappingDefinitionId, e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
         return Response.ok().build();
@@ -296,7 +351,7 @@ public class MappingService extends BaseAtlasService {
         return Response.ok().entity(serialized).build();
     }
 
-        /**
+    /**
      * Updates existing mapping file on the server.
      * @param mapping mapping
      * @param mappingDefinitionId mapping definition ID

@@ -14,12 +14,10 @@
     limitations under the License.
 */
 
-import { CommonUtil } from '../utils/common-util';
 import { DocumentDefinition } from './document-definition.model';
 import { Field } from './field.model';
 import { LookupTable } from './lookup-table.model';
 import { MappingModel } from './mapping.model';
-import { TransitionMode } from './transition.model';
 
 export class MappingDefinition {
   name: string | null = null;
@@ -109,12 +107,5 @@ export class MappingDefinition {
       }
     }
     return mappingsForField;
-  }
-
-  removeMapping(m: MappingModel): boolean {
-    if (m.transition.mode === TransitionMode.ENUM) {
-      this.removeTableByName(m.transition.lookupTableName!);
-    }
-    return CommonUtil.removeItemFromArray(m, this.mappings);
   }
 }
