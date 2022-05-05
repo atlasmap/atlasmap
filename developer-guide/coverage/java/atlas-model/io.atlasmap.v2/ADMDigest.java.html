@@ -19,8 +19,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The ADM digest model class.
+ * @deprecated Document metadata, specification and mapping definition are stored separately.
+ * This is kept only for backward compatibility.
  */
-<span class="fc" id="L23">public class ADMDigest {</span>
+@Deprecated
+<span class="fc" id="L26">public class ADMDigest {</span>
 
     @JsonProperty(&quot;exportMappings&quot;)
     private ValueContainer exportMappings;
@@ -34,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return exportMappings property
      */
     public ValueContainer getExportMappings() {
-<span class="nc" id="L37">        return exportMappings;</span>
+<span class="nc" id="L40">        return exportMappings;</span>
     }
 
     /**
@@ -42,15 +45,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param exportMappings exportMappings property
      */
     public void setExportMappings(ValueContainer exportMappings) {
-<span class="fc" id="L45">        this.exportMappings = exportMappings;</span>
-<span class="fc" id="L46">    }</span>
+<span class="fc" id="L48">        this.exportMappings = exportMappings;</span>
+<span class="fc" id="L49">    }</span>
 
     /**
      * Get an array of {@link DataSourceMetadata} property.
      * @return an array of {@link DataSourceMetadata}
      */
     public DataSourceMetadata[] getExportMeta() {
-<span class="fc" id="L53">        return exportMeta;</span>
+<span class="fc" id="L56">        return exportMeta;</span>
     }
 
     /**
@@ -58,15 +61,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param exportMeta an array of {@link DataSourceMetadata}
      */
     public void setExportMeta(DataSourceMetadata[] exportMeta) {
-<span class="fc" id="L61">        this.exportMeta = exportMeta;</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L64">        this.exportMeta = exportMeta;</span>
+<span class="fc" id="L65">    }</span>
 
     /**
      * Gets an array of exportBlockData property.
      * @return exportBlockData property
      */
     public ValueContainer[] getExportBlockData() {
-<span class="fc" id="L69">        return exportBlockData;</span>
+<span class="fc" id="L72">        return exportBlockData;</span>
     }
 
     /**
@@ -74,8 +77,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param exportBlockData exportBlockData property
      */
     public void setExportBlockData(ValueContainer[] exportBlockData) {
-<span class="fc" id="L77">        this.exportBlockData = exportBlockData;</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L80">        this.exportBlockData = exportBlockData;</span>
+<span class="fc" id="L81">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

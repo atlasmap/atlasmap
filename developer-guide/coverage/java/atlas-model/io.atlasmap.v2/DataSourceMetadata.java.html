@@ -23,8 +23,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * The Data Source metadata.
+ * @see ADMDigest
  */
-<span class="fc" id="L27">public class DataSourceMetadata implements Serializable {</span>
+@Deprecated
+<span class="fc" id="L29">public class DataSourceMetadata implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
@@ -52,7 +54,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return serial version UUID
      */
     public static long getSerialversionuid() {
-<span class="nc" id="L55">        return serialVersionUID;</span>
+<span class="nc" id="L57">        return serialVersionUID;</span>
     }
 
     /**
@@ -60,7 +62,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @return ID
      */
     public String getId() {
-<span class="fc" id="L63">        return id;</span>
+<span class="fc" id="L65">        return id;</span>
     }
 
     /**
@@ -68,15 +70,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param id ID
      */
     public void setId(String id) {
-<span class="fc" id="L71">        this.id = id;</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L73">        this.id = id;</span>
+<span class="fc" id="L74">    }</span>
 
     /**
      * Gets the name.
      * @return name
      */
     public String getName() {
-<span class="fc" id="L79">        return name;</span>
+<span class="fc" id="L81">        return name;</span>
     }
 
     /**
@@ -84,15 +86,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param name name
      */
     public void setName(String name) {
-<span class="fc" id="L87">        this.name = name;</span>
-<span class="fc" id="L88">    }</span>
+<span class="fc" id="L89">        this.name = name;</span>
+<span class="fc" id="L90">    }</span>
 
     /**
      * Gets the Document type.
      * @return Document type
      */
     public String getDocumentType() {
-<span class="nc" id="L95">        return documentType;</span>
+<span class="fc" id="L97">        return documentType;</span>
     }
 
     /**
@@ -100,15 +102,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param documentType Document type
      */
     public void setDocumentType(String documentType) {
-<span class="fc" id="L103">        this.documentType = documentType;</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L105">        this.documentType = documentType;</span>
+<span class="fc" id="L106">    }</span>
 
     /**
      * Gets the inspection type.
      * @return inspection type
      */
     public InspectionType getInspectionType() {
-<span class="fc" id="L111">        return inspectionType;</span>
+<span class="fc" id="L113">        return inspectionType;</span>
     }
 
     /**
@@ -116,15 +118,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param inspectionType inspection type
      */
     public void setInspectionType(InspectionType inspectionType) {
-<span class="fc" id="L119">        this.inspectionType = inspectionType;</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L121">        this.inspectionType = inspectionType;</span>
+<span class="fc" id="L122">    }</span>
 
     /**
      * Gets if it's a source Document.
      * @return true if it's a source Document, or false
      */
     public boolean getIsSource() {
-<span class="fc" id="L127">        return isSource;</span>
+<span class="fc" id="L129">        return isSource;</span>
     }
 
     /**
@@ -132,15 +134,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param isSource true if it's a source Document, or false
      */
     public void setIsSource(boolean isSource) {
-<span class="fc" id="L135">        this.isSource = isSource;</span>
-<span class="fc" id="L136">    }</span>
+<span class="fc" id="L137">        this.isSource = isSource;</span>
+<span class="fc" id="L138">    }</span>
 
     /**
      * Gets the specification.
      * @return specification
      */
     public byte[] getSpecification() {
-<span class="fc" id="L143">        return specification;</span>
+<span class="nc" id="L145">        return specification;</span>
     }
 
     /**
@@ -148,15 +150,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param specification specification
      */
     public void setSpecification(byte[] specification) {
-<span class="fc" id="L151">        this.specification = specification;</span>
-<span class="fc" id="L152">    }</span>
+<span class="nc" id="L153">        this.specification = specification;</span>
+<span class="nc" id="L154">    }</span>
 
     /**
      * Gets the DataSource type.
      * @return DataSource type
      */
     public String getDataSourceType() {
-<span class="fc" id="L159">        return dataSourceType;</span>
+<span class="fc" id="L161">        return dataSourceType;</span>
     }
 
     /**
@@ -164,15 +166,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param dataSourceType DataSource type.
      */
     public void setDataSourceType(String dataSourceType) {
-<span class="fc" id="L167">        this.dataSourceType = dataSourceType;</span>
-<span class="fc" id="L168">    }</span>
+<span class="fc" id="L169">        this.dataSourceType = dataSourceType;</span>
+<span class="fc" id="L170">    }</span>
 
     /**
      * Gets the inspection parameters.
      * @return inspection parameters
      */
     public Map&lt;String,String&gt; getInspectionParameters() {
-<span class="nc" id="L175">        return inspectionParameters;</span>
+<span class="fc" id="L177">        return inspectionParameters;</span>
     }
 
     /**
@@ -180,8 +182,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
      * @param inspectionParameters inspection parameters
      */
     public void setInspectionParameters(Map&lt;String,String&gt; inspectionParameters) {
-<span class="fc" id="L183">        this.inspectionParameters = inspectionParameters;</span>
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L185">        this.inspectionParameters = inspectionParameters;</span>
+<span class="fc" id="L186">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -15,8 +15,10 @@
  */
 package io.atlasmap.kafkaconnect.inspect;
 
+import java.io.InputStream;
 import java.util.HashMap;
 
+import io.atlasmap.api.AtlasException;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
 
 /**
@@ -29,20 +31,20 @@ public class KafkaConnectInspectionService {
      * A constructor.
      * @param loader class loader
      */
-<span class="fc" id="L32">    public KafkaConnectInspectionService(ClassLoader loader) {</span>
-<span class="fc" id="L33">        this.inspector = new KafkaConnectInspector(loader);</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L34">    public KafkaConnectInspectionService(ClassLoader loader) {</span>
+<span class="fc" id="L35">        this.inspector = new KafkaConnectInspector(loader);</span>
+<span class="fc" id="L36">    }</span>
 
     /**
      * Inspects Kafka Connect JSON schema.
      * @param jsonSchema Kafka Connect JSON schema
      * @param options inspection options
      * @return inspected
-     * @throws Exception unexpected error
+     * @throws AtlasException unexpected error
      */
-    public KafkaConnectDocument inspectJson(String jsonSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L44">        inspector.inspectJson(jsonSchema, options);</span>
-<span class="fc" id="L45">        return inspector.getKafkaConnectDocument();</span>
+    public KafkaConnectDocument inspectJson(InputStream jsonSchema, HashMap&lt;String, ?&gt; options) throws AtlasException {
+<span class="fc" id="L46">        inspector.inspectJson(jsonSchema, options);</span>
+<span class="fc" id="L47">        return inspector.getKafkaConnectDocument();</span>
     }
 
     /**
@@ -50,11 +52,11 @@ public class KafkaConnectInspectionService {
      * @param avroSchema Kafka Connect AVRO schema
      * @param options inspection options
      * @return inspected
-     * @throws Exception unexpected error
+     * @throws AtlasException unexpected error
      */
-    public KafkaConnectDocument inspectAvro(String avroSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L56">        inspector.inspectAvro(avroSchema, options);</span>
-<span class="fc" id="L57">        return inspector.getKafkaConnectDocument();</span>
+    public KafkaConnectDocument inspectAvro(InputStream avroSchema, HashMap&lt;String, ?&gt; options) throws AtlasException {
+<span class="fc" id="L58">        inspector.inspectAvro(avroSchema, options);</span>
+<span class="fc" id="L59">        return inspector.getKafkaConnectDocument();</span>
     }
 
 }

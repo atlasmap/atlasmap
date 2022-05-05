@@ -15,6 +15,8 @@
  */
 package io.atlasmap.kafkaconnect.module;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,7 +41,7 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.DataSourceMetadata;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Validation;
@@ -50,73 +52,71 @@ import io.atlasmap.v2.Validations;
  */
 @AtlasModuleDetail(name = &quot;KafkaConnectModule&quot;, uri = &quot;atlas:kafkaconnect&quot;, modes = { &quot;SOURCE&quot;, &quot;TARGET&quot; }, dataFormats = {
         &quot;kafkaconnect&quot; }, configPackages = { &quot;io.atlasmap.kafkaconnect.v2&quot; })
-<span class="fc" id="L53">public class KafkaConnectModule extends BaseAtlasModule {</span>
-<span class="fc" id="L54">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectModule.class);</span>
+<span class="fc" id="L55">public class KafkaConnectModule extends BaseAtlasModule {</span>
+<span class="fc" id="L56">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectModule.class);</span>
 
     private boolean isKey;
     private Type rootSchemaType;
 
     @Override
     public void init() throws AtlasException {
-<span class="nc" id="L61">        super.init();</span>
-<span class="nc" id="L62">        String typeStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), &quot;rootSchemaType&quot;));</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        rootSchemaType = typeStr != null ? Type.valueOf(typeStr) : Type.STRUCT;</span>
-<span class="nc" id="L64">        String isKeyStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), &quot;isKey&quot;));</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        isKey = isKeyStr != null ? Boolean.parseBoolean(isKeyStr) : false;</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L63">        super.init();</span>
+<span class="nc" id="L64">        String typeStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), &quot;rootSchemaType&quot;));</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        rootSchemaType = typeStr != null ? Type.valueOf(typeStr) : Type.STRUCT;</span>
+<span class="nc" id="L66">        String isKeyStr = AtlasUtil.unescapeFromUri(AtlasUtil.getUriParameterValue(getUri(), &quot;isKey&quot;));</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        isKey = isKeyStr != null ? Boolean.parseBoolean(isKeyStr) : false;</span>
+<span class="nc" id="L68">    }</span>
 
     @Override
     public void processPreValidation(AtlasInternalSession session) throws AtlasException {
-<span class="nc bnc" id="L70" title="All 4 branches missed.">        if (session == null || session.getMapping() == null) {</span>
-<span class="nc" id="L71">            throw new AtlasValidationException(&quot;Invalid session: Session and AtlasMapping must be specified&quot;);</span>
+<span class="nc bnc" id="L72" title="All 4 branches missed.">        if (session == null || session.getMapping() == null) {</span>
+<span class="nc" id="L73">            throw new AtlasValidationException(&quot;Invalid session: Session and AtlasMapping must be specified&quot;);</span>
         }
 
-<span class="nc" id="L74">        Validations validations = session.getValidations();</span>
-<span class="nc" id="L75">        KafkaConnectValidationService kafkaConnectValidationService = new KafkaConnectValidationService(getConversionService(), getFieldActionService());</span>
-<span class="nc" id="L76">        kafkaConnectValidationService.setMode(getMode());</span>
-<span class="nc" id="L77">        kafkaConnectValidationService.setDocId(getDocId());</span>
-<span class="nc" id="L78">        List&lt;Validation&gt; kafkaConnectValidations = kafkaConnectValidationService.validateMapping(session.getMapping());</span>
-<span class="nc bnc" id="L79" title="All 4 branches missed.">        if (kafkaConnectValidations != null &amp;&amp; !kafkaConnectValidations.isEmpty()) {</span>
-<span class="nc" id="L80">            validations.getValidation().addAll(kafkaConnectValidations);</span>
+<span class="nc" id="L76">        Validations validations = session.getValidations();</span>
+<span class="nc" id="L77">        KafkaConnectValidationService kafkaConnectValidationService = new KafkaConnectValidationService(getConversionService(), getFieldActionService());</span>
+<span class="nc" id="L78">        kafkaConnectValidationService.setMode(getMode());</span>
+<span class="nc" id="L79">        kafkaConnectValidationService.setDocId(getDocId());</span>
+<span class="nc" id="L80">        List&lt;Validation&gt; kafkaConnectValidations = kafkaConnectValidationService.validateMapping(session.getMapping());</span>
+<span class="nc bnc" id="L81" title="All 4 branches missed.">        if (kafkaConnectValidations != null &amp;&amp; !kafkaConnectValidations.isEmpty()) {</span>
+<span class="nc" id="L82">            validations.getValidation().addAll(kafkaConnectValidations);</span>
         }
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L84">            LOG.debug(&quot;Detected &quot; + kafkaConnectValidations.size() + &quot; json validation notices&quot;);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L86">            LOG.debug(&quot;Detected &quot; + kafkaConnectValidations.size() + &quot; json validation notices&quot;);</span>
         }
 
-<span class="nc bnc" id="L87" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L88">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L90">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
         }
-<span class="nc" id="L90">    }</span>
+<span class="nc" id="L92">    }</span>
 
     @Override
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L94">        Object sourceDocument = session.getSourceDocument(getDocId());</span>
-<span class="nc" id="L95">        KafkaConnectFieldReader fieldReader = new KafkaConnectFieldReader(getConversionService());</span>
-<span class="nc" id="L96">        fieldReader.setDocument(sourceDocument);</span>
-<span class="nc" id="L97">        fieldReader.setSchema(extractSchema(getDataSourceMetadata()));</span>
-<span class="nc" id="L98">        session.setFieldReader(getDocId(), fieldReader);</span>
+<span class="nc" id="L96">        Object sourceDocument = session.getSourceDocument(getDocId());</span>
+<span class="nc" id="L97">        KafkaConnectFieldReader fieldReader = new KafkaConnectFieldReader(getConversionService());</span>
+<span class="nc" id="L98">        fieldReader.setDocument(sourceDocument);</span>
+<span class="nc" id="L99">        fieldReader.setSchema(extractSchema(getDocumentMetadata(), getDocumentSpecificationFile()));</span>
+<span class="nc" id="L100">        session.setFieldReader(getDocId(), fieldReader);</span>
 
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L101">            LOG.debug(&quot;{} processPreSourceExcution completed&quot;, getDocId());</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L103">            LOG.debug(&quot;{} processPreSourceExcution completed&quot;, getDocId());</span>
         }
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L105">    }</span>
 
-    private org.apache.kafka.connect.data.Schema extractSchema(DataSourceMetadata meta) throws AtlasException {
-<span class="nc bnc" id="L106" title="All 4 branches missed.">        if (meta == null || meta.getSpecification() == null) {</span>
-<span class="nc" id="L107">            return null;</span>
+    private org.apache.kafka.connect.data.Schema extractSchema(DocumentMetadata meta, File specFile) throws AtlasException {
+<span class="nc bnc" id="L108" title="All 4 branches missed.">        if (specFile == null || !specFile.exists()) {</span>
+<span class="nc" id="L109">            return null;</span>
         }
-<span class="nc" id="L109">        byte[] bytes = meta.getSpecification();</span>
-<span class="nc" id="L110">        String schema = new String(bytes);</span>
 <span class="nc" id="L111">        String typeStr = meta.getInspectionParameters().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
 <span class="nc" id="L112">        KafkaConnectSchemaType type = KafkaConnectSchemaType.valueOf(typeStr);</span>
 <span class="nc" id="L113">        HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(meta.getInspectionParameters());</span>
         try {
 <span class="nc bnc" id="L115" title="All 3 branches missed.">            switch (type) {</span>
                 case JSON:
-<span class="nc" id="L117">                    return KafkaConnectUtil.parseJson(schema, options);</span>
+<span class="nc" id="L117">                    return KafkaConnectUtil.parseJson(new FileInputStream(specFile), options);</span>
                 case AVRO:
-<span class="nc" id="L119">                    return KafkaConnectUtil.parseAvro(schema, options);</span>
+<span class="nc" id="L119">                    return KafkaConnectUtil.parseAvro(new FileInputStream(specFile), options);</span>
                 default:
 <span class="nc" id="L121">                    LOG.warn(&quot;Ignoring unsupported KafkaConnect schema type '{}'&quot;, type);</span>
 <span class="nc" id="L122">                    return null;</span>
@@ -129,7 +129,7 @@ import io.atlasmap.v2.Validations;
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
 <span class="nc" id="L131">        KafkaConnectFieldWriter writer = new KafkaConnectFieldWriter(getConversionService());</span>
-<span class="nc" id="L132">        writer.setSchema(extractSchema(getDataSourceMetadata()));</span>
+<span class="nc" id="L132">        writer.setSchema(extractSchema(getDocumentMetadata(), getDocumentSpecificationFile()));</span>
 <span class="nc" id="L133">        session.setFieldWriter(getDocId(), writer);</span>
 
 <span class="nc bnc" id="L135" title="All 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>

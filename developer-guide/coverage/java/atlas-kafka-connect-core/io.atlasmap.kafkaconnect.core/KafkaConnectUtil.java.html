@@ -15,6 +15,7 @@
  */
 package io.atlasmap.kafkaconnect.core;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ import io.atlasmap.v2.FieldType;
 /**
  * A collection of utility methods for Kafka Connect module.
  */
-<span class="nc" id="L37">public class KafkaConnectUtil {</span>
+<span class="nc" id="L38">public class KafkaConnectUtil {</span>
 
     /**
      * Converts Kafka Connect from {@link Type} to AtlasMap {@link FieldType}.
@@ -42,33 +43,33 @@ import io.atlasmap.v2.FieldType;
      * @return FieldType
      */
     public static FieldType getFieldType(Type type) {
-<span class="pc bpc" id="L45" title="6 of 13 branches missed.">        switch (type) {</span>
+<span class="pc bpc" id="L46" title="6 of 13 branches missed.">        switch (type) {</span>
             case ARRAY:
-<span class="nc" id="L47">                return FieldType.COMPLEX;</span>
+<span class="nc" id="L48">                return FieldType.COMPLEX;</span>
             case BOOLEAN:
-<span class="fc" id="L49">                return FieldType.BOOLEAN;</span>
+<span class="fc" id="L50">                return FieldType.BOOLEAN;</span>
             case BYTES:
-<span class="fc" id="L51">                return FieldType.BYTE_ARRAY;</span>
+<span class="fc" id="L52">                return FieldType.BYTE_ARRAY;</span>
             case FLOAT32:
-<span class="fc" id="L53">                return FieldType.FLOAT;</span>
+<span class="fc" id="L54">                return FieldType.FLOAT;</span>
             case FLOAT64:
-<span class="fc" id="L55">                return FieldType.DOUBLE;</span>
+<span class="fc" id="L56">                return FieldType.DOUBLE;</span>
             case INT16:
-<span class="nc" id="L57">                return FieldType.SHORT;</span>
+<span class="nc" id="L58">                return FieldType.SHORT;</span>
             case INT32:
-<span class="fc" id="L59">                return FieldType.INTEGER;</span>
+<span class="fc" id="L60">                return FieldType.INTEGER;</span>
             case INT64:
-<span class="fc" id="L61">                return FieldType.LONG;</span>
+<span class="fc" id="L62">                return FieldType.LONG;</span>
             case INT8:
-<span class="nc" id="L63">                return FieldType.BYTE;</span>
+<span class="nc" id="L64">                return FieldType.BYTE;</span>
             case MAP:
-<span class="nc" id="L65">                return FieldType.COMPLEX;</span>
+<span class="nc" id="L66">                return FieldType.COMPLEX;</span>
             case STRING:
-<span class="fc" id="L67">                return FieldType.STRING;</span>
+<span class="fc" id="L68">                return FieldType.STRING;</span>
             case STRUCT:
-<span class="nc" id="L69">                return FieldType.COMPLEX;</span>
+<span class="nc" id="L70">                return FieldType.COMPLEX;</span>
             default:
-<span class="nc" id="L71">                return FieldType.UNSUPPORTED;</span>
+<span class="nc" id="L72">                return FieldType.UNSUPPORTED;</span>
 
         }
     }
@@ -81,11 +82,11 @@ import io.atlasmap.v2.FieldType;
      * @throws Exception unexpected error
      * @see JsonConverter
      */
-    public static org.apache.kafka.connect.data.Schema parseJson(String jsonSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L85">        try (JsonConverter converter = new JsonConverter()) {</span>
-<span class="fc" id="L86">            converter.configure(options);</span>
-<span class="fc" id="L87">            JsonNode parsed = new ObjectMapper().readTree(jsonSchema);</span>
-<span class="fc" id="L88">            return converter.asConnectSchema(parsed);</span>
+    public static org.apache.kafka.connect.data.Schema parseJson(InputStream jsonSchema, HashMap&lt;String, ?&gt; options) throws Exception {
+<span class="fc" id="L86">        try (JsonConverter converter = new JsonConverter()) {</span>
+<span class="fc" id="L87">            converter.configure(options);</span>
+<span class="fc" id="L88">            JsonNode parsed = new ObjectMapper().readTree(jsonSchema);</span>
+<span class="fc" id="L89">            return converter.asConnectSchema(parsed);</span>
         }
     }
 
@@ -98,10 +99,10 @@ import io.atlasmap.v2.FieldType;
      * @see AvroSchemaUtils
      * @see AvroData
      */
-    public static org.apache.kafka.connect.data.Schema parseAvro(String avroSchema, HashMap&lt;String, ?&gt; options) throws Exception {
-<span class="fc" id="L102">        org.apache.avro.Schema schema = AvroSchemaUtils.parse(avroSchema);</span>
-<span class="fc" id="L103">        AvroData avro = new AvroData(0);</span>
-<span class="fc" id="L104">        return avro.toConnectSchema(schema);</span>
+    public static org.apache.kafka.connect.data.Schema parseAvro(InputStream avroSchema, HashMap&lt;String, ?&gt; options) throws Exception {
+<span class="fc" id="L103">        org.apache.avro.Schema schema = AvroSchemaUtils.parse(new String(avroSchema.readAllBytes()));</span>
+<span class="fc" id="L104">        AvroData avro = new AvroData(0);</span>
+<span class="fc" id="L105">        return avro.toConnectSchema(schema);</span>
     }
 
     /**
@@ -110,14 +111,14 @@ import io.atlasmap.v2.FieldType;
      * @return KafkaConnect parser options
      */
     public static HashMap&lt;String, Object&gt; repackParserOptions(Map&lt;String, String&gt; requestOptions) {
-<span class="fc" id="L113">        HashMap&lt;String, Object&gt; options = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L114">        String isKeyStr = requestOptions.get(KafkaConnectConstants.OPTIONS_IS_KEY);</span>
-<span class="pc bpc" id="L115" title="2 of 4 branches missed.">        boolean isKey = isKeyStr != null &amp;&amp; Boolean.parseBoolean(isKeyStr) ? true : false;</span>
-<span class="fc" id="L116">        String cacheSizeStr = requestOptions.get(KafkaConnectConstants.OPTIONS_SCHEMA_CACHE_SIZE);</span>
-<span class="fc" id="L117">        options.put(JsonConverterConfig.SCHEMAS_CACHE_SIZE_CONFIG,</span>
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">            cacheSizeStr != null ? Integer.parseInt(cacheSizeStr) : Integer.valueOf(0));</span>
-<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        options.put(StringConverterConfig.TYPE_CONFIG, isKey ? &quot;key&quot; : &quot;value&quot;);</span>
-<span class="fc" id="L120">        return options;</span>
+<span class="fc" id="L114">        HashMap&lt;String, Object&gt; options = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L115">        String isKeyStr = requestOptions.get(KafkaConnectConstants.OPTIONS_IS_KEY);</span>
+<span class="pc bpc" id="L116" title="2 of 4 branches missed.">        boolean isKey = isKeyStr != null &amp;&amp; Boolean.parseBoolean(isKeyStr) ? true : false;</span>
+<span class="fc" id="L117">        String cacheSizeStr = requestOptions.get(KafkaConnectConstants.OPTIONS_SCHEMA_CACHE_SIZE);</span>
+<span class="fc" id="L118">        options.put(JsonConverterConfig.SCHEMAS_CACHE_SIZE_CONFIG,</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">            cacheSizeStr != null ? Integer.parseInt(cacheSizeStr) : Integer.valueOf(0));</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        options.put(StringConverterConfig.TYPE_CONFIG, isKey ? &quot;key&quot; : &quot;value&quot;);</span>
+<span class="fc" id="L121">        return options;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

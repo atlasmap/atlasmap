@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AtlasMappingHandler.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-core</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.core</a> &gt; <span class="el_source">AtlasMappingHandler.java</span></div><h1>AtlasMappingHandler.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.core;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.BaseMapping;
+import io.atlasmap.v2.Collection;
+import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.Mapping;
+
+/**
+ * The API for handling {@link AtlasMapping} which represents the AtlasMap Mapping Definition.
+ * TODO Migrate {@link AtlasMapping} handling to this, mostly from {@link DefaultAtlasContext},
+ * and possibly from io.atlasmap.service.MappingService
+ */
+public class AtlasMappingHandler {
+
+    private AtlasMapping mapping;
+
+    /**
+     * A constructor.
+     * @param mapping Mapping Definition
+     */
+<span class="fc" id="L46">    public AtlasMappingHandler(AtlasMapping mapping) {</span>
+<span class="fc" id="L47">        this.mapping = mapping;</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * Removes all references to the specified Document in the mapping definition.
+     * It removes the DataSource entry as well as the mappings that refer to the Document.
+     * @param docKey the indentifier of the Document to be removed
+     */
+    public void removeDocumentReference(DocumentKey docKey) {
+<span class="fc" id="L56">        Optional&lt;DataSource&gt; dataSource = mapping.getDataSource().stream().filter(ds -&gt;</span>
+<span class="pc bpc" id="L57" title="1 of 4 branches missed.">            ds.getDataSourceType() == docKey.getDataSourceType() &amp;&amp; ds.getId().equals(docKey.getDocumentId())</span>
+<span class="fc" id="L58">            ).findAny();</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (dataSource.isPresent()) {</span>
+<span class="fc" id="L60">            mapping.getDataSource().remove(dataSource.get());</span>
+        }
+<span class="fc" id="L62">        List&lt;BaseMapping&gt; mappings = mapping.getMappings().getMapping();</span>
+<span class="fc" id="L63">        removeDocumentReferenceFromMappings(mappings, docKey);</span>
+<span class="fc" id="L64">    }</span>
+
+    private void removeDocumentReferenceFromMappings(List&lt;BaseMapping&gt; mappings, DocumentKey docKey) {
+<span class="fc" id="L67">        List&lt;Mapping&gt; toDelete = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (BaseMapping m : mappings) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            if (m instanceof Mapping) {</span>
+<span class="fc" id="L70">                Mapping mm = (Mapping)m;</span>
+                List&lt;Field&gt; fields;
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">                if (docKey.getDataSourceType() == DataSourceType.SOURCE) {</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">                    if (mm.getInputFieldGroup() != null) {</span>
+<span class="nc" id="L74">                        FieldGroup fg = mm.getInputFieldGroup();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                        if (fg.getPath() != null) {</span>
+<span class="nc" id="L76">                            fields = Collections.singletonList(fg);</span>
+                        } else {
+<span class="nc" id="L78">                            fields = fg.getField();</span>
+                        }
+<span class="nc" id="L80">                    } else {</span>
+<span class="fc" id="L81">                        fields = mm.getInputField();</span>
+                    }
+                } else {
+<span class="nc" id="L84">                    fields = mm.getOutputField();</span>
+                }
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                for (Field f : fields) {</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">                    if (docKey.getDocumentId().equals(f.getDocId())) {</span>
+<span class="fc" id="L88">                        toDelete.add(mm);</span>
+<span class="fc" id="L89">                        break;</span>
+                    }
+<span class="fc" id="L91">                }</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            } else if (m instanceof Collection) {</span>
+<span class="fc" id="L93">                removeDocumentReferenceFromMappings(((Collection)m).getMappings().getMapping(), docKey);</span>
+            }
+<span class="fc" id="L95">        }</span>
+<span class="fc" id="L96">        mappings.removeAll(toDelete);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Gets the {@link AtlasMapping}.
+     * @return AtlasMapping
+     */
+    public AtlasMapping getAtlasMapping() {
+<span class="fc" id="L104">        return this.mapping;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

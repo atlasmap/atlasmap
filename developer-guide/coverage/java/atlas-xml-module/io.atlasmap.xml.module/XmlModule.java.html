@@ -16,6 +16,8 @@
 package io.atlasmap.xml.module;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,76 +68,77 @@ import io.atlasmap.xml.v2.XmlNamespaces;
  */
 @AtlasModuleDetail(name = &quot;XmlModule&quot;, uri = &quot;atlas:xml&quot;, modes = { &quot;SOURCE&quot;, &quot;TARGET&quot; }, dataFormats = {
         &quot;xml&quot; }, configPackages = { &quot;io.atlasmap.xml.v2&quot; })
-<span class="fc" id="L69">public class XmlModule extends BaseAtlasModule {</span>
-<span class="fc" id="L70">    private static final Logger LOG = LoggerFactory.getLogger(XmlModule.class);</span>
+<span class="fc" id="L71">public class XmlModule extends BaseAtlasModule {</span>
+<span class="fc" id="L72">    private static final Logger LOG = LoggerFactory.getLogger(XmlModule.class);</span>
 
     private XmlIOHelper ioHelper;
+    private XSSchemaSet xsSchemaSet;
 
     @Override
     public void init() throws AtlasException {
-<span class="fc" id="L76">        super.init();</span>
-<span class="fc" id="L77">        this.ioHelper = new XmlIOHelper(this.getClassLoader());</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L79">        super.init();</span>
+<span class="fc" id="L80">        this.ioHelper = new XmlIOHelper(this.getClassLoader());</span>
+<span class="fc" id="L81">    }</span>
 
     @Override
     public void processPreValidation(AtlasInternalSession atlasSession) throws AtlasException {
-<span class="pc bpc" id="L82" title="2 of 4 branches missed.">        if (atlasSession == null || atlasSession.getMapping() == null) {</span>
-<span class="nc" id="L83">            LOG.error(&quot;Invalid session: Session and AtlasMapping must be specified&quot;);</span>
-<span class="nc" id="L84">            throw new AtlasValidationException(&quot;Invalid session&quot;);</span>
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if (atlasSession == null || atlasSession.getMapping() == null) {</span>
+<span class="nc" id="L86">            LOG.error(&quot;Invalid session: Session and AtlasMapping must be specified&quot;);</span>
+<span class="nc" id="L87">            throw new AtlasValidationException(&quot;Invalid session&quot;);</span>
         }
 
-<span class="fc" id="L87">        List&lt;Validation&gt; xmlValidations = createValidationService().validateMapping(atlasSession.getMapping());</span>
-<span class="fc" id="L88">        atlasSession.getValidations().getValidation().addAll(xmlValidations);</span>
+<span class="fc" id="L90">        List&lt;Validation&gt; xmlValidations = createValidationService().validateMapping(atlasSession.getMapping());</span>
+<span class="fc" id="L91">        atlasSession.getValidations().getValidation().addAll(xmlValidations);</span>
 
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L91">            LOG.debug(&quot;Detected &quot; + xmlValidations.size() + &quot; xml validation notices&quot;);</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L94">            LOG.debug(&quot;Detected &quot; + xmlValidations.size() + &quot; xml validation notices&quot;);</span>
         }
 
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L95">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L97" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L98">            LOG.debug(&quot;{}: processPreValidation completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L100">    }</span>
 
     /**
      * Creates the validation service.
      * @return validation service
      */
     protected XmlValidationService createValidationService() {
-<span class="fc" id="L104">        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());</span>
-<span class="fc" id="L105">        xmlValidationService.setMode(getMode());</span>
-<span class="fc" id="L106">        xmlValidationService.setDocId(getDocId());</span>
-<span class="fc" id="L107">        return xmlValidationService;</span>
+<span class="fc" id="L107">        XmlValidationService xmlValidationService = new XmlValidationService(getConversionService(), getFieldActionService());</span>
+<span class="fc" id="L108">        xmlValidationService.setMode(getMode());</span>
+<span class="fc" id="L109">        xmlValidationService.setDocId(getDocId());</span>
+<span class="fc" id="L110">        return xmlValidationService;</span>
     }
 
     @Override
     public void processPreSourceExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L112">        Object sourceDocument = session.getSourceDocument(getDocId());</span>
-<span class="fc" id="L113">        String sourceDocumentString = null;</span>
-<span class="fc" id="L114">        boolean enableNamespaces = false;</span>
-<span class="pc bpc" id="L115" title="1 of 4 branches missed.">        if (sourceDocument == null || !(sourceDocument instanceof String)) {</span>
-<span class="fc" id="L116">            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
-<span class="fc" id="L117">                    &quot;Null or non-String source document: docId='%s'&quot;, getDocId()),</span>
+<span class="fc" id="L115">        Object sourceDocument = session.getSourceDocument(getDocId());</span>
+<span class="fc" id="L116">        String sourceDocumentString = null;</span>
+<span class="fc" id="L117">        boolean enableNamespaces = false;</span>
+<span class="pc bpc" id="L118" title="1 of 4 branches missed.">        if (sourceDocument == null || !(sourceDocument instanceof String)) {</span>
+<span class="fc" id="L119">            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
+<span class="fc" id="L120">                    &quot;Null or non-String source document: docId='%s'&quot;, getDocId()),</span>
                     AuditStatus.WARN, null);
         } else {
-<span class="fc" id="L120">            enableNamespaces = true;</span>
-<span class="fc" id="L121">            String param = this.getUriParameters().get(&quot;disableNamespaces&quot;);</span>
-<span class="pc bpc" id="L122" title="1 of 4 branches missed.">            if (param != null &amp;&amp; &quot;true&quot;.equalsIgnoreCase(param)) {</span>
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L124">                    LOG.debug(&quot;Disabling namespace support&quot;);</span>
+<span class="fc" id="L123">            enableNamespaces = true;</span>
+<span class="fc" id="L124">            String param = this.getUriParameters().get(&quot;disableNamespaces&quot;);</span>
+<span class="pc bpc" id="L125" title="1 of 4 branches missed.">            if (param != null &amp;&amp; &quot;true&quot;.equalsIgnoreCase(param)) {</span>
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L127">                    LOG.debug(&quot;Disabling namespace support&quot;);</span>
                 }
-<span class="fc" id="L126">                enableNamespaces = false;</span>
+<span class="fc" id="L129">                enableNamespaces = false;</span>
             }
-<span class="fc" id="L128">            sourceDocumentString = String.class.cast(sourceDocument);</span>
+<span class="fc" id="L131">            sourceDocumentString = String.class.cast(sourceDocument);</span>
         }
-<span class="fc" id="L130">        Document sourceXmlDocument = convertToXmlDocument(sourceDocumentString, enableNamespaces);</span>
-<span class="fc" id="L131">        XmlFieldReader reader = new XmlFieldReader(getClassLoader(), getConversionService());</span>
-<span class="fc" id="L132">        reader.setDocument(sourceXmlDocument);</span>
-<span class="fc" id="L133">        session.setFieldReader(getDocId(), reader);</span>
+<span class="fc" id="L133">        Document sourceXmlDocument = convertToXmlDocument(sourceDocumentString, enableNamespaces);</span>
+<span class="fc" id="L134">        XmlFieldReader reader = new XmlFieldReader(getClassLoader(), getConversionService());</span>
+<span class="fc" id="L135">        reader.setDocument(sourceXmlDocument);</span>
+<span class="fc" id="L136">        session.setFieldReader(getDocId(), reader);</span>
 
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L136">            LOG.debug(&quot;{}: processPreSourceExecution completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L139">            LOG.debug(&quot;{}: processPreSourceExecution completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L138">    }</span>
+<span class="fc" id="L141">    }</span>
 
     /**
      * Convert a source document into XML. The modules extending this class can
@@ -146,191 +149,191 @@ import io.atlasmap.xml.v2.XmlNamespaces;
      * @throws AtlasException unexpected error
      */
     protected Document convertToXmlDocument(String source, boolean namespaced) throws AtlasException {
-<span class="pc bpc" id="L149" title="1 of 4 branches missed.">        if (source == null || source.isEmpty()) {</span>
-<span class="fc" id="L150">            return null;</span>
+<span class="pc bpc" id="L152" title="1 of 4 branches missed.">        if (source == null || source.isEmpty()) {</span>
+<span class="fc" id="L153">            return null;</span>
         }
 
         try {
-<span class="fc" id="L154">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
-<span class="fc" id="L155">            dbf.setNamespaceAware(namespaced); // this must be done to use namespaces</span>
-<span class="fc" id="L156">            DocumentBuilder b = dbf.newDocumentBuilder();</span>
-<span class="fc" id="L157">            return b.parse(new ByteArrayInputStream(source.getBytes(&quot;UTF-8&quot;)));</span>
-<span class="nc" id="L158">        } catch (Exception e) {</span>
-<span class="nc" id="L159">            LOG.warn(&quot;Failed to parse XML document&quot;, e);</span>
-<span class="nc" id="L160">            return null;</span>
+<span class="fc" id="L157">            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L158">            dbf.setNamespaceAware(namespaced); // this must be done to use namespaces</span>
+<span class="fc" id="L159">            DocumentBuilder b = dbf.newDocumentBuilder();</span>
+<span class="fc" id="L160">            return b.parse(new ByteArrayInputStream(source.getBytes(&quot;UTF-8&quot;)));</span>
+<span class="nc" id="L161">        } catch (Exception e) {</span>
+<span class="nc" id="L162">            LOG.warn(&quot;Failed to parse XML document&quot;, e);</span>
+<span class="nc" id="L163">            return null;</span>
         }
     };
 
     @Override
     public void processPreTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L166">        XmlNamespaces xmlNs = null;</span>
-<span class="fc" id="L167">        String template = null;</span>
-<span class="fc" id="L168">        DataSource ds = getDataSource();</span>
-<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (ds instanceof XmlDataSource) {</span>
-<span class="fc" id="L170">            xmlNs = ((XmlDataSource) ds).getXmlNamespaces();</span>
-<span class="fc" id="L171">            template = ((XmlDataSource) ds).getTemplate();</span>
+<span class="fc" id="L169">        XmlNamespaces xmlNs = null;</span>
+<span class="fc" id="L170">        String template = null;</span>
+<span class="fc" id="L171">        DataSource ds = getDataSource();</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (ds instanceof XmlDataSource) {</span>
+<span class="fc" id="L173">            xmlNs = ((XmlDataSource) ds).getXmlNamespaces();</span>
+<span class="fc" id="L174">            template = ((XmlDataSource) ds).getTemplate();</span>
         }
 
-<span class="fc" id="L174">        Map&lt;String, String&gt; nsMap = new HashMap&lt;String, String&gt;();</span>
-<span class="pc bpc" id="L175" title="1 of 6 branches missed.">        if (xmlNs != null &amp;&amp; xmlNs.getXmlNamespace() != null &amp;&amp; !xmlNs.getXmlNamespace().isEmpty()) {</span>
-<span class="fc bfc" id="L176" title="All 2 branches covered.">            for (XmlNamespace ns : xmlNs.getXmlNamespace()) {</span>
-<span class="fc" id="L177">                nsMap.put(ns.getAlias(), ns.getUri());</span>
-<span class="fc" id="L178">            }</span>
+<span class="fc" id="L177">        Map&lt;String, String&gt; nsMap = new HashMap&lt;String, String&gt;();</span>
+<span class="pc bpc" id="L178" title="1 of 6 branches missed.">        if (xmlNs != null &amp;&amp; xmlNs.getXmlNamespace() != null &amp;&amp; !xmlNs.getXmlNamespace().isEmpty()) {</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            for (XmlNamespace ns : xmlNs.getXmlNamespace()) {</span>
+<span class="fc" id="L180">                nsMap.put(ns.getAlias(), ns.getUri());</span>
+<span class="fc" id="L181">            }</span>
         }
 
-<span class="fc" id="L181">        XmlFieldWriter writer = new XmlFieldWriter(getClassLoader(), nsMap, template);</span>
-<span class="fc" id="L182">        session.setFieldWriter(getDocId(), writer);</span>
+<span class="fc" id="L184">        XmlFieldWriter writer = new XmlFieldWriter(getClassLoader(), nsMap, template);</span>
+<span class="fc" id="L185">        session.setFieldWriter(getDocId(), writer);</span>
 
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L185">            LOG.debug(&quot;{}: processPreTargetExcution completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L188">            LOG.debug(&quot;{}: processPreTargetExcution completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L187">    }</span>
+<span class="fc" id="L190">    }</span>
 
     @Override
     public void readSourceValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L191">        Field sourceField = session.head().getSourceField();</span>
-<span class="fc" id="L192">        XmlFieldReader reader = session.getFieldReader(getDocId(), XmlFieldReader.class);</span>
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">        if (reader == null) {</span>
-<span class="nc" id="L194">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
-<span class="nc" id="L195">                    &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
+<span class="fc" id="L194">        Field sourceField = session.head().getSourceField();</span>
+<span class="fc" id="L195">        XmlFieldReader reader = session.getFieldReader(getDocId(), XmlFieldReader.class);</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (reader == null) {</span>
+<span class="nc" id="L197">            AtlasUtil.addAudit(session, sourceField, String.format(</span>
+<span class="nc" id="L198">                    &quot;Source document '%s' doesn't exist&quot;, getDocId()),</span>
                     AuditStatus.ERROR, null);
-<span class="nc" id="L197">            return;</span>
+<span class="nc" id="L200">            return;</span>
         }
-<span class="fc" id="L199">        reader.read(session);</span>
+<span class="fc" id="L202">        reader.read(session);</span>
 
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L202">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
-<span class="nc" id="L203">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L204">                    sourceField.getValue());</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L205">            LOG.debug(&quot;{}: processSourceFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}]&quot;,</span>
+<span class="nc" id="L206">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="nc" id="L207">                    sourceField.getValue());</span>
         }
-<span class="fc" id="L206">    }</span>
+<span class="fc" id="L209">    }</span>
 
     @Override
     public void populateTargetField(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L210">        Field sourceField = session.head().getSourceField();</span>
-<span class="fc" id="L211">        Field targetField = session.head().getTargetField();</span>
-<span class="fc" id="L212">        XmlPath path = new XmlPath(targetField.getPath());</span>
-<span class="fc" id="L213">        FieldGroup targetFieldGroup = null;</span>
-<span class="pc bpc" id="L214" title="1 of 4 branches missed.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
-<span class="fc" id="L215">            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
-<span class="fc" id="L216">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L213">        Field sourceField = session.head().getSourceField();</span>
+<span class="fc" id="L214">        Field targetField = session.head().getTargetField();</span>
+<span class="fc" id="L215">        XmlPath path = new XmlPath(targetField.getPath());</span>
+<span class="fc" id="L216">        FieldGroup targetFieldGroup = null;</span>
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="fc" id="L218">            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
+<span class="fc" id="L219">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
         // Attempt to Auto-detect field type based on input value
-<span class="fc bfc" id="L220" title="All 4 branches covered.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
-<span class="fc" id="L221">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
+<span class="fc bfc" id="L223" title="All 4 branches covered.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
+<span class="fc" id="L224">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
         }
 
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (targetFieldGroup == null) {</span>
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
-<span class="nc" id="L226">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
-<span class="nc bnc" id="L227" title="All 4 branches missed.">                if (subFields != null &amp;&amp; subFields.size() &gt; 0) {</span>
-<span class="nc" id="L228">                    Integer index = targetField.getIndex();</span>
-<span class="nc bnc" id="L229" title="All 2 branches missed.">                    if (index != null) {</span>
-<span class="nc bnc" id="L230" title="All 2 branches missed.">                        if (subFields.size() &gt; index) {</span>
-<span class="nc" id="L231">                            sourceField = subFields.get(index);</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">        if (targetFieldGroup == null) {</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="nc" id="L229">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
+<span class="nc bnc" id="L230" title="All 4 branches missed.">                if (subFields != null &amp;&amp; subFields.size() &gt; 0) {</span>
+<span class="nc" id="L231">                    Integer index = targetField.getIndex();</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">                    if (index != null) {</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">                        if (subFields.size() &gt; index) {</span>
+<span class="nc" id="L234">                            sourceField = subFields.get(index);</span>
                         } else {
-<span class="nc" id="L233">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
+<span class="nc" id="L236">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
                                     &quot;The number of source fields (%s) is smaller than target index (%s) - ignoring&quot;,
-<span class="nc" id="L235">                                    subFields.size(), index),</span>
+<span class="nc" id="L238">                                    subFields.size(), index),</span>
                                     AuditStatus.WARN, null);
-<span class="nc" id="L237">                            return;</span>
+<span class="nc" id="L240">                            return;</span>
                         }
                     } else {
                         // The last one wins for compatibility
-<span class="nc" id="L241">                        sourceField = subFields.get(subFields.size() - 1);</span>
+<span class="nc" id="L244">                        sourceField = subFields.get(subFields.size() - 1);</span>
                     }
-<span class="nc" id="L243">                    session.head().setSourceField(sourceField);</span>
+<span class="nc" id="L246">                    session.head().setSourceField(sourceField);</span>
                 }
             }
-<span class="fc" id="L246">            super.populateTargetField(session);</span>
-<span class="fc bfc" id="L247" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
-<span class="fc" id="L248">            Field previousTargetSubField = null;</span>
-<span class="fc bfc" id="L249" title="All 2 branches covered.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
-<span class="fc" id="L250">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
-<span class="fc" id="L251">                XmlField targetSubField = new XmlField();</span>
-<span class="fc" id="L252">                AtlasXmlModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="fc" id="L253">                getCollectionHelper().copyCollectionIndexes(sourceField, sourceSubField, targetSubField, previousTargetSubField);</span>
-<span class="fc" id="L254">                previousTargetSubField = targetSubField;</span>
+<span class="fc" id="L249">            super.populateTargetField(session);</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
+<span class="fc" id="L251">            Field previousTargetSubField = null;</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
+<span class="fc" id="L253">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
+<span class="fc" id="L254">                XmlField targetSubField = new XmlField();</span>
+<span class="fc" id="L255">                AtlasXmlModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L256">                getCollectionHelper().copyCollectionIndexes(sourceField, sourceSubField, targetSubField, previousTargetSubField);</span>
+<span class="fc" id="L257">                previousTargetSubField = targetSubField;</span>
                 // Attempt to Auto-detect field type based on input value
-<span class="pc bpc" id="L256" title="1 of 4 branches missed.">                if (targetSubField.getFieldType() == null &amp;&amp; sourceSubField.getValue() != null) {</span>
-<span class="fc" id="L257">                    targetSubField.setFieldType(getConversionService().fieldTypeFromClass(sourceSubField.getValue().getClass()));</span>
+<span class="pc bpc" id="L259" title="1 of 4 branches missed.">                if (targetSubField.getFieldType() == null &amp;&amp; sourceSubField.getValue() != null) {</span>
+<span class="fc" id="L260">                    targetSubField.setFieldType(getConversionService().fieldTypeFromClass(sourceSubField.getValue().getClass()));</span>
                 }
-<span class="fc" id="L259">                targetFieldGroup.getField().add(targetSubField);</span>
-<span class="fc" id="L260">                session.head().setSourceField(sourceSubField);</span>
-<span class="fc" id="L261">                session.head().setTargetField(targetSubField);</span>
-<span class="fc" id="L262">                super.populateTargetField(session);</span>
+<span class="fc" id="L262">                targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L263">                session.head().setSourceField(sourceSubField);</span>
+<span class="fc" id="L264">                session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L265">                super.populateTargetField(session);</span>
             }
-<span class="fc" id="L264">            session.head().setSourceField(sourceField);</span>
-<span class="fc" id="L265">            session.head().setTargetField(targetFieldGroup);</span>
-<span class="fc" id="L266">        } else {</span>
-<span class="fc" id="L267">            XmlField targetSubField = new XmlField();</span>
-<span class="fc" id="L268">            AtlasXmlModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="fc" id="L269">            path.setVacantCollectionIndex(0);</span>
-<span class="fc" id="L270">            targetSubField.setPath(path.toString());</span>
-<span class="fc" id="L271">            targetFieldGroup.getField().add(targetSubField);</span>
-<span class="fc" id="L272">            session.head().setTargetField(targetSubField);</span>
-<span class="fc" id="L273">            super.populateTargetField(session);</span>
-<span class="fc" id="L274">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L267">            session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L268">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L269">        } else {</span>
+<span class="fc" id="L270">            XmlField targetSubField = new XmlField();</span>
+<span class="fc" id="L271">            AtlasXmlModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L272">            path.setVacantCollectionIndex(0);</span>
+<span class="fc" id="L273">            targetSubField.setPath(path.toString());</span>
+<span class="fc" id="L274">            targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L275">            session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L276">            super.populateTargetField(session);</span>
+<span class="fc" id="L277">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
-<span class="pc bpc" id="L277" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L278">            LOG.debug(</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L281">            LOG.debug(</span>
                     &quot;{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]&quot;,
-<span class="nc" id="L280">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L281">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
-<span class="nc" id="L282">                    targetField.getValue());</span>
+<span class="nc" id="L283">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="nc" id="L284">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
+<span class="nc" id="L285">                    targetField.getValue());</span>
         }
-<span class="fc" id="L284">    }</span>
+<span class="fc" id="L287">    }</span>
 
     @Override
     protected AtlasCollectionHelper createCollectionHelper(AtlasFieldActionService fieldActionService) {
-<span class="fc" id="L288">        return new XmlCollectionHelper(fieldActionService);</span>
+<span class="fc" id="L291">        return new XmlCollectionHelper(fieldActionService);</span>
     }
 
     @Override
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L293">        XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);</span>
-<span class="fc bfc" id="L294" title="All 2 branches covered.">        if (session.head().getTargetField() instanceof FieldGroup) {</span>
-<span class="fc" id="L295">            FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();</span>
-<span class="fc bfc" id="L296" title="All 2 branches covered.">            if (targetFieldGroup.getField().size() &gt; 0) {</span>
-<span class="fc bfc" id="L297" title="All 2 branches covered.">                for (Field f : targetFieldGroup.getField()) {</span>
-<span class="fc" id="L298">                    session.head().setTargetField(f);</span>
-<span class="fc" id="L299">                    writer.write(session);</span>
-<span class="fc" id="L300">                }</span>
-<span class="fc" id="L301">                return;</span>
+<span class="fc" id="L296">        XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        if (session.head().getTargetField() instanceof FieldGroup) {</span>
+<span class="fc" id="L298">            FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">            if (targetFieldGroup.getField().size() &gt; 0) {</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                for (Field f : targetFieldGroup.getField()) {</span>
+<span class="fc" id="L301">                    session.head().setTargetField(f);</span>
+<span class="fc" id="L302">                    writer.write(session);</span>
+<span class="fc" id="L303">                }</span>
+<span class="fc" id="L304">                return;</span>
             }
         }
-<span class="fc" id="L304">        writer.write(session);</span>
-<span class="fc" id="L305">    }</span>
+<span class="fc" id="L307">        writer.write(session);</span>
+<span class="fc" id="L308">    }</span>
 
     @Override
     public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L309">        session.removeFieldReader(getDocId());</span>
+<span class="fc" id="L312">        session.removeFieldReader(getDocId());</span>
 
-<span class="pc bpc" id="L311" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L312">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L315">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L314">    }</span>
+<span class="fc" id="L317">    }</span>
 
     @Override
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L318">        XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);</span>
-<span class="pc bpc" id="L319" title="2 of 4 branches missed.">        if (writer != null &amp;&amp; writer.getDocument() != null) {</span>
-<span class="fc" id="L320">            Document doc = enforceSchema(writer.getDocument());</span>
-<span class="fc" id="L321">            String targetDocumentString = convertFromXmlDocument(doc);</span>
-<span class="fc" id="L322">            session.setTargetDocument(getDocId(), targetDocumentString);</span>
-<span class="fc" id="L323">        } else {</span>
-<span class="nc" id="L324">            AtlasUtil.addAudit(session, getDocId(), String</span>
-<span class="nc" id="L325">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
+<span class="fc" id="L321">        XmlFieldWriter writer = session.getFieldWriter(getDocId(), XmlFieldWriter.class);</span>
+<span class="pc bpc" id="L322" title="2 of 4 branches missed.">        if (writer != null &amp;&amp; writer.getDocument() != null) {</span>
+<span class="fc" id="L323">            Document doc = enforceSchema(writer.getDocument());</span>
+<span class="fc" id="L324">            String targetDocumentString = convertFromXmlDocument(doc);</span>
+<span class="fc" id="L325">            session.setTargetDocument(getDocId(), targetDocumentString);</span>
+<span class="fc" id="L326">        } else {</span>
+<span class="nc" id="L327">            AtlasUtil.addAudit(session, getDocId(), String</span>
+<span class="nc" id="L328">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
                     AuditStatus.WARN, null);
         }
-<span class="fc" id="L328">        session.removeFieldWriter(getDocId());</span>
+<span class="fc" id="L331">        session.removeFieldWriter(getDocId());</span>
 
-<span class="pc bpc" id="L330" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L331">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L334">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L333">    }</span>
+<span class="fc" id="L336">    }</span>
 
     /**
      * Convert a target XML document into some format. The modules extending this class can
@@ -340,25 +343,25 @@ import io.atlasmap.xml.v2.XmlNamespaces;
      * @throws AtlasException unexpected error
      */
     protected String convertFromXmlDocument(Document xml) throws AtlasException {
-<span class="fc" id="L343">        return getXmlIOHelper().writeDocumentToString(false, xml);</span>
+<span class="fc" id="L346">        return getXmlIOHelper().writeDocumentToString(false, xml);</span>
     }
 
     @Override
     public Boolean isSupportedField(Field field) {
-<span class="fc bfc" id="L348" title="All 2 branches covered.">        if (super.isSupportedField(field)) {</span>
-<span class="fc" id="L349">            return true;</span>
+<span class="fc bfc" id="L351" title="All 2 branches covered.">        if (super.isSupportedField(field)) {</span>
+<span class="fc" id="L352">            return true;</span>
         }
-<span class="fc bfc" id="L351" title="All 4 branches covered.">        return field instanceof XmlField || field instanceof XmlEnumField;</span>
+<span class="fc bfc" id="L354" title="All 4 branches covered.">        return field instanceof XmlField || field instanceof XmlEnumField;</span>
     }
 
     @Override
     public Field cloneField(Field field) throws AtlasException {
-<span class="nc" id="L356">        return AtlasXmlModelFactory.cloneField((XmlField)field, true);</span>
+<span class="nc" id="L359">        return AtlasXmlModelFactory.cloneField((XmlField)field, true);</span>
     }
 
     @Override
     public XmlField createField() {
-<span class="fc" id="L361">        return AtlasXmlModelFactory.createXmlField();</span>
+<span class="fc" id="L364">        return AtlasXmlModelFactory.createXmlField();</span>
     }
 
     /**
@@ -366,18 +369,15 @@ import io.atlasmap.xml.v2.XmlNamespaces;
      * @return helper
      */
     protected XmlIOHelper getXmlIOHelper() {
-<span class="fc" id="L369">        return this.ioHelper;</span>
+<span class="fc" id="L372">        return this.ioHelper;</span>
     }
 
     private Document enforceSchema(Document doc) {
-<span class="fc bfc" id="L373" title="All 4 branches covered.">        if (getDataSourceMetadata() == null || getDataSourceMetadata().getInspectionType() != InspectionType.SCHEMA</span>
-<span class="pc bpc" id="L374" title="2 of 4 branches missed.">            || getDataSourceMetadata().getSpecification() == null || getDataSourceMetadata().getSpecification().length == 0) {</span>
-<span class="fc" id="L375">            return doc;</span>
-        }
         try {
-<span class="fc" id="L378">            byte[] bytes = getDataSourceMetadata().getSpecification();</span>
-<span class="fc" id="L379">            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());</span>
-<span class="fc" id="L380">            XSSchemaSet schemaSet = schemaParser.parse(new ByteArrayInputStream(bytes));</span>
+<span class="fc" id="L377">            XSSchemaSet schemaSet = getXsSchemaSet();</span>
+<span class="fc bfc" id="L378" title="All 2 branches covered.">            if (schemaSet == null) {</span>
+<span class="fc" id="L379">                return doc;</span>
+            }
 <span class="fc" id="L381">            Element sourceRoot = doc.getDocumentElement();</span>
 <span class="fc" id="L382">            String namespaceUri = sourceRoot.getNamespaceURI();</span>
 <span class="pc bpc" id="L383" title="1 of 2 branches missed.">            if (namespaceUri == null) {</span>
@@ -407,5 +407,20 @@ import io.atlasmap.xml.v2.XmlNamespaces;
         }
     }
 
+    private XSSchemaSet getXsSchemaSet() throws AtlasException {
+<span class="fc bfc" id="L411" title="All 4 branches covered.">        if (getDocumentMetadata() == null || getDocumentMetadata().getInspectionType() != InspectionType.SCHEMA</span>
+<span class="pc bpc" id="L412" title="2 of 4 branches missed.">            || getDocumentSpecificationFile() == null || !getDocumentSpecificationFile().exists()) {</span>
+<span class="fc" id="L413">            return null;</span>
+        }
+<span class="pc bpc" id="L415" title="1 of 2 branches missed.">        if (this.xsSchemaSet == null) {</span>
+<span class="fc" id="L416">            AtlasXmlSchemaSetParser schemaParser = new AtlasXmlSchemaSetParser(getClassLoader());</span>
+            try {
+<span class="fc" id="L418">                this.xsSchemaSet = schemaParser.parse(new FileInputStream(getDocumentSpecificationFile()));</span>
+<span class="nc" id="L419">            } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L420">                throw new AtlasException(&quot;Couldn't load the specification file&quot;, e);</span>
+<span class="fc" id="L421">            }</span>
+        }
+<span class="fc" id="L423">        return this.xsSchemaSet;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -15,6 +15,10 @@
  */
 package io.atlasmap.kafkaconnect.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -22,15 +26,18 @@ import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.kafkaconnect.core.KafkaConnectUtil;
 import io.atlasmap.kafkaconnect.inspect.KafkaConnectInspectionService;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
@@ -39,9 +46,15 @@ import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionRequest;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionResponse;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectSchemaType;
 import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
 import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -53,83 +66,119 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * Kafka Connect schema such as JSON or AVRO.
  */
 @Path(&quot;/kafkaconnect/&quot;)
-<span class="fc" id="L56">public class KafkaConnectService extends ModuleService {</span>
+public class KafkaConnectService extends ModuleService {
 
-<span class="fc" id="L58">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectService.class);</span>
-
-    @Context
-    private ResourceContext resourceContext;
+<span class="fc" id="L71">    private static final Logger LOG = LoggerFactory.getLogger(KafkaConnectService.class);</span>
 
     /**
-     * Inspects a Kafka Connect schema and return a Document object.
+     * A constructor.
+     * @param atlasService AtlasService
+     * @param documentService DocumentService
+     */
+    public KafkaConnectService(AtlasService atlasService, DocumentService documentService) {
+<span class="fc" id="L79">        super(atlasService, documentService);</span>
+<span class="fc" id="L80">        getDocumentService().registerModuleService(DocumentType.KAFKA_AVRO, this);</span>
+<span class="fc" id="L81">        getDocumentService().registerModuleService(DocumentType.KAFKA_JSON, this);</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Import a Kafka Connect schema and return a Document object.
      * @param request {@link KafkaConnectInspectionRequest}
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dataSourceType DataSourceType
+     * @param documentId Document ID
+     * @param uriInfo URI info
      * @return {@link KafkaConnectInspectionResponse}
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path(&quot;/inspect&quot;)
-    @Operation(summary = &quot;Inspect Kafka Connect Schema&quot;, description = &quot;Inspect a Kafka Connect schema and return a Document object&quot;)
+    @Path(&quot;/project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}&quot;)
+    @Operation(summary = &quot;Import Kafka Connect Document&quot;, description = &quot;Import a Kafka Connect schema and return a Document object&quot;)
     @RequestBody(description = &quot;KafkaConnectInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = KafkaConnectInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = KafkaConnectInspectionResponse.class)), description = &quot;Return a Document object represented by KafkaConnectDocument&quot;))
-    public Response inspect(InputStream request) {
-<span class="nc" id="L76">        return inspect(fromJson(request, KafkaConnectInspectionRequest.class));</span>
-    }
+    public Response importKafkaConnectDocument(
+            InputStream request,
+            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+            @Parameter(description = &quot;DataSource Type&quot;) @PathParam(&quot;dataSourceType&quot;) DataSourceType dataSourceType,
+            @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
+            @Context UriInfo uriInfo
+        ) {
+<span class="fc" id="L107">        long startTime = System.currentTimeMillis();</span>
 
-    /**
-     * Inspects a Kafka Connect schema and return a Document object.
-     * @param request request
-     * @return {@link KafkaConnectInspectionResponse}
-     */
-    public Response inspect(KafkaConnectInspectionRequest request) {
-<span class="fc" id="L85">        long startTime = System.currentTimeMillis();</span>
-
-<span class="fc" id="L87">        KafkaConnectInspectionResponse response = new KafkaConnectInspectionResponse();</span>
-<span class="fc" id="L88">        KafkaConnectDocument d = null;</span>
+<span class="fc" id="L109">        KafkaConnectInspectionRequest inspectionRequest = fromJson(request, KafkaConnectInspectionRequest.class);</span>
+<span class="fc" id="L110">        KafkaConnectInspectionResponse response = new KafkaConnectInspectionResponse();</span>
+<span class="fc" id="L111">        KafkaConnectDocument d = null;</span>
 
         try {
-
-<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            ClassLoader loader = resourceContext != null</span>
-<span class="nc" id="L93">                    ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
-<span class="fc" id="L94">                    : KafkaConnectService.class.getClassLoader();</span>
-<span class="fc" id="L95">            KafkaConnectInspectionService s = new KafkaConnectInspectionService(loader);</span>
-
-<span class="fc" id="L97">            String schemaTypeStr = request.getOptions().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
-<span class="fc" id="L98">            KafkaConnectSchemaType schemaType = KafkaConnectSchemaType.valueOf(schemaTypeStr);</span>
-<span class="fc" id="L99">            HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(request.getOptions());</span>
-    
-<span class="pc bpc" id="L101" title="2 of 3 branches missed.">            switch (schemaType) {</span>
-                case JSON:
-<span class="nc" id="L103">                    d = s.inspectJson(request.getSchemaData(), options);</span>
-<span class="nc" id="L104">                    break;</span>
-                case AVRO:
-<span class="fc" id="L106">                    d = s.inspectAvro(request.getSchemaData(), options);</span>
-<span class="fc" id="L107">                    break;</span>
-                default:
-<span class="nc" id="L109">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + schemaType);</span>
-                    break;
-            }
-<span class="nc" id="L112">        } catch (Exception e) {</span>
-<span class="nc" id="L113">            LOG.error(&quot;Error inspecting Kafka Connect schema: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L114">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L114">            DocumentMetadata metadata = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);</span>
+<span class="fc" id="L115">            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata);</span>
+<span class="fc" id="L116">            storeDocumentSpecification(mappingDefinitionId, dataSourceType, documentId, new ByteArrayInputStream(inspectionRequest.getSchemaData().getBytes()));</span>
+<span class="fc" id="L117">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L118">            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);</span>
+<span class="fc" id="L119">            File specFile = admHandler.getDocumentSpecificationFile(docKey);</span>
+<span class="fc" id="L120">            performDocumentInspection(mappingDefinitionId, metadata, specFile);</span>
+<span class="fc" id="L121">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
+<span class="fc" id="L122">            d = fromJson(new FileInputStream(f), KafkaConnectDocument.class);</span>
+<span class="nc" id="L123">        } catch (Exception e) {</span>
+<span class="nc" id="L124">            LOG.error(&quot;Error inspecting Kafka Connect schema: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L125">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L116">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L127">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L119">        response.setKafkaConnectDocument(d);</span>
-<span class="fc" id="L120">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L130">        response.setKafkaConnectDocument(d);</span>
+<span class="fc" id="L131">        return Response.ok().entity(toJson(response)).build();</span>
     }
+
+    @Override
+    public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
+            throws AtlasException {
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">                ClassLoader loader = getAtlasService() != null</span>
+<span class="fc" id="L138">                ? getAtlasService().getLibraryLoader()</span>
+<span class="pc" id="L139">                : KafkaConnectService.class.getClassLoader();</span>
+<span class="fc" id="L140">        KafkaConnectInspectionService s = new KafkaConnectInspectionService(loader);</span>
+
+<span class="fc" id="L142">        String schemaTypeStr = meta.getInspectionParameters().get(KafkaConnectConstants.OPTIONS_SCHEMA_TYPE);</span>
+<span class="fc" id="L143">        KafkaConnectSchemaType schemaType = KafkaConnectSchemaType.valueOf(schemaTypeStr);</span>
+<span class="fc" id="L144">        HashMap&lt;String, Object&gt; options = KafkaConnectUtil.repackParserOptions(meta.getInspectionParameters());</span>
+
+        KafkaConnectDocument d;
+        try {
+<span class="pc bpc" id="L148" title="2 of 3 branches missed.">            switch (schemaType) {</span>
+                case JSON:
+<span class="nc" id="L150">                    d = s.inspectJson(new FileInputStream(spec), options);</span>
+<span class="nc" id="L151">                    break;</span>
+                case AVRO:
+<span class="fc" id="L153">                    d = s.inspectAvro(new FileInputStream(spec), options);</span>
+<span class="fc" id="L154">                    break;</span>
+                default:
+<span class="nc" id="L156">                    throw new AtlasException(&quot;Unsupported inspection type: &quot; + schemaType);</span>
+            }
+<span class="nc" id="L158">        } catch (FileNotFoundException e) {</span>
+<span class="nc" id="L159">            throw new AtlasException(e);</span>
+<span class="fc" id="L160">        }</span>
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (d != null) {</span>
+<span class="fc" id="L162">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), d);</span>
+        }
+<span class="fc" id="L164">    }</span>
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L126">        return null;</span>
+<span class="nc" id="L169">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L132">        return null;</span>
+<span class="nc" id="L175">        return null;</span>
     }
+
+    @Override
+    protected Logger getLogger() {
+<span class="nc" id="L180">        return KafkaConnectService.LOG;</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

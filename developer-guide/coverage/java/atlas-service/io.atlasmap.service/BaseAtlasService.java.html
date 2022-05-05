@@ -79,15 +79,15 @@ import io.atlasmap.v2.Json;
      */
     protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt; clazz) {
         try {
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L83">                BufferedReader reader = new BufferedReader(new InputStreamReader(value));</span>
-<span class="nc" id="L84">                StringBuffer buf = new StringBuffer();</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L83">                BufferedReader reader = new BufferedReader(new InputStreamReader(value));</span>
+<span class="fc" id="L84">                StringBuffer buf = new StringBuffer();</span>
                 String line;
-<span class="nc bnc" id="L86" title="All 2 branches missed.">                while ((line = reader.readLine()) != null) {</span>
-<span class="nc" id="L87">                    buf.append(line);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">                while ((line = reader.readLine()) != null) {</span>
+<span class="fc" id="L87">                    buf.append(line);</span>
                 }
-<span class="nc" id="L89">                LOG.debug(buf.toString());</span>
-<span class="nc" id="L90">                return getMapper().readValue(buf.toString(), clazz);</span>
+<span class="fc" id="L89">                LOG.debug(buf.toString());</span>
+<span class="fc" id="L90">                return getMapper().readValue(buf.toString(), clazz);</span>
             }
 <span class="fc" id="L92">            return getMapper().readValue(value, clazz);</span>
 <span class="nc" id="L93">        } catch (IOException e) {</span>

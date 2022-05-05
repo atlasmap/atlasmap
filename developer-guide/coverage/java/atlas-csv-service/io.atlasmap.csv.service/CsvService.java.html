@@ -16,6 +16,8 @@
 package io.atlasmap.csv.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -24,25 +26,35 @@ import java.util.Map;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.container.ResourceContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
 import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
 import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Document;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -53,66 +65,107 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * CSV Service provides CSV inspection service which generate an AtlasMap Document object from the CSV.
  */
 @Path(&quot;/csv/&quot;)
-<span class="fc" id="L56">public class CsvService extends ModuleService {</span>
+public class CsvService extends ModuleService {
 
-<span class="fc" id="L58">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
-
-    @Context
-    private ResourceContext resourceContext;
+<span class="fc" id="L70">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
 
     /**
-     * Inspect a CSV instance and return a Document object.
+     * A constructor.
+     * @param atlasService AtlasService
+     * @param documentService DocumentService
+     */
+    public CsvService(AtlasService atlasService, DocumentService documentService) {
+<span class="fc" id="L78">        super(atlasService, documentService);</span>
+<span class="fc" id="L79">        getDocumentService().registerModuleService(DocumentType.CSV, this);</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Imports a CSV instance and return a Document object.
      * @param requestIn request
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dataSourceType DataSourceType
+     * @param documentId Document ID
+     * @param uriInfo URI info
      * @return {@link CsvInspectionResponse}
      * @throws IOException unexpected error
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path(&quot;/inspect&quot;)
-    @Operation(summary = &quot;Inspect CSV&quot;, description = &quot;Inspect a CSV instance and return a Document object&quot;)
-    @RequestBody(description = &quot;JsonInspectionRequest object&quot;,  content = @Content(schema = @Schema(implementation = CsvInspectionRequest.class)))
+    @Path(&quot;/project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}&quot;)
+    @Operation(summary = &quot;Import CSV&quot;, description = &quot;Import a CSV instance and return a Document object&quot;)
+    @RequestBody(description = &quot;CsvInspectionRequest object&quot;,  content = @Content(schema = @Schema(implementation = CsvInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = CsvInspectionResponse.class)),
         description = &quot;Return a Document object&quot;))
-    public Response inspect(InputStream requestIn) throws IOException  {
-<span class="fc" id="L78">        long startTime = System.currentTimeMillis();</span>
+    public Response importCsvDocument(
+            InputStream requestIn,
+            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+            @Parameter(description = &quot;DataSource Type&quot;) @PathParam(&quot;dataSourceType&quot;) DataSourceType dataSourceType,
+            @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
+            @Context UriInfo uriInfo
+        ) throws IOException  {
+<span class="fc" id="L107">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L80">        CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);</span>
-<span class="fc" id="L81">        Map&lt;String,String&gt; options = request.getOptions();</span>
-<span class="fc" id="L82">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
+<span class="fc" id="L109">        CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);</span>
+<span class="fc" id="L110">        DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);</span>
+<span class="fc" id="L111">        Map&lt;String,String&gt; options = request.getOptions();</span>
+<span class="fc" id="L112">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
         try {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L85">                LOG.debug(&quot;Options: {}&quot;, options);</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L115">                LOG.debug(&quot;Options: {}&quot;, options);</span>
             }
-<span class="fc" id="L87">            CsvConfig csvConfig = CsvConfig.newConfig(options);</span>
-<span class="fc" id="L88">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
-<span class="fc" id="L89">            csvFieldReader.setDocument(new ByteArrayInputStream(request.getCsvData().getBytes()));</span>
-
-<span class="fc" id="L91">            Document document = csvFieldReader.readSchema();</span>
-<span class="fc" id="L92">            response.setCsvDocument(document);</span>
-<span class="nc" id="L93">        } catch (Exception e) {</span>
-<span class="nc" id="L94">            LOG.error(&quot;Error inspecting CSV: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L95">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L117">            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), documentId, metadata);</span>
+<span class="fc" id="L118">            InputStream specification = new ByteArrayInputStream(request.getCsvData().getBytes());</span>
+<span class="fc" id="L119">            storeDocumentSpecification(mappingDefinitionId, metadata.getDataSourceType(), documentId, specification);</span>
+<span class="fc" id="L120">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L121">            DocumentKey docKey = new DocumentKey(metadata.getDataSourceType(), documentId);</span>
+<span class="fc" id="L122">            File specFile = admHandler.getDocumentSpecificationFile(docKey);</span>
+<span class="fc" id="L123">            performDocumentInspection(mappingDefinitionId, metadata, specFile);</span>
+<span class="fc" id="L124">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
+<span class="fc" id="L125">            response.setCsvDocument(fromJson(new FileInputStream(f), Document.class));</span>
+<span class="nc" id="L126">        } catch (Exception e) {</span>
+<span class="nc" id="L127">            LOG.error(&quot;Error importing CSV: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L128">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L97">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L130">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L101">            LOG.debug((&quot;Response: {}&quot; + new ObjectMapper().writeValueAsString(response)));</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L134">            LOG.debug((&quot;Response: {}&quot; + new ObjectMapper().writeValueAsString(response)));</span>
         }
-<span class="fc" id="L103">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L136">        return Response.ok().entity(toJson(response)).build();</span>
     }
+
+    @Override
+    public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
+            throws AtlasException {
+        try {
+<span class="fc" id="L143">            CsvConfig csvConfig = CsvConfig.newConfig(meta.getInspectionParameters());</span>
+<span class="fc" id="L144">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
+<span class="fc" id="L145">            csvFieldReader.setDocument(new FileInputStream(spec));</span>
+<span class="fc" id="L146">            Document document = csvFieldReader.readSchema();</span>
+<span class="fc" id="L147">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), document);</span>
+<span class="nc" id="L148">        } catch (Exception e) {</span>
+<span class="nc" id="L149">            throw new AtlasException(e);</span>
+<span class="fc" id="L150">        }</span>
+<span class="fc" id="L151">    }</span>
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L109">        return null;</span>
+<span class="nc" id="L156">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L115">        return null;</span>
+<span class="nc" id="L162">        return null;</span>
     }
+
+    @Override
+    protected Logger getLogger() {
+<span class="fc" id="L167">        return CsvService.LOG;</span>
+    }
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

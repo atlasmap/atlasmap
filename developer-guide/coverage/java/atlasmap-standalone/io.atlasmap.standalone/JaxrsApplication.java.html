@@ -15,10 +15,12 @@
  */
 package io.atlasmap.standalone;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import io.atlasmap.api.AtlasException;
@@ -37,87 +39,27 @@ import io.atlasmap.xml.service.XmlService;
  */
 @Component
 @ApplicationPath(&quot;/v2/atlas/&quot;)
-<span class="fc" id="L40">public class JaxrsApplication extends Application {</span>
+<span class="fc" id="L42">public class JaxrsApplication extends Application {</span>
 
-    /**
-     * Core service.
-     * @return Core service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public AtlasService atlasService() throws AtlasException {
-<span class="fc" id="L49">        return new AtlasService();</span>
+    @Override
+    public Set&lt;Object&gt; getSingletons() {
+<span class="fc" id="L46">        Set&lt;Object&gt; set = new HashSet&lt;&gt;();</span>
+        try {
+<span class="fc" id="L48">            AtlasService atlasService = new AtlasService();</span>
+<span class="fc" id="L49">            set.add(atlasService);</span>
+<span class="fc" id="L50">            DocumentService documentService = new DocumentService(atlasService);</span>
+<span class="fc" id="L51">            set.add(documentService);</span>
+<span class="fc" id="L52">            set.add(new MappingService(atlasService));</span>
+<span class="fc" id="L53">            set.add(new CsvService(atlasService, documentService));</span>
+<span class="fc" id="L54">            set.add(new DfdlService(atlasService, documentService));</span>
+<span class="fc" id="L55">            set.add(new JavaService(atlasService, documentService));</span>
+<span class="fc" id="L56">            set.add(new JsonService(atlasService, documentService));</span>
+<span class="fc" id="L57">            set.add(new KafkaConnectService(atlasService, documentService));</span>
+<span class="fc" id="L58">            set.add(new XmlService(atlasService, documentService));</span>
+<span class="nc" id="L59">        } catch (AtlasException e) {</span>
+<span class="nc" id="L60">            throw new IllegalStateException(e);</span>
+<span class="fc" id="L61">        }</span>
+<span class="fc" id="L62">        return set;</span>
     }
-
-    /**
-     * Mapping service.
-     * @return Mapping service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public MappingService mappingService() throws AtlasException {
-<span class="fc" id="L59">        return new MappingService(atlasService());</span>
-    }
-
-    /**
-     * Document service.
-     * @return Document service
-     * @throws AtlasException unexpected error
-     */
-    @Bean
-    public DocumentService documentService() throws AtlasException {
-<span class="fc" id="L69">        return new DocumentService(atlasService());</span>
-    }
-
-    /**
-     * Java service.
-     * @return Java service
-     */
-    @Bean
-    public JavaService javaService() {
-<span class="fc" id="L78">        return new JavaService();</span>
-    }
-
-    /**
-     * JSON service.
-     * @return JSON service
-     */
-    @Bean
-    public JsonService jsonService() {
-<span class="fc" id="L87">        return new JsonService();</span>
-    }
-
-    /**
-     * XML service.
-     * @return XML service
-     */
-    @Bean
-    public XmlService xmlService() {
-<span class="fc" id="L96">        return new XmlService();</span>
-    }
-
-    /**
-     * DFDL service.
-     * @return DFDL service.
-     */
-    @Bean
-    public DfdlService dfdlService() {
-<span class="fc" id="L105">        return new DfdlService();</span>
-    }
-
-    /**
-     * CSV service.
-     * @return CSV service.
-     */
-    @Bean
-<span class="fc" id="L113">    public CsvService csvService() { return new CsvService(); }</span>
-
-    /**
-     * Kafka Connect service.
-     * @return Kafka Connect service.
-     */
-    @Bean
-<span class="fc" id="L120">    public KafkaConnectService kafkaConnectService() { return new KafkaConnectService(); }</span>
-    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">13.16% </span>
+                <span class="strong">14.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/114</span>
+                <span class='fraction'>15/106</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.71% </span>
+                <span class="strong">15.96% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/102</span>
+                <span class='fraction'>15/94</span>
             </div>
         
             
@@ -409,18 +409,7 @@
 <a name='L351'></a><a href='#L351'>351</a>
 <a name='L352'></a><a href='#L352'>352</a>
 <a name='L353'></a><a href='#L353'>353</a>
-<a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a>
-<a name='L356'></a><a href='#L356'>356</a>
-<a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a>
-<a name='L360'></a><a href='#L360'>360</a>
-<a name='L361'></a><a href='#L361'>361</a>
-<a name='L362'></a><a href='#L362'>362</a>
-<a name='L363'></a><a href='#L363'>363</a>
-<a name='L364'></a><a href='#L364'>364</a>
-<a name='L365'></a><a href='#L365'>365</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L354'></a><a href='#L354'>354</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -457,15 +446,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -558,13 +543,6 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -801,7 +779,6 @@
 */
 import {
   CollectionType,
-  CommonUtil,
   ConfigModel,
   DocumentDefinition,
   DocumentInspectionUtil,
@@ -828,10 +805,7 @@ export async function <span class="fstat-no" title="function not covered" >chang
   isSource: boolean,
 ) {
   const <span class="cstat-no" title="statement not covered" >cfg = ConfigModel.getConfig();</span>
-  const <span class="cstat-no" title="statement not covered" >docDef = getDocDef(docId, cfg, isSource);</span>
-<span class="cstat-no" title="statement not covered" >  docDef.name = newDocName;</span>
-<span class="cstat-no" title="statement not covered" >  await cfg.fileService.updateDigestFile();</span>
-<span class="cstat-no" title="statement not covered" >  cfg.mappingService.refreshMappingUI();</span>
+<span class="cstat-no" title="statement not covered" >  await cfg.documentService.setDocumentName(isSource, docId, newDocName);</span>
 }
 &nbsp;
 /**
@@ -924,14 +898,7 @@ export async function <span class="fstat-no" title="function not covered" >remov
   cfg: ConfigModel,
 ): Promise&lt;boolean&gt; {
 <span class="cstat-no" title="statement not covered" >  return new Promise&lt;boolean&gt;(<span class="fstat-no" title="function not covered" >async (r</span>esolve<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >) =&gt; {</span></span></span>
-<span class="cstat-no" title="statement not covered" >    cfg.mappingService.removeDocumentReferenceFromAllMappings(docDef.id);</span>
-<span class="cstat-no" title="statement not covered" >    if (docDef.isSource) {</span>
-<span class="cstat-no" title="statement not covered" >      CommonUtil.removeItemFromArray(docDef, cfg.sourceDocs);</span>
-    } else {
-<span class="cstat-no" title="statement not covered" >      CommonUtil.removeItemFromArray(docDef, cfg.targetDocs);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    await cfg.mappingService.notifyMappingUpdated();</span>
-<span class="cstat-no" title="statement not covered" >    await cfg.fileService.updateDigestFile();</span>
+<span class="cstat-no" title="statement not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >    await cfg.documentService.deleteDocument(docDef);</span></span>
 <span class="cstat-no" title="statement not covered" >    resolve(true);</span>
   });
 }
@@ -1030,7 +997,7 @@ export async function <span class="fstat-no" title="function not covered" >impor
       )
       .then(<span class="fstat-no" title="function not covered" >(i</span>mportOk: boolean) =&gt; {
 <span class="cstat-no" title="statement not covered" >        if (importOk) {</span>
-<span class="cstat-no" title="statement not covered" >          cfg.fileService.updateDigestFile().finally(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >          cfg.documentService.fetchDocuments().finally(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >            cfg.errorService.addError(</span>
               new ErrorInfo({
                 message: `${selectedFile.name} import complete.`,
@@ -1077,7 +1044,7 @@ export function <span class="fstat-no" title="function not covered" >enableCusto
         selectedCollection as CollectionType,
       )
       .then(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        cfg.fileService.updateDigestFile().finally(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >        cfg.documentService.fetchDocuments().finally(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >          cfg.initializationService.updateStatus();</span>
 <span class="cstat-no" title="statement not covered" >          resolve(true);</span>
         });
@@ -1146,7 +1113,7 @@ export async function <span class="fstat-no" title="function not covered" >setDo
   const <span class="cstat-no" title="statement not covered" >docDef = getDocDef(docId, cfg, isSource);</span>
 <span class="cstat-no" title="statement not covered" >  docDef.inspectionParameters = parameters;</span>
 <span class="cstat-no" title="statement not covered" >  await cfg.mappingService.notifyMappingUpdated();</span>
-<span class="cstat-no" title="statement not covered" >  await cfg.fileService.updateDigestFile();</span>
+<span class="cstat-no" title="statement not covered" >  await cfg.documentService.fetchDocuments();</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -1155,7 +1122,7 @@ export async function <span class="fstat-no" title="function not covered" >setDo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 02 2022 17:26:26 GMT+0000 (Coordinated Universal Time)
+                at Thu May 05 2022 15:01:14 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -15,16 +15,52 @@
  */
 package io.atlasmap.service;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.Serializable;
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.v2.BaseInspectionRequest;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 /**
  * The base class for module services which provides Document format specific
  * backend REST services.
  */
-<span class="fc" id="L26">public abstract class ModuleService extends BaseAtlasService {</span>
-    
+public abstract class ModuleService extends BaseAtlasService {
+    private AtlasService atlasService;
+    private DocumentService documentService;
+
+    /**
+     * A constructor.
+     * @param atlasService AtlasService
+     * @param documentService DocumentService
+     */
+<span class="fc" id="L58">    public ModuleService(AtlasService atlasService, DocumentService documentService) {</span>
+<span class="fc" id="L59">        this.atlasService = atlasService;</span>
+<span class="fc" id="L60">        this.documentService = documentService;</span>
+<span class="fc" id="L61">    }</span>
+
+
     /**
      * Gets the Document Field that has the given path. If the field
      * is a COMPLEX field and the {@code recursive} is true, the children
@@ -41,6 +77,143 @@ import io.atlasmap.v2.Field;
      * @return matched fields
      */
     public abstract List&lt;Field&gt; searchFields(String keywords);
+
+    /**
+     * Perform Document inspection and store the inspection result.
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param meta DocumentMetadata
+     * @param spec Document Specification
+     */
+    public abstract void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec) throws AtlasException;
+
+    /**
+     * Gets the logger.
+     * @return logger
+     */
+    protected abstract Logger getLogger();
+
+    /**
+     * Gets the {@link AtlasService}.
+     * @return AtlasService
+     */
+    protected AtlasService getAtlasService() {
+<span class="fc" id="L100">        return this.atlasService;</span>
+    }
+
+    /**
+     * Gets the {@link DocumentService}.
+     * @return DocumentService
+     */
+    protected DocumentService getDocumentService() {
+<span class="fc" id="L108">        return this.documentService;</span>
+    }
+
+    /**
+     * Creates the {@link DocumentMetadata} from {@link BaseInspectionRequest}.
+     * @param request request
+     * @return created
+     */
+    protected &lt;T extends BaseInspectionRequest&gt; DocumentMetadata createDocumentMetadataFrom(T request, DataSourceType dsType, String documentId) {
+<span class="fc" id="L117">        DocumentMetadata answer = new DocumentMetadata();</span>
+<span class="pc bpc" id="L118" title="1 of 4 branches missed.">        if (request.getDocumentId() == null || !request.getDocumentId().equals(documentId)) {</span>
+<span class="fc" id="L119">            getLogger().warn(</span>
+                &quot;Document ID is not consistent - path parameter has '{}' while '{}' is in the InspectionRequest. '{}' will be used&quot;,
+<span class="fc" id="L121">                documentId, request.getDocumentId(), documentId);</span>
+        }
+<span class="fc" id="L123">        answer.setDataSourceType(dsType);</span>
+<span class="fc" id="L124">        answer.setId(documentId);</span>
+<span class="fc" id="L125">        answer.setName(request.getDocumentName());</span>
+<span class="fc" id="L126">        answer.setDescription(request.getDocumentDescription());</span>
+<span class="fc" id="L127">        answer.setDocumentType(request.getDocumentType());</span>
+<span class="fc" id="L128">        answer.setInspectionType(request.getInspectionType());</span>
+<span class="fc" id="L129">        answer.setInspectionParameters(request.getOptions());</span>
+<span class="fc" id="L130">        answer.setFieldNameExclusions(request.getFieldNameExclusions());</span>
+<span class="fc" id="L131">        answer.setTypeNameExclusions(request.getTypeNameExclusions());</span>
+<span class="fc" id="L132">        answer.setNamespaceExclusions(request.getNamespaceExclusions());</span>
+<span class="fc" id="L133">        return answer;</span>
+    }
+
+    /**
+     * Persists the InspectionRequest object as a Document metadata. The combination of the InspectionRequest and
+     * the Document specification stored with {@link #storeDocumentSpecification(Integer,DataSourceType,String,InputStream)}
+     * have to be a complete set for reproducing Document inspection.
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dsType DataSourceType indicating SOURCE or TARGET
+     * @param documentId Document ID
+     * @param metadata Document inspection request object, which contains Document metadata such as
+     * Document ID/name/description, inspection parameters, etc
+     */
+    protected void storeDocumentMetadata(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
+            DocumentMetadata metadata) {
+        try {
+<span class="fc" id="L149">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L150">            handler.setDocumentMetadata(new DocumentKey(dsType, documentId), metadata);</span>
+<span class="fc" id="L151">            handler.persist();</span>
+<span class="nc" id="L152">        } catch (Exception e) {</span>
+<span class="nc" id="L153">            throw new WebApplicationException(</span>
+<span class="nc" id="L154">                    String.format(&quot;Failed to store a metadata of the Document %s:%s&quot;, mappingDefinitionId, documentId),</span>
+                    e);
+<span class="fc" id="L156">        }</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Persists the Document specification such as JSON schema for the JSON Document. The combination of
+     * the InspectionRequest stored with {@link #storeDocumentMetadata(Integer,DataSourceType,String,DocumentMetadata)} and the Document specification
+     * have to be a complete set for reproducing Document inspection.
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dsType DataSourceType indicating SOURCE or TARGET
+     * @param documentId Document ID
+     * @param specification The Document specification to be inspected
+     */
+    protected void storeDocumentSpecification(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
+            InputStream specification) {
+        try {
+<span class="fc" id="L171">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L172">            handler.setDocumentSpecification(new DocumentKey(dsType, documentId), specification);</span>
+<span class="fc" id="L173">            handler.persist();</span>
+<span class="nc" id="L174">        } catch (Exception e) {</span>
+<span class="nc" id="L175">            throw new WebApplicationException(</span>
+<span class="nc" id="L176">                    String.format(&quot;Failed to store a specification of the Document %s:%s&quot;, mappingDefinitionId,</span>
+                            documentId),
+                    e);
+<span class="fc" id="L179">        }</span>
+<span class="fc" id="L180">    }</span>
+
+    /**
+     * Persists the Document inspection result as a JSON file. The &lt;code&gt;resultObject&lt;/code&gt; argument
+     * has to be serializable with Jackson.
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dsType DataSourceType indicating SOURCE or TARGET
+     * @param documentId Document ID
+     * @param resultObject Document inspection result object
+     */
+    protected void storeInspectionResult(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
+            Serializable resultObject) {
+        try {
+<span class="fc" id="L193">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L194">            handler.setDocumentInspectionResult(new DocumentKey(dsType, documentId), resultObject);</span>
+<span class="fc" id="L195">            handler.persist();</span>
+<span class="nc" id="L196">        } catch (Exception e) {</span>
+<span class="nc" id="L197">            throw new WebApplicationException(</span>
+<span class="nc" id="L198">                    String.format(&quot;Failed to store an inspection result of the Document %s:%s&quot;, mappingDefinitionId,</span>
+                            documentId),
+                    e);
+<span class="fc" id="L201">        }</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Simple liveness check method used in liveness checks. Must not be protected via authetication.
+     * @return pong
+     */
+    @GET
+    @Path(&quot;/ping&quot;)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Operation(summary = &quot;Ping&quot;, description = &quot;Simple liveness check method used in liveness checks. Must not be protected via authetication.&quot;)
+    @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(type = &quot;string&quot;)), description = &quot;Return 'pong'&quot;))
+    public Response ping() {
+<span class="nc" id="L214">        getLogger().debug(&quot;Ping...  responding with 'pong'.&quot;);</span>
+<span class="nc" id="L215">        return Response.ok().entity(&quot;pong&quot;).build();</span>
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

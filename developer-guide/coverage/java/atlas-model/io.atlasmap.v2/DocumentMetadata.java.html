@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>DocumentMetadata.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">Unit Test Coverage Report</a> &gt; <a href="../index.html" class="el_bundle">atlas-model</a> &gt; <a href="index.source.html" class="el_package">io.atlasmap.v2</a> &gt; <span class="el_source">DocumentMetadata.java</span></div><h1>DocumentMetadata.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Red Hat, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.atlasmap.v2;
+
+import java.io.Serializable;
+import java.util.Map;
+
+/**
+ * The Document metadata.
+ * @see DocumentCatalog
+ */
+<span class="fc" id="L25">public class DocumentMetadata implements Serializable {</span>
+
+    private static final long serialVersionUID = 1L;
+
+    /** Document ID. */
+    private String id;
+    /** Document name. */
+    private String name;
+    /** Document description. */
+    private String description;
+    /** URI. */
+    private String uri;
+    /** DataSource type */
+    private DataSourceType dataSourceType;
+    /** Document type */
+    private DocumentType documentType;
+    /** inspection type */
+    private InspectionType inspectionType;
+    /** inspection parameters */
+    private Map&lt;String,String&gt; inspectionParameters;
+    /** Field name exclusions. */
+    private StringList fieldNameExclusions;
+    /** Type name exclusions. */
+    private StringList typeNameExclusions;
+    /** Namespace exclusions. */
+    private StringList namespaceExclusions;
+
+    /**
+     * Gets the ID.
+     * @return ID
+     */
+    public String getId() {
+<span class="fc" id="L57">        return id;</span>
+    }
+
+    /**
+     * Sets the ID.
+     * @param id ID
+     */
+    public void setId(String id) {
+<span class="fc" id="L65">        this.id = id;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Gets the name.
+     * @return name
+     */
+    public String getName() {
+<span class="fc" id="L73">        return name;</span>
+    }
+
+    /**
+     * Sets the name.
+     * @param name name
+     */
+    public void setName(String name) {
+<span class="fc" id="L81">        this.name = name;</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Gets the description.
+     * @return description
+     */
+    public String getDescription() {
+<span class="fc" id="L89">        return description;</span>
+    }
+
+    /**
+     * Sets the description.
+     * @param description
+     */
+    public void setDescription(String description) {
+<span class="fc" id="L97">        this.description = description;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Gets the URI.
+     * @return URI
+     */
+    public String getUri() {
+<span class="fc" id="L105">        return uri;</span>
+    }
+
+    /**
+     * Sets the URI.
+     * @param uri URI
+     */
+    public void setUri(String uri) {
+<span class="nc" id="L113">        this.uri = uri;</span>
+<span class="nc" id="L114">    }</span>
+
+    /**
+     * Gets the Document type.
+     * @return Document type
+     */
+    public DocumentType getDocumentType() {
+<span class="fc" id="L121">        return documentType;</span>
+    }
+
+    /**
+     * Sets the Document type.
+     * @param documentType Document type
+     */
+    public void setDocumentType(DocumentType documentType) {
+<span class="fc" id="L129">        this.documentType = documentType;</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Gets the inspection type.
+     * @return inspection type
+     */
+    public InspectionType getInspectionType() {
+<span class="fc" id="L137">        return inspectionType;</span>
+    }
+
+    /**
+     * Sets the inspection type.
+     * @param inspectionType inspection type
+     */
+    public void setInspectionType(InspectionType inspectionType) {
+<span class="fc" id="L145">        this.inspectionType = inspectionType;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Gets the DataSource type.
+     * @return DataSource type
+     */
+    public DataSourceType getDataSourceType() {
+<span class="fc" id="L153">        return dataSourceType;</span>
+    }
+
+    /**
+     * Sets the DataSource type.
+     * @param dataSourceType DataSource type.
+     */
+    public void setDataSourceType(DataSourceType dataSourceType) {
+<span class="fc" id="L161">        this.dataSourceType = dataSourceType;</span>
+<span class="fc" id="L162">    }</span>
+
+    /**
+     * Gets the inspection parameters.
+     * @return inspection parameters
+     */
+    public Map&lt;String,String&gt; getInspectionParameters() {
+<span class="fc" id="L169">        return inspectionParameters;</span>
+    }
+
+    /**
+     * Sets the inspection parameters.
+     * @param inspectionParameters inspection parameters
+     */
+    public void setInspectionParameters(Map&lt;String,String&gt; inspectionParameters) {
+<span class="fc" id="L177">        this.inspectionParameters = inspectionParameters;</span>
+<span class="fc" id="L178">    }</span>
+
+    public StringList getFieldNameExclusions() {
+<span class="fc" id="L181">        return fieldNameExclusions;</span>
+    }
+
+    public void setFieldNameExclusions(StringList fieldNameExclusions) {
+<span class="fc" id="L185">        this.fieldNameExclusions = fieldNameExclusions;</span>
+<span class="fc" id="L186">    }</span>
+
+    public StringList getTypeNameExclusions() {
+<span class="fc" id="L189">        return typeNameExclusions;</span>
+    }
+
+    public void setTypeNameExclusions(StringList typeNameExclusions) {
+<span class="fc" id="L193">        this.typeNameExclusions = typeNameExclusions;</span>
+<span class="fc" id="L194">    }</span>
+
+    public StringList getNamespaceExclusions() {
+<span class="fc" id="L197">        return namespaceExclusions;</span>
+    }
+
+    public void setNamespaceExclusions(StringList namespaceExclusions) {
+<span class="fc" id="L201">        this.namespaceExclusions = namespaceExclusions;</span>
+<span class="fc" id="L202">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

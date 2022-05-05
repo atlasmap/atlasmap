@@ -15,12 +15,38 @@
  */
 package io.atlasmap.service;
 
+import java.io.File;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
-import javax.ws.rs.container.ResourceContext;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentCatalog;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 /**
  * Provides backend REST services for handling Documents.
@@ -29,29 +55,170 @@ import org.slf4j.LoggerFactory;
  */
 @Path(&quot;/project/{mappingDefinitionId}/document&quot;)
 public class DocumentService extends BaseAtlasService {
-<span class="fc" id="L32">    private static final Logger LOG = LoggerFactory.getLogger(DocumentService.class);</span>
+<span class="fc" id="L58">    private static final Logger LOG = LoggerFactory.getLogger(DocumentService.class);</span>
 
-    @Context
-    private ResourceContext resourceContext;
     private AtlasService atlasService;
+<span class="fc" id="L61">    private Map&lt;DocumentType, ModuleService&gt; moduleServices = new ConcurrentHashMap&lt;&gt;();</span>
 
     /**
      * A constructor.
+     * @param atlasService AtlasService
      */
-<span class="nc" id="L41">    public DocumentService() {</span>
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (resourceContext == null) {</span>
-<span class="nc" id="L43">            throw new IllegalStateException(&quot;JAX-RS ResourceContext is not injected&quot;);</span>
+<span class="fc" id="L67">    public DocumentService(AtlasService atlasService) {</span>
+<span class="fc" id="L68">        this.atlasService = atlasService;</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Retrieve a DocumentCatalog.
+     * @param mappingDefinitionId mapping definition ID
+     * @return DocumentCatalog
+     */
+    @GET
+    @Path(&quot;/&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    @Operation(summary = &quot;Get DocumentCatalog&quot;, description = &quot;Retrieve a Document catalog file saved on the server&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(implementation = DocumentCatalog.class)), description = &quot;Return a DocumentCatalog content&quot;),
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Document catalog file was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Document catalog file access error&quot;)})
+    public Response getDocumentCatalogRequest(
+      @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId) {
+<span class="fc" id="L86">        LOG.debug(&quot;getDocumentCatalogRequest: {}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L87">        ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+
+<span class="fc" id="L89">        byte[] serialized = null;</span>
+        try {
+<span class="fc" id="L91">            serialized = admHandler.getSerializedDocumentCatalog();</span>
+<span class="nc" id="L92">        } catch (Exception e) {</span>
+<span class="nc" id="L93">            LOG.error(&quot;Error retrieving Document catalog file for ID:&quot; + mappingDefinitionId, e);</span>
+<span class="nc" id="L94">            throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);</span>
+<span class="fc" id="L95">        }</span>
+<span class="pc bpc" id="L96" title="3 of 4 branches missed.">        if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
+<span class="nc" id="L97">            LOG.debug(new String(serialized));</span>
         }
-<span class="nc" id="L45">        this.atlasService = resourceContext.getResource(AtlasService.class);</span>
-<span class="nc" id="L46">    }</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (serialized == null) {</span>
+<span class="fc" id="L100">            LOG.debug(&quot;Document catalog not found for ID:{}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L101">            return Response.noContent().build();</span>
+        }
+<span class="fc" id="L103">        return Response.ok().entity(serialized).build();</span>
+    }
+
+    @GET
+    @Path(&quot;/{dataSourceType}/{documentId}/inspected&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    @Operation(summary = &quot;Get Document inspection result&quot;, description = &quot;Get the Document inspection result&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Document inspection result was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Document inspection result access error&quot;)})
+    public Response getDocumentInspectionResultRequest(
+      @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+      @Parameter(description = &quot;DataSource Type&quot;) @PathParam(&quot;dataSourceType&quot;) DataSourceType dataSourceType,
+      @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId
+      ) {
+<span class="fc" id="L118">        LOG.debug(&quot;getDocumentInspectionResultRequest: {}:{}:{}&quot;, mappingDefinitionId, dataSourceType, documentId);</span>
+        try {
+<span class="fc" id="L120">            ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L121">            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);</span>
+<span class="fc" id="L122">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
+<span class="pc bpc" id="L123" title="1 of 4 branches missed.">            if (f == null || !f.exists()) {</span>
+<span class="fc" id="L124">                DocumentMetadata meta = admHandler.getDocumentMetadata(docKey);</span>
+<span class="fc" id="L125">                File spec = admHandler.getDocumentSpecificationFile(docKey);</span>
+<span class="fc" id="L126">                ModuleService mod = moduleServices.get(meta.getDocumentType());</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">                if (mod == null) {</span>
+<span class="nc" id="L128">                    throw new WebApplicationException(String.format(&quot;Unsupported Document type '%s'&quot;, meta.getDocumentType()));</span>
+                }
+<span class="fc" id="L130">                mod.performDocumentInspection(mappingDefinitionId, meta, spec);</span>
+<span class="fc" id="L131">                f = admHandler.getDocumentInspectionResultFile(docKey);</span>
+            }
+<span class="fc" id="L133">            return Response.ok(f).build();</span>
+<span class="nc" id="L134">        } catch (AtlasException e) {</span>
+<span class="nc" id="L135">            throw new WebApplicationException(</span>
+<span class="nc" id="L136">                String.format(&quot;Failed to get the Document inspection result %s:%s:%s&quot;, mappingDefinitionId, dataSourceType, documentId),</span>
+                e);
+        }
+    }
 
     /**
-     * A constructor.
-     * @param parent parent {@link AtlasService}
+     * Set the Document Name of an existing Document.
+     * @param mappingDefinitionId mapping definition ID
+     * @param dataSourceType DataSourceType
+     * @param documentId Document ID
+     * @param name Document Name to set
+     * @return no content
      */
-<span class="fc" id="L52">    public DocumentService(AtlasService parent) {</span>
-<span class="fc" id="L53">        this.atlasService = parent;</span>
-<span class="fc" id="L54">    }</span>
+    @PUT
+    @Path(&quot;/{dataSourceType}/{documentId}/name&quot;)
+    @Produces({MediaType.TEXT_PLAIN})
+    @Operation(summary = &quot;Set Document Name&quot;, description = &quot;Set the Document Name of an existing Document&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Document was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Document access error&quot;)})
+    public Response setDocumentNameRequest(
+      @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+      @Parameter(description = &quot;DataSource Type&quot;) @PathParam(&quot;dataSourceType&quot;) DataSourceType dataSourceType,
+      @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
+      String name
+      ) {
+<span class="fc" id="L162">        LOG.debug(&quot;setDocumentNameRequest: {}:{}:{}:{}&quot;, mappingDefinitionId, dataSourceType, documentId, name);</span>
+        try {
+<span class="fc" id="L164">            ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L165">            DocumentCatalog catalog = admHandler.getDocumentCatalog();</span>
+            Optional&lt;DocumentMetadata&gt; meta =
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">                (dataSourceType == DataSourceType.SOURCE ? catalog.getSources() : catalog.getTargets())</span>
+<span class="fc" id="L168">                    .stream().filter((m -&gt; m.getId().equals(documentId))).findAny();</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (!meta.isPresent()) {</span>
+<span class="nc" id="L170">                return Response.status(Status.NOT_FOUND).build();</span>
+            }
+<span class="fc" id="L172">            meta.get().setName(name);</span>
+<span class="fc" id="L173">            admHandler.persist();</span>
+<span class="nc" id="L174">        } catch (AtlasException e) {</span>
+<span class="nc" id="L175">            throw new WebApplicationException(</span>
+<span class="nc" id="L176">                String.format(&quot;Failed to set the Document name %s:%s:%s:%s&quot;, mappingDefinitionId, dataSourceType, documentId, name),</span>
+                e);
+<span class="fc" id="L178">        }</span>
+<span class="fc" id="L179">        return Response.ok().build();</span>
+    }
+
+    /**
+     * Delete the Document and the mappings that refer to the Document being deleted.
+     * @param mappingDefinitionId mapping definition ID
+     * @param dataSourceType DataSourceType
+     * @param documentId Document ID
+     * @return no content
+     */
+    @DELETE
+    @Path(&quot;/{dataSourceType}/{documentId}&quot;)
+    @Produces({MediaType.APPLICATION_JSON})
+    @Operation(summary = &quot;Delete Document&quot;, description = &quot;Delete the Document&quot;)
+    @ApiResponses({
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Document was not found&quot;),
+        @ApiResponse(responseCode = &quot;500&quot;, description = &quot;Document access error&quot;)})
+    public Response deleteDocumentRequest(
+      @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+      @Parameter(description = &quot;DataSource Type&quot;) @PathParam(&quot;dataSourceType&quot;) DataSourceType dataSourceType,
+      @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId
+      ) {
+<span class="fc" id="L201">        LOG.debug(&quot;deleteDocumentRequest: {}:{}:{}&quot;, mappingDefinitionId, dataSourceType, documentId);</span>
+        try {
+<span class="fc" id="L203">            ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L204">            admHandler.deleteDocument(dataSourceType, documentId);</span>
+<span class="fc" id="L205">            admHandler.persist();</span>
+<span class="nc" id="L206">        } catch (AtlasException e) {</span>
+<span class="nc" id="L207">            throw new WebApplicationException(</span>
+<span class="nc" id="L208">                String.format(&quot;Failed to delete the Document %s:%s:%s&quot;, mappingDefinitionId, dataSourceType, documentId),</span>
+                e);
+<span class="fc" id="L210">        }</span>
+<span class="fc" id="L211">        return Response.ok().build();</span>
+    }
+
+    /**
+     * Registers the {@link ModuleService} with the its ID as a key.
+     * @param documentType Document Type
+     * @param instance service
+     */
+    public void registerModuleService(DocumentType documentType, ModuleService instance) {
+<span class="fc" id="L220">        moduleServices.put(documentType, instance);</span>
+<span class="fc" id="L221">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

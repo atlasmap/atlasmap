@@ -15,27 +15,42 @@
  */
 package io.atlasmap.xml.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.service.AtlasService;
+import io.atlasmap.service.DocumentService;
 import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
+import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.xml.inspect.XmlInspectionService;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -46,80 +61,115 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
  * XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.
  */
 @Path(&quot;/xml/&quot;)
-<span class="fc" id="L49">public class XmlService extends ModuleService {</span>
+public class XmlService extends ModuleService {
 
-<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
+<span class="fc" id="L66">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
 
     /**
-     * Inspects a XML schema or instance and return a Document object.
+     * A constructor.
+     * @param atlasService AtlasService
+     * @param documentService DocumentService
+     */
+    public XmlService(AtlasService atlasService, DocumentService documentService) {
+<span class="fc" id="L74">        super(atlasService, documentService);</span>
+<span class="fc" id="L75">        getDocumentService().registerModuleService(DocumentType.XML, this);</span>
+<span class="fc" id="L76">        getDocumentService().registerModuleService(DocumentType.XSD, this);</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Import a XML schema or instance and return a Document object.
      * @param request {@link XmlInspectionRequest}
+     * @param mappingDefinitionId Mapping Definition ID
+     * @param dataSourceType DataSourceType
+     * @param documentId Document ID
+     * @param uriInfo URI info
      * @return {@link XmlInspectionResponse}
      */
     @POST
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON })
-    @Path(&quot;/inspect&quot;)
-    @Operation(summary = &quot;Inspect XML&quot;, description = &quot;Inspect a XML schema or instance and return a Document object&quot;)
+    @Path(&quot;/project/{mappingDefinitionId}/document/{dataSourceType}/{documentId}&quot;)
+    @Operation(summary = &quot;Import XML&quot;, description = &quot;Import a XML schema or instance and return a Document object&quot;)
     @RequestBody(description = &quot;XmlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = XmlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;,  content = @Content(schema = @Schema(implementation = XmlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
-    public Response inspect(InputStream request) {
-<span class="fc" id="L66">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
-    }
+    public Response importXmlDocument(
+            InputStream request,
+            @Parameter(description = &quot;Mapping Definition ID&quot;) @PathParam(&quot;mappingDefinitionId&quot;) Integer mappingDefinitionId,
+            @Parameter(description = &quot;DataSource Type&quot;) @PathParam(&quot;dataSourceType&quot;) DataSourceType dataSourceType,
+            @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
+            @Context UriInfo uriInfo
+        ) {
+<span class="fc" id="L102">        long startTime = System.currentTimeMillis();</span>
 
-    /**
-     * Inspets a XML schema or instance and return a Document object.
-     * @param request request
-     * @return {@link XmlInspectionResponse}
-     */
-    public Response inspect(XmlInspectionRequest request) {
-<span class="fc" id="L75">        long startTime = System.currentTimeMillis();</span>
-
-<span class="fc" id="L77">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
-<span class="fc" id="L78">        XmlDocument d = null;</span>
+<span class="fc" id="L104">        XmlInspectionRequest inspectionRequest = fromJson(request, XmlInspectionRequest.class);</span>
+<span class="fc" id="L105">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
+<span class="fc" id="L106">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            if (request.getInspectionType() == null) {</span>
-<span class="nc" id="L83">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
-            } else {
-<span class="fc" id="L85">                XmlInspectionService s = new XmlInspectionService();</span>
-
-<span class="pc bpc" id="L87" title="2 of 3 branches missed.">                switch (request.getInspectionType()) {</span>
-                case INSTANCE:
-<span class="nc" id="L89">                    d = s.inspectXmlDocument(request.getXmlData());</span>
-<span class="nc" id="L90">                    break;</span>
-                case SCHEMA:
-<span class="fc" id="L92">                    d = s.inspectSchema(request.getXmlData());</span>
-<span class="fc" id="L93">                    break;</span>
-                default:
-<span class="nc" id="L95">                    response.setErrorMessage(&quot;Unsupported inspection type: &quot; + request.getInspectionType());</span>
-                    break;
-                }
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            if (inspectionRequest.getInspectionType() == null) {</span>
+<span class="nc" id="L111">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="nc" id="L112">                return Response.ok().entity(toJson(response)).build();</span>
             }
-<span class="nc" id="L99">        } catch (Exception e) {</span>
-<span class="nc" id="L100">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L101">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L114">            DocumentMetadata metadata = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);</span>
+<span class="fc" id="L115">            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata);</span>
+<span class="fc" id="L116">            storeDocumentSpecification(mappingDefinitionId, dataSourceType, documentId, new ByteArrayInputStream(inspectionRequest.getXmlData().getBytes()));</span>
+<span class="fc" id="L117">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L118">            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);</span>
+<span class="fc" id="L119">            File specFile = admHandler.getDocumentSpecificationFile(docKey);</span>
+<span class="fc" id="L120">            performDocumentInspection(mappingDefinitionId, metadata, specFile);</span>
+<span class="fc" id="L121">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
+<span class="fc" id="L122">            d = fromJson(new FileInputStream(f), XmlDocument.class);</span>
+<span class="nc" id="L123">        } catch (Exception e) {</span>
+<span class="nc" id="L124">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L125">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L103">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L127">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L106">        AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());</span>
+<span class="fc" id="L130">        AtlasUtil.excludeNotRequestedFields(d, inspectionRequest.getInspectPaths(), inspectionRequest.getSearchPhrase());</span>
 
-<span class="fc" id="L108">        response.setXmlDocument(d);</span>
-<span class="fc" id="L109">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L132">        response.setXmlDocument(d);</span>
+<span class="fc" id="L133">        return Response.ok().entity(toJson(response)).build();</span>
     }
+
+    @Override
+    public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
+            throws AtlasException {
+<span class="fc" id="L139">        XmlInspectionService s = new XmlInspectionService();</span>
+        XmlDocument d;
+<span class="pc bpc" id="L141" title="2 of 3 branches missed.">        switch (meta.getInspectionType()) {</span>
+            case INSTANCE:
+<span class="nc" id="L143">                d = s.inspectXmlDocument(spec);</span>
+<span class="nc" id="L144">                break;</span>
+            case SCHEMA:
+<span class="fc" id="L146">                d = s.inspectSchema(spec);</span>
+<span class="fc" id="L147">                break;</span>
+            default:
+<span class="nc" id="L149">                throw new AtlasException(&quot;Unsupported inspection type: &quot; + meta.getInspectionType());</span>
+        }
+<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (d != null) {</span>
+<span class="fc" id="L152">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), d);</span>
+        }
+<span class="fc" id="L154">    }</span>
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L115">        return null;</span>
+<span class="nc" id="L159">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L121">        return null;</span>
+<span class="nc" id="L165">        return null;</span>
     }
+
+    @Override
+    protected Logger getLogger() {
+<span class="fc" id="L170">        return XmlService.LOG;</span>
+    }
+
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

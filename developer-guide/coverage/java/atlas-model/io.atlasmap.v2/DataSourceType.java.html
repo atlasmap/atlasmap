@@ -16,14 +16,14 @@
 package io.atlasmap.v2;
 
 /**
- * The enumeration of {@link DataSource} type.
+ * The enumeration of {@link DataSource} type which indicates {@link #SOURCE} or {@link #TARGET}.
  */
 <span class="fc" id="L21">public enum DataSourceType {</span>
 
     /** Source. */
-<span class="fc" id="L24">    SOURCE(&quot;Source&quot;),</span>
+<span class="fc" id="L24">    SOURCE(&quot;SOURCE&quot;),</span>
     /** Target. */
-<span class="fc" id="L26">    TARGET(&quot;Target&quot;);</span>
+<span class="fc" id="L26">    TARGET(&quot;TARGET&quot;);</span>
 
     private final String value;
 
@@ -40,7 +40,7 @@ package io.atlasmap.v2;
      * @return value
      */
     public String value() {
-<span class="nc" id="L43">        return value;</span>
+<span class="fc" id="L43">        return value;</span>
     }
 
     /**
@@ -49,9 +49,9 @@ package io.atlasmap.v2;
      * @return the enum
      */
     public static DataSourceType fromValue(String v) {
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (DataSourceType c: DataSourceType.values()) {</span>
-<span class="nc bnc" id="L53" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
-<span class="nc" id="L54">                return c;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        for (DataSourceType c: DataSourceType.values()) {</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L54">                return c;</span>
             }
         }
 <span class="nc" id="L57">        throw new IllegalArgumentException(v);</span>

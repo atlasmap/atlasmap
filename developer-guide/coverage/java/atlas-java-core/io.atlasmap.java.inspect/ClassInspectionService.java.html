@@ -124,8 +124,8 @@ import io.atlasmap.v2.StringList;
      * @param disableProtectedOnlyFields true to disable, or false
      */
     public void setDisableProtectedOnlyFields(Boolean disableProtectedOnlyFields) {
-<span class="fc" id="L127">        this.disableProtectedOnlyFields = disableProtectedOnlyFields;</span>
-<span class="fc" id="L128">    }</span>
+<span class="nc" id="L127">        this.disableProtectedOnlyFields = disableProtectedOnlyFields;</span>
+<span class="nc" id="L128">    }</span>
 
     /**
      * Gets if it disables package private fields.
@@ -156,8 +156,8 @@ import io.atlasmap.v2.StringList;
      * @param disablePrivateOnlyFields true to disable, or false
      */
     public void setDisablePrivateOnlyFields(Boolean disablePrivateOnlyFields) {
-<span class="fc" id="L159">        this.disablePrivateOnlyFields = disablePrivateOnlyFields;</span>
-<span class="fc" id="L160">    }</span>
+<span class="nc" id="L159">        this.disablePrivateOnlyFields = disablePrivateOnlyFields;</span>
+<span class="nc" id="L160">    }</span>
 
     /**
      * Gets if it disables public fields.
@@ -172,8 +172,8 @@ import io.atlasmap.v2.StringList;
      * @param disablePublicOnlyFields true to disable, or false
      */
     public void setDisablePublicOnlyFields(Boolean disablePublicOnlyFields) {
-<span class="fc" id="L175">        this.disablePublicOnlyFields = disablePublicOnlyFields;</span>
-<span class="fc" id="L176">    }</span>
+<span class="nc" id="L175">        this.disablePublicOnlyFields = disablePublicOnlyFields;</span>
+<span class="nc" id="L176">    }</span>
 
     /**
      * Gets if it disables the field with public getter/setter.
@@ -188,8 +188,8 @@ import io.atlasmap.v2.StringList;
      * @param disablePublicGetterSetterFields true to disable, or false
      */
     public void setDisablePublicGetterSetterFields(Boolean disablePublicGetterSetterFields) {
-<span class="fc" id="L191">        this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;</span>
-<span class="fc" id="L192">    }</span>
+<span class="nc" id="L191">        this.disablePublicGetterSetterFields = disablePublicGetterSetterFields;</span>
+<span class="nc" id="L192">    }</span>
 
     /**
      * Inspects Java class as a Document and return {@link JavaClass} Java Document.
@@ -776,8 +776,8 @@ import io.atlasmap.v2.StringList;
 
                         // Merge get/set method info for interfaces that don't
                         // have fields
-<span class="pc bpc" id="L779" title="1 of 4 branches missed.">                        if (exists.getGetMethod() == null &amp;&amp; s.getGetMethod() != null) {</span>
-<span class="fc" id="L780">                            exists.setGetMethod(s.getGetMethod());</span>
+<span class="pc bpc" id="L779" title="3 of 4 branches missed.">                        if (exists.getGetMethod() == null &amp;&amp; s.getGetMethod() != null) {</span>
+<span class="nc" id="L780">                            exists.setGetMethod(s.getGetMethod());</span>
                         }
 <span class="fc bfc" id="L782" title="All 4 branches covered.">                        if (exists.getSetMethod() == null &amp;&amp; s.getSetMethod() != null) {</span>
 <span class="fc" id="L783">                            exists.setSetMethod(s.getSetMethod());</span>

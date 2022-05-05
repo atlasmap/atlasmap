@@ -87,8 +87,8 @@ public class DefaultAtlasModuleInfoRegistry implements AtlasModuleInfoRegistry {
 <span class="fc" id="L87">            ObjectName on = new ObjectName(n);</span>
 <span class="fc bfc" id="L88" title="All 2 branches covered.">            if (!ManagementFactory.getPlatformMBeanServer().isRegistered(on)) {</span>
 <span class="fc" id="L89">                ManagementFactory.getPlatformMBeanServer().registerMBean(module, on);</span>
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L91">                    LOG.debug(&quot;Registered AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;);</span>
+<span class="fc bfc" id="L90" title="All 2 branches covered.">                if (LOG.isDebugEnabled()) {</span>
+<span class="fc" id="L91">                    LOG.debug(&quot;Registered AtlasModule '&quot; + module.getName() + &quot;' with JMX&quot;);</span>
                 }
             }
 <span class="nc" id="L94">        } catch (Exception e) {</span>

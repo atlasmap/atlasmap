@@ -583,7 +583,7 @@ import io.atlasmap.v2.ValidationStatus;
      */
     public static void deleteDirectoryContents(File targetDir) {
 <span class="fc" id="L585">        File[] allContents = targetDir.listFiles();</span>
-<span class="pc bpc" id="L586" title="1 of 2 branches missed.">        if (allContents != null) {</span>
+<span class="fc bfc" id="L586" title="All 2 branches covered.">        if (allContents != null) {</span>
 <span class="fc bfc" id="L587" title="All 2 branches covered.">            for (File element : allContents) {</span>
 <span class="pc bpc" id="L588" title="1 of 2 branches missed.">                if (element.isFile()) {</span>
 <span class="nc" id="L589">                    element.delete();</span>

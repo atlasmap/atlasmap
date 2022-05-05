@@ -67,8 +67,8 @@ public class CsvFieldReader implements AtlasFieldReader {
      * @param inputStream CSV Document
      */
     public void setDocument(InputStream inputStream) {
-<span class="pc bpc" id="L70" title="1 of 4 branches missed.">        if (inputStream != null &amp;&amp; !inputStream.markSupported()) {</span>
-<span class="nc" id="L71">            this.document = new BufferedInputStream(inputStream);</span>
+<span class="fc bfc" id="L70" title="All 4 branches covered.">        if (inputStream != null &amp;&amp; !inputStream.markSupported()) {</span>
+<span class="fc" id="L71">            this.document = new BufferedInputStream(inputStream);</span>
         } else {
 <span class="fc" id="L73">            this.document = inputStream;</span>
         }
