@@ -176,24 +176,26 @@ export const MappingField: FunctionComponent<IMappingFieldProps> = ({
                       </Tooltip>
                     </SplitItem>
                   )}
-                  <SplitItem>
-                    <Tooltip
-                      position={'auto'}
-                      enableFlip={true}
-                      entryDelay={750}
-                      exitDelay={100}
-                      content={'Delete this field from the mapping.'}
-                    >
-                      <Button
-                        variant={'plain'}
-                        onClick={onDelete}
-                        className={styles.link}
-                        data-testid={`remove-${name}-from-mapping-button`}
+                  {!mappingExpressionEnabled && onDelete && (
+                    <SplitItem>
+                      <Tooltip
+                        position={'auto'}
+                        enableFlip={true}
+                        entryDelay={750}
+                        exitDelay={100}
+                        content={'Delete this field from the mapping.'}
                       >
-                        <TrashIcon />
-                      </Button>
-                    </Tooltip>
-                  </SplitItem>
+                        <Button
+                          variant={'plain'}
+                          onClick={onDelete}
+                          className={styles.link}
+                          data-testid={`remove-${name}-from-mapping-button`}
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </Tooltip>
+                    </SplitItem>
+                  )}
                 </Split>
                 {/*
                   Show established field action transformations associated with this

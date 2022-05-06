@@ -220,12 +220,12 @@ export class MappingManagementService {
   async updateMappedField(mapping: MappingModel): Promise<boolean> {
     return new Promise<boolean>(async (resolve) => {
       if (mapping.isEmpty()) {
-        this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
+        this.removeMapping(mapping);
         this.deselectMapping();
       } else {
         this.updateTransition(mapping);
       }
-      await this.notifyMappingUpdated();
+      await this.notifyFetchMapping();
       resolve(true);
     });
   }
@@ -254,6 +254,55 @@ export class MappingManagementService {
     );
     mappedFields.splice(targetIndex - 1, 0, insertedMappedField);
     this.clearExtraPaddingFields(mappedFields, true);
+  }
+
+  /**
+   * Invoked the backend service to remove the specified field from the specified
+   * mapping.
+   *
+   * @param mapping
+   * @param mappedField
+   * @returns
+   */
+  removeMappedField(
+    mapping: MappingModel,
+    mappedField: MappedField
+  ): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      if (!mappedField || !mappedField.field || !mapping) {
+        resolve(false);
+        return;
+      }
+      const dataSourceType = mappedField.isSource()
+        ? DataSourceType.SOURCE
+        : DataSourceType.TARGET;
+
+      const url: string =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'project/' +
+        this.cfg.mappingDefinitionId +
+        '/mapping/' +
+        mapping.uuid +
+        '/field/' +
+        dataSourceType +
+        '/' +
+        mappedField.mappingField?.index;
+
+      this.api
+        .delete(url)
+        .then(async (res: Response) => {
+          this.cfg.logger!.debug(`Remove Mapped Field Response: ${res.ok}`);
+          await this.notifyFetchMapping();
+          resolve(true);
+        })
+        .catch((error: any) => {
+          this.cfg.errorService.addBackendError(
+            'Error occurred while removing mapped field from mapping.',
+            error
+          );
+          resolve(false);
+        });
+    });
   }
 
   /**
@@ -656,43 +705,50 @@ export class MappingManagementService {
    * Remove any mappings referencing the specified document ID.
    *
    * @param docId - Specified document ID
-   * @param cfg
    */
-  removeDocumentReferenceFromAllMappings(docId: string) {
-    for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-      for (const mappedField of mapping.getAllFields()) {
-        if (
-          mappedField instanceof PaddingField ||
-          mappedField.docDef.id !== docId
-        ) {
-          continue;
-        }
-        this.removeFieldFromAllMappings(mappedField);
-        if (
-          mapping.sourceFields.length === 0 ||
-          mapping.targetFields.length === 0
-        ) {
-          this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
-          if (mapping === this.cfg.mappings!.activeMapping) {
-            // TODO: check this non null operator
-            this.cfg.mappingService.deselectMapping();
+  async removeDocumentReferenceFromAllMappings(
+    docId: string
+  ): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
+        for (const mappedField of mapping.getAllFields()) {
+          if (
+            mappedField instanceof PaddingField ||
+            mappedField.docDef.id !== docId
+          ) {
+            continue;
+          }
+          await this.removeFieldFromAllMappings(mappedField);
+          if (
+            mapping.sourceFields.length === 0 ||
+            mapping.targetFields.length === 0
+          ) {
+            if (mapping === this.cfg.mappings!.activeMapping) {
+              this.cfg.mappingService.deselectMapping();
+            }
           }
         }
       }
-    }
+      resolve(true);
+    });
   }
 
-  removeFieldFromAllMappings(field: Field): void {
-    // TODO: check this non null operator
-    for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
-      const mappedField = mapping.getMappedFieldForField(field);
-      if (mappedField != null) {
-        mapping.removeMappedField(mappedField);
-        if (mapping.isEmpty()) {
-          this.cfg.mappings!.removeMapping(mapping); // TODO: check this non null operator
+  /**
+   * Remove the specified field from all existing mappings.
+   *
+   * @param field - mapped field to remove
+   */
+  async removeFieldFromAllMappings(field: Field): Promise<boolean> {
+    return new Promise<boolean>(async (resolve) => {
+      for (const mapping of this.cfg.mappings!.getAllMappings(true)) {
+        const mappedField = mapping.getMappedFieldForField(field);
+        if (mappedField != null) {
+          await this.removeMappedField(mapping, mappedField);
         }
       }
-    }
+      this.notifyFetchMapping();
+      resolve(true);
+    });
   }
 
   /**

@@ -34,9 +34,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Json;
@@ -146,4 +148,11 @@ public class MappingServiceTest {
         assertEquals("param foo", pmr.getMapping().getOutputField().get(0).getValue());
     }
 
+    @Test
+    public void testRemoveFieldMappingRequest() throws Exception {
+        Response res =
+            mappingService.processMappingRequest(this.getClass().getClassLoader().getResourceAsStream("mappings/process-mapping-request-3935.json"),
+            0, Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project/0/mapping/mapping.xxxxxx/field/TARGET/1"));
+        assertEquals(200, res.getStatus());
+    }
 }
