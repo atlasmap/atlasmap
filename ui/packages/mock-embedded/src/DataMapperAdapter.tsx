@@ -29,12 +29,11 @@ export interface IDataMapperAdapterProps {
   inputDocuments: IExternalDocumentProps[];
   outputDocument: IExternalDocumentProps;
   initialMappings?: string;
-  baseAtlasServiceUrl: string;
+  baseMappingServiceUrl: string;
   baseJavaInspectionServiceUrl: string;
   baseXMLInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
   baseCSVInspectionServiceUrl: string;
-  baseKafkaConnectInspectionServiceUrl: string;
   onMappings(mappings: string): void;
 }
 
@@ -48,55 +47,49 @@ export interface IParameter {
   required?: boolean;
 }
 
-export const DataMapperAdapter: React.FunctionComponent<
-  IDataMapperAdapterProps
-> = ({
-  documentId,
-  inputDocuments,
-  outputDocument,
-  initialMappings,
-  baseAtlasServiceUrl,
-  baseJavaInspectionServiceUrl,
-  baseXMLInspectionServiceUrl,
-  baseJSONInspectionServiceUrl,
-  baseCSVInspectionServiceUrl,
-  baseKafkaConnectInspectionServiceUrl,
-  onMappings,
-}) => {
-  const externalDocument = React.useMemo(
-    () =>
-      ({
-        documentId,
-        initialMappings,
-        inputDocuments,
-        outputDocument,
-      } as IAtlasmapProviderProps['externalDocument']),
-    [initialMappings, documentId, inputDocuments, outputDocument],
-  );
-  return (
-    <AtlasmapProvider
-      logLevel={'warn'}
-      baseAtlasServiceUrl={baseAtlasServiceUrl}
-      baseJSONInspectionServiceUrl={baseJSONInspectionServiceUrl}
-      baseJavaInspectionServiceUrl={baseJavaInspectionServiceUrl}
-      baseXMLInspectionServiceUrl={baseXMLInspectionServiceUrl}
-      baseCSVInspectionServiceUrl={baseCSVInspectionServiceUrl}
-      baseKafkaConnectInspectionServiceUrl={
-        baseKafkaConnectInspectionServiceUrl
-      }
-      externalDocument={externalDocument}
-      onMappingChange={onMappings}
-    >
-      <Atlasmap
-        allowImport={false}
-        allowExport={false}
-        allowDeleteReset={false}
-        allowDelete={false}
-        allowCustomJavaClasses={false}
-      />
-    </AtlasmapProvider>
-  );
-};
+export const DataMapperAdapter: React.FunctionComponent<IDataMapperAdapterProps> =
+  ({
+    documentId,
+    inputDocuments,
+    outputDocument,
+    initialMappings,
+    baseMappingServiceUrl,
+    baseJavaInspectionServiceUrl,
+    baseXMLInspectionServiceUrl,
+    baseJSONInspectionServiceUrl,
+    baseCSVInspectionServiceUrl,
+    onMappings,
+  }) => {
+    const externalDocument = React.useMemo(
+      () =>
+        ({
+          documentId,
+          initialMappings,
+          inputDocuments,
+          outputDocument,
+        } as IAtlasmapProviderProps['externalDocument']),
+      [initialMappings, documentId, inputDocuments, outputDocument],
+    );
+    return (
+      <AtlasmapProvider
+        logLevel={'warn'}
+        baseMappingServiceUrl={baseMappingServiceUrl}
+        baseJSONInspectionServiceUrl={baseJSONInspectionServiceUrl}
+        baseJavaInspectionServiceUrl={baseJavaInspectionServiceUrl}
+        baseXMLInspectionServiceUrl={baseXMLInspectionServiceUrl}
+        baseCSVInspectionServiceUrl={baseCSVInspectionServiceUrl}
+        externalDocument={externalDocument}
+        onMappingChange={onMappings}
+      >
+        <Atlasmap
+          allowImport={false}
+          allowExport={false}
+          allowDelete={false}
+          allowCustomJavaClasses={false}
+        />
+      </AtlasmapProvider>
+    );
+  };
 
 export interface IParameterOption {
   label: string;

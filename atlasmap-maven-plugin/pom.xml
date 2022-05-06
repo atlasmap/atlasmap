@@ -25,72 +25,13 @@
     <relativePath>../parent</relativePath>
   </parent>
 
-  <artifactId>atlasmap-maven-plugin</artifactId>
-  <name>AtlasMap Maven Plugin</name>
-  <description>A maven plugin to process Document inspection (atlasmap:generate-inspections) and generate transformation metadata (atlasmap:fenerate-field-actions)</description>
-  <packaging>maven-plugin</packaging>
+  <artifactId>atlasmap-maven-plugin-parent</artifactId>
+  <name>AtlasMap Maven Plugin Parent</name>
+  <description>AtlasMap Maven Plugin Parent</description>
+  <packaging>pom</packaging>
 
-  <properties>
-  </properties>
-
-  <dependencies>
-
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-service</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-json-service</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-xml-service</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-plugin-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven.plugin-tools</groupId>
-      <artifactId>maven-plugin-annotations</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-plugin-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-descriptor</id>
-            <phase>process-classes</phase>
-          </execution>
-          <execution>
-            <id>help-goal</id>
-            <goals>
-              <goal>helpmojo</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+  <modules>
+    <module>mojo</module>
+    <module>tests</module>
+  </modules>
 </project>

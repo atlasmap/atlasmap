@@ -28,10 +28,7 @@ import io.atlasmap.csv.service.CsvService;
 import io.atlasmap.dfdl.service.DfdlService;
 import io.atlasmap.java.service.JavaService;
 import io.atlasmap.json.service.JsonService;
-import io.atlasmap.kafkaconnect.service.KafkaConnectService;
 import io.atlasmap.service.AtlasService;
-import io.atlasmap.service.DocumentService;
-import io.atlasmap.service.MappingService;
 import io.atlasmap.xml.service.XmlService;
 
 /**
@@ -47,15 +44,11 @@ public class JaxrsApplication extends Application {
         try {
             AtlasService atlasService = new AtlasService();
             set.add(atlasService);
-            DocumentService documentService = new DocumentService(atlasService);
-            set.add(documentService);
-            set.add(new MappingService(atlasService));
-            set.add(new CsvService(atlasService, documentService));
-            set.add(new DfdlService(atlasService, documentService));
-            set.add(new JavaService(atlasService, documentService));
-            set.add(new JsonService(atlasService, documentService));
-            set.add(new KafkaConnectService(atlasService, documentService));
-            set.add(new XmlService(atlasService, documentService));
+            set.add(new CsvService());
+            set.add(new DfdlService());
+            set.add(new JavaService());
+            set.add(new JsonService());
+            set.add(new XmlService());
         } catch (AtlasException e) {
             throw new IllegalStateException(e);
         }

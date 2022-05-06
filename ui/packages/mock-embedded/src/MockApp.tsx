@@ -54,8 +54,7 @@ const MockApp: React.FC = () => {
           baseXMLInspectionServiceUrl={'/v2/atlas/xml/'}
           baseJSONInspectionServiceUrl={'/v2/atlas/json/'}
           baseCSVInspectionServiceUrl={'/v2/atlas/csv/'}
-          baseKafkaConnectInspectionServiceUrl={'/v2/atlas/kafkaconnect/'}
-          baseAtlasServiceUrl={'/v2/atlas/'}
+          baseMappingServiceUrl={'/v2/atlas/'}
           onMappings={function (mappings: string): void {
             receivedMappings = mappings;
           }}
