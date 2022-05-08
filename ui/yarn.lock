@@ -11778,9 +11778,9 @@ jest-config@^24.9.0:
     realpath-native "^1.1.0"
 
 jest-css-modules-transform@^4.2.1:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/jest-css-modules-transform/-/jest-css-modules-transform-4.4.0.tgz#fa484919c156ca5f1e53ae57beb7619db1016e24"
-  integrity sha512-3SR/8bo6t3etvipzXZThNSqJc3/uJ+XIbgM3F6XZ4kjvzkZMuJG2Z8M3LQ6yWJwWQrtAJ8cNLhSj8wERjaYbyw==
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/jest-css-modules-transform/-/jest-css-modules-transform-4.4.2.tgz#a090b0e5beb346c9e719588f34ccdb8ac4e5591f"
+  integrity sha512-qsUVOcY26chaFMJNMVrFYJBtYvPt1TImi9FWGaVycfsP6xnFW2HlnKRdZdKdg2LVVBv2Q9M4aLv7IbxPSXqPmg==
   dependencies:
     camelcase "6.3.0"
     postcss "^7.0.30 || ^8.0.0"
