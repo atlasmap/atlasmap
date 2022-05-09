@@ -248,7 +248,10 @@ public class MappingService extends BaseAtlasService {
         try {
             ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);
             if (admHandler != null) {
-                admHandler.deleteMappingField(dataSourceType, mappingId, fieldIndex);
+                AtlasMapping def = admHandler.getMappingDefinition();
+                admHandler.getAtlasMappingHandler().removeMappingField(def, dataSourceType, mappingId, fieldIndex);
+                admHandler.setMappingDefinition(def);
+                admHandler.persist();
             }
         } catch (AtlasException e) {
             LOG.error("Error removing mapping from a mapping definition file for ID: " + mappingDefinitionId, e);

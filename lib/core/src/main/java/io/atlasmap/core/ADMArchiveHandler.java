@@ -721,21 +721,6 @@ public class ADMArchiveHandler {
     }
 
     /**
-     * Delete the specified field from the specified mapping.
-     *
-     * @param dsType
-     * @param mappingId
-     * @param fieldIndex
-     * @throws AtlasException
-     */
-    public void deleteMappingField(DataSourceType dsType, String mappingId, Integer fieldIndex) throws AtlasException {
-        AtlasMapping def = getMappingDefinition();
-        getAtlasMappingHandler().removeMappingField(def, dsType, mappingId, fieldIndex);
-        setMappingDefinition(def);
-        persist();
-    }
-
-    /**
      * Loads ADM Archive from an exploded directory.
      * @param dir directory path.
      * @throws AtlasException unexpected error
