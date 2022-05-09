@@ -25,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -90,9 +90,9 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     private DefaultAtlasContextFactory factory;
     private URI atlasMappingUri;
     private ADMArchiveHandler admHandler;
-    private Map<String, AtlasModule> sourceModules = new HashMap<>();
-    private Map<String, AtlasModule> targetModules = new HashMap<>();
-    private Map<String, LookupTable> lookupTables = new HashMap<>();
+    private Map<String, AtlasModule> sourceModules = new LinkedHashMap<>();
+    private Map<String, AtlasModule> targetModules = new LinkedHashMap<>();
+    private Map<String, LookupTable> lookupTables = new LinkedHashMap<>();
     private boolean initialized;
 
     /**
@@ -833,7 +833,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
             if (combineValues == null) {
                 // We need to support a sorted map w/ null values
-                combineValues = new HashMap<>();
+                combineValues = new LinkedHashMap<>();
             }
 
             if (sourceField.getValue() != null) {

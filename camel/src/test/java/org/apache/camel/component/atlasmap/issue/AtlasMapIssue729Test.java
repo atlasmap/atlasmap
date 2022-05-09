@@ -60,7 +60,7 @@ public class AtlasMapIssue729Test {
         MockEndpoint.assertIsSatisfied(camelContext);
         Exchange exchange = result.getExchanges().get(0);
         Map<?, ?> targetMap = exchange.getIn().getBody(Map.class);
-        TargetContact javaTarget = (TargetContact) targetMap.get("DOCID:JAVA:CONTACT:T");
+        TargetContact javaTarget = (TargetContact) targetMap.get("DOCID-JAVA-CONTACT-T");
         assertEquals("JavaFirstName", javaTarget.getFirstName());
 
     }
