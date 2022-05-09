@@ -3,32 +3,32 @@
     "jsonType" : "io.atlasmap.v2.AtlasMapping",
     "dataSource" : [ {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "DOCID:JAVA:CONTACT:S",
+      "id" : "DOCID-JAVA-CONTACT-S",
       "uri" : "atlas:java?className=io.atlasmap.java.test.SourceContact",
       "dataSourceType" : "SOURCE"
     }, {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "DOCID:JSON:CONTACT:S",
+      "id" : "DOCID-JSON-CONTACT-S",
       "uri" : "atlas:json:JSONContact",
       "dataSourceType" : "SOURCE"
     }, {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "DOCID:XML:CONTACT:S",
+      "id" : "DOCID-XML-CONTACT-S",
       "uri" : "atlas:xml:XMLContact",
       "dataSourceType" : "SOURCE"
     }, {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "DOCID:JAVA:CONTACT:T",
+      "id" : "DOCID-JAVA-CONTACT-T",
       "uri" : "atlas:java?className=io.atlasmap.java.test.TargetContact",
       "dataSourceType" : "TARGET"
     }, {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "DOCID:JSON:CONTACT:T",
+      "id" : "DOCID-JSON-CONTACT-T",
       "uri" : "atlas:json:JSONContact",
       "dataSourceType" : "TARGET"
     }, {
       "jsonType" : "io.atlasmap.v2.DataSource",
-      "id" : "DOCID:XML:CONTACT:T",
+      "id" : "DOCID-XML-CONTACT-T",
       "uri" : "atlas:xml:XMLContact",
       "dataSourceType" : "TARGET"
     } ],
@@ -38,7 +38,7 @@
         "mappingType" : "MAP",
         "inputField" : [ {
           "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "DOCID:JAVA:CONTACT:S",
+          "docId" : "DOCID-JAVA-CONTACT-S",
           "path" : "/firstName",
           "fieldType" : "STRING",
           "name" : "firstName",
@@ -46,7 +46,7 @@
         } ],
         "outputField" : [ {
           "jsonType" : "io.atlasmap.java.v2.JavaField",
-          "docId" : "DOCID:JAVA:CONTACT:T",
+          "docId" : "DOCID-JAVA-CONTACT-T",
           "path" : "/firstName",
           "fieldType" : "STRING",
           "name" : "firstName",
