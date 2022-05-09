@@ -96,9 +96,9 @@ public class DocumentService extends BaseAtlasService {
 <span class="pc bpc" id="L96" title="3 of 4 branches missed.">        if (LOG.isDebugEnabled() &amp;&amp; serialized != null) {</span>
 <span class="nc" id="L97">            LOG.debug(new String(serialized));</span>
         }
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (serialized == null) {</span>
-<span class="nc" id="L100">            LOG.debug(&quot;Document catalog not found for ID:{}&quot;, mappingDefinitionId);</span>
-<span class="nc" id="L101">            return Response.noContent().build();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (serialized == null) {</span>
+<span class="fc" id="L100">            LOG.debug(&quot;Document catalog not found for ID:{}&quot;, mappingDefinitionId);</span>
+<span class="fc" id="L101">            return Response.noContent().build();</span>
         }
 <span class="fc" id="L103">        return Response.ok().entity(serialized).build();</span>
     }
