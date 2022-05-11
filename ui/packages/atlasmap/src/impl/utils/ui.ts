@@ -349,6 +349,16 @@ export function mappingExpressionAddField(
   initializationService.cfg.mappingService.notifyMappingUpdated();
 }
 
+function removeMappedField(mapping: MappingModel, mappedField: MappedField) {
+  if (mappedField!.field!.isCollection) {
+    mapping.removeReferenceField(mappedField);
+  }
+  CommonUtil.removeItemFromArray(
+    mappedField,
+    mapping.getMappedFields(mappedField.field!.isSource()),
+  );
+}
+
 export function mappingExpressionInit() {
   if (
     !initializationService.cfg.mappings ||
@@ -362,7 +372,7 @@ export function mappingExpressionInit() {
   mapping
     .getMappedFields(true)
     .filter((mf) => mf.isPadField())
-    .forEach((mf) => mapping.removeMappedField(mf));
+    .forEach((mf) => removeMappedField(mapping, mf));
 
   if (!mapping.transition.expression) {
     mapping.transition.expression = new ExpressionModel(

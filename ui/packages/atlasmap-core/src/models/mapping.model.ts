@@ -176,20 +176,6 @@ export class MappingModel {
     this.getMappedFields(isSource).push(mappedField);
   }
 
-  removeMappedField(mappedField: MappedField): void {
-    if (!mappedField || !mappedField.field) {
-      return;
-    }
-    if (mappedField.field.isCollection) {
-      this.removeReferenceField(mappedField);
-    }
-    CommonUtil.removeItemFromArray(
-      mappedField,
-      this.getMappedFields(mappedField.field!.isSource())
-    );
-    this.cfg.mappingService.notifyMappingUpdated();
-  }
-
   getMappedFieldForField(field: Field): MappedField | null {
     if (!field || !field.isSource) {
       return null;

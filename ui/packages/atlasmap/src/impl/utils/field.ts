@@ -239,29 +239,21 @@ export function addToCurrentMapping(field: Field): void {
  *
  * @param field
  */
-export function removeFromCurrentMapping(field: Field): void {
+export async function removeFieldFromCurrentMapping(
+  field: Field | MappedField,
+) {
   const cfg = ConfigModel.getConfig();
   const mapping = cfg.mappings?.activeMapping;
   if (mapping) {
-    const mappedField = mapping.getMappedFieldForField(field);
-    if (mappedField) {
-      mapping.removeMappedField(mappedField);
-      cfg.mappingService.updateMappedField(mapping);
+    let mappedField;
+    if (field instanceof Field) {
+      mappedField = mapping.getMappedFieldForField(field);
+    } else {
+      mappedField = field;
     }
-  }
-}
-
-/**
- * Add the specified field to the current mapping.
- *
- * @param field
- */
-export function removeMappedFieldFromCurrentMapping(field: MappedField): void {
-  const cfg = ConfigModel.getConfig();
-  const mapping = cfg.mappings?.activeMapping;
-  if (mapping && field) {
-    mapping.removeMappedField(field);
-    cfg.mappingService.updateMappedField(mapping);
+    if (mappedField) {
+      await cfg.mappingService.removeMappedField(mapping, mappedField);
+    }
   }
 }
 
