@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.12% </span>
+                <span class="strong">15.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/242</span>
+                <span class='fraction'>39/245</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/218</span>
+                <span class='fraction'>0/220</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/49</span>
+                <span class='fraction'>0/50</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.67% </span>
+                <span class="strong">16.46% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>39/234</span>
+                <span class='fraction'>39/237</span>
             </div>
         
             
@@ -768,7 +768,17 @@
 <a name='L710'></a><a href='#L710'>710</a>
 <a name='L711'></a><a href='#L711'>711</a>
 <a name='L712'></a><a href='#L712'>712</a>
-<a name='L713'></a><a href='#L713'>713</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L713'></a><a href='#L713'>713</a>
+<a name='L714'></a><a href='#L714'>714</a>
+<a name='L715'></a><a href='#L715'>715</a>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a>
+<a name='L718'></a><a href='#L718'>718</a>
+<a name='L719'></a><a href='#L719'>719</a>
+<a name='L720'></a><a href='#L720'>720</a>
+<a name='L721'></a><a href='#L721'>721</a>
+<a name='L722'></a><a href='#L722'>722</a>
+<a name='L723'></a><a href='#L723'>723</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1117,6 +1127,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -1831,6 +1851,16 @@ export function <span class="fstat-no" title="function not covered" >mappingExpr
 <span class="cstat-no" title="statement not covered" >  initializationService.cfg.mappingService.notifyMappingUpdated();</span>
 }
 &nbsp;
+function <span class="fstat-no" title="function not covered" >removeMappedField(</span>mapping: MappingModel, mappedField: MappedField) {
+<span class="cstat-no" title="statement not covered" >  if (mappedField!.field!.isCollection) {</span>
+<span class="cstat-no" title="statement not covered" >    mapping.removeReferenceField(mappedField);</span>
+  }
+<span class="cstat-no" title="statement not covered" >  CommonUtil.removeItemFromArray(</span>
+    mappedField,
+    mapping.getMappedFields(mappedField.field!.isSource()),
+  );
+}
+&nbsp;
 export function <span class="fstat-no" title="function not covered" >mappingExpressionInit(</span>) {
 <span class="cstat-no" title="statement not covered" >  if (</span>
     !initializationService.cfg.mappings ||
@@ -1844,7 +1874,7 @@ export function <span class="fstat-no" title="function not covered" >mappingExpr
 <span class="cstat-no" title="statement not covered" >  mapping</span>
     .getMappedFields(true)
     .filter(<span class="fstat-no" title="function not covered" >(m</span>f) =&gt; <span class="cstat-no" title="statement not covered" >mf.isPadField())</span>
-    .forEach(<span class="fstat-no" title="function not covered" >(m</span>f) =&gt; <span class="cstat-no" title="statement not covered" >mapping.removeMappedField(mf));</span>
+    .forEach(<span class="fstat-no" title="function not covered" >(m</span>f) =&gt; <span class="cstat-no" title="statement not covered" >removeMappedField(mapping, mf));</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!mapping.transition.expression) {</span>
 <span class="cstat-no" title="statement not covered" >    mapping.transition.expression = new ExpressionModel(</span>
@@ -2199,7 +2229,7 @@ export function <span class="fstat-no" title="function not covered" >deselectMap
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 09 2022 19:42:30 GMT+0000 (Coordinated Universal Time)
+                at Wed May 11 2022 19:03:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

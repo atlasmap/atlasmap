@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.46% </span>
+                <span class="strong">83.6% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>272/311</span>
+                <span class='fraction'>260/311</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.18% </span>
+                <span class="strong">66.36% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>75/110</span>
+                <span class='fraction'>73/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.49% </span>
+                <span class="strong">76.92% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>31/39</span>
+                <span class='fraction'>30/39</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.92% </span>
+                <span class="strong">84.91% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>233/265</span>
+                <span class='fraction'>225/265</span>
             </div>
         
             
@@ -656,7 +656,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
-<span class="cline-any cline-yes">72x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -703,7 +703,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2884x</span>
+<span class="cline-any cline-yes">2544x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
@@ -991,17 +991,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">72x</span>
-<span class="cline-any cline-yes">312x</span>
-<span class="cline-any cline-yes">312x</span>
+<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">312x</span>
-<span class="cline-any cline-yes">312x</span>
-<span class="cline-any cline-yes">384x</span>
-<span class="cline-any cline-yes">384x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">384x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1176,8 +1176,8 @@ export class PaddingField extends Field {
     this.path = '';
   }
 &nbsp;
-  isSource(): boolean {
-    return this._isSource;
+<span class="fstat-no" title="function not covered" >  isSource(</span>): boolean {
+<span class="cstat-no" title="statement not covered" >    return this._isSource;</span>
   }
 }
 &nbsp;
@@ -1512,17 +1512,17 @@ export class DocumentDefinition {
     }
 &nbsp;
     // FIXME: some of this work is happening N times for N source/target docs, should only happen once.
-    for (const mapping of mappingDefinition.getAllMappings(true)) {
-      for (const field of mapping.getAllFields()) {
-        let parentField = field;
+    for (const mapping<span class="cstat-no" title="statement not covered" > of m</span>appingDefinition.getAllMappings(true)) {
+<span class="cstat-no" title="statement not covered" >      for (const field<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >m</span>apping.</span>getAllFields())</span> {</span>
+        let parentField = <span class="cstat-no" title="statement not covered" >field;</span>
         // TODO: check this non null operator
         const partOfTransformation =
-          mapping.getMappedFieldForField(field)!.actions.length &gt; 0;
-        while (parentField != null) {
-          parentField.partOfMapping = true;
-          parentField.partOfTransformation =
+<span class="cstat-no" title="statement not covered" >          mapping.getMappedFieldForField(field)!.actions.length &gt; 0;</span>
+<span class="cstat-no" title="statement not covered" >        while (parentField != null) {</span>
+<span class="cstat-no" title="statement not covered" >          parentField.partOfMapping = true;</span>
+<span class="cstat-no" title="statement not covered" >          parentField.partOfTransformation =</span>
             parentField.partOfTransformation || partOfTransformation;
-          parentField = parentField.parentField;
+<span class="cstat-no" title="statement not covered" >          parentField = parentField.parentField;</span>
         }
       }
     }
@@ -1626,7 +1626,7 @@ export class DocumentDefinition {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 09 2022 19:41:36 GMT+0000 (Coordinated Universal Time)
+                at Wed May 11 2022 19:02:04 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

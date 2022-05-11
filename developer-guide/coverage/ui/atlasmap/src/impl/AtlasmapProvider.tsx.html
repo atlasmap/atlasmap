@@ -24,28 +24,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/190</span>
+                <span class='fraction'>0/193</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/57</span>
+                <span class='fraction'>0/58</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/185</span>
+                <span class='fraction'>0/188</span>
             </div>
         
             
@@ -783,7 +783,10 @@
 <a name='L725'></a><a href='#L725'>725</a>
 <a name='L726'></a><a href='#L726'>726</a>
 <a name='L727'></a><a href='#L727'>727</a>
-<a name='L728'></a><a href='#L728'>728</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L728'></a><a href='#L728'>728</a>
+<a name='L729'></a><a href='#L729'>729</a>
+<a name='L730'></a><a href='#L730'>730</a>
+<a name='L731'></a><a href='#L731'>731</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -894,7 +897,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1109,9 +1111,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1426,7 +1433,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1608,8 +1614,7 @@ import { IAtlasmapDocument, IAtlasmapField, IAtlasmapGroup } from '../Views';
   mappingExpressionRemoveField,
   newMapping,
   onFieldPreviewChange,
-  removeFromCurrentMapping,
-  removeMappedFieldFromCurrentMapping,
+  removeFieldFromCurrentMapping,
   removeMapping,
   resetAtlasmap,
   selectMapping,
@@ -1839,6 +1844,11 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 &nbsp;
   const convertMappings = <span class="cstat-no" title="statement not covered" >useCallback(</span>
     function <span class="fstat-no" title="function not covered" >convertMappingsCb(</span>) {
+<span class="cstat-no" title="statement not covered" >      if (configModel.mappings?.activeMapping) {</span>
+<span class="cstat-no" title="statement not covered" >        configModel.mappings.activeMapping = configModel.mappings.mappings.find(</span>
+<span class="fstat-no" title="function not covered" >          (m</span>p) =&gt; <span class="cstat-no" title="statement not covered" >mp!.uuid === configModel.mappings?.activeMapping?.uuid,</span>
+        )!;
+      }
 <span class="cstat-no" title="statement not covered" >      return fromMappingDefinitionToIMappings(configModel.mappings);</span>
     },
     [configModel],
@@ -1882,10 +1892,10 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
         sources: convertSources(),
         constants: convertConstants(),
         sourceProperties: convertSourceProperties(),
-        targets: convertTargets(),
         targetProperties: convertTargetProperties(),
         mappings: convertMappings(),
         selectedMapping: convertSelectedMapping(),
+        targets: convertTargets(),
         flatSources: convertSourcesToFlatArray(),
         flatTargets: convertTargetsToFlatArray(),
       });
@@ -2086,7 +2096,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
 &nbsp;
   const onRemoveFromMapping = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(n</span>ode: IAtlasmapField) =&gt; {</span>
     const field = <span class="cstat-no" title="statement not covered" >node.amField;</span>
-<span class="cstat-no" title="statement not covered" >    removeFromCurrentMapping(field);</span>
+<span class="cstat-no" title="statement not covered" >    removeFieldFromCurrentMapping(field);</span>
   }, []);
 &nbsp;
   const onCreateMapping = <span class="cstat-no" title="statement not covered" >useCallback(</span>
@@ -2193,8 +2203,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
     toggleShowUnmappedFields,
     onFieldPreviewChange,
     addToCurrentMapping,
-    removeFromCurrentMapping,
-    removeMappedFieldFromCurrentMapping,
+    removeFieldFromCurrentMapping,
     fromMappedFieldToIMappingField,
     createMapping,
     newMapping,
@@ -2244,7 +2253,7 @@ export const <span class="cstat-no" title="statement not covered" >AtlasmapProvi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 09 2022 19:42:30 GMT+0000 (Coordinated Universal Time)
+                at Wed May 11 2022 19:03:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

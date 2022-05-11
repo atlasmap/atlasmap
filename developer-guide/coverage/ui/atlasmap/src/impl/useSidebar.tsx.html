@@ -24,7 +24,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/73</span>
+                <span class='fraction'>0/74</span>
             </div>
         
             
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/71</span>
+                <span class='fraction'>0/72</span>
             </div>
         
             
@@ -310,7 +310,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -369,8 +368,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -425,6 +422,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -543,7 +543,6 @@
   MappingDetailsView,
 } from '../Views';
 <span class="cstat-no" title="statement not covered" >import React, { useCallback } from 'react';</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >import { CommonUtil } from '@atlasmap/core';</span>
 <span class="cstat-no" title="statement not covered" >import { useAtlasmap } from './AtlasmapProvider';</span>
 &nbsp;
@@ -572,7 +571,7 @@ export interface IUseSidebarProps {
   const {
     selectedMapping<span class="cstat-no" title="statement not covered" >,</span>
     deselectMapping<span class="cstat-no" title="statement not covered" >,</span>
-    removeMappedFieldFromCurrentMapping<span class="cstat-no" title="statement not covered" >,</span>
+    removeFieldFromCurrentMapping<span class="cstat-no" title="statement not covered" >,</span>
     fromMappedFieldToIMappingField<span class="cstat-no" title="statement not covered" >,</span>
     flatSources<span class="cstat-no" title="statement not covered" >,</span>
     flatTargets<span class="cstat-no" title="statement not covered" >,</span>
@@ -601,10 +600,8 @@ export interface IUseSidebarProps {
 <span class="cstat-no" title="statement not covered" >  return useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (selectedMapping) {</span>
       const m = <span class="cstat-no" title="statement not covered" >selectedMapping.mapping;</span>
-      const sources = <span class="cstat-no" title="statement not covered" >m</span>
-        .getMappedFields(true)
-        .map(fromMappedFieldToIMappingField);
-      const targets = <span class="cstat-no" title="statement not covered" >m</span>
+      let sources = <span class="cstat-no" title="statement not covered" >m.getMappedFields(true).map(fromMappedFieldToIMappingField);</span>
+      let targets = <span class="cstat-no" title="statement not covered" >m</span>
         .getMappedFields(false)
         .map(fromMappedFieldToIMappingField);
       const showSourcesIndex =
@@ -657,13 +654,16 @@ export interface IUseSidebarProps {
         };
       }
 &nbsp;
-      const handleRemoveMappedField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>sSource: boolean, index: number) =&gt; {</span>
-        const amField = <span class="cstat-no" title="statement not covered" >selectedMapping.mapping.getMappedFieldForIndex(</span>
+      const handleRemoveMappedField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (</span></span>
+        isSource: boolean,
+        index: number<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >,</span></span>
+      ) =&gt; {
+        const <span class="cstat-no" title="statement not covered" >amField = selectedMapping.mapping.getMappedFieldForIndex(</span>
           '' + (index + 1),
           isSource,
         );
-<span class="cstat-no" title="statement not covered" >        if (amField) {</span>
-<span class="cstat-no" title="statement not covered" >          removeMappedFieldFromCurrentMapping(amField);</span>
+        if (<span class="cstat-no" title="statement not covered" >amField)</span> {
+<span class="cstat-no" title="statement not covered" >          await removeFieldFromCurrentMapping(amField);</span>
         }
       };
 &nbsp;
@@ -746,7 +746,7 @@ export interface IUseSidebarProps {
     getMultiplicityActionDelimiters,
     handleMultiplicityChange,
     handleMultiplicityArgumentChange,
-    removeMappedFieldFromCurrentMapping,
+    removeFieldFromCurrentMapping,
     isFieldAddableToSelection,
     addToCurrentMapping,
     mappingExpressionEnabled,
@@ -762,7 +762,7 @@ export interface IUseSidebarProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 09 2022 19:42:30 GMT+0000 (Coordinated Universal Time)
+                at Wed May 11 2022 19:03:09 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
