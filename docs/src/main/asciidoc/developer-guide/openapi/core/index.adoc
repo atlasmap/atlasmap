@@ -1557,6 +1557,109 @@ ifdef::internal-generation[]
 endif::internal-generation[]
 
 
+[.removeFieldMappingRequest]
+==== removeFieldMappingRequest
+
+`DELETE /project/{mappingDefinitionId}/mapping/{mappingId}/field/{dataSourceType}/{fieldIndex}`
+
+Remove Field From Mapping
+
+===== Description
+
+Remove the specific field from the specified mapping in the mapping definition
+
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/\{fieldIndex\}/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+| mappingId
+| Mapping ID 
+| X
+| null
+| 
+
+| dataSourceType
+| Source or Target Mapping 
+| X
+| null
+| 
+
+| fieldIndex
+| Field Index 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 200
+| The mapping at the specified index within the specified mapping definition was removed successfully
+|  <<>>
+
+
+| 204
+| The specified mapping definition was not found
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/\{fieldIndex\}/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/\{fieldIndex\}/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :project/{mappingDefinitionId}/mapping/{mappingId}/field/{dataSourceType}/{fieldIndex}/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}project/\{mappingDefinitionId\}/mapping/\{mappingId\}/field/\{dataSourceType\}/\{fieldIndex\}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
 [.removeMappingRequest]
 ==== removeMappingRequest
 

@@ -22,9 +22,14 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,9 +39,12 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
+import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Json;
@@ -146,4 +154,21 @@ public class MappingServiceTest {
         assertEquals("param foo", pmr.getMapping().getOutputField().get(0).getValue());
     }
 
+    @Test
+    public void testRemoveFieldMappingRequest() throws Exception {
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("mappings/remove-mapping-field.json");
+        ADMArchiveHandler handler = atlasService.getADMArchiveHandler(0);
+        handler.setMappingDefinitionFromStream(is);
+        handler.persist();
+        Mapping m = (Mapping) handler.getMappingDefinition().getMappings().getMapping().get(0);
+        assertEquals(3, m.getOutputField().size()); // assert original mapped field size
+        assertEquals("city", m.getOutputField().get(0).getName()); // assert 'city' resides at index 0
+
+        Response res = mappingService.removeFieldMappingRequest(0, "mapping.xxxxxx", DataSourceType.TARGET, 0);
+
+        assertEquals(200, res.getStatus());
+        m = (Mapping) handler.getMappingDefinition().getMappings().getMapping().get(0);
+        assertEquals(2, m.getOutputField().size());  // assert mapped field size after field removed
+        assertEquals("state", m.getOutputField().get(0).getName()); // ''state' is now at index 0
+    }
 }
