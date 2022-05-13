@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.v2.BaseInspectionRequest;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentMetadata;
@@ -134,9 +135,10 @@ public abstract class ModuleService extends BaseAtlasService {
     }
 
     /**
-     * Persists the InspectionRequest object as a Document metadata. The combination of the InspectionRequest and
+     * Persists the Document Metadata. The combination of the {@link DocumentMetadata} and
      * the Document specification stored with {@link #storeDocumentSpecification(Integer,DataSourceType,String,InputStream)}
      * have to be a complete set for reproducing Document inspection.
+     * This also sets the corresponding {@link DataSource} into the Mapping Definition.
      * @param mappingDefinitionId Mapping Definition ID
      * @param dsType DataSourceType indicating SOURCE or TARGET
      * @param documentId Document ID
@@ -144,10 +146,12 @@ public abstract class ModuleService extends BaseAtlasService {
      * Document ID/name/description, inspection parameters, etc
      */
     protected void storeDocumentMetadata(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
-            DocumentMetadata metadata) {
+            DocumentMetadata metadata, DataSource dataSource) {
         try {
             ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
-            handler.setDocumentMetadata(new DocumentKey(dsType, documentId), metadata);
+            DocumentKey docKey = new DocumentKey(dsType, documentId);
+            handler.setDocumentMetadata(docKey, metadata);
+            handler.getAtlasMappingHandler().setDataSource(docKey, dataSource);
             handler.persist();
         } catch (Exception e) {
             throw new WebApplicationException(
@@ -158,8 +162,8 @@ public abstract class ModuleService extends BaseAtlasService {
 
     /**
      * Persists the Document specification such as JSON schema for the JSON Document. The combination of
-     * the InspectionRequest stored with {@link #storeDocumentMetadata(Integer,DataSourceType,String,DocumentMetadata)} and the Document specification
-     * have to be a complete set for reproducing Document inspection.
+     * the InspectionRequest stored with {@link #storeDocumentMetadata(Integer,DataSourceType,String,DocumentMetadata,DataSource)}
+     *  and the Document specification have to be a complete set for reproducing Document inspection.
      * @param mappingDefinitionId Mapping Definition ID
      * @param dsType DataSourceType indicating SOURCE or TARGET
      * @param documentId Document ID

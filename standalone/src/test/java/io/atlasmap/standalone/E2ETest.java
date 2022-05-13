@@ -90,6 +90,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import io.atlasmap.core.ADMArchiveHandler;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.DocumentKey;
@@ -138,8 +139,8 @@ public class E2ETest {
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='Properties']")));
         WebElement atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
         atlasmapMenuBtn.click();
-        waitForLoad.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[@data-testid='import-mappings-button']")));
         WebElement importBtn = driver.findElement(By.xpath("//a[@data-testid='import-mappings-button']"));
+        waitForLoad.until(ExpectedConditions.elementToBeClickable(importBtn));
         importBtn.click();
         WebElement fileInput = driver.findElement(By.xpath("//div[@id='data-toolbar']//input[@type='file']"));
         String cwd = System.getProperty("user.dir");

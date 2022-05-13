@@ -17,9 +17,11 @@ package io.atlasmap.dfdl.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.List;
 
 import javax.ws.rs.core.Response;
 
@@ -28,29 +30,35 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasMappingHandler;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.dfdl.core.schema.CsvDfdlSchemaGenerator;
 import io.atlasmap.dfdl.v2.DfdlInspectionRequest;
 import io.atlasmap.dfdl.v2.DfdlInspectionResponse;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Json;
 import io.atlasmap.v2.InspectionType;
 import io.atlasmap.xml.v2.XmlComplexType;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlField;
+import io.atlasmap.xml.v2.XmlNamespace;
 
 public class DfdlServiceTest {
 
+    private AtlasService atlasService;
     private DfdlService dfdlService = null;
     private DocumentService documentService;
 
     @BeforeEach
     public void setUp() throws AtlasException {
-        AtlasService atlas = new AtlasService();
-        documentService = new DocumentService(atlas);
-        dfdlService = new DfdlService(atlas, documentService);
+        atlasService = new AtlasService();
+        documentService = new DocumentService(atlasService);
+        dfdlService = new DfdlService(atlasService, documentService);
     }
 
     @AfterEach
@@ -98,6 +106,14 @@ public class DfdlServiceTest {
         XmlDocument inspected = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
         file = (XmlComplexType) inspected.getFields().getField().get(0);
         assertEquals(2, file.getXmlFields().getXmlField().size());
+        AtlasMappingHandler handler = atlasService.getADMArchiveHandler(0).getAtlasMappingHandler();
+        XmlDataSource ds = (XmlDataSource) handler.getDataSource(new DocumentKey(DataSourceType.SOURCE, "test"));
+        assertEquals("dfdl", AtlasUtil.getUriModule(ds.getUri()));
+        assertEquals("test", AtlasUtil.getUriDataType(ds.getUri()));
+        List<XmlNamespace> namespaces = ds.getXmlNamespaces().getXmlNamespace();
+        assertEquals(1, namespaces.size());
+        assertEquals("tns", namespaces.get(0).getAlias());
+        assertEquals("http://atlasmap.io/dfdl/csv", namespaces.get(0).getUri());
     }
 
     @Test
@@ -143,6 +159,10 @@ public class DfdlServiceTest {
         XmlDocument inspected = Json.mapper().readValue((File)res.getEntity(), XmlDocument.class);
         file = (XmlComplexType) inspected.getFields().getField().get(0);
         assertEquals(2, file.getXmlFields().getXmlField().size());
+        AtlasMappingHandler handler = atlasService.getADMArchiveHandler(0).getAtlasMappingHandler();
+        XmlDataSource ds = (XmlDataSource) handler.getDataSource(new DocumentKey(DataSourceType.SOURCE, "test"));
+        assertEquals("test", AtlasUtil.getUriDataType(ds.getUri()));
+        assertNull(ds.getXmlNamespaces());
     }
 
 }

@@ -54,6 +54,7 @@ import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
 import io.atlasmap.service.ModuleService;
 import io.atlasmap.v2.CollectionType;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentMetadata;
@@ -117,8 +118,9 @@ public class JavaService extends ModuleService {
         }
         ClassInspectionResponse response = new ClassInspectionResponse();
         DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);
+        DataSource dataSource = createDataSource(metadata);
         try {
-            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), metadata.getId(), metadata);
+            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), metadata.getId(), metadata, dataSource);
             performDocumentInspection(mappingDefinitionId, metadata, null);
             File f = getAtlasService()
                         .getADMArchiveHandler(mappingDefinitionId)
@@ -168,6 +170,28 @@ public class JavaService extends ModuleService {
             meta.getInspectionParameters().put(OPTION_DISABLE_PUBLIC_ONLY_FIELDS, Boolean.toString(request.isDisablePublicOnlyFields()));
         }
         return meta;
+    }
+
+    private DataSource createDataSource(DocumentMetadata meta) {
+        DataSource answer = new DataSource();
+        answer.setDataSourceType(meta.getDataSourceType());
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        answer.setDescription(meta.getDescription());
+        StringBuffer uri = new StringBuffer("atlas:java:");
+        uri.append(meta.getId());
+        uri.append("?className=");
+        uri.append(meta.getInspectionParameters().get(OPTION_CLASS_NAME));
+        if (meta.getInspectionParameters().containsKey(OPTION_COLLECTION_TYPE)) {
+            uri.append("&collectionType=");
+            uri.append(meta.getInspectionParameters().get(OPTION_COLLECTION_TYPE));
+        }
+        if (meta.getInspectionParameters().containsKey(OPTION_COLLECTION_CLASS_NAME)) {
+            uri.append("&collectionClassName=");
+            uri.append(meta.getInspectionParameters().get(OPTION_COLLECTION_CLASS_NAME));
+        }
+        answer.setUri(uri.toString());
+        return answer;
     }
 
     @Override

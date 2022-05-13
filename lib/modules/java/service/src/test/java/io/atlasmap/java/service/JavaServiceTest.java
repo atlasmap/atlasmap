@@ -30,25 +30,30 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
+import io.atlasmap.core.AtlasMappingHandler;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.java.v2.ClassInspectionRequest;
 import io.atlasmap.java.v2.ClassInspectionResponse;
 import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.Json;
 
 @ExtendWith(MockitoExtension.class)
 public class JavaServiceTest {
 
+    private AtlasService atlasService;
     private JavaService javaService;
     private DocumentService documentService;
 
     @BeforeEach
     public void before() throws AtlasException {
-        AtlasService atlas = new AtlasService();
-        documentService = new DocumentService(atlas);
-        this.javaService = new JavaService(atlas, documentService);
+        this.atlasService = new AtlasService();
+        this.documentService = new DocumentService(atlasService);
+        this.javaService = new JavaService(atlasService, documentService);
     }
 
     @Test
@@ -83,5 +88,10 @@ public class JavaServiceTest {
         assertEquals(200, res.getStatus());
         JavaClass inspected = Json.mapper().readValue((File)res.getEntity(), JavaClass.class);
         assertEquals(AtlasSession.class.getName(), inspected.getClassName());
+        AtlasMappingHandler handler = atlasService.getADMArchiveHandler(0).getAtlasMappingHandler();
+        DataSource ds = handler.getDataSource(new DocumentKey(DataSourceType.SOURCE, "test"));
+        assertEquals(AtlasSession.class.getName(), AtlasUtil.getUriParameters(ds.getUri()).get("className"));
+        assertEquals("java", AtlasUtil.getUriModule(ds.getUri()));
+        assertEquals("test", AtlasUtil.getUriDataType(ds.getUri()));
     }
 }

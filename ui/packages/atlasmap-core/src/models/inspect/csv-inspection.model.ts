@@ -29,7 +29,6 @@ import {
 } from './document-inspection.model';
 import { FieldType, IDocument } from '../../contracts/common';
 
-import { CommonUtil } from '../../utils/common-util';
 import { Field } from '../field.model';
 
 export class CsvInspectionModel extends DocumentInspectionModel {
@@ -70,12 +69,6 @@ export class CsvInspectionModel extends DocumentInspectionModel {
     }
     if (!this.doc.name) {
       this.doc.name = this.doc.id;
-    }
-    if (this.doc.inspectionParameters) {
-      this.doc.uri = CommonUtil.urlWithParameters(
-        this.doc.uri,
-        this.doc.inspectionParameters
-      );
     }
 
     for (const field of csvDocument.fields.field) {
