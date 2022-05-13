@@ -198,29 +198,6 @@ export class ConfigModel {
     docDef.inspectionParameters = docInitModel.inspectionParameters;
     docDef.selectedRoot = docInitModel.selectedRoot;
 
-    if (docDef.type === DocumentType.XSD) {
-      docDef.uri = 'atlas:xml:' + docDef.id;
-    } else if (docDef.type === DocumentType.JAVA) {
-      docDef.uri = `atlas:java:${docDef.id}?className=${docDef.inspectionSource}`;
-      if (
-        docInitModel.collectionType &&
-        docInitModel.collectionType !== CollectionType.NONE
-      ) {
-        docDef.uri += '&collectionType=' + docInitModel.collectionType;
-        if (docInitModel.collectionClassName) {
-          docDef.uri +=
-            '&collectionClassName=' + docInitModel.collectionClassName;
-        }
-      }
-    } else if (
-      docDef.type === DocumentType.KAFKA_AVRO ||
-      docDef.type === DocumentType.KAFKA_JSON
-    ) {
-      docDef.uri = 'atlas:kafkaconnect:' + docDef.id;
-    } else {
-      docDef.uri = 'atlas:' + docDef.type.toLowerCase() + ':' + docDef.id;
-    }
-
     if (docInitModel.isSource) {
       this.sourceDocs.push(docDef);
     } else {

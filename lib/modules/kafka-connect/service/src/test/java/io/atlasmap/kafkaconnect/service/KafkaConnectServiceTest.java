@@ -30,25 +30,30 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasMappingHandler;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectConstants;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectDocument;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionRequest;
 import io.atlasmap.kafkaconnect.v2.KafkaConnectInspectionResponse;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.Json;
 
 public class KafkaConnectServiceTest {
 
+    private AtlasService atlasService;
     private KafkaConnectService kafkaConnectService = null;
     private DocumentService documentService;
 
     @BeforeEach
     public void setUp() throws AtlasException {
-        AtlasService atlas = new AtlasService();
-        documentService = new DocumentService(atlas);
-        kafkaConnectService = new KafkaConnectService(atlas, documentService);
+        atlasService = new AtlasService();
+        documentService = new DocumentService(atlasService);
+        kafkaConnectService = new KafkaConnectService(atlasService, documentService);
     }
 
     @AfterEach
@@ -80,6 +85,10 @@ public class KafkaConnectServiceTest {
         assertEquals(200, res.getStatus());
         KafkaConnectDocument inspected = Json.mapper().readValue((File)res.getEntity(), KafkaConnectDocument.class);
         assertEquals(9, inspected.getFields().getField().size());
+        AtlasMappingHandler handler = atlasService.getADMArchiveHandler(0).getAtlasMappingHandler();
+        DataSource ds = (DataSource) handler.getDataSource(new DocumentKey(DataSourceType.SOURCE, "test"));
+        assertEquals("kafkaconnect", AtlasUtil.getUriModule(ds.getUri()));
+        assertEquals("test", AtlasUtil.getUriDataType(ds.getUri()));
     }
 
 

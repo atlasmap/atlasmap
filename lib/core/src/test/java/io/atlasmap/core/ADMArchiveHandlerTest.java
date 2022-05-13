@@ -144,7 +144,6 @@ public class ADMArchiveHandlerTest {
 
         handler.clear();
         assertNull(handler.getMappingDefinition());
-        assertNull(handler.getAtlasMappingHandler());
         assertNull(handler.getDocumentCatalog());
         assertNull(handler.getDocumentSpecificationFile(sourceDocKey));
         assertNull(handler.getDocumentInspectionResultFile(sourceDocKey));

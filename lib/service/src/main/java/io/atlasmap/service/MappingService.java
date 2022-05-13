@@ -34,7 +34,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
@@ -370,17 +369,15 @@ public class MappingService extends BaseAtlasService {
             @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId,
             @Context UriInfo uriInfo) {
         ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);
-        UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         try {
             handler.setMappingDefinitionFromStream(mapping);
             handler.persist();
-            builder.path(handler.getMappingDefinition().getName());
         } catch (AtlasException e) {
             LOG.error("Error saving Mapping Definition file.\n" + e.getMessage(), e);
             throw new WebApplicationException(e.getMessage(), e, Status.INTERNAL_SERVER_ERROR);
         }
 
-        return Response.ok().location(builder.build()).build();
+        return Response.ok().build();
     }
 
     /**

@@ -46,6 +46,7 @@ import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.xml.inspect.XmlInspectionService;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
@@ -112,7 +113,6 @@ public class XmlService extends ModuleService {
                 return Response.ok().entity(toJson(response)).build();
             }
             DocumentMetadata metadata = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);
-            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata);
             storeDocumentSpecification(mappingDefinitionId, dataSourceType, documentId, new ByteArrayInputStream(inspectionRequest.getXmlData().getBytes()));
             ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);
             DocumentKey docKey = new DocumentKey(dataSourceType, documentId);
@@ -120,6 +120,8 @@ public class XmlService extends ModuleService {
             performDocumentInspection(mappingDefinitionId, metadata, specFile);
             File f = admHandler.getDocumentInspectionResultFile(docKey);
             d = fromJson(new FileInputStream(f), XmlDocument.class);
+            XmlDataSource dataSource = createDataSource(metadata, d);
+            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata, dataSource);
         } catch (Exception e) {
             LOG.error("Error inspecting xml: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
@@ -131,6 +133,19 @@ public class XmlService extends ModuleService {
 
         response.setXmlDocument(d);
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    private XmlDataSource createDataSource(DocumentMetadata meta, XmlDocument xmlDoc) {
+        XmlDataSource answer = new XmlDataSource();
+        answer.setDataSourceType(meta.getDataSourceType());
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        answer.setDescription(meta.getDescription());
+        StringBuffer uri = new StringBuffer("atlas:xml:");
+        uri.append(meta.getId());
+        answer.setUri(uri.toString());
+        answer.setXmlNamespaces(xmlDoc.getXmlNamespaces());
+        return answer;
     }
 
     @Override

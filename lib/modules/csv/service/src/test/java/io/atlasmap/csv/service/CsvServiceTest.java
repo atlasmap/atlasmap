@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
@@ -29,8 +30,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasMappingHandler;
+import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.csv.v2.CsvComplexType;
 import io.atlasmap.csv.v2.CsvConstants;
+import io.atlasmap.csv.v2.CsvDataSource;
 import io.atlasmap.csv.v2.CsvField;
 import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
@@ -38,18 +42,20 @@ import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Document;
+import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.Json;
 
 public class CsvServiceTest {
 
+    private AtlasService atlasService;
     private CsvService csvService = null;
     private DocumentService documentService;
 
     @BeforeEach
     public void setUp() throws AtlasException {
-        AtlasService atlas = new AtlasService();
-        documentService = new DocumentService(atlas);
-        csvService = new CsvService(atlas, documentService);
+        atlasService = new AtlasService();
+        documentService = new DocumentService(atlasService);
+        csvService = new CsvService(atlasService, documentService);
     }
 
     @AfterEach
@@ -127,5 +133,13 @@ public class CsvServiceTest {
         Document inspected = Json.mapper().readValue((File)res.getEntity(), Document.class);
         complexType = (CsvComplexType) inspected.getFields().getField().get(0);
         assertEquals(5, complexType.getCsvFields().getCsvField().size());
+        AtlasMappingHandler handler = atlasService.getADMArchiveHandler(0).getAtlasMappingHandler();
+        CsvDataSource ds = (CsvDataSource) handler.getDataSource(new DocumentKey(DataSourceType.SOURCE, "test"));
+        assertEquals("csv", AtlasUtil.getUriModule(ds.getUri()));
+        assertEquals("test", AtlasUtil.getUriDataType(ds.getUri()));
+        Map<String,String> parameters = AtlasUtil.getUriParameters(ds.getUri());
+        assertEquals(2, parameters.size());
+        assertEquals(",", parameters.get(CsvConstants.OPTION_DELIMITER));
+        assertEquals("true", parameters.get(CsvConstants.OPTION_FIRST_RECORD_AS_HEADER));
     }
 }

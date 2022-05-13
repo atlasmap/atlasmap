@@ -42,6 +42,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.v2.CsvDataSource;
 import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
 import io.atlasmap.service.AtlasService;
@@ -108,13 +109,14 @@ public class CsvService extends ModuleService {
 
         CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);
         DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);
+        CsvDataSource dataSource = createDataSource(metadata);
         Map<String,String> options = request.getOptions();
         CsvInspectionResponse response = new CsvInspectionResponse();
         try {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Options: {}", options);
             }
-            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), documentId, metadata);
+            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), documentId, metadata, dataSource);
             InputStream specification = new ByteArrayInputStream(request.getCsvData().getBytes());
             storeDocumentSpecification(mappingDefinitionId, metadata.getDataSourceType(), documentId, specification);
             ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);
@@ -134,6 +136,31 @@ public class CsvService extends ModuleService {
             LOG.debug(("Response: {}" + new ObjectMapper().writeValueAsString(response)));
         }
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    private CsvDataSource createDataSource(DocumentMetadata meta) {
+        CsvDataSource answer = new CsvDataSource();
+        answer.setDataSourceType(meta.getDataSourceType());
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        answer.setDescription(meta.getDescription());
+        StringBuffer uri = new StringBuffer("atlas:csv:");
+        uri.append(meta.getId());
+        if (!meta.getInspectionParameters().isEmpty()) {
+            uri.append("?");
+            boolean first = true;
+            for (Map.Entry<String,String> entry : meta.getInspectionParameters().entrySet()) {
+                if (!first) {
+                    uri.append("&");
+                }
+                first = false;
+                uri.append(entry.getKey());
+                uri.append("=");
+                uri.append(entry.getValue());
+            }
+        }
+        answer.setUri(uri.toString());
+        return answer;
     }
 
     @Override

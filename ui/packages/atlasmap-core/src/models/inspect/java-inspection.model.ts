@@ -74,9 +74,6 @@ export class JavaInspectionModel extends DocumentInspectionModel {
         );
       }
     }
-    if (javaClass.uri && (!this.doc.uri || this.doc.uri.length === 0)) {
-      this.doc.uri = javaClass.uri;
-    }
 
     let rootField = null;
     if (

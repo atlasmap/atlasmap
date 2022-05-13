@@ -302,6 +302,12 @@ public class ADMArchiveHandler {
      * @return handler
      */
     public AtlasMappingHandler getAtlasMappingHandler() {
+        if (this.atlasMappingHandler == null) {
+            if (this.mappingDefinition == null) {
+                this.mappingDefinition = new AtlasMapping();
+            }
+            this.atlasMappingHandler = new AtlasMappingHandler(this.mappingDefinition);
+        }
         return this.atlasMappingHandler;
     }
 
@@ -328,6 +334,9 @@ public class ADMArchiveHandler {
      */
     public void setMappingDefinition(AtlasMapping mapping) {
         this.mappingDefinition = mapping;
+        if (AtlasUtil.isEmpty(mapping.getName())) {
+            mapping.setName(mappingDefinitionId);
+        }
         this.atlasMappingHandler = new AtlasMappingHandler(mapping);
     }
 
@@ -695,20 +704,25 @@ public class ADMArchiveHandler {
 
     /**
      * Deletes the Document specification, inspection result and metadata from the {@link DocumentCatalog}.
-     * This also invokes {@link AtlasMappingHandler#removeDocumentReference(DocumentKey)} to remove
-     * all the Document references from the Mapping Definition.
      * @param dsType SOURCE or TARGET
      * @param documentId Document ID of the Document to be deleted
      */
     public void deleteDocument(DataSourceType dsType, String documentId) throws AtlasException {
+        deleteDocument(new DocumentKey(dsType, documentId));
+    }
+
+    /**
+     * Deletes the Document specification, inspection result and metadata from the {@link DocumentCatalog}.
+     * @param docKey DocumentKey
+     */
+    public void deleteDocument(DocumentKey docKey) throws AtlasException {
         DocumentCatalog catalog = getDocumentCatalog();
-        List<DocumentMetadata> docs = dsType == DataSourceType.SOURCE ? catalog.getSources() : catalog.getTargets();
-        Optional<DocumentMetadata> todelete = docs.stream().filter(m -> m.getId().equals(documentId)).findAny();
+        List<DocumentMetadata> docs = docKey.getDataSourceType() == DataSourceType.SOURCE ? catalog.getSources() : catalog.getTargets();
+        Optional<DocumentMetadata> todelete = docs.stream().filter(m -> m.getId().equals(docKey.getDocumentId())).findAny();
         if (!todelete.isPresent()) {
             return;
         }
         docs.remove(todelete.get());
-        DocumentKey docKey = new DocumentKey(dsType, documentId);
         File specDir = getDocumentSpecificationDirectory(docKey);
         if (specDir != null && specDir.exists()) {
             AtlasUtil.deleteDirectory(specDir);
@@ -717,7 +731,6 @@ public class ADMArchiveHandler {
         if (inspectedDir != null && specDir.exists()) {
             AtlasUtil.deleteDirectory(inspectedDir);
         }
-        getAtlasMappingHandler().removeDocumentReference(docKey);
     }
 
     /**

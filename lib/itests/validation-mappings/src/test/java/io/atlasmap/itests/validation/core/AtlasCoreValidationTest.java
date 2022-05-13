@@ -70,6 +70,7 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
     public void testMappingNameNull() throws AtlasException {
         assertNotNull(context);
         assertNotNull(session);
+        session.getMapping().setName(null);
         context.processValidation(session);
         Validations validations = session.getValidations();
         assertNotNull(validations);
@@ -94,6 +95,7 @@ public class AtlasCoreValidationTest extends AtlasMappingBaseTest {
     public void testMappingNameEmpty() throws AtlasException {
         assertNotNull(context);
         assertNotNull(session);
+        session.getMapping().setName(null);
         context.processValidation(session);
         Validations validations = session.getValidations();
         assertNotNull(validations);

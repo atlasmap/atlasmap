@@ -175,6 +175,38 @@ public class AtlasMappingHandler {
     }
 
     /**
+     * Sets the {@link DataSource}. It updates if there is an existing DataSource identified by
+     * the Document ID and DataSourceType, otherwise adds a new entry.
+     * @param docKey DocumentKey
+     * @param dataSource DataSource
+     */
+    public void setDataSource(DocumentKey docKey, DataSource dataSource) {
+        Optional<DataSource> existing = lookupDataSource(docKey);
+        if (existing.isPresent()) {
+            int pos = this.mapping.getDataSource().indexOf(existing.get());
+            this.mapping.getDataSource().set(pos, dataSource);
+        } else {
+            this.mapping.getDataSource().add(dataSource);
+        }
+    }
+
+    private Optional<DataSource> lookupDataSource(DocumentKey docKey) {
+        return this.mapping.getDataSource().stream().filter(
+            ds -> ds.getDataSourceType() == docKey.getDataSourceType()
+            && ds.getId().equals(docKey.getDocumentId())).findAny();
+    }
+
+    /**
+     * Gets the existing {@link DataSource} identified by the {@link DocumentKey}.
+     * @param docKey DocumentKey
+     * @return DataSource if found, or null
+     */
+    public DataSource getDataSource(DocumentKey docKey) {
+        Optional<DataSource> existing = lookupDataSource(docKey);
+        return existing.isPresent() ? existing.get() : null;
+    }
+  
+    /**
      * Gets the {@link AtlasMapping}.
      * @return AtlasMapping
      */
