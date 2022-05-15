@@ -53,7 +53,7 @@
     "eslint-plugin-mdx": "^1.13.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^4.2.3",
+    "husky": "^8.0.1",
     "jest-css-modules-transform": "^4.2.1",
     "jest-environment-jsdom-sixteen": "^2.0.0",
     "lodash.clamp": "^4.0.3",
