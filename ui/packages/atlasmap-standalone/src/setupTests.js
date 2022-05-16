@@ -21,3 +21,12 @@ new MatchMediaMock();
 process.on('unhandledRejection', (reason) => {
   console.log('REJECTION', reason);
 });
+
+global.MutationObserver = jest.fn(function MutationObserver(callback) {
+  this.observe = jest.fn();
+  this.disconnect = jest.fn();
+  // Optionally add a trigger() method to manually trigger a change
+  this.trigger = (mockedMutationsList) => {
+    callback(mockedMutationsList, this);
+  };
+});
