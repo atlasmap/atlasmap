@@ -25,6 +25,10 @@
     "baseUrl": "./",
     "jsx": "react",
     "esModuleInterop": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@atlasmap/core": ["../atlasmap-core/src"],
+      "@atlasmap/*": ["../*"]
+    },
   }
 }

@@ -89,6 +89,9 @@ module.exports = () => {
       path: path.resolve(__dirname, 'dist'),
     },
     resolve: {
+      alias: {
+        "@atlasmap/core": path.resolve(__dirname, '../atlasmap-core/src'),
+      },
       extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
   };
