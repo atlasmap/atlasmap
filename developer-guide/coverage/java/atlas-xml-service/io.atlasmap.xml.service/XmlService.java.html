@@ -46,6 +46,7 @@ import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.xml.inspect.XmlInspectionService;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.atlasmap.xml.v2.XmlInspectionRequest;
 import io.atlasmap.xml.v2.XmlInspectionResponse;
@@ -63,7 +64,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Path(&quot;/xml/&quot;)
 public class XmlService extends ModuleService {
 
-<span class="fc" id="L66">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
+<span class="fc" id="L67">    private static final Logger LOG = LoggerFactory.getLogger(XmlService.class);</span>
 
     /**
      * A constructor.
@@ -71,10 +72,10 @@ public class XmlService extends ModuleService {
      * @param documentService DocumentService
      */
     public XmlService(AtlasService atlasService, DocumentService documentService) {
-<span class="fc" id="L74">        super(atlasService, documentService);</span>
-<span class="fc" id="L75">        getDocumentService().registerModuleService(DocumentType.XML, this);</span>
-<span class="fc" id="L76">        getDocumentService().registerModuleService(DocumentType.XSD, this);</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L75">        super(atlasService, documentService);</span>
+<span class="fc" id="L76">        getDocumentService().registerModuleService(DocumentType.XML, this);</span>
+<span class="fc" id="L77">        getDocumentService().registerModuleService(DocumentType.XSD, this);</span>
+<span class="fc" id="L78">    }</span>
 
     /**
      * Import a XML schema or instance and return a Document object.
@@ -99,20 +100,19 @@ public class XmlService extends ModuleService {
             @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
             @Context UriInfo uriInfo
         ) {
-<span class="fc" id="L102">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L103">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L104">        XmlInspectionRequest inspectionRequest = fromJson(request, XmlInspectionRequest.class);</span>
-<span class="fc" id="L105">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
-<span class="fc" id="L106">        XmlDocument d = null;</span>
+<span class="fc" id="L105">        XmlInspectionRequest inspectionRequest = fromJson(request, XmlInspectionRequest.class);</span>
+<span class="fc" id="L106">        XmlInspectionResponse response = new XmlInspectionResponse();</span>
+<span class="fc" id="L107">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">            if (inspectionRequest.getInspectionType() == null) {</span>
-<span class="nc" id="L111">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
-<span class="nc" id="L112">                return Response.ok().entity(toJson(response)).build();</span>
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">            if (inspectionRequest.getInspectionType() == null) {</span>
+<span class="nc" id="L112">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="nc" id="L113">                return Response.ok().entity(toJson(response)).build();</span>
             }
-<span class="fc" id="L114">            DocumentMetadata metadata = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);</span>
-<span class="fc" id="L115">            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata);</span>
+<span class="fc" id="L115">            DocumentMetadata metadata = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);</span>
 <span class="fc" id="L116">            storeDocumentSpecification(mappingDefinitionId, dataSourceType, documentId, new ByteArrayInputStream(inspectionRequest.getXmlData().getBytes()));</span>
 <span class="fc" id="L117">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
 <span class="fc" id="L118">            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);</span>
@@ -120,54 +120,69 @@ public class XmlService extends ModuleService {
 <span class="fc" id="L120">            performDocumentInspection(mappingDefinitionId, metadata, specFile);</span>
 <span class="fc" id="L121">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
 <span class="fc" id="L122">            d = fromJson(new FileInputStream(f), XmlDocument.class);</span>
-<span class="nc" id="L123">        } catch (Exception e) {</span>
-<span class="nc" id="L124">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L125">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L123">            XmlDataSource dataSource = createDataSource(metadata, d);</span>
+<span class="fc" id="L124">            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata, dataSource);</span>
+<span class="nc" id="L125">        } catch (Exception e) {</span>
+<span class="nc" id="L126">            LOG.error(&quot;Error inspecting xml: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L127">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L127">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L129">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L130">        AtlasUtil.excludeNotRequestedFields(d, inspectionRequest.getInspectPaths(), inspectionRequest.getSearchPhrase());</span>
+<span class="fc" id="L132">        AtlasUtil.excludeNotRequestedFields(d, inspectionRequest.getInspectPaths(), inspectionRequest.getSearchPhrase());</span>
 
-<span class="fc" id="L132">        response.setXmlDocument(d);</span>
-<span class="fc" id="L133">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L134">        response.setXmlDocument(d);</span>
+<span class="fc" id="L135">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    private XmlDataSource createDataSource(DocumentMetadata meta, XmlDocument xmlDoc) {
+<span class="fc" id="L139">        XmlDataSource answer = new XmlDataSource();</span>
+<span class="fc" id="L140">        answer.setDataSourceType(meta.getDataSourceType());</span>
+<span class="fc" id="L141">        answer.setId(meta.getId());</span>
+<span class="fc" id="L142">        answer.setName(meta.getName());</span>
+<span class="fc" id="L143">        answer.setDescription(meta.getDescription());</span>
+<span class="fc" id="L144">        StringBuffer uri = new StringBuffer(&quot;atlas:xml:&quot;);</span>
+<span class="fc" id="L145">        uri.append(meta.getId());</span>
+<span class="fc" id="L146">        answer.setUri(uri.toString());</span>
+<span class="fc" id="L147">        answer.setXmlNamespaces(xmlDoc.getXmlNamespaces());</span>
+<span class="fc" id="L148">        return answer;</span>
     }
 
     @Override
     public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
             throws AtlasException {
-<span class="fc" id="L139">        XmlInspectionService s = new XmlInspectionService();</span>
+<span class="fc" id="L154">        XmlInspectionService s = new XmlInspectionService();</span>
         XmlDocument d;
-<span class="pc bpc" id="L141" title="2 of 3 branches missed.">        switch (meta.getInspectionType()) {</span>
+<span class="pc bpc" id="L156" title="2 of 3 branches missed.">        switch (meta.getInspectionType()) {</span>
             case INSTANCE:
-<span class="nc" id="L143">                d = s.inspectXmlDocument(spec);</span>
-<span class="nc" id="L144">                break;</span>
+<span class="nc" id="L158">                d = s.inspectXmlDocument(spec);</span>
+<span class="nc" id="L159">                break;</span>
             case SCHEMA:
-<span class="fc" id="L146">                d = s.inspectSchema(spec);</span>
-<span class="fc" id="L147">                break;</span>
+<span class="fc" id="L161">                d = s.inspectSchema(spec);</span>
+<span class="fc" id="L162">                break;</span>
             default:
-<span class="nc" id="L149">                throw new AtlasException(&quot;Unsupported inspection type: &quot; + meta.getInspectionType());</span>
+<span class="nc" id="L164">                throw new AtlasException(&quot;Unsupported inspection type: &quot; + meta.getInspectionType());</span>
         }
-<span class="pc bpc" id="L151" title="1 of 2 branches missed.">        if (d != null) {</span>
-<span class="fc" id="L152">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), d);</span>
+<span class="pc bpc" id="L166" title="1 of 2 branches missed.">        if (d != null) {</span>
+<span class="fc" id="L167">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), d);</span>
         }
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L169">    }</span>
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L159">        return null;</span>
+<span class="nc" id="L174">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L165">        return null;</span>
+<span class="nc" id="L180">        return null;</span>
     }
 
     @Override
     protected Logger getLogger() {
-<span class="fc" id="L170">        return XmlService.LOG;</span>
+<span class="fc" id="L185">        return XmlService.LOG;</span>
     }
 
 }

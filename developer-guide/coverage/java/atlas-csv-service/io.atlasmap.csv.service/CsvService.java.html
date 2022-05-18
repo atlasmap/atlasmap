@@ -42,6 +42,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.csv.core.CsvConfig;
 import io.atlasmap.csv.core.CsvFieldReader;
+import io.atlasmap.csv.v2.CsvDataSource;
 import io.atlasmap.csv.v2.CsvInspectionRequest;
 import io.atlasmap.csv.v2.CsvInspectionResponse;
 import io.atlasmap.service.AtlasService;
@@ -67,7 +68,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Path(&quot;/csv/&quot;)
 public class CsvService extends ModuleService {
 
-<span class="fc" id="L70">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
+<span class="fc" id="L71">    private static final Logger LOG = LoggerFactory.getLogger(CsvService.class);</span>
 
     /**
      * A constructor.
@@ -75,9 +76,9 @@ public class CsvService extends ModuleService {
      * @param documentService DocumentService
      */
     public CsvService(AtlasService atlasService, DocumentService documentService) {
-<span class="fc" id="L78">        super(atlasService, documentService);</span>
-<span class="fc" id="L79">        getDocumentService().registerModuleService(DocumentType.CSV, this);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L79">        super(atlasService, documentService);</span>
+<span class="fc" id="L80">        getDocumentService().registerModuleService(DocumentType.CSV, this);</span>
+<span class="fc" id="L81">    }</span>
 
     /**
      * Imports a CSV instance and return a Document object.
@@ -104,67 +105,93 @@ public class CsvService extends ModuleService {
             @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
             @Context UriInfo uriInfo
         ) throws IOException  {
-<span class="fc" id="L107">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L108">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L109">        CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);</span>
-<span class="fc" id="L110">        DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);</span>
-<span class="fc" id="L111">        Map&lt;String,String&gt; options = request.getOptions();</span>
-<span class="fc" id="L112">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
+<span class="fc" id="L110">        CsvInspectionRequest request = fromJson(requestIn, CsvInspectionRequest.class);</span>
+<span class="fc" id="L111">        DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);</span>
+<span class="fc" id="L112">        CsvDataSource dataSource = createDataSource(metadata);</span>
+<span class="fc" id="L113">        Map&lt;String,String&gt; options = request.getOptions();</span>
+<span class="fc" id="L114">        CsvInspectionResponse response = new CsvInspectionResponse();</span>
         try {
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L115">                LOG.debug(&quot;Options: {}&quot;, options);</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L117">                LOG.debug(&quot;Options: {}&quot;, options);</span>
             }
-<span class="fc" id="L117">            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), documentId, metadata);</span>
-<span class="fc" id="L118">            InputStream specification = new ByteArrayInputStream(request.getCsvData().getBytes());</span>
-<span class="fc" id="L119">            storeDocumentSpecification(mappingDefinitionId, metadata.getDataSourceType(), documentId, specification);</span>
-<span class="fc" id="L120">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
-<span class="fc" id="L121">            DocumentKey docKey = new DocumentKey(metadata.getDataSourceType(), documentId);</span>
-<span class="fc" id="L122">            File specFile = admHandler.getDocumentSpecificationFile(docKey);</span>
-<span class="fc" id="L123">            performDocumentInspection(mappingDefinitionId, metadata, specFile);</span>
-<span class="fc" id="L124">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
-<span class="fc" id="L125">            response.setCsvDocument(fromJson(new FileInputStream(f), Document.class));</span>
-<span class="nc" id="L126">        } catch (Exception e) {</span>
-<span class="nc" id="L127">            LOG.error(&quot;Error importing CSV: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L128">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L119">            storeDocumentMetadata(mappingDefinitionId, metadata.getDataSourceType(), documentId, metadata, dataSource);</span>
+<span class="fc" id="L120">            InputStream specification = new ByteArrayInputStream(request.getCsvData().getBytes());</span>
+<span class="fc" id="L121">            storeDocumentSpecification(mappingDefinitionId, metadata.getDataSourceType(), documentId, specification);</span>
+<span class="fc" id="L122">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L123">            DocumentKey docKey = new DocumentKey(metadata.getDataSourceType(), documentId);</span>
+<span class="fc" id="L124">            File specFile = admHandler.getDocumentSpecificationFile(docKey);</span>
+<span class="fc" id="L125">            performDocumentInspection(mappingDefinitionId, metadata, specFile);</span>
+<span class="fc" id="L126">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
+<span class="fc" id="L127">            response.setCsvDocument(fromJson(new FileInputStream(f), Document.class));</span>
+<span class="nc" id="L128">        } catch (Exception e) {</span>
+<span class="nc" id="L129">            LOG.error(&quot;Error importing CSV: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L130">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L130">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L132">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L134">            LOG.debug((&quot;Response: {}&quot; + new ObjectMapper().writeValueAsString(response)));</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L136">            LOG.debug((&quot;Response: {}&quot; + new ObjectMapper().writeValueAsString(response)));</span>
         }
-<span class="fc" id="L136">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L138">        return Response.ok().entity(toJson(response)).build();</span>
+    }
+
+    private CsvDataSource createDataSource(DocumentMetadata meta) {
+<span class="fc" id="L142">        CsvDataSource answer = new CsvDataSource();</span>
+<span class="fc" id="L143">        answer.setDataSourceType(meta.getDataSourceType());</span>
+<span class="fc" id="L144">        answer.setId(meta.getId());</span>
+<span class="fc" id="L145">        answer.setName(meta.getName());</span>
+<span class="fc" id="L146">        answer.setDescription(meta.getDescription());</span>
+<span class="fc" id="L147">        StringBuffer uri = new StringBuffer(&quot;atlas:csv:&quot;);</span>
+<span class="fc" id="L148">        uri.append(meta.getId());</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (!meta.getInspectionParameters().isEmpty()) {</span>
+<span class="fc" id="L150">            uri.append(&quot;?&quot;);</span>
+<span class="fc" id="L151">            boolean first = true;</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">            for (Map.Entry&lt;String,String&gt; entry : meta.getInspectionParameters().entrySet()) {</span>
+<span class="fc bfc" id="L153" title="All 2 branches covered.">                if (!first) {</span>
+<span class="fc" id="L154">                    uri.append(&quot;&amp;&quot;);</span>
+                }
+<span class="fc" id="L156">                first = false;</span>
+<span class="fc" id="L157">                uri.append(entry.getKey());</span>
+<span class="fc" id="L158">                uri.append(&quot;=&quot;);</span>
+<span class="fc" id="L159">                uri.append(entry.getValue());</span>
+<span class="fc" id="L160">            }</span>
+        }
+<span class="fc" id="L162">        answer.setUri(uri.toString());</span>
+<span class="fc" id="L163">        return answer;</span>
     }
 
     @Override
     public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
             throws AtlasException {
         try {
-<span class="fc" id="L143">            CsvConfig csvConfig = CsvConfig.newConfig(meta.getInspectionParameters());</span>
-<span class="fc" id="L144">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
-<span class="fc" id="L145">            csvFieldReader.setDocument(new FileInputStream(spec));</span>
-<span class="fc" id="L146">            Document document = csvFieldReader.readSchema();</span>
-<span class="fc" id="L147">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), document);</span>
-<span class="nc" id="L148">        } catch (Exception e) {</span>
-<span class="nc" id="L149">            throw new AtlasException(e);</span>
-<span class="fc" id="L150">        }</span>
-<span class="fc" id="L151">    }</span>
+<span class="fc" id="L170">            CsvConfig csvConfig = CsvConfig.newConfig(meta.getInspectionParameters());</span>
+<span class="fc" id="L171">            CsvFieldReader csvFieldReader = new CsvFieldReader(csvConfig);</span>
+<span class="fc" id="L172">            csvFieldReader.setDocument(new FileInputStream(spec));</span>
+<span class="fc" id="L173">            Document document = csvFieldReader.readSchema();</span>
+<span class="fc" id="L174">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), document);</span>
+<span class="nc" id="L175">        } catch (Exception e) {</span>
+<span class="nc" id="L176">            throw new AtlasException(e);</span>
+<span class="fc" id="L177">        }</span>
+<span class="fc" id="L178">    }</span>
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L156">        return null;</span>
+<span class="nc" id="L183">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L162">        return null;</span>
+<span class="nc" id="L189">        return null;</span>
     }
 
     @Override
     protected Logger getLogger() {
-<span class="fc" id="L167">        return CsvService.LOG;</span>
+<span class="fc" id="L194">        return CsvService.LOG;</span>
     }
 
 }

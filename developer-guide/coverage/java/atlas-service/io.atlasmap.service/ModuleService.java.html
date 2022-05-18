@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.v2.BaseInspectionRequest;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentMetadata;
@@ -55,10 +56,10 @@ public abstract class ModuleService extends BaseAtlasService {
      * @param atlasService AtlasService
      * @param documentService DocumentService
      */
-<span class="fc" id="L58">    public ModuleService(AtlasService atlasService, DocumentService documentService) {</span>
-<span class="fc" id="L59">        this.atlasService = atlasService;</span>
-<span class="fc" id="L60">        this.documentService = documentService;</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L59">    public ModuleService(AtlasService atlasService, DocumentService documentService) {</span>
+<span class="fc" id="L60">        this.atlasService = atlasService;</span>
+<span class="fc" id="L61">        this.documentService = documentService;</span>
+<span class="fc" id="L62">    }</span>
 
 
     /**
@@ -97,7 +98,7 @@ public abstract class ModuleService extends BaseAtlasService {
      * @return AtlasService
      */
     protected AtlasService getAtlasService() {
-<span class="fc" id="L100">        return this.atlasService;</span>
+<span class="fc" id="L101">        return this.atlasService;</span>
     }
 
     /**
@@ -105,7 +106,7 @@ public abstract class ModuleService extends BaseAtlasService {
      * @return DocumentService
      */
     protected DocumentService getDocumentService() {
-<span class="fc" id="L108">        return this.documentService;</span>
+<span class="fc" id="L109">        return this.documentService;</span>
     }
 
     /**
@@ -114,29 +115,30 @@ public abstract class ModuleService extends BaseAtlasService {
      * @return created
      */
     protected &lt;T extends BaseInspectionRequest&gt; DocumentMetadata createDocumentMetadataFrom(T request, DataSourceType dsType, String documentId) {
-<span class="fc" id="L117">        DocumentMetadata answer = new DocumentMetadata();</span>
-<span class="pc bpc" id="L118" title="1 of 4 branches missed.">        if (request.getDocumentId() == null || !request.getDocumentId().equals(documentId)) {</span>
-<span class="fc" id="L119">            getLogger().warn(</span>
+<span class="fc" id="L118">        DocumentMetadata answer = new DocumentMetadata();</span>
+<span class="pc bpc" id="L119" title="1 of 4 branches missed.">        if (request.getDocumentId() == null || !request.getDocumentId().equals(documentId)) {</span>
+<span class="fc" id="L120">            getLogger().warn(</span>
                 &quot;Document ID is not consistent - path parameter has '{}' while '{}' is in the InspectionRequest. '{}' will be used&quot;,
-<span class="fc" id="L121">                documentId, request.getDocumentId(), documentId);</span>
+<span class="fc" id="L122">                documentId, request.getDocumentId(), documentId);</span>
         }
-<span class="fc" id="L123">        answer.setDataSourceType(dsType);</span>
-<span class="fc" id="L124">        answer.setId(documentId);</span>
-<span class="fc" id="L125">        answer.setName(request.getDocumentName());</span>
-<span class="fc" id="L126">        answer.setDescription(request.getDocumentDescription());</span>
-<span class="fc" id="L127">        answer.setDocumentType(request.getDocumentType());</span>
-<span class="fc" id="L128">        answer.setInspectionType(request.getInspectionType());</span>
-<span class="fc" id="L129">        answer.setInspectionParameters(request.getOptions());</span>
-<span class="fc" id="L130">        answer.setFieldNameExclusions(request.getFieldNameExclusions());</span>
-<span class="fc" id="L131">        answer.setTypeNameExclusions(request.getTypeNameExclusions());</span>
-<span class="fc" id="L132">        answer.setNamespaceExclusions(request.getNamespaceExclusions());</span>
-<span class="fc" id="L133">        return answer;</span>
+<span class="fc" id="L124">        answer.setDataSourceType(dsType);</span>
+<span class="fc" id="L125">        answer.setId(documentId);</span>
+<span class="fc" id="L126">        answer.setName(request.getDocumentName());</span>
+<span class="fc" id="L127">        answer.setDescription(request.getDocumentDescription());</span>
+<span class="fc" id="L128">        answer.setDocumentType(request.getDocumentType());</span>
+<span class="fc" id="L129">        answer.setInspectionType(request.getInspectionType());</span>
+<span class="fc" id="L130">        answer.setInspectionParameters(request.getOptions());</span>
+<span class="fc" id="L131">        answer.setFieldNameExclusions(request.getFieldNameExclusions());</span>
+<span class="fc" id="L132">        answer.setTypeNameExclusions(request.getTypeNameExclusions());</span>
+<span class="fc" id="L133">        answer.setNamespaceExclusions(request.getNamespaceExclusions());</span>
+<span class="fc" id="L134">        return answer;</span>
     }
 
     /**
-     * Persists the InspectionRequest object as a Document metadata. The combination of the InspectionRequest and
+     * Persists the Document Metadata. The combination of the {@link DocumentMetadata} and
      * the Document specification stored with {@link #storeDocumentSpecification(Integer,DataSourceType,String,InputStream)}
      * have to be a complete set for reproducing Document inspection.
+     * This also sets the corresponding {@link DataSource} into the Mapping Definition.
      * @param mappingDefinitionId Mapping Definition ID
      * @param dsType DataSourceType indicating SOURCE or TARGET
      * @param documentId Document ID
@@ -144,22 +146,24 @@ public abstract class ModuleService extends BaseAtlasService {
      * Document ID/name/description, inspection parameters, etc
      */
     protected void storeDocumentMetadata(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
-            DocumentMetadata metadata) {
+            DocumentMetadata metadata, DataSource dataSource) {
         try {
-<span class="fc" id="L149">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
-<span class="fc" id="L150">            handler.setDocumentMetadata(new DocumentKey(dsType, documentId), metadata);</span>
-<span class="fc" id="L151">            handler.persist();</span>
-<span class="nc" id="L152">        } catch (Exception e) {</span>
-<span class="nc" id="L153">            throw new WebApplicationException(</span>
-<span class="nc" id="L154">                    String.format(&quot;Failed to store a metadata of the Document %s:%s&quot;, mappingDefinitionId, documentId),</span>
+<span class="fc" id="L151">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L152">            DocumentKey docKey = new DocumentKey(dsType, documentId);</span>
+<span class="fc" id="L153">            handler.setDocumentMetadata(docKey, metadata);</span>
+<span class="fc" id="L154">            handler.getAtlasMappingHandler().setDataSource(docKey, dataSource);</span>
+<span class="fc" id="L155">            handler.persist();</span>
+<span class="nc" id="L156">        } catch (Exception e) {</span>
+<span class="nc" id="L157">            throw new WebApplicationException(</span>
+<span class="nc" id="L158">                    String.format(&quot;Failed to store a metadata of the Document %s:%s&quot;, mappingDefinitionId, documentId),</span>
                     e);
-<span class="fc" id="L156">        }</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L160">        }</span>
+<span class="fc" id="L161">    }</span>
 
     /**
      * Persists the Document specification such as JSON schema for the JSON Document. The combination of
-     * the InspectionRequest stored with {@link #storeDocumentMetadata(Integer,DataSourceType,String,DocumentMetadata)} and the Document specification
-     * have to be a complete set for reproducing Document inspection.
+     * the InspectionRequest stored with {@link #storeDocumentMetadata(Integer,DataSourceType,String,DocumentMetadata,DataSource)}
+     *  and the Document specification have to be a complete set for reproducing Document inspection.
      * @param mappingDefinitionId Mapping Definition ID
      * @param dsType DataSourceType indicating SOURCE or TARGET
      * @param documentId Document ID
@@ -168,16 +172,16 @@ public abstract class ModuleService extends BaseAtlasService {
     protected void storeDocumentSpecification(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
             InputStream specification) {
         try {
-<span class="fc" id="L171">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
-<span class="fc" id="L172">            handler.setDocumentSpecification(new DocumentKey(dsType, documentId), specification);</span>
-<span class="fc" id="L173">            handler.persist();</span>
-<span class="nc" id="L174">        } catch (Exception e) {</span>
-<span class="nc" id="L175">            throw new WebApplicationException(</span>
-<span class="nc" id="L176">                    String.format(&quot;Failed to store a specification of the Document %s:%s&quot;, mappingDefinitionId,</span>
+<span class="fc" id="L175">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L176">            handler.setDocumentSpecification(new DocumentKey(dsType, documentId), specification);</span>
+<span class="fc" id="L177">            handler.persist();</span>
+<span class="nc" id="L178">        } catch (Exception e) {</span>
+<span class="nc" id="L179">            throw new WebApplicationException(</span>
+<span class="nc" id="L180">                    String.format(&quot;Failed to store a specification of the Document %s:%s&quot;, mappingDefinitionId,</span>
                             documentId),
                     e);
-<span class="fc" id="L179">        }</span>
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L183">        }</span>
+<span class="fc" id="L184">    }</span>
 
     /**
      * Persists the Document inspection result as a JSON file. The &lt;code&gt;resultObject&lt;/code&gt; argument
@@ -190,16 +194,16 @@ public abstract class ModuleService extends BaseAtlasService {
     protected void storeInspectionResult(Integer mappingDefinitionId, DataSourceType dsType, String documentId,
             Serializable resultObject) {
         try {
-<span class="fc" id="L193">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
-<span class="fc" id="L194">            handler.setDocumentInspectionResult(new DocumentKey(dsType, documentId), resultObject);</span>
-<span class="fc" id="L195">            handler.persist();</span>
-<span class="nc" id="L196">        } catch (Exception e) {</span>
-<span class="nc" id="L197">            throw new WebApplicationException(</span>
-<span class="nc" id="L198">                    String.format(&quot;Failed to store an inspection result of the Document %s:%s&quot;, mappingDefinitionId,</span>
+<span class="fc" id="L197">            ADMArchiveHandler handler = atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
+<span class="fc" id="L198">            handler.setDocumentInspectionResult(new DocumentKey(dsType, documentId), resultObject);</span>
+<span class="fc" id="L199">            handler.persist();</span>
+<span class="nc" id="L200">        } catch (Exception e) {</span>
+<span class="nc" id="L201">            throw new WebApplicationException(</span>
+<span class="nc" id="L202">                    String.format(&quot;Failed to store an inspection result of the Document %s:%s&quot;, mappingDefinitionId,</span>
                             documentId),
                     e);
-<span class="fc" id="L201">        }</span>
-<span class="fc" id="L202">    }</span>
+<span class="fc" id="L205">        }</span>
+<span class="fc" id="L206">    }</span>
 
     /**
      * Simple liveness check method used in liveness checks. Must not be protected via authetication.
@@ -211,8 +215,8 @@ public abstract class ModuleService extends BaseAtlasService {
     @Operation(summary = &quot;Ping&quot;, description = &quot;Simple liveness check method used in liveness checks. Must not be protected via authetication.&quot;)
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;, content = @Content(schema = @Schema(type = &quot;string&quot;)), description = &quot;Return 'pong'&quot;))
     public Response ping() {
-<span class="nc" id="L214">        getLogger().debug(&quot;Ping...  responding with 'pong'.&quot;);</span>
-<span class="nc" id="L215">        return Response.ok().entity(&quot;pong&quot;).build();</span>
+<span class="nc" id="L218">        getLogger().debug(&quot;Ping...  responding with 'pong'.&quot;);</span>
+<span class="nc" id="L219">        return Response.ok().entity(&quot;pong&quot;).build();</span>
     }
 
 }

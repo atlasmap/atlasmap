@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.2% </span>
+                <span class="strong">85.17% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>518/608</span>
+                <span class='fraction'>517/607</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.52% </span>
+                <span class="strong">72.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>285/393</span>
+                <span class='fraction'>287/395</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.44% </span>
+                <span class="strong">84.41% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>445/527</span>
+                <span class='fraction'>444/526</span>
             </div>
         
             
@@ -1771,8 +1771,6 @@
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2043,8 +2041,8 @@
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2410,34 +2408,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">14x</span>
-<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">47x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">47x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
@@ -3137,9 +3137,7 @@ export class MappingSerializer {
     }
     cfg.mappings.name = this.deserializeAtlasMappingName(json);
     this.extractCheckVersion(json, cfg);
-    cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(
-      MappingSerializer.deserializeDocs(json, cfg.mappings)!
-    ); // TODO: check this non null operator
+    MappingSerializer.deserializeDocs(json, cfg);
     try {
       const mappings = await MappingSerializer.deserializeMappings(json, cfg);
       cfg.mappings.mappings = cfg.mappings.mappings.concat(mappings);
@@ -3775,17 +3773,21 @@ export class MappingSerializer {
 &nbsp;
   private static deserializeDocs(
     json: IAtlasMappingContainer,
-    mappingDefinition: MappingDefinition
-  ): DocumentDefinition[] | null {
-    const docs: DocumentDefinition[] = [];
+    cfg: ConfigModel
+  ) {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!json || !json.AtlasMapping || !json.AtlasMapping.dataSource) {
-<span class="cstat-no" title="statement not covered" >      return null;</span>
+<span class="cstat-no" title="statement not covered" >      return;</span>
     }
     for (const docRef of json.AtlasMapping.dataSource) {
-      const doc: DocumentDefinition = new DocumentDefinition();
-      doc.isSource = docRef.dataSourceType === 'SOURCE';
+      const isSource = docRef.dataSourceType === DataSourceType.SOURCE;
+      let doc = cfg.getDocForIdentifier(docRef.id, isSource);
+      if (!doc) {
+        console.error(
+          `Unknown Document ${docRef.name} (ID:${docRef.id}) is in the Mapping Definition`
+        );
+        continue;
+      }
       doc.uri = docRef.uri;
-      doc.id = docRef.id;
       doc.name = docRef.name ? docRef.name : '';
       doc.description = docRef.description;
       const xmlDocRef = docRef as IXmlDataSource;
@@ -3801,11 +3803,9 @@ export class MappingSerializer {
         }
       }
       <span class="missing-if-branch" title="if path not taken" >I</span>if (xmlDocRef.template) {
-<span class="cstat-no" title="statement not covered" >        mappingDefinition.templateText = xmlDocRef.template;</span>
+<span class="cstat-no" title="statement not covered" >        cfg.mappings!.templateText = xmlDocRef.template;</span>
       }
-      docs.push(doc);
     }
-    return docs;
   }
 &nbsp;
   private static async deserializeMappings(
@@ -4167,7 +4167,7 @@ export class MappingSerializer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue May 17 2022 18:40:00 GMT+0000 (Coordinated Universal Time)
+                at Wed May 18 2022 12:45:26 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -175,11 +175,43 @@ public class AtlasMappingHandler {
 <span class="fc" id="L175">    }</span>
 
     /**
+     * Sets the {@link DataSource}. It updates if there is an existing DataSource identified by
+     * the Document ID and DataSourceType, otherwise adds a new entry.
+     * @param docKey DocumentKey
+     * @param dataSource DataSource
+     */
+    public void setDataSource(DocumentKey docKey, DataSource dataSource) {
+<span class="fc" id="L184">        Optional&lt;DataSource&gt; existing = lookupDataSource(docKey);</span>
+<span class="fc bfc" id="L185" title="All 2 branches covered.">        if (existing.isPresent()) {</span>
+<span class="fc" id="L186">            int pos = this.mapping.getDataSource().indexOf(existing.get());</span>
+<span class="fc" id="L187">            this.mapping.getDataSource().set(pos, dataSource);</span>
+<span class="fc" id="L188">        } else {</span>
+<span class="fc" id="L189">            this.mapping.getDataSource().add(dataSource);</span>
+        }
+<span class="fc" id="L191">    }</span>
+
+    private Optional&lt;DataSource&gt; lookupDataSource(DocumentKey docKey) {
+<span class="fc" id="L194">        return this.mapping.getDataSource().stream().filter(</span>
+<span class="pc bpc" id="L195" title="1 of 2 branches missed.">            ds -&gt; ds.getDataSourceType() == docKey.getDataSourceType()</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">            &amp;&amp; ds.getId().equals(docKey.getDocumentId())).findAny();</span>
+    }
+
+    /**
+     * Gets the existing {@link DataSource} identified by the {@link DocumentKey}.
+     * @param docKey DocumentKey
+     * @return DataSource if found, or null
+     */
+    public DataSource getDataSource(DocumentKey docKey) {
+<span class="fc" id="L205">        Optional&lt;DataSource&gt; existing = lookupDataSource(docKey);</span>
+<span class="pc bpc" id="L206" title="1 of 2 branches missed.">        return existing.isPresent() ? existing.get() : null;</span>
+    }
+  
+    /**
      * Gets the {@link AtlasMapping}.
      * @return AtlasMapping
      */
     public AtlasMapping getAtlasMapping() {
-<span class="fc" id="L182">        return this.mapping;</span>
+<span class="fc" id="L214">        return this.mapping;</span>
     }
 
 }

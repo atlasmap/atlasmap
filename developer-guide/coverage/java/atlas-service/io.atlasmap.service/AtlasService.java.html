@@ -191,8 +191,8 @@ public class AtlasService extends BaseAtlasService {
 <span class="fc" id="L191">                }</span>
 <span class="fc" id="L192">                ADMArchiveHandler handler = getADMArchiveHandler(mappingDefinitionId);</span>
 <span class="fc" id="L193">                AtlasMapping map = handler.getMappingDefinition();</span>
-<span class="fc bfc" id="L194" title="All 2 branches covered.">                if (map == null) {</span>
-<span class="fc" id="L195">                    continue;</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">                if (map == null) {</span>
+<span class="nc" id="L195">                    continue;</span>
                 }
 <span class="fc" id="L197">                StringMapEntry mapEntry = new StringMapEntry();</span>
 <span class="fc" id="L198">                mapEntry.setName(map.getName());</span>

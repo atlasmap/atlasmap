@@ -201,14 +201,16 @@ public class DocumentService extends BaseAtlasService {
 <span class="fc" id="L201">        LOG.debug(&quot;deleteDocumentRequest: {}:{}:{}&quot;, mappingDefinitionId, dataSourceType, documentId);</span>
         try {
 <span class="fc" id="L203">            ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);</span>
-<span class="fc" id="L204">            admHandler.deleteDocument(dataSourceType, documentId);</span>
-<span class="fc" id="L205">            admHandler.persist();</span>
-<span class="nc" id="L206">        } catch (AtlasException e) {</span>
-<span class="nc" id="L207">            throw new WebApplicationException(</span>
-<span class="nc" id="L208">                String.format(&quot;Failed to delete the Document %s:%s:%s&quot;, mappingDefinitionId, dataSourceType, documentId),</span>
+<span class="fc" id="L204">            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);</span>
+<span class="fc" id="L205">            admHandler.deleteDocument(docKey);</span>
+<span class="fc" id="L206">            admHandler.getAtlasMappingHandler().removeDocumentReference(docKey);</span>
+<span class="fc" id="L207">            admHandler.persist();</span>
+<span class="nc" id="L208">        } catch (AtlasException e) {</span>
+<span class="nc" id="L209">            throw new WebApplicationException(</span>
+<span class="nc" id="L210">                String.format(&quot;Failed to delete the Document %s:%s:%s&quot;, mappingDefinitionId, dataSourceType, documentId),</span>
                 e);
-<span class="fc" id="L210">        }</span>
-<span class="fc" id="L211">        return Response.ok().build();</span>
+<span class="fc" id="L212">        }</span>
+<span class="fc" id="L213">        return Response.ok().build();</span>
     }
 
     /**
@@ -217,8 +219,8 @@ public class DocumentService extends BaseAtlasService {
      * @param instance service
      */
     public void registerModuleService(DocumentType documentType, ModuleService instance) {
-<span class="fc" id="L220">        moduleServices.put(documentType, instance);</span>
-<span class="fc" id="L221">    }</span>
+<span class="fc" id="L222">        moduleServices.put(documentType, instance);</span>
+<span class="fc" id="L223">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

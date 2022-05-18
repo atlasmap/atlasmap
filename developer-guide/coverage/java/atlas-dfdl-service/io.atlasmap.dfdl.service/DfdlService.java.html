@@ -49,6 +49,7 @@ import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,7 +65,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @Path(&quot;/dfdl/&quot;)
 public class DfdlService extends ModuleService {
 
-<span class="fc" id="L67">    private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);</span>
+<span class="fc" id="L68">    private static final Logger LOG = LoggerFactory.getLogger(DfdlService.class);</span>
 
     @Context
     private ResourceContext resourceContext;
@@ -75,9 +76,9 @@ public class DfdlService extends ModuleService {
      * @param documentService DocumentService
      */
     public DfdlService(AtlasService atlasService, DocumentService documentService) {
-<span class="fc" id="L78">        super(atlasService, documentService);</span>
-<span class="fc" id="L79">        getDocumentService().registerModuleService(DocumentType.DFDL, this);</span>
-<span class="fc" id="L80">    }</span>
+<span class="fc" id="L79">        super(atlasService, documentService);</span>
+<span class="fc" id="L80">        getDocumentService().registerModuleService(DocumentType.DFDL, this);</span>
+<span class="fc" id="L81">    }</span>
 
     /**
      * Import a DFDL schema or instance and return a Document object.
@@ -102,90 +103,104 @@ public class DfdlService extends ModuleService {
             @Parameter(description = &quot;Document ID&quot;) @PathParam(&quot;documentId&quot;) String documentId,
             @Context UriInfo uriInfo
         ) {
-<span class="fc" id="L105">        long startTime = System.currentTimeMillis();</span>
+<span class="fc" id="L106">        long startTime = System.currentTimeMillis();</span>
 
-<span class="fc" id="L107">        DfdlInspectionRequest inspectionRequest = fromJson(request, DfdlInspectionRequest.class);</span>
-<span class="fc" id="L108">        DfdlInspectionResponse response = new DfdlInspectionResponse();</span>
-<span class="fc" id="L109">        XmlDocument d = null;</span>
+<span class="fc" id="L108">        DfdlInspectionRequest inspectionRequest = fromJson(request, DfdlInspectionRequest.class);</span>
+<span class="fc" id="L109">        DfdlInspectionResponse response = new DfdlInspectionResponse();</span>
+<span class="fc" id="L110">        XmlDocument d = null;</span>
 
         try {
 
-<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            if (inspectionRequest.getInspectionType() == null) {</span>
-<span class="nc" id="L114">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
-<span class="nc" id="L115">                return Response.ok().entity(toJson(response)).build();</span>
+<span class="pc bpc" id="L114" title="1 of 2 branches missed.">            if (inspectionRequest.getInspectionType() == null) {</span>
+<span class="nc" id="L115">                response.setErrorMessage(&quot;Instance or Schema type must be specified in request&quot;);</span>
+<span class="nc" id="L116">                return Response.ok().entity(toJson(response)).build();</span>
             }
-<span class="fc" id="L117">            DocumentMetadata meta = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);</span>
-<span class="fc" id="L118">            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, meta);</span>
+<span class="fc" id="L118">            DocumentMetadata meta = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);</span>
 <span class="fc" id="L119">            ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);</span>
 <span class="fc" id="L120">            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);</span>
 <span class="fc" id="L121">            performDocumentInspection(mappingDefinitionId, meta, null);</span>
 <span class="fc" id="L122">            File f = admHandler.getDocumentInspectionResultFile(docKey);</span>
 <span class="fc" id="L123">            d = fromJson(new FileInputStream(f), XmlDocument.class);</span>
-<span class="nc" id="L124">        } catch (Exception e) {</span>
-<span class="nc" id="L125">            LOG.error(&quot;Error inspecting DFDL: &quot; + e.getMessage(), e);</span>
-<span class="nc" id="L126">            response.setErrorMessage(e.getMessage());</span>
+<span class="fc" id="L124">            XmlDataSource dataSource = createDataSource(meta, d);</span>
+<span class="fc" id="L125">            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, meta, dataSource);</span>
+<span class="nc" id="L126">        } catch (Exception e) {</span>
+<span class="nc" id="L127">            LOG.error(&quot;Error inspecting DFDL: &quot; + e.getMessage(), e);</span>
+<span class="nc" id="L128">            response.setErrorMessage(e.getMessage());</span>
         } finally {
-<span class="fc" id="L128">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
+<span class="fc" id="L130">            response.setExecutionTime(System.currentTimeMillis() - startTime);</span>
         }
 
-<span class="fc" id="L131">        response.setXmlDocument(d);</span>
-<span class="fc" id="L132">        return Response.ok().entity(toJson(response)).build();</span>
+<span class="fc" id="L133">        response.setXmlDocument(d);</span>
+<span class="fc" id="L134">        return Response.ok().entity(toJson(response)).build();</span>
     }
 
     private DocumentMetadata createDocumentMetadataFrom(DfdlInspectionRequest request, DataSourceType dsType, String documentId) {
-<span class="fc" id="L136">        DocumentMetadata meta = super.createDocumentMetadataFrom(request, dsType, documentId);</span>
-<span class="fc" id="L137">        meta.getInspectionParameters().put(OPTION_DFDL_SCHEMA_NAME, request.getDfdlSchemaName());</span>
-<span class="fc" id="L138">        return meta;</span>
+<span class="fc" id="L138">        DocumentMetadata meta = super.createDocumentMetadataFrom(request, dsType, documentId);</span>
+<span class="fc" id="L139">        meta.getInspectionParameters().put(OPTION_DFDL_SCHEMA_NAME, request.getDfdlSchemaName());</span>
+<span class="fc" id="L140">        return meta;</span>
+    }
+
+    private XmlDataSource createDataSource(DocumentMetadata meta, XmlDocument xmlDoc) {
+<span class="fc" id="L144">        XmlDataSource answer = new XmlDataSource();</span>
+<span class="fc" id="L145">        answer.setDataSourceType(meta.getDataSourceType());</span>
+<span class="fc" id="L146">        answer.setId(meta.getId());</span>
+<span class="fc" id="L147">        answer.setName(meta.getName());</span>
+<span class="fc" id="L148">        answer.setDescription(meta.getDescription());</span>
+<span class="fc" id="L149">        StringBuffer uri = new StringBuffer(&quot;atlas:dfdl:&quot;);</span>
+<span class="fc" id="L150">        uri.append(meta.getId());</span>
+<span class="fc" id="L151">        answer.setUri(uri.toString());</span>
+<span class="fc" id="L152">        answer.setXmlNamespaces(xmlDoc.getXmlNamespaces());</span>
+<span class="fc" id="L153">        return answer;</span>
     }
 
     @Override
     public void performDocumentInspection(Integer mappingDefinitionId, DocumentMetadata meta, File spec)
             throws AtlasException {
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        ClassLoader loader = resourceContext != null</span>
-<span class="nc" id="L145">                ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
-<span class="fc" id="L146">                : DfdlService.class.getClassLoader();</span>
-<span class="fc" id="L147">        DfdlInspectionService s = new DfdlInspectionService(loader);</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        ClassLoader loader = resourceContext != null</span>
+<span class="nc" id="L160">                ? resourceContext.getResource(AtlasService.class).getLibraryLoader()</span>
+<span class="fc" id="L161">                : DfdlService.class.getClassLoader();</span>
+<span class="fc" id="L162">        DfdlInspectionService s = new DfdlInspectionService(loader);</span>
 
         XmlDocument d;
         try {
-<span class="pc bpc" id="L151" title="1 of 3 branches missed.">            switch (meta.getInspectionType()) {</span>
+<span class="pc bpc" id="L166" title="1 of 3 branches missed.">            switch (meta.getInspectionType()) {</span>
                 case INSTANCE:
-<span class="fc" id="L153">                    d = s.inspectDfdlInstance(meta.getInspectionParameters().get(OPTION_DFDL_SCHEMA_NAME),</span>
-<span class="fc" id="L154">                            meta.getInspectionParameters());</span>
-<span class="fc" id="L155">                    break;</span>
+<span class="fc" id="L168">                    d = s.inspectDfdlInstance(meta.getInspectionParameters().get(OPTION_DFDL_SCHEMA_NAME),</span>
+<span class="fc" id="L169">                            meta.getInspectionParameters());</span>
+<span class="fc" id="L170">                    break;</span>
                 case SCHEMA:
-<span class="fc" id="L157">                    d = s.inspectDfdlSchema(meta.getInspectionParameters().get(OPTION_DFDL_SCHEMA_NAME),</span>
-<span class="fc" id="L158">                            meta.getInspectionParameters());</span>
-<span class="fc" id="L159">                    break;</span>
+<span class="fc" id="L172">                    d = s.inspectDfdlSchema(meta.getInspectionParameters().get(OPTION_DFDL_SCHEMA_NAME),</span>
+<span class="fc" id="L173">                            meta.getInspectionParameters());</span>
+<span class="fc" id="L174">                    break;</span>
                 default:
-<span class="nc" id="L161">                    throw new AtlasException(&quot;Unsupported inspection type: &quot; + meta.getInspectionType());</span>
+<span class="nc" id="L176">                    throw new AtlasException(&quot;Unsupported inspection type: &quot; + meta.getInspectionType());</span>
             }
-<span class="nc" id="L163">        } catch (AtlasException e) {</span>
-<span class="nc" id="L164">            throw e;</span>
-<span class="nc" id="L165">        } catch (Exception e2) {</span>
-<span class="nc" id="L166">            throw new AtlasException(e2);</span>
-<span class="fc" id="L167">        }</span>
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        if (d != null) {</span>
-<span class="fc" id="L169">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), d);</span>
+<span class="nc" id="L178">        } catch (AtlasException e) {</span>
+<span class="nc" id="L179">            throw e;</span>
+<span class="nc" id="L180">        } catch (Exception e2) {</span>
+<span class="nc" id="L181">            throw new AtlasException(e2);</span>
+<span class="fc" id="L182">        }</span>
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">        if (d != null) {</span>
+<span class="fc" id="L184">            storeInspectionResult(mappingDefinitionId, meta.getDataSourceType(), meta.getId(), d);</span>
         }
 
-<span class="fc" id="L172">    }</span>
+<span class="fc" id="L187">    }</span>
 
     @Override
     public Field getField(String path, boolean recursive) {
         // TODO Auto-generated method stub
-<span class="nc" id="L177">        return null;</span>
+<span class="nc" id="L192">        return null;</span>
     }
 
     @Override
     public List&lt;Field&gt; searchFields(String keywords) {
         // TODO Auto-generated method stub
-<span class="nc" id="L183">        return null;</span>
+<span class="nc" id="L198">        return null;</span>
     }
 
     @Override
     protected Logger getLogger() {
-<span class="fc" id="L188">        return DfdlService.LOG;</span>
+<span class="fc" id="L203">        return DfdlService.LOG;</span>
     }
 
 }
