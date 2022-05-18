@@ -209,6 +209,28 @@ public class AtlasService extends BaseAtlasService {
         return Response.ok().entity(serialized).build();
     }
 
+    @DELETE
+    @Path("/all-documents")
+    @Produces({MediaType.APPLICATION_JSON})
+    @Operation(summary = "Delete All Documents", description = "Delete all user defined documents")
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Document was not found"),
+        @ApiResponse(responseCode = "500", description = "Document access error")})
+    public Response deleteAllDocuments(
+      @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId
+      ) {
+        LOG.debug("deleteAllDocumentsRequest: {}", mappingDefinitionId);
+        try {
+            ADMArchiveHandler admHandler = getADMArchiveHandler(mappingDefinitionId);
+            admHandler.deleteAllDocuments();
+        } catch (AtlasException e) {
+            throw new WebApplicationException(
+                String.format("Failed to delete all documents %s", mappingDefinitionId),
+                e);
+        }
+        return Response.ok().build();
+    }
+
     /**
      * Delete all mapping projects including Mapping Definitions and Documents saved on the server.
      * @return empty response
@@ -351,19 +373,24 @@ public class AtlasService extends BaseAtlasService {
     }
 
     /**
-     * Delete all user-defined library JAR files and mapping projects including Mapping Definitions and Documents saved on the server.
+     * Delete all user-defined library JAR files and mapping projects including Mapping Definitions and
+     * Documents associated with the specified mapping definition ID.
+     *
+     * @param mappingDefinitionId mapping definition ID
      * @return empty response
      */
     @DELETE
-    @Path("/all")
-    @Operation(summary = "Delete all", description = "Delete all user-defined library JAR files and mapping projects")
+    @Path("/all/{mappingDefinitionId}")
+    @Operation(summary = "Delete all", description = "Delete all user-defined library JAR files, documents and mapping projects")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "All user-defined libarary JARs and mapping projects were deleted successfully"),
-        @ApiResponse(responseCode = "204", description = "Unable to delete all user-defined JAR files and mapping projects") })
-    public Response deleteAll() {
-        LOG.debug("deleteAll");
+        @ApiResponse(responseCode = "200", description = "All user-defined libarary JARs,documents and mapping projects were deleted successfully"),
+        @ApiResponse(responseCode = "204", description = "Unable to delete all user-defined JAR files, documents and mapping projects") })
+    public Response deleteAll(
+        @Parameter(description = "Mapping Definition ID") @PathParam("mappingDefinitionId") Integer mappingDefinitionId) {
+        LOG.debug("deleteAll {} ", mappingDefinitionId);
         getLibraryLoader().clearLibraries();
         deleteAllMappingProjects();
+        deleteAllDocuments(mappingDefinitionId);
         return Response.ok().build();
     }
 

@@ -183,7 +183,10 @@ export class FileManagementService {
   resetAll(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
       this.cfg.errorService.resetAll();
-      const url = this.cfg.initCfg.baseAtlasServiceUrl + 'all';
+      const url =
+        this.cfg.initCfg.baseAtlasServiceUrl +
+        'all/' +
+        this.cfg.mappingDefinitionId;
       this.cfg.logger!.debug('Delete All Request');
       this.api
         .delete(url)

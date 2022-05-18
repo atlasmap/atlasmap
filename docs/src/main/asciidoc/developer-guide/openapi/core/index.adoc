@@ -142,21 +142,34 @@ endif::internal-generation[]
 [.deleteAll]
 ==== deleteAll
 
-`DELETE /all`
+`DELETE /all/{mappingDefinitionId}`
 
 Delete all
 
 ===== Description
 
-Delete all user-defined library JAR files and mapping projects
+Delete all user-defined library JAR files, documents and mapping projects
 
 
-// markup not found, no include::{specDir}all/DELETE/spec.adoc[opts=optional]
+// markup not found, no include::{specDir}all/\{mappingDefinitionId\}/DELETE/spec.adoc[opts=optional]
 
 
 
 ===== Parameters
 
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+|===
 
 
 
@@ -179,12 +192,12 @@ Delete all user-defined library JAR files and mapping projects
 
 
 | 200
-| All user-defined libarary JARs and mapping projects were deleted successfully
+| All user-defined libarary JARs,documents and mapping projects were deleted successfully
 |  <<>>
 
 
 | 204
-| Unable to delete all user-defined JAR files and mapping projects
+| Unable to delete all user-defined JAR files, documents and mapping projects
 |  <<>>
 
 |===
@@ -192,20 +205,105 @@ Delete all user-defined library JAR files and mapping projects
 ===== Samples
 
 
-// markup not found, no include::{snippetDir}all/DELETE/http-request.adoc[opts=optional]
+// markup not found, no include::{snippetDir}all/\{mappingDefinitionId\}/DELETE/http-request.adoc[opts=optional]
 
 
-// markup not found, no include::{snippetDir}all/DELETE/http-response.adoc[opts=optional]
+// markup not found, no include::{snippetDir}all/\{mappingDefinitionId\}/DELETE/http-response.adoc[opts=optional]
 
 
 
-// file not found, no * wiremock data link :all/DELETE/DELETE.json[]
+// file not found, no * wiremock data link :all/{mappingDefinitionId}/DELETE/DELETE.json[]
 
 
 ifdef::internal-generation[]
 ===== Implementation
 
-// markup not found, no include::{specDir}all/DELETE/implementation.adoc[opts=optional]
+// markup not found, no include::{specDir}all/\{mappingDefinitionId\}/DELETE/implementation.adoc[opts=optional]
+
+
+endif::internal-generation[]
+
+
+[.deleteAllDocuments]
+==== deleteAllDocuments
+
+`DELETE /all-documents`
+
+Delete All Documents
+
+===== Description
+
+Delete all user defined documents
+
+
+// markup not found, no include::{specDir}all-documents/DELETE/spec.adoc[opts=optional]
+
+
+
+===== Parameters
+
+====== Path Parameters
+
+[cols="2,3,1,1,1"]
+|===
+|Name| Description| Required| Default| Pattern
+
+| mappingDefinitionId
+| Mapping Definition ID 
+| X
+| null
+| 
+
+|===
+
+
+
+
+
+
+===== Return Type
+
+
+
+-
+
+
+===== Responses
+
+.http response codes
+[cols="2,3,1"]
+|===
+| Code | Message | Datatype
+
+
+| 204
+| Document was not found
+|  <<>>
+
+
+| 500
+| Document access error
+|  <<>>
+
+|===
+
+===== Samples
+
+
+// markup not found, no include::{snippetDir}all-documents/DELETE/http-request.adoc[opts=optional]
+
+
+// markup not found, no include::{snippetDir}all-documents/DELETE/http-response.adoc[opts=optional]
+
+
+
+// file not found, no * wiremock data link :all-documents/DELETE/DELETE.json[]
+
+
+ifdef::internal-generation[]
+===== Implementation
+
+// markup not found, no include::{specDir}all-documents/DELETE/implementation.adoc[opts=optional]
 
 
 endif::internal-generation[]

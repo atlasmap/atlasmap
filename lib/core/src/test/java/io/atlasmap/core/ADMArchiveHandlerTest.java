@@ -150,4 +150,20 @@ public class ADMArchiveHandlerTest {
         assertNull(handler.getDocumentSpecificationFile(targetDocKey));
         assertNull(handler.getDocumentInspectionResultFile(targetDocKey));
     }
+
+    @Test
+    public void testDeleteAllDocuments() throws Exception {
+        Path persistDir = Paths.get("target/testImportOldADM/persist");
+        Path libDir = Paths.get("target/testImportOldADM/lib");
+        ADMArchiveHandler handler = new ADMArchiveHandler();
+        handler.setPersistDirectory(persistDir);
+        handler.setLibraryDirectory(libDir);
+        handler.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("atlasmap-mapping.adm"));
+        DocumentCatalog docCatalog = handler.getDocumentCatalog();
+        assertEquals(1, docCatalog.getSources().size());
+        assertEquals(1, docCatalog.getTargets().size());
+
+        handler.deleteAllDocuments();
+        assertNull(handler.getDocumentCatalog());
+    }
 }

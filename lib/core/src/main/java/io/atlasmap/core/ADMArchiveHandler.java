@@ -334,10 +334,12 @@ public class ADMArchiveHandler {
      */
     public void setMappingDefinition(AtlasMapping mapping) {
         this.mappingDefinition = mapping;
-        if (AtlasUtil.isEmpty(mapping.getName())) {
-            mapping.setName(mappingDefinitionId);
+        if (mapping != null) {
+            if (AtlasUtil.isEmpty(mapping.getName())) {
+                mapping.setName(mappingDefinitionId);
+            }
+            this.atlasMappingHandler = new AtlasMappingHandler(mapping);
         }
-        this.atlasMappingHandler = new AtlasMappingHandler(mapping);
     }
 
     /**
@@ -731,6 +733,30 @@ public class ADMArchiveHandler {
         if (inspectedDir != null && specDir.exists()) {
             AtlasUtil.deleteDirectory(inspectedDir);
         }
+    }
+
+    /**
+     * Delete all source/target documents in the catalog.
+     *
+     * @throws AtlasException
+     */
+    public void deleteAllDocuments() throws AtlasException {
+        DocumentCatalog catalog = getDocumentCatalog();
+        if (catalog == null) {
+            return;
+        }
+
+        List<DocumentMetadata> docs = catalog.getSources();
+        for (int i=0; i<docs.size()-1; i++) {
+            deleteDocument(DataSourceType.SOURCE, docs.get(i).getId());
+        }
+
+        docs = catalog.getTargets();
+        for (int i=0; i<docs.size()-1; i++) {
+            deleteDocument(DataSourceType.TARGET, docs.get(i).getId());
+        }
+        setDocumentCatalog(null);
+        setMappingDefinition(null);
     }
 
     /**
