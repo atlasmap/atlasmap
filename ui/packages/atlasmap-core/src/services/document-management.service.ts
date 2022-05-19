@@ -545,7 +545,7 @@ export class DocumentManagementService {
               cfg.errorService.addError(
                 new ErrorInfo({
                   message:
-                    'The maximum number of fields matching the specified search filter has beeen exceeded  ' +
+                    'The maximum number of fields matching the specified search filter has been exceeded  ' +
                     'Try using a longer field filter.',
                   level: ErrorLevel.INFO,
                   scope: ErrorScope.APPLICATION,
