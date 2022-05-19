@@ -25,7 +25,7 @@ import { Alert, AlertActionCloseButton, Badge } from '@patternfly/react-core';
 import { IAtlasmapField, IAtlasmapMappedField, INotification } from './models';
 import React, { FunctionComponent } from 'react';
 
-import { Field } from '@atlasmap/core/dist/models/field.model';
+import { Field } from '@atlasmap/core/models/field.model';
 import { MappingDetailsSidebar } from '../Layout';
 
 export interface IMappingDetailsViewProps {

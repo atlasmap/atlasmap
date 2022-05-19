@@ -23,12 +23,6 @@ module.exports = ({ config }) => {
   const jsRule = config.module.rules.find((rule) => rule.test.test('.jsx'))
   jsRule.exclude = excludePaths
 
-  // HACK: Instruct Babel to check module type before injecting Core JS polyfills
-  // https://github.com/i-like-robots/broken-webpack-bundle-test-case
-  const babelConfig = jsRule.use.find(({ loader }) => loader === 'babel-loader')
-  if (babelConfig) {
-    babelConfig.options.sourceType = 'unambiguous'
-  }
 
   config.module.rules.push({
     test: /\.js$/,

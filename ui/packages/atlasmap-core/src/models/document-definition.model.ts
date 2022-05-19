@@ -82,8 +82,6 @@ export class PaddingField extends Field {
 }
 
 export class DocumentDefinition {
-  private static padField: Field;
-
   LEFT_BRACKET = '\x5b';
   RIGHT_BRACKET = '\x5d';
 

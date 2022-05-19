@@ -21,6 +21,7 @@
     "build": "npm-run-all build:module lint test",
     "test": "jest --runInBand",
     "test:coverage": "jest test --coverage --runInBand",
+    "test:watch": "yarn run test -- --watch",
     "lint": "eslint --ext .ts,.tsx,.js ./src",
     "format": "yarn lint --fix",
     "storybook": "start-storybook -p 6006"
@@ -29,7 +30,6 @@
     "@atlasmap/core": "2.4.0-SNAPSHOT"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.10",
     "@storybook/addon-actions": "^6.3.8",
     "@storybook/addon-docs": "^6.3.8",
     "@storybook/addon-knobs": "^6.3.0",
@@ -45,7 +45,6 @@
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.5",
-    "babel-loader": "8.1.0",
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
     "eslint-config-react-app": "^6.0.0",
@@ -124,7 +123,8 @@
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
       "ky": "ky/umd",
-      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.d.ts"
+      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.d.ts",
+      "@atlasmap/core": "<rootDir>../atlasmap-core/src"
     },
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "transform": {
