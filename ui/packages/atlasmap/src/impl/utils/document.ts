@@ -51,6 +51,7 @@ export async function changeDocumentName(
  * @param alias
  * @param uri
  * @param locationUri
+ * @param isTarget
  */
 export function createNamespace(
   docName: string,

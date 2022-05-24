@@ -46,12 +46,12 @@ export class ErrorInfo {
   private static errorIdentifierCounter = 0;
   private _identifier: string;
 
-  message: string;
-  level: ErrorLevel;
-  scope: ErrorScope;
-  type: ErrorType;
-  mapping: MappingModel;
-  field: MappedField;
+  message: string = '';
+  level: ErrorLevel = ErrorLevel.INFO;
+  scope: ErrorScope = ErrorScope.CONSTANT;
+  type: ErrorType = ErrorType.PREVIEW;
+  mapping: MappingModel = new MappingModel();
+  field: MappedField = new MappedField();
   object: any;
 
   constructor(init: Partial<ErrorInfo>) {

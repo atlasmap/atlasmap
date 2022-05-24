@@ -13,24 +13,21 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import {
-  CollectionType,
-  DocumentType,
-  InspectionType,
-} from '../contracts/common';
+import ky from 'ky/umd';
+import { Logger } from 'loglevel';
+import { editor } from 'monaco-editor';
 import { DocumentDefaultName } from '../common/config.types';
-import { DocumentDefinition } from './document-definition.model';
+import { CollectionType, DocumentType, InspectionType } from '../contracts/common';
 import { DocumentManagementService } from '../services/document-management.service';
 import { ErrorHandlerService } from '../services/error-handler.service';
 import { FieldActionService } from '../services/field-action.service';
 import { FileManagementService } from '../services/file-management.service';
 import { InitializationService } from '../services/initialization.service';
-import { Logger } from 'loglevel';
-import { MappingDefinition } from './mapping-definition.model';
 import { MappingExpressionService } from '../services/mapping-expression.service';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingPreviewService } from '../services/mapping-preview.service';
-import { editor } from 'monaco-editor';
+import { DocumentDefinition } from './document-definition.model';
+import { MappingDefinition } from './mapping-definition.model';
 
 export class DataMapperInitializationModel {
   dataMapperVersion = '';
@@ -75,17 +72,17 @@ export class DataMapperInitializationModel {
 }
 
 export class DocumentInitializationModel {
-  id: string;
-  type: DocumentType;
-  name: string;
-  description: string;
-  isSource: boolean;
+  id: string = '';
+  type: DocumentType = DocumentType.CONSTANT;
+  name: string = '';
+  description: string = '';
+  isSource: boolean = false;
   showFields = true;
-  inspectionType: InspectionType;
-  inspectionSource: string;
-  inspectionParameters: { [key: string]: string };
-  inspectionResult: string;
-  selectedRoot: string;
+  inspectionType: InspectionType = InspectionType.INSTANCE;
+  inspectionSource: string = '';
+  inspectionParameters: { [key: string]: string } = { hello: '' };
+  inspectionResult: string = '';
+  selectedRoot: string = '';
   collectionType?: CollectionType;
   collectionClassName?: string;
 }
@@ -111,14 +108,14 @@ export class ConfigModel {
   _showMappingPreview = false;
   currentDraggedField: any = null;
 
-  documentService: DocumentManagementService;
-  mappingService: MappingManagementService;
-  errorService: ErrorHandlerService;
-  initializationService: InitializationService;
-  fieldActionService: FieldActionService;
-  fileService: FileManagementService;
-  previewService: MappingPreviewService;
-  expressionService: MappingExpressionService;
+  documentService: DocumentManagementService = new DocumentManagementService(ky);
+  mappingService: MappingManagementService = new MappingManagementService(ky);
+  errorService: ErrorHandlerService = new ErrorHandlerService();
+  initializationService: InitializationService = new InitializationService(ky);
+  fieldActionService: FieldActionService = new FieldActionService(ky);
+  fileService: FileManagementService = new FileManagementService(ky);
+  previewService: MappingPreviewService = new MappingPreviewService(ky);
+  expressionService: MappingExpressionService = new MappingExpressionService();
 
   sourceDocs: DocumentDefinition[] = [];
   targetDocs: DocumentDefinition[] = [];

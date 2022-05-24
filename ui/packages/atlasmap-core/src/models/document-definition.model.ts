@@ -13,12 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import {
-  DocumentType,
-  FIELD_PATH_SEPARATOR,
-  FieldType,
-  InspectionType,
-} from '../contracts/common';
+import { DocumentType, FIELD_PATH_SEPARATOR, FieldType, InspectionType } from '../contracts/common';
 
 import { CommonUtil } from '../utils/common-util';
 import { DocumentInitializationModel } from './config.model';
@@ -28,9 +23,9 @@ import { MappingDefinition } from './mapping-definition.model';
 export class NamespaceModel {
   private static unqualifiedNamespace: NamespaceModel;
 
-  alias: string;
-  uri: string;
-  locationUri: string | undefined;
+  alias: string = '';
+  uri: string = '';
+  locationUri: string | undefined = '';
   createdByUser = false;
   isTarget = false;
 
@@ -85,21 +80,21 @@ export class DocumentDefinition {
   LEFT_BRACKET = '\x5b';
   RIGHT_BRACKET = '\x5d';
 
-  initModel: DocumentInitializationModel;
-  id: string;
-  _type: DocumentType;
-  name: string;
-  description: string | undefined;
-  uri: string;
-  inspectionType: InspectionType;
-  inspectionParameters: { [key: string]: string };
-  inspectionSource: string;
-  inspectionResult: string;
+  initModel: DocumentInitializationModel = new DocumentInitializationModel();
+  id: string = '';
+  _type: DocumentType = DocumentType.CONSTANT;
+  name: string = '';
+  description: string | undefined = '';
+  uri: string = '';
+  inspectionType: InspectionType = InspectionType.SCHEMA;
+  inspectionParameters: { [key: string]: string } = { hello: '' };
+  inspectionSource: string = '';
+  inspectionResult: string = '';
   inspectionPaths: string[] = ['/'];
-  isSource: boolean;
-  isPropertyOrConstant: boolean;
-  selectedRoot: string;
-  classPath: string;
+  isSource: boolean = false;
+  isPropertyOrConstant: boolean = false;
+  selectedRoot: string = '';
+  classPath: string = '';
   initialized = false;
   errorOccurred = false;
   fields: Field[] = [];
@@ -112,8 +107,8 @@ export class DocumentDefinition {
   showFields = true;
   visibleInCurrentDocumentSearch = true;
   namespaces: NamespaceModel[] = [];
-  characterEncoding: string;
-  locale: string;
+  characterEncoding: string = '';
+  locale: string = '';
 
   set type(type: DocumentType) {
     this._type = type;
