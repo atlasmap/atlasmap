@@ -410,6 +410,7 @@ public class AtlasService extends BaseAtlasService {
             LOG.warn("{} is not a directory - removing anyway", mappingFolderFile.getAbsolutePath());
         }
         AtlasUtil.deleteDirectory(mappingFolderFile);
+        admHandlerMap.clear();
         return Response.ok().build();
     }
 

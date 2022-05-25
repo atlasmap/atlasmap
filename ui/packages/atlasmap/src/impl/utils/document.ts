@@ -140,26 +140,6 @@ export async function removeDocumentRef(
 }
 
 /**
- * Remove all documents from the UI and vackend service.
- *
- * @param cfg
- * @returns
- */
-export async function removeAllDocumentRefs(
-  cfg: ConfigModel,
-): Promise<boolean> {
-  return new Promise<boolean>(async (resolve) => {
-    for (const docDef of cfg.getDocs(true)) {
-      await removeDocumentRef(docDef, cfg);
-    }
-    for (const docDef of cfg.getDocs(false)) {
-      await removeDocumentRef(docDef, cfg);
-    }
-    resolve(true);
-  });
-}
-
-/**
  * Return the document definition associated with the specified document ID.
  *
  * @param docId - document ID
