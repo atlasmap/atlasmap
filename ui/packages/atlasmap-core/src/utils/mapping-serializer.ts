@@ -343,9 +343,7 @@ export class MappingSerializer {
     }
     cfg.mappings.name = this.deserializeAtlasMappingName(json);
     this.extractCheckVersion(json, cfg);
-    cfg.mappings.parsedDocs = cfg.mappings.parsedDocs.concat(
-      MappingSerializer.deserializeDocs(json, cfg.mappings)!
-    ); // TODO: check this non null operator
+    MappingSerializer.deserializeDocs(json, cfg);
     try {
       const mappings = await MappingSerializer.deserializeMappings(json, cfg);
       cfg.mappings.mappings = cfg.mappings.mappings.concat(mappings);
@@ -981,17 +979,21 @@ export class MappingSerializer {
 
   private static deserializeDocs(
     json: IAtlasMappingContainer,
-    mappingDefinition: MappingDefinition
-  ): DocumentDefinition[] | null {
-    const docs: DocumentDefinition[] = [];
+    cfg: ConfigModel
+  ) {
     if (!json || !json.AtlasMapping || !json.AtlasMapping.dataSource) {
-      return null;
+      return;
     }
     for (const docRef of json.AtlasMapping.dataSource) {
-      const doc: DocumentDefinition = new DocumentDefinition();
-      doc.isSource = docRef.dataSourceType === 'SOURCE';
+      const isSource = docRef.dataSourceType === DataSourceType.SOURCE;
+      let doc = cfg.getDocForIdentifier(docRef.id, isSource);
+      if (!doc) {
+        console.error(
+          `Unknown Document ${docRef.name} (ID:${docRef.id}) is in the Mapping Definition`
+        );
+        continue;
+      }
       doc.uri = docRef.uri;
-      doc.id = docRef.id;
       doc.name = docRef.name ? docRef.name : '';
       doc.description = docRef.description;
       const xmlDocRef = docRef as IXmlDataSource;
@@ -1007,11 +1009,9 @@ export class MappingSerializer {
         }
       }
       if (xmlDocRef.template) {
-        mappingDefinition.templateText = xmlDocRef.template;
+        cfg.mappings!.templateText = xmlDocRef.template;
       }
-      docs.push(doc);
     }
-    return docs;
   }
 
   private static async deserializeMappings(

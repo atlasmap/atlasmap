@@ -29,26 +29,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.core.AtlasMappingHandler;
+import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.json.v2.JsonDataSource;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
 import io.atlasmap.v2.DataSourceType;
+import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.InspectionType;
 import io.atlasmap.v2.Json;
 
 public class JsonServiceTest {
 
+    private AtlasService atlasService;
     private JsonService jsonService = null;
     private DocumentService documentService;
 
     @BeforeEach
     public void setUp() throws AtlasException {
-        AtlasService atlas = new AtlasService();
-        documentService = new DocumentService(atlas);
-        jsonService = new JsonService(atlas, documentService);
+        atlasService = new AtlasService();
+        documentService = new DocumentService(atlasService);
+        jsonService = new JsonService(atlasService, documentService);
     }
 
     @AfterEach
@@ -87,5 +92,9 @@ public class JsonServiceTest {
         assertEquals(200, res.getStatus());
         JsonDocument inspected = Json.mapper().readValue((File)res.getEntity(), JsonDocument.class);
         assertEquals(4, inspected.getFields().getField().size());
+        AtlasMappingHandler handler = atlasService.getADMArchiveHandler(0).getAtlasMappingHandler();
+        JsonDataSource ds = (JsonDataSource) handler.getDataSource(new DocumentKey(DataSourceType.SOURCE, "test"));
+        assertEquals("json", AtlasUtil.getUriModule(ds.getUri()));
+        assertEquals("test", AtlasUtil.getUriDataType(ds.getUri()));
     }
 }

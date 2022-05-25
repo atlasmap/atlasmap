@@ -1,0 +1,47 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "actions" : [ {
+            "delimiter" : " ",
+            "collapseRepeatingDelimiters" : false,
+            "@type" : "Split"
+          } ],
+          "docId" : "JSONSchemaSource-00364df0-247e-4c6c-8de5-a3803fbc7e84",
+          "path" : "/primitives/stringPrimitive",
+          "fieldType" : "STRING",
+          "name" : "stringPrimitive"
+        } ],
+        "outputField" : [
+          {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONInstanceSource-abcf7e87-04ee-4d3a-8306-18ac1af8d3eb",
+            "index" : 0,
+            "path" : "/order/address/city",
+            "fieldType" : "STRING",
+            "name" : "city"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONInstanceSource-abcf7e87-04ee-4d3a-8306-18ac1af8d3eb",
+            "index" : 2,
+            "path" : "/order/address/state",
+            "fieldType" : "STRING",
+            "name" : "state"
+          }, {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "JSONInstanceSource-abcf7e87-04ee-4d3a-8306-18ac1af8d3eb",
+            "index" : 3,
+            "path" : "/order/address/street",
+            "fieldType" : "STRING",
+            "name" : "street"
+          } ],
+       "id" : "mapping.xxxxxx"
+      } ]
+    }
+  }
+}

@@ -39,6 +39,7 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.json.inspect.JsonInspectionService;
+import io.atlasmap.json.v2.JsonDataSource;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.json.v2.JsonInspectionRequest;
 import io.atlasmap.json.v2.JsonInspectionResponse;
@@ -117,7 +118,8 @@ public class JsonService extends ModuleService {
                 return Response.ok().entity(toJson(response)).build();
             }
             DocumentMetadata metadata = createDocumentMetadataFrom(request, dataSourceType, documentId);
-            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata);
+            JsonDataSource dataSource = createDataSource(metadata);
+            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata, dataSource);
             storeDocumentSpecification(mappingDefinitionId, dataSourceType, documentId, new ByteArrayInputStream(request.getJsonData().getBytes()));
             ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);
             DocumentKey docKey = new DocumentKey(dataSourceType, documentId);
@@ -135,6 +137,18 @@ public class JsonService extends ModuleService {
         AtlasUtil.excludeNotRequestedFields(d, request.getInspectPaths(), request.getSearchPhrase());
         response.setJsonDocument(d);
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    private JsonDataSource createDataSource(DocumentMetadata meta) {
+        JsonDataSource answer = new JsonDataSource();
+        answer.setDataSourceType(meta.getDataSourceType());
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        answer.setDescription(meta.getDescription());
+        StringBuffer uri = new StringBuffer("atlas:json:");
+        uri.append(meta.getId());
+        answer.setUri(uri.toString());
+        return answer;
     }
 
     @Override

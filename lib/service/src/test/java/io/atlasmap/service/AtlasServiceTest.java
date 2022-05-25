@@ -43,6 +43,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import io.atlasmap.core.AtlasUtil;
+import io.atlasmap.service.DocumentService;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
@@ -66,6 +67,7 @@ public class AtlasServiceTest {
     private static final String TEST_JAR_PATH = TEST_JAR_DIR + "/my.jar";
 
     private AtlasService atlasService;
+    private DocumentService documentService;
     private MappingService mappingService;
     private ObjectMapper mapper = null;
 
@@ -74,6 +76,7 @@ public class AtlasServiceTest {
         File workspaceFolderWithSpace = new File(TEMP_DIR);
         System.setProperty(AtlasService.ATLASMAP_WORKSPACE, workspaceFolderWithSpace.getAbsolutePath());
         atlasService = new AtlasService();
+        documentService = new DocumentService(atlasService);
         mappingService = new MappingService(atlasService);
         mapper = Json.mapper();
     }
@@ -208,4 +211,17 @@ public class AtlasServiceTest {
         assertEquals(4, mappings.getMappings().getMapping().size());
     }
 
+    @Test
+    public void testDeleteAll() throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-schema-source-to-xml-schema-target.adm");
+        Response res = atlasService.importADMArchiveRequest(in, 0,
+            Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project/0/adm"));
+        assertEquals(200, res.getStatus());
+        res = documentService.getDocumentCatalogRequest(0);
+        assertEquals(200, res.getStatus());
+        res = atlasService.deleteAll();
+        assertEquals(200, res.getStatus());
+        res = documentService.getDocumentCatalogRequest(0);
+        assertEquals(204, res.getStatus());  // Document catalog file was not found
+    }
 }

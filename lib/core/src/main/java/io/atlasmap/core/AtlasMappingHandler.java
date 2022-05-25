@@ -18,6 +18,7 @@ package io.atlasmap.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 
 import io.atlasmap.v2.AtlasMapping;
@@ -48,9 +49,86 @@ public class AtlasMappingHandler {
     }
 
     /**
+     * Return the mapping element for the specified mapping uuid.
+     *
+     * @param uuid
+     * @returns mapping element
+     */
+    private Mapping getMappingByID(List<BaseMapping> mappings, String uuid) {
+        Mapping objectMapping = null;
+        if (mappings != null) {
+            for (ListIterator<BaseMapping> iter = mappings.listIterator(); iter.hasNext();) {
+                Mapping element = (Mapping)iter.next();
+                if (element.getId().equals(uuid)) {
+                    objectMapping = element;
+                    break;
+                }
+            }
+        }
+        return objectMapping;
+    }
+
+    /**
+     * Extract the list of mapped fields from the specified mapping.
+     *
+     * @param objectMapping - specified mapping
+     * @param dataSourceType - source/target
+     *
+     * @return - list of mapped fields.
+     */
+    private List<Field> getMappedFields(Mapping objectMapping, DataSourceType dataSourceType) {
+        List<Field> mappedFields = null;
+        if (dataSourceType == DataSourceType.SOURCE) {
+            FieldGroup fg = objectMapping.getInputFieldGroup();
+            if (fg != null) {
+                mappedFields = fg.getField();
+            } else {
+                mappedFields = objectMapping.getInputField();
+            }
+        } else {
+            mappedFields = objectMapping.getOutputField();
+        }
+        return mappedFields;
+    }
+
+    /**
+     * Return the ordinal position of the mapped field with the specified index property.
+     *
+     * @param mappedFields
+     * @param fieldIndex
+     *
+     * @return ordinal position
+     */
+    private int getOrdinalPosition(List<Field> mappedFields, int fieldIndex) {
+        int ordinalPosition = 0;
+        for (Field field : mappedFields) {
+            if (field.getIndex().intValue() == fieldIndex) {
+                break;
+            }
+            ordinalPosition++;
+        }
+        return ordinalPosition;
+    }
+
+    /**
+     * Remove the specified mapped field from the mapping.
+     *
+     * @param def
+     * @param dsType
+     * @param mappingId
+     * @param fieldIndex
+     */
+    public void removeMappingField(AtlasMapping def, DataSourceType dsType, String mappingId, Integer fieldIndex) {
+        List<BaseMapping> mappings = def.getMappings().getMapping();
+        Mapping objectMapping = this.getMappingByID(mappings, mappingId);
+        List<Field> mappedFields = this.getMappedFields(objectMapping, dsType);
+        mappedFields.remove(getOrdinalPosition(mappedFields, fieldIndex));
+    }
+
+    /**
      * Removes all references to the specified Document in the mapping definition.
      * It removes the DataSource entry as well as the mappings that refer to the Document.
-     * @param docKey the indentifier of the Document to be removed
+     * @param docKey the identifier of the Document to be removed
      */
     public void removeDocumentReference(DocumentKey docKey) {
         Optional<DataSource> dataSource = mapping.getDataSource().stream().filter(ds ->
@@ -96,6 +174,38 @@ public class AtlasMappingHandler {
         mappings.removeAll(toDelete);
     }
 
+    /**
+     * Sets the {@link DataSource}. It updates if there is an existing DataSource identified by
+     * the Document ID and DataSourceType, otherwise adds a new entry.
+     * @param docKey DocumentKey
+     * @param dataSource DataSource
+     */
+    public void setDataSource(DocumentKey docKey, DataSource dataSource) {
+        Optional<DataSource> existing = lookupDataSource(docKey);
+        if (existing.isPresent()) {
+            int pos = this.mapping.getDataSource().indexOf(existing.get());
+            this.mapping.getDataSource().set(pos, dataSource);
+        } else {
+            this.mapping.getDataSource().add(dataSource);
+        }
+    }
+
+    private Optional<DataSource> lookupDataSource(DocumentKey docKey) {
+        return this.mapping.getDataSource().stream().filter(
+            ds -> ds.getDataSourceType() == docKey.getDataSourceType()
+            && ds.getId().equals(docKey.getDocumentId())).findAny();
+    }
+
+    /**
+     * Gets the existing {@link DataSource} identified by the {@link DocumentKey}.
+     * @param docKey DocumentKey
+     * @return DataSource if found, or null
+     */
+    public DataSource getDataSource(DocumentKey docKey) {
+        Optional<DataSource> existing = lookupDataSource(docKey);
+        return existing.isPresent() ? existing.get() : null;
+    }
+  
     /**
      * Gets the {@link AtlasMapping}.
      * @return AtlasMapping

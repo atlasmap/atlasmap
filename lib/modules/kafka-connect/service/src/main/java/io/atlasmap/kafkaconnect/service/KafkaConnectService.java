@@ -48,6 +48,7 @@ import io.atlasmap.kafkaconnect.v2.KafkaConnectSchemaType;
 import io.atlasmap.service.AtlasService;
 import io.atlasmap.service.DocumentService;
 import io.atlasmap.service.ModuleService;
+import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentMetadata;
@@ -112,7 +113,8 @@ public class KafkaConnectService extends ModuleService {
 
         try {
             DocumentMetadata metadata = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);
-            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata);
+            DataSource dataSource = createDataSource(metadata);
+            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, metadata, dataSource);
             storeDocumentSpecification(mappingDefinitionId, dataSourceType, documentId, new ByteArrayInputStream(inspectionRequest.getSchemaData().getBytes()));
             ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);
             DocumentKey docKey = new DocumentKey(dataSourceType, documentId);
@@ -129,6 +131,18 @@ public class KafkaConnectService extends ModuleService {
 
         response.setKafkaConnectDocument(d);
         return Response.ok().entity(toJson(response)).build();
+    }
+
+    private DataSource createDataSource(DocumentMetadata meta) {
+        DataSource answer = new DataSource();
+        answer.setDataSourceType(meta.getDataSourceType());
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        answer.setDescription(meta.getDescription());
+        StringBuffer uri = new StringBuffer("atlas:kafkaconnect:");
+        uri.append(meta.getId());
+        answer.setUri(uri.toString());
+        return answer;
     }
 
     @Override

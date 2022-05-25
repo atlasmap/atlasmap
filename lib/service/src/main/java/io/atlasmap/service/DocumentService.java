@@ -201,7 +201,9 @@ public class DocumentService extends BaseAtlasService {
         LOG.debug("deleteDocumentRequest: {}:{}:{}", mappingDefinitionId, dataSourceType, documentId);
         try {
             ADMArchiveHandler admHandler = this.atlasService.getADMArchiveHandler(mappingDefinitionId);
-            admHandler.deleteDocument(dataSourceType, documentId);
+            DocumentKey docKey = new DocumentKey(dataSourceType, documentId);
+            admHandler.deleteDocument(docKey);
+            admHandler.getAtlasMappingHandler().removeDocumentReference(docKey);
             admHandler.persist();
         } catch (AtlasException e) {
             throw new WebApplicationException(

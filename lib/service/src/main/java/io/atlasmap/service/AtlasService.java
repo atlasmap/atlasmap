@@ -231,6 +231,7 @@ public class AtlasService extends BaseAtlasService {
         }
 
         AtlasUtil.deleteDirectoryContents(mappingFolderPathFile);
+        this.admHandlerMap.clear();
         return Response.ok().build();
     }
 

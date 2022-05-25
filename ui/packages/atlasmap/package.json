@@ -54,7 +54,6 @@
     "eslint-plugin-mdx": "^1.13.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^4.2.3",
     "jest-css-modules-transform": "^4.2.1",
     "jest-environment-jsdom-sixteen": "^2.0.0",
     "lodash.clamp": "^4.0.3",
@@ -73,11 +72,11 @@
     "webpack-cli": "^4.9.2"
   },
   "peerDependencies": {
-    "@patternfly/react-core": "^4.147.0",
-    "@patternfly/react-icons": "^4.11.8",
-    "@patternfly/react-styles": "^4.11.8",
-    "@patternfly/react-table": "^4.30.3",
-    "@patternfly/react-topology": "^4.9.42",
+    "@patternfly/react-core": "^4.214.1",
+    "@patternfly/react-icons": "^4.65.1",
+    "@patternfly/react-styles": "^4.64.1",
+    "@patternfly/react-table": "^4.83.1",
+    "@patternfly/react-topology": "^4.61.1",
     "@types/d3-scale": "^4.0.0",
     "@types/d3-shape": "^3.0.0",
     "@types/he": "^1.1.1",
@@ -103,11 +102,6 @@
   "resolutions": {
     "jest": "24.9.0",
     "webpack": "4.42.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "eslint --ext .ts,.tsx,.js ./src"
-    }
   },
   "prettier": {
     "printWidth": 80,

@@ -19,7 +19,6 @@ import {
   MappingDetailsView,
 } from '../Views';
 import React, { useCallback } from 'react';
-
 import { CommonUtil } from '@atlasmap/core';
 import { useAtlasmap } from './AtlasmapProvider';
 
@@ -48,7 +47,7 @@ export function useSidebar({
   const {
     selectedMapping,
     deselectMapping,
-    removeMappedFieldFromCurrentMapping,
+    removeFieldFromCurrentMapping,
     fromMappedFieldToIMappingField,
     flatSources,
     flatTargets,
@@ -77,10 +76,8 @@ export function useSidebar({
   return useCallback(() => {
     if (selectedMapping) {
       const m = selectedMapping.mapping;
-      const sources = m
-        .getMappedFields(true)
-        .map(fromMappedFieldToIMappingField);
-      const targets = m
+      let sources = m.getMappedFields(true).map(fromMappedFieldToIMappingField);
+      let targets = m
         .getMappedFields(false)
         .map(fromMappedFieldToIMappingField);
       const showSourcesIndex =
@@ -133,13 +130,16 @@ export function useSidebar({
         };
       }
 
-      const handleRemoveMappedField = (isSource: boolean, index: number) => {
+      const handleRemoveMappedField = async (
+        isSource: boolean,
+        index: number,
+      ) => {
         const amField = selectedMapping.mapping.getMappedFieldForIndex(
           '' + (index + 1),
           isSource,
         );
         if (amField) {
-          removeMappedFieldFromCurrentMapping(amField);
+          await removeFieldFromCurrentMapping(amField);
         }
       };
 
@@ -222,7 +222,7 @@ export function useSidebar({
     getMultiplicityActionDelimiters,
     handleMultiplicityChange,
     handleMultiplicityArgumentChange,
-    removeMappedFieldFromCurrentMapping,
+    removeFieldFromCurrentMapping,
     isFieldAddableToSelection,
     addToCurrentMapping,
     mappingExpressionEnabled,

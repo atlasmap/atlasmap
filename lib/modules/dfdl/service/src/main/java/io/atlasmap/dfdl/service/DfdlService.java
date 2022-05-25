@@ -49,6 +49,7 @@ import io.atlasmap.v2.DocumentKey;
 import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.DocumentType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.xml.v2.XmlDataSource;
 import io.atlasmap.xml.v2.XmlDocument;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -115,12 +116,13 @@ public class DfdlService extends ModuleService {
                 return Response.ok().entity(toJson(response)).build();
             }
             DocumentMetadata meta = createDocumentMetadataFrom(inspectionRequest, dataSourceType, documentId);
-            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, meta);
             ADMArchiveHandler admHandler = getAtlasService().getADMArchiveHandler(mappingDefinitionId);
             DocumentKey docKey = new DocumentKey(dataSourceType, documentId);
             performDocumentInspection(mappingDefinitionId, meta, null);
             File f = admHandler.getDocumentInspectionResultFile(docKey);
             d = fromJson(new FileInputStream(f), XmlDocument.class);
+            XmlDataSource dataSource = createDataSource(meta, d);
+            storeDocumentMetadata(mappingDefinitionId, dataSourceType, documentId, meta, dataSource);
         } catch (Exception e) {
             LOG.error("Error inspecting DFDL: " + e.getMessage(), e);
             response.setErrorMessage(e.getMessage());
@@ -136,6 +138,19 @@ public class DfdlService extends ModuleService {
         DocumentMetadata meta = super.createDocumentMetadataFrom(request, dsType, documentId);
         meta.getInspectionParameters().put(OPTION_DFDL_SCHEMA_NAME, request.getDfdlSchemaName());
         return meta;
+    }
+
+    private XmlDataSource createDataSource(DocumentMetadata meta, XmlDocument xmlDoc) {
+        XmlDataSource answer = new XmlDataSource();
+        answer.setDataSourceType(meta.getDataSourceType());
+        answer.setId(meta.getId());
+        answer.setName(meta.getName());
+        answer.setDescription(meta.getDescription());
+        StringBuffer uri = new StringBuffer("atlas:dfdl:");
+        uri.append(meta.getId());
+        answer.setUri(uri.toString());
+        answer.setXmlNamespaces(xmlDoc.getXmlNamespaces());
+        return answer;
     }
 
     @Override
