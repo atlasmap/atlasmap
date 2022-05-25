@@ -30,6 +30,7 @@
     "@atlasmap/core": "2.4.0-SNAPSHOT"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.18.0",
     "@storybook/addon-actions": "^6.3.8",
     "@storybook/addon-docs": "^6.3.8",
     "@storybook/addon-knobs": "^6.3.0",
@@ -98,6 +99,11 @@
     "rxjs": "^6.6.7",
     "use-debounce": "^7.0.0"
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
   "resolutions": {
     "jest": "24.9.0",
     "webpack": "4.42.0"
@@ -115,31 +121,6 @@
     "singleQuote": true,
     "trailingComma": "all",
     "endOfLine": "auto"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.test.json"
-      }
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/setup.ts"
-    ],
-    "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "ky": "ky/umd",
-      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.d.ts",
-      "@atlasmap/core": "<rootDir>../atlasmap-core/src"
-    },
-    "testEnvironment": "jest-environment-jsdom-sixteen",
-    "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest",
-      "^.+\\.(css)$": "jest-css-modules-transform"
-    },
-    "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky)/)",
-      "<rootDir>/node_modules/(?!(monaco-editor)/)"
-    ]
   },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
