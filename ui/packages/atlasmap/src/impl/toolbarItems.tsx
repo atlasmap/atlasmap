@@ -88,6 +88,7 @@ export const AtlasmapToolbarItem: FunctionComponent<
       toggleOff();
     };
   };
+
   const dropdownItems = [
     showImportAtlasFileToolbarItem && (
       <ImportAtlasFileToolbarItem
@@ -113,16 +114,16 @@ export const AtlasmapToolbarItem: FunctionComponent<
     showExportAtlasFileToolbarItem && (
       <DropdownSeparator key="export-separator" />
     ),
-    false /* showDeleteResetToolbarItem #3866 */ && (
+    showDeleteResetToolbarItem && (
       <DeleteDocsAndMappingsToolbarItem
         docsExist={docsExist!}
         onClick={runAndClose(onDeleteDocsAndMappings)}
         key="del-docs-mappings"
       />
     ),
-    false /* showDeleteResetToolbarItem #3867 */ && (
+    showDeleteResetToolbarItem && (
       <DeleteLibrariesToolbarItem
-        librariesExist={librariesExist!}
+        userLibrariesExist={librariesExist!}
         onClick={runAndClose(onDeleteLibraries)}
         key="del-libs"
       />
@@ -249,12 +250,12 @@ export const DeleteDocsAndMappingsToolbarItem: FunctionComponent<{
 );
 
 export const DeleteLibrariesToolbarItem: FunctionComponent<{
-  librariesExist: boolean;
+  userLibrariesExist: boolean;
   onClick: () => void;
-}> = ({ librariesExist, onClick }) => (
+}> = ({ userLibrariesExist, onClick }) => (
   <DropdownItem
     icon={<TrashIcon />}
-    isDisabled={!librariesExist}
+    isDisabled={!userLibrariesExist}
     onClick={onClick}
     data-testid="del-libs-button"
   >

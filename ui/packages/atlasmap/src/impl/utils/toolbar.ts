@@ -21,7 +21,12 @@ import {
   ErrorScope,
   ErrorType,
 } from '@atlasmap/core';
-import { getDocDef, getDocDefByName, removeDocumentRef } from './document';
+import {
+  getDocDef,
+  getDocDefByName,
+  removeAllDocumentRefs,
+  removeDocumentRef,
+} from './document';
 
 /**
  * Return true if the specified file object exists as a source or target
@@ -99,8 +104,7 @@ export function importJarFile(selectedFile: File, cfg: ConfigModel) {
 export async function delDocsAndMappingsAtlasmap() {
   const cfg = ConfigModel.getConfig();
   await cfg.mappingService.removeAllMappings();
-  cfg.clearDocs(false);
-  await cfg.mappingService.notifyMappingUpdated();
+  await removeAllDocumentRefs(cfg);
   await cfg.documentService.fetchDocuments();
 }
 
@@ -119,7 +123,6 @@ export function deleteLibrariesAtlasmap() {
 export async function deleteMappingsAtlasmap() {
   const cfg = ConfigModel.getConfig();
   await cfg.mappingService.removeAllMappings();
-  await cfg.mappingService.notifyMappingUpdated();
 }
 
 /**

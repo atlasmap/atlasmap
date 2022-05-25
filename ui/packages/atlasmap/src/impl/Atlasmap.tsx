@@ -112,7 +112,9 @@ export const Atlasmap: FunctionComponent<IAtlasmapProps> = ({
       showExportAtlasFileToolbarItem: allowExport,
       showDeleteResetToolbarItem: allowDeleteReset,
       docsExist: sources.length > 2 || targets.length > 1,
-      librariesExist: false, // #3867
+      // TODO: determine if user-defined Java libraries exist
+      // without invoking backend service on each render
+      librariesExist: true,
       mappingsExist: mappings.length > 0,
       ...toolbarOptions,
       onImportADMArchiveFile: handlers.onImportADMArchive,
