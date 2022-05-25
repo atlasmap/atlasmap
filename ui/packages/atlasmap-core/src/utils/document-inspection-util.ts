@@ -28,7 +28,7 @@ import { CommonUtil } from './common-util';
 import { CsvInspectionModel } from '../models/inspect/csv-inspection.model';
 import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentInspectionModel } from '../models/inspect/document-inspection.model';
-import { DocumentMetadata } from '../contracts';
+import { DocumentMetadata } from 'src/contracts';
 import { JavaInspectionModel } from '../models/inspect/java-inspection.model';
 import { JsonInspectionModel } from '../models/inspect/json-inspection.model';
 import { KafkaConnectInspectionModel } from '../models/inspect/kafkaconnect-inspection.model';
