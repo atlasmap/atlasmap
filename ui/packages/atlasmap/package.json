@@ -19,7 +19,7 @@
     "build:module": "npm-run-all prebuild build:yarn",
     "build:storybook": "build-storybook --quiet",
     "build": "npm-run-all build:module lint test",
-    "test": "jest --runInBand",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand",
     "test:coverage": "jest test --coverage --runInBand",
     "test:watch": "yarn run test -- --watch",
     "lint": "eslint --ext .ts,.tsx,.js ./src",
@@ -46,6 +46,7 @@
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.5",
+    "babel-jest": "^28.1.0",
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
     "eslint-config-react-app": "^6.0.0",
@@ -98,11 +99,6 @@
     "react-use-gesture": "^9.1.3",
     "rxjs": "^6.6.7",
     "use-debounce": "^7.0.0"
-  },
-  "babel": {
-    "presets": [
-      "@babel/preset-env"
-    ]
   },
   "resolutions": {
     "jest": "24.9.0",
