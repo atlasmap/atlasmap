@@ -30,9 +30,9 @@ export class MappedField {
    * @todo Identify document field at once when it deserializes and remove this temporary
    * object.
    */
-  mappingField: IField = { jsonType: '' };
+  mappingField: IField;
   /** The field object created from document field */
-  field: Field | null = null;
+  field: Field | null;
   /** The field actions read from mapping and enriched through {@link FieldActionService} */
   actions: FieldAction[] = [];
 

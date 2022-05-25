@@ -13,33 +13,38 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import { DocumentType, FIELD_PATH_SEPARATOR, FieldType, IField } from '../contracts/common';
+import {
+  DocumentType,
+  FIELD_PATH_SEPARATOR,
+  FieldType,
+  IField,
+} from '../contracts/common';
 import { DocumentDefinition } from './document-definition.model';
 
 export class EnumValue {
-  name: string = '';
-  ordinal: number = 0;
+  name: string;
+  ordinal: number;
 }
 
 export class Field {
   private static uuidCounter = 0;
 
-  name: string = '';
-  classIdentifier: string = '';
-  displayName: string = '';
-  path: string = '';
-  type: FieldType = FieldType.ANY;
-  scope: string | undefined = '';
-  value: string = '';
-  column: number = 0;
+  name: string;
+  classIdentifier: string;
+  displayName: string;
+  path: string;
+  type: FieldType;
+  scope: string | undefined;
+  value: string;
+  column: number;
   // The field properties read from document inspection result.
   documentField: IField = { jsonType: '' };
-  parentField: Field | undefined;
+  parentField: Field;
   partOfMapping = false;
   partOfTransformation = false;
   visibleInCurrentDocumentSearch = true;
   enumeration = false;
-  enumIndexValue: number = 0;
+  enumIndexValue: number;
   enumValues: EnumValue[] = [];
   children: Field[] = [];
   fieldDepth = 0;
@@ -51,8 +56,8 @@ export class Field {
   isAttribute = false;
   isPrimitive = false;
   userCreated = false;
-  docDef: DocumentDefinition = new DocumentDefinition();
-  namespaceAlias: string | null = null;
+  docDef: DocumentDefinition;
+  namespaceAlias: string | null;
 
   static fieldHasUnmappedChild(field: Field): boolean {
     if (field == null) {
@@ -127,7 +132,7 @@ export class Field {
    * Expand all fields above the current field.
    */
   expandToRoot() {
-    let parent: Field | undefined = this;
+    let parent: Field = this;
     while (parent != null) {
       parent.collapsed = false;
       if (parent.isPropertyOrConstant()) {
@@ -200,7 +205,7 @@ export class Field {
 
   // @ts-ignore
   getCollectionParentField(): Field {
-    let parent: Field | undefined = this;
+    let parent: Field = this;
     while (parent != null) {
       if (parent.isCollection) {
         return parent;
@@ -215,7 +220,7 @@ export class Field {
 
   getCollectionCount(): number {
     let count = 0;
-    let field: Field | undefined = this;
+    let field: Field = this;
     while (field != null) {
       if (field.isCollection) {
         count++;

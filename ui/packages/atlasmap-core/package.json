@@ -68,28 +68,6 @@
     "trailingComma": "es5",
     "endOfLine": "auto"
   },
-  "jest": {
-    "moduleNameMapper": {
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "ky": "ky/umd",
-      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js",
-      "@src": "<rootDir>/src/index.ts",
-      "@src/(.*)": "<rootDir>/src/$1",
-      "@test/(.*)": "<rootDir>/test/$1"
-    },
-    "setupFilesAfterEnv": [
-      "<rootDir>/test/setup.tsx"
-    ],
-    "testEnvironment": "jsdom",
-    "transform": {
-      "monaco-editor": "jest-esm-transformer",
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "/node_modules/(?!(ky|monaco-editor)/)"
-    ]
-  },
   "eslintConfig": {
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
