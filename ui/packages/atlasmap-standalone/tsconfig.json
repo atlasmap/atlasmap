@@ -19,6 +19,10 @@
     "noEmit": true,
     "jsx": "react"
   },
+  "paths": {
+    "@atlasmap/core": ["../atlasmap-core/src"],
+    "@atlasmap/core/*": ["../atlasmap-core/src/*"],
+  },
   "include": [
     "src"
   ]

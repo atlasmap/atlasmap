@@ -8,8 +8,8 @@
     "start": "react-scripts --max_old_space_size=4096 start",
     "build:module": "react-scripts --max_old_space_size=4096 build",
     "build": "npm-run-all build:module lint test",
-    "test": "react-scripts test --watchAll=false --runInBand",
-    "test:coverage": "react-scripts test --watchAll=false --coverage --runInBand",
+    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand",
+    "test:coverage": "jest --watchAll=false --coverage --runInBand",
     "eject": "react-scripts eject",
     "lint": "eslint --ext .ts,.tsx,.js ./src",
     "format": "yarn lint --fix"
@@ -93,16 +93,27 @@
     "endOfLine": "auto"
   },
   "jest": {
+    "globals": {
+      "ts-jest": {
+        "isolatedModules": true,
+        "tsConfig": "tsconfig.test.json"
+      }
+    },
     "moduleNameMapper": {
       "ky": "ky/umd",
-      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js"
+      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js",
+      "@atlasmap/core": "<rootDir>../atlasmap-core/src",
+      "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js"
     },
     "transform": {
-      "monaco-editor": "jest-esm-transformer",
+      "^.+\\.(js|jsx)$": "babel-jest",
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles|monaco-editor)/)"
+      "@atlasmap/core",
+      "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles|monaco-editor|d3-scale)/)",
+      "/node_modules/(?!monaco-editor)"
     ]
   }
 }
