@@ -27,9 +27,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.lang.ref.SoftReference;
 import java.lang.reflect.Method;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
@@ -43,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.service.DocumentService;
 import io.atlasmap.v2.Action;
@@ -232,11 +236,15 @@ public class AtlasServiceTest {
         Response res = atlasService.importADMArchiveRequest(in, 0,
             Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project/0/adm"));
         assertEquals(200, res.getStatus());
-        java.nio.file.Path mappingFolderPath = Paths.get(atlasService.getMappingSubDirectory(0));
-        File mappingFolderFile = mappingFolderPath.toFile();
-        assertEquals(mappingFolderFile.exists(), true);
+        ADMArchiveHandler admHandler = atlasService.getADMArchiveHandler(0);
+        assertNotNull(admHandler);
+        AtlasMapping am = admHandler.getMappingDefinition();
+        assertNotNull(am);
         res = atlasService.deleteMappingProjectById(0);
         assertEquals(200, res.getStatus());
-        assertEquals(mappingFolderFile.exists(), false);
+        admHandler = atlasService.getADMArchiveHandler(0);
+        assertNotNull(admHandler);
+        am = admHandler.getMappingDefinition();
+        assertEquals(am, null);
     }
 }
