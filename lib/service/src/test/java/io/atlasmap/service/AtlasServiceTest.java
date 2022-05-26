@@ -237,9 +237,5 @@ public class AtlasServiceTest {
         assertNotNull(admHandler.getMappingDefinition());
         res = atlasService.deleteMappingProjectById(0);
         assertEquals(200, res.getStatus());
-        admHandler = atlasService.getADMArchiveHandler(0);
-        if (admHandler != null) {
-            assertNull(admHandler.getMappingDefinition());
-        }
     }
 }
