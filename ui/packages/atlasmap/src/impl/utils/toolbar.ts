@@ -98,9 +98,7 @@ export function importJarFile(selectedFile: File, cfg: ConfigModel) {
  */
 export async function delDocsAndMappingsAtlasmap() {
   const cfg = ConfigModel.getConfig();
-  await cfg.mappingService.removeAllMappings();
-  cfg.clearDocs(false);
-  await cfg.mappingService.notifyMappingUpdated();
+  await cfg.documentService.deleteMappingProject();
   await cfg.documentService.fetchDocuments();
 }
 
@@ -119,7 +117,6 @@ export function deleteLibrariesAtlasmap() {
 export async function deleteMappingsAtlasmap() {
   const cfg = ConfigModel.getConfig();
   await cfg.mappingService.removeAllMappings();
-  await cfg.mappingService.notifyMappingUpdated();
 }
 
 /**

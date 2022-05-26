@@ -182,24 +182,6 @@ export function getDocDefByName(
 }
 
 /**
- * Determine the user-defined class names associated with previously
- * imported JARs.
- */
-export async function getCustomClassNameOptions(): Promise<string[]> {
-  return new Promise<string[]>(async (resolve, reject) => {
-    const cfg = ConfigModel.getConfig();
-    cfg.documentService
-      .getLibraryClassNames()
-      .then((classNames: string[]) => {
-        resolve(classNames);
-      })
-      .catch(() => {
-        reject();
-      });
-  });
-}
-
-/**
  * Import a CSV, instance or schema document into either the Source panel or Target
  * panel.
  *

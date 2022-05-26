@@ -16,8 +16,8 @@
 import { CustomClassDialog, ICustomClass } from '../../UI';
 import React, { ReactElement, useCallback, useState } from 'react';
 
+import { ConfigModel } from '@atlasmap/core';
 import { collectionTypes } from '@atlasmap/core';
-import { getCustomClassNameOptions } from '../utils/document';
 import { useToggle } from '../utils';
 
 type CustomClassCallback = (constant: ICustomClass) => void;
@@ -45,7 +45,9 @@ export function useCustomClassDialog(
   );
 
   const getCustomClassNames = async () => {
-    setCustomClassNames(await getCustomClassNameOptions());
+    setCustomClassNames(
+      await ConfigModel.getConfig().documentService.getLibraryClassNames(),
+    );
   };
 
   const dialog = (
