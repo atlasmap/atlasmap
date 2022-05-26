@@ -182,34 +182,6 @@ export function getDocDefByName(
 }
 
 /**
- * Determine the user-defined class names associated with previously
- * imported JARs.
- */
-export async function getCustomClassNameOptions(): Promise<string[]> {
-  return new Promise<string[]>(async (resolve, reject) => {
-    const cfg = ConfigModel.getConfig();
-    cfg.documentService
-      .getLibraryClassNames()
-      .then((classNames: string[]) => {
-        resolve(classNames);
-      })
-      .catch(() => {
-        reject();
-      });
-  });
-}
-
-/**
- * @returns Return true if user-defined libraries exist, false otherwise.
- */
-export async function librariesExist(): Promise<boolean> {
-  return new Promise<boolean>(async (resolve) => {
-    const userClassNames = await getCustomClassNameOptions();
-    resolve(userClassNames.length > 0);
-  });
-}
-
-/**
  * Import a CSV, instance or schema document into either the Source panel or Target
  * panel.
  *

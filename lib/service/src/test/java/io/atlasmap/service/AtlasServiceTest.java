@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.List;
 
 import javax.ws.rs.WebApplicationException;
@@ -223,5 +224,20 @@ public class AtlasServiceTest {
         assertEquals(200, res.getStatus());
         res = documentService.getDocumentCatalogRequest(0);
         assertEquals(204, res.getStatus());  // Document catalog file was not found
+    }
+
+    @Test
+    public void testDeleteMappingProjectById() throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-schema-source-to-xml-schema-target.adm");
+        Response res = atlasService.importADMArchiveRequest(in, 0,
+            Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project/0/adm"));
+        assertEquals(200, res.getStatus());
+        java.nio.file.Path mappingFolderPath = Paths.get(atlasService.getMappingSubDirectory(0));
+        File mappingFolderFile = mappingFolderPath.toFile();
+        assertEquals(mappingFolderFile.exists(), true);
+        res = atlasService.deleteMappingProjectById(0);
+        assertEquals(200, res.getStatus());
+        mappingFolderFile = mappingFolderPath.toFile();
+        assertEquals(mappingFolderFile.exists(), false);
     }
 }

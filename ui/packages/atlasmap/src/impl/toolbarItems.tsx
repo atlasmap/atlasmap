@@ -121,7 +121,7 @@ export const AtlasmapToolbarItem: FunctionComponent<
         key="del-docs-mappings"
       />
     ),
-    showDeleteResetToolbarItem && (
+    false /* showDeleteResetToolbarItem #3867 */ && (
       <DeleteLibrariesToolbarItem
         userLibrariesExist={librariesExist!}
         onClick={runAndClose(onDeleteLibraries)}
