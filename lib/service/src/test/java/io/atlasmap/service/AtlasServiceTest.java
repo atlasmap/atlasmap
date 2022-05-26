@@ -18,6 +18,7 @@ package io.atlasmap.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -42,8 +43,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import io.atlasmap.core.ADMArchiveHandler;
 import io.atlasmap.core.AtlasUtil;
-import io.atlasmap.service.DocumentService;
 import io.atlasmap.v2.Action;
 import io.atlasmap.v2.AtlasMapping;
 import io.atlasmap.v2.Audit;
@@ -223,5 +224,18 @@ public class AtlasServiceTest {
         assertEquals(200, res.getStatus());
         res = documentService.getDocumentCatalogRequest(0);
         assertEquals(204, res.getStatus());  // Document catalog file was not found
+    }
+
+    @Test
+    public void testDeleteMappingProjectById() throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("json-schema-source-to-xml-schema-target.adm");
+        Response res = atlasService.importADMArchiveRequest(in, 0,
+            Util.generateTestUriInfo("http://localhost:8686/v2/atlas", "http://localhost:8686/v2/atlas/project/0/adm"));
+        assertEquals(200, res.getStatus());
+        ADMArchiveHandler admHandler = atlasService.getADMArchiveHandler(0);
+        assertNotNull(admHandler);
+        assertNotNull(admHandler.getMappingDefinition());
+        res = atlasService.deleteMappingProjectById(0);
+        assertEquals(200, res.getStatus());
     }
 }
