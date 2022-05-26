@@ -237,7 +237,6 @@ public class AtlasServiceTest {
         assertEquals(mappingFolderFile.exists(), true);
         res = atlasService.deleteMappingProjectById(0);
         assertEquals(200, res.getStatus());
-        mappingFolderFile = mappingFolderPath.toFile();
         assertEquals(mappingFolderFile.exists(), false);
     }
 }
