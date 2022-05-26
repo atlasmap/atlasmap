@@ -1047,21 +1047,21 @@ export class DocumentManagementService {
   }
 
   /**
-   * Delete all user-defined documents.
+   * Delete all mappings and user-defined documents.
    *
    * @returns Promise true is all documents are successfully delete, Promise
    * false otherwise.
    */
-  deleteAllDocuments(): Promise<boolean> {
+  deleteMappingProject(): Promise<boolean> {
     const url = `${this.cfg.initCfg.baseAtlasServiceUrl}project/${this.cfg.mappingDefinitionId}`;
     this.cfg.logger!.debug(
-      `Delete All Documents Request: ID=${this.cfg.mappingDefinitionId}`
+      `Delete All Documents and Mappings Request: ID=${this.cfg.mappingDefinitionId}`
     );
     return new Promise((resolve) => {
       this.api
         .delete(url)
         .then(async (response: Response) => {
-          this.cfg.logger!.debug(`Delete All Document Response: ${response}`);
+          this.cfg.logger!.debug(`Delete All Document and Mappings Response: ${response}`);
           if (response.ok) {
             resolve(
               (await this.fetchDocuments()) &&
@@ -1073,7 +1073,7 @@ export class DocumentManagementService {
         })
         .catch((error: Error) => {
           this.cfg.errorService.addBackendError(
-            `Failed to delete all documents: ${error}`
+            `Failed to delete all documents and mappings: ${error}`
           );
           resolve(false);
         });
