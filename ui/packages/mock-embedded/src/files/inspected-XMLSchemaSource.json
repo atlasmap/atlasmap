@@ -1,0 +1,167 @@
+{
+  "XmlDocument" : {
+    "jsonType" : "io.atlasmap.xml.v2.XmlDocument",
+    "fields" : {
+      "field" : [ {
+        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+        "path" : "/tns:request",
+        "fieldType" : "COMPLEX",
+        "name" : "tns:request",
+        "attribute" : false,
+        "xmlFields" : {
+          "xmlField" : [ {
+            "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+            "path" : "/tns:request/tns:body",
+            "fieldType" : "COMPLEX",
+            "name" : "tns:body",
+            "attribute" : false,
+            "xmlFields" : {
+              "xmlField" : [ {
+                "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                "path" : "/tns:request/tns:body/Pet",
+                "fieldType" : "COMPLEX",
+                "name" : "Pet",
+                "attribute" : false,
+                "xmlFields" : {
+                  "xmlField" : [ {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:request/tns:body/Pet/id",
+                    "fieldType" : "DECIMAL",
+                    "name" : "id",
+                    "restrictions" : {
+                      "restriction" : [ ]
+                    },
+                    "attribute" : false
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                    "path" : "/tns:request/tns:body/Pet/Category",
+                    "fieldType" : "COMPLEX",
+                    "name" : "Category",
+                    "attribute" : false,
+                    "xmlFields" : {
+                      "xmlField" : [ {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                        "path" : "/tns:request/tns:body/Pet/Category/id",
+                        "fieldType" : "DECIMAL",
+                        "name" : "id",
+                        "restrictions" : {
+                          "restriction" : [ ]
+                        },
+                        "attribute" : false
+                      }, {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                        "path" : "/tns:request/tns:body/Pet/Category/name",
+                        "fieldType" : "STRING",
+                        "name" : "name",
+                        "restrictions" : {
+                          "restriction" : [ ]
+                        },
+                        "attribute" : false
+                      } ]
+                    }
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                    "path" : "/tns:request/tns:body/Pet/name",
+                    "fieldType" : "STRING",
+                    "name" : "name",
+                    "restrictions" : {
+                      "restriction" : [ ]
+                    },
+                    "attribute" : false
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                    "path" : "/tns:request/tns:body/Pet/photoUrl",
+                    "fieldType" : "COMPLEX",
+                    "name" : "photoUrl",
+                    "attribute" : false,
+                    "xmlFields" : {
+                      "xmlField" : [ {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                        "collectionType" : "LIST",
+                        "path" : "/tns:request/tns:body/Pet/photoUrl/photoUrl<>",
+                        "fieldType" : "STRING",
+                        "name" : "photoUrl",
+                        "restrictions" : {
+                          "restriction" : [ ]
+                        },
+                        "attribute" : false
+                      } ]
+                    }
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                    "path" : "/tns:request/tns:body/Pet/tag",
+                    "fieldType" : "COMPLEX",
+                    "name" : "tag",
+                    "attribute" : false,
+                    "xmlFields" : {
+                      "xmlField" : [ {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                        "collectionType" : "LIST",
+                        "path" : "/tns:request/tns:body/Pet/tag/Tag<>",
+                        "fieldType" : "COMPLEX",
+                        "name" : "Tag",
+                        "attribute" : false,
+                        "xmlFields" : {
+                          "xmlField" : [ {
+                            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                            "path" : "/tns:request/tns:body/Pet/tag/Tag<>/id",
+                            "fieldType" : "DECIMAL",
+                            "name" : "id",
+                            "restrictions" : {
+                              "restriction" : [ ]
+                            },
+                            "attribute" : false
+                          }, {
+                            "jsonType" : "io.atlasmap.xml.v2.XmlField",
+                            "path" : "/tns:request/tns:body/Pet/tag/Tag<>/name",
+                            "fieldType" : "STRING",
+                            "name" : "name",
+                            "restrictions" : {
+                              "restriction" : [ ]
+                            },
+                            "attribute" : false
+                          } ]
+                        }
+                      } ]
+                    }
+                  }, {
+                    "jsonType" : "io.atlasmap.xml.v2.XmlComplexType",
+                    "path" : "/tns:request/tns:body/Pet/status",
+                    "fieldType" : "COMPLEX",
+                    "name" : "status",
+                    "attribute" : false,
+                    "xmlEnumFields" : {
+                      "xmlEnumField" : [ {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlEnumField",
+                        "name" : "Available",
+                        "attribute" : false
+                      }, {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlEnumField",
+                        "name" : "Pending",
+                        "attribute" : false
+                      }, {
+                        "jsonType" : "io.atlasmap.xml.v2.XmlEnumField",
+                        "name" : "Sold",
+                        "attribute" : false
+                      } ]
+                    },
+                    "xmlFields" : {
+                      "xmlField" : [ ]
+                    },
+                    "enumeration" : true
+                  } ]
+                }
+              } ]
+            }
+          } ]
+        }
+      } ]
+    },
+    "xmlNamespaces" : {
+      "xmlNamespace" : [ {
+        "alias" : "tns",
+        "uri" : "http://syndesis.io/v1/swagger-connector-template/request"
+      } ]
+    }
+  }
+}
