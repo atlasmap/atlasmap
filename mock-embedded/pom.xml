@@ -25,24 +25,18 @@
     <relativePath>../parent</relativePath>
   </parent>
 
-  <artifactId>atlasmap-standalone</artifactId>
-  <name>AtlasMap Standalone Application</name>
-  <description>AtlasMap spring-boot runtime which runs AtlasMap design runtime service and AtlasMap Data Mapper UI in a single spring-boot image</description>
+  <artifactId>atlasmap-mock-embedded</artifactId>
+  <name>Embedded UI mockup for e2e test</name>
+  <description>AtlasMap spring-boot runtime which runs AtlasMap design runtime service and AtlasMap Data Mapper UI mockup in embedded mode in a single spring-boot image</description>
   <packaging>jar</packaging>
 
   <properties>
     <failOnMissingWebXml>false</failOnMissingWebXml>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
-    <!-- Controls Docker Image Generation -->
-    <from.image>fabric8/java-jboss-openjdk8-jdk</from.image>
-    <docker.image>atlasmap/atlasmap</docker.image>
-    <from.image.version>1.3</from.image.version>
-    <license.dir>${project.basedir}/src/main/resources/license</license.dir>
-    <license.output.dir>${project.build.directory}/classes/licenses</license.output.dir>
   </properties>
 
   <build>
-    <finalName>atlasmap-standalone</finalName>
+    <finalName>atlasmap-mock-embedded</finalName>
 
     <plugins>
       <plugin>
@@ -59,7 +53,7 @@
                 <artifactItem>
                   <groupId>io.atlasmap</groupId>
                   <artifactId>atlasmap-ui</artifactId>
-		  <classifier>standalone</classifier>
+		  <classifier>mock-embedded</classifier>
                   <type>zip</type>
                   <outputDirectory>${project.build.directory}/classes/public</outputDirectory>
                 </artifactItem>
@@ -73,7 +67,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <jvmArguments>-server -Xms256m -Xmx1024m</jvmArguments>
-          <mainClass>io.atlasmap.standalone.Application</mainClass>
+          <mainClass>io.atlasmap.mockembedded.Application</mainClass>
         </configuration>
         <executions>
           <execution>
@@ -265,56 +259,6 @@
 
   <profiles>
     <profile>
-      <id>ci</id>
-      <properties>
-        <user.home>/home/jenkins</user.home>
-        <fabric8.namespace>syndesis-ci</fabric8.namespace>
-        <fabric8.mode>openshift</fabric8.mode>
-      </properties>
-    </profile>
-    <profile>
-      <id>docker</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.eclipse.jkube</groupId>
-            <artifactId>kubernetes-maven-plugin</artifactId>
-            <configuration>
-              <buildStrategy>jib</buildStrategy>
-              <images>
-                <image>
-                  <name>${docker.image}:${image.tag.primary}</name>
-                  <build>
-                    <from>${from.image}:${from.image.version}</from>
-                    <tags>
-                      <tag>${image.tag.secondary}</tag>
-                      <tag>${image.tag.tertiary}</tag>
-                    </tags>
-                    <assembly>
-                      <inline>
-                        <id>copy-files</id>
-                        <fileSets>
-                          <fileSet>
-                            <directory>${license.output.dir}/licenses</directory>
-                            <outputDirectory>licenses</outputDirectory>
-                          </fileSet>
-                        </fileSets>
-                      </inline>
-                      <targetDir>/deployments</targetDir>
-                    </assembly>
-                    <cmd>java -jar /deployments/${project.artifactId}.jar</cmd>
-                    <ports>
-                      <port>8585</port>
-                    </ports>
-                  </build>
-                </image>
-              </images>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>itests</id>
       <build>
         <plugins>
@@ -342,29 +286,6 @@
           <artifactId>twitter4j-core</artifactId>
         </dependency>
       </dependencies>
-    </profile>
-    <profile>
-      <id>generate-licenses-xml</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>license-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>aggregate-download-licenses</goal>
-                </goals>
-                <phase>generate-resources</phase>
-                <configuration>
-                  <licensesOutputDirectory>${license.dir}/licenses</licensesOutputDirectory>
-                  <licensesOutputFile>${license.dir}/licenses.xml</licensesOutputFile>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
     </profile>
 
   </profiles>

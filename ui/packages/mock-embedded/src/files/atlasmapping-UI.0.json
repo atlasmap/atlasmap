@@ -1,0 +1,108 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONSchemaSource-a3192b3f-190e-46ca-b679-4222ebde5355",
+      "name" : "JSONSchemaSource",
+      "description" : "Source document JSONSchemaSource type: JSON",
+      "uri" : "atlas:json:JSONSchemaSource-a3192b3f-190e-46ca-b679-4222ebde5355",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "XMLSchemaSource-2ef7b947-fe0a-4871-b682-49611a58084d",
+      "name" : "XMLSchemaSource",
+      "description" : "Source document XMLSchemaSource type: XML",
+      "uri" : "atlas:xml:XMLSchemaSource-2ef7b947-fe0a-4871-b682-49611a58084d",
+      "dataSourceType" : "SOURCE",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://syndesis.io/v1/swagger-connector-template/request",
+          "targetNamespace" : false
+        } ]
+      }
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "twitter4j.Status",
+      "name" : "Status",
+      "description" : "Java document class twitter4j.Status",
+      "uri" : "atlas:java:twitter4j.Status?className=twitter4j.Status&collectionType=None",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "JSONSchemaSource-d7df54bc-e51d-43f2-a715-d9a77d425a26",
+      "name" : "JSONSchemaSource",
+      "description" : "Target document JSONSchemaSource type: JSON",
+      "uri" : "atlas:json:JSONSchemaSource-d7df54bc-e51d-43f2-a715-d9a77d425a26",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource-a3192b3f-190e-46ca-b679-4222ebde5355",
+          "path" : "/order/orderId",
+          "fieldType" : "STRING",
+          "name" : "orderId"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource-d7df54bc-e51d-43f2-a715-d9a77d425a26",
+          "path" : "/order/orderId",
+          "fieldType" : "STRING",
+          "name" : "orderId"
+        } ],
+        "id" : "mapping.934973"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "XMLSchemaSource-2ef7b947-fe0a-4871-b682-49611a58084d",
+          "path" : "/tns:request/tns:body/Pet/name",
+          "fieldType" : "STRING",
+          "name" : "name",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource-d7df54bc-e51d-43f2-a715-d9a77d425a26",
+          "path" : "/order/contact/firstName",
+          "fieldType" : "STRING",
+          "name" : "firstName"
+        } ],
+        "id" : "mapping.699334"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.java.v2.JavaField",
+          "docId" : "twitter4j.Status",
+          "path" : "/text",
+          "fieldType" : "STRING",
+          "name" : "text"
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "JSONSchemaSource-d7df54bc-e51d-43f2-a715-d9a77d425a26",
+          "path" : "/primitives/stringPrimitive",
+          "fieldType" : "STRING",
+          "name" : "stringPrimitive"
+        } ],
+        "id" : "mapping.943717"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "0",
+    "version" : "2.4.0-SNAPSHOT"
+  }
+}

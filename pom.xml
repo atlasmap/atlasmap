@@ -93,6 +93,7 @@
     <module>kafka-smt</module>
     <module>ui</module>
     <module>standalone</module>
+    <module>mock-embedded</module>
     <module>coverage-report</module>
     <module>examples</module>
     <module>docs</module>
