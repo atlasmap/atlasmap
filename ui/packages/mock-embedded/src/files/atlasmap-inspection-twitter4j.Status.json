@@ -1,0 +1,1688 @@
+{
+  "JavaClass" : {
+    "jsonType" : "io.atlasmap.java.v2.JavaClass",
+    "collectionType" : "NONE",
+    "path" : "/",
+    "fieldType" : "COMPLEX",
+    "modifiers" : {
+      "modifier" : [ "ABSTRACT", "INTERFACE", "PUBLIC" ]
+    },
+    "className" : "twitter4j.Status",
+    "canonicalClassName" : "twitter4j.Status",
+    "primitive" : false,
+    "synthetic" : false,
+    "javaEnumFields" : {
+      "javaEnumField" : [ ]
+    },
+    "javaFields" : {
+      "javaField" : [ {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/id",
+        "status" : "SUPPORTED",
+        "fieldType" : "LONG",
+        "name" : "id",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "long",
+        "canonicalClassName" : "long",
+        "getMethod" : "getId",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/text",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "text",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getText",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/source",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "source",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getSource",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/inReplyToUserId",
+        "status" : "SUPPORTED",
+        "fieldType" : "LONG",
+        "name" : "inReplyToUserId",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "long",
+        "canonicalClassName" : "long",
+        "getMethod" : "getInReplyToUserId",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/inReplyToScreenName",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "inReplyToScreenName",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getInReplyToScreenName",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/geoLocation",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "geoLocation",
+        "modifiers" : {
+          "modifier" : [ "PUBLIC" ]
+        },
+        "className" : "twitter4j.GeoLocation",
+        "canonicalClassName" : "twitter4j.GeoLocation",
+        "getMethod" : "getGeoLocation",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/geoLocation/serialVersionUID",
+            "status" : "EXCLUDED",
+            "fieldType" : "LONG",
+            "name" : "serialVersionUID",
+            "modifiers" : {
+              "modifier" : [ "FINAL", "PRIVATE", "STATIC" ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/geoLocation/latitude",
+            "status" : "SUPPORTED",
+            "fieldType" : "DOUBLE",
+            "name" : "latitude",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "double",
+            "canonicalClassName" : "double",
+            "getMethod" : "getLatitude",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/geoLocation/longitude",
+            "status" : "SUPPORTED",
+            "fieldType" : "DOUBLE",
+            "name" : "longitude",
+            "modifiers" : {
+              "modifier" : [ "PRIVATE" ]
+            },
+            "className" : "double",
+            "canonicalClassName" : "double",
+            "getMethod" : "getLongitude",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "twitter4j",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=twitter4j.GeoLocation",
+        "interface" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/place",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "place",
+        "modifiers" : {
+          "modifier" : [ "ABSTRACT", "INTERFACE", "PUBLIC" ]
+        },
+        "className" : "twitter4j.Place",
+        "canonicalClassName" : "twitter4j.Place",
+        "getMethod" : "getPlace",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/name",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "name",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getName",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/id",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "id",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getId",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/country",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "country",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getCountry",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/fullName",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "fullName",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getFullName",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/uRL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "uRL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/streetAddress",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "streetAddress",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getStreetAddress",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/countryCode",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "countryCode",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getCountryCode",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/placeType",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "placeType",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getPlaceType",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/boundingBoxType",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "boundingBoxType",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getBoundingBoxType",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "arrayDimensions" : 2,
+            "collectionType" : "ARRAY",
+            "path" : "/place/boundingBoxCoordinates[]",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "boundingBoxCoordinates",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "twitter4j.GeoLocation",
+            "getMethod" : "getBoundingBoxCoordinates",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            },
+            "uri" : "atlas:java?className=twitter4j.GeoLocation"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/place/geometryType",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "geometryType",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getGeometryType",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "arrayDimensions" : 2,
+            "collectionType" : "ARRAY",
+            "path" : "/place/geometryCoordinates[]",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "geometryCoordinates",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "twitter4j.GeoLocation",
+            "getMethod" : "getGeometryCoordinates",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            },
+            "uri" : "atlas:java?className=twitter4j.GeoLocation"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/place/containedWithIn[]",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "containedWithIn",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "twitter4j.Place",
+            "getMethod" : "getContainedWithIn",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            },
+            "uri" : "atlas:java?className=twitter4j.Place"
+          } ]
+        },
+        "packageName" : "twitter4j",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=twitter4j.Place",
+        "interface" : true
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/favorited",
+        "status" : "SUPPORTED",
+        "fieldType" : "BOOLEAN",
+        "name" : "favorited",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "boolean",
+        "canonicalClassName" : "boolean",
+        "getMethod" : "isFavorited",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/retweeted",
+        "status" : "SUPPORTED",
+        "fieldType" : "BOOLEAN",
+        "name" : "retweeted",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "boolean",
+        "canonicalClassName" : "boolean",
+        "getMethod" : "isRetweeted",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/favoriteCount",
+        "status" : "SUPPORTED",
+        "fieldType" : "INTEGER",
+        "name" : "favoriteCount",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "int",
+        "canonicalClassName" : "int",
+        "getMethod" : "getFavoriteCount",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/retweet",
+        "status" : "SUPPORTED",
+        "fieldType" : "BOOLEAN",
+        "name" : "retweet",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "boolean",
+        "canonicalClassName" : "boolean",
+        "getMethod" : "isRetweet",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/retweetedStatus",
+        "status" : "CACHED",
+        "fieldType" : "COMPLEX",
+        "name" : "retweetedStatus",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "twitter4j.Status",
+        "getMethod" : "getRetweetedStatus",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ ]
+        },
+        "uri" : "atlas:java?className=twitter4j.Status"
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/retweetCount",
+        "status" : "SUPPORTED",
+        "fieldType" : "INTEGER",
+        "name" : "retweetCount",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "int",
+        "canonicalClassName" : "int",
+        "getMethod" : "getRetweetCount",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/retweetedByMe",
+        "status" : "SUPPORTED",
+        "fieldType" : "BOOLEAN",
+        "name" : "retweetedByMe",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "boolean",
+        "canonicalClassName" : "boolean",
+        "getMethod" : "isRetweetedByMe",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/currentUserRetweetId",
+        "status" : "SUPPORTED",
+        "fieldType" : "LONG",
+        "name" : "currentUserRetweetId",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "long",
+        "canonicalClassName" : "long",
+        "getMethod" : "getCurrentUserRetweetId",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/possiblySensitive",
+        "status" : "SUPPORTED",
+        "fieldType" : "BOOLEAN",
+        "name" : "possiblySensitive",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "boolean",
+        "canonicalClassName" : "boolean",
+        "getMethod" : "isPossiblySensitive",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/lang",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "lang",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getLang",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "arrayDimensions" : 1,
+        "collectionType" : "ARRAY",
+        "path" : "/withheldInCountries[]",
+        "status" : "SUPPORTED",
+        "fieldType" : "STRING",
+        "name" : "withheldInCountries",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "java.lang.String",
+        "canonicalClassName" : "java.lang.String",
+        "getMethod" : "getWithheldInCountries",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/quotedStatusId",
+        "status" : "SUPPORTED",
+        "fieldType" : "LONG",
+        "name" : "quotedStatusId",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "long",
+        "canonicalClassName" : "long",
+        "getMethod" : "getQuotedStatusId",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/quotedStatus",
+        "status" : "CACHED",
+        "fieldType" : "COMPLEX",
+        "name" : "quotedStatus",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "twitter4j.Status",
+        "getMethod" : "getQuotedStatus",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ ]
+        },
+        "uri" : "atlas:java?className=twitter4j.Status"
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/quotedStatusPermalink",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "quotedStatusPermalink",
+        "modifiers" : {
+          "modifier" : [ "ABSTRACT", "INTERFACE", "PUBLIC" ]
+        },
+        "className" : "twitter4j.URLEntity",
+        "canonicalClassName" : "twitter4j.URLEntity",
+        "getMethod" : "getQuotedStatusPermalink",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/quotedStatusPermalink/text",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "text",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getText",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/quotedStatusPermalink/uRL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "uRL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/quotedStatusPermalink/expandedURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "expandedURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getExpandedURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/quotedStatusPermalink/displayURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "displayURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getDisplayURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/quotedStatusPermalink/start",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "start",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getStart",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/quotedStatusPermalink/end",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "end",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getEnd",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "twitter4j",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=twitter4j.URLEntity",
+        "interface" : true
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/user",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "user",
+        "modifiers" : {
+          "modifier" : [ "ABSTRACT", "INTERFACE", "PUBLIC" ]
+        },
+        "className" : "twitter4j.User",
+        "canonicalClassName" : "twitter4j.User",
+        "getMethod" : "getUser",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/name",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "name",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getName",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/location",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "location",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getLocation",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/id",
+            "status" : "SUPPORTED",
+            "fieldType" : "LONG",
+            "name" : "id",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "long",
+            "canonicalClassName" : "long",
+            "getMethod" : "getId",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/protected",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "protected",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isProtected",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/timeZone",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "timeZone",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getTimeZone",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/uRL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "uRL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/lang",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "lang",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getLang",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/user/withheldInCountries[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "withheldInCountries",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getWithheldInCountries",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/screenName",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "screenName",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getScreenName",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/createdAt",
+            "status" : "SUPPORTED",
+            "fieldType" : "DATE_TIME",
+            "name" : "createdAt",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.util.Date",
+            "canonicalClassName" : "java.util.Date",
+            "getMethod" : "getCreatedAt",
+            "primitive" : false,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/originalProfileImageURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "originalProfileImageURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getOriginalProfileImageURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/400x400ProfileImageURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "400x400ProfileImageURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "get400x400ProfileImageURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileImageURLHttps",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileImageURLHttps",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileImageURLHttps",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/biggerProfileImageURLHttps",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "biggerProfileImageURLHttps",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getBiggerProfileImageURLHttps",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/miniProfileImageURLHttps",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "miniProfileImageURLHttps",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getMiniProfileImageURLHttps",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/originalProfileImageURLHttps",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "originalProfileImageURLHttps",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getOriginalProfileImageURLHttps",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/400x400ProfileImageURLHttps",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "400x400ProfileImageURLHttps",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "get400x400ProfileImageURLHttps",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/defaultProfileImage",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "defaultProfileImage",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isDefaultProfileImage",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/followersCount",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "followersCount",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getFollowersCount",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBackgroundColor",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBackgroundColor",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBackgroundColor",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileTextColor",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileTextColor",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileTextColor",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileLinkColor",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileLinkColor",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileLinkColor",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileSidebarFillColor",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileSidebarFillColor",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileSidebarFillColor",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileSidebarBorderColor",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileSidebarBorderColor",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileSidebarBorderColor",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileUseBackgroundImage",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "profileUseBackgroundImage",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isProfileUseBackgroundImage",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/defaultProfile",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "defaultProfile",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isDefaultProfile",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/showAllInlineMedia",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "showAllInlineMedia",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isShowAllInlineMedia",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/friendsCount",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "friendsCount",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getFriendsCount",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/favouritesCount",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "favouritesCount",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getFavouritesCount",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/utcOffset",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "utcOffset",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getUtcOffset",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBackgroundImageURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBackgroundImageURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBackgroundImageURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBackgroundImageUrlHttps",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBackgroundImageUrlHttps",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBackgroundImageUrlHttps",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBannerURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBannerURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBannerURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBannerRetinaURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBannerRetinaURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBannerRetinaURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBannerIPadURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBannerIPadURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBannerIPadURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBannerIPadRetinaURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBannerIPadRetinaURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBannerIPadRetinaURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBannerMobileURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBannerMobileURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBannerMobileURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBannerMobileRetinaURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBannerMobileRetinaURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBannerMobileRetinaURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBanner300x100URL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBanner300x100URL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBanner300x100URL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBanner600x200URL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBanner600x200URL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBanner600x200URL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBanner1500x500URL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileBanner1500x500URL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileBanner1500x500URL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileBackgroundTiled",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "profileBackgroundTiled",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isProfileBackgroundTiled",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/statusesCount",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "statusesCount",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getStatusesCount",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/geoEnabled",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "geoEnabled",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isGeoEnabled",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/verified",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "verified",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isVerified",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/translator",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "translator",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isTranslator",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/listedCount",
+            "status" : "SUPPORTED",
+            "fieldType" : "INTEGER",
+            "name" : "listedCount",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "int",
+            "canonicalClassName" : "int",
+            "getMethod" : "getListedCount",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/followRequestSent",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "followRequestSent",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isFollowRequestSent",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/user/descriptionURLEntities[]",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "descriptionURLEntities",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "twitter4j.URLEntity",
+            "getMethod" : "getDescriptionURLEntities",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            },
+            "uri" : "atlas:java?className=twitter4j.URLEntity"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "path" : "/user/uRLEntity",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "uRLEntity",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "twitter4j.URLEntity",
+            "getMethod" : "getURLEntity",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            },
+            "uri" : "atlas:java?className=twitter4j.URLEntity"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/biggerProfileImageURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "biggerProfileImageURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getBiggerProfileImageURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/miniProfileImageURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "miniProfileImageURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getMiniProfileImageURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/contributorsEnabled",
+            "status" : "SUPPORTED",
+            "fieldType" : "BOOLEAN",
+            "name" : "contributorsEnabled",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "boolean",
+            "canonicalClassName" : "boolean",
+            "getMethod" : "isContributorsEnabled",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/profileImageURL",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "profileImageURL",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getProfileImageURL",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/description",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "description",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getDescription",
+            "primitive" : true,
+            "synthetic" : false
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaClass",
+            "path" : "/user/status",
+            "status" : "CACHED",
+            "fieldType" : "COMPLEX",
+            "name" : "status",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "twitter4j.Status",
+            "getMethod" : "getStatus",
+            "primitive" : false,
+            "synthetic" : false,
+            "javaEnumFields" : {
+              "javaEnumField" : [ ]
+            },
+            "javaFields" : {
+              "javaField" : [ ]
+            },
+            "uri" : "atlas:java?className=twitter4j.Status"
+          }, {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "path" : "/user/email",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "email",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getEmail",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "twitter4j",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=twitter4j.User",
+        "interface" : true
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/createdAt",
+        "status" : "SUPPORTED",
+        "fieldType" : "DATE_TIME",
+        "name" : "createdAt",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "java.util.Date",
+        "canonicalClassName" : "java.util.Date",
+        "getMethod" : "getCreatedAt",
+        "primitive" : false,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/displayTextRangeStart",
+        "status" : "SUPPORTED",
+        "fieldType" : "INTEGER",
+        "name" : "displayTextRangeStart",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "int",
+        "canonicalClassName" : "int",
+        "getMethod" : "getDisplayTextRangeStart",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/displayTextRangeEnd",
+        "status" : "SUPPORTED",
+        "fieldType" : "INTEGER",
+        "name" : "displayTextRangeEnd",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "int",
+        "canonicalClassName" : "int",
+        "getMethod" : "getDisplayTextRangeEnd",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/truncated",
+        "status" : "SUPPORTED",
+        "fieldType" : "BOOLEAN",
+        "name" : "truncated",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "boolean",
+        "canonicalClassName" : "boolean",
+        "getMethod" : "isTruncated",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "path" : "/inReplyToStatusId",
+        "status" : "SUPPORTED",
+        "fieldType" : "LONG",
+        "name" : "inReplyToStatusId",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "long",
+        "canonicalClassName" : "long",
+        "getMethod" : "getInReplyToStatusId",
+        "primitive" : true,
+        "synthetic" : false
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaClass",
+        "path" : "/scopes",
+        "status" : "SUPPORTED",
+        "fieldType" : "COMPLEX",
+        "name" : "scopes",
+        "modifiers" : {
+          "modifier" : [ "ABSTRACT", "INTERFACE", "PUBLIC" ]
+        },
+        "className" : "twitter4j.Scopes",
+        "canonicalClassName" : "twitter4j.Scopes",
+        "getMethod" : "getScopes",
+        "primitive" : false,
+        "synthetic" : false,
+        "javaEnumFields" : {
+          "javaEnumField" : [ ]
+        },
+        "javaFields" : {
+          "javaField" : [ {
+            "jsonType" : "io.atlasmap.java.v2.JavaField",
+            "arrayDimensions" : 1,
+            "collectionType" : "ARRAY",
+            "path" : "/scopes/placeIds[]",
+            "status" : "SUPPORTED",
+            "fieldType" : "STRING",
+            "name" : "placeIds",
+            "modifiers" : {
+              "modifier" : [ ]
+            },
+            "className" : "java.lang.String",
+            "canonicalClassName" : "java.lang.String",
+            "getMethod" : "getPlaceIds",
+            "primitive" : true,
+            "synthetic" : false
+          } ]
+        },
+        "packageName" : "twitter4j",
+        "annotation" : false,
+        "annonymous" : false,
+        "enumeration" : false,
+        "localClass" : false,
+        "memberClass" : false,
+        "uri" : "atlas:java?className=twitter4j.Scopes",
+        "interface" : true
+      }, {
+        "jsonType" : "io.atlasmap.java.v2.JavaField",
+        "arrayDimensions" : 1,
+        "collectionType" : "ARRAY",
+        "path" : "/contributors[]",
+        "status" : "SUPPORTED",
+        "fieldType" : "LONG",
+        "name" : "contributors",
+        "modifiers" : {
+          "modifier" : [ ]
+        },
+        "className" : "long",
+        "canonicalClassName" : "long",
+        "getMethod" : "getContributors",
+        "primitive" : true,
+        "synthetic" : false
+      } ]
+    },
+    "packageName" : "twitter4j",
+    "annotation" : false,
+    "annonymous" : false,
+    "enumeration" : false,
+    "localClass" : false,
+    "memberClass" : false,
+    "uri" : "atlas:java?className=twitter4j.Status",
+    "interface" : true
+  }
+}

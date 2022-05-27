@@ -1,0 +1,7 @@
+@import '~@patternfly/react-core/dist/styles/base.css';
+@import '~@atlasmap/atlasmap/dist/styles.css';
+
+html, body, #root {
+  height: 100%;
+}
+
