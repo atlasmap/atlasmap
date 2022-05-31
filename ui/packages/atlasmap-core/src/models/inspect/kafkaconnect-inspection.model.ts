@@ -143,6 +143,7 @@ export class KafkaConnectInspectionRequestOptions extends DocumentInspectionRequ
   json: IKafkaConnectInspectionRequestContainer = {
     KafkaConnectInspectionRequest: {
       jsonType: KAFKACONNECT_INSPECTION_REQUEST_JSON_TYPE,
+      documentType: this.doc.type,
       inspectionType: this.doc.inspectionType,
       schemaData: this.doc.inspectionSource,
       options: { schemaType: this.documentType },
