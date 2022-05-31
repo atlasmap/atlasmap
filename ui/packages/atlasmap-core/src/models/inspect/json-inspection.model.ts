@@ -122,6 +122,7 @@ export class JsonInspectionRequestOptions extends DocumentInspectionRequestOptio
   json: IJsonInspectionRequestContainer = {
     JsonInspectionRequest: {
       jsonType: JSON_INSPECTION_REQUEST_JSON_TYPE,
+      documentType: this.doc.type,
       inspectionType: this.doc.inspectionType,
       jsonData: this.doc.inspectionSource,
       inspectPaths: this.doc.inspectionPaths,

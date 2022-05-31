@@ -127,6 +127,7 @@ export interface IInspectionRequest {
   documentId?: string;
   documentName?: string;
   documentDescription?: string;
+  documentType?: string;
   jsonType: string;
   fieldNameExclusions?: IStringList;
   typeNameExclusions?: IStringList;

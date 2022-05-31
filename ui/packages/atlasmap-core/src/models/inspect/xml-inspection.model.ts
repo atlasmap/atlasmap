@@ -148,6 +148,7 @@ export class XmlInspectionRequestOptions extends DocumentInspectionRequestOption
   json: IXmlInspectionRequestContainer = {
     XmlInspectionRequest: {
       jsonType: XML_INSPECTION_REQUEST_JSON_TYPE,
+      documentType: this.doc.type,
       inspectionType: this.doc.inspectionType,
       xmlData: this.doc.inspectionSource,
       inspectPaths: this.doc.inspectionPaths,
