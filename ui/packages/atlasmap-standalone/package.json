@@ -91,29 +91,5 @@
     "singleQuote": true,
     "trailingComma": "all",
     "endOfLine": "auto"
-  },
-  "jest": {
-    "globals": {
-      "ts-jest": {
-        "isolatedModules": true,
-        "tsConfig": "tsconfig.test.json"
-      }
-    },
-    "moduleNameMapper": {
-      "ky": "ky/umd",
-      "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js",
-      "@atlasmap/core": "<rootDir>../atlasmap-core/src",
-      "\\.(css|less)$": "<rootDir>/src/__mocks__/styleMock.js",
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__mocks__/fileMock.js"
-    },
-    "transform": {
-      "^.+\\.(js|jsx)$": "babel-jest",
-      "^.+\\.(ts|tsx)$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "@atlasmap/core",
-      "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles|monaco-editor|d3-scale)/)",
-      "/node_modules/(?!monaco-editor)"
-    ]
   }
 }
