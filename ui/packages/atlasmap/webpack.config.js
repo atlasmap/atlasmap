@@ -1,8 +1,7 @@
-/* eslint-disable */
 const path = require('path');
-const autoprefixer = require("autoprefixer");
-const cssnano = require("cssnano");
-const postcssurl = require("postcss-url");
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const postcssurl = require('postcss-url');
 
 module.exports = () => {
   return {
@@ -30,25 +29,25 @@ module.exports = () => {
         {
           test: /\.css$/i,
           use: [
-            "style-loader",
+            'style-loader',
             {
-              loader: "css-loader",
+              loader: 'css-loader',
               options: {
                 importLoaders: 1,
                 modules: true,
               },
             },
             {
-              loader: "postcss-loader",
+              loader: 'postcss-loader',
               options: {
                 postcssOptions: {
                   plugins: [
                     autoprefixer(),
                     cssnano({
-                      preset: "default",
+                      preset: 'default',
                     }),
                     postcssurl({
-                      url: "inline",
+                      url: 'inline',
                     }),
                   ],
                   modules: true,
@@ -63,7 +62,7 @@ module.exports = () => {
         },
         {
           test: /\.css$/,
-          use: ["style-loader", "css-loader"],
+          use: ['style-loader', 'css-loader'],
           exclude: /\.module\.css$/,
         },
         {
@@ -90,7 +89,7 @@ module.exports = () => {
     },
     resolve: {
       alias: {
-        "@atlasmap/core": path.resolve(__dirname, '../atlasmap-core/src'),
+        '@atlasmap/core': path.resolve(__dirname, '../atlasmap-core/src'),
       },
       extensions: ['.js', '.jsx', '.ts', '.tsx']
     },
