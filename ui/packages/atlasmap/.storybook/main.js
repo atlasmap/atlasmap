@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   stories: [
     '../doc/*.stories.mdx',
