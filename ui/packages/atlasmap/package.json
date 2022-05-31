@@ -19,7 +19,7 @@
     "build:module": "npm-run-all prebuild build:yarn",
     "build:storybook": "build-storybook --quiet",
     "build": "npm-run-all build:module lint test",
-    "test": "NODE_OPTIONS=--experimental-vm-modules npx jest --runInBand",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
     "test:coverage": "jest test --coverage --runInBand",
     "test:watch": "yarn run test -- --watch",
     "lint": "eslint --ext .ts,.tsx,.js ./src",
@@ -30,7 +30,6 @@
     "@atlasmap/core": "2.4.0-SNAPSHOT"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.18.0",
     "@storybook/addon-actions": "^6.3.8",
     "@storybook/addon-docs": "^6.3.8",
     "@storybook/addon-knobs": "^6.3.0",
@@ -46,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.26.0",
     "autoprefixer": "^10.2.5",
-    "babel-jest": "^28.1.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^5.2.4",
     "cssnano": "^5.0.2",
     "eslint-config-react-app": "^6.0.0",
