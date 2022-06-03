@@ -54,6 +54,7 @@ export class DocumentManagementService {
 
   private mappingUpdatedSubscription!: Subscription;
   private MAX_SEARCH_MATCH = 10000;
+  private documentUpdatedSubscription: Subscription;
 
   documentUpdated = new Subject<void>();
   documentUpdated$: Observable<void> = this.documentUpdated.asObservable();
@@ -69,10 +70,15 @@ export class DocumentManagementService {
           }
         }
       });
+    // Document update could modify the DataSource in the mapping definition
+    this.documentUpdatedSubscription = this.documentUpdated.subscribe(() => {
+      this.cfg.mappingService.notifyFetchMapping();
+    });
   }
 
   uninitialize(): void {
     this.mappingUpdatedSubscription.unsubscribe();
+    this.documentUpdatedSubscription.unsubscribe();
   }
 
   /**
