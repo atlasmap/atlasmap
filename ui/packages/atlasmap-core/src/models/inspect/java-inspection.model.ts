@@ -134,6 +134,9 @@ export class JavaInspectionRequestOptions extends DocumentInspectionRequestOptio
     const request: IClassInspectionRequestContainer = {
       ClassInspectionRequest: {
         jsonType: JAVA_INSPECTION_REQUEST_JSON_TYPE,
+        documentId: this.doc.id,
+        documentName: this.doc.name,
+        documentDescription: this.doc.description,
         documentType: this.doc.type,
         className: this.doc.inspectionSource,
         inspectionType: this.doc.inspectionType,

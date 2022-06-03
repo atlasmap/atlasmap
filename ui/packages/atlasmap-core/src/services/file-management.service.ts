@@ -297,7 +297,7 @@ export class FileManagementService {
         FileName.JAR
       );
       if (jarUpdated && this.cfg.mappingService) {
-        this.cfg.mappingService.notifyMappingUpdated();
+        this.cfg.mappingService.notifyFetchMapping();
         await this.cfg.fieldActionService.fetchFieldActions();
         resolve(true);
       } else {
