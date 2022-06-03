@@ -105,6 +105,9 @@ export class CsvInspectionRequestOptions extends DocumentInspectionRequestOption
   json: ICsvInspectionRequestContainer = {
     CsvInspectionRequest: {
       jsonType: CSV_INSPECTION_REQUEST_JSON_TYPE,
+      documentId: this.doc.id,
+      documentName: this.doc.name,
+      documentDescription: this.doc.description,
       documentType: this.doc.type,
       inspectionType: this.doc.inspectionType,
       csvData: this.doc.inspectionSource,
