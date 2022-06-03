@@ -363,58 +363,6 @@ with ID ${mappedField.mappingField.docId}`,
     return false;
   }
 
-  static updateDocumentNamespacesFromMappings(cfg: ConfigModel): void {
-    const docs: DocumentDefinition[] = cfg.getDocs(false);
-
-    // TODO: check this non null operator
-    for (const parsedDoc of cfg.mappings!.parsedDocs) {
-      if (!parsedDoc) {
-        continue;
-      }
-      if (parsedDoc.isSource) {
-        continue;
-      }
-      if (parsedDoc.namespaces.length === 0) {
-        continue;
-      }
-
-      const doc = this.getDocById(parsedDoc.id, docs);
-      if (doc == null) {
-        cfg.errorService.addError(
-          new ErrorInfo({
-            message: `Could not find document with identifier '${parsedDoc.id}' for namespace override.`,
-            level: ErrorLevel.ERROR,
-            scope: ErrorScope.APPLICATION,
-            type: ErrorType.INTERNAL,
-            object: {
-              identifier: parsedDoc.id,
-              parsedDoc: parsedDoc,
-              docs: docs,
-            },
-          })
-        );
-        continue;
-      }
-
-      doc.namespaces = [...parsedDoc.namespaces];
-    }
-  }
-
-  private static getDocById(
-    documentId: string,
-    docs: DocumentDefinition[]
-  ): DocumentDefinition | null {
-    if (documentId == null || docs == null || !docs.length) {
-      return null;
-    }
-    for (const doc of docs) {
-      if (doc.id === documentId) {
-        return doc;
-      }
-    }
-    return null;
-  }
-
   static activeMapping(cfg: ConfigModel): boolean {
     return !!cfg?.mappings?.activeMapping;
   }
