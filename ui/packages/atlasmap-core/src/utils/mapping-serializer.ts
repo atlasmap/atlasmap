@@ -998,6 +998,7 @@ export class MappingSerializer {
       doc.description = docRef.description;
       const xmlDocRef = docRef as IXmlDataSource;
       if (xmlDocRef.xmlNamespaces && xmlDocRef.xmlNamespaces.xmlNamespace) {
+        doc.namespaces = [];
         for (const svcNS of xmlDocRef.xmlNamespaces.xmlNamespace) {
           const ns: NamespaceModel = new NamespaceModel();
           ns.alias = svcNS.alias;

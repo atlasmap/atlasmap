@@ -344,7 +344,6 @@ export class InitializationService {
       }
       if (this.cfg.mappings) {
         LookupTableUtil.updateLookupTables(this.cfg.mappings);
-        MappingUtil.updateDocumentNamespacesFromMappings(this.cfg);
         await MappingUtil.updateMappingsFromDocuments(this.cfg);
         for (const d of this.cfg.getAllDocs()) {
           d.updateFromMappings(this.cfg.mappings);
