@@ -32,7 +32,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <apicurio-registry.version>2.2.3.Final</apicurio-registry.version>
+    <apicurio-registry.version>2.2.4.Final</apicurio-registry.version>
     <asciidoctor-maven-plugin.version>2.2.2</asciidoctor-maven-plugin.version>
     <asciidoctorj.version>2.5.4</asciidoctorj.version>
     <asciidoctorj-pdf.version>2.0.4</asciidoctorj-pdf.version>
