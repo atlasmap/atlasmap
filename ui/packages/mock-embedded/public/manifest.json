@@ -1,0 +1,25 @@
+{
+  "short_name": "mock-embedded",
+  "name": "AtlasMap UI mockup for embedded mode",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "256x256 128x128 64x64 32x32 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "mock-embedded",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
