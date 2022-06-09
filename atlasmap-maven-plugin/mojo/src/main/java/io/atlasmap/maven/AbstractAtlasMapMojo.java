@@ -136,7 +136,7 @@ public abstract class AbstractAtlasMapMojo extends AbstractMojo {
             if (target == null) {
                 target = new File(outputDir, name + ".json");
             }
-	    target.getParentFile().mkdirs();
+            target.getParentFile().mkdirs();
             objectMapper.writeValue(target, object);
             getLog().info("Created: " + target);
         } catch (JsonProcessingException e) {
