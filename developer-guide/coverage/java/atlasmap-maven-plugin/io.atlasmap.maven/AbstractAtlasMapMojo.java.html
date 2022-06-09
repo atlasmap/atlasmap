@@ -136,21 +136,22 @@ import io.atlasmap.v2.Json;
 <span class="nc bnc" id="L136" title="All 2 branches missed.">            if (target == null) {</span>
 <span class="nc" id="L137">                target = new File(outputDir, name + &quot;.json&quot;);</span>
             }
-<span class="nc" id="L139">            objectMapper.writeValue(target, object);</span>
-<span class="nc" id="L140">            getLog().info(&quot;Created: &quot; + target);</span>
-<span class="nc" id="L141">        } catch (JsonProcessingException e) {</span>
-<span class="nc" id="L142">            throw new MojoExecutionException(e.getMessage(), e);</span>
-<span class="nc" id="L143">        } catch (IOException e) {</span>
-<span class="nc" id="L144">            throw new MojoExecutionException(e.getMessage(), e);</span>
-<span class="nc" id="L145">        }</span>
-<span class="nc" id="L146">    }</span>
+<span class="nc" id="L139">            target.getParentFile().mkdirs();</span>
+<span class="nc" id="L140">            objectMapper.writeValue(target, object);</span>
+<span class="nc" id="L141">            getLog().info(&quot;Created: &quot; + target);</span>
+<span class="nc" id="L142">        } catch (JsonProcessingException e) {</span>
+<span class="nc" id="L143">            throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L144">        } catch (IOException e) {</span>
+<span class="nc" id="L145">            throw new MojoExecutionException(e.getMessage(), e);</span>
+<span class="nc" id="L146">        }</span>
+<span class="nc" id="L147">    }</span>
 
     /**
      * Gets the repository system.
      * @return repository system
      */
     public RepositorySystem getSystem() {
-<span class="nc" id="L153">        return system;</span>
+<span class="nc" id="L154">        return system;</span>
     }
 
     /**
@@ -158,15 +159,15 @@ import io.atlasmap.v2.Json;
      * @param system repository system
      */
     public void setSystem(RepositorySystem system) {
-<span class="nc" id="L161">        this.system = system;</span>
-<span class="nc" id="L162">    }</span>
+<span class="nc" id="L162">        this.system = system;</span>
+<span class="nc" id="L163">    }</span>
 
     /**
      * Gets the remote repositories.
      * @return remote repos
      */
     public List&lt;RemoteRepository&gt; getRemoteRepos() {
-<span class="nc" id="L169">        return remoteRepos;</span>
+<span class="nc" id="L170">        return remoteRepos;</span>
     }
 
     /**
@@ -174,15 +175,15 @@ import io.atlasmap.v2.Json;
      * @param remoteRepos remote repos
      */
     public void setRemoteRepos(List&lt;RemoteRepository&gt; remoteRepos) {
-<span class="nc" id="L177">        this.remoteRepos = remoteRepos;</span>
-<span class="nc" id="L178">    }</span>
+<span class="nc" id="L178">        this.remoteRepos = remoteRepos;</span>
+<span class="nc" id="L179">    }</span>
 
     /**
      * Get the repository system session.
      * @return repo session
      */
     public RepositorySystemSession getRepoSession() {
-<span class="nc" id="L185">        return repoSession;</span>
+<span class="nc" id="L186">        return repoSession;</span>
     }
 
     /**
@@ -190,15 +191,15 @@ import io.atlasmap.v2.Json;
      * @param repoSession repo session
      */
     public void setRepoSession(RepositorySystemSession repoSession) {
-<span class="nc" id="L193">        this.repoSession = repoSession;</span>
-<span class="nc" id="L194">    }</span>
+<span class="nc" id="L194">        this.repoSession = repoSession;</span>
+<span class="nc" id="L195">    }</span>
 
     /**
      * Gets the output directory.
      * @return output directory
      */
     public File getOutputDir() {
-<span class="nc" id="L201">        return outputDir;</span>
+<span class="nc" id="L202">        return outputDir;</span>
     }
 
     /**
@@ -206,15 +207,15 @@ import io.atlasmap.v2.Json;
      * @param outputDir output directory
      */
     public void setOutputDir(File outputDir) {
-<span class="nc" id="L209">        this.outputDir = outputDir;</span>
-<span class="nc" id="L210">    }</span>
+<span class="nc" id="L210">        this.outputDir = outputDir;</span>
+<span class="nc" id="L211">    }</span>
 
     /**
      * Gets the output file.
      * @return output file
      */
     public File getOutputFile() {
-<span class="nc" id="L217">        return outputFile;</span>
+<span class="nc" id="L218">        return outputFile;</span>
     }
 
     /**
@@ -222,8 +223,8 @@ import io.atlasmap.v2.Json;
      * @param outputFile output file
      */
     public void setOutputFile(File outputFile) {
-<span class="nc" id="L225">        this.outputFile = outputFile;</span>
-<span class="nc" id="L226">    }</span>
+<span class="nc" id="L226">        this.outputFile = outputFile;</span>
+<span class="nc" id="L227">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
