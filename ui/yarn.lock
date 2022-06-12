@@ -2954,9 +2954,9 @@
     tslib "^2.0.0"
 
 "@patternfly/react-icons@^4.65.1":
-  version "4.65.1"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.65.1.tgz#bc31f349577e416c8211b68da4dfb5e46e8039d7"
-  integrity sha512-CUYFRPztFkR7qrXq/0UAhLjeHd8FdjLe4jBjj8tfKc7OXwxDeZczqNFyRMATZpPaduTH7BU2r3OUjQrgAbquWg==
+  version "4.72.3"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.72.3.tgz#5886755a2b516d49d97ed3bdc88609d9b3c4fc2a"
+  integrity sha512-bZCPsOsxtFXTmZQqDKNebkBywud3E0ID3446AWI1RO5Ypufdc0FTkehSzBPANfJPYjjK9/EYaIy8rF0yiJdFPQ==
 
 "@patternfly/react-styles@^4.64.1":
   version "4.64.1"
@@ -4372,9 +4372,9 @@
   integrity sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
 
 "@types/eslint@*":
-  version "8.4.2"
-  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.4.2.tgz#48f2ac58ab9c631cb68845c3d956b28f79fad575"
-  integrity sha512-Z1nseZON+GEnFjJc04sv4NSALGjhFwy6K0HXt7qsn5ArfAKtb63dXNJHf+1YW6IpOIYRBGUbu3GwJdj8DGnCjA==
+  version "8.4.3"
+  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.4.3.tgz#5c92815a3838b1985c90034cd85f26f59d9d0ece"
+  integrity sha512-YP1S7YJRMPs+7KZKDb9G63n8YejIwW9BALq7a5j2+H4yl6iOv9CB29edho+cuFRrvmJbbaH2yiVChKLJVysDGw==
   dependencies:
     "@types/estree" "*"
     "@types/json-schema" "*"
@@ -6341,7 +6341,7 @@ browserslist@4.10.0:
     node-releases "^1.1.52"
     pkg-up "^3.1.0"
 
-browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.14.5, browserslist@^4.16.6, browserslist@^4.17.5, browserslist@^4.20.3, browserslist@^4.6.2, browserslist@^4.6.4, browserslist@^4.9.1:
+browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.16.6, browserslist@^4.17.5, browserslist@^4.20.3, browserslist@^4.6.2, browserslist@^4.6.4, browserslist@^4.9.1:
   version "4.20.3"
   resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.20.3.tgz#eb7572f49ec430e054f56d52ff0ebe9be915f8bf"
   integrity sha512-NBhymBQl1zM0Y5dQT/O+xiLP9/rzOIQdKM/eMJBAq7yBgaB6krIYLGejrwVYnSHZdqjscB1SPuAjHwxjvN6Wdg==
@@ -6350,6 +6350,17 @@ browserslist@^4.0.0, browserslist@^4.12.0, browserslist@^4.14.5, browserslist@^4
     electron-to-chromium "^1.4.118"
     escalade "^3.1.1"
     node-releases "^2.0.3"
+    picocolors "^1.0.0"
+
+browserslist@^4.14.5:
+  version "4.20.4"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.20.4.tgz#98096c9042af689ee1e0271333dbc564b8ce4477"
+  integrity sha512-ok1d+1WpnU24XYN7oC3QWgTyMhY/avPJ/r9T00xxvUOIparA/gc+UPUMaod3i+G6s+nI2nUb9xZ5k794uIwShw==
+  dependencies:
+    caniuse-lite "^1.0.30001349"
+    electron-to-chromium "^1.4.147"
+    escalade "^3.1.1"
+    node-releases "^2.0.5"
     picocolors "^1.0.0"
 
 bs-logger@0.x:
@@ -6685,6 +6696,11 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, can
   version "1.0.30001338"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001338.tgz#b5dd7a7941a51a16480bdf6ff82bded1628eec0d"
   integrity sha512-1gLHWyfVoRDsHieO+CaeYe7jSo/MT7D7lhaXUiwwbuR5BwQxORs0f1tAwUSQr3YbxRXJvxHM/PA5FfPQRnsPeQ==
+
+caniuse-lite@^1.0.30001349:
+  version "1.0.30001352"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001352.tgz#cc6f5da3f983979ad1e2cdbae0505dccaa7c6a12"
+  integrity sha512-GUgH8w6YergqPQDGWhJGt8GDRnY0L/iJVQcU3eJ46GYf52R8tk0Wxp0PymuFVZboJYXGiCqwozAYZNRjVj6IcA==
 
 canvas@^2.8.0:
   version "2.9.1"
@@ -8856,6 +8872,11 @@ electron-to-chromium@^1.4.118:
   version "1.4.137"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.137.tgz#186180a45617283f1c012284458510cd99d6787f"
   integrity sha512-0Rcpald12O11BUogJagX3HsCN3FE83DSqWjgXoHo5a72KUKMSfI39XBgJpgNNxS9fuGzytaFjE06kZkiVFy2qA==
+
+electron-to-chromium@^1.4.147:
+  version "1.4.152"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.152.tgz#7dedbe8f3dc1c597088982a203f392e60f7ee90a"
+  integrity sha512-jk4Ju5SGZAQQJ1iI4Rgru7dDlvkQPLpNPWH9gIZmwCD4YteA5Bbk1xPcPDUf5jUYs3e1e80RXdi8XgKQZaigeg==
 
 elliptic@^6.5.3:
   version "6.5.4"
@@ -14351,6 +14372,11 @@ node-releases@^2.0.3:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.4.tgz#f38252370c43854dc48aa431c766c6c398f40476"
   integrity sha512-gbMzqQtTtDz/00jQzZ21PQzdI9PyLYqUSvD0p3naOhX4odFji0ZxYdnVwPTxmSwkmxhcFImpozceidSG+AgoPQ==
 
+node-releases@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.5.tgz#280ed5bc3eba0d96ce44897d8aee478bfb3d9666"
+  integrity sha512-U9h1NLROZTq9uE1SNffn6WuPDg8icmi3ns4rEl/oTfIle4iLjTliCzgTsbaIFMq/Xn078/lfY/BL0GWZ+psK4Q==
+
 nopt@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-5.0.0.tgz#530942bb58a512fccafe53fe210f13a25355dc88"
@@ -19393,9 +19419,9 @@ terser@^5.3.4:
     source-map-support "~0.5.19"
 
 terser@^5.7.2:
-  version "5.14.0"
-  resolved "https://registry.yarnpkg.com/terser/-/terser-5.14.0.tgz#eefeec9af5153f55798180ee2617f390bdd285e2"
-  integrity sha512-JC6qfIEkPBd9j1SMO3Pfn+A6w2kQV54tv+ABQLgZr7dA3k/DL/OBoYSWxzVpZev3J+bUHXfr55L8Mox7AaNo6g==
+  version "5.14.1"
+  resolved "https://registry.yarnpkg.com/terser/-/terser-5.14.1.tgz#7c95eec36436cb11cf1902cc79ac564741d19eca"
+  integrity sha512-+ahUAE+iheqBTDxXhTisdA8hgvbEG1hHOQ9xmNjeUJSoi6DU/gMrKNcfZjHkyY6Alnuyc+ikYJaxxfHkT3+WuQ==
   dependencies:
     "@jridgewell/source-map" "^0.3.2"
     acorn "^8.5.0"
