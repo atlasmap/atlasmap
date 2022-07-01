@@ -5,9 +5,9 @@ name: Checked
 
 on:
   push:
-    branches: [ atlasmap-2.3.* ]
+    branches: [ atlasmap-2.4.* ]
   pull_request:
-    branches: [ atlasmap-2.3.* ]
+    branches: [ atlasmap-2.4.* ]
 
 jobs:
   build_maven:
