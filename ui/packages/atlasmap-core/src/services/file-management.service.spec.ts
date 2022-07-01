@@ -42,6 +42,7 @@ describe('FileManagementService', () => {
   const mockedCommonUtil = mocked(CommonUtil, true);
   jest.mock('pako');
   const mockedPako = mocked(pako);
+  const mockedFileSaver = mocked(FileSaver);
 
   beforeEach(() => {
     const initService = new InitializationService(ky);
