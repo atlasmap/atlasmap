@@ -65,7 +65,7 @@
     <kafka-junit.version>3.2.0</kafka-junit.version>
     <keytool-maven-plugin.version>1.6</keytool-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
-    <log4j2.version>2.17.2</log4j2.version>
+    <log4j2.version>2.18.0</log4j2.version>
     <lsp4j.version>0.14.0</lsp4j.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
     <resteasy.version>6.0.1.Final</resteasy.version>
