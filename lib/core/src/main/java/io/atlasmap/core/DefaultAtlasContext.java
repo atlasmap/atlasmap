@@ -131,11 +131,14 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
         if (mappingVersion != null && mappingVersion.length() > 0) {
             String[] mappingVersionComps = mappingVersion.split("\\.");
             String[] coreVersionComps = coreVersion.split("\\.");
-            if (
-                coreVersionComps.length < 2 || mappingVersionComps.length < 2 ||
-                Integer.parseInt(coreVersionComps[0]) < Integer.parseInt(mappingVersionComps[0]) ||
-                Integer.parseInt(coreVersionComps[1]) < Integer.parseInt(mappingVersionComps[1])
-            ) {
+            if (coreVersionComps.length < 2 || mappingVersionComps.length < 2) {
+                return false;
+            }
+            if (Integer.parseInt(coreVersionComps[0]) < Integer.parseInt(mappingVersionComps[0])) {
+                return false;
+            }
+            if (Integer.parseInt(coreVersionComps[0]) == Integer.parseInt(mappingVersionComps[0]) &&
+                Integer.parseInt(coreVersionComps[1]) < Integer.parseInt(mappingVersionComps[1])) {
                 return false;
             }
         }
