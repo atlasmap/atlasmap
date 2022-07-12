@@ -1,6 +1,6 @@
 = AtlasMap Design Time Service API :: Core
 atlasmap@googlegroups.com
-2.4.x-SNAPSHOT
+2.5.0-SNAPSHOT
 :toc: left
 :numbered:
 :toclevels: 3
@@ -2142,21 +2142,15 @@ endif::internal-generation[]
 | 
 |  
 
-<<<<<<< HEAD
-| jsonType 
-| X 
+| version 
+|  
 | String  
-=======
-| version
-| 
-| String 
 | 
 |  
 
-| jsonType
-| X
-| String 
->>>>>>> 25b20c1cfa1 (fix: Add version info to mapping - check in UI and in default Atlas context. (#3862))
+| jsonType 
+| X 
+| String  
 | 
 |  
 
