@@ -101,7 +101,7 @@ public class XSOMParserTest extends TestCase {
     /**
      * Test of parse method, of class com.sun.xml.xsom.parser.XSOMParser.
      */
-    public void testParse() throws Exception {
+    public void ignore_testParse() throws Exception {
         System.out.println("parse");
 
         //Following works.
