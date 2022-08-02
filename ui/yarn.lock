@@ -9038,9 +9038,9 @@ electron-to-chromium@^1.4.118:
   integrity sha512-0Rcpald12O11BUogJagX3HsCN3FE83DSqWjgXoHo5a72KUKMSfI39XBgJpgNNxS9fuGzytaFjE06kZkiVFy2qA==
 
 electron-to-chromium@^1.4.202:
-  version "1.4.206"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.206.tgz#580ff85b54d7ec0c05f20b1e37ea0becdd7b0ee4"
-  integrity sha512-h+Fadt1gIaQ06JaIiyqPsBjJ08fV5Q7md+V8bUvQW/9OvXfL2LRICTz2EcnnCP7QzrFTS6/27MRV6Bl9Yn97zA==
+  version "1.4.207"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.207.tgz#9c3310ebace2952903d05dcaba8abe3a4ed44c01"
+  integrity sha512-piH7MJDJp4rJCduWbVvmUd59AUne1AFBJ8JaRQvk0KzNTSUnZrVXHCZc+eg+CGE4OujkcLJznhGKD6tuAshj5Q==
 
 elliptic@^6.5.3:
   version "6.5.4"
@@ -21027,9 +21027,9 @@ url@^0.11.0:
     querystring "0.2.0"
 
 use-debounce@^8.0.1:
-  version "8.0.2"
-  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-8.0.2.tgz#bd1b522c7b5b5d9dc249824fd2e4c3e4137b1ea9"
-  integrity sha512-4yCQ4FmlmYNpcHXJk1E19chO1X58fH4+QrwKpa5nkx3d7szHR3MjheRgECLvHivp3ClUqEom+SHOGB9zBz+qlw==
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-8.0.3.tgz#2b4d7d7307a9397acb6520b7a1dea14c2c3d108c"
+  integrity sha512-BV7xuVy4LS0HtzHb23sDwAjfNjdBWlc4oyjJLcdCoVAjPv1+hroZYsCXX4VfRJT+8sLaqCftBOO8l7CMQtn9Gw==
 
 use@^3.1.0:
   version "3.1.1"
