@@ -29,7 +29,6 @@
     "@types/text-encoding": "^0.0.36",
     "babel-jest": "^24.9.0",
     "eslint-plugin-header": "^3.1.1",
-    "husky": "^4.2.3",
     "text-encoding": "^0.7.0",
     "ts-jest": "^24.3.0",
     "tsdx": "^0.13.1",
@@ -48,11 +47,6 @@
     "jest": "24.9.0",
     "prettier": "^2.3.1",
     "webpack": "4.42.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsdx lint"
-    }
   },
   "prettier": {
     "printWidth": 80,
