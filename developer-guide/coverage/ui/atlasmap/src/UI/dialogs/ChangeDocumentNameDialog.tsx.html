@@ -141,8 +141,7 @@
 <a name='L83'></a><a href='#L83'>83</a>
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -184,7 +183,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -269,51 +267,50 @@ export interface IChangeDocumentNameDialogProps {
   onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (updatedDocNameInfo: IDocumentName) =&gt; void;
 }
-export const ChangeDocumentNameDialog: FunctionComponent&lt;
-  IChangeDocumentNameDialogProps
-&gt; = <span class="fstat-no" title="function not covered" >({</span> id<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >n</span>ame: i</span>nitialName<span class="cstat-no" title="statement not covered" > = '', i</span>sSource<span class="cstat-no" title="statement not covered" >, i</span>sOpen<span class="cstat-no" title="statement not covered" >, o</span>nCancel<span class="cstat-no" title="statement not covered" >, o</span>nConfirm<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
-  const [documentName<span class="cstat-no" title="statement not covered" >, s</span>etDocumentName<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialName);</span>
+export const ChangeDocumentNameDialog: FunctionComponent&lt;IChangeDocumentNameDialogProps&gt; =
+<span class="fstat-no" title="function not covered" >  ({</span> id<span class="cstat-no" title="statement not covered" >, <span class="cstat-no" title="statement not covered" >n</span>ame: i</span>nitialName<span class="cstat-no" title="statement not covered" > = '', i</span>sSource<span class="cstat-no" title="statement not covered" >, i</span>sOpen<span class="cstat-no" title="statement not covered" >, o</span>nCancel<span class="cstat-no" title="statement not covered" >, o</span>nConfirm<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
+    const [documentName<span class="cstat-no" title="statement not covered" >, s</span>etDocumentName<span class="cstat-no" title="statement not covered" >] = <span class="cstat-no" title="statement not covered" >u</span>seState(initialName);</span>
 &nbsp;
-  const reset = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    setDocumentName(initialName);</span>
-  }, [initialName]);
+    const reset = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      setDocumentName(initialName);</span>
+    }, [initialName]);
 &nbsp;
-  const handleOnConfirm = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (id &amp;&amp; isSource !== undefined) {</span>
-<span class="cstat-no" title="statement not covered" >      onConfirm({ id: id, name: documentName, isSource: isSource });</span>
+    const handleOnConfirm = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      if (id &amp;&amp; isSource !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        onConfirm({ id: id, name: documentName, isSource: isSource });</span>
+      }
+<span class="cstat-no" title="statement not covered" >      reset();</span>
+    }, [documentName, id, isSource, onConfirm, reset]);
+&nbsp;
+    const handleOnCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >      onCancel();</span>
+<span class="cstat-no" title="statement not covered" >      reset();</span>
+    }, [onCancel, reset]);
+&nbsp;
+    function <span class="fstat-no" title="function not covered" >handleOnNameChange(</span>name: string) {
+<span class="cstat-no" title="statement not covered" >      setDocumentName(name);</span>
     }
-<span class="cstat-no" title="statement not covered" >    reset();</span>
-  }, [documentName, id, isSource, onConfirm, reset]);
 &nbsp;
-  const handleOnCancel = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    onCancel();</span>
-<span class="cstat-no" title="statement not covered" >    reset();</span>
-  }, [onCancel, reset]);
+    // resync the internal state to the values passed in as props
+<span class="cstat-no" title="statement not covered" >    useEffect(reset, [reset]);</span>
 &nbsp;
-  function <span class="fstat-no" title="function not covered" >handleOnNameChange(</span>name: string) {
-<span class="cstat-no" title="statement not covered" >    setDocumentName(name);</span>
-  }
-&nbsp;
-  // resync the internal state to the values passed in as props
-<span class="cstat-no" title="statement not covered" >  useEffect(reset, [reset]);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;ConfirmationDialog
-      title={'Change selected document name?'}
-      onCancel={handleOnCancel}
-      onConfirm={handleOnConfirm}
-      isOpen={isOpen}
-    &gt;
-      &lt;TextInput
-        value={documentName}
-        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >handleOnNameChange(value)}</span>
-        id={id}
-        name={documentName}
-        data-testid={id + '-parameter-text-input'}
-      /&gt;
-    &lt;/ConfirmationDialog&gt;
-  );
-};
+<span class="cstat-no" title="statement not covered" >    return (</span>
+      &lt;ConfirmationDialog
+        title={'Change selected document name?'}
+        onCancel={handleOnCancel}
+        onConfirm={handleOnConfirm}
+        isOpen={isOpen}
+      &gt;
+        &lt;TextInput
+          value={documentName}
+          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >handleOnNameChange(value)}</span>
+          id={id}
+          name={documentName}
+          data-testid={id + '-parameter-text-input'}
+        /&gt;
+      &lt;/ConfirmationDialog&gt;
+    );
+  };
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -321,7 +318,7 @@ export const ChangeDocumentNameDialog: FunctionComponent&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 08 2022 17:02:09 GMT+0000 (Coordinated Universal Time)
+                at Thu Aug 11 2022 21:25:20 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

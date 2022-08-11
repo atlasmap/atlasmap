@@ -24,9 +24,6 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
-/**
- * The String pattern validator.
- */
 public class StringPatternValidator implements AtlasValidator {
 
     private String violationMessage;
@@ -34,67 +31,54 @@ public class StringPatternValidator implements AtlasValidator {
     private ValidationScope scope;
     private boolean useMatch;
 
-    /**
-     * A constructor.
-     * @param scope validation scope
-     * @param violationMessage violation message
-     * @param pattern pattern
-     */
     public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern) {
-<span class="fc" id="L44">        this(scope, violationMessage, pattern, false);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L35">        this(scope, violationMessage, pattern, false);</span>
+<span class="fc" id="L36">    }</span>
 
-    /**
-     * A constructor.
-     * @param scope validation scope
-     * @param violationMessage violation message
-     * @param pattern pattern
-     * @param useMatch true to use {@link Matcher#match(int,int)}, or use {@link Matcher#find()}
-     */
-<span class="fc" id="L54">    public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern, boolean useMatch) {</span>
-<span class="fc" id="L55">        this.violationMessage = violationMessage;</span>
-<span class="fc" id="L56">        this.pattern = pattern;</span>
-<span class="fc" id="L57">        this.scope = scope;</span>
-<span class="fc" id="L58">        this.useMatch = useMatch;</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L38">    public StringPatternValidator(ValidationScope scope, String violationMessage, String pattern, boolean useMatch) {</span>
+<span class="fc" id="L39">        this.violationMessage = violationMessage;</span>
+<span class="fc" id="L40">        this.pattern = pattern;</span>
+<span class="fc" id="L41">        this.scope = scope;</span>
+<span class="fc" id="L42">        this.useMatch = useMatch;</span>
+<span class="fc" id="L43">    }</span>
 
     @Override
     public boolean supports(Class&lt;?&gt; clazz) {
-<span class="fc" id="L63">        return String.class.isAssignableFrom(clazz);</span>
+<span class="fc" id="L47">        return String.class.isAssignableFrom(clazz);</span>
     }
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id) {
-<span class="fc" id="L68">        validate(target, validations, id, ValidationStatus.ERROR);</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L52">        validate(target, validations, id, ValidationStatus.ERROR);</span>
+<span class="fc" id="L53">    }</span>
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id, ValidationStatus status) {
-<span class="fc" id="L73">        Pattern regEx = Pattern.compile(pattern);</span>
+<span class="fc" id="L57">        Pattern regEx = Pattern.compile(pattern);</span>
 
-<span class="pc bpc" id="L75" title="1 of 4 branches missed.">        if (target != null &amp;&amp; supports(target.getClass())) {</span>
-<span class="fc" id="L76">            String value = (String) target;</span>
-<span class="fc" id="L77">            Matcher m = regEx.matcher(value);</span>
-<span class="fc bfc" id="L78" title="All 2 branches covered.">            if (useMatch) {</span>
-<span class="fc bfc" id="L79" title="All 2 branches covered.">                if (!m.matches()) {</span>
-<span class="fc" id="L80">                    Validation validation = new Validation();</span>
-<span class="fc" id="L81">                    validation.setScope(scope);</span>
-<span class="fc" id="L82">                    validation.setId(id);</span>
-<span class="fc" id="L83">                    validation.setMessage(String.format(violationMessage, target.toString()));</span>
-<span class="fc" id="L84">                    validation.setStatus(status);</span>
-<span class="fc" id="L85">                    validations.add(validation);</span>
-<span class="fc" id="L86">                }</span>
+<span class="pc bpc" id="L59" title="1 of 4 branches missed.">        if (target != null &amp;&amp; supports(target.getClass())) {</span>
+<span class="fc" id="L60">            String value = (String) target;</span>
+<span class="fc" id="L61">            Matcher m = regEx.matcher(value);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (useMatch) {</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">                if (!m.matches()) {</span>
+<span class="fc" id="L64">                    Validation validation = new Validation();</span>
+<span class="fc" id="L65">                    validation.setScope(scope);</span>
+<span class="fc" id="L66">                    validation.setId(id);</span>
+<span class="fc" id="L67">                    validation.setMessage(String.format(violationMessage, target.toString()));</span>
+<span class="fc" id="L68">                    validation.setStatus(status);</span>
+<span class="fc" id="L69">                    validations.add(validation);</span>
+<span class="fc" id="L70">                }</span>
             } else {
-<span class="fc bfc" id="L88" title="All 2 branches covered.">                if (m.find()) {</span>
-<span class="fc" id="L89">                    Validation validation = new Validation();</span>
-<span class="fc" id="L90">                    validation.setScope(scope);</span>
-<span class="fc" id="L91">                    validation.setId(id);</span>
-<span class="fc" id="L92">                    validation.setMessage(String.format(violationMessage, target.toString()));</span>
-<span class="fc" id="L93">                    validation.setStatus(status);</span>
-<span class="fc" id="L94">                    validations.add(validation);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                if (m.find()) {</span>
+<span class="fc" id="L73">                    Validation validation = new Validation();</span>
+<span class="fc" id="L74">                    validation.setScope(scope);</span>
+<span class="fc" id="L75">                    validation.setId(id);</span>
+<span class="fc" id="L76">                    validation.setMessage(String.format(violationMessage, target.toString()));</span>
+<span class="fc" id="L77">                    validation.setStatus(status);</span>
+<span class="fc" id="L78">                    validations.add(validation);</span>
                 }
             }
         }
-<span class="fc" id="L98">    }</span>
+<span class="fc" id="L82">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

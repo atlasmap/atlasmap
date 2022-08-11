@@ -33,88 +33,79 @@ import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.PropertyField;
 import io.atlasmap.v2.SimpleField;
 
-/**
- * The expression processor processes the conditional mapping expression. {@link DefaultAtlasContext}
- * uses this to process the expression where it's declared in the mapping definition.
- */
-<span class="nc" id="L40">public class DefaultAtlasExpressionProcessor {</span>
-<span class="fc" id="L41">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);</span>
+<span class="nc" id="L36">public class DefaultAtlasExpressionProcessor {</span>
+<span class="fc" id="L37">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasExpressionProcessor.class);</span>
 
-    /**
-     * Processes the expression.
-     * @param session session
-     * @param expression expression
-     */
     public static void processExpression(DefaultAtlasSession session, String expression) {
-<span class="pc bpc" id="L49" title="2 of 4 branches missed.">        if (expression == null || expression.trim().isEmpty()) {</span>
-<span class="nc" id="L50">            return;</span>
+<span class="pc bpc" id="L40" title="2 of 4 branches missed.">        if (expression == null || expression.trim().isEmpty()) {</span>
+<span class="nc" id="L41">            return;</span>
         }
 
         try {
-<span class="fc" id="L54">            Map&lt;String, Field&gt; sourceFieldMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L55">            Field parent = session.head().getSourceField();</span>
-<span class="pc bpc" id="L56" title="2 of 6 branches missed.">            if (parent != null &amp;&amp; !AtlasUtil.isEmpty(parent.getDocId()) &amp;&amp; !AtlasUtil.isEmpty(parent.getPath())) {</span>
-<span class="fc" id="L57">                 sourceFieldMap.put(parent.getDocId() + &quot;:&quot; + parent.getPath(), parent);</span>
+<span class="fc" id="L45">            Map&lt;String, Field&gt; sourceFieldMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L46">            Field parent = session.head().getSourceField();</span>
+<span class="pc bpc" id="L47" title="2 of 6 branches missed.">            if (parent != null &amp;&amp; !AtlasUtil.isEmpty(parent.getDocId()) &amp;&amp; !AtlasUtil.isEmpty(parent.getPath())) {</span>
+<span class="fc" id="L48">                 sourceFieldMap.put(parent.getDocId() + &quot;:&quot; + parent.getPath(), parent);</span>
             }
             // Anonymous FieldGroup is just a wrapping, peel it off
-<span class="fc bfc" id="L60" title="All 4 branches covered.">            if (parent instanceof FieldGroup &amp;&amp; AtlasUtil.isEmpty(parent.getPath())) {</span>
-<span class="fc" id="L61">                FieldGroup parentGroup = FieldGroup.class.cast(parent);</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">                for (Field child : parentGroup.getField()) {</span>
-<span class="pc bpc" id="L63" title="3 of 4 branches missed.">                    if (!(AtlasUtil.isEmpty(child.getDocId()) &amp;&amp; AtlasUtil.isEmpty(child.getPath()))) {</span>
-<span class="fc" id="L64">                         sourceFieldMap.put(child.getDocId() + &quot;:&quot; + child.getPath(), child);</span>
+<span class="fc bfc" id="L51" title="All 4 branches covered.">            if (parent instanceof FieldGroup &amp;&amp; AtlasUtil.isEmpty(parent.getPath())) {</span>
+<span class="fc" id="L52">                FieldGroup parentGroup = FieldGroup.class.cast(parent);</span>
+<span class="fc bfc" id="L53" title="All 2 branches covered.">                for (Field child : parentGroup.getField()) {</span>
+<span class="pc bpc" id="L54" title="3 of 4 branches missed.">                    if (!(AtlasUtil.isEmpty(child.getDocId()) &amp;&amp; AtlasUtil.isEmpty(child.getPath()))) {</span>
+<span class="fc" id="L55">                         sourceFieldMap.put(child.getDocId() + &quot;:&quot; + child.getPath(), child);</span>
                     }
-<span class="fc" id="L66">                }</span>
+<span class="fc" id="L57">                }</span>
             }
 
-<span class="fc" id="L69">            Expression parsedExpression = Expression.parse(expression, DefaultAtlasFunctionResolver.getInstance());</span>
-<span class="fc" id="L70">            Object answer = parsedExpression.evaluate((path) -&gt; {</span>
-<span class="pc bpc" id="L71" title="2 of 4 branches missed.">                if (path == null || path.isEmpty()) {</span>
-<span class="nc" id="L72">                    return null;</span>
+<span class="fc" id="L60">            Expression parsedExpression = Expression.parse(expression, DefaultAtlasFunctionResolver.getInstance());</span>
+<span class="fc" id="L61">            Object answer = parsedExpression.evaluate((path) -&gt; {</span>
+<span class="pc bpc" id="L62" title="2 of 4 branches missed.">                if (path == null || path.isEmpty()) {</span>
+<span class="nc" id="L63">                    return null;</span>
                 }
                 try {
-<span class="fc" id="L75">                    Field f = sourceFieldMap.get(path);</span>
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                    if (f == null) {</span>
-<span class="nc" id="L77">                        return null;</span>
+<span class="fc" id="L66">                    Field f = sourceFieldMap.get(path);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">                    if (f == null) {</span>
+<span class="nc" id="L68">                        return null;</span>
                     }
                     AtlasModule sourceModule;
-<span class="fc" id="L80">                    Map&lt;String, AtlasModule&gt; sourceModules = session.getAtlasContext().getSourceModules();</span>
-<span class="fc bfc" id="L81" title="All 2 branches covered.">                    if (f instanceof ConstantField) {</span>
-<span class="fc" id="L82">                        sourceModule = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">                    } else if (f instanceof PropertyField) {</span>
-<span class="fc" id="L84">                        sourceModule = sourceModules.get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);</span>
+<span class="fc" id="L71">                    Map&lt;String, AtlasModule&gt; sourceModules = session.getAtlasContext().getSourceModules();</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                    if (f instanceof ConstantField) {</span>
+<span class="fc" id="L73">                        sourceModule = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                    } else if (f instanceof PropertyField) {</span>
+<span class="fc" id="L75">                        sourceModule = sourceModules.get(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID);</span>
                     } else {
-<span class="fc" id="L86">                        String[] splitted = path.split(&quot;:&quot;, 2);</span>
-<span class="fc" id="L87">                        sourceModule = sourceModules.get(splitted[0]);</span>
+<span class="fc" id="L77">                        String[] splitted = path.split(&quot;:&quot;, 2);</span>
+<span class="fc" id="L78">                        sourceModule = sourceModules.get(splitted[0]);</span>
                     }
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">                    if (sourceModule == null) {</span>
-<span class="nc" id="L90">                        throw new ExpressionException(String.format(&quot;Module for the path '%s' is not found&quot;, path));</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                    if (sourceModule == null) {</span>
+<span class="nc" id="L81">                        throw new ExpressionException(String.format(&quot;Module for the path '%s' is not found&quot;, path));</span>
                     }
-<span class="fc" id="L92">                    session.head().setSourceField(f);</span>
-<span class="fc" id="L93">                    sourceModule.readSourceValue(session);</span>
-<span class="fc" id="L94">                    return session.head().getSourceField();</span>
-<span class="nc" id="L95">                } catch (Exception e) {</span>
-<span class="nc" id="L96">                    throw new ExpressionException(e);</span>
+<span class="fc" id="L83">                    session.head().setSourceField(f);</span>
+<span class="fc" id="L84">                    sourceModule.readSourceValue(session);</span>
+<span class="fc" id="L85">                    return session.head().getSourceField();</span>
+<span class="nc" id="L86">                } catch (Exception e) {</span>
+<span class="nc" id="L87">                    throw new ExpressionException(e);</span>
                 }
             });
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            if (answer instanceof Field) {</span>
-<span class="fc" id="L100">                session.head().setSourceField((Field)answer);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (answer instanceof Field) {</span>
+<span class="fc" id="L91">                session.head().setSourceField((Field)answer);</span>
             } else {
-<span class="nc" id="L102">                Field from = session.head().getSourceField();</span>
-<span class="nc" id="L103">                SimpleField to = new SimpleField();</span>
-<span class="nc" id="L104">                AtlasModelFactory.copyField(from, to, false);</span>
-<span class="nc" id="L105">                to.setValue(answer);</span>
-<span class="nc" id="L106">                session.head().setSourceField(to);</span>
+<span class="nc" id="L93">                Field from = session.head().getSourceField();</span>
+<span class="nc" id="L94">                SimpleField to = new SimpleField();</span>
+<span class="nc" id="L95">                AtlasModelFactory.copyField(from, to, false);</span>
+<span class="nc" id="L96">                to.setValue(answer);</span>
+<span class="nc" id="L97">                session.head().setSourceField(to);</span>
             }
-<span class="nc" id="L108">        } catch (Exception e) {</span>
-<span class="nc" id="L109">            AtlasUtil.addAudit(session, expression,</span>
-<span class="nc" id="L110">                    String.format(&quot;Expression processing error [%s]: %s&quot;,</span>
-<span class="nc" id="L111">                            expression, e.getMessage()),</span>
+<span class="nc" id="L99">        } catch (Exception e) {</span>
+<span class="nc" id="L100">            AtlasUtil.addAudit(session, expression,</span>
+<span class="nc" id="L101">                    String.format(&quot;Expression processing error [%s]: %s&quot;,</span>
+<span class="nc" id="L102">                            expression, e.getMessage()),</span>
                     AuditStatus.ERROR, null);
-<span class="nc bnc" id="L113" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L114">                LOG.debug(&quot;&quot;, e);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L105">                LOG.debug(&quot;&quot;, e);</span>
             }
-<span class="fc" id="L116">        }</span>
-<span class="fc" id="L117">    }</span>
+<span class="fc" id="L107">        }</span>
+<span class="fc" id="L108">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

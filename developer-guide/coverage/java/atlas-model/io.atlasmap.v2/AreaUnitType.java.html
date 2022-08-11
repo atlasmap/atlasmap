@@ -18,47 +18,32 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * The enumeration of area units.
- */
-<span class="fc" id="L24">public enum AreaUnitType {</span>
+<span class="fc" id="L21">public enum AreaUnitType {</span>
 
-    /** Square Meter. */
-<span class="fc" id="L27">    SQUARE_METER(&quot;Square Meter&quot;),</span>
-    /** Square Mile. */
-<span class="fc" id="L29">    SQUARE_MILE(&quot;Square Mile&quot;),</span>
-    /** Square Foot. */
-<span class="fc" id="L31">    SQUARE_FOOT(&quot;Square Foot&quot;);</span>
+<span class="fc" id="L23">    SQUARE_METER(&quot;Square Meter&quot;),</span>
+<span class="fc" id="L24">    SQUARE_MILE(&quot;Square Mile&quot;),</span>
+<span class="fc" id="L25">    SQUARE_FOOT(&quot;Square Foot&quot;);</span>
 
     private final String value;
 
-<span class="fc" id="L35">    AreaUnitType(String v) {</span>
-<span class="fc" id="L36">        value = v;</span>
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L29">    AreaUnitType(String v) {</span>
+<span class="fc" id="L30">        value = v;</span>
+<span class="fc" id="L31">    }</span>
 
-    /**
-     * Gets a value of the enum.
-     * @return value
-     */
     @JsonValue
     public String value() {
-<span class="fc" id="L45">        return value;</span>
+<span class="fc" id="L35">        return value;</span>
     }
 
-    /**
-     * Gets an enum represented by the string value.
-     * @param v string value
-     * @return the enum
-     */
     @JsonCreator
     public static AreaUnitType fromValue(String v) {
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        for (AreaUnitType c: AreaUnitType.values()) {</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L57">                return c;</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        for (AreaUnitType c: AreaUnitType.values()) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L42">                return c;</span>
             }
         }
-<span class="nc" id="L60">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L45">        throw new IllegalArgumentException(v);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

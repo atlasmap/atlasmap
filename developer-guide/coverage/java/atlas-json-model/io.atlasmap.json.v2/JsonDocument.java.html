@@ -22,35 +22,30 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
-/**
- * The JSON Document.
- */
 @JsonRootName(&quot;JsonDocument&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L30">public class JsonDocument extends Document implements Serializable {</span>
+<span class="fc" id="L27">public class JsonDocument extends Document implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L36" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L37">            return false;</span>
+<span class="nc bnc" id="L32" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L33">            return false;</span>
         }
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L40">            return true;</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L36">            return true;</span>
         }
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L43">            return false;</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L39">            return false;</span>
         }
-<span class="nc" id="L45">        return true;</span>
+<span class="nc" id="L41">        return true;</span>
     }
 
-    @Override
     public int hashCode() {
-<span class="nc" id="L50">        int currentHashCode = 1;</span>
-<span class="nc" id="L51">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
-<span class="nc" id="L52">        return currentHashCode;</span>
+<span class="nc" id="L45">        int currentHashCode = 1;</span>
+<span class="nc" id="L46">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L47">        return currentHashCode;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

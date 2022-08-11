@@ -32,352 +32,232 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-/**
- * The type converters for {@link BigInteger}.
- */
-<span class="fc" id="L38">public class BigIntegerConverter implements AtlasConverter&lt;BigInteger&gt; {</span>
+<span class="fc" id="L35">public class BigIntegerConverter implements AtlasConverter&lt;BigInteger&gt; {</span>
 
-    /**
-     * Converts to {@link BigDecimal}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(BigInteger value) {
-<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        return value != null ? new BigDecimal(value) : null;</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        return value != null ? new BigDecimal(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link BigInteger}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(BigInteger value) {
-<span class="nc" id="L57">        return value;</span>
+<span class="nc" id="L44">        return value;</span>
     }
 
-    /**
-     * Converts to {@link Boolean}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BOOLEAN)
     public Boolean toBoolean(BigInteger value) {
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L68">            return null;</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L50">            return null;</span>
         }
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        return value.intValue() == 0 ? Boolean.FALSE : Boolean.TRUE;</span>
     }
 
-    /**
-     * Converts to {@link Byte}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.BYTE,
             concerns = AtlasConversionConcern.RANGE)
     public Byte toByte(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L83">            return null;</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L59">            return null;</span>
         }
         try {
-<span class="fc" id="L86">            return value.byteValueExact();</span>
-<span class="nc" id="L87">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L88">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L62">            return value.byteValueExact();</span>
+<span class="nc" id="L63">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L64">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value));
         }
     }
 
-    /**
-     * Converts to {@link Character}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.CHAR,
             concerns = AtlasConversionConcern.RANGE)
     public Character toCharacter(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L103">            return null;</span>
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L73">            return null;</span>
         }
         try {
-<span class="fc" id="L106">            Character.valueOf((char) value.intValueExact());</span>
-<span class="nc" id="L107">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L108">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L76">            Character.valueOf((char) value.intValueExact());</span>
+<span class="nc" id="L77">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L78">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Character.MAX_VALUE or less than Character.MIN_VALUE&quot;, value));
-<span class="fc" id="L110">        }</span>
-<span class="fc" id="L111">        return Character.valueOf((char) value.intValue());</span>
+<span class="fc" id="L80">        }</span>
+<span class="fc" id="L81">        return Character.valueOf((char) value.intValue());</span>
     }
 
-    /**
-     * Converts to {@link Date}.
-     * @param date value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.RANGE)
     public Date toDate(BigInteger date) throws AtlasConversionException {
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (date == null) {</span>
-<span class="nc" id="L124">            return null;</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (date == null) {</span>
+<span class="nc" id="L88">            return null;</span>
         }
         try {
-<span class="fc" id="L127">            long dateLong = date.longValueExact();</span>
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">            if (dateLong &gt;= Instant.MIN.getEpochSecond()) {</span>
-<span class="fc" id="L129">                return Date.from(Instant.ofEpochMilli(dateLong));</span>
+<span class="fc" id="L91">            long dateLong = date.longValueExact();</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            if (dateLong &gt;= Instant.MIN.getEpochSecond()) {</span>
+<span class="fc" id="L93">                return Date.from(Instant.ofEpochMilli(dateLong));</span>
             }
-<span class="nc" id="L131">            return new Date(dateLong);</span>
-<span class="nc" id="L132">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L133">            throw new AtlasConversionException(String.format(</span>
+<span class="nc" id="L95">            return new Date(dateLong);</span>
+<span class="nc" id="L96">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L97">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, date));
         }
     }
 
-    /**
-     * Converts to {@link Double}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DOUBLE,
             concerns = AtlasConversionConcern.RANGE)
     public Double toDouble(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L148">            return null;</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L106">            return null;</span>
         }
-<span class="fc" id="L150">        Double answer = value.doubleValue();</span>
-<span class="pc bpc" id="L151" title="2 of 4 branches missed.">        if (answer == Double.NEGATIVE_INFINITY || answer == Double.POSITIVE_INFINITY) {</span>
-<span class="nc" id="L152">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L108">        Double answer = value.doubleValue();</span>
+<span class="pc bpc" id="L109" title="2 of 4 branches missed.">        if (answer == Double.NEGATIVE_INFINITY || answer == Double.POSITIVE_INFINITY) {</span>
+<span class="nc" id="L110">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Double.MAX_VALUE or less than Double.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L155">        return answer;</span>
+<span class="fc" id="L113">        return answer;</span>
     }
 
-    /**
-     * COnverts to {@link Float}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.FLOAT,
             concerns = AtlasConversionConcern.RANGE)
     public Float toFloat(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L167" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L168">            return null;</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L120">            return null;</span>
         }
-<span class="fc" id="L170">        Float answer = value.floatValue();</span>
-<span class="pc bpc" id="L171" title="2 of 4 branches missed.">        if (answer == Float.NEGATIVE_INFINITY || answer == Float.POSITIVE_INFINITY) {</span>
-<span class="nc" id="L172">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L122">        Float answer = value.floatValue();</span>
+<span class="pc bpc" id="L123" title="2 of 4 branches missed.">        if (answer == Float.NEGATIVE_INFINITY || answer == Float.POSITIVE_INFINITY) {</span>
+<span class="nc" id="L124">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Float.MAX_VALUE or less than Float.MIN_VALUE&quot;, value));
         }
-<span class="fc" id="L175">        return answer;</span>
+<span class="fc" id="L127">        return answer;</span>
     }
 
-    /**
-     * Converts to {@link Integer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.INTEGER,
             concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L188">            return null;</span>
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L134">            return null;</span>
         }
         try {
-<span class="fc" id="L191">            return value.intValueExact();</span>
-<span class="nc" id="L192">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L193">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L137">            return value.intValueExact();</span>
+<span class="nc" id="L138">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L139">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE&quot;, value));
         }
     }
 
-    /**
-     * Converts to {@link LocalDate}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE,
             concerns = AtlasConversionConcern.RANGE)
     public LocalDate toLocalDate(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L208">            return null;</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L148">            return null;</span>
         }
         try {
-<span class="fc" id="L211">            long longValue = value.longValueExact();</span>
-<span class="fc" id="L212">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalDate();</span>
-<span class="nc" id="L213">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L214">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L151">            long longValue = value.longValueExact();</span>
+<span class="fc" id="L152">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalDate();</span>
+<span class="nc" id="L153">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L154">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
     }
 
-    /**
-     * Converts to {@link LocalTime}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.TIME,
             concerns = AtlasConversionConcern.RANGE)
     public LocalTime toLocalTime(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L229">            return null;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L163">            return null;</span>
         }
         try {
-<span class="fc" id="L232">            long longValue = value.longValueExact();</span>
-<span class="fc" id="L233">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalTime();</span>
-<span class="nc" id="L234">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L235">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L166">            long longValue = value.longValueExact();</span>
+<span class="fc" id="L167">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalTime();</span>
+<span class="nc" id="L168">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L169">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
     }
 
-    /**
-     * Converts to {@link LocalDateTime}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME,
             concerns = AtlasConversionConcern.RANGE)
     public LocalDateTime toLocalDateTime(BigInteger value) throws AtlasConversionException {
-<span class="nc bnc" id="L249" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L250">            return null;</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L178">            return null;</span>
         }
         try {
-<span class="nc" id="L253">            long longValue = value.longValueExact();</span>
-<span class="nc" id="L254">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
-<span class="nc" id="L255">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L256">            throw new AtlasConversionException(String.format(</span>
+<span class="nc" id="L181">            long longValue = value.longValueExact();</span>
+<span class="nc" id="L182">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault()).toLocalDateTime();</span>
+<span class="nc" id="L183">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L184">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
     }
 
-    /**
-     * Converts to {@link Long}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.LONG,
             concerns = AtlasConversionConcern.RANGE)
     public Long toLong(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L271">            return null;</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L193">            return null;</span>
         }
         try {
-<span class="fc" id="L274">            return value.longValueExact();</span>
-<span class="nc" id="L275">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L276">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L196">            return value.longValueExact();</span>
+<span class="nc" id="L197">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L198">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
     }
 
-    /**
-     * Converts to {@link Number}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.NUMBER)
     public Number toNumber(BigInteger value) {
-<span class="nc" id="L288">        return value;</span>
+<span class="nc" id="L205">        return value;</span>
     }
 
-    /**
-     * Converts to {@link Short}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.SHORT,
             concerns = AtlasConversionConcern.RANGE)
     public Short toShort(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L301">            return null;</span>
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L212">            return null;</span>
         }
         try {
-<span class="fc" id="L304">            return value.shortValueExact();</span>
-<span class="nc" id="L305">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L306">            throw new AtlasConversionException(</span>
-<span class="nc" id="L307">                    String.format(&quot;BigInteger %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
+<span class="fc" id="L215">            return value.shortValueExact();</span>
+<span class="nc" id="L216">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L217">            throw new AtlasConversionException(</span>
+<span class="nc" id="L218">                    String.format(&quot;BigInteger %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
         }
     }
 
-    /**
-     * Converts to {@link String}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public String toString(BigInteger value) {
-<span class="pc bpc" id="L318" title="1 of 2 branches missed.">        return value != null ? value.toString() : null;</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        return value != null ? value.toString() : null;</span>
     }
 
-    /**
-     * Converts to {@link CharBuffer}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(BigInteger value) {
-<span class="nc bnc" id="L328" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link CharSequence}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public CharSequence toCharSequence(BigInteger value) {
-<span class="nc bnc" id="L338" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link StringBuffer}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(BigInteger value) {
-<span class="nc bnc" id="L348" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link StringBuilder}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(BigInteger value) {
-<span class="nc bnc" id="L358" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link ZonedDateTime}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.BIG_INTEGER, targetType = FieldType.DATE_TIME_TZ,
             concerns = AtlasConversionConcern.RANGE)
     public ZonedDateTime toZonedDateTime(BigInteger value) throws AtlasConversionException {
-<span class="pc bpc" id="L370" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L371">            return null;</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L251">            return null;</span>
         }
         try {
-<span class="fc" id="L374">            long longValue = value.longValueExact();</span>
-<span class="fc" id="L375">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault());</span>
-<span class="nc" id="L376">        } catch (ArithmeticException e) {</span>
-<span class="nc" id="L377">            throw new AtlasConversionException(String.format(</span>
+<span class="fc" id="L254">            long longValue = value.longValueExact();</span>
+<span class="fc" id="L255">            return Instant.ofEpochMilli(longValue).atZone(ZoneId.systemDefault());</span>
+<span class="nc" id="L256">        } catch (ArithmeticException e) {</span>
+<span class="nc" id="L257">            throw new AtlasConversionException(String.format(</span>
                     &quot;BigInteger %s is greater than Long.MAX_VALUE or less than Long.MIN_VALUE&quot;, value));
         }
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

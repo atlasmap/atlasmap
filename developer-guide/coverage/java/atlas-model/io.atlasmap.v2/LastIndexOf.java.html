@@ -19,14 +19,10 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-/**
- * The model class for the &lt;strong&gt;Last Index Of&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class LastIndexOf extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class LastIndexOf extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** string to test */
     protected String string;
 
     /**
@@ -38,7 +34,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getString() {
-<span class="fc" id="L41">        return string;</span>
+<span class="fc" id="L37">        return string;</span>
     }
 
     /**
@@ -52,8 +48,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to look for&quot;)
     @AtlasActionProperty(title = &quot;String&quot;, type = FieldType.STRING)
     public void setString(String value) {
-<span class="fc" id="L55">        this.string = value;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L51">        this.string = value;</span>
+<span class="fc" id="L52">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -22,23 +22,19 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.parser.ParseException;
 import io.atlasmap.v2.AtlasModelFactory;
 
-/**
- * The {@code TOLOWER()} function for conditional mapping expression, which
- * returns the lower cased string of the source String.
- */
-<span class="fc" id="L29">public class TOLOWER extends BaseFunctionFactory {</span>
+<span class="fc" id="L25">public class TOLOWER extends BaseFunctionFactory {</span>
 
     @Override
     public Expression create(List&lt;Expression&gt; args) throws ParseException {
-<span class="pc bpc" id="L33" title="1 of 2 branches missed.">        if (args.size() != 1) {</span>
-<span class="nc" id="L34">            throw new ParseException(&quot;TOLOWER expects 1 argument.&quot;);</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        if (args.size() != 1) {</span>
+<span class="nc" id="L30">            throw new ParseException(&quot;TOLOWER expects 1 argument.&quot;);</span>
         }
-<span class="fc" id="L36">        Expression arg = args.get(0);</span>
-<span class="fc" id="L37">        return (ctx) -&gt; {</span>
-<span class="fc" id="L38">            Object value = arg.evaluate(ctx).getValue();</span>
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">            return AtlasModelFactory.wrapWithField(value == null ? null : value.toString().toLowerCase());</span>
+<span class="fc" id="L32">        Expression arg = args.get(0);</span>
+<span class="fc" id="L33">        return (ctx) -&gt; {</span>
+<span class="fc" id="L34">            Object value = arg.evaluate(ctx).getValue();</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">            return AtlasModelFactory.wrapWithField(value == null ? null : value.toString().toLowerCase());</span>
         };
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

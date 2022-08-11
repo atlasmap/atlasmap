@@ -31,80 +31,72 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
-/**
- * {@link MappingFieldPairValidator} for the Java Document.
- */
 public class JavaMappingFieldPairValidator extends MappingFieldPairValidator {
 
     private JavaValidationService service;
     private AtlasConversionService conversionService;
     
-    /**
-     * A constructor.
-     * @param service validation service
-     * @param conversion conversion service
-     */
     JavaMappingFieldPairValidator(JavaValidationService service, AtlasConversionService conversion) {
-<span class="fc" id="L48">        super(service);</span>
-<span class="fc" id="L49">        this.service = service;</span>
-<span class="fc" id="L50">        this.conversionService = conversion;</span>
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L40">        super(service);</span>
+<span class="fc" id="L41">        this.service = service;</span>
+<span class="fc" id="L42">        this.conversionService = conversion;</span>
+<span class="fc" id="L43">    }</span>
 
     @Override
     protected void doValidateFieldTypes(List&lt;Validation&gt; validations, String mappingId,
             Field sourceField, Field targetField, FieldType sourceFieldType) {
-<span class="fc bfc" id="L56" title="All 6 branches covered.">        if ((sourceField instanceof JavaField &amp;&amp; targetField instanceof JavaField) &amp;&amp; ((sourceFieldType == null</span>
-<span class="fc bfc" id="L57" title="All 4 branches covered.">                || targetField.getFieldType() == null)</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">                || (sourceFieldType == FieldType.COMPLEX || targetField.getFieldType() == FieldType.COMPLEX))) {</span>
+<span class="fc bfc" id="L48" title="All 6 branches covered.">        if ((sourceField instanceof JavaField &amp;&amp; targetField instanceof JavaField) &amp;&amp; ((sourceFieldType == null</span>
+<span class="fc bfc" id="L49" title="All 4 branches covered.">                || targetField.getFieldType() == null)</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">                || (sourceFieldType == FieldType.COMPLEX || targetField.getFieldType() == FieldType.COMPLEX))) {</span>
             // making an assumption that anything marked as COMPLEX would require the use of
             // the class name to find a validator.
-<span class="pc bpc" id="L61" title="3 of 4 branches missed.">            if (((JavaField)sourceField).getClassName() != null &amp;&amp; ((JavaField)targetField).getClassName() != null) {</span>
-<span class="nc" id="L62">                validateClassConversion(mappingId, (JavaField) sourceField, (JavaField) targetField, validations);</span>
-<span class="nc" id="L63">                return;</span>
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">            if (((JavaField)sourceField).getClassName() != null &amp;&amp; ((JavaField)targetField).getClassName() != null) {</span>
+<span class="nc" id="L54">                validateClassConversion(mappingId, (JavaField) sourceField, (JavaField) targetField, validations);</span>
+<span class="nc" id="L55">                return;</span>
             }
         }
 
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (sourceField.getFieldType() != targetField.getFieldType()) {</span>
-<span class="fc" id="L68">            super.doValidateFieldTypes(validations, mappingId, sourceField, targetField, sourceFieldType);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (sourceField.getFieldType() != targetField.getFieldType()) {</span>
+<span class="fc" id="L60">            super.doValidateFieldTypes(validations, mappingId, sourceField, targetField, sourceFieldType);</span>
         }
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L62">    }</span>
 
     private void validateClassConversion(String mappingId, JavaField inputField, JavaField outField,
             List&lt;Validation&gt; validations) {
         // skip converter check for COMPLEX source field (possible for conditional mapping)
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (inputField.getFieldType() == FieldType.COMPLEX) {</span>
-<span class="nc" id="L76">            return;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (inputField.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="nc" id="L68">            return;</span>
         }
 
-<span class="nc" id="L79">        Optional&lt;AtlasConverter&lt;?&gt;&gt; atlasConverter = conversionService</span>
-<span class="nc" id="L80">                .findMatchingConverter(inputField.getClassName(), outField.getClassName());</span>
+<span class="nc" id="L71">        Optional&lt;AtlasConverter&lt;?&gt;&gt; atlasConverter = conversionService</span>
+<span class="nc" id="L72">                .findMatchingConverter(inputField.getClassName(), outField.getClassName());</span>
 
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!atlasConverter.isPresent()) {</span>
-<span class="nc" id="L83">            Validation validation = new Validation();</span>
-<span class="nc" id="L84">            validation.setScope(ValidationScope.MAPPING);</span>
-<span class="nc" id="L85">            validation.setId(mappingId);</span>
-<span class="nc" id="L86">            validation</span>
-<span class="nc" id="L87">                    .setMessage(String.format(&quot;Conversion from '%s' to '%s' is required but no converter is available&quot;,</span>
-<span class="nc" id="L88">                            inputField.getClassName(), outField.getClassName()));</span>
-<span class="nc" id="L89">            validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="nc" id="L90">            validations.add(validation);</span>
-<span class="nc" id="L91">        } else {</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (!atlasConverter.isPresent()) {</span>
+<span class="nc" id="L75">            Validation validation = new Validation();</span>
+<span class="nc" id="L76">            validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L77">            validation.setId(mappingId);</span>
+<span class="nc" id="L78">            validation</span>
+<span class="nc" id="L79">                    .setMessage(String.format(&quot;Conversion from '%s' to '%s' is required but no converter is available&quot;,</span>
+<span class="nc" id="L80">                            inputField.getClassName(), outField.getClassName()));</span>
+<span class="nc" id="L81">            validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L82">            validations.add(validation);</span>
+<span class="nc" id="L83">        } else {</span>
             AtlasConversionInfo conversionInfo;
             // find the method that does the conversion
-<span class="nc" id="L94">            Method[] methods = atlasConverter.get().getClass().getMethods();</span>
-<span class="nc" id="L95">            conversionInfo = Arrays.stream(methods).map(method -&gt; method.getAnnotation(AtlasConversionInfo.class))</span>
-<span class="nc bnc" id="L96" title="All 2 branches missed.">                    .filter(atlasConversionInfo -&gt; atlasConversionInfo != null)</span>
-<span class="nc" id="L97">                    .filter(atlasConversionInfo -&gt; atlasConversionInfo.sourceType()</span>
-<span class="nc bnc" id="L98" title="All 2 branches missed.">                            .compareTo(inputField.getFieldType()) == 0</span>
-<span class="nc bnc" id="L99" title="All 2 branches missed.">                            &amp;&amp; atlasConversionInfo.targetType().compareTo(outField.getFieldType()) == 0)</span>
-<span class="nc" id="L100">                    .findFirst().orElse(null);</span>
+<span class="nc" id="L86">            Method[] methods = atlasConverter.get().getClass().getMethods();</span>
+<span class="nc" id="L87">            conversionInfo = Arrays.stream(methods).map(method -&gt; method.getAnnotation(AtlasConversionInfo.class))</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                    .filter(atlasConversionInfo -&gt; atlasConversionInfo != null)</span>
+<span class="nc" id="L89">                    .filter(atlasConversionInfo -&gt; atlasConversionInfo.sourceType()</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                            .compareTo(inputField.getFieldType()) == 0</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                            &amp;&amp; atlasConversionInfo.targetType().compareTo(outField.getFieldType()) == 0)</span>
+<span class="nc" id="L92">                    .findFirst().orElse(null);</span>
 
-<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (conversionInfo != null) {</span>
-<span class="nc" id="L103">                populateConversionConcerns(validations, mappingId,</span>
-<span class="nc" id="L104">                     conversionInfo, service.getModuleFieldName(inputField), service.getModuleFieldName(outField));</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (conversionInfo != null) {</span>
+<span class="nc" id="L95">                populateConversionConcerns(validations, mappingId,</span>
+<span class="nc" id="L96">                     conversionInfo, service.getModuleFieldName(inputField), service.getModuleFieldName(outField));</span>
             }
         }
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L99">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <meta name="author" content="The AtlasMap Team">
 <title>AtlasMap Developer Guide</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -194,8 +194,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
-details>summary::-webkit-details-marker{display:none}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -237,8 +236,9 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -275,7 +275,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -291,11 +291,10 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
-li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -338,6 +337,8 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -443,8 +444,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h1>AtlasMap Developer Guide</h1>
 <div class="details">
 <span id="author" class="author">The AtlasMap Team</span><br>
-<span id="revnumber">version 3.0.0-SNAPSHOT,</span>
-<span id="revdate">2022-08-08</span>
+<span id="revnumber">version 2.6.0-SNAPSHOT,</span>
+<span id="revdate">2022-08-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">AtlasMap Developer Guide</div>
@@ -475,7 +476,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#json-service">3.3.3. JSON Service</a></li>
 <li><a href="#xml-service">3.3.4. XML Service</a></li>
 <li><a href="#dfdl-service">3.3.5. DFDL Service</a></li>
-<li><a href="#kafka-connect-service">3.3.6. Kafka Connect Service</a></li>
 </ul>
 </li>
 <li><a href="#internal-runtime-engine">3.4. Runtime Engine</a>
@@ -528,7 +528,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <span class="image"><a class="image" href="https://badge.fury.io/js/%40atlasmap%2Fatlasmap"><img src="https://badge.fury.io/js/%40atlasmap%2Fatlasmap.svg" alt="%40atlasmap%2Fatlasmap"></a></span></p>
 </div>
 <div class="paragraph">
-<p><span class="image"><a class="image" href="https://github.com/atlasmap/atlasmap/actions/workflows/main.yml"><img src="https://github.com/atlasmap/atlasmap/actions/workflows/main.yml/badge.svg" alt="badge"></a></span>
+<p><span class="image"><a class="image" href="https://github.com/atlasmap/atlasmap/actions/workflows/master.yml"><img src="https://github.com/atlasmap/atlasmap/actions/workflows/master.yml/badge.svg" alt="badge"></a></span>
 <span class="image"><a class="image" href="https://github.com/atlasmap/atlasmap/actions/workflows/supported-build.yml"><img src="https://github.com/atlasmap/atlasmap/actions/workflows/supported-build.yml/badge.svg" alt="badge"></a></span>
 <span class="image"><a class="image" href="https://www.codacy.com/gh/atlasmap/atlasmap/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/57f3935eba6b4438976295efea04ac0c" alt="Codacy Grade"></a></span>
 <span class="image"><a class="image" href="https://www.codacy.com/gh/atlasmap/atlasmap/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=atlasmap/atlasmap&amp;utm_campaign=Badge_Coverage"><img src="https://app.codacy.com/project/badge/Coverage/57f3935eba6b4438976295efea04ac0c" alt="Codacy Coverage"></a></span>
@@ -649,7 +649,7 @@ $ ./mvnw clean install</code></pre>
 <p>AtlasMap Document object defines a tree of fields. Defining a set of field-to-field mapping is all about the mappings in AtlasMap.</p>
 </div>
 <div class="paragraph">
-<p>Another thing to know for AtlasMap internal is the modules located <a href="https://github.com/atlasmap/atlasmap/tree/main/lib/modules">here</a> in repository. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:</p>
+<p>Another thing to know for AtlasMap internal is the modules located <a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules">here</a> in repository. Module in AtlasMap is a facility to plug-in an individual data format support like Java, JSON and XML. Each module implements roughly following 2 parts:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -682,7 +682,7 @@ $ ./mvnw clean install</code></pre>
 </td>
 <td class="content">
 There is also an overview document for the Data Mapper step in Syndesis, which might help if you look into AtlasMap within Syndesis context.
-<a href="https://github.com/syndesisio/syndesis/blob/main/app/server/docs/design/datamapper.md" class="bare">https://github.com/syndesisio/syndesis/blob/main/app/server/docs/design/datamapper.md</a>
+<a href="https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md" class="bare">https://github.com/syndesisio/syndesis/blob/master/app/server/docs/design/datamapper.md</a>
 </td>
 </tr>
 </table>
@@ -695,7 +695,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/atlasmap/atlasmap/blob/main/ui/" class="bare">https://github.com/atlasmap/atlasmap/blob/main/ui/</a></p>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/ui/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/ui/</a></p>
 </li>
 </ul>
 </div>
@@ -705,13 +705,13 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://github.com/atlasmap/atlasmap/tree/main/ui/packages/atlasmap-core">@atlasmap/core</a> - UI side business logic which is used by the presentation layer, <code>@atlasmap/atlasmap</code>. Published in NPM repoisitory - <a href="https://www.npmjs.com/package/@atlasmap/core" class="bare">https://www.npmjs.com/package/@atlasmap/core</a></p>
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-core">@atlasmap/core</a> - UI side business logic which is used by the presentation layer, <code>@atlasmap/atlasmap</code>. Published in NPM repoisitory - <a href="https://www.npmjs.com/package/@atlasmap/core" class="bare">https://www.npmjs.com/package/@atlasmap/core</a></p>
 </li>
 <li>
-<p><a href="https://github.com/atlasmap/atlasmap/tree/main/ui/packages/atlasmap">@atlasmap/atlasmap</a> - The presentation layer of AtlasMap Data Mapper UI built with React. <code>&lt;AtlasmapProvider&gt;</code> is meant to be placed in any React Web application. Published in NPM repository - <a href="https://www.npmjs.com/package/@atlasmap/atlasmap" class="bare">https://www.npmjs.com/package/@atlasmap/atlasmap</a></p>
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap">@atlasmap/atlasmap</a> - The presentation layer of AtlasMap Data Mapper UI built with React. <code>&lt;AtlasmapProvider&gt;</code> is meant to be placed in any React Web application. Published in NPM repository - <a href="https://www.npmjs.com/package/@atlasmap/atlasmap" class="bare">https://www.npmjs.com/package/@atlasmap/atlasmap</a></p>
 </li>
 <li>
-<p><a href="https://github.com/atlasmap/atlasmap/tree/main/ui/packages/atlasmap-standalone">@atlasmap/standalone</a> - A thin React bootstrapping component to spin up AtlasMap Data Mapper UI in standalone mode.</p>
+<p><a href="https://github.com/atlasmap/atlasmap/tree/master/ui/packages/atlasmap-standalone">@atlasmap/standalone</a> - A thin React bootstrapping component to spin up AtlasMap Data Mapper UI in standalone mode.</p>
 </li>
 </ul>
 </div>
@@ -748,7 +748,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="sect4">
 <h5 id="service">SERVICE</h5>
 <div class="paragraph">
-<p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (<a href="https://github.com/atlasmap/atlasmap/blob/main/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts">MappingManagementService</a>) and document service (<a href="https://github.com/atlasmap/atlasmap/blob/main/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a>).</p>
+<p>When the Data Mapper UI Bootstraps, a series of service calls are made to the mapping service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/mapping-management.service.ts">MappingManagementService</a>) and document service (<a href="https://github.com/atlasmap/atlasmap/blob/master/ui/src/app/lib/atlasmap-data-mapper/services/document-management.service.ts">DocumentManagementService</a>).</p>
 </div>
 <div class="paragraph">
 <p>The document service is used to fetch our source/target document information (name of doc, fields). After these are parsed from the service, they are stored in the ConfigModel&#8217;s inputDoc and outputDoc DocumentDefinition models.</p>
@@ -793,7 +793,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/service" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="openapi/core/index.html">API</a></p>
@@ -809,7 +809,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/modules/java/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/java/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="openapi/java/index.html">API</a></p>
@@ -825,7 +825,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/modules/json/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/json/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="openapi/json/index.html">API</a></p>
@@ -841,7 +841,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/modules/xml/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/xml/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="openapi/xml/index.html">API</a></p>
@@ -857,7 +857,7 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/modules/dfdl/service" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/modules/dfdl/service</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/modules/dfdl/service" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/modules/dfdl/service</a></p>
 </li>
 <li>
 <p>API Reference: <a href="openapi/dfdl/index.html">API</a></p>
@@ -868,29 +868,13 @@ There is also an overview document for the Data Mapper step in Syndesis, which m
 <p>XML Service provides XML inspection service which generate an AtlasMap Document object from XML instance or XML schema.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="kafka-connect-service">3.3.6. Kafka Connect Service</h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/modules/kafka-connect/service" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/modules/kafka-connect/service</a></p>
-</li>
-<li>
-<p>API Reference: <a href="openapi/kafka-connect/index.html">API</a></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Kafka Connect Service provides Kafka Connect inspection service which generate an AtlasMap Document object from Kafka Connect schema such as JSON or AVRO.</p>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="internal-runtime-engine">3.4. Runtime Engine</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/" class="bare">https://github.com/atlasmap/atlasmap/blob/main/lib/</a></p>
+<p>Code Location: <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/" class="bare">https://github.com/atlasmap/atlasmap/blob/master/lib/</a></p>
 </li>
 </ul>
 </div>
@@ -914,15 +898,15 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum"
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td><a href="https://github.com/atlasmap/atlasmap/blob/main/lib/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java">AtlasContextFactory</a> is a singleton instance on JVM, which holds global configuration for the AtlasMap.</td>
+<td><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContextFactory.java">AtlasContextFactory</a> is a singleton instance on JVM, which holds global configuration for the AtlasMap.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/main/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding an ADM archive file exported from the AtlasMap Data Mapper UI.</td>
+<td><code>AtlasContextFactory#createContext(File)</code> creates <a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasContext.java">AtlasContext</a> which represents an AtlasMap mapping context for each mapping definitions by feeding an ADM archive file exported from the AtlasMap Data Mapper UI.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><a href="https://github.com/atlasmap/atlasmap/blob/main/lib/api/src/main/java/io/atlasmap/api/AtlasSession.java">AtlasSession</a> represents a mapping processing session. <code>AtlasSession</code> should be created for each execution and should <strong>NOT</strong> be shared among multiple threads.</td>
+<td><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/api/AtlasSession.java">AtlasSession</a> represents a mapping processing session. <code>AtlasSession</code> should be created for each execution and should <strong>NOT</strong> be shared among multiple threads.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -941,10 +925,10 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum"
 <div class="sect3">
 <h4 id="internal-runtime-atlasmodule">3.4.1. AtlasModule and mapping process</h4>
 <div class="paragraph">
-<p><a href="https://github.com/atlasmap/atlasmap/blob/main/lib/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
-<a href="https://github.com/atlasmap/atlasmap/tree/main/lib/modules/java">Java</a>,
-<a href="https://github.com/atlasmap/atlasmap/tree/main/lib/modules/json">JSON</a> and
-<a href="https://github.com/atlasmap/atlasmap/tree/main/lib/modules/xml">XML</a>. The methods defined in <code>AtlasModule</code> are invoked from <code>AtlasContext</code> while <code>AtlasContext#process(AtlasSession)</code> is in progress.</p>
+<p><a href="https://github.com/atlasmap/atlasmap/blob/master/lib/api/src/main/java/io/atlasmap/spi/AtlasModule.java">AtlasModule</a> is a SPI to be implemented by each modules like
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/java">Java</a>,
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/json">JSON</a> and
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/modules/xml">XML</a>. The methods defined in <code>AtlasModule</code> are invoked from <code>AtlasContext</code> while <code>AtlasContext#process(AtlasSession)</code> is in progress.</p>
 </div>
 <div class="paragraph">
 <p><code>AtlasContext#process(AtlasSession)</code> goes on in following order:</p>
@@ -1025,14 +1009,14 @@ Object targetDoc = session.getTargetDocument("myXmlTargetDoc"); <i class="conum"
 <h4 id="internal-runtime-typeconverter">3.4.2. TypeConverter</h4>
 <div class="paragraph">
 <p>TypeConverter converts one field value to the expected field type. This is automatically invoked during mapping when the actual value is not in expected type. AtlasMap runtime provides OOTB converters for the AtlasMap primitive types
-<a href="https://github.com/atlasmap/atlasmap/tree/main/lib/core/src/main/java/io/atlasmap/converters">here</a>.</p>
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/converters">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="internal-runtime-fieldaction">3.4.3. FieldAction (Transformation)</h4>
 <div class="paragraph">
 <p>FieldAction is a function you can apply on a field value as a part of mapping. AtlasMap provides a variety of FieldActions you can apply in the middle of processing mappings
-<a href="https://github.com/atlasmap/atlasmap/tree/main/lib/core/src/main/java/io/atlasmap/actions">here</a>.
+<a href="https://github.com/atlasmap/atlasmap/tree/master/lib/core/src/main/java/io/atlasmap/actions">here</a>.
 Also There is a <a href="#fieldAction">Reference</a> for all available FieldAction.</p>
 </div>
 </div>
@@ -1766,8 +1750,8 @@ string.</p></td>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 3.0.0-SNAPSHOT<br>
-Last updated 2022-08-08 16:45:18 UTC
+Version 2.6.0-SNAPSHOT<br>
+Last updated 2022-08-11 21:09:08 UTC
 </div>
 </div>
 </body>

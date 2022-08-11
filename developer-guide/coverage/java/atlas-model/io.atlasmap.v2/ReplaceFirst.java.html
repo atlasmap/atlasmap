@@ -19,16 +19,12 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-/**
- * The model class for the &lt;strong&gt;Replace First&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class ReplaceFirst extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class ReplaceFirst extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** matching regular expression */
     private String match;
-    /** new string replacing to */
+
     private String newString;
 
     /**
@@ -40,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      * 
      */
     public String getMatch() {
-<span class="fc" id="L43">        return match;</span>
+<span class="fc" id="L39">        return match;</span>
     }
 
     /**
@@ -54,8 +50,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to match&quot;)
     @AtlasActionProperty(title = &quot;Match&quot;, type = FieldType.STRING)
     public void setMatch(String value) {
-<span class="fc" id="L57">        this.match = value;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L53">        this.match = value;</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Gets the value of the newString property.
@@ -66,7 +62,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getNewString() {
-<span class="fc" id="L69">        return newString;</span>
+<span class="fc" id="L65">        return newString;</span>
     }
 
     /**
@@ -80,8 +76,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The string to replace with&quot;)
     @AtlasActionProperty(title = &quot;New string&quot;, type = FieldType.STRING)
     public void setNewString(String value) {
-<span class="fc" id="L83">        this.newString = value;</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L79">        this.newString = value;</span>
+<span class="fc" id="L80">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

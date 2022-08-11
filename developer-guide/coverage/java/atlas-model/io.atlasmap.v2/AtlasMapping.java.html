@@ -22,31 +22,22 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * Represents &lt;strong&gt;AtlasMapping&lt;/strong&gt; root object of the AtlasMap mapping definition JSON.
- */
 @JsonRootName(&quot;AtlasMapping&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L30">public class AtlasMapping implements Serializable {</span>
+<span class="fc" id="L27">public class AtlasMapping implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** A list of {@link DataSource} */
     protected List&lt;DataSource&gt; dataSource;
 
-    /** {@link Mappings} */
     protected Mappings mappings;
 
-    /** {@link LookupTables} */
     protected LookupTables lookupTables;
 
-    /** {@link Constants} */
     protected Constants constants;
 
-    /** {@link Properties} */
     protected Properties properties;
 
-    /** name */
     protected String name;
 
     /** version */
@@ -75,10 +66,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      * @return A list of {@link DataSource}
      */
     public List&lt;DataSource&gt; getDataSource() {
-<span class="fc bfc" id="L78" title="All 2 branches covered.">        if (dataSource == null) {</span>
-<span class="fc" id="L79">            dataSource = new ArrayList&lt;DataSource&gt;();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (dataSource == null) {</span>
+<span class="fc" id="L70">            dataSource = new ArrayList&lt;DataSource&gt;();</span>
         }
-<span class="fc" id="L81">        return this.dataSource;</span>
+<span class="fc" id="L72">        return this.dataSource;</span>
     }
 
     /**
@@ -90,7 +81,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mappings getMappings() {
-<span class="fc" id="L93">        return mappings;</span>
+<span class="fc" id="L84">        return mappings;</span>
     }
 
     /**
@@ -102,8 +93,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMappings(Mappings value) {
-<span class="fc" id="L105">        this.mappings = value;</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L96">        this.mappings = value;</span>
+<span class="fc" id="L97">    }</span>
 
     /**
      * Gets the value of the lookupTables property.
@@ -114,7 +105,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public LookupTables getLookupTables() {
-<span class="fc" id="L117">        return lookupTables;</span>
+<span class="fc" id="L108">        return lookupTables;</span>
     }
 
     /**
@@ -126,8 +117,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setLookupTables(LookupTables value) {
-<span class="fc" id="L129">        this.lookupTables = value;</span>
-<span class="fc" id="L130">    }</span>
+<span class="fc" id="L120">        this.lookupTables = value;</span>
+<span class="fc" id="L121">    }</span>
 
     /**
      * Gets the value of the constants property.
@@ -138,7 +129,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Constants getConstants() {
-<span class="fc" id="L141">        return constants;</span>
+<span class="fc" id="L132">        return constants;</span>
     }
 
     /**
@@ -150,8 +141,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setConstants(Constants value) {
-<span class="fc" id="L153">        this.constants = value;</span>
-<span class="fc" id="L154">    }</span>
+<span class="fc" id="L144">        this.constants = value;</span>
+<span class="fc" id="L145">    }</span>
 
     /**
      * Gets the value of the properties property.
@@ -162,7 +153,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Properties getProperties() {
-<span class="fc" id="L165">        return properties;</span>
+<span class="fc" id="L156">        return properties;</span>
     }
 
     /**
@@ -174,8 +165,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setProperties(Properties value) {
-<span class="fc" id="L177">        this.properties = value;</span>
-<span class="fc" id="L178">    }</span>
+<span class="fc" id="L168">        this.properties = value;</span>
+<span class="fc" id="L169">    }</span>
 
     /**
      * Gets the value of the name property.
@@ -186,7 +177,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getName() {
-<span class="fc" id="L189">        return name;</span>
+<span class="fc" id="L180">        return name;</span>
     }
 
     /**
@@ -198,8 +189,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L201">        this.name = value;</span>
-<span class="fc" id="L202">    }</span>
+<span class="fc" id="L192">        this.name = value;</span>
+<span class="fc" id="L193">    }</span>
 
     /**
      * Gets the value of the version property.
@@ -210,7 +201,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *
      */
     public String getVersion() {
-<span class="fc" id="L213">        return version;</span>
+<span class="fc" id="L204">        return version;</span>
     }
 
     /**
@@ -222,7 +213,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *
      */
     public void setVersion(String value) {
-<span class="fc" id="L225">        this.version = value;</span>
-<span class="fc" id="L226">    }</span>
+<span class="fc" id="L216">        this.version = value;</span>
+<span class="fc" id="L217">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

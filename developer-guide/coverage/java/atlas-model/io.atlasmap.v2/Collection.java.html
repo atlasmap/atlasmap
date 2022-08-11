@@ -20,25 +20,19 @@ import java.math.BigInteger;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The collection mapping.
- * @deprecated collection field is now handled vertically and this is not in use.
- * However, we might want to resurrect it to support one-to-many/many-to-one for
- * each collection, see https://github.com/atlasmap/atlasmap/issues/1236
- */
 @Deprecated
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L31">public class Collection extends BaseMapping implements Serializable {</span>
+<span class="fc" id="L25">public class Collection</span>
+    extends BaseMapping
+    implements Serializable
+{
 
     private static final long serialVersionUID = 1L;
 
-    /** {@link Mappings} */
     protected Mappings mappings;
 
-    /** collection size */
     protected BigInteger collectionSize;
 
-    /** collection type */
     protected CollectionType collectionType;
 
     /**
@@ -50,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mappings getMappings() {
-<span class="fc" id="L53">        return mappings;</span>
+<span class="fc" id="L47">        return mappings;</span>
     }
 
     /**
@@ -62,8 +56,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMappings(Mappings value) {
-<span class="fc" id="L65">        this.mappings = value;</span>
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L59">        this.mappings = value;</span>
+<span class="fc" id="L60">    }</span>
 
     /**
      * Gets the value of the collectionSize property.
@@ -74,7 +68,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public BigInteger getCollectionSize() {
-<span class="fc" id="L77">        return collectionSize;</span>
+<span class="fc" id="L71">        return collectionSize;</span>
     }
 
     /**
@@ -86,8 +80,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setCollectionSize(BigInteger value) {
-<span class="fc" id="L89">        this.collectionSize = value;</span>
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L83">        this.collectionSize = value;</span>
+<span class="fc" id="L84">    }</span>
 
     /**
      * Gets the value of the collectionType property.
@@ -98,7 +92,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public CollectionType getCollectionType() {
-<span class="fc" id="L101">        return collectionType;</span>
+<span class="fc" id="L95">        return collectionType;</span>
     }
 
     /**
@@ -110,8 +104,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setCollectionType(CollectionType value) {
-<span class="fc" id="L113">        this.collectionType = value;</span>
-<span class="fc" id="L114">    }</span>
+<span class="fc" id="L107">        this.collectionType = value;</span>
+<span class="fc" id="L108">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

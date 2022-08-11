@@ -18,14 +18,10 @@ package io.atlasmap.java.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * The container of {@link JavaField}.
- */
-<span class="fc" id="L25">public class JavaFields implements Serializable {</span>
+<span class="fc" id="L21">public class JavaFields implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    /** a list of {@link JavaField}. */
+
     protected List&lt;JavaField&gt; javaField;
 
     /**
@@ -51,56 +47,54 @@ import java.util.List;
      * 
      */
     public List&lt;JavaField&gt; getJavaField() {
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (javaField == null) {</span>
-<span class="fc" id="L55">            javaField = new ArrayList&lt;JavaField&gt;();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (javaField == null) {</span>
+<span class="fc" id="L51">            javaField = new ArrayList&lt;JavaField&gt;();</span>
         }
-<span class="fc" id="L57">        return this.javaField;</span>
+<span class="fc" id="L53">        return this.javaField;</span>
     }
 
-    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L62" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L63">            return false;</span>
+<span class="nc bnc" id="L57" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L58">            return false;</span>
         }
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L66">            return true;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L61">            return true;</span>
         }
-<span class="nc" id="L68">        final JavaFields that = ((JavaFields) object);</span>
+<span class="nc" id="L63">        final JavaFields that = ((JavaFields) object);</span>
         {
             List&lt;JavaField&gt; leftJavaField;
-<span class="nc bnc" id="L71" title="All 4 branches missed.">            leftJavaField = (((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty()))?this.getJavaField():null);</span>
+<span class="nc bnc" id="L66" title="All 4 branches missed.">            leftJavaField = (((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty()))?this.getJavaField():null);</span>
             List&lt;JavaField&gt; rightJavaField;
-<span class="nc bnc" id="L73" title="All 4 branches missed.">            rightJavaField = (((that.javaField!= null)&amp;&amp;(!that.javaField.isEmpty()))?that.getJavaField():null);</span>
-<span class="nc bnc" id="L74" title="All 4 branches missed.">            if ((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty())) {</span>
-<span class="nc bnc" id="L75" title="All 4 branches missed.">                if ((that.javaField!= null)&amp;&amp;(!that.javaField.isEmpty())) {</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">                    if (!leftJavaField.equals(rightJavaField)) {</span>
-<span class="nc" id="L77">                        return false;</span>
+<span class="nc bnc" id="L68" title="All 4 branches missed.">            rightJavaField = (((that.javaField!= null)&amp;&amp;(!that.javaField.isEmpty()))?that.getJavaField():null);</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">            if ((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty())) {</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">                if ((that.javaField!= null)&amp;&amp;(!that.javaField.isEmpty())) {</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                    if (!leftJavaField.equals(rightJavaField)) {</span>
+<span class="nc" id="L72">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L80">                    return false;</span>
+<span class="nc" id="L75">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L83" title="All 4 branches missed.">                if ((that.javaField!= null)&amp;&amp;(!that.javaField.isEmpty())) {</span>
-<span class="nc" id="L84">                    return false;</span>
+<span class="nc bnc" id="L78" title="All 4 branches missed.">                if ((that.javaField!= null)&amp;&amp;(!that.javaField.isEmpty())) {</span>
+<span class="nc" id="L79">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L88">        return true;</span>
+<span class="nc" id="L83">        return true;</span>
     }
 
-    @Override
     public int hashCode() {
-<span class="nc" id="L93">        int currentHashCode = 1;</span>
+<span class="nc" id="L87">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L95">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L89">            currentHashCode = (currentHashCode* 31);</span>
             List&lt;JavaField&gt; theJavaField;
-<span class="nc bnc" id="L97" title="All 4 branches missed.">            theJavaField = (((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty()))?this.getJavaField():null);</span>
-<span class="nc bnc" id="L98" title="All 4 branches missed.">            if ((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty())) {</span>
-<span class="nc" id="L99">                currentHashCode += theJavaField.hashCode();</span>
+<span class="nc bnc" id="L91" title="All 4 branches missed.">            theJavaField = (((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty()))?this.getJavaField():null);</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            if ((this.javaField!= null)&amp;&amp;(!this.javaField.isEmpty())) {</span>
+<span class="nc" id="L93">                currentHashCode += theJavaField.hashCode();</span>
             }
         }
-<span class="nc" id="L102">        return currentHashCode;</span>
+<span class="nc" id="L96">        return currentHashCode;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

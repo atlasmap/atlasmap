@@ -15,53 +15,32 @@
  */
 package io.atlasmap.v2;
 
-/**
- * The enumeration of collection type.
- */
-<span class="fc" id="L21">public enum CollectionType {</span>
+<span class="fc" id="L18">public enum CollectionType {</span>
 
-    /** All. */
-<span class="fc" id="L24">    ALL(&quot;All&quot;),</span>
-    /** Array. */
-<span class="fc" id="L26">    ARRAY(&quot;Array&quot;),</span>
-    /** List. */
-<span class="fc" id="L28">    LIST(&quot;List&quot;),</span>
-    /** Map. */
-<span class="fc" id="L30">    MAP(&quot;Map&quot;),</span>
-    /** None. */
-<span class="fc" id="L32">    NONE(&quot;None&quot;);</span>
+<span class="fc" id="L20">    ALL(&quot;All&quot;),</span>
+<span class="fc" id="L21">    ARRAY(&quot;Array&quot;),</span>
+<span class="fc" id="L22">    LIST(&quot;List&quot;),</span>
+<span class="fc" id="L23">    MAP(&quot;Map&quot;),</span>
+<span class="fc" id="L24">    NONE(&quot;None&quot;);</span>
 
     private final String value;
 
-    /**
-     * A constructor.
-     * @param v value
-     */
-<span class="fc" id="L40">    CollectionType(String v) {</span>
-<span class="fc" id="L41">        value = v;</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L28">    CollectionType(String v) {</span>
+<span class="fc" id="L29">        value = v;</span>
+<span class="fc" id="L30">    }</span>
 
-    /**
-     * Gets a value.
-     * @return value
-     */
     public String value() {
-<span class="fc" id="L49">        return value;</span>
+<span class="fc" id="L33">        return value;</span>
     }
 
-    /**
-     * Gets a collection type enum from the value.
-     * @param v value
-     * @return the enum
-     */
     public static CollectionType fromValue(String v) {
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        for (CollectionType c: CollectionType.values()) {</span>
-<span class="fc bfc" id="L59" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L60">                return c;</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        for (CollectionType c: CollectionType.values()) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L39">                return c;</span>
             }
         }
-<span class="nc" id="L63">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L42">        throw new IllegalArgumentException(v);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

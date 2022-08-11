@@ -20,69 +20,59 @@ import java.util.Vector;
 import com.sun.xml.xsom.XSFacet;
 import com.sun.xml.xsom.XSRestrictionSimpleType;
 
-/**
- * Represents the simple type restriction in XML schema. This copies the properties from
- * XSOM {@link XSRestrictionSimpleType} and holds them.
- * 
- * @see XSRestrictionSimpleType
- */
 @SuppressWarnings(&quot;unused&quot;)
-<span class="fc" id="L30">public class SimpleTypeRestriction {</span>
+<span class="fc" id="L24">public class SimpleTypeRestriction {</span>
 
-<span class="fc" id="L32">    private String[] enumeration = null;</span>
-<span class="fc" id="L33">    private String maxValue = null;</span>
-<span class="fc" id="L34">    private String minValue = null;</span>
-<span class="fc" id="L35">    private String length = null;</span>
-<span class="fc" id="L36">    private String maxLength = null;</span>
-<span class="fc" id="L37">    private String minLength = null;</span>
-<span class="fc" id="L38">    private String pattern = null;</span>
-<span class="fc" id="L39">    private String totalDigits = null;</span>
-<span class="fc" id="L40">    private String maxExclusive = null;</span>
-<span class="fc" id="L41">    private String minExclusive = null;</span>
+<span class="fc" id="L26">    private String[] enumeration = null;</span>
+<span class="fc" id="L27">    private String maxValue = null;</span>
+<span class="fc" id="L28">    private String minValue = null;</span>
+<span class="fc" id="L29">    private String length = null;</span>
+<span class="fc" id="L30">    private String maxLength = null;</span>
+<span class="fc" id="L31">    private String minLength = null;</span>
+<span class="fc" id="L32">    private String pattern = null;</span>
+<span class="fc" id="L33">    private String totalDigits = null;</span>
+<span class="fc" id="L34">    private String maxExclusive = null;</span>
+<span class="fc" id="L35">    private String minExclusive = null;</span>
 
-    /**
-     * Initializes from XSOM {@link XSRestrictionSimpleType}.
-     * @param restriction restriction
-     */
     public void initRestrictions(XSRestrictionSimpleType restriction) {
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        if (restriction != null) {</span>
-<span class="fc" id="L49">            Vector&lt;String&gt; enumeration = new Vector&lt;&gt;();</span>
-<span class="fc bfc" id="L50" title="All 2 branches covered.">            for (XSFacet facet : restriction.getDeclaredFacets()) {</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {</span>
-<span class="fc" id="L52">                    enumeration.add(facet.getValue().value);</span>
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (restriction != null) {</span>
+<span class="fc" id="L39">            Vector&lt;String&gt; enumeration = new Vector&lt;&gt;();</span>
+<span class="fc bfc" id="L40" title="All 2 branches covered.">            for (XSFacet facet : restriction.getDeclaredFacets()) {</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_ENUMERATION)) {</span>
+<span class="fc" id="L42">                    enumeration.add(facet.getValue().value);</span>
                 }
-<span class="fc bfc" id="L54" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXINCLUSIVE)) {</span>
-<span class="fc" id="L55">                    this.maxValue = facet.getValue().value;</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXINCLUSIVE)) {</span>
+<span class="fc" id="L45">                    this.maxValue = facet.getValue().value;</span>
                 }
-<span class="fc bfc" id="L57" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MININCLUSIVE)) {</span>
-<span class="fc" id="L58">                    this.minValue = facet.getValue().value;</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MININCLUSIVE)) {</span>
+<span class="fc" id="L48">                    this.minValue = facet.getValue().value;</span>
                 }
-<span class="fc bfc" id="L60" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXEXCLUSIVE)) {</span>
-<span class="fc" id="L61">                    this.maxExclusive = String.valueOf(Integer.parseInt(facet.getValue().value) - 1);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXEXCLUSIVE)) {</span>
+<span class="fc" id="L51">                    this.maxExclusive = String.valueOf(Integer.parseInt(facet.getValue().value) - 1);</span>
                 }
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_MINEXCLUSIVE)) {</span>
-<span class="nc" id="L64">                    this.minExclusive = String.valueOf(Integer.parseInt(facet.getValue().value) + 1);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_MINEXCLUSIVE)) {</span>
+<span class="nc" id="L54">                    this.minExclusive = String.valueOf(Integer.parseInt(facet.getValue().value) + 1);</span>
                 }
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_LENGTH)) {</span>
-<span class="nc" id="L67">                    this.length = facet.getValue().value;</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_LENGTH)) {</span>
+<span class="nc" id="L57">                    this.length = facet.getValue().value;</span>
                 }
-<span class="fc bfc" id="L69" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXLENGTH)) {</span>
-<span class="fc" id="L70">                    this.maxLength = facet.getValue().value;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MAXLENGTH)) {</span>
+<span class="fc" id="L60">                    this.maxLength = facet.getValue().value;</span>
                 }
-<span class="fc bfc" id="L72" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MINLENGTH)) {</span>
-<span class="fc" id="L73">                    this.minLength = facet.getValue().value;</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_MINLENGTH)) {</span>
+<span class="fc" id="L63">                    this.minLength = facet.getValue().value;</span>
                 }
-<span class="fc bfc" id="L75" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_PATTERN)) {</span>
-<span class="fc" id="L76">                    this.pattern = facet.getValue().value;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">                if (facet.getName().equals(XSFacet.FACET_PATTERN)) {</span>
+<span class="fc" id="L66">                    this.pattern = facet.getValue().value;</span>
                 }
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_TOTALDIGITS)) {</span>
-<span class="nc" id="L79">                    this.totalDigits = facet.getValue().value;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">                if (facet.getName().equals(XSFacet.FACET_TOTALDIGITS)) {</span>
+<span class="nc" id="L69">                    this.totalDigits = facet.getValue().value;</span>
                 }
-<span class="fc" id="L81">            }</span>
-<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (enumeration.size() &gt; 0) {</span>
-<span class="fc" id="L83">                this.enumeration = enumeration.toArray(new String[] {});</span>
+<span class="fc" id="L71">            }</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (enumeration.size() &gt; 0) {</span>
+<span class="fc" id="L73">                this.enumeration = enumeration.toArray(new String[] {});</span>
             }
         }
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L76">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

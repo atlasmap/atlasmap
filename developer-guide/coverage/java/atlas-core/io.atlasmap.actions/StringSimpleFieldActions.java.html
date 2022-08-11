@@ -15,14 +15,12 @@
  */
 package io.atlasmap.actions;
 
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.Capitalize;
 import io.atlasmap.v2.FileExtension;
-import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.Lowercase;
 import io.atlasmap.v2.LowercaseChar;
 import io.atlasmap.v2.Normalize;
@@ -35,230 +33,132 @@ import io.atlasmap.v2.TrimRight;
 import io.atlasmap.v2.Uppercase;
 import io.atlasmap.v2.UppercaseChar;
 
-/**
- * The String field actions that doesn't have any parameter.
- */
-<span class="fc" id="L41">public class StringSimpleFieldActions implements AtlasFieldAction {</span>
+<span class="fc" id="L36">public class StringSimpleFieldActions implements AtlasFieldAction {</span>
 
-    /** The regular expression for the string separator. */
     public static final String STRING_SEPARATOR_REGEX = &quot;[\\s+\\:\\_\\+\\=\\-]+&quot;;
-    /** The compiled {@link Pattern} for {@link #STRING_SEPARATOR_REGEX}. */
-<span class="fc" id="L46">    public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);</span>
+<span class="fc" id="L39">    public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);</span>
 
-    /**
-     * Capitalize the source String.
-     * @param action action model
-     * @param input source
-     * @return capitalized
-     */
     @AtlasActionProcessor
     public static String capitalize(Capitalize action, String input) {
-<span class="fc bfc" id="L56" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L57">            return input;</span>
+<span class="fc bfc" id="L43" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L44">            return input;</span>
         }
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (input.length() == 1) {</span>
-<span class="nc" id="L60">            return String.valueOf(input.charAt(0)).toUpperCase();</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (input.length() == 1) {</span>
+<span class="nc" id="L47">            return String.valueOf(input.charAt(0)).toUpperCase();</span>
         }
-<span class="fc" id="L62">        return String.valueOf(input.charAt(0)).toUpperCase() + input.substring(1);</span>
+<span class="fc" id="L49">        return String.valueOf(input.charAt(0)).toUpperCase() + input.substring(1);</span>
     }
 
-    /**
-     * Gets the file extension from the source String if it has. For example,
-     * if the source string is &quot;test.zip&quot; then &quot;zip&quot; is returned. It returns &quot;null&quot;
-     * if there's no extension.
-     * @param action action model
-     * @param input source
-     * @return file extension if exists, or null
-     */
     @AtlasActionProcessor
     public static String fileExtension(FileExtension action, String input) {
-<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L76">            return null;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L55">            return null;</span>
         }
 
-<span class="fc" id="L79">        int ndx = input.lastIndexOf('.');</span>
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        return ndx &lt; 0 ? null : input.substring(ndx + 1);</span>
+<span class="fc" id="L58">        int ndx = input.lastIndexOf('.');</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        return ndx &lt; 0 ? null : input.substring(ndx + 1);</span>
     }
 
-    /**
-     * Gets the UUID String.
-     * @param action action model
-     * @return UUID String
-     */
-    @AtlasActionProcessor
-    public static String genareteUUID(GenerateUUID action) {
-<span class="fc" id="L90">        return UUID.randomUUID().toString();</span>
-    }
-
-    /**
-     * Gets the lower cased string.
-     * @param action action model
-     * @param input source
-     * @return lower cased
-     */
     @AtlasActionProcessor
     public static String lowercase(Lowercase action, String input) {
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L102">            return null;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L65">            return null;</span>
         }
 
-<span class="fc" id="L105">        return input.toLowerCase();</span>
+<span class="fc" id="L68">        return input.toLowerCase();</span>
     }
 
-    /**
-     * Gets the lower ased character.
-     * @param action action model
-     * @param input source
-     * @return lower cased
-     */
     @AtlasActionProcessor
     public static Character lowercaseChar(LowercaseChar action, Character input) {
-<span class="fc bfc" id="L116" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L117">            return null;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L74">            return null;</span>
         }
 
-<span class="fc" id="L120">        return String.valueOf(input).toLowerCase().charAt(0);</span>
+<span class="fc" id="L77">        return String.valueOf(input).toLowerCase().charAt(0);</span>
     }
 
-    /**
-     * Replaces the repeating spaces to a single space.
-     * @param action action model
-     * @param input source
-     * @return single spaced
-     */
     @AtlasActionProcessor
     public static String normalize(Normalize action, String input) {
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        return input == null ? null : input.replaceAll(&quot;\\s+&quot;, &quot; &quot;).trim();</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        return input == null ? null : input.replaceAll(&quot;\\s+&quot;, &quot; &quot;).trim();</span>
     }
 
-    /**
-     * Removes the file extension if there is, or returns the source String as-is. For example,
-     * if the source string is &quot;test.zip&quot;, &quot;test&quot; is returned.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String removeFileExtension(RemoveFileExtension action, String input) {
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L144">            return null;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L88">            return null;</span>
         }
 
-<span class="fc" id="L147">        int ndx = input.lastIndexOf('.');</span>
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        return ndx &lt; 0 ? input : input.substring(0, ndx);</span>
+<span class="fc" id="L91">        int ndx = input.lastIndexOf('.');</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        return ndx &lt; 0 ? input : input.substring(0, ndx);</span>
     }
 
-    /**
-     * Replaces the string separator to the dash(-). The regular expression for detecting
-     * separators to replace is {@link #STRING_SEPARATOR_REGEX}.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String separateByDash(SeparateByDash action, String input) {
-<span class="fc bfc" id="L160" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L161">            return input;</span>
+<span class="fc bfc" id="L97" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L98">            return input;</span>
         }
-<span class="fc" id="L163">        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll(&quot;-&quot;);</span>
+<span class="fc" id="L100">        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll(&quot;-&quot;);</span>
     }
 
-    /**
-     * Replaces the string separator to the underscore(_). The regular expression for detecting
-     * separators to replace is {@link #STRING_SEPARATOR_REGEX}.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String separateByUnderscore(SeparateByUnderscore action, String input) {
-<span class="fc bfc" id="L175" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L176">            return input;</span>
+<span class="fc bfc" id="L105" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L106">            return input;</span>
         }
-<span class="fc" id="L178">        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll(&quot;_&quot;);</span>
+<span class="fc" id="L108">        return STRING_SEPARATOR_PATTERN.matcher(input).replaceAll(&quot;_&quot;);</span>
     }
 
-    /**
-     * Trims the source String by using {@link String#trim()}.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String trim(Trim action, String input) {
-<span class="fc bfc" id="L189" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L190">            return input;</span>
+<span class="fc bfc" id="L113" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L114">            return input;</span>
         }
 
-<span class="fc" id="L193">        return input.trim();</span>
+<span class="fc" id="L117">        return input.trim();</span>
     }
 
-    /**
-     * Trims the white spaces at the left.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String trimLeft(TrimLeft action, String input) {
-<span class="fc bfc" id="L204" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L205">            return input;</span>
+<span class="fc bfc" id="L122" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L123">            return input;</span>
         }
 
-<span class="fc" id="L208">        int i = 0;</span>
-<span class="pc bpc" id="L209" title="1 of 4 branches missed.">        while (i &lt; input.length() &amp;&amp; Character.isWhitespace(input.charAt(i))) {</span>
-<span class="fc" id="L210">            i++;</span>
+<span class="fc" id="L126">        int i = 0;</span>
+<span class="pc bpc" id="L127" title="1 of 4 branches missed.">        while (i &lt; input.length() &amp;&amp; Character.isWhitespace(input.charAt(i))) {</span>
+<span class="fc" id="L128">            i++;</span>
         }
-<span class="fc" id="L212">        return input.substring(i);</span>
+<span class="fc" id="L130">        return input.substring(i);</span>
     }
 
-    /**
-     * Trims the white spaces at the right.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String trimRight(TrimRight action, String input) {
-<span class="fc bfc" id="L223" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L224">            return input;</span>
+<span class="fc bfc" id="L135" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L136">            return input;</span>
         }
 
-<span class="fc" id="L227">        int i = input.length() - 1;</span>
-<span class="pc bpc" id="L228" title="1 of 4 branches missed.">        while (i &gt;= 0 &amp;&amp; Character.isWhitespace(input.charAt(i))) {</span>
-<span class="fc" id="L229">            i--;</span>
+<span class="fc" id="L139">        int i = input.length() - 1;</span>
+<span class="pc bpc" id="L140" title="1 of 4 branches missed.">        while (i &gt;= 0 &amp;&amp; Character.isWhitespace(input.charAt(i))) {</span>
+<span class="fc" id="L141">            i--;</span>
         }
-<span class="fc" id="L231">        return input.substring(0, i + 1);</span>
+<span class="fc" id="L143">        return input.substring(0, i + 1);</span>
     }
 
-    /**
-     * Gets the upper cased string.
-     * @param action action model
-     * @param input source
-     * @return upper cased
-     */
     @AtlasActionProcessor
     public static String uppercase(Uppercase action, String input) {
-<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L243">            return null;</span>
+<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L149">            return null;</span>
         }
 
-<span class="fc" id="L246">        return input.toUpperCase();</span>
+<span class="fc" id="L152">        return input.toUpperCase();</span>
     }
 
-    /**
-     * Gets the upper cased character.
-     * @param action action model
-     * @param input source
-     * @return upper cased
-     */
     @AtlasActionProcessor
     public static Character uppercaseChar(UppercaseChar action, Character input) {
-<span class="fc bfc" id="L257" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L258">            return null;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L158">            return null;</span>
         }
 
-<span class="fc" id="L261">        return String.valueOf(input).toUpperCase().charAt(0);</span>
+<span class="fc" id="L161">        return String.valueOf(input).toUpperCase().charAt(0);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

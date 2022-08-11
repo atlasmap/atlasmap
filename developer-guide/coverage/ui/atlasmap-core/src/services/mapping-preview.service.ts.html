@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.47% </span>
+                <span class="strong">67.86% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>76/111</span>
+                <span class='fraction'>76/112</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.84% </span>
+                <span class="strong">40.48% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>35/95</span>
+                <span class='fraction'>34/84</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.57% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/14</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.48% </span>
+                <span class="strong">71.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>63/92</span>
+                <span class='fraction'>64/90</span>
             </div>
         
             
@@ -292,10 +292,7 @@
 <a name='L234'></a><a href='#L234'>234</a>
 <a name='L235'></a><a href='#L235'>235</a>
 <a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L237'></a><a href='#L237'>237</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -333,17 +330,17 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-yes">92x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -398,12 +395,12 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -413,7 +410,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,9 +440,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -588,7 +582,7 @@ export class MappingPreviewService {
    * Enable Mapping Preview.
    */
   enableMappingPreview(): void {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.cfg.initCfg.baseAtlasServiceUrl == null) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (this.cfg.initCfg.baseMappingServiceUrl == null) {
       // process mapping service not configured.
 <span class="cstat-no" title="statement not covered" >      return;</span>
     }
@@ -626,23 +620,23 @@ export class MappingPreviewService {
         `Process Mapping Preview Request: ${JSON.stringify(payload)}`
       );
       const url: string =
-        this.cfg.initCfg.baseAtlasServiceUrl + '/project/0/mapping/process';
+        this.cfg.initCfg.baseMappingServiceUrl + 'mapping/process';
       this.api
-        .post(url, { json: payload })
+        .put(url, { json: payload })
         .json&lt;IProcessMappingResponseContainer&gt;()
         .then((body) =&gt; {
           this.cfg.logger!.debug(
             `Process Mapping Preview Response: ${JSON.stringify(body)}`
           );
-          this.processPreviewResponse(inputFieldMapping, body).then();
+          this.processPreviewResponse(inputFieldMapping, body);
         })
-        .catch(<span class="fstat-no" title="function not covered" >(e</span>rror: any) =&gt; {
-<span class="cstat-no" title="statement not covered" >          if (</span>
+        .catch((error: any) =&gt; {
+          <span class="missing-if-branch" title="else path not taken" >E</span>if (
             this.cfg.mappings &amp;&amp;
             this.cfg.mappings.activeMapping &amp;&amp;
             this.cfg.mappings.activeMapping === inputFieldMapping
           ) {
-<span class="cstat-no" title="statement not covered" >            this.cfg.errorService.addError(</span>
+            this.cfg.errorService.addError(
               new ErrorInfo({
                 message: error,
                 level: ErrorLevel.ERROR,
@@ -652,7 +646,7 @@ export class MappingPreviewService {
               })
             );
           }
-<span class="cstat-no" title="statement not covered" >          this.mappingPreviewErrorSource.next([</span>
+          this.mappingPreviewErrorSource.next([
             new ErrorInfo({ message: error, level: ErrorLevel.ERROR }),
           ]);
         });
@@ -675,19 +669,16 @@ export class MappingPreviewService {
     };
   }
 &nbsp;
-  private async processPreviewResponse(
+  private processPreviewResponse(
     inputFieldMapping: MappingModel,
     body: IProcessMappingResponseContainer
   ) {
-    const answer = await MappingSerializer.deserializeFieldMapping(
-      body.ProcessMappingResponse<span class="branch-1 cbranch-no" title="branch not covered" >?.mapping,</span>
+    const answer = MappingSerializer.deserializeFieldMapping(
+      body.ProcessMappingResponse.mapping,
       this.cfg
     );
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (!answer) {
-      return;
-    }
-<span class="cstat-no" title="statement not covered" >    for (const <span class="cstat-no" title="statement not covered" >toWrite of i</span>nputFieldMapping.targetFields) {</span>
-<span class="cstat-no" title="statement not covered" >      for (const <span class="cstat-no" title="statement not covered" >toRead of a</span>nswer.targetFields) {</span>
+<span class="cstat-no" title="statement not covered" >    for (const toWrite<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >i</span>nputFieldMapping.</span>targetFields)</span> {</span>
+<span class="cstat-no" title="statement not covered" >      for (const toRead<span class="cstat-no" title="statement not covered" > of <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >a</span>nswer.</span>targetFields)</span> {</span>
         // TODO: check these non null operator
 <span class="cstat-no" title="statement not covered" >        if (</span>
           toWrite.field?.docDef?.id === toRead.field?.docDef.id &amp;&amp;
@@ -696,7 +687,7 @@ export class MappingPreviewService {
           // TODO let field component subscribe mappingPreviewOutputSource instead of doing this
           // TODO: check this non null operator
 <span class="cstat-no" title="statement not covered" >          toWrite.field!.value = toRead.mappingField?.value!;</span>
-          const <span class="cstat-no" title="statement not covered" >index = answer.targetFields.indexOf(toRead);</span>
+          const index = <span class="cstat-no" title="statement not covered" >answer.targetFields.indexOf(toRead);</span>
 <span class="cstat-no" title="statement not covered" >          if (index !== -1) {</span>
 <span class="cstat-no" title="statement not covered" >            answer.targetFields.splice(index, 1);</span>
 <span class="cstat-no" title="statement not covered" >            break;</span>
@@ -705,8 +696,8 @@ export class MappingPreviewService {
       }
     }
 <span class="cstat-no" title="statement not covered" >    this.mappingPreviewOutputSource.next(answer);</span>
-    const <span class="cstat-no" title="statement not covered" >audits = MappingSerializer.deserializeAudits(</span>
-      body.ProcessMappingResponse?.audits,
+    const audits = <span class="cstat-no" title="statement not covered" >MappingSerializer.deserializeAudits(</span>
+      body.ProcessMappingResponse.audits,
       ErrorType.PREVIEW
     );
     // TODO: check this non null operator
@@ -780,7 +771,7 @@ export class MappingPreviewService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 08 2022 17:01:24 GMT+0000 (Coordinated Universal Time)
+                at Thu Aug 11 2022 21:24:29 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

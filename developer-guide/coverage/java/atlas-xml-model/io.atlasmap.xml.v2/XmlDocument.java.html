@@ -23,15 +23,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
-/**
- * Represents XML Document.
- */
 @JsonRootName(&quot;XmlDocument&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L31">public class XmlDocument extends Document implements Serializable {</span>
+<span class="fc" id="L28">public class XmlDocument extends Document implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    /** XML namespaces. */
+
     protected XmlNamespaces xmlNamespaces;
 
     /**
@@ -43,7 +40,7 @@ import io.atlasmap.v2.Document;
      *     
      */
     public XmlNamespaces getXmlNamespaces() {
-<span class="fc" id="L46">        return xmlNamespaces;</span>
+<span class="fc" id="L43">        return xmlNamespaces;</span>
     }
 
     /**
@@ -55,57 +52,55 @@ import io.atlasmap.v2.Document;
      *     
      */
     public void setXmlNamespaces(XmlNamespaces value) {
-<span class="fc" id="L58">        this.xmlNamespaces = value;</span>
-<span class="fc" id="L59">    }</span>
+<span class="fc" id="L55">        this.xmlNamespaces = value;</span>
+<span class="fc" id="L56">    }</span>
 
-    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L63" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L64">            return false;</span>
+<span class="nc bnc" id="L59" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L60">            return false;</span>
         }
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L67">            return true;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L63">            return true;</span>
         }
-<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
-<span class="nc" id="L70">            return false;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (!super.equals(object)) {</span>
+<span class="nc" id="L66">            return false;</span>
         }
-<span class="nc" id="L72">        final XmlDocument that = ((XmlDocument) object);</span>
+<span class="nc" id="L68">        final XmlDocument that = ((XmlDocument) object);</span>
         {
             XmlNamespaces leftXmlNamespaces;
-<span class="nc" id="L75">            leftXmlNamespaces = this.getXmlNamespaces();</span>
+<span class="nc" id="L71">            leftXmlNamespaces = this.getXmlNamespaces();</span>
             XmlNamespaces rightXmlNamespaces;
-<span class="nc" id="L77">            rightXmlNamespaces = that.getXmlNamespaces();</span>
-<span class="nc bnc" id="L78" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">                    if (!leftXmlNamespaces.equals(rightXmlNamespaces)) {</span>
-<span class="nc" id="L81">                        return false;</span>
+<span class="nc" id="L73">            rightXmlNamespaces = that.getXmlNamespaces();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">                    if (!leftXmlNamespaces.equals(rightXmlNamespaces)) {</span>
+<span class="nc" id="L77">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L84">                    return false;</span>
+<span class="nc" id="L80">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L87" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
-<span class="nc" id="L88">                    return false;</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                if (that.xmlNamespaces!= null) {</span>
+<span class="nc" id="L84">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L92">        return true;</span>
+<span class="nc" id="L88">        return true;</span>
     }
 
-    @Override
     public int hashCode() {
-<span class="nc" id="L97">        int currentHashCode = 1;</span>
-<span class="nc" id="L98">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
+<span class="nc" id="L92">        int currentHashCode = 1;</span>
+<span class="nc" id="L93">        currentHashCode = ((currentHashCode* 31)+ super.hashCode());</span>
         {
-<span class="nc" id="L100">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L95">            currentHashCode = (currentHashCode* 31);</span>
             XmlNamespaces theXmlNamespaces;
-<span class="nc" id="L102">            theXmlNamespaces = this.getXmlNamespaces();</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
-<span class="nc" id="L104">                currentHashCode += theXmlNamespaces.hashCode();</span>
+<span class="nc" id="L97">            theXmlNamespaces = this.getXmlNamespaces();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            if (this.xmlNamespaces!= null) {</span>
+<span class="nc" id="L99">                currentHashCode += theXmlNamespaces.hashCode();</span>
             }
         }
-<span class="nc" id="L107">        return currentHashCode;</span>
+<span class="nc" id="L102">        return currentHashCode;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

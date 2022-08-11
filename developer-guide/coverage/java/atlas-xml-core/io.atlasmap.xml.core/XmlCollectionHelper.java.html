@@ -19,23 +19,16 @@ import io.atlasmap.core.AtlasPath;
 import io.atlasmap.core.DefaultAtlasCollectionHelper;
 import io.atlasmap.spi.AtlasFieldActionService;
 
-/**
- * The {@link io.atlasmap.spi.AtlasCollectionHelper} implementation for XML module.
- */
 public class XmlCollectionHelper extends DefaultAtlasCollectionHelper {
 
-    /**
-     * A constructor.
-     * @param fieldActionService field action service
-     */
     public XmlCollectionHelper(AtlasFieldActionService fieldActionService) {
-<span class="fc" id="L32">        super(fieldActionService);</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L25">        super(fieldActionService);</span>
+<span class="fc" id="L26">    }</span>
 
     @Override
     protected AtlasPath createTargetAtlasPath(String path) {
-<span class="fc" id="L37">        return new XmlPath(path);</span>
+<span class="fc" id="L30">        return new XmlPath(path);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

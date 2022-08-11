@@ -33,273 +33,152 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-/**
- * The type converter for {@link LocalDate}.
- */
-<span class="fc" id="L39">public class LocalDateConverter implements AtlasConverter&lt;LocalDate&gt; {</span>
+<span class="fc" id="L36">public class LocalDateConverter implements AtlasConverter&lt;LocalDate&gt; {</span>
 
-    /**
-     * Converts to {@link BigDecimal}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(LocalDate value) {
-<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(getStartEpochMilli(value)) : null;</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">        return value != null ? BigDecimal.valueOf(getStartEpochMilli(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link BigInteger}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(LocalDate value) {
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(getStartEpochMilli(value)) : null;</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">        return value != null ? BigInteger.valueOf(getStartEpochMilli(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link Byte}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.BYTE,
             concerns = AtlasConversionConcern.RANGE)
     public Byte toByte(LocalDate value) throws AtlasConversionException {
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L71">            return null;</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L52">            return null;</span>
         }
-<span class="nc" id="L73">        Long longValue = getStartEpochMilli(value);</span>
-<span class="nc bnc" id="L74" title="All 4 branches missed.">        if (longValue &gt;= Byte.MIN_VALUE &amp;&amp; longValue &lt;= Byte.MAX_VALUE) {</span>
-<span class="nc" id="L75">            return longValue.byteValue();</span>
+<span class="nc" id="L54">        Long longValue = getStartEpochMilli(value);</span>
+<span class="nc bnc" id="L55" title="All 4 branches missed.">        if (longValue &gt;= Byte.MIN_VALUE &amp;&amp; longValue &lt;= Byte.MAX_VALUE) {</span>
+<span class="nc" id="L56">            return longValue.byteValue();</span>
         }
-<span class="nc" id="L77">        throw new AtlasConversionException(</span>
-<span class="nc" id="L78">                String.format(&quot;LocalDate %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value));</span>
+<span class="nc" id="L58">        throw new AtlasConversionException(</span>
+<span class="nc" id="L59">                String.format(&quot;LocalDate %s is greater than Byte.MAX_VALUE or less than Byte.MIN_VALUE&quot;, value));</span>
     }
 
-    /**
-     * Converts to {@link Calendar}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
     public Calendar toCalendar(LocalDate value) {
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atStartOfDay(ZoneId.systemDefault())) : null;</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atStartOfDay(ZoneId.systemDefault())) : null;</span>
     }
 
-    /**
-     * Converts to {@link Date}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
     public Date toDate(LocalDate value) {
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        return value != null ? new Date(getStartEpochMilli(value)) : null;</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        return value != null ? new Date(getStartEpochMilli(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link Double}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DOUBLE)
     public Double toDouble(LocalDate value) {
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value).doubleValue() : null;</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value).doubleValue() : null;</span>
     }
 
-    /**
-     * Converts to {@link Float}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.FLOAT)
     public Float toFloat(LocalDate value) {
-<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value).floatValue() : null;</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value).floatValue() : null;</span>
     }
 
-    /**
-     * Converts to {@link GregorianCalendar}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar toGregorianCalendar(LocalDate value) {
-<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atStartOfDay(ZoneId.systemDefault())) : null;</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        return value != null ? GregorianCalendar.from(value.atStartOfDay(ZoneId.systemDefault())) : null;</span>
     }
 
-    /**
-     * Converts to {@link Integer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.INTEGER,
             concerns = AtlasConversionConcern.RANGE)
     public Integer toInteger(LocalDate value) throws AtlasConversionException {
-<span class="nc bnc" id="L140" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L141">            return null;</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L91">            return null;</span>
         }
-<span class="nc" id="L143">        Long longValue = getStartEpochMilli(value);</span>
-<span class="nc bnc" id="L144" title="All 4 branches missed.">        if (longValue &gt; Integer.MAX_VALUE || longValue &lt; Integer.MIN_VALUE) {</span>
-<span class="nc" id="L145">            throw new AtlasConversionException(String</span>
-<span class="nc" id="L146">                    .format(&quot;LocalDate %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE&quot;, value));</span>
+<span class="nc" id="L93">        Long longValue = getStartEpochMilli(value);</span>
+<span class="nc bnc" id="L94" title="All 4 branches missed.">        if (longValue &gt; Integer.MAX_VALUE || longValue &lt; Integer.MIN_VALUE) {</span>
+<span class="nc" id="L95">            throw new AtlasConversionException(String</span>
+<span class="nc" id="L96">                    .format(&quot;LocalDate %s is greater than Integer.MAX_VALUE or less than Integer.MIN_VALUE&quot;, value));</span>
         }
-<span class="nc" id="L148">        return longValue.intValue();</span>
+<span class="nc" id="L98">        return longValue.intValue();</span>
     }
 
-    /**
-     * Converts to {@link LocalDate}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE)
     public LocalDate toLocalDate(LocalDate value) {
-<span class="nc" id="L158">        return value;</span>
+<span class="nc" id="L103">        return value;</span>
     }
 
-    /**
-     * Converts to {@link LocalDateTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(LocalDate value) {
-<span class="pc bpc" id="L168" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay() : null;</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay() : null;</span>
     }
 
-    /**
-     * Converts to {@link LocalTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.TIME)
     public LocalTime toLocalTime(LocalDate value) {
-<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay().toLocalTime() : null;</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay().toLocalTime() : null;</span>
     }
 
-    /**
-     * Converts to {@link Long}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.LONG)
     public Long toLong(LocalDate value) {
-<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value) : null;</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link Short}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.SHORT,
             concerns = AtlasConversionConcern.RANGE)
     public Short toShort(LocalDate value) throws AtlasConversionException {
-<span class="nc bnc" id="L200" title="All 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L201">            return null;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L125">            return null;</span>
         }
-<span class="nc" id="L203">        Long longValue = getStartEpochMilli(value);</span>
-<span class="nc bnc" id="L204" title="All 4 branches missed.">        if (longValue &gt; Short.MAX_VALUE || longValue &lt; Short.MIN_VALUE) {</span>
-<span class="nc" id="L205">            throw new AtlasConversionException(</span>
-<span class="nc" id="L206">                    String.format(&quot;LocalDate %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
+<span class="nc" id="L127">        Long longValue = getStartEpochMilli(value);</span>
+<span class="nc bnc" id="L128" title="All 4 branches missed.">        if (longValue &gt; Short.MAX_VALUE || longValue &lt; Short.MIN_VALUE) {</span>
+<span class="nc" id="L129">            throw new AtlasConversionException(</span>
+<span class="nc" id="L130">                    String.format(&quot;LocalDate %s is greater than Short.MAX_VALUE or less than Short.MIN_VALUE&quot;, value));</span>
         }
-<span class="nc" id="L208">        return longValue.shortValue();</span>
+<span class="nc" id="L132">        return longValue.shortValue();</span>
     }
 
-    /**
-     * Converts to {@link String}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
     public String toString(LocalDate value) {
-<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        return value != null ? value.toString() : null;</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        return value != null ? value.toString() : null;</span>
     }
 
-    /**
-     * Converts to {@link CharBuffer}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(LocalDate value) {
-<span class="nc bnc" id="L228" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link CharSequence}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
     public CharSequence toCharSequence(LocalDate value) {
-<span class="nc bnc" id="L238" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link StringBuffer}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(LocalDate value) {
-<span class="nc bnc" id="L248" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link StringBuilder}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(LocalDate value) {
-<span class="nc bnc" id="L258" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link Number}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.NUMBER)
     public Number toNumber(LocalDate value) {
-<span class="pc bpc" id="L268" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value) : null;</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">        return value != null ? getStartEpochMilli(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link java.sql.Date}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE)
     public java.sql.Date toSqlDate(LocalDate value) {
-<span class="fc" id="L278">        return java.sql.Date.valueOf(value);</span>
+<span class="fc" id="L167">        return java.sql.Date.valueOf(value);</span>
     }
 
-    /**
-     * Converts to {@link java.sql.Timestamp}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME)
     public java.sql.Timestamp toSqlTimestamp(LocalDate value) {
-<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        return value != null ? java.sql.Timestamp.valueOf(value.atStartOfDay()) : null;</span>
+<span class="pc bpc" id="L172" title="1 of 2 branches missed.">        return value != null ? java.sql.Timestamp.valueOf(value.atStartOfDay()) : null;</span>
     }
 
-    /**
-     * Converts to {@link ZonedDateTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(LocalDate value) {
-<span class="pc bpc" id="L298" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay(ZoneId.systemDefault()) : null;</span>
+<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay(ZoneId.systemDefault()) : null;</span>
     }
 
     private Long getStartEpochMilli(LocalDate value) {
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;</span>
+<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        return value != null ? value.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() : null;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

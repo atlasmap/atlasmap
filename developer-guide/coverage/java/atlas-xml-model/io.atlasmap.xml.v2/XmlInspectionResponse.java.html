@@ -20,20 +20,16 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The top container object of XML Document inspection response that AtlasMap design time backend
- * service sends back to the UI in return for {@link XmlInspectionRequest}.
- */
 @JsonRootName(&quot;XmlInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L29">public class XmlInspectionResponse implements Serializable {</span>
+<span class="fc" id="L25">public class XmlInspectionResponse implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    /** XML Document object created as a result of the inspection. */
+
     protected XmlDocument xmlDocument;
-    /** Error message. */
+
     protected String errorMessage;
-    /** Execution time. */
+
     protected Long executionTime;
 
     /**
@@ -45,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public XmlDocument getXmlDocument() {
-<span class="fc" id="L48">        return xmlDocument;</span>
+<span class="fc" id="L44">        return xmlDocument;</span>
     }
 
     /**
@@ -57,8 +53,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setXmlDocument(XmlDocument value) {
-<span class="fc" id="L60">        this.xmlDocument = value;</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L56">        this.xmlDocument = value;</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Gets the value of the errorMessage property.
@@ -69,7 +65,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getErrorMessage() {
-<span class="fc" id="L72">        return errorMessage;</span>
+<span class="fc" id="L68">        return errorMessage;</span>
     }
 
     /**
@@ -81,8 +77,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setErrorMessage(String value) {
-<span class="nc" id="L84">        this.errorMessage = value;</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L80">        this.errorMessage = value;</span>
+<span class="nc" id="L81">    }</span>
 
     /**
      * Gets the value of the executionTime property.
@@ -93,7 +89,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Long getExecutionTime() {
-<span class="fc" id="L96">        return executionTime;</span>
+<span class="fc" id="L92">        return executionTime;</span>
     }
 
     /**
@@ -105,107 +101,105 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setExecutionTime(Long value) {
-<span class="fc" id="L108">        this.executionTime = value;</span>
-<span class="fc" id="L109">    }</span>
+<span class="fc" id="L104">        this.executionTime = value;</span>
+<span class="fc" id="L105">    }</span>
 
-    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L113" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L114">            return false;</span>
+<span class="nc bnc" id="L108" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L109">            return false;</span>
         }
-<span class="nc bnc" id="L116" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L117">            return true;</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L112">            return true;</span>
         }
-<span class="nc" id="L119">        final XmlInspectionResponse that = ((XmlInspectionResponse) object);</span>
+<span class="nc" id="L114">        final XmlInspectionResponse that = ((XmlInspectionResponse) object);</span>
         {
             XmlDocument leftXmlDocument;
-<span class="nc" id="L122">            leftXmlDocument = this.getXmlDocument();</span>
+<span class="nc" id="L117">            leftXmlDocument = this.getXmlDocument();</span>
             XmlDocument rightXmlDocument;
-<span class="nc" id="L124">            rightXmlDocument = that.getXmlDocument();</span>
-<span class="nc bnc" id="L125" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">                    if (!leftXmlDocument.equals(rightXmlDocument)) {</span>
-<span class="nc" id="L128">                        return false;</span>
+<span class="nc" id="L119">            rightXmlDocument = that.getXmlDocument();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                    if (!leftXmlDocument.equals(rightXmlDocument)) {</span>
+<span class="nc" id="L123">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L131">                    return false;</span>
+<span class="nc" id="L126">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L134" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
-<span class="nc" id="L135">                    return false;</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                if (that.xmlDocument!= null) {</span>
+<span class="nc" id="L130">                    return false;</span>
                 }
             }
         }
         {
             String leftErrorMessage;
-<span class="nc" id="L141">            leftErrorMessage = this.getErrorMessage();</span>
+<span class="nc" id="L136">            leftErrorMessage = this.getErrorMessage();</span>
             String rightErrorMessage;
-<span class="nc" id="L143">            rightErrorMessage = that.getErrorMessage();</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
-<span class="nc bnc" id="L145" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
-<span class="nc bnc" id="L146" title="All 2 branches missed.">                    if (!leftErrorMessage.equals(rightErrorMessage)) {</span>
-<span class="nc" id="L147">                        return false;</span>
+<span class="nc" id="L138">            rightErrorMessage = that.getErrorMessage();</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                    if (!leftErrorMessage.equals(rightErrorMessage)) {</span>
+<span class="nc" id="L142">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L150">                    return false;</span>
+<span class="nc" id="L145">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L153" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
-<span class="nc" id="L154">                    return false;</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                if (that.errorMessage!= null) {</span>
+<span class="nc" id="L149">                    return false;</span>
                 }
             }
         }
         {
             Long leftExecutionTime;
-<span class="nc" id="L160">            leftExecutionTime = this.getExecutionTime();</span>
+<span class="nc" id="L155">            leftExecutionTime = this.getExecutionTime();</span>
             Long rightExecutionTime;
-<span class="nc" id="L162">            rightExecutionTime = that.getExecutionTime();</span>
-<span class="nc bnc" id="L163" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">                    if (!leftExecutionTime.equals(rightExecutionTime)) {</span>
-<span class="nc" id="L166">                        return false;</span>
+<span class="nc" id="L157">            rightExecutionTime = that.getExecutionTime();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">                    if (!leftExecutionTime.equals(rightExecutionTime)) {</span>
+<span class="nc" id="L161">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L169">                    return false;</span>
+<span class="nc" id="L164">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L172" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
-<span class="nc" id="L173">                    return false;</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">                if (that.executionTime!= null) {</span>
+<span class="nc" id="L168">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L177">        return true;</span>
+<span class="nc" id="L172">        return true;</span>
     }
 
-    @Override
     public int hashCode() {
-<span class="nc" id="L182">        int currentHashCode = 1;</span>
+<span class="nc" id="L176">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L184">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L178">            currentHashCode = (currentHashCode* 31);</span>
             XmlDocument theXmlDocument;
-<span class="nc" id="L186">            theXmlDocument = this.getXmlDocument();</span>
-<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
-<span class="nc" id="L188">                currentHashCode += theXmlDocument.hashCode();</span>
+<span class="nc" id="L180">            theXmlDocument = this.getXmlDocument();</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if (this.xmlDocument!= null) {</span>
+<span class="nc" id="L182">                currentHashCode += theXmlDocument.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L192">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L186">            currentHashCode = (currentHashCode* 31);</span>
             String theErrorMessage;
-<span class="nc" id="L194">            theErrorMessage = this.getErrorMessage();</span>
-<span class="nc bnc" id="L195" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
-<span class="nc" id="L196">                currentHashCode += theErrorMessage.hashCode();</span>
+<span class="nc" id="L188">            theErrorMessage = this.getErrorMessage();</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (this.errorMessage!= null) {</span>
+<span class="nc" id="L190">                currentHashCode += theErrorMessage.hashCode();</span>
             }
         }
         {
-<span class="nc" id="L200">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L194">            currentHashCode = (currentHashCode* 31);</span>
             Long theExecutionTime;
-<span class="nc" id="L202">            theExecutionTime = this.getExecutionTime();</span>
-<span class="nc bnc" id="L203" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
-<span class="nc" id="L204">                currentHashCode += theExecutionTime.hashCode();</span>
+<span class="nc" id="L196">            theExecutionTime = this.getExecutionTime();</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            if (this.executionTime!= null) {</span>
+<span class="nc" id="L198">                currentHashCode += theExecutionTime.hashCode();</span>
             }
         }
-<span class="nc" id="L207">        return currentHashCode;</span>
+<span class="nc" id="L201">        return currentHashCode;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -19,33 +19,26 @@ import java.lang.reflect.Type;
 
 import io.atlasmap.api.AtlasException;
 
-/**
- * The {@link JavaChildAccessor} which accesses the Document root.
- */
 public class RootAccessor extends JavaChildAccessor {
 
-    /**
-     * A constructor.
-     * @param parent the root object
-     */
     public RootAccessor(Object parent) {
-<span class="fc" id="L32">        super(parent, null);</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L25">        super(parent, null);</span>
+<span class="fc" id="L26">    }</span>
 
     @Override
     public Object getRawValue() throws AtlasException {
-<span class="fc" id="L37">        return getParentObject();</span>
+<span class="fc" id="L30">        return getParentObject();</span>
     }
 
     @Override
     public Type getRawGenericType() throws AtlasException {
-<span class="nc" id="L42">        return null;</span>
+<span class="nc" id="L35">        return null;</span>
     }
 
     @Override
     public Class&lt;?&gt; getRawClass() throws AtlasException {
-<span class="fc" id="L47">        return getParentObject().getClass();</span>
+<span class="fc" id="L40">        return getParentObject().getClass();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -30,89 +30,66 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
+import io.atlasmap.dfdl.core.DfdlConstants;
 import io.atlasmap.dfdl.core.DfdlSchemaResolver;
-import io.atlasmap.dfdl.v2.DfdlConstants;
 import io.atlasmap.xml.core.XmlIOHelper;
 import io.atlasmap.xml.inspect.XmlInstanceInspector;
 import io.atlasmap.xml.inspect.XmlSchemaInspector;
 import io.atlasmap.xml.v2.XmlDocument;
 
-/**
- * Inspects DFDL instance of schema.
- */
 public class DfdlInspector {
-<span class="fc" id="L44">    private static final Logger LOG = LoggerFactory.getLogger(DfdlInspector.class);</span>
+<span class="fc" id="L41">    private static final Logger LOG = LoggerFactory.getLogger(DfdlInspector.class);</span>
 
     private ClassLoader classLoader;
     private DfdlSchemaResolver schemaResolver;
-<span class="fc" id="L48">    private XmlInstanceInspector xmlInstanceInspector = new XmlInstanceInspector();</span>
-<span class="fc" id="L49">    private XmlSchemaInspector xmlSchemaInspector = new XmlSchemaInspector();</span>
+<span class="fc" id="L45">    private XmlInstanceInspector xmlInstanceInspector = new XmlInstanceInspector();</span>
+<span class="fc" id="L46">    private XmlSchemaInspector xmlSchemaInspector = new XmlSchemaInspector();</span>
     private XmlDocument output;
 
-    /**
-     * A constructor.
-     * @param loader class loader
-     */
-<span class="fc" id="L56">    public DfdlInspector(ClassLoader loader) {</span>
-<span class="fc" id="L57">        this.classLoader = loader;</span>
-<span class="fc" id="L58">        xmlSchemaInspector.setClassLoader(loader);</span>
-<span class="fc" id="L59">        this.schemaResolver = new DfdlSchemaResolver(loader);</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L49">    public DfdlInspector(ClassLoader loader) {</span>
+<span class="fc" id="L50">        this.classLoader = loader;</span>
+<span class="fc" id="L51">        xmlSchemaInspector.setClassLoader(loader);</span>
+<span class="fc" id="L52">        this.schemaResolver = new DfdlSchemaResolver(loader);</span>
+<span class="fc" id="L53">    }</span>
 
-    /**
-     * Inspects DFDL instance.
-     * @param dfdlSchemaName instance
-     * @param options options
-     * @throws Exception unexpected error
-     */
     public void inspectInstance(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
-<span class="fc" id="L69">        String example = options.get(DfdlConstants.OPTION_EXAMPLE_DATA);</span>
-<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (example == null) {</span>
-<span class="nc" id="L71">            LOG.error(&quot;DFDL instance inspection requires example data, but it was not specified&quot;);</span>
-<span class="nc" id="L72">            return;</span>
+<span class="fc" id="L56">        String example = options.get(DfdlConstants.OPTION_EXAMPLE_DATA);</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">        if (example == null) {</span>
+<span class="nc" id="L58">            LOG.error(&quot;DFDL instance inspection requires example data, but it was not specified&quot;);</span>
+<span class="nc" id="L59">            return;</span>
         }
 
-<span class="fc" id="L75">        Compiler c = Daffodil.compiler();</span>
-<span class="fc" id="L76">        ProcessorFactory pf = c.compileSource(schemaResolver.resolve(dfdlSchemaName, options));</span>
-<span class="fc" id="L77">        DataProcessor dp = pf.onPath(&quot;/&quot;);</span>
-<span class="fc" id="L78">        W3CDOMInfosetOutputter output = new W3CDOMInfosetOutputter();</span>
-<span class="fc" id="L79">        ParseResult result = dp.parse(new InputSourceDataInputStream(example.getBytes()), output);</span>
-<span class="pc bpc" id="L80" title="1 of 2 branches missed.">        if (result.isError()) {</span>
-<span class="nc" id="L81">            StringBuffer buf = new StringBuffer(&quot;DFDL inspection failed&quot;);</span>
-<span class="nc" id="L82">            result.getDiagnostics().forEach(d -&gt; {</span>
-<span class="nc" id="L83">                buf.append(&quot;; &quot;).append(d.getMessage());</span>
-<span class="nc" id="L84">            });</span>
-<span class="nc" id="L85">            throw new AtlasException(buf.toString());</span>
+<span class="fc" id="L62">        Compiler c = Daffodil.compiler();</span>
+<span class="fc" id="L63">        ProcessorFactory pf = c.compileSource(schemaResolver.resolve(dfdlSchemaName, options));</span>
+<span class="fc" id="L64">        DataProcessor dp = pf.onPath(&quot;/&quot;);</span>
+<span class="fc" id="L65">        W3CDOMInfosetOutputter output = new W3CDOMInfosetOutputter();</span>
+<span class="fc" id="L66">        ParseResult result = dp.parse(new InputSourceDataInputStream(example.getBytes()), output);</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (result.isError()) {</span>
+<span class="nc" id="L68">            StringBuffer buf = new StringBuffer(&quot;DFDL inspection failed&quot;);</span>
+<span class="nc" id="L69">            result.getDiagnostics().forEach(d -&gt; {</span>
+<span class="nc" id="L70">                buf.append(&quot;; &quot;).append(d.getMessage());</span>
+<span class="nc" id="L71">            });</span>
+<span class="nc" id="L72">            throw new AtlasException(buf.toString());</span>
         }
 
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
             try {
-<span class="fc" id="L90">                LOG.trace(new XmlIOHelper(classLoader).writeDocumentToString(false, output.getResult()));</span>
-<span class="pc" id="L91">            } catch (Exception e) {}</span>
+<span class="fc" id="L77">                LOG.trace(new XmlIOHelper(classLoader).writeDocumentToString(false, output.getResult()));</span>
+<span class="pc" id="L78">            } catch (Exception e) {}</span>
         }
-<span class="fc" id="L93">        xmlInstanceInspector.inspect(output.getResult());</span>
-<span class="fc" id="L94">        this.output = xmlInstanceInspector.getXmlDocument();</span>
-<span class="fc" id="L95">    }</span>
+<span class="fc" id="L80">        xmlInstanceInspector.inspect(output.getResult());</span>
+<span class="fc" id="L81">        this.output = xmlInstanceInspector.getXmlDocument();</span>
+<span class="fc" id="L82">    }</span>
 
-    /**
-     * Inspects DFDL schema.
-     * @param dfdlSchemaName schema
-     * @param options options
-     * @throws Exception unexpected error
-     */
     public void inspectSchema(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
-<span class="fc" id="L104">        URI uri = schemaResolver.resolve(dfdlSchemaName, options);</span>
-<span class="fc" id="L105">        xmlSchemaInspector.inspect(new File(uri));</span>
-<span class="fc" id="L106">        this.output = xmlSchemaInspector.getXmlDocument();</span>
-<span class="fc" id="L107">    }</span>
+<span class="fc" id="L85">        URI uri = schemaResolver.resolve(dfdlSchemaName, options);</span>
+<span class="fc" id="L86">        xmlSchemaInspector.inspect(new File(uri));</span>
+<span class="fc" id="L87">        this.output = xmlSchemaInspector.getXmlDocument();</span>
+<span class="fc" id="L88">    }</span>
 
-    /**
-     * Gets the DFDL Document.
-     * @return DFDL Document
-     */
     public XmlDocument getXmlDocument() {
-<span class="fc" id="L114">        return this.output;</span>
+<span class="fc" id="L91">        return this.output;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

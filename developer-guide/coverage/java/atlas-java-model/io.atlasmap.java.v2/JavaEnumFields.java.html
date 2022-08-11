@@ -19,13 +19,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The container of the {@link JavaEnumField}.
- */
-<span class="fc" id="L25">public class JavaEnumFields implements Serializable {</span>
+<span class="fc" id="L22">public class JavaEnumFields implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    /** a list of {@link JavaEnumField}. */
+
     protected List&lt;JavaEnumField&gt; javaEnumField;
 
     /**
@@ -51,56 +48,54 @@ import java.util.List;
      * 
      */
     public List&lt;JavaEnumField&gt; getJavaEnumField() {
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (javaEnumField == null) {</span>
-<span class="fc" id="L55">            javaEnumField = new ArrayList&lt;JavaEnumField&gt;();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (javaEnumField == null) {</span>
+<span class="fc" id="L52">            javaEnumField = new ArrayList&lt;JavaEnumField&gt;();</span>
         }
-<span class="fc" id="L57">        return this.javaEnumField;</span>
+<span class="fc" id="L54">        return this.javaEnumField;</span>
     }
 
-    @Override
     public boolean equals(Object object) {
-<span class="nc bnc" id="L62" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
-<span class="nc" id="L63">            return false;</span>
+<span class="nc bnc" id="L58" title="All 4 branches missed.">        if ((object == null)||(this.getClass()!= object.getClass())) {</span>
+<span class="nc" id="L59">            return false;</span>
         }
-<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (this == object) {</span>
-<span class="nc" id="L66">            return true;</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (this == object) {</span>
+<span class="nc" id="L62">            return true;</span>
         }
-<span class="nc" id="L68">        final JavaEnumFields that = ((JavaEnumFields) object);</span>
+<span class="nc" id="L64">        final JavaEnumFields that = ((JavaEnumFields) object);</span>
         {
             List&lt;JavaEnumField&gt; leftJavaEnumField;
-<span class="nc bnc" id="L71" title="All 4 branches missed.">            leftJavaEnumField = (((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty()))?this.getJavaEnumField():null);</span>
+<span class="nc bnc" id="L67" title="All 4 branches missed.">            leftJavaEnumField = (((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty()))?this.getJavaEnumField():null);</span>
             List&lt;JavaEnumField&gt; rightJavaEnumField;
-<span class="nc bnc" id="L73" title="All 4 branches missed.">            rightJavaEnumField = (((that.javaEnumField!= null)&amp;&amp;(!that.javaEnumField.isEmpty()))?that.getJavaEnumField():null);</span>
-<span class="nc bnc" id="L74" title="All 4 branches missed.">            if ((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty())) {</span>
-<span class="nc bnc" id="L75" title="All 4 branches missed.">                if ((that.javaEnumField!= null)&amp;&amp;(!that.javaEnumField.isEmpty())) {</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">                    if (!leftJavaEnumField.equals(rightJavaEnumField)) {</span>
-<span class="nc" id="L77">                        return false;</span>
+<span class="nc bnc" id="L69" title="All 4 branches missed.">            rightJavaEnumField = (((that.javaEnumField!= null)&amp;&amp;(!that.javaEnumField.isEmpty()))?that.getJavaEnumField():null);</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">            if ((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty())) {</span>
+<span class="nc bnc" id="L71" title="All 4 branches missed.">                if ((that.javaEnumField!= null)&amp;&amp;(!that.javaEnumField.isEmpty())) {</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                    if (!leftJavaEnumField.equals(rightJavaEnumField)) {</span>
+<span class="nc" id="L73">                        return false;</span>
                     }
                 } else {
-<span class="nc" id="L80">                    return false;</span>
+<span class="nc" id="L76">                    return false;</span>
                 }
             } else {
-<span class="nc bnc" id="L83" title="All 4 branches missed.">                if ((that.javaEnumField!= null)&amp;&amp;(!that.javaEnumField.isEmpty())) {</span>
-<span class="nc" id="L84">                    return false;</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">                if ((that.javaEnumField!= null)&amp;&amp;(!that.javaEnumField.isEmpty())) {</span>
+<span class="nc" id="L80">                    return false;</span>
                 }
             }
         }
-<span class="nc" id="L88">        return true;</span>
+<span class="nc" id="L84">        return true;</span>
     }
 
-    @Override
     public int hashCode() {
-<span class="nc" id="L93">        int currentHashCode = 1;</span>
+<span class="nc" id="L88">        int currentHashCode = 1;</span>
         {
-<span class="nc" id="L95">            currentHashCode = (currentHashCode* 31);</span>
+<span class="nc" id="L90">            currentHashCode = (currentHashCode* 31);</span>
             List&lt;JavaEnumField&gt; theJavaEnumField;
-<span class="nc bnc" id="L97" title="All 4 branches missed.">            theJavaEnumField = (((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty()))?this.getJavaEnumField():null);</span>
-<span class="nc bnc" id="L98" title="All 4 branches missed.">            if ((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty())) {</span>
-<span class="nc" id="L99">                currentHashCode += theJavaEnumField.hashCode();</span>
+<span class="nc bnc" id="L92" title="All 4 branches missed.">            theJavaEnumField = (((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty()))?this.getJavaEnumField():null);</span>
+<span class="nc bnc" id="L93" title="All 4 branches missed.">            if ((this.javaEnumField!= null)&amp;&amp;(!this.javaEnumField.isEmpty())) {</span>
+<span class="nc" id="L94">                currentHashCode += theJavaEnumField.hashCode();</span>
             }
         }
-<span class="nc" id="L102">        return currentHashCode;</span>
+<span class="nc" id="L97">        return currentHashCode;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

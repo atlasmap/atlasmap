@@ -21,15 +21,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-/**
- * The container of {@link Validation}.
- */
 @JsonRootName(&quot;Validations&quot;)
-<span class="fc" id="L28">public class Validations implements Serializable {</span>
+<span class="fc" id="L25">public class Validations implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** A list of {@link Validation} */
     protected List&lt;Validation&gt; validation;
 
     /**
@@ -55,11 +51,11 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link Validation}
      */
     public List&lt;Validation&gt; getValidation() {
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (validation == null) {</span>
-<span class="fc" id="L59">            validation = new ArrayList&lt;Validation&gt;();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (validation == null) {</span>
+<span class="fc" id="L55">            validation = new ArrayList&lt;Validation&gt;();</span>
         }
-<span class="fc" id="L61">        return this.validation;</span>
+<span class="fc" id="L57">        return this.validation;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

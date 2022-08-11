@@ -15,9 +15,9 @@
  */
 package io.atlasmap.core;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +37,7 @@ import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.AtlasModuleMode;
 import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.DataSource;
-import io.atlasmap.v2.DataSourceType;
-import io.atlasmap.v2.DocumentMetadata;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -47,295 +45,243 @@ import io.atlasmap.v2.LookupEntry;
 import io.atlasmap.v2.LookupTable;
 import io.atlasmap.v2.SimpleField;
 
-/**
- * The base implementation of the {@link AtlasModule} which implements common routines.
- */
-<span class="fc" id="L53">public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean {</span>
-<span class="fc" id="L54">    private static final Logger LOG = LoggerFactory.getLogger(BaseAtlasModule.class);</span>
+<span class="fc" id="L48">public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean {</span>
+<span class="fc" id="L49">    private static final Logger LOG = LoggerFactory.getLogger(BaseAtlasModule.class);</span>
 
-<span class="fc" id="L56">    private boolean automaticallyProcessOutputFieldActions = true;</span>
-<span class="fc" id="L57">    private AtlasConversionService atlasConversionService = null;</span>
-<span class="fc" id="L58">    private AtlasFieldActionService atlasFieldActionService = null;</span>
-<span class="fc" id="L59">    private AtlasCollectionHelper collectionHelper = null;</span>
+<span class="fc" id="L51">    private boolean automaticallyProcessOutputFieldActions = true;</span>
+<span class="fc" id="L52">    private AtlasConversionService atlasConversionService = null;</span>
+<span class="fc" id="L53">    private AtlasFieldActionService atlasFieldActionService = null;</span>
+<span class="fc" id="L54">    private AtlasCollectionHelper collectionHelper = null;</span>
+<span class="fc" id="L55">    private AtlasModuleMode atlasModuleMode = AtlasModuleMode.UNSET;</span>
+    private String docId;
+    private String docName;
+    private String uri;
+    private String uriDataType;
+<span class="fc" id="L60">    private Map&lt;String,String&gt; uriParameters = new HashMap&lt;&gt;();</span>
     private ClassLoader classLoader;
-    private DataSource dataSource;
-    private DocumentMetadata documentMetadata;
-    private File specFile;
+    private DataSourceMetadata dataSourceMetadata;
 
     @Override
     public void init() throws AtlasException {
         // no-op now
-<span class="fc" id="L68">    }</span>
+<span class="fc" id="L67">    }</span>
 
     @Override
     public void destroy() throws AtlasException {
         // no-op now
-<span class="fc" id="L73">    }</span>
+<span class="fc" id="L72">    }</span>
 
     @Override
     public void setClassLoader(ClassLoader classLoader) {
-<span class="fc" id="L77">        this.classLoader = classLoader;</span>
-<span class="fc" id="L78">    }</span>
+<span class="fc" id="L76">        this.classLoader = classLoader;</span>
+<span class="fc" id="L77">    }</span>
 
     @Override
     public ClassLoader getClassLoader() {
-<span class="fc" id="L82">        return this.classLoader;</span>
+<span class="fc" id="L81">        return this.classLoader;</span>
     }
 
     @Override
     public void processPostValidation(AtlasInternalSession session) throws AtlasException {
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L88">            LOG.debug(&quot;{}: processPostValidation completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L87">            LOG.debug(&quot;{}: processPostValidation completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L90">    }</span>
+<span class="fc" id="L89">    }</span>
 
     @Override
     public void populateTargetField(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L94">        Field sourceField = session.head().getSourceField();</span>
-<span class="fc" id="L95">        Field targetField = session.head().getTargetField();</span>
-<span class="fc" id="L96">        Object targetValue = null;</span>
-<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (targetField.getFieldType() == null</span>
-<span class="fc bfc" id="L98" title="All 4 branches covered.">                || (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType().equals(targetField.getFieldType()))) {</span>
-<span class="fc" id="L99">            targetValue = sourceField.getValue();</span>
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        } else if (sourceField.getValue() != null) {</span>
+<span class="fc" id="L93">        Field sourceField = session.head().getSourceField();</span>
+<span class="fc" id="L94">        Field targetField = session.head().getTargetField();</span>
+<span class="fc" id="L95">        Object targetValue = null;</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (targetField.getFieldType() == null</span>
+<span class="fc bfc" id="L97" title="All 4 branches covered.">                || (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType().equals(targetField.getFieldType()))) {</span>
+<span class="fc" id="L98">            targetValue = sourceField.getValue();</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        } else if (sourceField.getValue() != null) {</span>
             try {
-<span class="fc" id="L102">                targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),</span>
-<span class="fc" id="L103">                        targetField.getFieldType(), targetField.getFormat());</span>
-<span class="nc" id="L104">            } catch (AtlasConversionException e) {</span>
-<span class="nc" id="L105">                AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L106">                        String.format(&quot;Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s&quot;, sourceField.getFieldType(),</span>
-<span class="nc" id="L107">                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),</span>
+<span class="fc" id="L101">                targetValue = getConversionService().convertType(sourceField.getValue(), sourceField.getFormat(),</span>
+<span class="fc" id="L102">                        targetField.getFieldType(), targetField.getFormat());</span>
+<span class="nc" id="L103">            } catch (AtlasConversionException e) {</span>
+<span class="nc" id="L104">                AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L105">                        String.format(&quot;Unable to auto-convert for sT=%s tT=%s tF=%s msg=%s&quot;, sourceField.getFieldType(),</span>
+<span class="nc" id="L106">                                targetField.getFieldType(), targetField.getPath(), e.getMessage()),</span>
                         AuditStatus.ERROR, null);
-<span class="nc" id="L109">                return;</span>
-<span class="fc" id="L110">            }</span>
+<span class="nc" id="L108">                return;</span>
+<span class="fc" id="L109">            }</span>
         }
-<span class="fc" id="L112">        targetField.setValue(targetValue);</span>
+<span class="fc" id="L111">        targetField.setValue(targetValue);</span>
 
-<span class="fc" id="L114">        LookupTable lookupTable = session.head().getLookupTable();</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (lookupTable != null) {</span>
-<span class="fc" id="L116">            processLookupField(session, lookupTable, targetField.getValue(), targetField);</span>
+<span class="fc" id="L113">        LookupTable lookupTable = session.head().getLookupTable();</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (lookupTable != null) {</span>
+<span class="fc" id="L115">            processLookupField(session, lookupTable, targetField.getValue(), targetField);</span>
         }
-<span class="fc" id="L118">    }</span>
+<span class="fc" id="L117">    }</span>
 
-    /**
-     * Processes Lookup mapping.
-     * @param session session
-     * @param lookupTable lookup table
-     * @param sourceValue source value
-     * @param targetField target field
-     * @throws AtlasException unexpected error
-     */
     protected void processLookupField(AtlasInternalSession session, LookupTable lookupTable, Object sourceValue,
             Field targetField) throws AtlasException {
-<span class="fc" id="L130">        String lookupValue = null;</span>
-<span class="fc" id="L131">        FieldType lookupType = null;</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        for (LookupEntry lkp : lookupTable.getLookupEntry()) {</span>
-<span class="fc bfc" id="L133" title="All 2 branches covered.">            if (lkp.getSourceValue().equals(sourceValue)) {</span>
-<span class="fc" id="L134">                lookupValue = lkp.getTargetValue();</span>
-<span class="fc" id="L135">                lookupType = lkp.getTargetType();</span>
-<span class="fc" id="L136">                break;</span>
+<span class="fc" id="L121">        String lookupValue = null;</span>
+<span class="fc" id="L122">        FieldType lookupType = null;</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        for (LookupEntry lkp : lookupTable.getLookupEntry()) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (lkp.getSourceValue().equals(sourceValue)) {</span>
+<span class="fc" id="L125">                lookupValue = lkp.getTargetValue();</span>
+<span class="fc" id="L126">                lookupType = lkp.getTargetType();</span>
+<span class="fc" id="L127">                break;</span>
             }
-<span class="fc" id="L138">        }</span>
+<span class="fc" id="L129">        }</span>
 
-<span class="fc" id="L140">        Object targetValue = null;</span>
-<span class="pc bpc" id="L141" title="2 of 4 branches missed.">        if (lookupType == null || FieldType.STRING.equals(lookupType)) {</span>
-<span class="fc" id="L142">            targetValue = lookupValue;</span>
+<span class="fc" id="L131">        Object targetValue = null;</span>
+<span class="pc bpc" id="L132" title="2 of 4 branches missed.">        if (lookupType == null || FieldType.STRING.equals(lookupType)) {</span>
+<span class="fc" id="L133">            targetValue = lookupValue;</span>
         } else {
-<span class="nc" id="L144">            targetValue = atlasConversionService.convertType(lookupValue, FieldType.STRING, lookupType);</span>
+<span class="nc" id="L135">            targetValue = atlasConversionService.convertType(lookupValue, FieldType.STRING, lookupType);</span>
         }
 
-<span class="fc" id="L147">        FieldType targetFieldType = targetField.getFieldType();</span>
-<span class="pc bpc" id="L148" title="2 of 4 branches missed.">        if (targetFieldType == null || targetFieldType == FieldType.COMPLEX) {</span>
-<span class="pc bpc" id="L149" title="1 of 2 branches missed.">            targetField.setFieldType(lookupType != null ? lookupType : FieldType.STRING);</span>
-<span class="fc" id="L150">            targetFieldType = targetField.getFieldType();</span>
+<span class="fc" id="L138">        FieldType targetFieldType = targetField.getFieldType();</span>
+<span class="pc bpc" id="L139" title="2 of 4 branches missed.">        if (targetFieldType == null || targetFieldType == FieldType.COMPLEX) {</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            targetField.setFieldType(lookupType != null ? lookupType : FieldType.STRING);</span>
+<span class="fc" id="L141">            targetFieldType = targetField.getFieldType();</span>
         }
-<span class="pc bpc" id="L152" title="2 of 4 branches missed.">        if (targetFieldType != null &amp;&amp; !targetFieldType.equals(lookupType)) {</span>
-<span class="nc" id="L153">            targetValue = atlasConversionService.convertType(targetValue, lookupType, targetField.getFieldType());</span>
+<span class="pc bpc" id="L143" title="2 of 4 branches missed.">        if (targetFieldType != null &amp;&amp; !targetFieldType.equals(lookupType)) {</span>
+<span class="nc" id="L144">            targetValue = atlasConversionService.convertType(targetValue, lookupType, targetField.getFieldType());</span>
         }
 
-<span class="fc" id="L156">        targetField.setValue(targetValue);</span>
-<span class="fc" id="L157">    }</span>
+<span class="fc" id="L147">        targetField.setValue(targetValue);</span>
+<span class="fc" id="L148">    }</span>
 
-    /**
-     * Applies target field actions.
-     * @param session session
-     * @return processed field
-     * @throws AtlasException unexpected error
-     */
     protected Field applyTargetFieldActions(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L166">        Field field = session.head().getTargetField();</span>
-<span class="nc bnc" id="L167" title="All 4 branches missed.">        if (isAutomaticallyProcessOutputFieldActions() &amp;&amp; field.getActions() != null</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">                &amp;&amp; field.getActions() != null) {</span>
-<span class="nc" id="L169">            return getFieldActionService().processActions(session, field);</span>
+<span class="nc" id="L151">        Field field = session.head().getTargetField();</span>
+<span class="nc bnc" id="L152" title="All 4 branches missed.">        if (isAutomaticallyProcessOutputFieldActions() &amp;&amp; field.getActions() != null</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">                &amp;&amp; field.getActions() != null) {</span>
+<span class="nc" id="L154">            return getFieldActionService().processActions(session, field);</span>
         }
-<span class="nc" id="L171">        return field;</span>
+<span class="nc" id="L156">        return field;</span>
     }
 
-    /**
-     * Applies source field actions.
-     * @param session session
-     * @return processed field
-     * @throws AtlasException unexpected error
-     */
     protected Field applySourceFieldActions(AtlasInternalSession session) throws AtlasException {
-<span class="nc" id="L181">        Field field = session.head().getSourceField();</span>
-<span class="nc bnc" id="L182" title="All 4 branches missed.">        if (field.getActions() != null &amp;&amp; field.getActions() != null) {</span>
-<span class="nc" id="L183">            return getFieldActionService().processActions(session, field);</span>
+<span class="nc" id="L160">        Field field = session.head().getSourceField();</span>
+<span class="nc bnc" id="L161" title="All 4 branches missed.">        if (field.getActions() != null &amp;&amp; field.getActions() != null) {</span>
+<span class="nc" id="L162">            return getFieldActionService().processActions(session, field);</span>
         }
-<span class="nc" id="L185">        return field;</span>
+<span class="nc" id="L164">        return field;</span>
     }
-
-    @Override
-    public DataSource getDataSource() {
-<span class="fc" id="L190">        return this.dataSource;</span>
-    }
-
-    @Override
-    public void setDataSource(DataSource ds) {
-<span class="fc" id="L195">        this.dataSource = ds;</span>
-<span class="fc" id="L196">    }</span>
 
     @Override
     public AtlasModuleMode getMode() {
-<span class="fc bfc" id="L200" title="All 2 branches covered.">         if (this.dataSource.getDataSourceType() == DataSourceType.SOURCE) {</span>
-<span class="fc" id="L201">             return AtlasModuleMode.SOURCE;</span>
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        } else if (this.dataSource.getDataSourceType() == DataSourceType.TARGET) {</span>
-<span class="fc" id="L203">            return AtlasModuleMode.TARGET;</span>
-        } else {
-<span class="fc" id="L205">            return AtlasModuleMode.UNSET;</span>
-        }
+<span class="fc" id="L169">        return this.atlasModuleMode;</span>
     }
 
     @Override
     public void setMode(AtlasModuleMode atlasModuleMode) {
-<span class="fc" id="L211">    }</span>
+<span class="fc" id="L174">        this.atlasModuleMode = atlasModuleMode;</span>
+<span class="fc" id="L175">    }</span>
 
     @Override
     public Boolean isStatisticsSupported() {
-<span class="fc" id="L215">        return false;</span>
+<span class="fc" id="L179">        return false;</span>
     }
 
     @Override
     public Boolean isStatisticsEnabled() {
-<span class="fc" id="L220">        return false;</span>
+<span class="fc" id="L184">        return false;</span>
     }
 
     @Override
     public List&lt;AtlasModuleMode&gt; listSupportedModes() {
-<span class="fc" id="L225">        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);</span>
+<span class="fc" id="L189">        return Arrays.asList(AtlasModuleMode.SOURCE, AtlasModuleMode.TARGET);</span>
     }
 
     @Override
     public AtlasConversionService getConversionService() {
-<span class="fc" id="L230">        return atlasConversionService;</span>
+<span class="fc" id="L194">        return atlasConversionService;</span>
     }
 
     @Override
     public AtlasCollectionHelper getCollectionHelper() {
-<span class="fc" id="L235">        return collectionHelper;</span>
+<span class="fc" id="L199">        return collectionHelper;</span>
     }
 
     @Override
     public String getDocId() {
-<span class="fc" id="L240">        return this.dataSource.getId();</span>
+<span class="fc" id="L204">        return docId;</span>
     }
 
     @Override
     public void setDocId(String docId) {
-<span class="fc" id="L245">    }</span>
+<span class="fc" id="L209">        this.docId = docId;</span>
+<span class="fc" id="L210">    }</span>
 
     @Override
     public String getUri() {
-<span class="fc" id="L249">        return this.dataSource.getUri();</span>
+<span class="fc" id="L214">        return uri;</span>
     }
 
     @Override
     public void setUri(String uri) {
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L219">        this.uri = uri;</span>
+<span class="fc" id="L220">        this.uriDataType = AtlasUtil.getUriDataType(uri);</span>
+<span class="fc" id="L221">        this.uriParameters = AtlasUtil.getUriParameters(uri);</span>
+<span class="fc" id="L222">    }</span>
 
     @Override
     public String getUriDataType() {
-<span class="fc" id="L258">        return AtlasUtil.getUriDataType(getUri());</span>
+<span class="fc" id="L226">        return this.uriDataType;</span>
     }
 
     @Override
     public Map&lt;String, String&gt; getUriParameters() {
-<span class="fc" id="L263">        return Collections.unmodifiableMap(AtlasUtil.getUriParameters(getUri()));</span>
+<span class="fc" id="L231">        return Collections.unmodifiableMap(uriParameters);</span>
     }
 
     @Override
     public void setConversionService(AtlasConversionService atlasConversionService) {
-<span class="fc" id="L268">        this.atlasConversionService = atlasConversionService;</span>
-<span class="fc" id="L269">    }</span>
+<span class="fc" id="L236">        this.atlasConversionService = atlasConversionService;</span>
+<span class="fc" id="L237">    }</span>
 
     @Override
     public AtlasFieldActionService getFieldActionService() {
-<span class="fc" id="L273">        return this.atlasFieldActionService;</span>
+<span class="fc" id="L241">        return this.atlasFieldActionService;</span>
     }
 
     @Override
     public void setFieldActionService(AtlasFieldActionService atlasFieldActionService) {
-<span class="fc" id="L278">        this.atlasFieldActionService = atlasFieldActionService;</span>
-<span class="fc" id="L279">        this.collectionHelper = createCollectionHelper(atlasFieldActionService);</span>
-<span class="fc" id="L280">    }</span>
+<span class="fc" id="L246">        this.atlasFieldActionService = atlasFieldActionService;</span>
+<span class="fc" id="L247">        this.collectionHelper = createCollectionHelper(atlasFieldActionService);</span>
+<span class="fc" id="L248">    }</span>
 
-    /**
-     * Creates the collection helper.
-     * @param fieldActionService field action service
-     * @return collection helper
-     */
     protected AtlasCollectionHelper createCollectionHelper(AtlasFieldActionService fieldActionService) {
-<span class="fc" id="L288">        return new DefaultAtlasCollectionHelper(fieldActionService);</span>
+<span class="fc" id="L251">        return new DefaultAtlasCollectionHelper(fieldActionService);</span>
     }
 
-    /**
-     * Gets if it processes target field actions automatically.
-     * @return true if it processes automatically, or false
-     */
     public boolean isAutomaticallyProcessOutputFieldActions() {
-<span class="nc" id="L296">        return automaticallyProcessOutputFieldActions;</span>
+<span class="nc" id="L255">        return automaticallyProcessOutputFieldActions;</span>
     }
 
-    /**
-     * Sets if it processes target field actions automatically.
-     * @param automaticallyProcessOutputFieldActions true if it processes automatically, or false
-     */
     public void setAutomaticallyProcessOutputFieldActions(boolean automaticallyProcessOutputFieldActions) {
-<span class="fc" id="L304">        this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;</span>
-<span class="fc" id="L305">    }</span>
+<span class="fc" id="L259">        this.automaticallyProcessOutputFieldActions = automaticallyProcessOutputFieldActions;</span>
+<span class="fc" id="L260">    }</span>
 
     @Override
     public Boolean isSupportedField(Field field) {
-<span class="pc bpc" id="L309" title="1 of 4 branches missed.">        return field instanceof SimpleField || field instanceof FieldGroup;</span>
+<span class="pc bpc" id="L264" title="1 of 4 branches missed.">        return field instanceof SimpleField || field instanceof FieldGroup;</span>
     }
 
     @Override
-    public void setDocumentMetadata(DocumentMetadata meta) {
-<span class="fc" id="L314">        this.documentMetadata = meta;</span>
-<span class="fc" id="L315">    }</span>
+    public void setDataSourceMetadata(DataSourceMetadata meta) {
+<span class="fc" id="L269">        this.dataSourceMetadata = meta;</span>
+<span class="fc" id="L270">    }</span>
 
     @Override
-    public DocumentMetadata getDocumentMetadata() {
-<span class="fc" id="L319">        return this.documentMetadata;</span>
-    }
-
-    @Override
-    public void setDocumentSpecificationFile(File specFile) {
-<span class="fc" id="L324">        this.specFile = specFile;</span>
-<span class="fc" id="L325">    }</span>
-
-    @Override
-    public File getDocumentSpecificationFile() {
-<span class="fc" id="L329">        return this.specFile;</span>
+    public DataSourceMetadata getDataSourceMetadata() {
+<span class="fc" id="L274">        return this.dataSourceMetadata;</span>
     }
 
     @Override
     public void setDocName(String docName) {
-<span class="nc" id="L334">    }</span>
+<span class="fc" id="L279">        this.docName = docName;</span>
+<span class="fc" id="L280">    }</span>
 
     @Override
     public String getDocName() {
-<span class="fc" id="L338">        return this.dataSource.getName();</span>
+<span class="fc" id="L284">        return this.docName;</span>
     }
 
     //-----------------------------------------
@@ -344,118 +290,118 @@ import io.atlasmap.v2.SimpleField;
 
     @Override
     public boolean isSourceSupported() {
-<span class="nc" id="L347">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;SOURCE&quot;);</span>
+<span class="nc" id="L293">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;SOURCE&quot;);</span>
     }
 
     @Override
     public boolean isTargetSupported() {
-<span class="nc" id="L352">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;TARGET&quot;);</span>
+<span class="nc" id="L298">        return Arrays.asList(this.getClass().getAnnotation(AtlasModuleDetail.class).modes()).contains(&quot;TARGET&quot;);</span>
     }
 
     @Override
     public String getClassName() {
-<span class="nc" id="L357">        return this.getClass().getName();</span>
+<span class="nc" id="L303">        return this.getClass().getName();</span>
     }
 
     @Override
     public String[] getDataFormats() {
-<span class="nc" id="L362">        return this.getClass().getAnnotation(AtlasModuleDetail.class).dataFormats();</span>
+<span class="nc" id="L308">        return this.getClass().getAnnotation(AtlasModuleDetail.class).dataFormats();</span>
     }
 
     @Override
     public String getModeName() {
-<span class="nc" id="L367">        return this.getMode().name();</span>
+<span class="nc" id="L313">        return this.atlasModuleMode.name();</span>
     }
 
     @Override
     public String getName() {
-<span class="nc" id="L372">        return this.getClass().getAnnotation(AtlasModuleDetail.class).name();</span>
+<span class="nc" id="L318">        return this.getClass().getAnnotation(AtlasModuleDetail.class).name();</span>
     }
 
     @Override
     public String[] getPackageNames() {
-<span class="nc" id="L377">        return null;</span>
+<span class="nc" id="L323">        return null;</span>
     }
 
     @Override
     public long getSourceErrorCount() {
-<span class="nc" id="L382">        return 0L;</span>
+<span class="nc" id="L328">        return 0L;</span>
     }
 
     @Override
     public long getSourceCount() {
-<span class="nc" id="L387">        return 0L;</span>
+<span class="nc" id="L333">        return 0L;</span>
     }
 
     @Override
     public long getSourceMaxExecutionTime() {
-<span class="nc" id="L392">        return 0L;</span>
+<span class="nc" id="L338">        return 0L;</span>
     }
 
     @Override
     public long getSourceMinExecutionTime() {
-<span class="nc" id="L397">        return 0L;</span>
+<span class="nc" id="L343">        return 0L;</span>
     }
 
     @Override
     public long getSourceSuccessCount() {
-<span class="nc" id="L402">        return 0L;</span>
+<span class="nc" id="L348">        return 0L;</span>
     }
 
     @Override
     public long getSourceTotalExecutionTime() {
-<span class="nc" id="L407">        return 0L;</span>
+<span class="nc" id="L353">        return 0L;</span>
     }
 
     @Override
     public long getTargetCount() {
-<span class="nc" id="L412">        return 0L;</span>
+<span class="nc" id="L358">        return 0L;</span>
     }
 
     @Override
     public long getTargetErrorCount() {
-<span class="nc" id="L417">        return 0L;</span>
+<span class="nc" id="L363">        return 0L;</span>
     }
 
     @Override
     public long getTargetMaxExecutionTime() {
-<span class="nc" id="L422">        return 0L;</span>
+<span class="nc" id="L368">        return 0L;</span>
     }
 
     @Override
     public long getTargetMinExecutionTime() {
-<span class="nc" id="L427">        return 0L;</span>
+<span class="nc" id="L373">        return 0L;</span>
     }
 
     @Override
     public long getTargetSuccessCount() {
-<span class="nc" id="L432">        return 0L;</span>
+<span class="nc" id="L378">        return 0L;</span>
     }
 
     @Override
     public long getTargetTotalExecutionTime() {
-<span class="nc" id="L437">        return 0L;</span>
+<span class="nc" id="L383">        return 0L;</span>
     }
 
     @Override
     public String getUuid() {
-<span class="nc" id="L442">        return null;</span>
+<span class="nc" id="L388">        return null;</span>
     }
 
     @Override
     public String getVersion() {
-<span class="nc" id="L447">        return null;</span>
+<span class="nc" id="L393">        return null;</span>
     }
 
     @Override
     public TabularData readAndResetStatistics() {
-<span class="nc" id="L452">        return null;</span>
+<span class="nc" id="L398">        return null;</span>
     }
 
     @Override
     public void setStatisticsEnabled(boolean enabled) {
-<span class="nc" id="L457">        LOG.warn(&quot;Statistics is not yet implemented&quot;);</span>
-<span class="nc" id="L458">    }</span>
+<span class="nc" id="L403">        LOG.warn(&quot;Statistics is not yet implemented&quot;);</span>
+<span class="nc" id="L404">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

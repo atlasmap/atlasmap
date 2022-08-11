@@ -19,33 +19,21 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-/**
- * The model class for the &lt;strong&gt;Repeat&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class Repeat extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class Repeat extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** count */
     private Integer count;
 
-    /**
-     * Gets the count.
-     * @return count
-     */
     public Integer getCount() {
-<span class="fc" id="L37">        return count;</span>
+<span class="fc" id="L29">        return count;</span>
     }
 
-    /**
-     * Sets the count.
-     * @param count count
-     */
     @JsonPropertyDescription(&quot;count &quot;)
     @AtlasActionProperty(title = &quot;count&quot;, type = FieldType.INTEGER)
     public void setCount(Integer count) {
-<span class="fc" id="L47">        this.count = count;</span>
-<span class="fc" id="L48">    }</span>
+<span class="fc" id="L35">        this.count = count;</span>
+<span class="fc" id="L36">    }</span>
 }
 
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

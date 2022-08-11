@@ -21,15 +21,11 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-/**
- * The container of strings.
- */
 @JsonRootName(&quot;StringList&quot;)
-<span class="fc" id="L28">public class StringList implements Serializable {</span>
+<span class="fc" id="L25">public class StringList implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** A list of strings */
     protected List&lt;String&gt; string;
 
     /**
@@ -55,11 +51,11 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link String}
      */
     public List&lt;String&gt; getString() {
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (string == null) {</span>
-<span class="fc" id="L59">            string = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        if (string == null) {</span>
+<span class="fc" id="L55">            string = new ArrayList&lt;String&gt;();</span>
         }
-<span class="fc" id="L61">        return this.string;</span>
+<span class="fc" id="L57">        return this.string;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

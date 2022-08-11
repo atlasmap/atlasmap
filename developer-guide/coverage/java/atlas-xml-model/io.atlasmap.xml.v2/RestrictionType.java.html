@@ -15,71 +15,41 @@
  */
 package io.atlasmap.xml.v2;
 
-/**
- * The enumeration of the types of the XML schema restrictions.
- * @see Restriction
- */
-<span class="fc" id="L22">public enum RestrictionType {</span>
-    /** All. */
-<span class="fc" id="L24">    ALL(&quot;All&quot;),</span>
-    /** enumeration. */
-<span class="fc" id="L26">    ENUMERATION(&quot;enumeration&quot;),</span>
-    /** Fraction Digits. */
-<span class="fc" id="L28">    FRACTION_DIGITS(&quot;fractionDigits&quot;),</span>
-    /** Length. */
-<span class="fc" id="L30">    LENGTH(&quot;length&quot;),</span>
-    /** Max Exclusive. */
-<span class="fc" id="L32">    MAX_EXCLUSIVE(&quot;maxExclusive&quot;),</span>
-    /** Max Inclusive. */
-<span class="fc" id="L34">    MAX_INCLUSIVE(&quot;maxInclusive&quot;),</span>
-    /** Max Length. */
-<span class="fc" id="L36">    MAX_LENGTH(&quot;maxLength&quot;),</span>
-    /** Min Exclusive. */
-<span class="fc" id="L38">    MIN_EXCLUSIVE(&quot;minExclusive&quot;),</span>
-    /** Min Inclusive. */
-<span class="fc" id="L40">    MIN_INCLUSIVE(&quot;minInclusive&quot;),</span>
-    /** Min Length. */
-<span class="fc" id="L42">    MIN_LENGTH(&quot;minLength&quot;),</span>
-    /** Pattern. */
-<span class="fc" id="L44">    PATTERN(&quot;pattern&quot;),</span>
-    /** Total Digits. */
-<span class="fc" id="L46">    TOTAL_DIGITS(&quot;totalDigits&quot;),</span>
-    /** Whitespace. */
-<span class="fc" id="L48">    WHITE_SPACE(&quot;whiteSpace&quot;),</span>
-    /** None. */
-<span class="fc" id="L50">    NONE(&quot;None&quot;);</span>
+<span class="fc" id="L18">public enum RestrictionType {</span>
+
+<span class="fc" id="L20">    ALL(&quot;All&quot;),</span>
+<span class="fc" id="L21">    ENUMERATION(&quot;enumeration&quot;),</span>
+<span class="fc" id="L22">    FRACTION_DIGITS(&quot;fractionDigits&quot;),</span>
+<span class="fc" id="L23">    LENGTH(&quot;length&quot;),</span>
+<span class="fc" id="L24">    MAX_EXCLUSIVE(&quot;maxExclusive&quot;),</span>
+<span class="fc" id="L25">    MAX_INCLUSIVE(&quot;maxInclusive&quot;),</span>
+<span class="fc" id="L26">    MAX_LENGTH(&quot;maxLength&quot;),</span>
+<span class="fc" id="L27">    MIN_EXCLUSIVE(&quot;minExclusive&quot;),</span>
+<span class="fc" id="L28">    MIN_INCLUSIVE(&quot;minInclusive&quot;),</span>
+<span class="fc" id="L29">    MIN_LENGTH(&quot;minLength&quot;),</span>
+<span class="fc" id="L30">    PATTERN(&quot;pattern&quot;),</span>
+<span class="fc" id="L31">    TOTAL_DIGITS(&quot;totalDigits&quot;),</span>
+<span class="fc" id="L32">    WHITE_SPACE(&quot;whiteSpace&quot;),</span>
+<span class="fc" id="L33">    NONE(&quot;None&quot;);</span>
 
     private final String value;
 
-    /**
-     * A constructor.
-     * @param v value
-     */
-<span class="fc" id="L58">    RestrictionType(String v) {</span>
-<span class="fc" id="L59">        value = v;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L37">    RestrictionType(String v) {</span>
+<span class="fc" id="L38">        value = v;</span>
+<span class="fc" id="L39">    }</span>
 
-    /**
-     * Gets the value.
-     * @return value
-     */
     public String value() {
-<span class="fc" id="L67">        return value;</span>
+<span class="fc" id="L42">        return value;</span>
     }
 
-    /**
-     * Gets the enum from the value.
-     * @param v value
-     * @return the enum
-     */
     public static RestrictionType fromValue(String v) {
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        for (RestrictionType c: RestrictionType.values()) {</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L78">                return c;</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        for (RestrictionType c: RestrictionType.values()) {</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L48">                return c;</span>
             }
         }
-<span class="nc" id="L81">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L51">        throw new IllegalArgumentException(v);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

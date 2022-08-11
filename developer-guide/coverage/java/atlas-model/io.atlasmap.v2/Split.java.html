@@ -19,16 +19,12 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-/**
- * The model class for the &lt;strong&gt;Split&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class Split extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class Split extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    /** delimiter */
+
     protected String delimiter;
-    /** true to collapse repeating delimiter, or false */
-<span class="fc" id="L31">    private boolean collapseRepeatingDelimiter = false;</span>
+<span class="fc" id="L27">    private boolean collapseRepeatingDelimiter = false;</span>
 
     /**
      * Gets the value of the delimiter property.
@@ -39,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getDelimiter() {
-<span class="fc" id="L42">        return delimiter;</span>
+<span class="fc" id="L38">        return delimiter;</span>
     }
 
     /**
@@ -53,26 +49,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The delimiter string to split with&quot;)
     @AtlasActionProperty(title = &quot;Delimiter&quot;, type = FieldType.STRING)
     public void setDelimiter(String value) {
-<span class="fc" id="L56">        this.delimiter = value;</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L52">        this.delimiter = value;</span>
+<span class="fc" id="L53">    }</span>
 
-    /**
-     * Gets the collapseRepeatingDelimiters property.
-     * @return the property
-     */
     public Boolean getCollapseRepeatingDelimiters() {
-<span class="fc" id="L64">        return collapseRepeatingDelimiter;</span>
+<span class="fc" id="L56">        return collapseRepeatingDelimiter;</span>
     }
 
-    /**
-     * Sets the collapseRepeatingDelimiters property.
-     * @param collapseRepeatingDelimiter the property
-     */
     @JsonPropertyDescription(&quot;Check to collapse repeating delimiters&quot;)
     @AtlasActionProperty(title = &quot;Collapse Repeating Delimiters&quot;, type = FieldType.STRING)
     public void setCollapseRepeatingDelimiters(Boolean collapseRepeatingDelimiter) {
-<span class="fc" id="L74">        this.collapseRepeatingDelimiter = collapseRepeatingDelimiter;</span>
-<span class="fc" id="L75">    }</span>
+<span class="fc" id="L62">        this.collapseRepeatingDelimiter = collapseRepeatingDelimiter;</span>
+<span class="fc" id="L63">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

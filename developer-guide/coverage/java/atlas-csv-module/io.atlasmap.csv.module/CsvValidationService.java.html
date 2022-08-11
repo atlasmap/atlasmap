@@ -25,41 +25,33 @@ import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.spi.FieldDirection;
 import io.atlasmap.v2.Validation;
 
-/**
- * The module validation service implementation for CSV Document.
- */
 public class CsvValidationService extends BaseModuleValidationService&lt;CsvField&gt; {
 
-<span class="nc" id="L33">    private AtlasModuleDetail moduleDetail = CsvModule.class.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="nc" id="L30">    private AtlasModuleDetail moduleDetail = CsvModule.class.getAnnotation(AtlasModuleDetail.class);</span>
 
-    /**
-     * A constructor.
-     * @param conversionService conversion service
-     * @param fieldActionService field action service
-     */
     public CsvValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
-<span class="nc" id="L41">        super(conversionService, fieldActionService);</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L33">        super(conversionService, fieldActionService);</span>
+<span class="nc" id="L34">    }</span>
 
     @Override
     protected AtlasModuleDetail getModuleDetail() {
-<span class="nc" id="L46">        return moduleDetail;</span>
+<span class="nc" id="L38">        return moduleDetail;</span>
     }
 
     @Override
     protected Class&lt;CsvField&gt; getFieldType() {
-<span class="nc" id="L51">        return CsvField.class;</span>
+<span class="nc" id="L43">        return CsvField.class;</span>
     }
 
     @Override
     protected void validateModuleField(String mappingId, CsvField field, FieldDirection direction, List&lt;Validation&gt; validation) {
 
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L49">    }</span>
 
     @Override
     protected String getModuleFieldName(CsvField field) {
-<span class="nc bnc" id="L61" title="All 2 branches missed.">        return field.getName() != null ? field.getName() : field.getPath();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        return field.getName() != null ? field.getName() : field.getPath();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -19,17 +19,13 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-/**
- * The target {@link Document} model object.
- */
+
 @JsonRootName(&quot;TargetDocument&quot;)
-<span class="nc" id="L26">public class TargetDocument implements Serializable {</span>
+<span class="nc" id="L24">public class TargetDocument implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-
-    /** body */
     protected String body;
-    /** Document ID */
+
     protected String docId;
 
     /**
@@ -41,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getBody() {
-<span class="nc" id="L44">        return body;</span>
+<span class="nc" id="L40">        return body;</span>
     }
 
     /**
@@ -53,8 +49,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setBody(String value) {
-<span class="nc" id="L56">        this.body = value;</span>
-<span class="nc" id="L57">    }</span>
+<span class="nc" id="L52">        this.body = value;</span>
+<span class="nc" id="L53">    }</span>
 
     /**
      * Gets the value of the docId property.
@@ -65,7 +61,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getDocId() {
-<span class="nc" id="L68">        return docId;</span>
+<span class="nc" id="L64">        return docId;</span>
     }
 
     /**
@@ -77,8 +73,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setDocId(String value) {
-<span class="nc" id="L80">        this.docId = value;</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L76">        this.docId = value;</span>
+<span class="nc" id="L77">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

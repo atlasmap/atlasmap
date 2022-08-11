@@ -19,18 +19,13 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-/**
- * The mock {@link Field}.
- */
 @JsonRootName(&quot;io.atlasmap.v2.MockField&quot;)
-<span class="fc" id="L26">public class MockField extends Field implements Serializable {</span>
+<span class="fc" id="L23">public class MockField extends Field implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** name */
     protected String name;
 
-    /** custom */
     protected String custom;
 
     /**
@@ -42,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getName() {
-<span class="fc" id="L45">        return name;</span>
+<span class="fc" id="L40">        return name;</span>
     }
 
     /**
@@ -54,8 +49,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L57">        this.name = value;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L52">        this.name = value;</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Gets the value of the custom property.
@@ -66,7 +61,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public String getCustom() {
-<span class="fc" id="L69">        return custom;</span>
+<span class="fc" id="L64">        return custom;</span>
     }
 
     /**
@@ -78,8 +73,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setCustom(String value) {
-<span class="fc" id="L81">        this.custom = value;</span>
-<span class="fc" id="L82">    }</span>
+<span class="fc" id="L76">        this.custom = value;</span>
+<span class="fc" id="L77">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -40,10 +40,6 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
-/**
- * The base implementation of the module validation service.
- * @param &lt;T&gt; type of the field specific to the module
- */
 public abstract class BaseModuleValidationService&lt;T extends Field&gt; implements AtlasValidationService {
 
     private AtlasConversionService conversionService;
@@ -53,481 +49,360 @@ public abstract class BaseModuleValidationService&lt;T extends Field&gt; impleme
     private String docId;
     private MappingFieldPairValidator mappingFieldPairValidator;
 
-    /**
-     * A constructor.
-     */
-<span class="nc" id="L59">    public BaseModuleValidationService() {</span>
-<span class="nc" id="L60">        this.conversionService = DefaultAtlasConversionService.getInstance();</span>
-<span class="nc" id="L61">        this.fieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
-<span class="nc" id="L62">        this.collectionHelper = new DefaultAtlasCollectionHelper(this.fieldActionService);</span>
-<span class="nc" id="L63">        init();</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L52">    public BaseModuleValidationService() {</span>
+<span class="nc" id="L53">        this.conversionService = DefaultAtlasConversionService.getInstance();</span>
+<span class="nc" id="L54">        this.fieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
+<span class="nc" id="L55">        this.collectionHelper = new DefaultAtlasCollectionHelper(this.fieldActionService);</span>
+<span class="nc" id="L56">        init();</span>
+<span class="nc" id="L57">    }</span>
 
-    /**
-     * A constructor.
-     * @param conversionService conversion service
-     * @param fieldActionService field action service
-     */
-<span class="fc" id="L71">    public BaseModuleValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {</span>
-<span class="fc" id="L72">        this.conversionService = conversionService;</span>
-<span class="fc" id="L73">        this.fieldActionService = fieldActionService;</span>
-<span class="fc" id="L74">        this.collectionHelper = new DefaultAtlasCollectionHelper(fieldActionService);</span>
-<span class="fc" id="L75">        init();</span>
-<span class="fc" id="L76">    }</span>
+<span class="fc" id="L59">    public BaseModuleValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {</span>
+<span class="fc" id="L60">        this.conversionService = conversionService;</span>
+<span class="fc" id="L61">        this.fieldActionService = fieldActionService;</span>
+<span class="fc" id="L62">        this.collectionHelper = new DefaultAtlasCollectionHelper(fieldActionService);</span>
+<span class="fc" id="L63">        init();</span>
+<span class="fc" id="L64">    }</span>
 
     private void init() {
-<span class="fc" id="L79">        this.mappingFieldPairValidator = new MappingFieldPairValidator(this);</span>
+<span class="fc" id="L67">        this.mappingFieldPairValidator = new MappingFieldPairValidator(this);</span>
+<span class="fc" id="L68">    }</span>
+
+    public void setMode(AtlasModuleMode mode) {
+<span class="fc" id="L71">        this.mode = mode;</span>
+<span class="fc" id="L72">    }</span>
+
+    public AtlasModuleMode getMode() {
+<span class="fc" id="L75">        return mode;</span>
+    }
+
+    public void setDocId(String docId) {
+<span class="fc" id="L79">        this.docId = docId;</span>
 <span class="fc" id="L80">    }</span>
 
-    /**
-     * Sets the module mode.
-     * @param mode module mode
-     */
-    public void setMode(AtlasModuleMode mode) {
-<span class="fc" id="L87">        this.mode = mode;</span>
-<span class="fc" id="L88">    }</span>
-
-    /**
-     * Gets the module mode.
-     * @return module mode
-     */
-    public AtlasModuleMode getMode() {
-<span class="fc" id="L95">        return mode;</span>
-    }
-
-    /**
-     * Sets the Document ID.
-     * @param docId Document ID
-     */
-    public void setDocId(String docId) {
-<span class="fc" id="L103">        this.docId = docId;</span>
-<span class="fc" id="L104">    }</span>
-
-    /**
-     * Gets the Document ID.
-     * @return Document ID
-     */
     public String getDocId() {
-<span class="fc" id="L111">        return this.docId;</span>
+<span class="fc" id="L83">        return this.docId;</span>
     }
 
-    /**
-     * Gets the {@link AtlasModuleDetail} which contains module metadata.
-     * @return module detail
-     */
     protected abstract AtlasModuleDetail getModuleDetail();
 
     @Override
     public List&lt;Validation&gt; validateMapping(AtlasMapping mapping) {
-<span class="fc" id="L122">        List&lt;Validation&gt; validations = new ArrayList&lt;&gt;();</span>
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (getMode() == AtlasModuleMode.UNSET) {</span>
-<span class="nc" id="L124">            Validation validation = new Validation();</span>
-<span class="nc" id="L125">            validation.setMessage(String.format(</span>
+<span class="fc" id="L90">        List&lt;Validation&gt; validations = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        if (getMode() == AtlasModuleMode.UNSET) {</span>
+<span class="nc" id="L92">            Validation validation = new Validation();</span>
+<span class="nc" id="L93">            validation.setMessage(String.format(</span>
                     &quot;No mode specified for %s/%s, skipping module validations&quot;,
-<span class="nc" id="L127">                    this.getModuleDetail().name(), this.getClass().getSimpleName()));</span>
+<span class="nc" id="L95">                    this.getModuleDetail().name(), this.getClass().getSimpleName()));</span>
         }
 
-<span class="pc bpc" id="L130" title="3 of 6 branches missed.">        if (mapping != null &amp;&amp; mapping.getMappings() != null &amp;&amp; mapping.getMappings().getMapping() != null</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">                &amp;&amp; !mapping.getMappings().getMapping().isEmpty()) {</span>
-<span class="fc" id="L132">            validateMappingEntries(mapping.getMappings().getMapping(), validations);</span>
+<span class="pc bpc" id="L98" title="3 of 6 branches missed.">        if (mapping != null &amp;&amp; mapping.getMappings() != null &amp;&amp; mapping.getMappings().getMapping() != null</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                &amp;&amp; !mapping.getMappings().getMapping().isEmpty()) {</span>
+<span class="fc" id="L100">            validateMappingEntries(mapping.getMappings().getMapping(), validations);</span>
         }
 
-<span class="fc" id="L135">        boolean found = false;</span>
-<span class="fc bfc" id="L136" title="All 2 branches covered.">        for (DataSource ds : mapping.getDataSource()) {</span>
-<span class="pc bpc" id="L137" title="1 of 4 branches missed.">            if (ds.getUri() != null &amp;&amp; ds.getUri().startsWith(getModuleDetail().uri())) {</span>
-<span class="fc" id="L138">                found = true;</span>
-<span class="fc" id="L139">                break;</span>
+<span class="fc" id="L103">        boolean found = false;</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        for (DataSource ds : mapping.getDataSource()) {</span>
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">            if (ds.getUri() != null &amp;&amp; ds.getUri().startsWith(getModuleDetail().uri())) {</span>
+<span class="fc" id="L106">                found = true;</span>
+<span class="fc" id="L107">                break;</span>
             }
-<span class="fc" id="L141">        }</span>
+<span class="fc" id="L109">        }</span>
 
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        if (!found) {</span>
-<span class="fc" id="L144">            Validation validation = new Validation();</span>
-<span class="fc" id="L145">            validation.setScope(ValidationScope.DATA_SOURCE);</span>
-<span class="fc" id="L146">            validation.setMessage(String.format(&quot;No DataSource with '%s' uri specified&quot;, getModuleDetail().uri()));</span>
-<span class="fc" id="L147">            validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="fc" id="L148">            validations.add(validation);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (!found) {</span>
+<span class="fc" id="L112">            Validation validation = new Validation();</span>
+<span class="fc" id="L113">            validation.setScope(ValidationScope.DATA_SOURCE);</span>
+<span class="fc" id="L114">            validation.setMessage(String.format(&quot;No DataSource with '%s' uri specified&quot;, getModuleDetail().uri()));</span>
+<span class="fc" id="L115">            validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="fc" id="L116">            validations.add(validation);</span>
         }
 
-<span class="fc" id="L151">        return validations;</span>
+<span class="fc" id="L119">        return validations;</span>
     }
 
-    /**
-     * Validates mapping entries.
-     * @param mappings a list of the mapping entries
-     * @param validations a container to put the result validations
-     */
     protected void validateMappingEntries(List&lt;BaseMapping&gt; mappings, List&lt;Validation&gt; validations) {
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        for (BaseMapping fieldMapping : mappings) {</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">            if (fieldMapping.getClass().isAssignableFrom(CustomMapping.class)) {</span>
-<span class="fc" id="L162">                validateCustomMapping((CustomMapping)fieldMapping, validations);</span>
-<span class="fc bfc" id="L163" title="All 2 branches covered.">            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)</span>
-<span class="fc bfc" id="L164" title="All 2 branches covered.">                    &amp;&amp; MappingType.SEPARATE.equals(((Mapping) fieldMapping).getMappingType())) {</span>
-<span class="fc" id="L165">                validateSeparateMapping((Mapping) fieldMapping, validations);</span>
-<span class="fc bfc" id="L166" title="All 2 branches covered.">            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)</span>
-<span class="fc bfc" id="L167" title="All 2 branches covered.">                    &amp;&amp; MappingType.COMBINE.equals(((Mapping) fieldMapping).getMappingType())) {</span>
-<span class="fc" id="L168">                validateCombineMapping((Mapping) fieldMapping, validations);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (BaseMapping fieldMapping : mappings) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (fieldMapping.getClass().isAssignableFrom(CustomMapping.class)) {</span>
+<span class="fc" id="L125">                validateCustomMapping((CustomMapping)fieldMapping, validations);</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">                    &amp;&amp; MappingType.SEPARATE.equals(((Mapping) fieldMapping).getMappingType())) {</span>
+<span class="fc" id="L128">                validateSeparateMapping((Mapping) fieldMapping, validations);</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">            } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">                    &amp;&amp; MappingType.COMBINE.equals(((Mapping) fieldMapping).getMappingType())) {</span>
+<span class="fc" id="L131">                validateCombineMapping((Mapping) fieldMapping, validations);</span>
             } else {
-<span class="fc bfc" id="L170" title="All 2 branches covered.">                if (fieldMapping instanceof io.atlasmap.v2.Collection) {</span>
-<span class="fc" id="L171">                    fieldMapping = ((io.atlasmap.v2.Collection)fieldMapping).getMappings().getMapping().get(0);</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">                if (fieldMapping instanceof io.atlasmap.v2.Collection) {</span>
+<span class="fc" id="L134">                    fieldMapping = ((io.atlasmap.v2.Collection)fieldMapping).getMappings().getMapping().get(0);</span>
                 }
-<span class="fc" id="L173">                validateMapMapping((Mapping) fieldMapping, validations);</span>
+<span class="fc" id="L136">                validateMapMapping((Mapping) fieldMapping, validations);</span>
             }
-<span class="fc" id="L175">        }</span>
-<span class="fc" id="L176">    }</span>
+<span class="fc" id="L138">        }</span>
+<span class="fc" id="L139">    }</span>
 
-    /**
-     * Validates MAP mapping.
-     * @param mapping mapping
-     * @param validations a container to put the result validations
-     */
     protected void validateMapMapping(Mapping mapping, List&lt;Validation&gt; validations) {
-<span class="pc bpc" id="L184" title="1 of 2 branches missed.">        if (mapping == null</span>
-<span class="pc bpc" id="L185" title="2 of 6 branches missed.">                || mapping.getInputField() == null || (mapping.getInputFieldGroup() == null &amp;&amp; mapping.getInputField().size() &lt;= 0)</span>
-<span class="pc bpc" id="L186" title="2 of 4 branches missed.">                || mapping.getOutputField() == null || mapping.getOutputField().size() &lt;= 0) {</span>
-<span class="nc" id="L187">            return;</span>
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (mapping == null</span>
+<span class="pc bpc" id="L143" title="2 of 6 branches missed.">                || mapping.getInputField() == null || (mapping.getInputFieldGroup() == null &amp;&amp; mapping.getInputField().size() &lt;= 0)</span>
+<span class="pc bpc" id="L144" title="2 of 4 branches missed.">                || mapping.getOutputField() == null || mapping.getOutputField().size() &lt;= 0) {</span>
+<span class="nc" id="L145">            return;</span>
         }
-<span class="fc" id="L189">        String mappingId = mapping.getId();</span>
+<span class="fc" id="L147">        String mappingId = mapping.getId();</span>
 
-<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (getMode() == AtlasModuleMode.SOURCE) {</span>
-<span class="fc" id="L192">            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
-<span class="fc bfc" id="L193" title="All 2 branches covered.">            if (sourceFieldGroup != null) {</span>
-<span class="fc" id="L194">                validateFieldGroup(mappingId, sourceFieldGroup, FieldDirection.SOURCE, validations);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (getMode() == AtlasModuleMode.SOURCE) {</span>
+<span class="fc" id="L150">            FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">            if (sourceFieldGroup != null) {</span>
+<span class="fc" id="L152">                validateFieldGroup(mappingId, sourceFieldGroup, FieldDirection.SOURCE, validations);</span>
             } else {
-<span class="fc" id="L196">                List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
-<span class="fc" id="L197">                sourceFields.forEach(sourceField -&gt; {</span>
-<span class="fc" id="L198">                    validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);</span>
-<span class="fc" id="L199">                });</span>
+<span class="fc" id="L154">                List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="fc" id="L155">                sourceFields.forEach(sourceField -&gt; {</span>
+<span class="fc" id="L156">                    validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);</span>
+<span class="fc" id="L157">                });</span>
             }
-<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        } else if (getMode() == AtlasModuleMode.TARGET) {</span>
-<span class="fc" id="L202">            List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        } else if (getMode() == AtlasModuleMode.TARGET) {</span>
+<span class="fc" id="L160">            List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
 
-<span class="fc bfc" id="L204" title="All 4 branches covered.">            if (targetFields.size() == 1 &amp;&amp; Integer.valueOf(0).equals(targetFields.get(0).getIndex())) {</span>
+<span class="fc bfc" id="L162" title="All 4 branches covered.">            if (targetFields.size() == 1 &amp;&amp; Integer.valueOf(0).equals(targetFields.get(0).getIndex())) {</span>
                 //The index should not have been set as there's only one item
-<span class="fc" id="L206">                targetFields.get(0).setIndex(null);</span>
+<span class="fc" id="L164">                targetFields.get(0).setIndex(null);</span>
             }
 
-<span class="fc" id="L209">            int i  = 0;</span>
-<span class="fc" id="L210">            List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
-<span class="fc bfc" id="L211" title="All 2 branches covered.">            for (Field targetField: targetFields) {</span>
-<span class="fc bfc" id="L212" title="All 2 branches covered.">                if (sourceFields.size() &gt; i) {</span>
-<span class="fc" id="L213">                    validateField(mappingId, sourceFields.get(i), targetField, FieldDirection.TARGET, validations);</span>
+<span class="fc" id="L167">            int i  = 0;</span>
+<span class="fc" id="L168">            List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for (Field targetField: targetFields) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                if (sourceFields.size() &gt; i) {</span>
+<span class="fc" id="L171">                    validateField(mappingId, sourceFields.get(i), targetField, FieldDirection.TARGET, validations);</span>
                 } else {
-<span class="fc" id="L215">                    validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);</span>
+<span class="fc" id="L173">                    validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);</span>
                 }
-<span class="fc" id="L217">                i++;</span>
-<span class="fc" id="L218">            }</span>
+<span class="fc" id="L175">                i++;</span>
+<span class="fc" id="L176">            }</span>
         }
 
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (getMode() == AtlasModuleMode.SOURCE) {</span>
-<span class="fc" id="L222">            validateFieldCombinations(mapping, validations);</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (getMode() == AtlasModuleMode.SOURCE) {</span>
+<span class="fc" id="L180">            validateFieldCombinations(mapping, validations);</span>
         }
-<span class="fc" id="L224">    }</span>
+<span class="fc" id="L182">    }</span>
 
-    /**
-     * Validates the custom mapping.
-     * @param mapping custom mapping
-     * @param validations a container to put the result validations
-     */
     protected void validateCustomMapping(CustomMapping mapping, List&lt;Validation&gt; validations) {
-<span class="pc bpc" id="L232" title="2 of 4 branches missed.">        if (mapping.getClassName() == null || mapping.getClassName().isEmpty()) {</span>
-<span class="nc" id="L233">            Validation v = new Validation();</span>
-<span class="nc" id="L234">            v.setScope(ValidationScope.MAPPING);</span>
-<span class="nc" id="L235">            v.setMessage(&quot;Class name must be specified for custom mapping&quot;);</span>
-<span class="nc" id="L236">            v.setStatus(ValidationStatus.ERROR);</span>
-<span class="nc" id="L237">            validations.add(v);</span>
+<span class="pc bpc" id="L185" title="2 of 4 branches missed.">        if (mapping.getClassName() == null || mapping.getClassName().isEmpty()) {</span>
+<span class="nc" id="L186">            Validation v = new Validation();</span>
+<span class="nc" id="L187">            v.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L188">            v.setMessage(&quot;Class name must be specified for custom mapping&quot;);</span>
+<span class="nc" id="L189">            v.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L190">            validations.add(v);</span>
         }
-<span class="fc" id="L239">    }</span>
+<span class="fc" id="L192">    }</span>
 
-    /**
-     * Validates the field group.
-     * @param mappingId mapping ID
-     * @param fieldGroup field group
-     * @param direction direction
-     * @param validations a container to put the result validations
-     */
     protected void validateFieldGroup(String mappingId, FieldGroup fieldGroup, FieldDirection direction, List&lt;Validation&gt; validations) {
-<span class="fc" id="L249">        fieldGroup.getField().forEach(f -&gt; {validateField(mappingId, null, f, direction, validations);});</span>
-<span class="fc" id="L250">    }</span>
+<span class="fc" id="L195">        fieldGroup.getField().forEach(f -&gt; {validateField(mappingId, null, f, direction, validations);});</span>
+<span class="fc" id="L196">    }</span>
 
-    /**
-     * Validate the combination of source field(s) and target field(s).
-     * @param mapping mapping
-     * @param validations a container to put the result validations
-     */
     protected void validateFieldCombinations(Mapping mapping, List&lt;Validation&gt; validations) {
-<span class="fc" id="L258">        String mappingId = mapping.getId();</span>
-<span class="fc" id="L259">        FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
-<span class="fc" id="L260">        List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
-<span class="fc" id="L261">        List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
-<span class="pc bpc" id="L262" title="2 of 6 branches missed.">        if (sourceFieldGroup != null || (sourceFields != null &amp;&amp; sourceFields.size() &gt; 1)) {</span>
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            if (targetFields.size() &gt; 1) {</span>
-<span class="nc" id="L264">                Validation validation = new Validation();</span>
-<span class="nc" id="L265">                validation.setScope(ValidationScope.MAPPING);</span>
-<span class="nc" id="L266">                validation.setId(mappingId);</span>
-<span class="nc" id="L267">                validation.setMessage(&quot;Multiple fields can not be selected on both of Source and Target&quot;);</span>
-<span class="nc" id="L268">                validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="nc" id="L269">                validations.add(validation);</span>
+<span class="fc" id="L199">        String mappingId = mapping.getId();</span>
+<span class="fc" id="L200">        FieldGroup sourceFieldGroup = mapping.getInputFieldGroup();</span>
+<span class="fc" id="L201">        List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="fc" id="L202">        List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
+<span class="pc bpc" id="L203" title="2 of 6 branches missed.">        if (sourceFieldGroup != null || (sourceFields != null &amp;&amp; sourceFields.size() &gt; 1)) {</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            if (targetFields.size() &gt; 1) {</span>
+<span class="nc" id="L205">                Validation validation = new Validation();</span>
+<span class="nc" id="L206">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="nc" id="L207">                validation.setId(mappingId);</span>
+<span class="nc" id="L208">                validation.setMessage(&quot;Multiple fields can not be selected on both of Source and Target&quot;);</span>
+<span class="nc" id="L209">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="nc" id="L210">                validations.add(validation);</span>
             }
-<span class="pc bpc" id="L271" title="1 of 2 branches missed.">            if (sourceFieldGroup != null) {</span>
-<span class="fc" id="L272">                mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFieldGroup, targetFields.get(0));</span>
+<span class="pc bpc" id="L212" title="1 of 2 branches missed.">            if (sourceFieldGroup != null) {</span>
+<span class="fc" id="L213">                mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFieldGroup, targetFields.get(0));</span>
             } else {
-<span class="nc" id="L274">                mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFields, targetFields.get(0));</span>
+<span class="nc" id="L215">                mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFields, targetFields.get(0));</span>
             }
-<span class="pc bpc" id="L276" title="1 of 4 branches missed.">        } else if (targetFields != null &amp;&amp; targetFields.size() &gt; 1) {</span>
-<span class="fc" id="L277">            mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFields.get(0), targetFields);</span>
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        } else if (targetFields != null &amp;&amp; targetFields.size() &gt; 1) {</span>
+<span class="fc" id="L218">            mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFields.get(0), targetFields);</span>
         } else {
-<span class="fc" id="L279">            mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFields.get(0), targetFields.get(0));</span>
+<span class="fc" id="L220">            mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceFields.get(0), targetFields.get(0));</span>
         }
-<span class="fc" id="L281">    }</span>
+<span class="fc" id="L222">    }</span>
 
-    /**
-     * Validates the field.
-     * @param mappingId mapping ID
-     * @param sourceField source field
-     * @param targetField target field
-     * @param direction direction
-     * @param validations a container to put the result validations
-     */
     @SuppressWarnings(&quot;unchecked&quot;)
     protected void validateField(String mappingId, Field sourceField, Field targetField, FieldDirection direction, List&lt;Validation&gt; validations) {
-<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        if (targetField == null) {</span>
-<span class="nc" id="L294">            return;</span>
+<span class="pc bpc" id="L226" title="1 of 2 branches missed.">        if (targetField == null) {</span>
+<span class="nc" id="L227">            return;</span>
         }
-<span class="fc bfc" id="L296" title="All 2 branches covered.">        if (direction == FieldDirection.TARGET) {</span>
-<span class="fc" id="L297">            Integer sourceCollectionCount = null;</span>
-<span class="fc bfc" id="L298" title="All 2 branches covered.">            if (sourceField != null) {</span>
-<span class="fc" id="L299">                sourceCollectionCount = collectionHelper.determineSourceCollectionCount(null, sourceField);</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (direction == FieldDirection.TARGET) {</span>
+<span class="fc" id="L230">            Integer sourceCollectionCount = null;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">            if (sourceField != null) {</span>
+<span class="fc" id="L232">                sourceCollectionCount = collectionHelper.determineSourceCollectionCount(null, sourceField);</span>
             }
 
-<span class="fc" id="L302">            Integer targetCollectionCount = collectionHelper.determineTargetCollectionCount(targetField);</span>
+<span class="fc" id="L235">            Integer targetCollectionCount = collectionHelper.determineTargetCollectionCount(targetField);</span>
 
-<span class="fc bfc" id="L304" title="All 2 branches covered.">            if (sourceCollectionCount != null) {</span>
-<span class="fc bfc" id="L305" title="All 2 branches covered.">                if (sourceCollectionCount &gt; targetCollectionCount) {</span>
-<span class="fc" id="L306">                    Validation validation = new Validation();</span>
-<span class="fc" id="L307">                    validation.setScope(ValidationScope.MAPPING);</span>
-<span class="fc" id="L308">                    validation.setId(mappingId);</span>
-<span class="fc" id="L309">                    String message = String.format(</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">            if (sourceCollectionCount != null) {</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">                if (sourceCollectionCount &gt; targetCollectionCount) {</span>
+<span class="fc" id="L239">                    Validation validation = new Validation();</span>
+<span class="fc" id="L240">                    validation.setScope(ValidationScope.MAPPING);</span>
+<span class="fc" id="L241">                    validation.setId(mappingId);</span>
+<span class="fc" id="L242">                    String message = String.format(</span>
                         &quot;Target [%s] has %s collection(s) on the path, whereas source has %s. Values from the %s rightmost &quot; +
                             &quot;source collections on the path will be added in depth-first order to the rightmost target &quot; +
                             &quot;collection(s) unless transformed explicitly.&quot;,
-<span class="fc" id="L313">                        targetField.getPath(), targetCollectionCount, sourceCollectionCount,</span>
-<span class="fc" id="L314">                        sourceCollectionCount - targetCollectionCount + 1);</span>
-<span class="fc" id="L315">                    validation.setMessage(message);</span>
-<span class="fc" id="L316">                    validation.setStatus(ValidationStatus.WARN);</span>
-<span class="fc" id="L317">                    validations.add(validation);</span>
-<span class="fc bfc" id="L318" title="All 2 branches covered.">                } else if (sourceCollectionCount &lt; targetCollectionCount) {</span>
-<span class="fc" id="L319">                    Validation validation = new Validation();</span>
-<span class="fc" id="L320">                    validation.setScope(ValidationScope.MAPPING);</span>
-<span class="fc" id="L321">                    validation.setId(mappingId);</span>
-<span class="fc" id="L322">                    validation.setMessage(String.format(&quot;The 0 index will be used for any extra parent collections in &quot; +</span>
+<span class="fc" id="L246">                        targetField.getPath(), targetCollectionCount, sourceCollectionCount,</span>
+<span class="fc" id="L247">                        sourceCollectionCount - targetCollectionCount + 1);</span>
+<span class="fc" id="L248">                    validation.setMessage(message);</span>
+<span class="fc" id="L249">                    validation.setStatus(ValidationStatus.WARN);</span>
+<span class="fc" id="L250">                    validations.add(validation);</span>
+<span class="fc bfc" id="L251" title="All 2 branches covered.">                } else if (sourceCollectionCount &lt; targetCollectionCount) {</span>
+<span class="fc" id="L252">                    Validation validation = new Validation();</span>
+<span class="fc" id="L253">                    validation.setScope(ValidationScope.MAPPING);</span>
+<span class="fc" id="L254">                    validation.setId(mappingId);</span>
+<span class="fc" id="L255">                    validation.setMessage(String.format(&quot;The 0 index will be used for any extra parent collections in &quot; +</span>
                             &quot;target [%s], since target has %s collections on the path, whereas source has %s.&quot;,
-<span class="fc" id="L324">                        targetField.getPath(), targetCollectionCount, sourceCollectionCount));</span>
-<span class="fc" id="L325">                    validation.setStatus(ValidationStatus.WARN);</span>
-<span class="fc" id="L326">                    validations.add(validation);</span>
+<span class="fc" id="L257">                        targetField.getPath(), targetCollectionCount, sourceCollectionCount));</span>
+<span class="fc" id="L258">                    validation.setStatus(ValidationStatus.WARN);</span>
+<span class="fc" id="L259">                    validations.add(validation);</span>
                 }
             }
 
         }
-<span class="fc bfc" id="L331" title="All 4 branches covered.">        if (getFieldType().isAssignableFrom(targetField.getClass()) &amp;&amp; matchDocIdOrNull(targetField.getDocId())) {</span>
-<span class="fc" id="L332">            validateModuleField(mappingId, (T)targetField, direction, validations);</span>
+<span class="fc bfc" id="L264" title="All 4 branches covered.">        if (getFieldType().isAssignableFrom(targetField.getClass()) &amp;&amp; matchDocIdOrNull(targetField.getDocId())) {</span>
+<span class="fc" id="L265">            validateModuleField(mappingId, (T)targetField, direction, validations);</span>
         }
-<span class="fc" id="L334">    }</span>
+<span class="fc" id="L267">    }</span>
 
-    /**
-     * Gets the field type.
-     * @return field type class
-     */
     protected abstract Class&lt;T&gt; getFieldType();
 
-    /**
-     * Validates module specific field.
-     * @param mappingId mapping ID
-     * @param field field
-     * @param direction direction
-     * @param validation a container to put the result validations
-     */
     protected abstract void validateModuleField(String mappingId, T field, FieldDirection direction, List&lt;Validation&gt; validation);
 
-    /**
-     * Gets if Document ID is null or matches with the specified.
-     * @param docId Document ID
-     * @return true if the Document ID is null or matches with the specified.
-     */
     protected boolean matchDocIdOrNull(String docId) {
-<span class="fc bfc" id="L357" title="All 4 branches covered.">        return docId == null || getDocId().equals(docId);</span>
+<span class="fc bfc" id="L274" title="All 4 branches covered.">        return docId == null || getDocId().equals(docId);</span>
     }
 
-    /**
-     * Gets the field name.
-     * @param field field
-     * @return field name
-     */
     @SuppressWarnings(&quot;unchecked&quot;)
     protected String getFieldName(Field field) {
-<span class="pc bpc" id="L367" title="1 of 2 branches missed.">        if (field == null) {</span>
-<span class="nc" id="L368">            return &quot;null&quot;;</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (field == null) {</span>
+<span class="nc" id="L280">            return &quot;null&quot;;</span>
         }
-<span class="fc bfc" id="L370" title="All 2 branches covered.">        if (field.getClass().isAssignableFrom(getFieldType())) {</span>
-<span class="fc" id="L371">            return getModuleFieldName((T)field);</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (field.getClass().isAssignableFrom(getFieldType())) {</span>
+<span class="fc" id="L283">            return getModuleFieldName((T)field);</span>
         }
-<span class="pc bpc" id="L373" title="1 of 2 branches missed.">        if (field.getFieldType() != null) {</span>
-<span class="fc" id="L374">            return field.getFieldType().name();</span>
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">        if (field.getFieldType() != null) {</span>
+<span class="fc" id="L286">            return field.getFieldType().name();</span>
         }
-<span class="nc" id="L376">        return field.getClass().getName();</span>
+<span class="nc" id="L288">        return field.getClass().getName();</span>
     }
 
-    /**
-     * Gets the module specific field name.
-     * @param field field
-     * @return field name
-     */
     protected abstract String getModuleFieldName(T field);
 
-    /**
-     * Gets the conversion service.
-     * @return conversion service
-     */
     protected AtlasConversionService getConversionService() {
-<span class="fc" id="L391">        return conversionService;</span>
+<span class="fc" id="L294">        return conversionService;</span>
     }
 
-    /**
-     * Gets the field action service.
-     * @return field action service.
-     */
     protected AtlasFieldActionService getFieldActionService() {
-<span class="fc" id="L399">        return fieldActionService;</span>
+<span class="fc" id="L298">        return fieldActionService;</span>
     }
 
-    /**
-     * Gets the mapping field pair validator.
-     * @return mapping field pair validator.
-     */
     protected MappingFieldPairValidator getMappingFieldPairValidator() {
-<span class="nc" id="L407">        return mappingFieldPairValidator;</span>
+<span class="nc" id="L302">        return mappingFieldPairValidator;</span>
     }
 
-    /**
-     * Sets the mapping field pair validator.
-     * @param mfpv mapping field pair validator
-     */
     protected void setMappingFieldPairValidator(MappingFieldPairValidator mfpv) {
-<span class="fc" id="L415">        mappingFieldPairValidator = mfpv;</span>
-<span class="fc" id="L416">    }</span>
+<span class="fc" id="L306">        mappingFieldPairValidator = mfpv;</span>
+<span class="fc" id="L307">    }</span>
 
-    /**
-     * Sets the conversion service.
-     * @param conversionService conversion service
-     */
     protected void setConversionService(AtlasConversionService conversionService) {
-<span class="nc" id="L423">        this.conversionService = conversionService;</span>
-<span class="nc" id="L424">    }</span>
+<span class="nc" id="L310">        this.conversionService = conversionService;</span>
+<span class="nc" id="L311">    }</span>
 
     /*
      * vvv Remove in 2.0 vvv
      */
 
-    /**
-     * Validates combine mapping.
-     * @deprecated
-     * @param mapping mapping
-     * @param validations a container to put the result validations
-     */
     @Deprecated
     protected void validateCombineMapping(Mapping mapping, List&lt;Validation&gt; validations) {
-<span class="pc bpc" id="L438" title="1 of 2 branches missed.">        if (mapping == null) {</span>
-<span class="nc" id="L439">            return;</span>
+<span class="pc bpc" id="L319" title="1 of 2 branches missed.">        if (mapping == null) {</span>
+<span class="nc" id="L320">            return;</span>
         }
 
-<span class="fc" id="L442">        List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="fc" id="L323">        List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
 
-<span class="fc" id="L444">        final List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
-<span class="pc bpc" id="L445" title="2 of 4 branches missed.">        final Field targetField = (targetFields != null &amp;&amp; !targetFields.isEmpty()) ? targetFields.get(0) : null;</span>
-<span class="pc bpc" id="L446" title="1 of 2 branches missed.">        if (targetField == null) {</span>
-<span class="nc" id="L447">            return;</span>
+<span class="fc" id="L325">        final List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
+<span class="pc bpc" id="L326" title="2 of 4 branches missed.">        final Field targetField = (targetFields != null &amp;&amp; !targetFields.isEmpty()) ? targetFields.get(0) : null;</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (targetField == null) {</span>
+<span class="nc" id="L328">            return;</span>
         }
 
-<span class="fc" id="L450">        String mappingId = mapping.getId();</span>
+<span class="fc" id="L331">        String mappingId = mapping.getId();</span>
 
-<span class="pc bpc" id="L452" title="1 of 4 branches missed.">        if (getMode() == AtlasModuleMode.TARGET &amp;&amp; matchDocIdOrNull(targetField.getDocId())) {</span>
-<span class="pc bpc" id="L453" title="1 of 2 branches missed.">            if (sourceFields != null) {</span>
+<span class="pc bpc" id="L333" title="1 of 4 branches missed.">        if (getMode() == AtlasModuleMode.TARGET &amp;&amp; matchDocIdOrNull(targetField.getDocId())) {</span>
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">            if (sourceFields != null) {</span>
                 // FIXME Run only for TARGET to avoid duplicate validation...
                 // we should convert per module validations to plugin style
-<span class="fc bfc" id="L456" title="All 2 branches covered.">                for (Field sourceField : sourceFields) {</span>
-<span class="fc" id="L457">                    mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceField, targetField);</span>
-<span class="fc" id="L458">                }</span>
+<span class="fc bfc" id="L337" title="All 2 branches covered.">                for (Field sourceField : sourceFields) {</span>
+<span class="fc" id="L338">                    mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceField, targetField);</span>
+<span class="fc" id="L339">                }</span>
             }
 
             // check that the output field is of type String else error
-<span class="fc bfc" id="L462" title="All 4 branches covered.">            if (targetField.getFieldType() != null &amp;&amp; targetField.getFieldType() != FieldType.STRING) {</span>
-<span class="fc" id="L463">                Validation validation = new Validation();</span>
-<span class="fc" id="L464">                validation.setScope(ValidationScope.MAPPING);</span>
-<span class="fc" id="L465">                validation.setId(mappingId);</span>
-<span class="fc" id="L466">                validation.setMessage(String.format(</span>
+<span class="fc bfc" id="L343" title="All 4 branches covered.">            if (targetField.getFieldType() != null &amp;&amp; targetField.getFieldType() != FieldType.STRING) {</span>
+<span class="fc" id="L344">                Validation validation = new Validation();</span>
+<span class="fc" id="L345">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="fc" id="L346">                validation.setId(mappingId);</span>
+<span class="fc" id="L347">                validation.setMessage(String.format(</span>
                         &quot;Target field '%s' must be of type '%s' for a Combine Mapping&quot;,
-<span class="fc" id="L468">                        getFieldName(targetField), FieldType.STRING));</span>
-<span class="fc" id="L469">                validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="fc" id="L470">                validations.add(validation);</span>
+<span class="fc" id="L349">                        getFieldName(targetField), FieldType.STRING));</span>
+<span class="fc" id="L350">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="fc" id="L351">                validations.add(validation);</span>
             }
-<span class="fc" id="L472">            validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);</span>
-<span class="pc bpc" id="L473" title="1 of 2 branches missed.">        } else if (sourceFields != null) { // SOURCE</span>
-<span class="fc bfc" id="L474" title="All 2 branches covered.">            for (Field sourceField : sourceFields) {</span>
-<span class="pc bpc" id="L475" title="1 of 2 branches missed.">                if (matchDocIdOrNull(sourceField.getDocId())) {</span>
-<span class="fc" id="L476">                    validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);</span>
+<span class="fc" id="L353">            validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">        } else if (sourceFields != null) { // SOURCE</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">            for (Field sourceField : sourceFields) {</span>
+<span class="pc bpc" id="L356" title="1 of 2 branches missed.">                if (matchDocIdOrNull(sourceField.getDocId())) {</span>
+<span class="fc" id="L357">                    validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);</span>
                 }
-<span class="fc" id="L478">            }</span>
+<span class="fc" id="L359">            }</span>
         }
-<span class="fc" id="L480">    }</span>
+<span class="fc" id="L361">    }</span>
 
-    /**
-     * Validates separate mapping.
-     * @deprecated
-     * @param mapping mapping
-     * @param validations a container to put the result validations
-     */
     @Deprecated
     protected void validateSeparateMapping(Mapping mapping, List&lt;Validation&gt; validations) {
-<span class="pc bpc" id="L490" title="1 of 2 branches missed.">        if (mapping == null) {</span>
-<span class="nc" id="L491">            return;</span>
+<span class="pc bpc" id="L365" title="1 of 2 branches missed.">        if (mapping == null) {</span>
+<span class="nc" id="L366">            return;</span>
         }
 
-<span class="fc" id="L494">        final List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
-<span class="pc bpc" id="L495" title="2 of 4 branches missed.">        final Field sourceField = (sourceFields != null &amp;&amp; !sourceFields.isEmpty()) ? sourceFields.get(0) : null;</span>
-<span class="pc bpc" id="L496" title="1 of 2 branches missed.">        if (sourceField == null) {</span>
-<span class="nc" id="L497">            return;</span>
+<span class="fc" id="L369">        final List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="pc bpc" id="L370" title="2 of 4 branches missed.">        final Field sourceField = (sourceFields != null &amp;&amp; !sourceFields.isEmpty()) ? sourceFields.get(0) : null;</span>
+<span class="pc bpc" id="L371" title="1 of 2 branches missed.">        if (sourceField == null) {</span>
+<span class="nc" id="L372">            return;</span>
         }
-<span class="fc" id="L499">        List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
-<span class="fc" id="L500">        String mappingId = mapping.getId();</span>
+<span class="fc" id="L374">        List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
+<span class="fc" id="L375">        String mappingId = mapping.getId();</span>
 
-<span class="pc bpc" id="L502" title="1 of 4 branches missed.">        if (getMode() == AtlasModuleMode.SOURCE &amp;&amp; matchDocIdOrNull(sourceField.getDocId())) {</span>
+<span class="pc bpc" id="L377" title="1 of 4 branches missed.">        if (getMode() == AtlasModuleMode.SOURCE &amp;&amp; matchDocIdOrNull(sourceField.getDocId())) {</span>
             // check that the source field is of type String else error
-<span class="fc bfc" id="L504" title="All 4 branches covered.">            if (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType() != FieldType.STRING) {</span>
-<span class="fc" id="L505">                Validation validation = new Validation();</span>
-<span class="fc" id="L506">                validation.setScope(ValidationScope.MAPPING);</span>
-<span class="fc" id="L507">                validation.setId(mapping.getId());</span>
-<span class="fc" id="L508">                validation.setMessage(String.format(</span>
+<span class="fc bfc" id="L379" title="All 4 branches covered.">            if (sourceField.getFieldType() != null &amp;&amp; sourceField.getFieldType() != FieldType.STRING) {</span>
+<span class="fc" id="L380">                Validation validation = new Validation();</span>
+<span class="fc" id="L381">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="fc" id="L382">                validation.setId(mapping.getId());</span>
+<span class="fc" id="L383">                validation.setMessage(String.format(</span>
                         &quot;Source field '%s' must be of type '%s' for a Separate Mapping&quot;,
-<span class="fc" id="L510">                        getFieldName(sourceField), FieldType.STRING));</span>
-<span class="fc" id="L511">                validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="fc" id="L512">                validations.add(validation);</span>
+<span class="fc" id="L385">                        getFieldName(sourceField), FieldType.STRING));</span>
+<span class="fc" id="L386">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="fc" id="L387">                validations.add(validation);</span>
             }
-<span class="fc" id="L514">            validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);</span>
+<span class="fc" id="L389">            validateField(mappingId, null, sourceField, FieldDirection.SOURCE, validations);</span>
 
-<span class="pc bpc" id="L516" title="1 of 2 branches missed.">            if (targetFields != null) {</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">            if (targetFields != null) {</span>
                 // FIXME Run only for SOURCE to avoid duplicate validation...
                 // we should convert per module validations to plugin style
-<span class="fc bfc" id="L519" title="All 2 branches covered.">                for (Field targetField : targetFields) {</span>
-<span class="fc" id="L520">                    mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceField, targetField);</span>
-<span class="fc" id="L521">                }</span>
+<span class="fc bfc" id="L394" title="All 2 branches covered.">                for (Field targetField : targetFields) {</span>
+<span class="fc" id="L395">                    mappingFieldPairValidator.validateFieldTypes(validations, mappingId, sourceField, targetField);</span>
+<span class="fc" id="L396">                }</span>
             }
-<span class="pc bpc" id="L523" title="1 of 2 branches missed.">        } else if (targetFields != null) { // TARGET</span>
-<span class="fc bfc" id="L524" title="All 2 branches covered.">            for (Field targetField : targetFields) {</span>
-<span class="pc bpc" id="L525" title="1 of 2 branches missed.">                if (matchDocIdOrNull(targetField.getDocId())) {</span>
-<span class="fc" id="L526">                    validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);</span>
+<span class="pc bpc" id="L398" title="1 of 2 branches missed.">        } else if (targetFields != null) { // TARGET</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">            for (Field targetField : targetFields) {</span>
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">                if (matchDocIdOrNull(targetField.getDocId())) {</span>
+<span class="fc" id="L401">                    validateField(mappingId, null, targetField, FieldDirection.TARGET, validations);</span>
                 }
-<span class="fc" id="L528">            }</span>
+<span class="fc" id="L403">            }</span>
         }
-<span class="fc" id="L530">    }</span>
+<span class="fc" id="L405">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

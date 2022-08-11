@@ -20,26 +20,18 @@ import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
 import io.atlasmap.xml.module.XmlValidationService;
 
-/**
- * The module validation service for DFDL Document.
- */
 public class DfdlValidationService extends XmlValidationService {
 
-<span class="fc" id="L28">    private AtlasModuleDetail moduleDetail = DfdlModule.class.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="fc" id="L25">    private AtlasModuleDetail moduleDetail = DfdlModule.class.getAnnotation(AtlasModuleDetail.class);</span>
 
-    /**
-     * A constructor.
-     * @param conversionService conversion service
-     * @param fieldActionService field action service
-     */
     public DfdlValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
-<span class="fc" id="L36">        super(conversionService, fieldActionService);</span>
-<span class="fc" id="L37">    }</span>
+<span class="fc" id="L28">        super(conversionService, fieldActionService);</span>
+<span class="fc" id="L29">    }</span>
 
     @Override
     protected AtlasModuleDetail getModuleDetail() {
-<span class="fc" id="L41">        return moduleDetail;</span>
+<span class="fc" id="L33">        return moduleDetail;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

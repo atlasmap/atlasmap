@@ -20,22 +20,16 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The process mapping response model object.
- */
 @JsonRootName(&quot;ProcessMappingResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L28">public class ProcessMappingResponse implements Serializable {</span>
+<span class="fc" id="L25">public class ProcessMappingResponse implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** single {@link Mapping} result */
     protected Mapping mapping;
 
-    /** {@link Audits} */
     protected Audits audits;
 
-    /** {@link AtlasMapping} result */
     protected AtlasMappingResult atlasMappingResult;
 
     /**
@@ -47,7 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mapping getMapping() {
-<span class="fc" id="L50">        return mapping;</span>
+<span class="fc" id="L44">        return mapping;</span>
     }
 
     /**
@@ -59,8 +53,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMapping(Mapping value) {
-<span class="fc" id="L62">        this.mapping = value;</span>
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L56">        this.mapping = value;</span>
+<span class="fc" id="L57">    }</span>
 
     /**
      * Gets the value of the audits property.
@@ -71,7 +65,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Audits getAudits() {
-<span class="fc" id="L74">        return audits;</span>
+<span class="fc" id="L68">        return audits;</span>
     }
 
     /**
@@ -83,8 +77,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setAudits(Audits value) {
-<span class="fc" id="L86">        this.audits = value;</span>
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L80">        this.audits = value;</span>
+<span class="fc" id="L81">    }</span>
 
     /**
      * Gets the value of the atlasMappingResult property.
@@ -95,7 +89,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public AtlasMappingResult getAtlasMappingResult() {
-<span class="fc" id="L98">        return atlasMappingResult;</span>
+<span class="fc" id="L92">        return atlasMappingResult;</span>
     }
 
     /**
@@ -107,8 +101,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setAtlasMappingResult(AtlasMappingResult value) {
-<span class="nc" id="L110">        this.atlasMappingResult = value;</span>
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L104">        this.atlasMappingResult = value;</span>
+<span class="nc" id="L105">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

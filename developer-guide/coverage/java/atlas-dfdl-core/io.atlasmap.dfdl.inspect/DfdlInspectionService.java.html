@@ -19,43 +19,22 @@ import java.util.Map;
 
 import io.atlasmap.xml.v2.XmlDocument;
 
-/**
- * The DFDL inspection service.
- */
 public class DfdlInspectionService {
     private DfdlInspector inspector;
 
-    /**
-     * A constructor.
-     * @param loader class loader
-     */
-<span class="fc" id="L32">    public DfdlInspectionService(ClassLoader loader) {</span>
-<span class="fc" id="L33">        this.inspector = new DfdlInspector(loader);</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L25">    public DfdlInspectionService(ClassLoader loader) {</span>
+<span class="fc" id="L26">        this.inspector = new DfdlInspector(loader);</span>
+<span class="fc" id="L27">    }</span>
 
-    /**
-     * Inspects the DFDL instance.
-     * @param dfdlSchemaName instance
-     * @param options options
-     * @return inspected
-     * @throws Exception unexpected error
-     */
     public XmlDocument inspectDfdlInstance(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
-<span class="fc" id="L44">        inspector.inspectInstance(dfdlSchemaName, options);</span>
-<span class="fc" id="L45">        return inspector.getXmlDocument();</span>
+<span class="fc" id="L30">        inspector.inspectInstance(dfdlSchemaName, options);</span>
+<span class="fc" id="L31">        return inspector.getXmlDocument();</span>
     }
 
-    /**
-     * Inspects the DFDL schema.
-     * @param dfdlSchemaName schema
-     * @param options options
-     * @return inspected
-     * @throws Exception unexpected error
-     */
     public XmlDocument inspectDfdlSchema(String dfdlSchemaName, Map&lt;String, String&gt; options) throws Exception {
-<span class="fc" id="L56">        inspector.inspectSchema(dfdlSchemaName, options);</span>
-<span class="fc" id="L57">        return inspector.getXmlDocument();</span>
+<span class="fc" id="L35">        inspector.inspectSchema(dfdlSchemaName, options);</span>
+<span class="fc" id="L36">        return inspector.getXmlDocument();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -29,58 +29,52 @@ import com.fasterxml.jackson.module.jsonSchema.factories.WrapperFactory;
 import com.fasterxml.jackson.module.jsonSchema.types.SimpleTypeSchema;
 import com.fasterxml.jackson.module.jsonSchema.types.StringSchema;
 
-/**
- * The {@link SchemaFactoryWrapper} of field action.
- */
 public class AtlasSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
-    /**
-     * A constructor.
-     */
     public AtlasSchemaFactoryWrapper() {
-<span class="fc" id="L41">        super(new AtlasSchemaFactoryWrapper.AtlasWrapperFactory());</span>
-<span class="fc" id="L42">        schemaProvider = new JsonSchemaFactory() {</span>
+<span class="fc" id="L35">        super(new AtlasSchemaFactoryWrapper.AtlasWrapperFactory());</span>
+<span class="fc" id="L36">        schemaProvider = new JsonSchemaFactory() {</span>
 
             @JsonProperty
             protected FieldType atlasFieldType;
 
             @SuppressWarnings(&quot;unused&quot;)
             public FieldType getAtlasFieldType() {
-<span class="nc" id="L49">                return atlasFieldType;</span>
+<span class="nc" id="L43">                return atlasFieldType;</span>
             }
 
             @SuppressWarnings(&quot;unused&quot;)
             public void setAtlasFieldType(FieldType atlasFieldType) {
-<span class="nc" id="L54">                this.atlasFieldType = atlasFieldType;</span>
-<span class="nc" id="L55">            }</span>
+<span class="nc" id="L48">                this.atlasFieldType = atlasFieldType;</span>
+<span class="nc" id="L49">            }</span>
 
             @Override
             public StringSchema stringSchema() {
-<span class="fc" id="L59">                return new ExtendedStringSchema();</span>
+<span class="fc" id="L53">                return new ExtendedStringSchema();</span>
             }
         };
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L56">    }</span>
 
     private static class AtlasWrapperFactory extends WrapperFactory {
         private AtlasWrapperFactory() {
         }
 
         public SchemaFactoryWrapper getWrapper(SerializerProvider p) {
-<span class="nc" id="L69">            SchemaFactoryWrapper wrapper = new AtlasSchemaFactoryWrapper();</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">            if (p != null) {</span>
-<span class="nc" id="L71">                wrapper.setProvider(p);</span>
+<span class="nc" id="L63">            SchemaFactoryWrapper wrapper = new AtlasSchemaFactoryWrapper();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            if (p != null) {</span>
+<span class="nc" id="L65">                wrapper.setProvider(p);</span>
             }
 
-<span class="nc" id="L74">            return wrapper;</span>
+<span class="nc" id="L68">            return wrapper;</span>
         }
 
         public SchemaFactoryWrapper getWrapper(SerializerProvider p, VisitorContext rvc) {
-<span class="fc" id="L78">            SchemaFactoryWrapper wrapper = new AtlasSchemaFactoryWrapper();</span>
-<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            if (p != null) {</span>
-<span class="fc" id="L80">                wrapper.setProvider(p);</span>
+<span class="fc" id="L72">            SchemaFactoryWrapper wrapper = new AtlasSchemaFactoryWrapper();</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            if (p != null) {</span>
+<span class="fc" id="L74">                wrapper.setProvider(p);</span>
             }
-<span class="fc" id="L82">            wrapper.setVisitorContext(rvc);</span>
-<span class="fc" id="L83">            return wrapper;</span>
+<span class="fc" id="L76">            wrapper.setVisitorContext(rvc);</span>
+<span class="fc" id="L77">            return wrapper;</span>
         }
     }
 
@@ -89,33 +83,33 @@ public class AtlasSchemaFactoryWrapper extends SchemaFactoryWrapper {
 
         @JsonAnySetter
         default void setMetadata(String name, Object value) {
-<span class="nc" id="L92">            getMetadata().put(name, value);</span>
-<span class="nc" id="L93">        }</span>
+<span class="nc" id="L86">            getMetadata().put(name, value);</span>
+<span class="nc" id="L87">        }</span>
     }
 
-<span class="fc" id="L96">    private static class ExtendedStringSchema extends StringSchema implements ExtendedJsonSchema {</span>
-<span class="fc" id="L97">        HashMap&lt;String, Object&gt; metadata = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L90">    private static class ExtendedStringSchema extends StringSchema implements ExtendedJsonSchema {</span>
+<span class="fc" id="L91">        HashMap&lt;String, Object&gt; metadata = new HashMap&lt;&gt;();</span>
         @JsonAnyGetter
         @Override
         public HashMap&lt;String, Object&gt; getMetadata() {
-<span class="fc" id="L101">            return metadata;</span>
+<span class="fc" id="L95">            return metadata;</span>
         }
 
         @Override
         public void enrichWithBeanProperty(BeanProperty beanProperty) {
-<span class="fc" id="L106">            enrichMetadata(this, beanProperty, metadata);</span>
-<span class="fc" id="L107">            super.enrichWithBeanProperty(beanProperty);</span>
-<span class="fc" id="L108">        }</span>
+<span class="fc" id="L100">            enrichMetadata(this, beanProperty, metadata);</span>
+<span class="fc" id="L101">            super.enrichWithBeanProperty(beanProperty);</span>
+<span class="fc" id="L102">        }</span>
 
     }
 
     private static void enrichMetadata(SimpleTypeSchema schema, BeanProperty property, HashMap&lt;String, Object&gt; metadata) {
-<span class="fc" id="L113">        AtlasActionProperty atlasField = property.getAnnotation(AtlasActionProperty.class);</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (atlasField != null) {</span>
-<span class="fc" id="L115">            schema.setTitle(atlasField.title());</span>
-<span class="fc" id="L116">            metadata.put(&quot;atlas-field-type&quot;, atlasField.type());</span>
-<span class="fc" id="L117">            metadata.put(&quot;atlas-collection-type&quot;, atlasField.collectionType());</span>
+<span class="fc" id="L107">        AtlasActionProperty atlasField = property.getAnnotation(AtlasActionProperty.class);</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        if (atlasField != null) {</span>
+<span class="fc" id="L109">            schema.setTitle(atlasField.title());</span>
+<span class="fc" id="L110">            metadata.put(&quot;atlas-field-type&quot;, atlasField.type());</span>
+<span class="fc" id="L111">            metadata.put(&quot;atlas-collection-type&quot;, atlasField.collectionType());</span>
         }
-<span class="fc" id="L119">    }</span>
+<span class="fc" id="L113">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

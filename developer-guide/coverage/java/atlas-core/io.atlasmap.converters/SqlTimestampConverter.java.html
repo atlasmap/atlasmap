@@ -29,100 +29,52 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-/**
- * The type converter for {@link Timestamp}.
- */
-<span class="fc" id="L35">public class SqlTimestampConverter implements AtlasConverter&lt;Timestamp&gt; {</span>
+<span class="fc" id="L32">public class SqlTimestampConverter implements AtlasConverter&lt;Timestamp&gt; {</span>
 
-    /**
-     * Converts to {@link Calendar}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
     public Calendar toCalendar(Timestamp timestamp) {
-<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        return timestamp != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault())) : null;</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">        return timestamp != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault())) : null;</span>
     }
 
-    /**
-     * Converts to {@link Date}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
     public Date toDate(Timestamp timestamp) {
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">        return timestamp != null ? Date.from(timestamp.toInstant()) : null;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        return timestamp != null ? Date.from(timestamp.toInstant()) : null;</span>
     }
 
-    /**
-     * Converts to {@link GregorianCalendar}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
     public GregorianCalendar toGregorianCalendar(Timestamp timestamp) {
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        return timestamp != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault())) : null;</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        return timestamp != null ? GregorianCalendar.from(ZonedDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault())) : null;</span>
     }
 
-    /**
-     * Converts to {@link LocalDate}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Timestamp timestamp) {
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        return timestamp != null ? timestamp.toLocalDateTime().toLocalDate() : null;</span>
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">        return timestamp != null ? timestamp.toLocalDateTime().toLocalDate() : null;</span>
     }
 
-    /**
-     * Converts to {@link LocalDateTime}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Timestamp timestamp) {
-<span class="pc bpc" id="L84" title="1 of 2 branches missed.">        return timestamp != null ? timestamp.toLocalDateTime() : null;</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        return timestamp != null ? timestamp.toLocalDateTime() : null;</span>
     }
 
-    /**
-     * Converts to {@link LocalTime}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Timestamp timestamp) {
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        return timestamp != null ? timestamp.toLocalDateTime().toLocalTime() : null;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        return timestamp != null ? timestamp.toLocalDateTime().toLocalTime() : null;</span>
     }
 
-    /**
-     * Converts to {@link java.sql.Date}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE)
     public java.sql.Date toSqlDate(Timestamp timestamp) {
-<span class="pc bpc" id="L104" title="1 of 2 branches missed.">        return timestamp != null ? java.sql.Date.valueOf(timestamp.toLocalDateTime().toLocalDate()) : null;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        return timestamp != null ? java.sql.Date.valueOf(timestamp.toLocalDateTime().toLocalDate()) : null;</span>
     }
 
-    /**
-     * Converts to {@link java.sql.Time}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.TIME)
     public java.sql.Time toSqlTime(Timestamp timestamp) {
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        return timestamp != null ? java.sql.Time.valueOf(timestamp.toLocalDateTime().toLocalTime()) : null;</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        return timestamp != null ? java.sql.Time.valueOf(timestamp.toLocalDateTime().toLocalTime()) : null;</span>
     }
 
-    /**
-     * Converts to {@link ZonedDateTime}.
-     * @param timestamp value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.DATE_TIME, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Timestamp timestamp) {
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        return timestamp != null ? ZonedDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault()) : null;</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        return timestamp != null ? ZonedDateTime.ofInstant(timestamp.toInstant(), ZoneId.systemDefault()) : null;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

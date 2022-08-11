@@ -26,39 +26,27 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchemaGenerator;
 import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
 
-/**
- * The field action metadata.
- */
 @JsonRootName(&quot;ActionDetail&quot;)
-<span class="fc" id="L33">public class ActionDetail implements Serializable {</span>
+<span class="fc" id="L30">public class ActionDetail implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** action parameters */
     protected ActionParameters parameters;
 
-    /** action name */
     protected String name;
 
-    /** true if it's a custom field action */
     protected Boolean custom;
 
-    /** name of the field action model class */
     protected String className;
 
-    /** method name */
     protected String method;
 
-    /** source(input) type */
     protected FieldType sourceType;
 
-    /** target(output) type */
     protected FieldType targetType;
 
-    /** multiplicity */
     protected Multiplicity multiplicity;
 
-    /** field action schema */
     protected ObjectSchema actionSchema;
 
     /**
@@ -70,7 +58,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public ActionParameters getParameters() {
-<span class="fc" id="L73">        return parameters;</span>
+<span class="fc" id="L61">        return parameters;</span>
     }
 
     /**
@@ -82,8 +70,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setParameters(ActionParameters value) {
-<span class="fc" id="L85">        this.parameters = value;</span>
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L73">        this.parameters = value;</span>
+<span class="fc" id="L74">    }</span>
 
     /**
      * Gets the value of the name property.
@@ -94,7 +82,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public String getName() {
-<span class="fc" id="L97">        return name;</span>
+<span class="fc" id="L85">        return name;</span>
     }
 
     /**
@@ -106,8 +94,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setName(String value) {
-<span class="fc" id="L109">        this.name = value;</span>
-<span class="fc" id="L110">    }</span>
+<span class="fc" id="L97">        this.name = value;</span>
+<span class="fc" id="L98">    }</span>
 
     /**
      * Gets the value of the custom property.
@@ -118,7 +106,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public Boolean isCustom() {
-<span class="fc" id="L121">        return custom;</span>
+<span class="fc" id="L109">        return custom;</span>
     }
 
     /**
@@ -130,8 +118,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setCustom(Boolean value) {
-<span class="fc" id="L133">        this.custom = value;</span>
-<span class="fc" id="L134">    }</span>
+<span class="fc" id="L121">        this.custom = value;</span>
+<span class="fc" id="L122">    }</span>
 
     /**
      * Gets the value of the className property.
@@ -142,7 +130,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public String getClassName() {
-<span class="fc" id="L145">        return className;</span>
+<span class="fc" id="L133">        return className;</span>
     }
 
     /**
@@ -154,8 +142,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setClassName(String value) {
-<span class="fc" id="L157">        this.className = value;</span>
-<span class="fc" id="L158">    }</span>
+<span class="fc" id="L145">        this.className = value;</span>
+<span class="fc" id="L146">    }</span>
 
     /**
      * Gets the value of the method property.
@@ -166,7 +154,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public String getMethod() {
-<span class="fc" id="L169">        return method;</span>
+<span class="fc" id="L157">        return method;</span>
     }
 
     /**
@@ -178,8 +166,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setMethod(String value) {
-<span class="fc" id="L181">        this.method = value;</span>
-<span class="fc" id="L182">    }</span>
+<span class="fc" id="L169">        this.method = value;</span>
+<span class="fc" id="L170">    }</span>
 
     /**
      * Gets the value of the sourceType property.
@@ -190,7 +178,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public FieldType getSourceType() {
-<span class="fc" id="L193">        return sourceType;</span>
+<span class="fc" id="L181">        return sourceType;</span>
     }
 
     /**
@@ -202,8 +190,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setSourceType(FieldType value) {
-<span class="fc" id="L205">        this.sourceType = value;</span>
-<span class="fc" id="L206">    }</span>
+<span class="fc" id="L193">        this.sourceType = value;</span>
+<span class="fc" id="L194">    }</span>
 
     /**
      * Gets the value of the targetType property.
@@ -214,7 +202,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public FieldType getTargetType() {
-<span class="fc" id="L217">        return targetType;</span>
+<span class="fc" id="L205">        return targetType;</span>
     }
 
     /**
@@ -226,8 +214,8 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setTargetType(FieldType value) {
-<span class="fc" id="L229">        this.targetType = value;</span>
-<span class="fc" id="L230">    }</span>
+<span class="fc" id="L217">        this.targetType = value;</span>
+<span class="fc" id="L218">    }</span>
 
     /**
      * Gets the value of the multiplicity property.
@@ -238,7 +226,7 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public Multiplicity getMultiplicity() {
-<span class="fc" id="L241">        return multiplicity;</span>
+<span class="fc" id="L229">        return multiplicity;</span>
     }
 
     /**
@@ -250,56 +238,43 @@ import com.fasterxml.jackson.module.jsonSchema.types.ObjectSchema;
      *     
      */
     public void setMultiplicity(Multiplicity value) {
-<span class="fc" id="L253">        this.multiplicity = value;</span>
-<span class="fc" id="L254">    }</span>
+<span class="fc" id="L241">        this.multiplicity = value;</span>
+<span class="fc" id="L242">    }</span>
 
-    /**
-     * Gets the value of the action schema property.
-     * @return action schema
-     */
     public JsonSchema getActionSchema() {
-<span class="fc" id="L261">        return actionSchema;</span>
+<span class="fc" id="L245">        return actionSchema;</span>
     }
 
-    /**
-     * Sets the value of the action schema property.
-     * @param actionSchema action schema
-     */
     public void setActionSchema(ObjectSchema actionSchema) {
-<span class="fc" id="L269">        this.actionSchema = actionSchema;</span>
-<span class="fc" id="L270">    }</span>
+<span class="fc" id="L249">        this.actionSchema = actionSchema;</span>
+<span class="fc" id="L250">    }</span>
 
-    /**
-     * Sets the action schema from a field action model class.
-     * @param clazz field action model class
-     * @throws JsonMappingException unexpected error
-     */
     @JsonProperty(&quot;actionSchema&quot;)
     public void setActionSchema(Class&lt;? extends Action&gt; clazz) throws JsonMappingException {
 
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (clazz == null) {</span>
-<span class="fc" id="L281">            setActionSchema((ObjectSchema)null);</span>
-<span class="fc" id="L282">            return;</span>
+<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (clazz == null) {</span>
+<span class="nc" id="L256">            setActionSchema((ObjectSchema)null);</span>
+<span class="nc" id="L257">            return;</span>
         }
 
-<span class="fc" id="L285">        setClassName(clazz.getName());</span>
-<span class="fc" id="L286">        ObjectMapper mapper = new ObjectMapper()</span>
-<span class="fc" id="L287">            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
-<span class="fc" id="L288">        JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);</span>
-<span class="fc" id="L289">        AtlasSchemaFactoryWrapper visitor = new AtlasSchemaFactoryWrapper();</span>
-<span class="fc" id="L290">        mapper.acceptJsonFormatVisitor(clazz, visitor);</span>
-<span class="fc" id="L291">        JsonSchema schema = visitor.finalSchema();</span>
-<span class="fc" id="L292">        ObjectSchema objectSchema = schema.asObjectSchema();</span>
+<span class="fc" id="L260">        setClassName(clazz.getName());</span>
+<span class="fc" id="L261">        ObjectMapper mapper = new ObjectMapper()</span>
+<span class="fc" id="L262">            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
+<span class="fc" id="L263">        JsonSchemaGenerator schemaGen = new JsonSchemaGenerator(mapper);</span>
+<span class="fc" id="L264">        AtlasSchemaFactoryWrapper visitor = new AtlasSchemaFactoryWrapper();</span>
+<span class="fc" id="L265">        mapper.acceptJsonFormatVisitor(clazz, visitor);</span>
+<span class="fc" id="L266">        JsonSchema schema = visitor.finalSchema();</span>
+<span class="fc" id="L267">        ObjectSchema objectSchema = schema.asObjectSchema();</span>
 
         // see: https://json-schema.org/understanding-json-schema/reference/generic.html#constant-values
-<span class="fc" id="L295">        String id = ActionResolver.getInstance().toId(clazz);</span>
-<span class="fc" id="L296">        objectSchema.setId(id);</span>
-<span class="fc" id="L297">        AtlasSchemaFactoryWrapper.ExtendedJsonSchema keyField = (AtlasSchemaFactoryWrapper.ExtendedJsonSchema) objectSchema.getProperties().get(&quot;@type&quot;);</span>
-<span class="fc" id="L298">        keyField.getMetadata().put(&quot;const&quot;, id);</span>
-<span class="fc" id="L299">        setActionSchema(objectSchema);</span>
-<span class="fc" id="L300">    }</span>
+<span class="fc" id="L270">        String id = ActionResolver.getInstance().toId(clazz);</span>
+<span class="fc" id="L271">        objectSchema.setId(id);</span>
+<span class="fc" id="L272">        AtlasSchemaFactoryWrapper.ExtendedJsonSchema keyField = (AtlasSchemaFactoryWrapper.ExtendedJsonSchema) objectSchema.getProperties().get(&quot;@type&quot;);</span>
+<span class="fc" id="L273">        keyField.getMetadata().put(&quot;const&quot;, id);</span>
+<span class="fc" id="L274">        setActionSchema(objectSchema);</span>
+<span class="fc" id="L275">    }</span>
 
 
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

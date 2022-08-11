@@ -34,462 +34,330 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-/**
- * The type converter for {@link CharSequence}.
- */
-<span class="fc" id="L40">public class CharSequenceConverter implements AtlasConverter&lt;CharSequence&gt; {</span>
+<span class="fc" id="L37">public class CharSequenceConverter implements AtlasConverter&lt;CharSequence&gt; {</span>
 
-<span class="fc" id="L42">    private static final Pattern TRUE_PATTERN = Pattern.compile(&quot;true|t|yes|y&quot;, Pattern.CASE_INSENSITIVE);</span>
+<span class="fc" id="L39">    private static final Pattern TRUE_PATTERN = Pattern.compile(&quot;true|t|yes|y&quot;, Pattern.CASE_INSENSITIVE);</span>
 
-    /**
-     * Converts to {@link BigDecimal}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DECIMAL,
             concerns = AtlasConversionConcern.FORMAT)
     public BigDecimal toBigDecimal(CharSequence value) throws AtlasConversionException {
         try {
-<span class="pc bpc" id="L54" title="1 of 2 branches missed.">            return value != null ? new BigDecimal(value.toString()) : null;</span>
-<span class="nc" id="L55">        } catch (NumberFormatException e) {</span>
-<span class="nc" id="L56">            throw new AtlasConversionException(String</span>
-<span class="nc" id="L57">                    .format(&quot;String %s cannont be converted to a BigDecimal as it is not in a valid format&quot;, value));</span>
+<span class="pc bpc" id="L45" title="1 of 2 branches missed.">            return value != null ? new BigDecimal(value.toString()) : null;</span>
+<span class="nc" id="L46">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L47">            throw new AtlasConversionException(String</span>
+<span class="nc" id="L48">                    .format(&quot;String %s cannont be converted to a BigDecimal as it is not in a valid format&quot;, value));</span>
         }
     }
 
-    /**
-     * Converts to {@link BigInteger}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.FORMAT)
     public BigInteger toBigInteger(CharSequence value) throws AtlasConversionException {
         try {
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            return value != null ? new BigInteger(value.toString()) : null;</span>
-<span class="nc" id="L72">        } catch (NumberFormatException e) {</span>
-<span class="nc" id="L73">            throw new AtlasConversionException(String</span>
-<span class="nc" id="L74">                    .format(&quot;String %s cannont be converted to a BigInteger as it is not in a valid format&quot;, value));</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">            return value != null ? new BigInteger(value.toString()) : null;</span>
+<span class="nc" id="L57">        } catch (NumberFormatException e) {</span>
+<span class="nc" id="L58">            throw new AtlasConversionException(String</span>
+<span class="nc" id="L59">                    .format(&quot;String %s cannont be converted to a BigInteger as it is not in a valid format&quot;, value));</span>
         }
     }
 
-    /**
-     * Converts to {@link Boolean}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean toBoolean(CharSequence value, String sourceFormat, String targetFormat) {
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L88">            return null;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L66">            return null;</span>
         }
 
         // string expression of true?
         Pattern pattern;
-<span class="pc bpc" id="L93" title="3 of 4 branches missed.">        if (sourceFormat != null &amp;&amp; !sourceFormat.isEmpty()) {</span>
-<span class="nc" id="L94">            pattern = Pattern.compile(sourceFormat, Pattern.CASE_INSENSITIVE);</span>
+<span class="pc bpc" id="L71" title="3 of 4 branches missed.">        if (sourceFormat != null &amp;&amp; !sourceFormat.isEmpty()) {</span>
+<span class="nc" id="L72">            pattern = Pattern.compile(sourceFormat, Pattern.CASE_INSENSITIVE);</span>
         } else {
-<span class="fc" id="L96">            pattern = TRUE_PATTERN;</span>
+<span class="fc" id="L74">            pattern = TRUE_PATTERN;</span>
         }
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (pattern.matcher(value).matches()) {</span>
-<span class="fc" id="L99">            return Boolean.TRUE;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (pattern.matcher(value).matches()) {</span>
+<span class="fc" id="L77">            return Boolean.TRUE;</span>
         }
 
         // then try C like numeric translation
         try {
-<span class="fc" id="L104">            Number n = NumberFormat.getInstance().parse(value.toString());</span>
-<span class="fc bfc" id="L105" title="All 2 branches covered.">            if (n.intValue() == 0) {</span>
-<span class="fc" id="L106">                return Boolean.FALSE;</span>
+<span class="fc" id="L82">            Number n = NumberFormat.getInstance().parse(value.toString());</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (n.intValue() == 0) {</span>
+<span class="fc" id="L84">                return Boolean.FALSE;</span>
             }
-<span class="fc" id="L108">            return Boolean.TRUE;</span>
-<span class="fc" id="L109">        } catch (ParseException e) {</span>
-<span class="fc" id="L110">            e.getMessage(); // ignore</span>
+<span class="fc" id="L86">            return Boolean.TRUE;</span>
+<span class="fc" id="L87">        } catch (ParseException e) {</span>
+<span class="fc" id="L88">            e.getMessage(); // ignore</span>
         }
 
         // false by default
-<span class="fc" id="L114">        return Boolean.FALSE;</span>
+<span class="fc" id="L92">        return Boolean.FALSE;</span>
     }
 
-    /**
-     * Converts to {@link Byte}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.FORMAT, AtlasConversionConcern.FRACTIONAL_PART})
     public Byte toByte(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L127">            return null;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L99">            return null;</span>
         }
         try {
-<span class="fc" id="L130">            return Byte.parseByte(value.toString());</span>
-<span class="fc" id="L131">        } catch (NumberFormatException nfex) {</span>
+<span class="fc" id="L102">            return Byte.parseByte(value.toString());</span>
+<span class="fc" id="L103">        } catch (NumberFormatException nfex) {</span>
             try {
-<span class="fc" id="L133">                BigDecimal bd = new BigDecimal(value.toString());</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Byte.MIN_VALUE)) &lt; 0</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Byte.MAX_VALUE)) &gt; 0) {</span>
-<span class="fc" id="L136">                    throw new AtlasConversionException(String</span>
-<span class="fc" id="L137">                            .format(&quot;String %s is greater than Byte.MAX_VALUE  or less than Byte.MIN_VALUE&quot;, value));</span>
+<span class="fc" id="L105">                BigDecimal bd = new BigDecimal(value.toString());</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Byte.MIN_VALUE)) &lt; 0</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Byte.MAX_VALUE)) &gt; 0) {</span>
+<span class="fc" id="L108">                    throw new AtlasConversionException(String</span>
+<span class="fc" id="L109">                            .format(&quot;String %s is greater than Byte.MAX_VALUE  or less than Byte.MIN_VALUE&quot;, value));</span>
                 }
-<span class="fc" id="L139">                return bd.byteValue();</span>
-<span class="fc" id="L140">            } catch (NumberFormatException nfe2) {</span>
-<span class="fc" id="L141">                throw new AtlasConversionException(String</span>
-<span class="fc" id="L142">                        .format(&quot;String %s cannont be converted to a Byte as it is not in a numerical format&quot;, value));</span>
+<span class="fc" id="L111">                return bd.byteValue();</span>
+<span class="fc" id="L112">            } catch (NumberFormatException nfe2) {</span>
+<span class="fc" id="L113">                throw new AtlasConversionException(String</span>
+<span class="fc" id="L114">                        .format(&quot;String %s cannont be converted to a Byte as it is not in a numerical format&quot;, value));</span>
             }
         }
     }
 
-    /**
-     * Converts to {@link Character}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or longer than one character
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character toCharacter(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L156">            return null;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L122">            return null;</span>
         }
         // empty or greater than 1 char String throws Exception
-<span class="fc bfc" id="L159" title="All 4 branches covered.">        if (value.toString().isEmpty() || value.length() &gt; 1) {</span>
-<span class="fc" id="L160">            throw new AtlasConversionException(</span>
-<span class="fc" id="L161">                    String.format(&quot;String '%s' is either empty or greater than one character long&quot;, value));</span>
-<span class="pc bpc" id="L162" title="2 of 4 branches missed.">        } else if (value.charAt(0) &lt; Character.MIN_VALUE || value.charAt(0) &gt; Character.MAX_VALUE) {</span>
-<span class="nc" id="L163">            throw new AtlasConversionException(String</span>
-<span class="nc" id="L164">                    .format(&quot;String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE&quot;, value));</span>
+<span class="fc bfc" id="L125" title="All 4 branches covered.">        if (value.toString().isEmpty() || value.length() &gt; 1) {</span>
+<span class="fc" id="L126">            throw new AtlasConversionException(</span>
+<span class="fc" id="L127">                    String.format(&quot;String '%s' is either empty or greater than one character long&quot;, value));</span>
+<span class="pc bpc" id="L128" title="2 of 4 branches missed.">        } else if (value.charAt(0) &lt; Character.MIN_VALUE || value.charAt(0) &gt; Character.MAX_VALUE) {</span>
+<span class="nc" id="L129">            throw new AtlasConversionException(String</span>
+<span class="nc" id="L130">                    .format(&quot;String %s is greater than Character.MAX_VALUE  or less than Character.MIN_VALUE&quot;, value));</span>
         }
-<span class="fc" id="L166">        return value.charAt(0);</span>
+<span class="fc" id="L132">        return value.charAt(0);</span>
     }
 
-    /**
-     * Converts to {@link Date}.
-     * @param date value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
     public Date toDate(CharSequence date, String sourceFormat, String targetFormat) {
 
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">        DateTimeFormatter formater = sourceFormat != null ? DateTimeFormatter.ofPattern(sourceFormat)</span>
-<span class="fc" id="L180">                : DateTimeFormatter.ISO_ZONED_DATE_TIME;</span>
-<span class="fc" id="L181">        return Date.from(ZonedDateTime.parse(date, formater).toInstant());</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">        DateTimeFormatter formater = sourceFormat != null ? DateTimeFormatter.ofPattern(sourceFormat)</span>
+<span class="fc" id="L139">                : DateTimeFormatter.ISO_ZONED_DATE_TIME;</span>
+<span class="fc" id="L140">        return Date.from(ZonedDateTime.parse(date, formater).toInstant());</span>
     }
 
-    /**
-     * Converts to {@link Double}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Double toDouble(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L194">            return null;</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L147">            return null;</span>
         }
 
-<span class="fc" id="L197">        String str = value.toString();</span>
-<span class="fc" id="L198">        double parsedDouble = 0.0d;</span>
+<span class="fc" id="L150">        String str = value.toString();</span>
+<span class="fc" id="L151">        double parsedDouble = 0.0d;</span>
         try {
-<span class="fc" id="L200">            parsedDouble = Double.parseDouble(str);</span>
-<span class="fc" id="L201">        } catch (NumberFormatException nfe) {</span>
-<span class="fc" id="L202">            throw new AtlasConversionException(nfe);</span>
-<span class="fc" id="L203">        }</span>
+<span class="fc" id="L153">            parsedDouble = Double.parseDouble(str);</span>
+<span class="fc" id="L154">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L155">            throw new AtlasConversionException(nfe);</span>
+<span class="fc" id="L156">        }</span>
 
-<span class="fc" id="L205">        double absParsedDouble = Math.abs(parsedDouble);</span>
-<span class="fc bfc" id="L206" title="All 2 branches covered.">        if (absParsedDouble == 0.0d) {</span>
-<span class="fc" id="L207">            return parsedDouble;</span>
+<span class="fc" id="L158">        double absParsedDouble = Math.abs(parsedDouble);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (absParsedDouble == 0.0d) {</span>
+<span class="fc" id="L160">            return parsedDouble;</span>
         }
-<span class="pc bpc" id="L209" title="1 of 4 branches missed.">        if (absParsedDouble &lt; Double.MIN_VALUE || absParsedDouble &gt; Double.MAX_VALUE) {</span>
-<span class="fc" id="L210">            throw new AtlasConversionException(</span>
-<span class="fc" id="L211">                    String.format(</span>
+<span class="pc bpc" id="L162" title="1 of 4 branches missed.">        if (absParsedDouble &lt; Double.MIN_VALUE || absParsedDouble &gt; Double.MAX_VALUE) {</span>
+<span class="fc" id="L163">            throw new AtlasConversionException(</span>
+<span class="fc" id="L164">                    String.format(</span>
                             &quot;String %s is greater than Double.MAX_VALUE  or less than Double.MIN_VALUE&quot;,
                             str));
         }
 
-<span class="fc" id="L216">        return parsedDouble;</span>
+<span class="fc" id="L169">        return parsedDouble;</span>
     }
 
-    /**
-     * Converts to {@link Float}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Float toFloat(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L229">            return null;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L176">            return null;</span>
         }
 
-<span class="fc" id="L232">        String str = value.toString();</span>
-<span class="fc" id="L233">        float parsedFloat = 0.0f;</span>
+<span class="fc" id="L179">        String str = value.toString();</span>
+<span class="fc" id="L180">        float parsedFloat = 0.0f;</span>
         try {
-<span class="fc" id="L235">            parsedFloat = Float.parseFloat(str);</span>
-<span class="fc" id="L236">        } catch (NumberFormatException nfe) {</span>
-<span class="fc" id="L237">            throw new AtlasConversionException(nfe);</span>
-<span class="fc" id="L238">        }</span>
+<span class="fc" id="L182">            parsedFloat = Float.parseFloat(str);</span>
+<span class="fc" id="L183">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L184">            throw new AtlasConversionException(nfe);</span>
+<span class="fc" id="L185">        }</span>
 
-<span class="fc" id="L240">        float absParsedFloat = Math.abs(parsedFloat);</span>
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (absParsedFloat == 0.0f) {</span>
-<span class="fc" id="L242">            return parsedFloat;</span>
+<span class="fc" id="L187">        float absParsedFloat = Math.abs(parsedFloat);</span>
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (absParsedFloat == 0.0f) {</span>
+<span class="fc" id="L189">            return parsedFloat;</span>
         }
 
-<span class="pc bpc" id="L245" title="1 of 4 branches missed.">        if (absParsedFloat &lt; Float.MIN_VALUE || absParsedFloat &gt; Float.MAX_VALUE) {</span>
-<span class="fc" id="L246">            throw new AtlasConversionException(</span>
-<span class="fc" id="L247">                    String.format(</span>
+<span class="pc bpc" id="L192" title="1 of 4 branches missed.">        if (absParsedFloat &lt; Float.MIN_VALUE || absParsedFloat &gt; Float.MAX_VALUE) {</span>
+<span class="fc" id="L193">            throw new AtlasConversionException(</span>
+<span class="fc" id="L194">                    String.format(</span>
                             &quot;String %s is greater than Float.MAX_VALUE  or less than Float.MIN_VALUE&quot;,
                             str));
         }
 
-<span class="fc" id="L252">        return Float.valueOf(str);</span>
+<span class="fc" id="L199">        return Float.valueOf(str);</span>
     }
 
-    /**
-     * Converts to {@link Integer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Integer toInteger(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L264" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L265">            return null;</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L206">            return null;</span>
         }
 
-<span class="fc" id="L268">        String str = value.toString();</span>
-<span class="fc" id="L269">        Integer i = null;</span>
+<span class="fc" id="L209">        String str = value.toString();</span>
+<span class="fc" id="L210">        Integer i = null;</span>
         try {
-<span class="fc" id="L271">            i = Integer.parseInt(str);</span>
-<span class="fc" id="L272">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L212">            i = Integer.parseInt(str);</span>
+<span class="fc" id="L213">        } catch (NumberFormatException nfe) {</span>
             try {
-<span class="fc" id="L274">                BigDecimal bd = new BigDecimal(str);</span>
-<span class="fc bfc" id="L275" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Integer.MIN_VALUE)) &lt; 0</span>
-<span class="fc bfc" id="L276" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Integer.MAX_VALUE)) &gt; 0) {</span>
-<span class="fc" id="L277">                    throw new AtlasConversionException(String</span>
-<span class="fc" id="L278">                            .format(&quot;String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE&quot;, str));</span>
+<span class="fc" id="L215">                BigDecimal bd = new BigDecimal(str);</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Integer.MIN_VALUE)) &lt; 0</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Integer.MAX_VALUE)) &gt; 0) {</span>
+<span class="fc" id="L218">                    throw new AtlasConversionException(String</span>
+<span class="fc" id="L219">                            .format(&quot;String %s is greater than Integer.MAX_VALUE  or less than Integer.MIN_VALUE&quot;, str));</span>
                 }
-<span class="fc" id="L280">                i = bd.intValue();</span>
-<span class="fc" id="L281">            } catch (NumberFormatException nfe2) {</span>
-<span class="fc" id="L282">                throw new AtlasConversionException(nfe);</span>
-<span class="fc" id="L283">            }</span>
-<span class="fc" id="L284">        }</span>
+<span class="fc" id="L221">                i = bd.intValue();</span>
+<span class="fc" id="L222">            } catch (NumberFormatException nfe2) {</span>
+<span class="fc" id="L223">                throw new AtlasConversionException(nfe);</span>
+<span class="fc" id="L224">            }</span>
+<span class="fc" id="L225">        }</span>
 
-<span class="fc" id="L286">        return i;</span>
+<span class="fc" id="L227">        return i;</span>
     }
 
-    /**
-     * Converts to {@link LocalDate}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE)
     public LocalDate toLocalDate(CharSequence value) {
-<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        return value != null ? LocalDate.parse(value) : null;</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        return value != null ? LocalDate.parse(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link LocalTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.TIME)
     public LocalTime toLocalTime(CharSequence value) {
-<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        return value != null ? LocalTime.parse(value) : null;</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">        return value != null ? LocalTime.parse(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link LocalDateTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(CharSequence value) {
-<span class="nc bnc" id="L316" title="All 2 branches missed.">        return value != null ? LocalDateTime.parse(value) : null;</span>
+<span class="nc bnc" id="L242" title="All 2 branches missed.">        return value != null ? LocalDateTime.parse(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link Long}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Long toLong(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L329">            return null;</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L249">            return null;</span>
         }
 
-<span class="fc" id="L332">        String str = value.toString();</span>
-<span class="fc" id="L333">        Long l = null;</span>
+<span class="fc" id="L252">        String str = value.toString();</span>
+<span class="fc" id="L253">        Long l = null;</span>
         try {
-<span class="fc" id="L335">            l = Long.parseLong(str);</span>
-<span class="fc" id="L336">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L255">            l = Long.parseLong(str);</span>
+<span class="fc" id="L256">        } catch (NumberFormatException nfe) {</span>
             try {
-<span class="fc" id="L338">                BigDecimal bd = new BigDecimal(str);</span>
-<span class="fc bfc" id="L339" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Long.MIN_VALUE)) &lt; 0</span>
-<span class="fc bfc" id="L340" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Long.MAX_VALUE)) &gt; 0) {</span>
-<span class="fc" id="L341">                    throw new AtlasConversionException(String</span>
-<span class="fc" id="L342">                            .format(&quot;String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE&quot;, value));</span>
+<span class="fc" id="L258">                BigDecimal bd = new BigDecimal(str);</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Long.MIN_VALUE)) &lt; 0</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Long.MAX_VALUE)) &gt; 0) {</span>
+<span class="fc" id="L261">                    throw new AtlasConversionException(String</span>
+<span class="fc" id="L262">                            .format(&quot;String %s is greater than Long.MAX_VALUE  or less than Long.MIN_VALUE&quot;, value));</span>
                 }
-<span class="fc" id="L344">                l = bd.longValue();</span>
-<span class="fc" id="L345">            } catch (NumberFormatException nfe2) {</span>
-<span class="fc" id="L346">                throw new AtlasConversionException(nfe);</span>
-<span class="fc" id="L347">            }</span>
-<span class="fc" id="L348">        }</span>
+<span class="fc" id="L264">                l = bd.longValue();</span>
+<span class="fc" id="L265">            } catch (NumberFormatException nfe2) {</span>
+<span class="fc" id="L266">                throw new AtlasConversionException(nfe);</span>
+<span class="fc" id="L267">            }</span>
+<span class="fc" id="L268">        }</span>
 
-<span class="fc" id="L350">        return l;</span>
+<span class="fc" id="L270">        return l;</span>
     }
 
-    /**
-     * Converts to {@link Short}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Short toShort(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L362" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L363">            return null;</span>
+<span class="fc bfc" id="L276" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L277">            return null;</span>
         }
 
-<span class="fc" id="L366">        String str = value.toString();</span>
-<span class="fc" id="L367">        Short shortty = null;</span>
+<span class="fc" id="L280">        String str = value.toString();</span>
+<span class="fc" id="L281">        Short shortty = null;</span>
         try {
-<span class="fc" id="L369">            shortty = Short.parseShort(str);</span>
-<span class="fc" id="L370">        } catch (NumberFormatException nfe) {</span>
+<span class="fc" id="L283">            shortty = Short.parseShort(str);</span>
+<span class="fc" id="L284">        } catch (NumberFormatException nfe) {</span>
             try {
-<span class="fc" id="L372">                BigDecimal bd = new BigDecimal(str);</span>
-<span class="fc bfc" id="L373" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Short.MIN_VALUE)) &lt; 0</span>
-<span class="fc bfc" id="L374" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Short.MAX_VALUE)) &gt; 0) {</span>
-<span class="fc" id="L375">                    throw new AtlasConversionException(String</span>
-<span class="fc" id="L376">                            .format(&quot;String %s is greater than Short.MAX_VALUE  or less than Short.MIN_VALUE&quot;, str));</span>
+<span class="fc" id="L286">                BigDecimal bd = new BigDecimal(str);</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">                if (bd.compareTo(new BigDecimal(Short.MIN_VALUE)) &lt; 0</span>
+<span class="fc bfc" id="L288" title="All 2 branches covered.">                        || bd.compareTo(new BigDecimal(Short.MAX_VALUE)) &gt; 0) {</span>
+<span class="fc" id="L289">                    throw new AtlasConversionException(String</span>
+<span class="fc" id="L290">                            .format(&quot;String %s is greater than Short.MAX_VALUE  or less than Short.MIN_VALUE&quot;, str));</span>
                 }
-<span class="fc" id="L378">                shortty = bd.shortValue();</span>
-<span class="fc" id="L379">            } catch (NumberFormatException nfe2) {</span>
-<span class="fc" id="L380">                throw new AtlasConversionException(nfe2);</span>
-<span class="fc" id="L381">            }</span>
-<span class="fc" id="L382">        }</span>
-<span class="fc" id="L383">        return shortty;</span>
+<span class="fc" id="L292">                shortty = bd.shortValue();</span>
+<span class="fc" id="L293">            } catch (NumberFormatException nfe2) {</span>
+<span class="fc" id="L294">                throw new AtlasConversionException(nfe2);</span>
+<span class="fc" id="L295">            }</span>
+<span class="fc" id="L296">        }</span>
+<span class="fc" id="L297">        return shortty;</span>
     }
 
-    /**
-     * Converts to {@link CharBuffer}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(CharSequence value, String sourceFormat, String targetFormat) {
-<span class="pc bpc" id="L395" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L396">            return null;</span>
+<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L303">            return null;</span>
         }
-<span class="fc" id="L398">        return CharBuffer.wrap(value);</span>
+<span class="fc" id="L305">        return CharBuffer.wrap(value);</span>
     }
 
-    /**
-     * Converts to {@link CharSequence}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public CharSequence toCharSequence(CharSequence value, String sourceFormat, String targetFormat) {
-<span class="fc bfc" id="L410" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L411">            return null;</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L311">            return null;</span>
         }
-<span class="fc" id="L413">        return new String(value.toString());</span>
+<span class="fc" id="L313">        return new String(value.toString());</span>
     }
 
-    /**
-     * Converts to {@link String}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public String toString(CharSequence value, String sourceFormat, String targetFormat) {
-<span class="pc bpc" id="L425" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L426">            return null;</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L319">            return null;</span>
         }
-<span class="fc" id="L428">        return new String(value.toString());</span>
+<span class="fc" id="L321">        return new String(value.toString());</span>
     }
 
-    /**
-     * Converts to {@link StringBuffer}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(CharSequence value, String sourceFormat, String targetFormat) {
-<span class="pc bpc" id="L440" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L441">            return null;</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L327">            return null;</span>
         }
-<span class="fc" id="L443">        return new StringBuffer(value);</span>
+<span class="fc" id="L329">        return new StringBuffer(value);</span>
     }
 
-    /**
-     * Converts to {@link StringBuilder}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(CharSequence value, String sourceFormat, String targetFormat) {
-<span class="pc bpc" id="L455" title="1 of 2 branches missed.">        if (value == null) {</span>
-<span class="nc" id="L456">            return null;</span>
+<span class="pc bpc" id="L334" title="1 of 2 branches missed.">        if (value == null) {</span>
+<span class="nc" id="L335">            return null;</span>
         }
-<span class="fc" id="L458">        return new StringBuilder(value);</span>
+<span class="fc" id="L337">        return new StringBuilder(value);</span>
     }
 
-    /**
-     * Converts to {@link Number}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
             AtlasConversionConcern.FORMAT })
     public Number toNumber(CharSequence value) throws AtlasConversionException {
-<span class="fc bfc" id="L470" title="All 4 branches covered.">        if (value == null || value.toString().trim().isEmpty()) {</span>
-<span class="fc" id="L471">            return null;</span>
+<span class="fc bfc" id="L343" title="All 4 branches covered.">        if (value == null || value.toString().trim().isEmpty()) {</span>
+<span class="fc" id="L344">            return null;</span>
         }
-<span class="fc" id="L473">        String str = value.toString();</span>
-<span class="fc bfc" id="L474" title="All 2 branches covered.">        if (str.matches(&quot;\\d+&quot;)) {</span>
-<span class="fc" id="L475">            return new BigInteger(str);</span>
+<span class="fc" id="L346">        String str = value.toString();</span>
+<span class="fc bfc" id="L347" title="All 2 branches covered.">        if (str.matches(&quot;\\d+&quot;)) {</span>
+<span class="fc" id="L348">            return new BigInteger(str);</span>
         }
         try {
-<span class="fc" id="L478">            return new BigDecimal(str);</span>
-<span class="fc" id="L479">        } catch (NumberFormatException e) {</span>
-<span class="fc" id="L480">            throw new AtlasConversionException(e);</span>
+<span class="fc" id="L351">            return new BigDecimal(str);</span>
+<span class="fc" id="L352">        } catch (NumberFormatException e) {</span>
+<span class="fc" id="L353">            throw new AtlasConversionException(e);</span>
         }
     }
 
-    /**
-     * Converts to {@link ZonedDateTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(CharSequence value) {
-<span class="pc bpc" id="L491" title="1 of 2 branches missed.">        return value != null ? ZonedDateTime.parse(value) : null;</span>
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">        return value != null ? ZonedDateTime.parse(value) : null;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

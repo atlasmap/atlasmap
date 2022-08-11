@@ -15,52 +15,32 @@
  */
 package io.atlasmap.v2;
 
-/**
- * The enumeration of {@link Validation} status.
- */
-<span class="fc" id="L21">public enum ValidationStatus {</span>
-    /** All. */
-<span class="fc" id="L23">    ALL(&quot;All&quot;),</span>
-    /** Info. */
-<span class="fc" id="L25">    INFO(&quot;Info&quot;),</span>
-    /** Warn. */
-<span class="fc" id="L27">    WARN(&quot;Warn&quot;),</span>
-    /** Error. */
-<span class="fc" id="L29">    ERROR(&quot;Error&quot;),</span>
-    /** None. */
-<span class="fc" id="L31">    NONE(&quot;None&quot;);</span>
+<span class="fc" id="L18">public enum ValidationStatus {</span>
+
+<span class="fc" id="L20">    ALL(&quot;All&quot;),</span>
+<span class="fc" id="L21">    INFO(&quot;Info&quot;),</span>
+<span class="fc" id="L22">    WARN(&quot;Warn&quot;),</span>
+<span class="fc" id="L23">    ERROR(&quot;Error&quot;),</span>
+<span class="fc" id="L24">    NONE(&quot;None&quot;);</span>
 
     private final String value;
 
-    /**
-     * A constructor.
-     * @param v value
-     */
-<span class="fc" id="L39">    ValidationStatus(String v) {</span>
-<span class="fc" id="L40">        value = v;</span>
-<span class="fc" id="L41">    }</span>
+<span class="fc" id="L28">    ValidationStatus(String v) {</span>
+<span class="fc" id="L29">        value = v;</span>
+<span class="fc" id="L30">    }</span>
 
-    /**
-     * Gets the value.
-     * @return value
-     */
     public String value() {
-<span class="fc" id="L48">        return value;</span>
+<span class="fc" id="L33">        return value;</span>
     }
 
-    /**
-     * Gets the enum from the value.
-     * @param v value
-     * @return the enum
-     */
     public static ValidationStatus fromValue(String v) {
-<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (ValidationStatus c: ValidationStatus.values()) {</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
-<span class="nc" id="L59">                return c;</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        for (ValidationStatus c: ValidationStatus.values()) {</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
+<span class="nc" id="L39">                return c;</span>
             }
         }
-<span class="nc" id="L62">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L42">        throw new IllegalArgumentException(v);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

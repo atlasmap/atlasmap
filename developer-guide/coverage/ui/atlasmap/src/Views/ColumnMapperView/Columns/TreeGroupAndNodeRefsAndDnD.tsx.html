@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.43% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>27/28</span>
+                <span class='fraction'>25/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/16</span>
+                <span class='fraction'>8/14</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.45% </span>
+                <span class="strong">95.24% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>21/22</span>
+                <span class='fraction'>20/21</span>
             </div>
         
             
@@ -162,12 +162,7 @@
 <a name='L104'></a><a href='#L104'>104</a>
 <a name='L105'></a><a href='#L105'>105</a>
 <a name='L106'></a><a href='#L106'>106</a>
-<a name='L107'></a><a href='#L107'>107</a>
-<a name='L108'></a><a href='#L108'>108</a>
-<a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L107'></a><a href='#L107'>107</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,24 +205,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -238,11 +230,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">48x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -254,8 +244,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">50x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">23x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -318,77 +308,72 @@ export interface ITreeGroupAndNodeRefsAndDnDProps {
   level?: number;
   position?: number;
   setSize?: number;
-  onToggleExpand: (expand?: boolean) =&gt; Promise&lt;void&gt;;
   children: ITreeGroupProps['children'];
 }
 &nbsp;
-export const TreeGroupAndNodeRefsAndDnD: FunctionComponent&lt;
-  ITreeGroupAndNodeRefsAndDnDProps
-&gt; = ({
-  fieldId,
-  group,
-  showTypes,
-  boundaryId,
-  overrideWidth,
-  parentId,
-  acceptDropType,
-  draggableType,
-  level = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-  position = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-  setSize = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-  onToggleExpand,
-  children,
-}) =&gt; (
-  &lt;FieldDropTarget
-    key={fieldId}
-    target={{
-      id: group.id,
-      name: group.name,
-      type: draggableType,
-    }}
-    canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >f</span>alse}</span>
-    accept={[acceptDropType]}
-  &gt;
-    {({ isOver }) =&gt; (
-      &lt;DelayedBoolean value={isOver}&gt;
-        {(isOver) =&gt; (
-          &lt;NodeRef
-            id={fieldId}
-            parentId={parentId}
-            boundaryId={boundaryId}
-            overrideWidth={overrideWidth}
-          &gt;
-            &lt;TreeGroup
+export const TreeGroupAndNodeRefsAndDnD: FunctionComponent&lt;ITreeGroupAndNodeRefsAndDnDProps&gt; =
+  ({
+    fieldId,
+    group,
+    showTypes,
+    boundaryId,
+    overrideWidth,
+    parentId,
+    acceptDropType,
+    draggableType,
+    level = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+    position = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+    setSize = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+    children,
+  }) =&gt; (
+    &lt;FieldDropTarget
+      key={fieldId}
+      target={{
+        id: group.id,
+        name: group.name,
+        type: draggableType,
+      }}
+      canDrop={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >f</span>alse}</span>
+      accept={[acceptDropType]}
+    &gt;
+      {({ isOver }) =&gt; (
+        &lt;DelayedBoolean value={isOver}&gt;
+          {(isOver) =&gt; (
+            &lt;NodeRef
               id={fieldId}
-              level={level}
-              position={position}
-              setSize={setSize}
-              expanded={isOver || group.expanded ? true : <span class="branch-1 cbranch-no" title="branch not covered" >false}</span>
-              onToggleExpand={onToggleExpand}
-              renderLabel={({ expanded, isLoading }) =&gt; (
-                &lt;DocumentGroup
-                  name={group.name}
-                  type={group.type}
-                  showType={showTypes}
-                  icon={group.isCollection ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;LayerGroupIcon /&gt; </span>: undefined}
-                  iconTooltip={
-                    group.isCollection
-                      ? <span class="branch-0 cbranch-no" title="branch not covered" >'This object is a collection'</span>
-                      : undefined
-                  }
-                  expanded={isOver || expanded}
-                  isLoading={isLoading}
-                /&gt;
-              )}
+              parentId={parentId}
+              boundaryId={boundaryId}
+              overrideWidth={overrideWidth}
             &gt;
-              {children}
-            &lt;/TreeGroup&gt;
-          &lt;/NodeRef&gt;
-        )}
-      &lt;/DelayedBoolean&gt;
-    )}
-  &lt;/FieldDropTarget&gt;
-);
+              &lt;TreeGroup
+                id={fieldId}
+                level={level}
+                position={position}
+                setSize={setSize}
+                expanded={isOver === true ? <span class="branch-0 cbranch-no" title="branch not covered" >true </span>: undefined}
+                renderLabel={({ expanded }) =&gt; (
+                  &lt;DocumentGroup
+                    name={group.name}
+                    type={group.type}
+                    showType={showTypes}
+                    icon={group.isCollection ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;LayerGroupIcon /&gt; </span>: undefined}
+                    iconTooltip={
+                      group.isCollection
+                        ? <span class="branch-0 cbranch-no" title="branch not covered" >'This object is a collection'</span>
+                        : undefined
+                    }
+                    expanded={isOver || expanded}
+                  /&gt;
+                )}
+              &gt;
+                {children}
+              &lt;/TreeGroup&gt;
+            &lt;/NodeRef&gt;
+          )}
+        &lt;/DelayedBoolean&gt;
+      )}
+    &lt;/FieldDropTarget&gt;
+  );
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -396,7 +381,7 @@ export const TreeGroupAndNodeRefsAndDnD: FunctionComponent&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 08 2022 17:02:09 GMT+0000 (Coordinated Universal Time)
+                at Thu Aug 11 2022 21:25:20 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

@@ -15,12 +15,10 @@
  */
 package io.atlasmap.standalone;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import io.atlasmap.api.AtlasException;
@@ -28,38 +26,40 @@ import io.atlasmap.csv.service.CsvService;
 import io.atlasmap.dfdl.service.DfdlService;
 import io.atlasmap.java.service.JavaService;
 import io.atlasmap.json.service.JsonService;
-import io.atlasmap.kafkaconnect.service.KafkaConnectService;
 import io.atlasmap.service.AtlasService;
-import io.atlasmap.service.DocumentService;
-import io.atlasmap.service.MappingService;
 import io.atlasmap.xml.service.XmlService;
 
-/**
- * JAX-RS application.
- */
 @Component
 @ApplicationPath(&quot;/v2/atlas/&quot;)
-<span class="fc" id="L42">public class JaxrsApplication extends Application {</span>
+<span class="nc" id="L34">public class JaxrsApplication extends Application {</span>
 
-    @Override
-    public Set&lt;Object&gt; getSingletons() {
-<span class="fc" id="L46">        Set&lt;Object&gt; set = new HashSet&lt;&gt;();</span>
-        try {
-<span class="fc" id="L48">            AtlasService atlasService = new AtlasService();</span>
-<span class="fc" id="L49">            set.add(atlasService);</span>
-<span class="fc" id="L50">            DocumentService documentService = new DocumentService(atlasService);</span>
-<span class="fc" id="L51">            set.add(documentService);</span>
-<span class="fc" id="L52">            set.add(new MappingService(atlasService));</span>
-<span class="fc" id="L53">            set.add(new CsvService(atlasService, documentService));</span>
-<span class="fc" id="L54">            set.add(new DfdlService(atlasService, documentService));</span>
-<span class="fc" id="L55">            set.add(new JavaService(atlasService, documentService));</span>
-<span class="fc" id="L56">            set.add(new JsonService(atlasService, documentService));</span>
-<span class="fc" id="L57">            set.add(new KafkaConnectService(atlasService, documentService));</span>
-<span class="fc" id="L58">            set.add(new XmlService(atlasService, documentService));</span>
-<span class="nc" id="L59">        } catch (AtlasException e) {</span>
-<span class="nc" id="L60">            throw new IllegalStateException(e);</span>
-<span class="fc" id="L61">        }</span>
-<span class="fc" id="L62">        return set;</span>
+    @Bean
+    public JavaService javaService() {
+<span class="nc" id="L38">        return new JavaService();</span>
     }
+
+    @Bean
+    public JsonService jsonService() {
+<span class="nc" id="L43">        return new JsonService();</span>
+    }
+
+    @Bean
+    public XmlService xmlService() {
+<span class="nc" id="L48">        return new XmlService();</span>
+    }
+
+    @Bean
+    public DfdlService dfdlService() {
+<span class="nc" id="L53">        return new DfdlService();</span>
+    }
+
+    @Bean
+<span class="nc" id="L57">    public CsvService csvService() { return new CsvService(); }</span>
+
+    @Bean
+    public AtlasService atlasService() throws AtlasException {
+<span class="nc" id="L61">        return new AtlasService();</span>
+    }
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

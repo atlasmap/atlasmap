@@ -31,98 +31,84 @@ import io.atlasmap.v2.ValidationStatus;
 import io.atlasmap.validators.NonNullValidator;
 import io.atlasmap.xml.v2.XmlField;
 
-/**
- * The module validation service for the XML Document.
- */
 public class XmlValidationService extends BaseModuleValidationService&lt;XmlField&gt; {
 
-<span class="fc" id="L39">    private static Map&lt;String, AtlasValidator&gt; validatorMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L40">    private AtlasModuleDetail moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);</span>
+<span class="fc" id="L36">    private static Map&lt;String, AtlasValidator&gt; validatorMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L37">    private AtlasModuleDetail moduleDetail = XmlModule.class.getAnnotation(AtlasModuleDetail.class);</span>
 
-    /**
-     * A constructor.
-     * @param conversionService conversion service
-     * @param fieldActionService field action service
-     */
     public XmlValidationService(AtlasConversionService conversionService, AtlasFieldActionService fieldActionService) {
-<span class="fc" id="L48">        super(conversionService, fieldActionService);</span>
-<span class="fc" id="L49">        init();</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L40">        super(conversionService, fieldActionService);</span>
+<span class="fc" id="L41">        init();</span>
+<span class="fc" id="L42">    }</span>
 
-    /**
-     * Initializes.
-     */
     public void init() {
-<span class="fc" id="L56">        NonNullValidator javaFileNameNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L45">        NonNullValidator javaFileNameNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;The name element must not be null nor empty&quot;);
-<span class="fc" id="L58">        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L47">        NonNullValidator javaFilePathNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;The path element must not be null nor empty&quot;);
-<span class="fc" id="L60">        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L49">        NonNullValidator inputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;Field type should not be null nor empty&quot;);
-<span class="fc" id="L62">        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L51">        NonNullValidator outputFieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;Field type should not be null nor empty&quot;);
-<span class="fc" id="L64">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
+<span class="fc" id="L53">        NonNullValidator fieldTypeNonNullValidator = new NonNullValidator(ValidationScope.MAPPING,</span>
                 &quot;Filed type should not be null nor empty&quot;);
 
-<span class="fc" id="L67">        validatorMap.put(&quot;xml.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
-<span class="fc" id="L68">        validatorMap.put(&quot;xml.field.name.not.null&quot;, javaFileNameNonNullValidator);</span>
-<span class="fc" id="L69">        validatorMap.put(&quot;xml.field.path.not.null&quot;, javaFilePathNonNullValidator);</span>
-<span class="fc" id="L70">        validatorMap.put(&quot;input.field.type.not.null&quot;, inputFieldTypeNonNullValidator);</span>
-<span class="fc" id="L71">        validatorMap.put(&quot;output.field.type.not.null&quot;, outputFieldTypeNonNullValidator);</span>
-<span class="fc" id="L72">    }</span>
+<span class="fc" id="L56">        validatorMap.put(&quot;xml.field.type.not.null&quot;, fieldTypeNonNullValidator);</span>
+<span class="fc" id="L57">        validatorMap.put(&quot;xml.field.name.not.null&quot;, javaFileNameNonNullValidator);</span>
+<span class="fc" id="L58">        validatorMap.put(&quot;xml.field.path.not.null&quot;, javaFilePathNonNullValidator);</span>
+<span class="fc" id="L59">        validatorMap.put(&quot;input.field.type.not.null&quot;, inputFieldTypeNonNullValidator);</span>
+<span class="fc" id="L60">        validatorMap.put(&quot;output.field.type.not.null&quot;, outputFieldTypeNonNullValidator);</span>
+<span class="fc" id="L61">    }</span>
 
-    /**
-     * Uninitializes.
-     */
     public void destroy() {
-<span class="nc" id="L78">        validatorMap.clear();</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L64">        validatorMap.clear();</span>
+<span class="nc" id="L65">    }</span>
 
     @Override
     protected AtlasModuleDetail getModuleDetail() {
-<span class="fc" id="L83">        return moduleDetail;</span>
+<span class="fc" id="L69">        return moduleDetail;</span>
     }
 
     @Override
     protected Class&lt;XmlField&gt; getFieldType() {
-<span class="fc" id="L88">        return XmlField.class;</span>
+<span class="fc" id="L74">        return XmlField.class;</span>
     }
 
     @Override
     protected String getModuleFieldName(XmlField field) {
-<span class="fc bfc" id="L93" title="All 2 branches covered.">        return field.getName() != null ? field.getName() : field.getPath();</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        return field.getName() != null ? field.getName() : field.getPath();</span>
     }
 
     @Override
     protected void validateModuleField(String mappingId, XmlField field, FieldDirection direction, List&lt;Validation&gt; validations) {
         // TODO check that it is a valid type on the AtlasContext
 
-<span class="fc" id="L100">        validatorMap.get(&quot;xml.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
-<span class="fc bfc" id="L101" title="All 2 branches covered.">        if (direction == FieldDirection.SOURCE) {</span>
-<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            if (field != null) {</span>
-<span class="fc" id="L103">                validatorMap.get(&quot;input.field.type.not.null&quot;).validate(field.getFieldType(), validations,</span>
+<span class="fc" id="L86">        validatorMap.get(&quot;xml.field.type.not.null&quot;).validate(field, validations, mappingId, ValidationStatus.WARN);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (direction == FieldDirection.SOURCE) {</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (field != null) {</span>
+<span class="fc" id="L89">                validatorMap.get(&quot;input.field.type.not.null&quot;).validate(field.getFieldType(), validations,</span>
                         mappingId, ValidationStatus.WARN);
             }
         } else {
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">            if (field != null) {</span>
-<span class="fc" id="L108">                validatorMap.get(&quot;output.field.type.not.null&quot;).validate(field.getFieldType(), validations,</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (field != null) {</span>
+<span class="fc" id="L94">                validatorMap.get(&quot;output.field.type.not.null&quot;).validate(field.getFieldType(), validations,</span>
                         mappingId, ValidationStatus.WARN);
             }
         }
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (field != null) {</span>
-<span class="fc bfc" id="L113" title="All 4 branches covered.">            if ((field.getName() == null &amp;&amp; field.getPath() == null)) {</span>
-<span class="fc" id="L114">                Validation validation = new Validation();</span>
-<span class="fc" id="L115">                validation.setScope(ValidationScope.MAPPING);</span>
-<span class="fc" id="L116">                validation.setId(mappingId);</span>
-<span class="fc" id="L117">                validation.setMessage(&quot;One of path or name must be specified&quot;);</span>
-<span class="fc" id="L118">                validation.setStatus(ValidationStatus.ERROR);</span>
-<span class="fc" id="L119">                validations.add(validation);</span>
-<span class="pc bpc" id="L120" title="1 of 4 branches missed.">            } else if (field.getName() != null &amp;&amp; field.getPath() == null) {</span>
-<span class="nc" id="L121">                validatorMap.get(&quot;xml.field.name.not.null&quot;).validate(field.getName(), validations, mappingId);</span>
-<span class="pc bpc" id="L122" title="1 of 4 branches missed.">            } else if (field.getName() == null &amp;&amp; field.getPath() != null) {</span>
-<span class="fc" id="L123">                validatorMap.get(&quot;xml.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (field != null) {</span>
+<span class="fc bfc" id="L99" title="All 4 branches covered.">            if ((field.getName() == null &amp;&amp; field.getPath() == null)) {</span>
+<span class="fc" id="L100">                Validation validation = new Validation();</span>
+<span class="fc" id="L101">                validation.setScope(ValidationScope.MAPPING);</span>
+<span class="fc" id="L102">                validation.setId(mappingId);</span>
+<span class="fc" id="L103">                validation.setMessage(&quot;One of path or name must be specified&quot;);</span>
+<span class="fc" id="L104">                validation.setStatus(ValidationStatus.ERROR);</span>
+<span class="fc" id="L105">                validations.add(validation);</span>
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">            } else if (field.getName() != null &amp;&amp; field.getPath() == null) {</span>
+<span class="nc" id="L107">                validatorMap.get(&quot;xml.field.name.not.null&quot;).validate(field.getName(), validations, mappingId);</span>
+<span class="pc bpc" id="L108" title="1 of 4 branches missed.">            } else if (field.getName() == null &amp;&amp; field.getPath() != null) {</span>
+<span class="fc" id="L109">                validatorMap.get(&quot;xml.field.path.not.null&quot;).validate(field.getPath(), validations, mappingId);</span>
             }
         }
-<span class="fc" id="L126">    }</span>
+<span class="fc" id="L112">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

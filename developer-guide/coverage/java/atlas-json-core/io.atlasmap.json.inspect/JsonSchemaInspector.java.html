@@ -15,7 +15,6 @@
  */
 package io.atlasmap.json.inspect;
 
-import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +34,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
+import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -48,57 +48,51 @@ import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Json;
 
 /**
- * The JSON schema inspector. It consumes JSON instance as an example
- * and build a {@link JsonDocument} from it.
  */
 public class JsonSchemaInspector implements JsonInspector {
 
-<span class="fc" id="L56">    private static final Logger LOG = LoggerFactory.getLogger(JsonSchemaInspector.class);</span>
-<span class="fc" id="L57">    private static JsonSchemaInspector myself = new JsonSchemaInspector();</span>
+<span class="fc" id="L54">    private static final Logger LOG = LoggerFactory.getLogger(JsonSchemaInspector.class);</span>
+<span class="fc" id="L55">    private static JsonSchemaInspector myself = new JsonSchemaInspector();</span>
 
     private JsonSchemaInspector() {
     }
 
-    /**
-     * Gets the singleton instance.
-     * @return instance
-     */
     public static JsonSchemaInspector instance() {
-<span class="fc" id="L67">        return myself;</span>
+<span class="fc" id="L61">        return myself;</span>
     }
 
-    public JsonDocument inspect(InputStream schema) throws JsonInspectionException {
-<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (schema == null) {</span>
-<span class="nc" id="L72">            throw new IllegalArgumentException(&quot;JSON schema cannot be null&quot;);</span>
+    public JsonDocument inspect(String schema) throws JsonInspectionException {
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">        if (schema == null || schema.isEmpty()) {</span>
+<span class="nc" id="L66">            throw new IllegalArgumentException(&quot;JSON schema cannot be null&quot;);</span>
         }
 
         try {
-<span class="fc" id="L76">            JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();</span>
-<span class="fc" id="L77">            ObjectMapper objectMapper = new ObjectMapper()</span>
-<span class="fc" id="L78">                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
-<span class="fc" id="L79">            JsonNode rootNode = objectMapper.readTree(schema);</span>
+<span class="fc" id="L70">            JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();</span>
+<span class="fc" id="L71">            ObjectMapper objectMapper = new ObjectMapper()</span>
+<span class="fc" id="L72">                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
+<span class="fc" id="L73">            JsonNode rootNode = objectMapper.readTree(schema);</span>
 
-<span class="fc" id="L81">            Map&lt;String, JsonNode&gt; definitionMap = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L82">            populateDefinitions(rootNode, definitionMap);</span>
-<span class="fc" id="L83">            JsonField rootNodeType = getJsonFieldBuilder(&quot;&quot;, rootNode, null, definitionMap, new HashSet&lt;&gt;(), false).build();</span>
+<span class="fc" id="L75">            Map&lt;String, JsonNode&gt; definitionMap = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L76">            populateDefinitions(rootNode, definitionMap);</span>
+<span class="fc" id="L77">            JsonField rootNodeType = getJsonFieldBuilder(&quot;&quot;, rootNode, null, definitionMap, new HashSet&lt;&gt;(), false).build();</span>
 
-<span class="fc bfc" id="L85" title="All 2 branches covered.">            if (rootNodeType instanceof JsonComplexType</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">                    &amp;&amp; ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().size() != 0) {</span>
-<span class="pc bpc" id="L87" title="1 of 4 branches missed.">                if (rootNodeType.getCollectionType() == null || rootNodeType.getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L88">                    jsonDocument.getFields().getField().addAll(((JsonComplexType)rootNodeType).getJsonFields().getJsonField());</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">            if (rootNodeType instanceof JsonComplexType</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                    &amp;&amp; ((JsonComplexType)rootNodeType).getJsonFields().getJsonField().size() != 0) {</span>
+<span class="pc bpc" id="L81" title="1 of 4 branches missed.">                if (rootNodeType.getCollectionType() == null || rootNodeType.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L82">                    jsonDocument.getFields().getField().addAll(((JsonComplexType)rootNodeType).getJsonFields().getJsonField());</span>
                 } else {
                     // taking care of topmost collection
-<span class="fc" id="L91">                    jsonDocument.getFields().getField().add(rootNodeType);</span>
+<span class="fc" id="L85">                    jsonDocument.getFields().getField().add(rootNodeType);</span>
                 }
-<span class="fc bfc" id="L93" title="All 2 branches covered.">            } else if (rootNodeType.getFieldType() == FieldType.COMPLEX) {</span>
-<span class="fc" id="L94">                LOG.warn(&quot;No simple type nor property is defined for the root node. It's going to be empty&quot;);</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            } else if (rootNodeType.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc" id="L88">                LOG.warn(&quot;No simple type nor property is defined for the root node. It's going to be empty&quot;);</span>
             } else {
-<span class="fc" id="L96">                jsonDocument.getFields().getField().add(rootNodeType);</span>
+<span class="fc" id="L90">                jsonDocument.getFields().getField().add(rootNodeType);</span>
             }
 
-<span class="fc" id="L99">            return jsonDocument;</span>
-<span class="fc" id="L100">        } catch (Exception e) {</span>
-<span class="fc" id="L101">            throw new JsonInspectionException(e);</span>
+<span class="fc" id="L93">            return jsonDocument;</span>
+<span class="fc" id="L94">        } catch (Exception e) {</span>
+<span class="fc" id="L95">            throw new JsonInspectionException(e);</span>
         }
     }
 
@@ -106,223 +100,223 @@ public class JsonSchemaInspector implements JsonInspector {
      * Store the JsonNode rather than pre-built JsonComplexType as path needs to be filled by their own.
      */
     private void populateDefinitions(JsonNode node, Map&lt;String, JsonNode&gt; definitionMap) {
-<span class="fc" id="L109">        JsonNode definitions = node.get(&quot;definitions&quot;);</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (definitions == null) {</span>
-<span class="fc" id="L111">            return;</span>
+<span class="fc" id="L103">        JsonNode definitions = node.get(&quot;definitions&quot;);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (definitions == null) {</span>
+<span class="fc" id="L105">            return;</span>
         }
 
-<span class="fc" id="L114">        definitions.fields().forEachRemaining((entry) -&gt; {</span>
-<span class="fc" id="L115">            String name = entry.getKey();</span>
-<span class="fc" id="L116">            JsonNode def = entry.getValue();</span>
-<span class="fc" id="L117">            JsonNode id = def.get(&quot;$id&quot;);</span>
-<span class="pc bpc" id="L118" title="1 of 4 branches missed.">            if (id != null &amp;&amp; !id.asText().isEmpty()) {</span>
-<span class="fc" id="L119">                definitionMap.put(id.asText(), def);</span>
+<span class="fc" id="L108">        definitions.fields().forEachRemaining((entry) -&gt; {</span>
+<span class="fc" id="L109">            String name = entry.getKey();</span>
+<span class="fc" id="L110">            JsonNode def = entry.getValue();</span>
+<span class="fc" id="L111">            JsonNode id = def.get(&quot;$id&quot;);</span>
+<span class="pc bpc" id="L112" title="1 of 4 branches missed.">            if (id != null &amp;&amp; !id.asText().isEmpty()) {</span>
+<span class="fc" id="L113">                definitionMap.put(id.asText(), def);</span>
             }
-<span class="fc" id="L121">            definitionMap.put(&quot;#/definitions/&quot; + name, def);</span>
-<span class="fc" id="L122">        });</span>
-<span class="fc" id="L123">    }</span>
+<span class="fc" id="L115">            definitionMap.put(&quot;#/definitions/&quot; + name, def);</span>
+<span class="fc" id="L116">        });</span>
+<span class="fc" id="L117">    }</span>
 
     private List&lt;JsonField&gt; loadProperties(JsonNode node, String parentPath, Map&lt;String, JsonNode&gt; definitionMap, Set&lt;String&gt; definitionTrace) throws JsonInspectionException {
-<span class="fc" id="L126">        List&lt;JsonField&gt; answer = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L127">        JsonNode properties = node.get(&quot;properties&quot;);</span>
-<span class="pc bpc" id="L128" title="1 of 4 branches missed.">        if (properties == null || !properties.fields().hasNext()) {</span>
-<span class="fc" id="L129">            LOG.warn(&quot;An object node without 'properties', it will be ignored: {}&quot;, node);</span>
-<span class="fc" id="L130">            return answer;</span>
+<span class="fc" id="L120">        List&lt;JsonField&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L121">        JsonNode properties = node.get(&quot;properties&quot;);</span>
+<span class="pc bpc" id="L122" title="1 of 4 branches missed.">        if (properties == null || !properties.fields().hasNext()) {</span>
+<span class="fc" id="L123">            LOG.warn(&quot;An object node without 'properties', it will be ignored: {}&quot;, node);</span>
+<span class="fc" id="L124">            return answer;</span>
         }
 
-<span class="fc" id="L133">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; topFields = properties.fields();</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">        while (topFields.hasNext()) {</span>
-<span class="fc" id="L135">            Entry&lt;String, JsonNode&gt; entry = topFields.next();</span>
-<span class="pc bpc" id="L136" title="1 of 2 branches missed.">            if (!entry.getValue().isObject()) {</span>
-<span class="nc" id="L137">                LOG.warn(&quot;Ignoring non-object field '{}'&quot;, entry);</span>
-<span class="nc" id="L138">                continue;</span>
+<span class="fc" id="L127">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; topFields = properties.fields();</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        while (topFields.hasNext()) {</span>
+<span class="fc" id="L129">            Entry&lt;String, JsonNode&gt; entry = topFields.next();</span>
+<span class="pc bpc" id="L130" title="1 of 2 branches missed.">            if (!entry.getValue().isObject()) {</span>
+<span class="nc" id="L131">                LOG.warn(&quot;Ignoring non-object field '{}'&quot;, entry);</span>
+<span class="nc" id="L132">                continue;</span>
             }
-<span class="fc" id="L140">            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap, definitionTrace, false).build();</span>
-<span class="fc" id="L141">            answer.add(type);</span>
-<span class="fc" id="L142">        }</span>
-<span class="fc" id="L143">        return answer;</span>
+<span class="fc" id="L134">            JsonField type = getJsonFieldBuilder(entry.getKey(), entry.getValue(), parentPath, definitionMap, definitionTrace, false).build();</span>
+<span class="fc" id="L135">            answer.add(type);</span>
+<span class="fc" id="L136">        }</span>
+<span class="fc" id="L137">        return answer;</span>
     }
 
     private JsonFieldBuilder getJsonFieldBuilder(String name, JsonNode value, String parentPath,
             Map&lt;String, JsonNode&gt; definitionMap, Set&lt;String&gt; definitionTrace, boolean isArray) throws JsonInspectionException {
-<span class="fc" id="L148">        LOG.trace(&quot;--&gt; Field:[name=[{}], value=[{}], parentPath=[{}]&quot;, name, value, parentPath);</span>
-<span class="fc" id="L149">        JsonFieldBuilder builder = new JsonFieldBuilder();</span>
-<span class="pc bpc" id="L150" title="1 of 2 branches missed.">        if (name != null) {</span>
-<span class="fc" id="L151">            builder.name = name;</span>
-<span class="fc bfc" id="L152" title="All 4 branches covered.">            builder.path = (parentPath != null &amp;&amp; !parentPath.equals(&quot;/&quot;)</span>
-<span class="fc" id="L153">                    ? parentPath.concat(&quot;/&quot;) : &quot;/&quot;).concat(name);</span>
+<span class="fc" id="L142">        LOG.trace(&quot;--&gt; Field:[name=[{}], value=[{}], parentPath=[{}]&quot;, name, value, parentPath);</span>
+<span class="fc" id="L143">        JsonFieldBuilder builder = new JsonFieldBuilder();</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (name != null) {</span>
+<span class="fc" id="L145">            builder.name = name;</span>
+<span class="fc bfc" id="L146" title="All 4 branches covered.">            builder.path = (parentPath != null &amp;&amp; !parentPath.equals(&quot;/&quot;)</span>
+<span class="fc" id="L147">                    ? parentPath.concat(&quot;/&quot;) : &quot;/&quot;).concat(name);</span>
         }
-<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (isArray) {</span>
-<span class="fc" id="L156">            builder.path += &quot;&lt;&gt;&quot;;</span>
-<span class="fc" id="L157">            builder.collectionType = CollectionType.LIST;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (isArray) {</span>
+<span class="fc" id="L150">            builder.path += &quot;&lt;&gt;&quot;;</span>
+<span class="fc" id="L151">            builder.collectionType = CollectionType.LIST;</span>
         }
-<span class="fc" id="L159">        builder.status = FieldStatus.SUPPORTED;</span>
+<span class="fc" id="L153">        builder.status = FieldStatus.SUPPORTED;</span>
 
-<span class="fc" id="L161">        JsonNode nodeValue = value;</span>
-<span class="fc" id="L162">        populateDefinitions(nodeValue, definitionMap);</span>
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (isRecursive(nodeValue, definitionTrace)) {</span>
-<span class="fc" id="L164">            builder.type = FieldType.COMPLEX;</span>
-<span class="fc" id="L165">            builder.status = FieldStatus.CACHED;</span>
-<span class="fc" id="L166">            return builder;</span>
+<span class="fc" id="L155">        JsonNode nodeValue = value;</span>
+<span class="fc" id="L156">        populateDefinitions(nodeValue, definitionMap);</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">        if (isRecursive(nodeValue, definitionTrace)) {</span>
+<span class="fc" id="L158">            builder.type = FieldType.COMPLEX;</span>
+<span class="fc" id="L159">            builder.status = FieldStatus.CACHED;</span>
+<span class="fc" id="L160">            return builder;</span>
         } else {
-<span class="fc" id="L168">            definitionTrace = new HashSet&lt;&gt;(definitionTrace);</span>
-<span class="fc" id="L169">            nodeValue = resolveReference(nodeValue, definitionMap, definitionTrace);</span>
+<span class="fc" id="L162">            definitionTrace = new HashSet&lt;&gt;(definitionTrace);</span>
+<span class="fc" id="L163">            nodeValue = resolveReference(nodeValue, definitionMap, definitionTrace);</span>
         }
 
-<span class="fc" id="L172">        JsonNode fieldEnum = nodeValue.get(&quot;enum&quot;);</span>
-<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (fieldEnum != null) {</span>
-<span class="fc" id="L174">            builder.type = FieldType.COMPLEX;</span>
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">            if (fieldEnum.isArray()) {</span>
-<span class="fc" id="L176">                final JsonFieldBuilder finalBuilder = builder;</span>
-<span class="fc" id="L177">                ((ArrayNode)fieldEnum).forEach(item -&gt; {</span>
-<span class="fc" id="L178">                    JsonEnumField itemField = new JsonEnumField();</span>
-<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                    itemField.setName(item.isNull() ? null : item.asText());</span>
-<span class="fc" id="L180">                    finalBuilder.enumFields.getJsonEnumField().add(itemField);</span>
-<span class="fc" id="L181">                });</span>
-<span class="pc bnc" id="L182" title="All 2 branches missed.">            } else if (!fieldEnum.isEmpty()) {</span>
-<span class="nc" id="L183">                JsonEnumField itemField = new JsonEnumField();</span>
-<span class="nc bnc" id="L184" title="All 2 branches missed.">                itemField.setName(fieldEnum.isNull() ? null : fieldEnum.asText());</span>
-<span class="nc" id="L185">                builder.enumFields.getJsonEnumField().add(itemField);</span>
+<span class="fc" id="L166">        JsonNode fieldEnum = nodeValue.get(&quot;enum&quot;);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (fieldEnum != null) {</span>
+<span class="fc" id="L168">            builder.type = FieldType.COMPLEX;</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">            if (fieldEnum.isArray()) {</span>
+<span class="fc" id="L170">                final JsonFieldBuilder finalBuilder = builder;</span>
+<span class="fc" id="L171">                ((ArrayNode)fieldEnum).forEach(item -&gt; {</span>
+<span class="fc" id="L172">                    JsonEnumField itemField = new JsonEnumField();</span>
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                    itemField.setName(item.isNull() ? null : item.asText());</span>
+<span class="fc" id="L174">                    finalBuilder.enumFields.getJsonEnumField().add(itemField);</span>
+<span class="fc" id="L175">                });</span>
+<span class="pc bnc" id="L176" title="All 2 branches missed.">            } else if (!fieldEnum.isEmpty()) {</span>
+<span class="nc" id="L177">                JsonEnumField itemField = new JsonEnumField();</span>
+<span class="nc bnc" id="L178" title="All 2 branches missed.">                itemField.setName(fieldEnum.isNull() ? null : fieldEnum.asText());</span>
+<span class="nc" id="L179">                builder.enumFields.getJsonEnumField().add(itemField);</span>
             }
-<span class="fc" id="L187">            return builder;</span>
+<span class="fc" id="L181">            return builder;</span>
         }
 
-<span class="fc" id="L190">        JsonNode fieldType = nodeValue.get(&quot;type&quot;);</span>
-<span class="pc bpc" id="L191" title="1 of 4 branches missed.">        if (fieldType == null || fieldType.asText() == null) {</span>
-<span class="fc" id="L192">            LOG.warn(&quot;'type' is not defined for node '{}', assuming as an object&quot;, name);</span>
-<span class="fc" id="L193">            builder.type = FieldType.COMPLEX;</span>
-<span class="fc" id="L194">            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap, definitionTrace));</span>
-<span class="fc" id="L195">            return builder;</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        } else if (&quot;array&quot;.equals(fieldType.asText())) {</span>
-<span class="fc" id="L197">            JsonNode arrayItems = nodeValue.get(&quot;items&quot;);</span>
-<span class="pc bpc" id="L198" title="2 of 4 branches missed.">            if (arrayItems == null || !arrayItems.fields().hasNext()) {</span>
-<span class="nc" id="L199">                LOG.warn(&quot;'{}' is an array node, but no 'items' found in it. It will be ignored&quot;, name);</span>
-<span class="nc" id="L200">                builder.status = FieldStatus.UNSUPPORTED;</span>
+<span class="fc" id="L184">        JsonNode fieldType = nodeValue.get(&quot;type&quot;);</span>
+<span class="pc bpc" id="L185" title="1 of 4 branches missed.">        if (fieldType == null || fieldType.asText() == null) {</span>
+<span class="fc" id="L186">            LOG.warn(&quot;'type' is not defined for node '{}', assuming as an object&quot;, name);</span>
+<span class="fc" id="L187">            builder.type = FieldType.COMPLEX;</span>
+<span class="fc" id="L188">            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap, definitionTrace));</span>
+<span class="fc" id="L189">            return builder;</span>
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        } else if (&quot;array&quot;.equals(fieldType.asText())) {</span>
+<span class="fc" id="L191">            JsonNode arrayItems = nodeValue.get(&quot;items&quot;);</span>
+<span class="pc bpc" id="L192" title="2 of 4 branches missed.">            if (arrayItems == null || !arrayItems.fields().hasNext()) {</span>
+<span class="nc" id="L193">                LOG.warn(&quot;'{}' is an array node, but no 'items' found in it. It will be ignored&quot;, name);</span>
+<span class="nc" id="L194">                builder.status = FieldStatus.UNSUPPORTED;</span>
             } else {
-<span class="fc" id="L202">                builder = getJsonFieldBuilder(name, arrayItems, parentPath, definitionMap, definitionTrace,true);</span>
+<span class="fc" id="L196">                builder = getJsonFieldBuilder(name, arrayItems, parentPath, definitionMap, definitionTrace,true);</span>
             }
-<span class="fc" id="L204">            return builder;</span>
+<span class="fc" id="L198">            return builder;</span>
         }
-<span class="fc" id="L206">        List&lt;String&gt; jsonTypes = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">        if (fieldType instanceof ArrayNode) {</span>
-<span class="fc" id="L208">            ((ArrayNode)fieldType).spliterator().forEachRemaining(node -&gt; jsonTypes.add(node.asText()));</span>
+<span class="fc" id="L200">        List&lt;String&gt; jsonTypes = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">        if (fieldType instanceof ArrayNode) {</span>
+<span class="fc" id="L202">            ((ArrayNode)fieldType).spliterator().forEachRemaining(node -&gt; jsonTypes.add(node.asText()));</span>
         } else {
-<span class="fc" id="L210">            jsonTypes.add(fieldType.asText());</span>
+<span class="fc" id="L204">            jsonTypes.add(fieldType.asText());</span>
         }
-<span class="fc" id="L212">        processFieldType(builder, jsonTypes, nodeValue, definitionMap, definitionTrace);</span>
+<span class="fc" id="L206">        processFieldType(builder, jsonTypes, nodeValue, definitionMap, definitionTrace);</span>
         
-<span class="fc" id="L214">        return builder;</span>
+<span class="fc" id="L208">        return builder;</span>
     }
 
     private void processFieldType(JsonFieldBuilder builder, List&lt;String&gt; jsonTypes,
             JsonNode nodeValue, Map&lt;String, JsonNode&gt; definitionMap, Set&lt;String&gt; definitionTrace) throws JsonInspectionException {
-<span class="fc" id="L219">        String jsonType = jsonTypes.get(0);</span>
-<span class="fc bfc" id="L220" title="All 2 branches covered.">        if (jsonTypes.size() &gt; 1) {</span>
-<span class="pc bpc" id="L221" title="1 of 2 branches missed.">            if (jsonTypes.contains(&quot;object&quot;)) {</span>
-<span class="nc" id="L222">                jsonType = &quot;object&quot;;</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">            } else if (jsonTypes.contains(&quot;string&quot;)) {</span>
-<span class="fc" id="L224">                jsonType = &quot;string&quot;;</span>
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            } else if (jsonTypes.contains(&quot;number&quot;)) {</span>
-<span class="fc" id="L226">                jsonType = &quot;number&quot;;</span>
-<span class="nc bnc" id="L227" title="All 2 branches missed.">            } else if (jsonTypes.contains(&quot;integer&quot;)) {</span>
-<span class="nc" id="L228">                jsonType = &quot;integer&quot;;</span>
-<span class="nc bnc" id="L229" title="All 2 branches missed.">            } else if (jsonTypes.contains(&quot;boolean&quot;)) {</span>
-<span class="nc" id="L230">                jsonType = &quot;boolean&quot;;</span>
+<span class="fc" id="L213">        String jsonType = jsonTypes.get(0);</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (jsonTypes.size() &gt; 1) {</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">            if (jsonTypes.contains(&quot;object&quot;)) {</span>
+<span class="nc" id="L216">                jsonType = &quot;object&quot;;</span>
+<span class="fc bfc" id="L217" title="All 2 branches covered.">            } else if (jsonTypes.contains(&quot;string&quot;)) {</span>
+<span class="fc" id="L218">                jsonType = &quot;string&quot;;</span>
+<span class="pc bpc" id="L219" title="1 of 2 branches missed.">            } else if (jsonTypes.contains(&quot;number&quot;)) {</span>
+<span class="fc" id="L220">                jsonType = &quot;number&quot;;</span>
+<span class="nc bnc" id="L221" title="All 2 branches missed.">            } else if (jsonTypes.contains(&quot;integer&quot;)) {</span>
+<span class="nc" id="L222">                jsonType = &quot;integer&quot;;</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            } else if (jsonTypes.contains(&quot;boolean&quot;)) {</span>
+<span class="nc" id="L224">                jsonType = &quot;boolean&quot;;</span>
             } else {
-<span class="nc" id="L232">                jsonType = &quot;null&quot;;</span>
+<span class="nc" id="L226">                jsonType = &quot;null&quot;;</span>
             }
         }
-<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (&quot;boolean&quot;.equals(jsonType)) {</span>
-<span class="fc" id="L236">            builder.type = FieldType.BOOLEAN;</span>
-<span class="fc bfc" id="L237" title="All 2 branches covered.">        } else if (&quot;integer&quot;.equals(jsonType)) {</span>
-<span class="fc" id="L238">            builder.type = FieldType.BIG_INTEGER;</span>
-<span class="fc bfc" id="L239" title="All 2 branches covered.">        } else if (&quot;null&quot;.equals(jsonType)) {</span>
-<span class="fc" id="L240">            builder.type = FieldType.NONE;</span>
-<span class="fc bfc" id="L241" title="All 2 branches covered.">        } else if (&quot;number&quot;.equals(jsonType)) {</span>
-<span class="fc" id="L242">            builder.type = FieldType.NUMBER;</span>
-<span class="fc bfc" id="L243" title="All 2 branches covered.">        } else if (&quot;string&quot;.equals(jsonType)) {</span>
-<span class="fc" id="L244">            builder.type = FieldType.STRING;</span>
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (&quot;boolean&quot;.equals(jsonType)) {</span>
+<span class="fc" id="L230">            builder.type = FieldType.BOOLEAN;</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        } else if (&quot;integer&quot;.equals(jsonType)) {</span>
+<span class="fc" id="L232">            builder.type = FieldType.BIG_INTEGER;</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        } else if (&quot;null&quot;.equals(jsonType)) {</span>
+<span class="fc" id="L234">            builder.type = FieldType.NONE;</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        } else if (&quot;number&quot;.equals(jsonType)) {</span>
+<span class="fc" id="L236">            builder.type = FieldType.NUMBER;</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        } else if (&quot;string&quot;.equals(jsonType)) {</span>
+<span class="fc" id="L238">            builder.type = FieldType.STRING;</span>
         } else {
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">            if (!&quot;object&quot;.equals(jsonType)) {</span>
-<span class="nc" id="L247">                LOG.warn(&quot;Unsupported field type '{}' found, assuming as an object&quot;, jsonType);</span>
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            if (!&quot;object&quot;.equals(jsonType)) {</span>
+<span class="nc" id="L241">                LOG.warn(&quot;Unsupported field type '{}' found, assuming as an object&quot;, jsonType);</span>
             }
-<span class="fc" id="L249">            builder.type = FieldType.COMPLEX;</span>
-<span class="fc" id="L250">            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap, definitionTrace));</span>
+<span class="fc" id="L243">            builder.type = FieldType.COMPLEX;</span>
+<span class="fc" id="L244">            builder.subFields.getJsonField().addAll(loadProperties(nodeValue, builder.path, definitionMap, definitionTrace));</span>
         }
-<span class="fc" id="L252">    }</span>
+<span class="fc" id="L246">    }</span>
 
-<span class="fc" id="L254">    private class JsonFieldBuilder {</span>
+<span class="fc" id="L248">    private class JsonFieldBuilder {</span>
         private String name;
         private String path;
         private FieldType type;
         private CollectionType collectionType;
         private FieldStatus status;
-<span class="fc" id="L260">        private JsonFields subFields = new JsonFields();</span>
-<span class="fc" id="L261">        private JsonEnumFields enumFields = new JsonEnumFields();</span>
+<span class="fc" id="L254">        private JsonFields subFields = new JsonFields();</span>
+<span class="fc" id="L255">        private JsonEnumFields enumFields = new JsonEnumFields();</span>
 
         public JsonField build() {
             JsonField answer;
-<span class="fc bfc" id="L265" title="All 2 branches covered.">            if (type == FieldType.COMPLEX) {</span>
-<span class="fc" id="L266">                JsonComplexType complex = AtlasJsonModelFactory.createJsonComlexField();</span>
-<span class="fc" id="L267">                complex.setJsonFields(subFields);</span>
-<span class="fc" id="L268">                complex.setJsonEnumFields(enumFields);</span>
-<span class="fc bfc" id="L269" title="All 2 branches covered.">                if (!enumFields.getJsonEnumField().isEmpty()) {</span>
-<span class="fc" id="L270">                    complex.setEnumeration(true);</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">            if (type == FieldType.COMPLEX) {</span>
+<span class="fc" id="L260">                JsonComplexType complex = JsonComplexTypeFactory.createJsonComlexField();</span>
+<span class="fc" id="L261">                complex.setJsonFields(subFields);</span>
+<span class="fc" id="L262">                complex.setJsonEnumFields(enumFields);</span>
+<span class="fc bfc" id="L263" title="All 2 branches covered.">                if (!enumFields.getJsonEnumField().isEmpty()) {</span>
+<span class="fc" id="L264">                    complex.setEnumeration(true);</span>
                 }
-<span class="fc" id="L272">                answer = complex;</span>
-<span class="fc" id="L273">            } else {</span>
-<span class="fc" id="L274">                answer = new JsonField();</span>
-<span class="fc" id="L275">                answer.setFieldType(type);</span>
+<span class="fc" id="L266">                answer = complex;</span>
+<span class="fc" id="L267">            } else {</span>
+<span class="fc" id="L268">                answer = new JsonField();</span>
+<span class="fc" id="L269">                answer.setFieldType(type);</span>
             }
-<span class="fc" id="L277">            answer.setName(name);</span>
-<span class="fc" id="L278">            answer.setPath(path);</span>
-<span class="fc" id="L279">            answer.setCollectionType(collectionType);</span>
-<span class="fc" id="L280">            answer.setStatus(status);</span>
-<span class="fc" id="L281">            return answer;</span>
+<span class="fc" id="L271">            answer.setName(name);</span>
+<span class="fc" id="L272">            answer.setPath(path);</span>
+<span class="fc" id="L273">            answer.setCollectionType(collectionType);</span>
+<span class="fc" id="L274">            answer.setStatus(status);</span>
+<span class="fc" id="L275">            return answer;</span>
         }
     }
 
     private boolean isRecursive(JsonNode node, Set&lt;String&gt; definitionTrace) {
-<span class="fc bfc" id="L286" title="All 2 branches covered.">        if (node.get(&quot;$ref&quot;) == null) {</span>
-<span class="fc" id="L287">            return false;</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (node.get(&quot;$ref&quot;) == null) {</span>
+<span class="fc" id="L281">            return false;</span>
         }
-<span class="fc" id="L289">        String uri = node.get(&quot;$ref&quot;).asText();</span>
-<span class="pc bpc" id="L290" title="2 of 4 branches missed.">        if (uri == null || uri.isEmpty()) {</span>
-<span class="nc" id="L291">            return false;</span>
+<span class="fc" id="L283">        String uri = node.get(&quot;$ref&quot;).asText();</span>
+<span class="pc bpc" id="L284" title="2 of 4 branches missed.">        if (uri == null || uri.isEmpty()) {</span>
+<span class="nc" id="L285">            return false;</span>
         }
 
-<span class="fc" id="L294">        return definitionTrace.contains(uri);</span>
+<span class="fc" id="L288">        return definitionTrace.contains(uri);</span>
     }
 
     private JsonNode resolveReference(JsonNode node, Map&lt;String, JsonNode&gt; definitionMap, Set&lt;String&gt; definitionTrace) {
-<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (node.get(&quot;$ref&quot;) == null) {</span>
-<span class="fc" id="L299">            return node;</span>
+<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (node.get(&quot;$ref&quot;) == null) {</span>
+<span class="fc" id="L293">            return node;</span>
         }
-<span class="fc" id="L301">        String uri = node.get(&quot;$ref&quot;).asText();</span>
-<span class="pc bpc" id="L302" title="2 of 4 branches missed.">        if (uri == null || uri.isEmpty()) {</span>
-<span class="nc" id="L303">            return node;</span>
+<span class="fc" id="L295">        String uri = node.get(&quot;$ref&quot;).asText();</span>
+<span class="pc bpc" id="L296" title="2 of 4 branches missed.">        if (uri == null || uri.isEmpty()) {</span>
+<span class="nc" id="L297">            return node;</span>
         }
 
-<span class="fc" id="L306">        LOG.trace(&quot;Resolving JSON schema reference '{}'&quot;, uri);</span>
+<span class="fc" id="L300">        LOG.trace(&quot;Resolving JSON schema reference '{}'&quot;, uri);</span>
         // internal reference precedes even if it's full URL
-<span class="fc" id="L308">        JsonNode def = definitionMap.get(uri);</span>
-<span class="pc bpc" id="L309" title="1 of 2 branches missed.">        if (def != null) {</span>
-<span class="fc" id="L310">            definitionTrace.add(uri);</span>
-<span class="fc" id="L311">            return def;</span>
+<span class="fc" id="L302">        JsonNode def = definitionMap.get(uri);</span>
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (def != null) {</span>
+<span class="fc" id="L304">            definitionTrace.add(uri);</span>
+<span class="fc" id="L305">            return def;</span>
         }
 
         // then try external resource
         try {
-<span class="nc" id="L316">            JsonNode external = Json.mapper().readTree(new URI(uri).toURL().openStream());</span>
-<span class="nc" id="L317">            LOG.trace(&quot;Successfully fetched external JSON schema '{}'    &quot;, uri);</span>
-<span class="nc" id="L318">            definitionMap.put(uri, external);</span>
-<span class="nc" id="L319">            return external;</span>
-<span class="nc" id="L320">        } catch (Exception e) {</span>
-<span class="nc" id="L321">            LOG.debug(&quot;&quot;, e);</span>
-<span class="nc" id="L322">            LOG.warn(&quot;The referenced schema '{}' is not found. Ignoring&quot;, node.get(&quot;$ref&quot;));</span>
-<span class="nc" id="L323">            return node;</span>
+<span class="nc" id="L310">            JsonNode external = Json.mapper().readTree(new URI(uri).toURL().openStream());</span>
+<span class="nc" id="L311">            LOG.trace(&quot;Successfully fetched external JSON schema '{}'    &quot;, uri);</span>
+<span class="nc" id="L312">            definitionMap.put(uri, external);</span>
+<span class="nc" id="L313">            return external;</span>
+<span class="nc" id="L314">        } catch (Exception e) {</span>
+<span class="nc" id="L315">            LOG.debug(&quot;&quot;, e);</span>
+<span class="nc" id="L316">            LOG.warn(&quot;The referenced schema '{}' is not found. Ignoring&quot;, node.get(&quot;$ref&quot;));</span>
+<span class="nc" id="L317">            return node;</span>
         }
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

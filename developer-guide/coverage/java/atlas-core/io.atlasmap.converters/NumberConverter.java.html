@@ -30,314 +30,186 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-/**
- * The type converter for {@link Number}.
- */
-<span class="fc" id="L36">public class NumberConverter implements AtlasConverter&lt;Number&gt; {</span>
-<span class="fc" id="L37">    private BigDecimalConverter bigDecimalConverter = new BigDecimalConverter();</span>
-<span class="fc" id="L38">    private BigIntegerConverter bigIntegerConverter = new BigIntegerConverter();</span>
-<span class="fc" id="L39">    private ByteConverter byteConverter = new ByteConverter();</span>
-<span class="fc" id="L40">    private DoubleConverter doubleConverter = new DoubleConverter();</span>
-<span class="fc" id="L41">    private FloatConverter floatConverter = new FloatConverter();</span>
-<span class="fc" id="L42">    private IntegerConverter integerConverter = new IntegerConverter();</span>
-<span class="fc" id="L43">    private LongConverter longConverter = new LongConverter();</span>
-<span class="fc" id="L44">    private ShortConverter shortConverter = new ShortConverter();</span>
+<span class="fc" id="L33">public class NumberConverter implements AtlasConverter&lt;Number&gt; {</span>
+<span class="fc" id="L34">    private BigDecimalConverter bigDecimalConverter = new BigDecimalConverter();</span>
+<span class="fc" id="L35">    private BigIntegerConverter bigIntegerConverter = new BigIntegerConverter();</span>
+<span class="fc" id="L36">    private ByteConverter byteConverter = new ByteConverter();</span>
+<span class="fc" id="L37">    private DoubleConverter doubleConverter = new DoubleConverter();</span>
+<span class="fc" id="L38">    private FloatConverter floatConverter = new FloatConverter();</span>
+<span class="fc" id="L39">    private IntegerConverter integerConverter = new IntegerConverter();</span>
+<span class="fc" id="L40">    private LongConverter longConverter = new LongConverter();</span>
+<span class="fc" id="L41">    private ShortConverter shortConverter = new ShortConverter();</span>
 
-    /**
-     * Converts to {@link BigDecimal}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DECIMAL)
     public BigDecimal toBigDecimal(Number value) throws AtlasConversionException {
-<span class="nc" id="L54">        return invoke(value, BigDecimal.class);</span>
+<span class="nc" id="L45">        return invoke(value, BigDecimal.class);</span>
     }
 
-    /**
-     * Converts to {@link BigInteger}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.BIG_INTEGER)
     public BigInteger toBigInteger(Number value) throws AtlasConversionException {
-<span class="nc" id="L65">        return invoke(value, BigInteger.class);</span>
+<span class="nc" id="L50">        return invoke(value, BigInteger.class);</span>
     }
 
-    /**
-     * Converts to {@link Boolean}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.BOOLEAN)
     public Boolean toBoolean(Number value) throws AtlasConversionException {
-<span class="nc" id="L76">        return invoke(value, Boolean.class);</span>
+<span class="nc" id="L55">        return invoke(value, Boolean.class);</span>
     }
 
-    /**
-     * Converts to {@link Byte}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.BYTE)
     public Byte toByte(Number value) throws AtlasConversionException {
-<span class="nc" id="L87">        return invoke(value, Byte.class);</span>
+<span class="nc" id="L60">        return invoke(value, Byte.class);</span>
     }
 
-    /**
-     * Converts to {@link Character}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.CHAR)
     public Character toCharacter(Number value) throws AtlasConversionException {
-<span class="nc" id="L98">        return invoke(value, Character.class);</span>
+<span class="nc" id="L65">        return invoke(value, Character.class);</span>
     }
 
-    /**
-     * Converts to {@link Date}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE_TIME)
     public Date toDate(Number value) throws AtlasConversionException {
-<span class="nc" id="L109">        return invoke(value, Date.class);</span>
+<span class="nc" id="L70">        return invoke(value, Date.class);</span>
     }
 
-    /**
-     * Converts to {@link Double}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DOUBLE)
     public Double toDouble(Number value) throws AtlasConversionException {
-<span class="nc" id="L120">        return invoke(value, Double.class);</span>
+<span class="nc" id="L75">        return invoke(value, Double.class);</span>
     }
 
-    /**
-     * Converts to {@link Float}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.FLOAT)
     public Float toFloat(Number value) throws AtlasConversionException {
-<span class="nc" id="L131">        return invoke(value, Float.class);</span>
+<span class="nc" id="L80">        return invoke(value, Float.class);</span>
     }
 
-    /**
-     * Converts to {@link Integer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.INTEGER)
     public Integer toInteger(Number value) throws AtlasConversionException {
-<span class="nc" id="L142">        return invoke(value, Integer.class);</span>
+<span class="nc" id="L85">        return invoke(value, Integer.class);</span>
     }
 
-    /**
-     * Converts to {@link LocalDate}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE)
     public LocalDate toLocalDate(Number value) throws AtlasConversionException {
-<span class="nc" id="L153">        return invoke(value, LocalDate.class);</span>
+<span class="nc" id="L90">        return invoke(value, LocalDate.class);</span>
     }
 
-    /**
-     * Converts to {@link LocalTime}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.TIME)
     public LocalTime toLocalTime(Number value) throws AtlasConversionException {
-<span class="nc" id="L164">        return invoke(value, LocalTime.class);</span>
+<span class="nc" id="L95">        return invoke(value, LocalTime.class);</span>
     }
 
-    /**
-     * Converts to {@link LocalDateTime}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(Number value) throws AtlasConversionException {
-<span class="nc" id="L175">        return invoke(value, LocalDateTime.class);</span>
+<span class="nc" id="L100">        return invoke(value, LocalDateTime.class);</span>
     }
 
-    /**
-     * Converts to {@link Long}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.LONG)
     public Long toLong(Number value) throws AtlasConversionException {
-<span class="nc" id="L186">        return invoke(value, Long.class);</span>
+<span class="nc" id="L105">        return invoke(value, Long.class);</span>
     }
 
-    /**
-     * Converts to {@link Number}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.NUMBER)
     public Number toNumber(Number value) {
-<span class="nc" id="L196">        return value;</span>
+<span class="nc" id="L110">        return value;</span>
     }
 
-    /**
-     * Converts to {@link Short}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.SHORT)
     public Short toShort(Number value) throws AtlasConversionException {
-<span class="nc" id="L207">        return invoke(value, Short.class);</span>
+<span class="nc" id="L115">        return invoke(value, Short.class);</span>
     }
 
-    /**
-     * Converts to {@link String}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public String toString(Number value) throws AtlasConversionException {
-<span class="nc" id="L218">        return invoke(value, String.class);</span>
+<span class="nc" id="L120">        return invoke(value, String.class);</span>
     }
 
-    /**
-     * Converts to {@link CharBuffer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(Number value) throws AtlasConversionException {
-<span class="nc bnc" id="L229" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        return value != null ? CharBuffer.wrap(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link CharSequence}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public CharSequence toCharSequence(Number value) throws AtlasConversionException {
-<span class="nc bnc" id="L240" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        return value != null ? toString(value) : null;</span>
     }
 
-    /**
-     * Converts to {@link StringBuffer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(Number value) throws AtlasConversionException {
-<span class="nc bnc" id="L251" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        return value != null ? new StringBuffer(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link StringBuilder}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(Number value) throws AtlasConversionException {
-<span class="nc bnc" id="L262" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">        return value != null ? new StringBuilder(toString(value)) : null;</span>
     }
 
-    /**
-     * Converts to {@link ZonedDateTime}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException conversion error
-     */
     @AtlasConversionInfo(sourceType = FieldType.NUMBER, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(Number value) throws AtlasConversionException {
-<span class="nc" id="L273">        return invoke(value, ZonedDateTime.class);</span>
+<span class="nc" id="L145">        return invoke(value, ZonedDateTime.class);</span>
     }
 
     private &lt;T&gt; T invoke(Number object, Class&lt;T&gt; returnType) throws AtlasConversionException {
-<span class="nc bnc" id="L277" title="All 2 branches missed.">        if (object == null) {</span>
-<span class="nc" id="L278">            return null;</span>
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        if (object == null) {</span>
+<span class="nc" id="L150">            return null;</span>
         }
-<span class="nc bnc" id="L280" title="All 2 branches missed.">        if (returnType.isInstance(object)) {</span>
-<span class="nc" id="L281">            return returnType.cast(object);</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (returnType.isInstance(object)) {</span>
+<span class="nc" id="L153">            return returnType.cast(object);</span>
         }
 
         try {
-<span class="nc bnc" id="L285" title="All 2 branches missed.">            if (object instanceof BigDecimal) {</span>
-<span class="nc" id="L286">                Method m = bigDecimalConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L287">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L288">                        object.getClass());</span>
-<span class="nc" id="L289">                return returnType.cast(m.invoke(bigDecimalConverter, object));</span>
+<span class="nc bnc" id="L157" title="All 2 branches missed.">            if (object instanceof BigDecimal) {</span>
+<span class="nc" id="L158">                Method m = bigDecimalConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L159">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L160">                        object.getClass());</span>
+<span class="nc" id="L161">                return returnType.cast(m.invoke(bigDecimalConverter, object));</span>
 
-<span class="nc bnc" id="L291" title="All 2 branches missed.">            } else if (object instanceof BigInteger) {</span>
-<span class="nc" id="L292">                Method m = bigIntegerConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L293">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L294">                        object.getClass());</span>
-<span class="nc" id="L295">                return returnType.cast(m.invoke(bigIntegerConverter, object));</span>
+<span class="nc bnc" id="L163" title="All 2 branches missed.">            } else if (object instanceof BigInteger) {</span>
+<span class="nc" id="L164">                Method m = bigIntegerConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L165">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L166">                        object.getClass());</span>
+<span class="nc" id="L167">                return returnType.cast(m.invoke(bigIntegerConverter, object));</span>
 
-<span class="nc bnc" id="L297" title="All 2 branches missed.">            } else if (object instanceof Byte) {</span>
-<span class="nc" id="L298">                Method m = byteConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L299">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L300">                        object.getClass());</span>
-<span class="nc" id="L301">                return returnType.cast(m.invoke(byteConverter, object));</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            } else if (object instanceof Byte) {</span>
+<span class="nc" id="L170">                Method m = byteConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L171">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L172">                        object.getClass());</span>
+<span class="nc" id="L173">                return returnType.cast(m.invoke(byteConverter, object));</span>
 
-<span class="nc bnc" id="L303" title="All 2 branches missed.">            } else if (object instanceof Double) {</span>
-<span class="nc" id="L304">                Method m = doubleConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L305">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L306">                        object.getClass());</span>
-<span class="nc" id="L307">                return returnType.cast(m.invoke(doubleConverter, object));</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            } else if (object instanceof Double) {</span>
+<span class="nc" id="L176">                Method m = doubleConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L177">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L178">                        object.getClass());</span>
+<span class="nc" id="L179">                return returnType.cast(m.invoke(doubleConverter, object));</span>
 
-<span class="nc bnc" id="L309" title="All 2 branches missed.">            } else if (object instanceof Float) {</span>
-<span class="nc" id="L310">                Method m = floatConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L311">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L312">                        object.getClass());</span>
-<span class="nc" id="L313">                return returnType.cast(m.invoke(floatConverter, object));</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            } else if (object instanceof Float) {</span>
+<span class="nc" id="L182">                Method m = floatConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L183">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L184">                        object.getClass());</span>
+<span class="nc" id="L185">                return returnType.cast(m.invoke(floatConverter, object));</span>
 
-<span class="nc bnc" id="L315" title="All 2 branches missed.">            } else if (object instanceof Integer) {</span>
-<span class="nc" id="L316">                Method m = integerConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L317">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L318">                        object.getClass());</span>
-<span class="nc" id="L319">                return returnType.cast(m.invoke(integerConverter, object));</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            } else if (object instanceof Integer) {</span>
+<span class="nc" id="L188">                Method m = integerConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L189">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L190">                        object.getClass());</span>
+<span class="nc" id="L191">                return returnType.cast(m.invoke(integerConverter, object));</span>
 
-<span class="nc bnc" id="L321" title="All 2 branches missed.">            } else if (object instanceof Long) {</span>
-<span class="nc" id="L322">                Method m = longConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L323">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L324">                        object.getClass());</span>
-<span class="nc" id="L325">                return returnType.cast(m.invoke(longConverter, object));</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">            } else if (object instanceof Long) {</span>
+<span class="nc" id="L194">                Method m = longConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L195">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L196">                        object.getClass());</span>
+<span class="nc" id="L197">                return returnType.cast(m.invoke(longConverter, object));</span>
 
-<span class="nc bnc" id="L327" title="All 2 branches missed.">            } else if (object instanceof Short) {</span>
-<span class="nc" id="L328">                Method m = shortConverter.getClass().getDeclaredMethod(</span>
-<span class="nc" id="L329">                        &quot;to&quot; + returnType.getSimpleName(),</span>
-<span class="nc" id="L330">                        object.getClass());</span>
-<span class="nc" id="L331">                return returnType.cast(m.invoke(shortConverter, object));</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">            } else if (object instanceof Short) {</span>
+<span class="nc" id="L200">                Method m = shortConverter.getClass().getDeclaredMethod(</span>
+<span class="nc" id="L201">                        &quot;to&quot; + returnType.getSimpleName(),</span>
+<span class="nc" id="L202">                        object.getClass());</span>
+<span class="nc" id="L203">                return returnType.cast(m.invoke(shortConverter, object));</span>
 
             } else {
-<span class="nc" id="L334">                throw new AtlasConversionException(String.format(</span>
-<span class="nc" id="L335">                        &quot;Unsupported Number type '%s'&quot;, object.getClass().getName()));</span>
+<span class="nc" id="L206">                throw new AtlasConversionException(String.format(</span>
+<span class="nc" id="L207">                        &quot;Unsupported Number type '%s'&quot;, object.getClass().getName()));</span>
             }
-<span class="nc" id="L337">        } catch (Exception e) {</span>
-<span class="nc" id="L338">            throw new AtlasConversionException(String.format(</span>
-<span class="nc" id="L339">                    &quot;No converter found from='%s' to='%s'&quot;, object.getClass().getName(), returnType.getName()));</span>
+<span class="nc" id="L209">        } catch (Exception e) {</span>
+<span class="nc" id="L210">            throw new AtlasConversionException(String.format(</span>
+<span class="nc" id="L211">                    &quot;No converter found from='%s' to='%s'&quot;, object.getClass().getName(), returnType.getName()));</span>
         }
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

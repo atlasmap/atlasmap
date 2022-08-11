@@ -40,328 +40,312 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldType;
 
 /**
- * The {@link AtlasFieldWriter} implementation of the JSON Document.
  */
 public class JsonFieldWriter implements AtlasFieldWriter {
-<span class="fc" id="L46">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonFieldWriter.class);</span>
+<span class="fc" id="L45">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JsonFieldWriter.class);</span>
 
-<span class="pc" id="L48">    private ObjectMapper objectMapper = null;</span>
-<span class="pc" id="L49">    private ContainerNode&lt;?&gt; rootNode = null;</span>
+<span class="pc" id="L47">    private ObjectMapper objectMapper = null;</span>
+<span class="pc" id="L48">    private ContainerNode&lt;?&gt; rootNode = null;</span>
 
-    /**
-     * A constructor.
-     */
-<span class="fc" id="L54">    public JsonFieldWriter() {</span>
-<span class="fc" id="L55">        this.objectMapper = new ObjectMapper()</span>
-<span class="fc" id="L56">            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)</span>
-<span class="fc" id="L57">            .setDefaultPrettyPrinter(new DefaultPrettyPrinter());</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L50">    public JsonFieldWriter() {</span>
+<span class="fc" id="L51">        this.objectMapper = new ObjectMapper()</span>
+<span class="fc" id="L52">            .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES)</span>
+<span class="fc" id="L53">            .setDefaultPrettyPrinter(new DefaultPrettyPrinter());</span>
+<span class="fc" id="L54">    }</span>
 
-    /**
-     * A constructor.
-     * @param objectMapper mapper
-     */
-<span class="nc" id="L64">    public JsonFieldWriter(ObjectMapper objectMapper) {</span>
-<span class="nc" id="L65">        this.objectMapper = objectMapper;</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L56">    public JsonFieldWriter(ObjectMapper objectMapper) {</span>
+<span class="nc" id="L57">        this.objectMapper = objectMapper;</span>
+<span class="nc" id="L58">    }</span>
 
-    /**
-     * Gets the root node.
-     * @return root node
-     */
     public ContainerNode&lt;?&gt; getRootNode() {
-<span class="fc" id="L73">        return rootNode;</span>
+<span class="fc" id="L61">        return rootNode;</span>
     }
 
-    /**
-     * Gets the ObjectMapper.
-     * @return ObjectMapper
-     */
     public ObjectMapper getObjectMapper() {
-<span class="fc" id="L81">        return objectMapper;</span>
+<span class="fc" id="L65">        return objectMapper;</span>
     }
 
     @Override
     public void write(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L86">        Field targetField = session.head().getTargetField();</span>
-<span class="fc bfc" id="L87" title="All 2 branches covered.">        if (targetField == null) {</span>
-<span class="fc" id="L88">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'jsonField' cannot be null&quot;));</span>
+<span class="fc" id="L70">        Field targetField = session.head().getTargetField();</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        if (targetField == null) {</span>
+<span class="fc" id="L72">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'jsonField' cannot be null&quot;));</span>
         }
-<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L91">            LOG.debug(&quot;Field: &quot; + AtlasModelFactory.toString(targetField));</span>
-<span class="nc" id="L92">            LOG.debug(&quot;Field type=&quot; + targetField.getFieldType() + &quot; path=&quot; + targetField.getPath() + &quot; v=&quot;</span>
-<span class="nc" id="L93">                    + targetField.getValue());</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L75">            LOG.debug(&quot;Field: &quot; + AtlasModelFactory.toString(targetField));</span>
+<span class="nc" id="L76">            LOG.debug(&quot;Field type=&quot; + targetField.getFieldType() + &quot; path=&quot; + targetField.getPath() + &quot; v=&quot;</span>
+<span class="nc" id="L77">                    + targetField.getValue());</span>
         }
-<span class="fc" id="L95">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
-<span class="fc" id="L96">        SegmentContext lastSegment = path.getLastSegment();</span>
+<span class="fc" id="L79">        AtlasPath path = new AtlasPath(targetField.getPath());</span>
+<span class="fc" id="L80">        SegmentContext lastSegment = path.getLastSegment();</span>
 
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (this.rootNode == null) {</span>
-<span class="fc bfc" id="L99" title="All 2 branches covered.">            if (path.hasCollectionRoot()) {</span>
-<span class="fc" id="L100">                this.rootNode = objectMapper.createArrayNode();</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (this.rootNode == null) {</span>
+<span class="fc bfc" id="L83" title="All 2 branches covered.">            if (path.hasCollectionRoot()) {</span>
+<span class="fc" id="L84">                this.rootNode = objectMapper.createArrayNode();</span>
             } else {
-<span class="fc" id="L102">                this.rootNode = objectMapper.createObjectNode();</span>
+<span class="fc" id="L86">                this.rootNode = objectMapper.createObjectNode();</span>
             }
         }
-<span class="fc" id="L105">        ContainerNode&lt;?&gt; parentNode = this.rootNode;</span>
+<span class="fc" id="L89">        ContainerNode&lt;?&gt; parentNode = this.rootNode;</span>
 
-<span class="fc" id="L107">        SegmentContext parentSegment = null;</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (SegmentContext segment : path.getSegments(true)) {</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">            if (!segment.equals(lastSegment)) { // this is a parent node.</span>
-<span class="pc bpc" id="L110" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L111">                    LOG.debug(&quot;Now processing parent segment: &quot; + segment);</span>
+<span class="fc" id="L91">        SegmentContext parentSegment = null;</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">        for (SegmentContext segment : path.getSegments(true)) {</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (!segment.equals(lastSegment)) { // this is a parent node.</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L95">                    LOG.debug(&quot;Now processing parent segment: &quot; + segment);</span>
                 }
                 JsonNode childNode;
-<span class="fc bfc" id="L114" title="All 2 branches covered.">                if (segment.isRoot()) {</span>
-<span class="fc bfc" id="L115" title="All 2 branches covered.">                    if (parentNode instanceof ArrayNode) {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">                if (segment.isRoot()) {</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">                    if (parentNode instanceof ArrayNode) {</span>
                         // taking care of topmost collection
-<span class="fc" id="L117">                        childNode = parentNode;</span>
+<span class="fc" id="L101">                        childNode = parentNode;</span>
                     } else {
-<span class="fc" id="L119">                        parentSegment = segment;</span>
-<span class="fc" id="L120">                        continue;</span>
+<span class="fc" id="L103">                        parentSegment = segment;</span>
+<span class="fc" id="L104">                        continue;</span>
                     }
                 } else {
-<span class="fc" id="L123">                    childNode = getChildNode(parentNode, parentSegment, segment);</span>
+<span class="fc" id="L107">                    childNode = getChildNode(parentNode, parentSegment, segment);</span>
                 }
-<span class="fc bfc" id="L125" title="All 2 branches covered.">                if (childNode == null) {</span>
-<span class="fc" id="L126">                    childNode = createParentNode(parentNode, parentSegment, segment);</span>
-<span class="fc bfc" id="L127" title="All 2 branches covered.">                } else if (childNode instanceof ArrayNode) {</span>
-<span class="fc" id="L128">                    Integer index = segment.getCollectionIndex();</span>
-<span class="fc bfc" id="L129" title="All 2 branches covered.">                    if (index == null) {</span>
-<span class="fc" id="L130">                        return;</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">                if (childNode == null) {</span>
+<span class="fc" id="L110">                    childNode = createParentNode(parentNode, parentSegment, segment);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">                } else if (childNode instanceof ArrayNode) {</span>
+<span class="fc" id="L112">                    Integer index = segment.getCollectionIndex();</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                    if (index == null) {</span>
+<span class="fc" id="L114">                        return;</span>
                     }
 
-<span class="fc" id="L133">                    ArrayNode arrayChild = (ArrayNode) childNode;</span>
-<span class="fc bfc" id="L134" title="All 2 branches covered.">                    if (arrayChild.size() &lt; (index + 1)) {</span>
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L136">                            LOG.debug(&quot;Object Array is too small, resizing to accomodate index: &quot; + index</span>
+<span class="fc" id="L117">                    ArrayNode arrayChild = (ArrayNode) childNode;</span>
+<span class="fc bfc" id="L118" title="All 2 branches covered.">                    if (arrayChild.size() &lt; (index + 1)) {</span>
+<span class="pc bpc" id="L119" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L120">                            LOG.debug(&quot;Object Array is too small, resizing to accomodate index: &quot; + index</span>
                                     + &quot;, current array: &quot; + arrayChild);
                         }
                         // if our array doesn't have index + 1 items in it, add nulls until we have the
                         // index available
-<span class="fc bfc" id="L141" title="All 2 branches covered.">                        while (arrayChild.size() &lt; (index + 1)) {</span>
-<span class="fc" id="L142">                            arrayChild.addObject();</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">                        while (arrayChild.size() &lt; (index + 1)) {</span>
+<span class="fc" id="L126">                            arrayChild.addObject();</span>
                         }
-<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L145">                            LOG.debug(&quot;Object Array after resizing: &quot; + arrayChild);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L129">                            LOG.debug(&quot;Object Array after resizing: &quot; + arrayChild);</span>
                         }
                     }
-<span class="fc" id="L148">                    childNode = arrayChild.get(index);</span>
+<span class="fc" id="L132">                    childNode = arrayChild.get(index);</span>
                 }
-<span class="fc bfc" id="L150" title="All 2 branches covered.">                if (childNode == null) {</span>
-<span class="fc" id="L151">                    return;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">                if (childNode == null) {</span>
+<span class="fc" id="L135">                    return;</span>
                 }
-<span class="fc" id="L153">                parentNode = (ObjectNode) childNode;</span>
-<span class="fc" id="L154">                parentSegment = segment;</span>
-<span class="fc" id="L155">            } else { // this is the last segment of the path, write the value</span>
-<span class="fc bfc" id="L156" title="All 2 branches covered.">                if (targetField.getFieldType() == FieldType.COMPLEX) {</span>
-<span class="fc" id="L157">                    createParentNode(parentNode, parentSegment, segment);</span>
-<span class="fc" id="L158">                    return;</span>
+<span class="fc" id="L137">                parentNode = (ObjectNode) childNode;</span>
+<span class="fc" id="L138">                parentSegment = segment;</span>
+<span class="fc" id="L139">            } else { // this is the last segment of the path, write the value</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">                if (targetField.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc" id="L141">                    createParentNode(parentNode, parentSegment, segment);</span>
+<span class="fc" id="L142">                    return;</span>
                 }
-<span class="pc bpc" id="L160" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L161">                    LOG.debug(&quot;Now processing field value segment: &quot; + segment);</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L145">                    LOG.debug(&quot;Now processing field value segment: &quot; + segment);</span>
                 }
-<span class="fc" id="L163">                writeValue(parentNode, parentSegment, segment, targetField);</span>
+<span class="fc" id="L147">                writeValue(parentNode, parentSegment, segment, targetField);</span>
             }
-<span class="fc" id="L165">        }</span>
-<span class="fc" id="L166">    }</span>
+<span class="fc" id="L149">        }</span>
+<span class="fc" id="L150">    }</span>
 
     private void writeValue(ContainerNode&lt;?&gt; parentNode, SegmentContext parentSegment, SegmentContext segment, Field field)
             throws AtlasException {
-<span class="pc bpc" id="L170" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L171">            LOG.debug(&quot;Writing field value '&quot; + segment + &quot;' in parent node '&quot; + parentSegment + &quot;', parentNode: &quot;</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L155">            LOG.debug(&quot;Writing field value '&quot; + segment + &quot;' in parent node '&quot; + parentSegment + &quot;', parentNode: &quot;</span>
                     + parentNode);
         }
-<span class="fc" id="L174">        JsonNode valueNode = createValueNode(field);</span>
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L176">            LOG.debug(&quot;Value to write: &quot; + valueNode);</span>
+<span class="fc" id="L158">        JsonNode valueNode = createValueNode(field);</span>
+<span class="pc bpc" id="L159" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L160">            LOG.debug(&quot;Value to write: &quot; + valueNode);</span>
         }
-<span class="fc" id="L178">        String cleanedSegment = segment.getName();</span>
-<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (segment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L162">        String cleanedSegment = segment.getName();</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (segment.getCollectionType() != CollectionType.NONE) {</span>
             // if this field is a collection, we need to place our value in an array
 
             // get or construct the array the value will be placed in
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L184">                LOG.debug(&quot;Field type is collection. Fetching array '&quot; + segment + &quot;' from parent '&quot; + parentSegment</span>
+<span class="pc bpc" id="L167" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L168">                LOG.debug(&quot;Field type is collection. Fetching array '&quot; + segment + &quot;' from parent '&quot; + parentSegment</span>
                         + &quot;': &quot; + parentNode);
             }
 
             ArrayNode arrayChild;
-<span class="pc bpc" id="L189" title="2 of 6 branches missed.">            if (parentSegment == null &amp;&amp; cleanedSegment.isEmpty() &amp;&amp; this.rootNode instanceof ArrayNode) {</span>
+<span class="pc bpc" id="L173" title="2 of 6 branches missed.">            if (parentSegment == null &amp;&amp; cleanedSegment.isEmpty() &amp;&amp; this.rootNode instanceof ArrayNode) {</span>
                 // taking care of topmost collection
-<span class="fc" id="L191">                arrayChild = (ArrayNode)parentNode;</span>
+<span class="fc" id="L175">                arrayChild = (ArrayNode)parentNode;</span>
             } else {
-<span class="fc" id="L193">                arrayChild = (ArrayNode) getChildNode(parentNode, parentSegment, segment);</span>
+<span class="fc" id="L177">                arrayChild = (ArrayNode) getChildNode(parentNode, parentSegment, segment);</span>
             }
-<span class="fc bfc" id="L195" title="All 2 branches covered.">            if (arrayChild == null) {</span>
-<span class="pc bpc" id="L196" title="1 of 2 branches missed.">                if (parentNode instanceof ObjectNode) {</span>
-<span class="fc" id="L197">                    arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">                } else if (parentNode instanceof ArrayNode) {</span>
-<span class="nc" id="L199">                    arrayChild = ((ArrayNode)parentNode).addArray();</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (arrayChild == null) {</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                if (parentNode instanceof ObjectNode) {</span>
+<span class="fc" id="L181">                    arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">                } else if (parentNode instanceof ArrayNode) {</span>
+<span class="nc" id="L183">                    arrayChild = ((ArrayNode)parentNode).addArray();</span>
                 } else {
-<span class="nc" id="L201">                    throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
-<span class="nc" id="L202">                            parentNode.getClass(), segment));</span>
+<span class="nc" id="L185">                    throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
+<span class="nc" id="L186">                            parentNode.getClass(), segment));</span>
                 }
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L205">                    LOG.debug(&quot;Could not find array to place value in, created it in parent: &quot; + parentNode);</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L189">                    LOG.debug(&quot;Could not find array to place value in, created it in parent: &quot; + parentNode);</span>
                 }
             }
 
-<span class="pc bpc" id="L209" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L210">                LOG.debug(&quot;Array before placing value: &quot; + arrayChild);</span>
+<span class="pc bpc" id="L193" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L194">                LOG.debug(&quot;Array before placing value: &quot; + arrayChild);</span>
             }
 
             // determine where in the array our value will go
-<span class="fc" id="L214">            Integer index = segment.getCollectionIndex();</span>
-<span class="fc bfc" id="L215" title="All 2 branches covered.">            if (index == null) {</span>
+<span class="fc" id="L198">            Integer index = segment.getCollectionIndex();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            if (index == null) {</span>
                 // No index is specified in the collection path
-<span class="fc" id="L217">                return;</span>
+<span class="fc" id="L201">                return;</span>
             }
 
-<span class="pc bpc" id="L220" title="1 of 2 branches missed.">            if (arrayChild.size() &lt; (index + 1)) {</span>
-<span class="pc bpc" id="L221" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L222">                    LOG.debug(&quot;Value Array is too small, resizing to accomodate index: &quot; + index + &quot;, current array: &quot;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">            if (arrayChild.size() &lt; (index + 1)) {</span>
+<span class="pc bpc" id="L205" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L206">                    LOG.debug(&quot;Value Array is too small, resizing to accomodate index: &quot; + index + &quot;, current array: &quot;</span>
                             + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add nulls until we have the
                 // index available
-<span class="fc bfc" id="L227" title="All 2 branches covered.">                while (arrayChild.size() &lt; (index + 1)) {</span>
-<span class="fc" id="L228">                    arrayChild.addNull();</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">                while (arrayChild.size() &lt; (index + 1)) {</span>
+<span class="fc" id="L212">                    arrayChild.addNull();</span>
                 }
-<span class="pc bpc" id="L230" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L231">                    LOG.debug(&quot;Value Array after resizing: &quot; + arrayChild);</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L215">                    LOG.debug(&quot;Value Array after resizing: &quot; + arrayChild);</span>
                 }
             }
 
             // set the value in the array
-<span class="fc" id="L236">            arrayChild.set(index, valueNode);</span>
-<span class="fc" id="L237">        } else {</span>
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">            if (parentNode instanceof ArrayNode) {</span>
-<span class="nc" id="L239">                ((ArrayNode)parentNode).add(valueNode);</span>
-<span class="pc bpc" id="L240" title="1 of 2 branches missed.">            } else if (parentNode instanceof ObjectNode) {</span>
-<span class="fc" id="L241">                ((ObjectNode)parentNode).replace(cleanedSegment, valueNode);</span>
+<span class="fc" id="L220">            arrayChild.set(index, valueNode);</span>
+<span class="fc" id="L221">        } else {</span>
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">            if (parentNode instanceof ArrayNode) {</span>
+<span class="nc" id="L223">                ((ArrayNode)parentNode).add(valueNode);</span>
+<span class="pc bpc" id="L224" title="1 of 2 branches missed.">            } else if (parentNode instanceof ObjectNode) {</span>
+<span class="fc" id="L225">                ((ObjectNode)parentNode).replace(cleanedSegment, valueNode);</span>
             } else {
-<span class="nc" id="L243">                throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
-<span class="nc" id="L244">                        parentNode.getClass(), segment));</span>
+<span class="nc" id="L227">                throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
+<span class="nc" id="L228">                        parentNode.getClass(), segment));</span>
             }
         }
 
-<span class="pc bpc" id="L248" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L249">            LOG.debug(&quot;Parent node after value written: &quot; + parentNode);</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L233">            LOG.debug(&quot;Parent node after value written: &quot; + parentNode);</span>
         }
-<span class="fc" id="L251">    }</span>
+<span class="fc" id="L235">    }</span>
 
     private ObjectNode createParentNode(ContainerNode&lt;?&gt; parentNode, SegmentContext parentSegment, SegmentContext segment)
             throws AtlasException {
-<span class="pc bpc" id="L255" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L256">            LOG.debug(&quot;Creating parent node '&quot; + segment + &quot;' under previous parent '&quot; + parentSegment + &quot;' (&quot;</span>
-<span class="nc" id="L257">                    + parentNode.getClass().getName() + &quot;)&quot;);</span>
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L240">            LOG.debug(&quot;Creating parent node '&quot; + segment + &quot;' under previous parent '&quot; + parentSegment + &quot;' (&quot;</span>
+<span class="nc" id="L241">                    + parentNode.getClass().getName() + &quot;)&quot;);</span>
         }
-<span class="fc" id="L259">        ObjectNode childNode = null;</span>
-<span class="fc" id="L260">        String cleanedSegment = segment.getName();</span>
-<span class="fc bfc" id="L261" title="All 2 branches covered.">        if (segment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L243">        ObjectNode childNode = null;</span>
+<span class="fc" id="L244">        String cleanedSegment = segment.getName();</span>
+<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (segment.getCollectionType() != CollectionType.NONE) {</span>
             ArrayNode arrayChild;
-<span class="pc bpc" id="L263" title="1 of 2 branches missed.">            if (parentNode instanceof ObjectNode) {</span>
-<span class="fc" id="L264">                arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);</span>
-<span class="nc bnc" id="L265" title="All 2 branches missed.">            } else if (parentNode instanceof ArrayNode) {</span>
-<span class="nc" id="L266">                arrayChild = ((ArrayNode)parentNode).addArray();</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">            if (parentNode instanceof ObjectNode) {</span>
+<span class="fc" id="L248">                arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);</span>
+<span class="nc bnc" id="L249" title="All 2 branches missed.">            } else if (parentNode instanceof ArrayNode) {</span>
+<span class="nc" id="L250">                arrayChild = ((ArrayNode)parentNode).addArray();</span>
             } else {
-<span class="nc" id="L268">                throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
-<span class="nc" id="L269">                        parentNode.getClass(), segment));</span>
+<span class="nc" id="L252">                throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
+<span class="nc" id="L253">                        parentNode.getClass(), segment));</span>
             }
-<span class="fc" id="L271">            Integer index = segment.getCollectionIndex();</span>
+<span class="fc" id="L255">            Integer index = segment.getCollectionIndex();</span>
 
-<span class="fc bfc" id="L273" title="All 2 branches covered.">            if (index == null) {</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">            if (index == null) {</span>
                 // No index is specified in the collection path - create only an array node and leave it empty
-<span class="fc" id="L275">                return null;</span>
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">            } else if (arrayChild.size() &lt; (index + 1)) {</span>
-<span class="pc bpc" id="L277" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L278">                    LOG.debug(&quot;Object Array is too small, resizing to accomodate index: &quot; + index + &quot;, current array: &quot;</span>
+<span class="fc" id="L259">                return null;</span>
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">            } else if (arrayChild.size() &lt; (index + 1)) {</span>
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L262">                    LOG.debug(&quot;Object Array is too small, resizing to accomodate index: &quot; + index + &quot;, current array: &quot;</span>
                             + arrayChild);
                 }
                 // if our array doesn't have index + 1 items in it, add objects until we have
                 // the index available
-<span class="fc bfc" id="L283" title="All 2 branches covered.">                while (arrayChild.size() &lt; (index + 1)) {</span>
-<span class="fc" id="L284">                    arrayChild.addObject();</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                while (arrayChild.size() &lt; (index + 1)) {</span>
+<span class="fc" id="L268">                    arrayChild.addObject();</span>
                 }
-<span class="pc bpc" id="L286" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L287">                    LOG.debug(&quot;Object Array after resizing: &quot; + arrayChild);</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L271">                    LOG.debug(&quot;Object Array after resizing: &quot; + arrayChild);</span>
                 }
             }
-<span class="pc bpc" id="L290" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L291">                LOG.debug(&quot;Created wrapper parent array node '&quot; + segment + &quot;': &quot; + arrayChild);</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L275">                LOG.debug(&quot;Created wrapper parent array node '&quot; + segment + &quot;': &quot; + arrayChild);</span>
             }
-<span class="fc" id="L293">            childNode = (ObjectNode) arrayChild.get(index);</span>
-<span class="fc" id="L294">        } else {</span>
-<span class="pc bpc" id="L295" title="1 of 2 branches missed.">            if (parentNode instanceof ObjectNode) {</span>
-<span class="fc" id="L296">                childNode = ((ObjectNode)parentNode).putObject(cleanedSegment);</span>
-<span class="nc bnc" id="L297" title="All 2 branches missed.">            } else if (parentNode instanceof ArrayNode) {</span>
-<span class="nc" id="L298">                childNode = ((ArrayNode) parentNode).addObject();</span>
+<span class="fc" id="L277">            childNode = (ObjectNode) arrayChild.get(index);</span>
+<span class="fc" id="L278">        } else {</span>
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">            if (parentNode instanceof ObjectNode) {</span>
+<span class="fc" id="L280">                childNode = ((ObjectNode)parentNode).putObject(cleanedSegment);</span>
+<span class="nc bnc" id="L281" title="All 2 branches missed.">            } else if (parentNode instanceof ArrayNode) {</span>
+<span class="nc" id="L282">                childNode = ((ArrayNode) parentNode).addObject();</span>
             } else {
-<span class="nc" id="L300">                throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
-<span class="nc" id="L301">                        parentNode.getClass(), segment));</span>
+<span class="nc" id="L284">                throw new AtlasException(String.format(&quot;Unknown JsonNode type '%s' for segment '%s'&quot;,</span>
+<span class="nc" id="L285">                        parentNode.getClass(), segment));</span>
             }
         }
-<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L305">            LOG.debug(&quot;Parent Node '&quot; + parentSegment + &quot;' after adding child parent node '&quot; + segment + &quot;':&quot;</span>
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L289">            LOG.debug(&quot;Parent Node '&quot; + parentSegment + &quot;' after adding child parent node '&quot; + segment + &quot;':&quot;</span>
                     + parentNode);
         }
-<span class="fc" id="L308">        return childNode;</span>
+<span class="fc" id="L292">        return childNode;</span>
     }
 
     private JsonNode createValueNode(Field jsonField) {
-<span class="fc" id="L312">        FieldType type = jsonField.getFieldType();</span>
-<span class="fc" id="L313">        Object value = jsonField.getValue();</span>
-<span class="fc" id="L314">        JsonNode valueNode = null;</span>
-<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (value == null) {</span>
-<span class="fc" id="L316">            valueNode = rootNode.nullNode();</span>
-<span class="fc bfc" id="L317" title="All 2 branches covered.">        } else if (FieldType.STRING.equals(type)) {</span>
-<span class="fc" id="L318">            valueNode = rootNode.textNode(String.valueOf(value));</span>
-<span class="fc bfc" id="L319" title="All 2 branches covered.">        } else if (FieldType.CHAR.equals(type)) {</span>
-<span class="fc" id="L320">            valueNode = rootNode.textNode(Character.toString((char) value));</span>
-<span class="fc bfc" id="L321" title="All 2 branches covered.">        } else if (FieldType.BOOLEAN.equals(type)) {</span>
-<span class="fc" id="L322">            valueNode = rootNode.booleanNode((Boolean) value);</span>
-<span class="fc bfc" id="L323" title="All 2 branches covered.">        } else if (FieldType.INTEGER.equals(type)) {</span>
-<span class="fc" id="L324">            valueNode = rootNode.numberNode((Integer) value);</span>
-<span class="fc bfc" id="L325" title="All 6 branches covered.">        } else if (FieldType.DOUBLE.equals(type) || FieldType.FLOAT.equals(type) || FieldType.NUMBER.equals(type)) {</span>
-<span class="fc" id="L326">            valueNode = rootNode.numberNode(new BigDecimal(String.valueOf(value)));</span>
-<span class="fc bfc" id="L327" title="All 2 branches covered.">        } else if (FieldType.SHORT.equals(type)) {</span>
-<span class="fc" id="L328">            valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));</span>
-<span class="fc bfc" id="L329" title="All 2 branches covered.">        } else if (FieldType.LONG.equals(type)) {</span>
-<span class="fc" id="L330">            valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));</span>
-<span class="fc bfc" id="L331" title="All 2 branches covered.">        } else if (FieldType.BYTE.equals(type)) {</span>
-<span class="fc" id="L332">            valueNode = rootNode.numberNode(Byte.valueOf(String.valueOf(value)));</span>
-<span class="pc bpc" id="L333" title="1 of 2 branches missed.">        } else if (FieldType.BIG_INTEGER.equals(type)) {</span>
-<span class="fc" id="L334">            valueNode = rootNode.numberNode(new BigInteger(String.valueOf(value)));</span>
+<span class="fc" id="L296">        FieldType type = jsonField.getFieldType();</span>
+<span class="fc" id="L297">        Object value = jsonField.getValue();</span>
+<span class="fc" id="L298">        JsonNode valueNode = null;</span>
+<span class="fc bfc" id="L299" title="All 2 branches covered.">        if (value == null) {</span>
+<span class="fc" id="L300">            valueNode = rootNode.nullNode();</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        } else if (FieldType.STRING.equals(type)) {</span>
+<span class="fc" id="L302">            valueNode = rootNode.textNode(String.valueOf(value));</span>
+<span class="fc bfc" id="L303" title="All 2 branches covered.">        } else if (FieldType.CHAR.equals(type)) {</span>
+<span class="fc" id="L304">            valueNode = rootNode.textNode(Character.toString((char) value));</span>
+<span class="fc bfc" id="L305" title="All 2 branches covered.">        } else if (FieldType.BOOLEAN.equals(type)) {</span>
+<span class="fc" id="L306">            valueNode = rootNode.booleanNode((Boolean) value);</span>
+<span class="fc bfc" id="L307" title="All 2 branches covered.">        } else if (FieldType.INTEGER.equals(type)) {</span>
+<span class="fc" id="L308">            valueNode = rootNode.numberNode((Integer) value);</span>
+<span class="fc bfc" id="L309" title="All 6 branches covered.">        } else if (FieldType.DOUBLE.equals(type) || FieldType.FLOAT.equals(type) || FieldType.NUMBER.equals(type)) {</span>
+<span class="fc" id="L310">            valueNode = rootNode.numberNode(new BigDecimal(String.valueOf(value)));</span>
+<span class="fc bfc" id="L311" title="All 2 branches covered.">        } else if (FieldType.SHORT.equals(type)) {</span>
+<span class="fc" id="L312">            valueNode = rootNode.numberNode(Short.valueOf(String.valueOf(value)));</span>
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        } else if (FieldType.LONG.equals(type)) {</span>
+<span class="fc" id="L314">            valueNode = rootNode.numberNode(Long.valueOf(String.valueOf(value)));</span>
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        } else if (FieldType.BYTE.equals(type)) {</span>
+<span class="fc" id="L316">            valueNode = rootNode.numberNode(Byte.valueOf(String.valueOf(value)));</span>
+<span class="pc bpc" id="L317" title="1 of 2 branches missed.">        } else if (FieldType.BIG_INTEGER.equals(type)) {</span>
+<span class="fc" id="L318">            valueNode = rootNode.numberNode(new BigInteger(String.valueOf(value)));</span>
         } else {
-<span class="nc" id="L336">            valueNode = rootNode.textNode(String.valueOf(value));</span>
+<span class="nc" id="L320">            valueNode = rootNode.textNode(String.valueOf(value));</span>
         }
-<span class="pc bpc" id="L338" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L339" title="All 2 branches missed.">            String valueClass = value == null ? &quot;null&quot; : value.getClass().getName();</span>
-<span class="nc" id="L340">            LOG.debug(&quot;Converted JsonField value to ValueNode. Type: &quot; + type + &quot;, value: &quot; + value + &quot;(&quot; + valueClass</span>
-<span class="nc" id="L341">                    + &quot;), node class: &quot; + valueNode.getClass().getName() + &quot;, node: &quot; + valueNode);</span>
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L323" title="All 2 branches missed.">            String valueClass = value == null ? &quot;null&quot; : value.getClass().getName();</span>
+<span class="nc" id="L324">            LOG.debug(&quot;Converted JsonField value to ValueNode. Type: &quot; + type + &quot;, value: &quot; + value + &quot;(&quot; + valueClass</span>
+<span class="nc" id="L325">                    + &quot;), node class: &quot; + valueNode.getClass().getName() + &quot;, node: &quot; + valueNode);</span>
         }
-<span class="fc" id="L343">        return valueNode;</span>
+<span class="fc" id="L327">        return valueNode;</span>
     }
 
     private JsonNode getChildNode(ContainerNode&lt;?&gt; parentNode, SegmentContext parentSegment, SegmentContext segment) {
-<span class="pc bpc" id="L347" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L348">            LOG.debug(&quot;Looking for child node '&quot; + segment + &quot;' in parent '&quot; + parentSegment + &quot;': &quot; + parentNode);</span>
+<span class="pc bpc" id="L331" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L332">            LOG.debug(&quot;Looking for child node '&quot; + segment + &quot;' in parent '&quot; + parentSegment + &quot;': &quot; + parentNode);</span>
         }
-<span class="fc" id="L350">        String cleanedSegment = segment.getName();</span>
-<span class="fc" id="L351">        JsonNode childNode = parentNode.path(cleanedSegment);</span>
-<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {</span>
-<span class="fc" id="L353">            childNode = null;</span>
+<span class="fc" id="L334">        String cleanedSegment = segment.getName();</span>
+<span class="fc" id="L335">        JsonNode childNode = parentNode.path(cleanedSegment);</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">        if (JsonNodeType.MISSING.equals(childNode.getNodeType())) {</span>
+<span class="fc" id="L337">            childNode = null;</span>
         }
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L356" title="All 2 branches missed.">            if (childNode == null) {</span>
-<span class="nc" id="L357">                LOG.debug(&quot;Could not find child node '&quot; + segment + &quot;' in parent '&quot; + parentSegment + &quot;'.&quot;);</span>
+<span class="pc bpc" id="L339" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">            if (childNode == null) {</span>
+<span class="nc" id="L341">                LOG.debug(&quot;Could not find child node '&quot; + segment + &quot;' in parent '&quot; + parentSegment + &quot;'.&quot;);</span>
             } else {
-<span class="nc" id="L359">                LOG.debug(&quot;Found child node '&quot; + segment + &quot;' in parent '&quot; + parentSegment + &quot;', class: &quot;</span>
-<span class="nc" id="L360">                        + childNode.getClass().getName() + &quot;, node: &quot; + childNode);</span>
+<span class="nc" id="L343">                LOG.debug(&quot;Found child node '&quot; + segment + &quot;' in parent '&quot; + parentSegment + &quot;', class: &quot;</span>
+<span class="nc" id="L344">                        + childNode.getClass().getName() + &quot;, node: &quot; + childNode);</span>
             }
         }
-<span class="fc" id="L363">        return childNode;</span>
+<span class="fc" id="L347">        return childNode;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

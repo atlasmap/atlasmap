@@ -21,26 +21,23 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-/**
- * The {@link ErrorHandler} implementation.
- */
-<span class="fc" id="L27">class XSOMErrorHandler implements ErrorHandler {</span>
-<span class="fc" id="L28">    private static final Logger LOG = LoggerFactory.getLogger(AtlasXmlSchemaSetParser.class);</span>
+<span class="fc" id="L24">class XSOMErrorHandler implements ErrorHandler {</span>
+<span class="fc" id="L25">    private static final Logger LOG = LoggerFactory.getLogger(AtlasXmlSchemaSetParser.class);</span>
 
     @Override
     public void error(SAXParseException arg0) throws SAXException {
-<span class="fc" id="L32">        throw arg0;</span>
+<span class="fc" id="L29">        throw arg0;</span>
     }
 
     @Override
     public void fatalError(SAXParseException arg0) throws SAXException {
-<span class="nc" id="L37">        throw arg0;</span>
+<span class="nc" id="L34">        throw arg0;</span>
     }
 
     @Override
     public void warning(SAXParseException arg0) throws SAXException {
-<span class="nc" id="L42">        LOG.warn(arg0.getMessage(), arg0);</span>
-<span class="nc" id="L43">    }</span>
+<span class="nc" id="L39">        LOG.warn(arg0.getMessage(), arg0);</span>
+<span class="nc" id="L40">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

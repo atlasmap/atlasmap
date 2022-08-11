@@ -16,7 +16,6 @@
 package io.atlasmap.json.inspect;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -30,6 +29,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.ValueNode;
 
+import io.atlasmap.json.core.JsonComplexTypeFactory;
 import io.atlasmap.json.v2.AtlasJsonModelFactory;
 import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.json.v2.JsonDocument;
@@ -40,8 +40,8 @@ import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
 /**
- * JSON instance inspector. It consumes JSON instance as an example
- * and build a {@link JsonDocument} from it.
+ * JSON instance document inspector. It consumes JSON instance document as an example
+ * and build a AtlasMap Document model object from it.
  */
 public class JsonInstanceInspector implements JsonInspector {
 
@@ -52,179 +52,174 @@ public class JsonInstanceInspector implements JsonInspector {
     private JsonInstanceInspector() {
     }
 
-    /**
-     * Gets the singleton instance.
-     * @return instance
-     */
     public static JsonInstanceInspector instance() {
-<span class="fc" id="L60">        return myself;</span>
+<span class="fc" id="L56">        return myself;</span>
     }
 
-    @Override
-    public JsonDocument inspect(InputStream instance) throws JsonInspectionException {
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L66">            LOG.trace(&quot;Start JSON instance inspection: {}&quot;, instance);</span>
+    public JsonDocument inspect(String instance) throws JsonInspectionException {
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L61">            LOG.trace(&quot;Start JSON instance inspection: {}&quot;, instance);</span>
         }
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (instance == null) {</span>
-<span class="nc" id="L69">            throw new IllegalArgumentException(&quot;JSON instance cannot be null&quot;);</span>
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">        if (instance == null || instance.isEmpty()) {</span>
+<span class="nc" id="L64">            throw new IllegalArgumentException(&quot;JSON instance cannot be null&quot;);</span>
         }
         try {
-<span class="fc" id="L72">            JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();</span>
-<span class="fc" id="L73">            ObjectMapper objectMapper = new ObjectMapper()</span>
-<span class="fc" id="L74">                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
+<span class="fc" id="L67">            JsonDocument jsonDocument = AtlasJsonModelFactory.createJsonDocument();</span>
+<span class="fc" id="L68">            ObjectMapper objectMapper = new ObjectMapper()</span>
+<span class="fc" id="L69">                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
 
-<span class="fc" id="L76">            JsonNode rootNode = objectMapper.readTree(instance);</span>
-<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (rootNode.isObject()) {</span>
-<span class="fc" id="L78">                Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; fields = rootNode.fields();</span>
-<span class="fc bfc" id="L79" title="All 2 branches covered.">                while (fields.hasNext()) {</span>
-<span class="fc" id="L80">                    Entry&lt;String, JsonNode&gt; e = fields.next();</span>
-<span class="fc" id="L81">                    String key = e.getKey();</span>
-<span class="fc" id="L82">                    JsonNode node = e.getValue();</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">                    if (node.isObject()) {</span>
-<span class="fc" id="L84">                        handleObjectNode(jsonDocument, null, key, (ObjectNode)node, false);</span>
-<span class="fc bfc" id="L85" title="All 2 branches covered.">                    } else if (node.isArray()) {</span>
-<span class="fc" id="L86">                        handleArrayNode(jsonDocument, null, key, (ArrayNode)node);</span>
+<span class="fc" id="L71">            JsonNode rootNode = objectMapper.readTree(instance);</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">            if (rootNode.isObject()) {</span>
+<span class="fc" id="L73">                Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; fields = rootNode.fields();</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                while (fields.hasNext()) {</span>
+<span class="fc" id="L75">                    Entry&lt;String, JsonNode&gt; e = fields.next();</span>
+<span class="fc" id="L76">                    String key = e.getKey();</span>
+<span class="fc" id="L77">                    JsonNode node = e.getValue();</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">                    if (node.isObject()) {</span>
+<span class="fc" id="L79">                        handleObjectNode(jsonDocument, null, key, (ObjectNode)node, false);</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                    } else if (node.isArray()) {</span>
+<span class="fc" id="L81">                        handleArrayNode(jsonDocument, null, key, (ArrayNode)node);</span>
                     } else {
-<span class="fc" id="L88">                        createChildJsonField(jsonDocument, null, key, (ValueNode)node, false);</span>
+<span class="fc" id="L83">                        createChildJsonField(jsonDocument, null, key, (ValueNode)node, false);</span>
                     }
-<span class="fc" id="L90">                }</span>
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">            } else if (rootNode.isArray()) {</span>
-<span class="fc" id="L92">                handleArrayNode(jsonDocument, null, &quot;&quot;, (ArrayNode)rootNode);</span>
+<span class="fc" id="L85">                }</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            } else if (rootNode.isArray()) {</span>
+<span class="fc" id="L87">                handleArrayNode(jsonDocument, null, &quot;&quot;, (ArrayNode)rootNode);</span>
             } else {
-<span class="nc" id="L94">                throw new IllegalArgumentException(&quot;JSON root must be object or array&quot;);</span>
+<span class="nc" id="L89">                throw new IllegalArgumentException(&quot;JSON root must be object or array&quot;);</span>
             }
-<span class="fc" id="L96">            return jsonDocument;</span>
-<span class="fc" id="L97">        } catch (IOException e) {</span>
-<span class="fc" id="L98">            throw new JsonInspectionException(e);</span>
+<span class="fc" id="L91">            return jsonDocument;</span>
+<span class="fc" id="L92">        } catch (IOException e) {</span>
+<span class="fc" id="L93">            throw new JsonInspectionException(e);</span>
         }
     }
 
     private void handleObjectNode(JsonDocument rootDocument, JsonComplexType parent, String key, ObjectNode objectNode, boolean isArray) {
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L104">            LOG.trace(&quot;Handling object node: {}&quot;, objectNode);</span>
+<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L99">            LOG.trace(&quot;Handling object node: {}&quot;, objectNode);</span>
         }
-<span class="fc" id="L106">        JsonComplexType complexType = createChildJsonComplexType(rootDocument, parent, key, isArray);</span>
-<span class="fc" id="L107">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; subFields = objectNode.fields();</span>
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        while (subFields.hasNext()) {</span>
-<span class="fc" id="L109">            Entry&lt;String, JsonNode&gt; e = subFields.next();</span>
-<span class="fc" id="L110">            String subKey = e.getKey();</span>
-<span class="fc" id="L111">            JsonNode subNode = e.getValue();</span>
-<span class="fc bfc" id="L112" title="All 2 branches covered.">            if (subNode.isObject()) {</span>
-<span class="fc" id="L113">                handleObjectNode(rootDocument, complexType, subKey, (ObjectNode)subNode, false);</span>
-<span class="fc bfc" id="L114" title="All 2 branches covered.">            } else if (subNode.isArray()) {</span>
-<span class="fc" id="L115">                handleArrayNode(rootDocument, complexType, subKey, (ArrayNode)subNode);</span>
+<span class="fc" id="L101">        JsonComplexType complexType = createChildJsonComplexType(rootDocument, parent, key, isArray);</span>
+<span class="fc" id="L102">        Iterator&lt;Entry&lt;String, JsonNode&gt;&gt; subFields = objectNode.fields();</span>
+<span class="fc bfc" id="L103" title="All 2 branches covered.">        while (subFields.hasNext()) {</span>
+<span class="fc" id="L104">            Entry&lt;String, JsonNode&gt; e = subFields.next();</span>
+<span class="fc" id="L105">            String subKey = e.getKey();</span>
+<span class="fc" id="L106">            JsonNode subNode = e.getValue();</span>
+<span class="fc bfc" id="L107" title="All 2 branches covered.">            if (subNode.isObject()) {</span>
+<span class="fc" id="L108">                handleObjectNode(rootDocument, complexType, subKey, (ObjectNode)subNode, false);</span>
+<span class="fc bfc" id="L109" title="All 2 branches covered.">            } else if (subNode.isArray()) {</span>
+<span class="fc" id="L110">                handleArrayNode(rootDocument, complexType, subKey, (ArrayNode)subNode);</span>
             } else {
-<span class="fc" id="L117">                createChildJsonField(rootDocument, complexType, subKey, (ValueNode)subNode, false);</span>
+<span class="fc" id="L112">                createChildJsonField(rootDocument, complexType, subKey, (ValueNode)subNode, false);</span>
             }
-<span class="fc" id="L119">        }</span>
-<span class="fc" id="L120">    }</span>
+<span class="fc" id="L114">        }</span>
+<span class="fc" id="L115">    }</span>
 
     private void handleArrayNode(JsonDocument rootDocument, JsonComplexType parent, String key, ArrayNode arrayNode) {
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L124">            LOG.trace(&quot;Handling array node: {}&quot;, arrayNode);</span>
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L119">            LOG.trace(&quot;Handling array node: {}&quot;, arrayNode);</span>
         }
-<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (arrayNode.size() == 0) {</span>
-<span class="nc" id="L127">            LOG.warn(&quot;Ignoring empty JSON array: {}&quot;, arrayNode);</span>
-<span class="nc" id="L128">            return;</span>
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">        if (arrayNode.size() == 0) {</span>
+<span class="nc" id="L122">            LOG.warn(&quot;Ignoring empty JSON array: {}&quot;, arrayNode);</span>
+<span class="nc" id="L123">            return;</span>
         }
         // TODO: Look into other items as well - they might have more fields first item doesn't have
-<span class="fc" id="L131">        JsonNode sample = arrayNode.get(0);</span>
-<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (sample.isObject()) {</span>
-<span class="fc" id="L133">            handleObjectNode(rootDocument, parent, key, (ObjectNode)sample, true);</span>
-<span class="pc bpc" id="L134" title="1 of 2 branches missed.">        } else if (sample.isArray()) {</span>
-<span class="nc" id="L135">            throw new IllegalArgumentException(&quot;Nested JSON array is not supported&quot;);</span>
+<span class="fc" id="L126">        JsonNode sample = arrayNode.get(0);</span>
+<span class="fc bfc" id="L127" title="All 2 branches covered.">        if (sample.isObject()) {</span>
+<span class="fc" id="L128">            handleObjectNode(rootDocument, parent, key, (ObjectNode)sample, true);</span>
+<span class="pc bpc" id="L129" title="1 of 2 branches missed.">        } else if (sample.isArray()) {</span>
+<span class="nc" id="L130">            throw new IllegalArgumentException(&quot;Nested JSON array is not supported&quot;);</span>
         } else {
-<span class="fc" id="L137">            createChildJsonField(rootDocument, parent, key, (ValueNode)sample, true);</span>
+<span class="fc" id="L132">            createChildJsonField(rootDocument, parent, key, (ValueNode)sample, true);</span>
         }
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L134">    }</span>
 
     private JsonComplexType createChildJsonComplexType(JsonDocument rootDocument, JsonComplexType parent, String key, boolean isArray) {
-<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L143">            LOG.trace(&quot;Creating JSON complex type (array:{}): {}&quot;, isArray, key);</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L138">            LOG.trace(&quot;Creating JSON complex type (array:{}): {}&quot;, isArray, key);</span>
         }
-<span class="fc" id="L145">        JsonComplexType jsonComplexType = AtlasJsonModelFactory.createJsonComlexField();</span>
-<span class="fc" id="L146">        jsonComplexType.setJsonFields(new JsonFields());</span>
-<span class="fc" id="L147">        jsonComplexType.setName(key);</span>
-<span class="fc" id="L148">        jsonComplexType.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="pc bpc" id="L149" title="1 of 4 branches missed.">        String path = (parent != null ? parent.getPath() : &quot;&quot;).concat(&quot;/&quot;).concat(key != null ? key : &quot;&quot;);</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (isArray) {</span>
+<span class="fc" id="L140">        JsonComplexType jsonComplexType = JsonComplexTypeFactory.createJsonComlexField();</span>
+<span class="fc" id="L141">        jsonComplexType.setJsonFields(new JsonFields());</span>
+<span class="fc" id="L142">        jsonComplexType.setName(key);</span>
+<span class="fc" id="L143">        jsonComplexType.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="pc bpc" id="L144" title="1 of 4 branches missed.">        String path = (parent != null ? parent.getPath() : &quot;&quot;).concat(&quot;/&quot;).concat(key != null ? key : &quot;&quot;);</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (isArray) {</span>
             // JSON array is a list in AtlasMap
-<span class="fc" id="L152">            path = path.concat(&quot;&lt;&gt;&quot;);</span>
-<span class="fc" id="L153">            jsonComplexType.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L147">            path = path.concat(&quot;&lt;&gt;&quot;);</span>
+<span class="fc" id="L148">            jsonComplexType.setCollectionType(CollectionType.LIST);</span>
         }
-<span class="fc" id="L155">        jsonComplexType.setPath(path);</span>
-<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (parent != null) {</span>
-<span class="fc" id="L157">            parent.getJsonFields().getJsonField().add(jsonComplexType);</span>
+<span class="fc" id="L150">        jsonComplexType.setPath(path);</span>
+<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (parent != null) {</span>
+<span class="fc" id="L152">            parent.getJsonFields().getJsonField().add(jsonComplexType);</span>
         } else {
-<span class="fc" id="L159">            rootDocument.getFields().getField().add(jsonComplexType);</span>
+<span class="fc" id="L154">            rootDocument.getFields().getField().add(jsonComplexType);</span>
         }
-<span class="fc" id="L161">        return jsonComplexType;</span>
+<span class="fc" id="L156">        return jsonComplexType;</span>
     }
 
     private JsonField createChildJsonField(JsonDocument rootDocument, JsonComplexType parent, String key, ValueNode valueNode, boolean isArray) {
-<span class="pc bpc" id="L165" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
-<span class="nc" id="L166">            LOG.trace(&quot;Creating JSON field (array:{}): {}&quot;, isArray, key);</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L161">            LOG.trace(&quot;Creating JSON field (array:{}): {}&quot;, isArray, key);</span>
         }
-<span class="fc" id="L168">        JsonField field = AtlasJsonModelFactory.createJsonField();</span>
-<span class="fc" id="L169">        field.setName(key);</span>
-<span class="pc bpc" id="L170" title="1 of 4 branches missed.">        String path = (parent != null ? parent.getPath() : &quot;&quot;).concat(&quot;/&quot;).concat(key != null ? key : &quot;&quot;);</span>
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (isArray) {</span>
+<span class="fc" id="L163">        JsonField field = AtlasJsonModelFactory.createJsonField();</span>
+<span class="fc" id="L164">        field.setName(key);</span>
+<span class="pc bpc" id="L165" title="1 of 4 branches missed.">        String path = (parent != null ? parent.getPath() : &quot;&quot;).concat(&quot;/&quot;).concat(key != null ? key : &quot;&quot;);</span>
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (isArray) {</span>
             // JSON array is a list in AtlasMap
-<span class="fc" id="L173">            path = path.concat(&quot;&lt;&gt;&quot;);</span>
-<span class="fc" id="L174">            field.setCollectionType(CollectionType.LIST);</span>
+<span class="fc" id="L168">            path = path.concat(&quot;&lt;&gt;&quot;);</span>
+<span class="fc" id="L169">            field.setCollectionType(CollectionType.LIST);</span>
         }
-<span class="fc" id="L176">        field.setPath(path);</span>
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (parent != null) {</span>
-<span class="fc" id="L178">            parent.getJsonFields().getJsonField().add(field);</span>
+<span class="fc" id="L171">        field.setPath(path);</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        if (parent != null) {</span>
+<span class="fc" id="L173">            parent.getJsonFields().getJsonField().add(field);</span>
         } else {
-<span class="fc" id="L180">            rootDocument.getFields().getField().add(field);</span>
+<span class="fc" id="L175">            rootDocument.getFields().getField().add(field);</span>
         }
 
-<span class="fc" id="L183">        LOG.trace(&quot;VALUE IS A &quot; + valueNode.getNodeType().name());</span>
-<span class="fc bfc" id="L184" title="All 2 branches covered.">        if (valueNode.isNumber()) {</span>
-<span class="fc bfc" id="L185" title="All 2 branches covered.">            if (valueNode.isInt()) {</span>
-<span class="fc" id="L186">                field.setFieldType(FieldType.INTEGER);</span>
-<span class="fc" id="L187">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc" id="L188">                field.setValue(valueNode.intValue());</span>
-<span class="pc bpc" id="L189" title="1 of 2 branches missed.">            } else if (valueNode.isBigInteger()) {</span>
-<span class="nc" id="L190">                field.setFieldType(FieldType.BIG_INTEGER);</span>
-<span class="nc" id="L191">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="nc" id="L192">                field.setValue(valueNode.bigIntegerValue());</span>
-<span class="pc bpc" id="L193" title="1 of 2 branches missed.">            } else if (valueNode.isFloat()) {</span>
-<span class="nc" id="L194">                field.setFieldType(FieldType.FLOAT);</span>
-<span class="nc" id="L195">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="nc" id="L196">                field.setValue(valueNode.floatValue());</span>
-<span class="pc bpc" id="L197" title="1 of 2 branches missed.">            } else if (valueNode.isDouble()) {</span>
-<span class="fc" id="L198">                field.setFieldType(FieldType.DOUBLE);</span>
-<span class="fc" id="L199">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc" id="L200">                field.setValue(valueNode.asDouble());</span>
-<span class="nc bnc" id="L201" title="All 2 branches missed.">            } else if (valueNode.isBigDecimal()) {</span>
-<span class="nc" id="L202">                field.setFieldType(FieldType.DECIMAL);</span>
-<span class="nc" id="L203">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="nc" id="L204">                field.setValue(valueNode.decimalValue());</span>
-<span class="nc bnc" id="L205" title="All 2 branches missed.">            } else if (valueNode.isShort()) {</span>
-<span class="nc" id="L206">                field.setFieldType(FieldType.SHORT);</span>
-<span class="nc" id="L207">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="nc" id="L208">                field.setValue(valueNode.shortValue());</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">            } else if (valueNode.isLong()) {</span>
-<span class="nc" id="L210">                field.setFieldType(FieldType.LONG);</span>
-<span class="nc" id="L211">                field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="nc" id="L212">                field.setValue(valueNode.longValue());</span>
+<span class="fc" id="L178">        LOG.trace(&quot;VALUE IS A &quot; + valueNode.getNodeType().name());</span>
+<span class="fc bfc" id="L179" title="All 2 branches covered.">        if (valueNode.isNumber()) {</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            if (valueNode.isInt()) {</span>
+<span class="fc" id="L181">                field.setFieldType(FieldType.INTEGER);</span>
+<span class="fc" id="L182">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L183">                field.setValue(valueNode.intValue());</span>
+<span class="pc bpc" id="L184" title="1 of 2 branches missed.">            } else if (valueNode.isBigInteger()) {</span>
+<span class="nc" id="L185">                field.setFieldType(FieldType.BIG_INTEGER);</span>
+<span class="nc" id="L186">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="nc" id="L187">                field.setValue(valueNode.bigIntegerValue());</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">            } else if (valueNode.isFloat()) {</span>
+<span class="nc" id="L189">                field.setFieldType(FieldType.FLOAT);</span>
+<span class="nc" id="L190">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="nc" id="L191">                field.setValue(valueNode.floatValue());</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">            } else if (valueNode.isDouble()) {</span>
+<span class="fc" id="L193">                field.setFieldType(FieldType.DOUBLE);</span>
+<span class="fc" id="L194">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L195">                field.setValue(valueNode.asDouble());</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            } else if (valueNode.isBigDecimal()) {</span>
+<span class="nc" id="L197">                field.setFieldType(FieldType.DECIMAL);</span>
+<span class="nc" id="L198">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="nc" id="L199">                field.setValue(valueNode.decimalValue());</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            } else if (valueNode.isShort()) {</span>
+<span class="nc" id="L201">                field.setFieldType(FieldType.SHORT);</span>
+<span class="nc" id="L202">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="nc" id="L203">                field.setValue(valueNode.shortValue());</span>
+<span class="nc bnc" id="L204" title="All 2 branches missed.">            } else if (valueNode.isLong()) {</span>
+<span class="nc" id="L205">                field.setFieldType(FieldType.LONG);</span>
+<span class="nc" id="L206">                field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="nc" id="L207">                field.setValue(valueNode.longValue());</span>
             }
-<span class="fc bfc" id="L214" title="All 2 branches covered.">        } else if (valueNode.isTextual()) {</span>
-<span class="fc" id="L215">            field.setFieldType(FieldType.STRING);</span>
-<span class="fc" id="L216">            field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc" id="L217">            field.setValue(valueNode.textValue());</span>
-<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        } else if (valueNode.isBoolean()) {</span>
-<span class="fc" id="L219">            field.setFieldType(FieldType.BOOLEAN);</span>
-<span class="fc" id="L220">            field.setStatus(FieldStatus.SUPPORTED);</span>
-<span class="fc" id="L221">            field.setValue(valueNode.booleanValue());</span>
-<span class="nc bnc" id="L222" title="All 4 branches missed.">        } else if (valueNode.isBinary() || valueNode.isPojo()) {</span>
-<span class="nc" id="L223">            field.setFieldType(FieldType.UNSUPPORTED);</span>
-<span class="nc" id="L224">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">        } else if (valueNode.isTextual()) {</span>
+<span class="fc" id="L210">            field.setFieldType(FieldType.STRING);</span>
+<span class="fc" id="L211">            field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L212">            field.setValue(valueNode.textValue());</span>
+<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        } else if (valueNode.isBoolean()) {</span>
+<span class="fc" id="L214">            field.setFieldType(FieldType.BOOLEAN);</span>
+<span class="fc" id="L215">            field.setStatus(FieldStatus.SUPPORTED);</span>
+<span class="fc" id="L216">            field.setValue(valueNode.booleanValue());</span>
+<span class="nc bnc" id="L217" title="All 4 branches missed.">        } else if (valueNode.isBinary() || valueNode.isPojo()) {</span>
+<span class="nc" id="L218">            field.setFieldType(FieldType.UNSUPPORTED);</span>
+<span class="nc" id="L219">            field.setStatus(FieldStatus.UNSUPPORTED);</span>
         }
-<span class="fc" id="L226">        return field;</span>
+<span class="fc" id="L221">        return field;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

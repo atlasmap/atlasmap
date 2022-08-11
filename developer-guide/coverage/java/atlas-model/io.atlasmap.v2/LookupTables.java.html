@@ -18,15 +18,10 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * The container of {@link LookupTable}.
- */
-<span class="fc" id="L25">public class LookupTables implements Serializable {</span>
+<span class="fc" id="L21">public class LookupTables implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** A list of {@link LookupTable} */
     protected List&lt;LookupTable&gt; lookupTable;
 
     /**
@@ -52,11 +47,11 @@ import java.util.List;
      * @return A list of {@link LookupTable}
      */
     public List&lt;LookupTable&gt; getLookupTable() {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (lookupTable == null) {</span>
-<span class="fc" id="L56">            lookupTable = new ArrayList&lt;LookupTable&gt;();</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (lookupTable == null) {</span>
+<span class="fc" id="L51">            lookupTable = new ArrayList&lt;LookupTable&gt;();</span>
         }
-<span class="fc" id="L58">        return this.lookupTable;</span>
+<span class="fc" id="L53">        return this.lookupTable;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

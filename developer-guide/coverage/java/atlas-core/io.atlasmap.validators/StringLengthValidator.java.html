@@ -22,51 +22,41 @@ import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.ValidationScope;
 import io.atlasmap.v2.ValidationStatus;
 
-/**
- * The String length validator.
- */
 public class StringLengthValidator implements AtlasValidator {
 
     private String violationMessage;
-<span class="fc" id="L31">    private int minLength = 1;</span>
-<span class="fc" id="L32">    private int maxLength = Integer.MAX_VALUE;</span>
+<span class="fc" id="L28">    private int minLength = 1;</span>
+<span class="fc" id="L29">    private int maxLength = Integer.MAX_VALUE;</span>
     private ValidationScope scope;
 
-    /**
-     * A constructor.
-     * @param scope validation scope
-     * @param violationMessage violation message
-     * @param minLength minumum length
-     * @param maxLength maximum length
-     */
-<span class="fc" id="L42">    public StringLengthValidator(ValidationScope scope, String violationMessage, int minLength, int maxLength) {</span>
-<span class="fc" id="L43">        this.scope = scope;</span>
-<span class="fc" id="L44">        this.violationMessage = violationMessage;</span>
-<span class="fc" id="L45">        this.minLength = minLength;</span>
-<span class="fc" id="L46">        this.maxLength = maxLength;</span>
-<span class="fc" id="L47">    }</span>
+<span class="fc" id="L32">    public StringLengthValidator(ValidationScope scope, String violationMessage, int minLength, int maxLength) {</span>
+<span class="fc" id="L33">        this.scope = scope;</span>
+<span class="fc" id="L34">        this.violationMessage = violationMessage;</span>
+<span class="fc" id="L35">        this.minLength = minLength;</span>
+<span class="fc" id="L36">        this.maxLength = maxLength;</span>
+<span class="fc" id="L37">    }</span>
 
     @Override
     public boolean supports(Class&lt;?&gt; clazz) {
-<span class="fc" id="L51">        return String.class.isAssignableFrom(clazz);</span>
+<span class="fc" id="L41">        return String.class.isAssignableFrom(clazz);</span>
     }
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id) {
-<span class="fc" id="L56">        validate(target, validations, id, ValidationStatus.ERROR);</span>
-<span class="fc" id="L57">    }</span>
+<span class="fc" id="L46">        validate(target, validations, id, ValidationStatus.ERROR);</span>
+<span class="fc" id="L47">    }</span>
 
     @Override
     public void validate(Object target, List&lt;Validation&gt; validations, String id, ValidationStatus status) {
-<span class="fc" id="L61">        String value = (String) target;</span>
-<span class="pc bpc" id="L62" title="2 of 6 branches missed.">        if (value.isEmpty() || value.length() &gt; maxLength || value.length() &lt; minLength) {</span>
-<span class="fc" id="L63">            Validation validation = new Validation();</span>
-<span class="fc" id="L64">            validation.setScope(scope);</span>
-<span class="fc" id="L65">            validation.setId(id);</span>
-<span class="fc" id="L66">            validation.setMessage(String.format(violationMessage, target.toString()));</span>
-<span class="fc" id="L67">            validation.setStatus(status);</span>
-<span class="fc" id="L68">            validations.add(validation);</span>
+<span class="fc" id="L51">        String value = (String) target;</span>
+<span class="pc bpc" id="L52" title="2 of 6 branches missed.">        if (value.isEmpty() || value.length() &gt; maxLength || value.length() &lt; minLength) {</span>
+<span class="fc" id="L53">            Validation validation = new Validation();</span>
+<span class="fc" id="L54">            validation.setScope(scope);</span>
+<span class="fc" id="L55">            validation.setId(id);</span>
+<span class="fc" id="L56">            validation.setMessage(String.format(violationMessage, target.toString()));</span>
+<span class="fc" id="L57">            validation.setStatus(status);</span>
+<span class="fc" id="L58">            validations.add(validation);</span>
         }
-<span class="fc" id="L70">    }</span>
+<span class="fc" id="L60">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -18,52 +18,33 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/**
- * The enumeration of the volume units.
- */
-<span class="fc" id="L24">public enum VolumeUnitType {</span>
-    /** Cubic Meter. */
-<span class="fc" id="L26">    CUBIC_METER(&quot;Cubic Meter&quot;),</span>
-    /** Liter. */
-<span class="fc" id="L28">    LITER(&quot;Liter&quot;),</span>
-    /** Cubic Foot. */
-<span class="fc" id="L30">    CUBIC_FOOT(&quot;Cubic Foot&quot;),</span>
-    /** Gallon (US Fluid). */
-<span class="fc" id="L32">    GALLON_US_FLUID(&quot;Gallon (US Fluid)&quot;);</span>
+<span class="fc" id="L21">public enum VolumeUnitType {</span>
+
+<span class="fc" id="L23">    CUBIC_METER(&quot;Cubic Meter&quot;),</span>
+<span class="fc" id="L24">    LITER(&quot;Liter&quot;),</span>
+<span class="fc" id="L25">    CUBIC_FOOT(&quot;Cubic Foot&quot;),</span>
+<span class="fc" id="L26">    GALLON_US_FLUID(&quot;Gallon (US Fluid)&quot;);</span>
 
     private final String value;
 
-    /**
-     * A constuctor.
-     * @param v value
-     */
-<span class="fc" id="L40">    VolumeUnitType(String v) {</span>
-<span class="fc" id="L41">        value = v;</span>
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L30">    VolumeUnitType(String v) {</span>
+<span class="fc" id="L31">        value = v;</span>
+<span class="fc" id="L32">    }</span>
 
-    /**
-     * Gets the value.
-     * @return value
-     */
     @JsonValue
     public String value() {
-<span class="fc" id="L50">        return value;</span>
+<span class="fc" id="L36">        return value;</span>
     }
 
-    /**
-     * Gets the enum from the value.
-     * @param v value
-     * @return the enum
-     */
     @JsonCreator
     public static VolumeUnitType fromValue(String v) {
-<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        for (VolumeUnitType c: VolumeUnitType.values()) {</span>
-<span class="fc bfc" id="L61" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
-<span class="fc" id="L62">                return c;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">        for (VolumeUnitType c: VolumeUnitType.values()) {</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L43">                return c;</span>
             }
         }
-<span class="nc" id="L65">        throw new IllegalArgumentException(v);</span>
+<span class="nc" id="L46">        throw new IllegalArgumentException(v);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

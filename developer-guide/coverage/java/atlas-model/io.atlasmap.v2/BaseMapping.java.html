@@ -19,21 +19,15 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * A base class of the mapping entry in AtlasMap mapping definition JSON.
- */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L26">public abstract class BaseMapping implements Serializable {</span>
+<span class="fc" id="L23">public abstract class BaseMapping implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** alias */
     protected String alias;
 
-    /** description */
     protected String description;
 
-    /** mapping type */
     protected MappingType mappingType;
 
     /**
@@ -45,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getAlias() {
-<span class="fc" id="L48">        return alias;</span>
+<span class="fc" id="L42">        return alias;</span>
     }
 
     /**
@@ -57,8 +51,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setAlias(String value) {
-<span class="fc" id="L60">        this.alias = value;</span>
-<span class="fc" id="L61">    }</span>
+<span class="fc" id="L54">        this.alias = value;</span>
+<span class="fc" id="L55">    }</span>
 
     /**
      * Gets the value of the description property.
@@ -69,7 +63,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public String getDescription() {
-<span class="fc" id="L72">        return description;</span>
+<span class="fc" id="L66">        return description;</span>
     }
 
     /**
@@ -81,8 +75,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setDescription(String value) {
-<span class="fc" id="L84">        this.description = value;</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L78">        this.description = value;</span>
+<span class="fc" id="L79">    }</span>
 
     /**
      * Gets the value of the mappingType property.
@@ -93,7 +87,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public MappingType getMappingType() {
-<span class="fc" id="L96">        return mappingType;</span>
+<span class="fc" id="L90">        return mappingType;</span>
     }
 
     /**
@@ -105,8 +99,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMappingType(MappingType value) {
-<span class="fc" id="L108">        this.mappingType = value;</span>
-<span class="fc" id="L109">    }</span>
+<span class="fc" id="L102">        this.mappingType = value;</span>
+<span class="fc" id="L103">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

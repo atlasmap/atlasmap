@@ -17,13 +17,7 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * The ADM digest model class.
- * @deprecated Document metadata, specification and mapping definition are stored separately.
- * This is kept only for backward compatibility.
- */
-@Deprecated
-<span class="fc" id="L26">public class ADMDigest {</span>
+<span class="fc" id="L20">public class ADMDigest {</span>
 
     @JsonProperty(&quot;exportMappings&quot;)
     private ValueContainer exportMappings;
@@ -32,53 +26,29 @@ import com.fasterxml.jackson.annotation.JsonProperty;
     @JsonProperty(&quot;exportBlockData&quot;)
     private ValueContainer[] exportBlockData;
 
-    /**
-     * Gets exportMappings property.
-     * @return exportMappings property
-     */
     public ValueContainer getExportMappings() {
-<span class="nc" id="L40">        return exportMappings;</span>
+<span class="nc" id="L30">        return exportMappings;</span>
     }
 
-    /**
-     * Sets exportMappings property.
-     * @param exportMappings exportMappings property
-     */
     public void setExportMappings(ValueContainer exportMappings) {
-<span class="fc" id="L48">        this.exportMappings = exportMappings;</span>
-<span class="fc" id="L49">    }</span>
+<span class="fc" id="L34">        this.exportMappings = exportMappings;</span>
+<span class="fc" id="L35">    }</span>
 
-    /**
-     * Get an array of {@link DataSourceMetadata} property.
-     * @return an array of {@link DataSourceMetadata}
-     */
     public DataSourceMetadata[] getExportMeta() {
-<span class="fc" id="L56">        return exportMeta;</span>
+<span class="fc" id="L38">        return exportMeta;</span>
     }
 
-    /**
-     * Sets an array of {@link DataSourceMetadata} property.
-     * @param exportMeta an array of {@link DataSourceMetadata}
-     */
     public void setExportMeta(DataSourceMetadata[] exportMeta) {
-<span class="fc" id="L64">        this.exportMeta = exportMeta;</span>
-<span class="fc" id="L65">    }</span>
+<span class="fc" id="L42">        this.exportMeta = exportMeta;</span>
+<span class="fc" id="L43">    }</span>
 
-    /**
-     * Gets an array of exportBlockData property.
-     * @return exportBlockData property
-     */
     public ValueContainer[] getExportBlockData() {
-<span class="fc" id="L72">        return exportBlockData;</span>
+<span class="fc" id="L46">        return exportBlockData;</span>
     }
 
-    /**
-     * Sets an array of exportBlockData property.
-     * @param exportBlockData exportBlockData property
-     */
     public void setExportBlockData(ValueContainer[] exportBlockData) {
-<span class="fc" id="L80">        this.exportBlockData = exportBlockData;</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L50">        this.exportBlockData = exportBlockData;</span>
+<span class="fc" id="L51">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

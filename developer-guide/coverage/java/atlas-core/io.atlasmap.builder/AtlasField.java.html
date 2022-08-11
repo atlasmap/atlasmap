@@ -44,153 +44,102 @@ public class AtlasField {
     private DefaultAtlasFieldActionService fieldActionService;
     private Field rawField;
 
-    /**
-     * A constructor.
-     * @param session session
-     */
-<span class="fc" id="L51">    public AtlasField(DefaultAtlasSession session) {</span>
-<span class="fc" id="L52">        this.session = session;</span>
-<span class="fc" id="L53">        this.conversionService = session.getAtlasContext().getContextFactory().getConversionService();</span>
-<span class="fc" id="L54">        this.fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L47">    public AtlasField(DefaultAtlasSession session) {</span>
+<span class="fc" id="L48">        this.session = session;</span>
+<span class="fc" id="L49">        this.conversionService = session.getAtlasContext().getContextFactory().getConversionService();</span>
+<span class="fc" id="L50">        this.fieldActionService = session.getAtlasContext().getContextFactory().getFieldActionService();</span>
+<span class="fc" id="L51">    }</span>
 
-    /**
-     * Reads the field from the source Document.
-     * @param docId Document ID
-     * @param path field path
-     * @return read field
-     * @throws AtlasException unexpected error
-     */
     public AtlasField read(String docId, String path) throws AtlasException {
-<span class="fc" id="L65">        AtlasModule module = session.resolveModule(docId);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (module == null) {</span>
-<span class="nc" id="L67">            throw new AtlasException(String.format(&quot;Source document '%s' doesn't exist&quot;, docId));</span>
+<span class="fc" id="L54">        AtlasModule module = session.resolveModule(docId);</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (module == null) {</span>
+<span class="nc" id="L56">            throw new AtlasException(String.format(&quot;Source document '%s' doesn't exist&quot;, docId));</span>
         }
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">        if (module.getMode() != AtlasModuleMode.SOURCE) {</span>
-<span class="nc" id="L70">            throw new AtlasException(String.format(</span>
-<span class="nc" id="L71">                    &quot;Unable to read from %s Document '%s'&quot;, module.getMode(), docId));</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (module.getMode() != AtlasModuleMode.SOURCE) {</span>
+<span class="nc" id="L59">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L60">                    &quot;Unable to read from %s Document '%s'&quot;, module.getMode(), docId));</span>
         }
-<span class="fc" id="L73">        Field sourceField = module.createField();</span>
-<span class="fc" id="L74">        sourceField.setDocId(docId);</span>
-<span class="fc" id="L75">        sourceField.setPath(path);</span>
-<span class="fc" id="L76">        session.head().setSourceField(sourceField);</span>
-<span class="fc" id="L77">        module.readSourceValue(session);</span>
-<span class="fc" id="L78">        setRawField(sourceField);</span>
-<span class="fc" id="L79">        return this;</span>
+<span class="fc" id="L62">        Field sourceField = module.createField();</span>
+<span class="fc" id="L63">        sourceField.setDocId(docId);</span>
+<span class="fc" id="L64">        sourceField.setPath(path);</span>
+<span class="fc" id="L65">        session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L66">        module.readSourceValue(session);</span>
+<span class="fc" id="L67">        setRawField(sourceField);</span>
+<span class="fc" id="L68">        return this;</span>
     }
 
-    /**
-     * Reads the constant.
-     * @param name name
-     * @return read field
-     * @throws AtlasException unexpected error
-     */
     public AtlasField readConstant(String name) throws AtlasException {
-<span class="fc" id="L89">        ConstantModule module = session.getConstantModule();</span>
-<span class="fc" id="L90">        List&lt;Constant&gt; constants = session.getMapping().getConstants().getConstant();</span>
-<span class="pc bpc" id="L91" title="1 of 2 branches missed.">        for (Constant constant : constants) {</span>
-<span class="pc bpc" id="L92" title="2 of 4 branches missed.">            if (constant.getName() != null &amp;&amp; constant.getName().equals(name)) {</span>
-<span class="fc" id="L93">                Field sourceField = module.createField();</span>
-<span class="fc" id="L94">                sourceField.setName(constant.getName());</span>
-<span class="fc" id="L95">                sourceField.setFieldType(constant.getFieldType());</span>
-<span class="fc" id="L96">                sourceField.setValue(constant.getValue());</span>
-<span class="fc" id="L97">                session.head().setSourceField(sourceField);</span>
-<span class="fc" id="L98">                module.readSourceValue(session);</span>
-<span class="fc" id="L99">                setRawField(sourceField);</span>
-<span class="fc" id="L100">                return this;</span>
+<span class="fc" id="L72">        ConstantModule module = session.getConstantModule();</span>
+<span class="fc" id="L73">        List&lt;Constant&gt; constants = session.getMapping().getConstants().getConstant();</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        for (Constant constant : constants) {</span>
+<span class="pc bpc" id="L75" title="2 of 4 branches missed.">            if (constant.getName() != null &amp;&amp; constant.getName().equals(name)) {</span>
+<span class="fc" id="L76">                Field sourceField = module.createField();</span>
+<span class="fc" id="L77">                sourceField.setName(constant.getName());</span>
+<span class="fc" id="L78">                sourceField.setFieldType(constant.getFieldType());</span>
+<span class="fc" id="L79">                sourceField.setValue(constant.getValue());</span>
+<span class="fc" id="L80">                session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L81">                module.readSourceValue(session);</span>
+<span class="fc" id="L82">                setRawField(sourceField);</span>
+<span class="fc" id="L83">                return this;</span>
             }
-<span class="nc" id="L102">        }</span>
-<span class="nc" id="L103">        throw new AtlasException(String.format(&quot;Constant '%s' not found&quot;, name));</span>
+<span class="nc" id="L85">        }</span>
+<span class="nc" id="L86">        throw new AtlasException(String.format(&quot;Constant '%s' not found&quot;, name));</span>
     }
 
-    /**
-     * Reads the source property.
-     * @param scope scope
-     * @param name name
-     * @return read field
-     * @throws AtlasException unexpected error
-     */
     public AtlasField readProperty(String scope, String name) throws AtlasException {
-<span class="fc" id="L114">        PropertyModule module = session.getSourcePropertyModule();</span>
-<span class="fc" id="L115">        PropertyField sourceField = module.createField();</span>
-<span class="fc" id="L116">        sourceField.setScope(scope);</span>
-<span class="fc" id="L117">        sourceField.setName(name);</span>
-<span class="fc" id="L118">        session.head().setSourceField(sourceField);</span>
-<span class="fc" id="L119">        module.readSourceValue(session);</span>
-<span class="fc" id="L120">        setRawField(sourceField);</span>
-<span class="fc" id="L121">        return this;</span>
+<span class="fc" id="L90">        PropertyModule module = session.getSourcePropertyModule();</span>
+<span class="fc" id="L91">        PropertyField sourceField = module.createField();</span>
+<span class="fc" id="L92">        sourceField.setScope(scope);</span>
+<span class="fc" id="L93">        sourceField.setName(name);</span>
+<span class="fc" id="L94">        session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L95">        module.readSourceValue(session);</span>
+<span class="fc" id="L96">        setRawField(sourceField);</span>
+<span class="fc" id="L97">        return this;</span>
     }
 
-    /**
-     * Wr8ites the field.
-     * @param docId Document ID
-     * @param path path
-     * @throws AtlasException unexpected error
-     */
     public void write(String docId, String path) throws AtlasException {
-<span class="fc" id="L131">        AtlasModule module = session.resolveModule(docId);</span>
-<span class="pc bpc" id="L132" title="1 of 2 branches missed.">        if (module == null) {</span>
-<span class="nc" id="L133">            throw new AtlasException(String.format(&quot;Target document '%s' doesn't exist&quot;, docId));</span>
+<span class="fc" id="L101">        AtlasModule module = session.resolveModule(docId);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">        if (module == null) {</span>
+<span class="nc" id="L103">            throw new AtlasException(String.format(&quot;Target document '%s' doesn't exist&quot;, docId));</span>
         }
-<span class="pc bpc" id="L135" title="1 of 2 branches missed.">        if (module.getMode() != AtlasModuleMode.TARGET) {</span>
-<span class="nc" id="L136">            throw new AtlasException(String.format(</span>
-<span class="nc" id="L137">                    &quot;Unable to write to %s Document '%s'&quot;, module.getMode(), docId));</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (module.getMode() != AtlasModuleMode.TARGET) {</span>
+<span class="nc" id="L106">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L107">                    &quot;Unable to write to %s Document '%s'&quot;, module.getMode(), docId));</span>
         }
-<span class="fc" id="L139">        Field f = module.createField();</span>
-<span class="fc" id="L140">        f.setDocId(docId);</span>
-<span class="fc" id="L141">        f.setPath(path);</span>
-<span class="fc" id="L142">        session.head().setSourceField(getRawField());</span>
-<span class="fc" id="L143">        session.head().setTargetField(f);</span>
-<span class="fc" id="L144">        module.populateTargetField(session);</span>
-<span class="fc" id="L145">        module.writeTargetValue(session);</span>
-<span class="fc" id="L146">    }</span>
+<span class="fc" id="L109">        Field f = module.createField();</span>
+<span class="fc" id="L110">        f.setDocId(docId);</span>
+<span class="fc" id="L111">        f.setPath(path);</span>
+<span class="fc" id="L112">        session.head().setSourceField(getRawField());</span>
+<span class="fc" id="L113">        session.head().setTargetField(f);</span>
+<span class="fc" id="L114">        module.populateTargetField(session);</span>
+<span class="fc" id="L115">        module.writeTargetValue(session);</span>
+<span class="fc" id="L116">    }</span>
 
-    /**
-     * Writes the target property.
-     * @param scope scope
-     * @param name name
-     * @throws AtlasException unexpected error
-     */
     public void writeProperty(String scope, String name) throws AtlasException {
-<span class="fc" id="L155">        PropertyModule module = session.getTargetPropertyModule();</span>
-<span class="fc" id="L156">        PropertyField f = module.createField();</span>
-<span class="fc" id="L157">        f.setScope(scope);</span>
-<span class="fc" id="L158">        f.setName(name);</span>
-<span class="fc" id="L159">        session.head().setSourceField(getRawField());</span>
-<span class="fc" id="L160">        session.head().setTargetField(f);</span>
-<span class="fc" id="L161">        module.populateTargetField(session);</span>
-<span class="fc" id="L162">        module.writeTargetValue(session);</span>
-<span class="fc" id="L163">    }</span>
+<span class="fc" id="L119">        PropertyModule module = session.getTargetPropertyModule();</span>
+<span class="fc" id="L120">        PropertyField f = module.createField();</span>
+<span class="fc" id="L121">        f.setScope(scope);</span>
+<span class="fc" id="L122">        f.setName(name);</span>
+<span class="fc" id="L123">        session.head().setSourceField(getRawField());</span>
+<span class="fc" id="L124">        session.head().setTargetField(f);</span>
+<span class="fc" id="L125">        module.populateTargetField(session);</span>
+<span class="fc" id="L126">        module.writeTargetValue(session);</span>
+<span class="fc" id="L127">    }</span>
 
-    /**
-     * Apply the field action.
-     * @param actionName action name
-     * @param parameters action parameters
-     * @return result field
-     */
     public AtlasField action(String actionName, List&lt;Object&gt; parameters) {
-<span class="nc bnc" id="L172" title="All 4 branches missed.">        Object value = parameters != null &amp;&amp; parameters.size() &gt; 1 ? parameters.get(parameters.size()-1) : null;</span>
-<span class="nc" id="L173">        ActionProcessor ap = this.fieldActionService.findActionProcessor(actionName, value);</span>
+<span class="nc bnc" id="L130" title="All 4 branches missed.">        Object value = parameters != null &amp;&amp; parameters.size() &gt; 1 ? parameters.get(parameters.size()-1) : null;</span>
+<span class="nc" id="L131">        ActionProcessor ap = this.fieldActionService.findActionProcessor(actionName, value);</span>
         
-<span class="nc" id="L175">        return this;</span>
+<span class="nc" id="L133">        return this;</span>
     }
 
-    /**
-     * Gets the raw {@link Field}.
-     * @return field
-     */
     public Field getRawField() {
-<span class="fc" id="L183">        return this.rawField;</span>
+<span class="fc" id="L137">        return this.rawField;</span>
     }
 
-    /**
-     * Sets the raw {@link Field}.
-     * @param f field
-     * @return this instance
-     */
     public AtlasField setRawField(Field f) {
-<span class="fc" id="L192">        this.rawField = f;</span>
-<span class="fc" id="L193">        return this;</span>
+<span class="fc" id="L141">        this.rawField = f;</span>
+<span class="fc" id="L142">        return this;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

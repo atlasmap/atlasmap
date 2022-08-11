@@ -27,9 +27,6 @@ import io.atlasmap.api.AtlasException;
 import io.atlasmap.java.core.ClassHelper;
 import io.atlasmap.v2.CollectionType;
 
-/**
- * The accessor for the Java child field.
- */
 public abstract class JavaChildAccessor {
 
     private Object parent;
@@ -38,144 +35,90 @@ public abstract class JavaChildAccessor {
     private List&lt;Object&gt; collectionValues;
     private Class&lt;?&gt; fieldClass;
 
-    /**
-     * A constructor.
-     * @param parent parent
-     * @param name name
-     */
-<span class="fc" id="L46">    public JavaChildAccessor(Object parent, String name) {</span>
-<span class="fc" id="L47">        this.parent = parent;</span>
-<span class="fc" id="L48">        this.name = name;</span>
-<span class="fc" id="L49">    }</span>
 
-    /**
-     * Gets the raw field value.
-     * @return value
-     * @throws AtlasException unexpected error
-     */
+<span class="fc" id="L39">    public JavaChildAccessor(Object parent, String name) {</span>
+<span class="fc" id="L40">        this.parent = parent;</span>
+<span class="fc" id="L41">        this.name = name;</span>
+<span class="fc" id="L42">    }</span>
+
     public abstract Object getRawValue() throws AtlasException;
 
-    /**
-     * Gets the raw generic type of the field.
-     * @return generic type
-     * @throws AtlasException unexpected error
-     */
     public abstract Type getRawGenericType() throws AtlasException;
 
-    /**
-     * Gets the raw class.
-     * @return class
-     * @throws AtlasException unexpected error
-     */
     public abstract Class&lt;?&gt; getRawClass() throws AtlasException;
 
-    /**
-     * Gets the parent object.
-     * @return parent
-     */
     public Object getParentObject() {
-<span class="fc" id="L77">        return this.parent;</span>
+<span class="fc" id="L51">        return this.parent;</span>
     }
 
-    /**
-     * Gets the field name.
-     * @return name
-     */
     public String getName() {
-<span class="nc" id="L85">        return this.name;</span>
+<span class="nc" id="L55">        return this.name;</span>
     }
 
-    /**
-     * Gets the collection type.
-     * @return collection type.
-     * @throws AtlasException unexpected error
-     */
     public CollectionType getCollectionType() throws AtlasException {
-<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (this.collectionType != null) {</span>
-<span class="fc" id="L95">            return this.collectionType;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (this.collectionType != null) {</span>
+<span class="fc" id="L60">            return this.collectionType;</span>
         }
 
-<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (getRawClass().isArray()) {</span>
-<span class="fc" id="L99">            this.collectionType = CollectionType.ARRAY;</span>
-<span class="fc" id="L100">            this.collectionValues = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L101" title="All 4 branches covered.">            for (int i=0; getRawValue() != null &amp;&amp; i&lt;Array.getLength(getRawValue()); i++) {</span>
-<span class="fc" id="L102">                this.collectionValues.add(Array.get(getRawValue(), i));</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (getRawClass().isArray()) {</span>
+<span class="fc" id="L64">            this.collectionType = CollectionType.ARRAY;</span>
+<span class="fc" id="L65">            this.collectionValues = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L66" title="All 4 branches covered.">            for (int i=0; getRawValue() != null &amp;&amp; i&lt;Array.getLength(getRawValue()); i++) {</span>
+<span class="fc" id="L67">                this.collectionValues.add(Array.get(getRawValue(), i));</span>
             }
-<span class="fc bfc" id="L104" title="All 2 branches covered.">        } else if (getRawValue() instanceof Collection) {</span>
-<span class="fc" id="L105">            this.collectionType = CollectionType.LIST;</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">            if (getRawValue() instanceof List) {</span>
-<span class="fc" id="L107">                this.collectionValues = (List&lt;Object&gt;)this.getRawValue();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        } else if (getRawValue() instanceof Collection) {</span>
+<span class="fc" id="L70">            this.collectionType = CollectionType.LIST;</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">            if (getRawValue() instanceof List) {</span>
+<span class="fc" id="L72">                this.collectionValues = (List&lt;Object&gt;)this.getRawValue();</span>
             } else {
-<span class="fc" id="L109">                this.collectionValues = Arrays.asList(Collection.class.cast(getRawValue()).toArray());</span>
+<span class="fc" id="L74">                this.collectionValues = Arrays.asList(Collection.class.cast(getRawValue()).toArray());</span>
             }
-<span class="pc bpc" id="L111" title="1 of 2 branches missed.">        } else if (getRawValue() instanceof Map) {</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        } else if (getRawValue() instanceof Map) {</span>
             // TODO java.util.Map support
-<span class="nc" id="L113">            this.collectionType = CollectionType.MAP;</span>
-<span class="nc" id="L114">            this.collectionValues = Arrays.asList(Map.class.cast(getRawValue()).values().toArray());</span>
+<span class="nc" id="L78">            this.collectionType = CollectionType.MAP;</span>
+<span class="nc" id="L79">            this.collectionValues = Arrays.asList(Map.class.cast(getRawValue()).values().toArray());</span>
         } else {
-<span class="fc" id="L116">            this.collectionType = CollectionType.NONE;</span>
+<span class="fc" id="L81">            this.collectionType = CollectionType.NONE;</span>
         }
-<span class="fc" id="L118">        return this.collectionType;</span>
+<span class="fc" id="L83">        return this.collectionType;</span>
     }
 
-    /**
-     * Gets the collection values.
-     * @return collection values
-     * @throws AtlasException unexpected error
-     */
     public List&lt;?&gt; getCollectionValues() throws AtlasException {
-<span class="fc" id="L127">        getCollectionType();</span>
-<span class="fc" id="L128">        return this.collectionValues;</span>
+<span class="fc" id="L87">        getCollectionType();</span>
+<span class="fc" id="L88">        return this.collectionValues;</span>
     }
 
-    /**
-     * Gets the field class.
-     * @return class
-     * @throws AtlasException unexpected error
-     */
     public Class&lt;?&gt; getFieldClass() throws AtlasException {
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (this.fieldClass != null) {</span>
-<span class="nc" id="L138">            return this.fieldClass;</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (this.fieldClass != null) {</span>
+<span class="nc" id="L93">            return this.fieldClass;</span>
         }
 
-<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (getCollectionType() == CollectionType.NONE) {</span>
-<span class="nc" id="L142">             this.fieldClass = getRawClass();</span>
-<span class="nc bnc" id="L143" title="All 2 branches missed.">        } else if (getCollectionType() == CollectionType.ARRAY) {</span>
-<span class="nc" id="L144">            this.fieldClass = getRawClass().getComponentType();</span>
-<span class="nc bnc" id="L145" title="All 2 branches missed.">        } else if (getCollectionType() == CollectionType.LIST) {</span>
-<span class="nc" id="L146">            return ClassHelper.detectClassFromTypeArgument(getRawGenericType());</span>
-<span class="nc bnc" id="L147" title="All 2 branches missed.">        } else if (getCollectionType() == CollectionType.MAP) {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (getCollectionType() == CollectionType.NONE) {</span>
+<span class="nc" id="L97">             this.fieldClass = getRawClass();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        } else if (getCollectionType() == CollectionType.ARRAY) {</span>
+<span class="nc" id="L99">            this.fieldClass = getRawClass().getComponentType();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        } else if (getCollectionType() == CollectionType.LIST) {</span>
+<span class="nc" id="L101">            return ClassHelper.detectClassFromTypeArgument(getRawGenericType());</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">        } else if (getCollectionType() == CollectionType.MAP) {</span>
             // TODO java.util.Map support
-<span class="nc" id="L149">            return ClassHelper.detectClassFromTypeArgumentAt(getRawGenericType(), 1);</span>
+<span class="nc" id="L104">            return ClassHelper.detectClassFromTypeArgumentAt(getRawGenericType(), 1);</span>
         }
-<span class="nc" id="L151">        return this.fieldClass;</span>
+<span class="nc" id="L106">        return this.fieldClass;</span>
     }
 
-    /**
-     * Gets the value.
-     * @return value
-     * @throws AtlasException unexpected error
-     */
     public Object getValue() throws AtlasException {
-<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L161">            return getRawValue();</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        if (getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L111">            return getRawValue();</span>
         }
-<span class="fc bfc" id="L163" title="All 2 branches covered.">        return this.collectionValues.size() &gt; 0 ? this.collectionValues.get(0) : null;</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        return this.collectionValues.size() &gt; 0 ? this.collectionValues.get(0) : null;</span>
     }
 
-    /**
-     * Gets the value at the specified index in the collection if it's a collection.
-     * Otherwise it returs the raw value.
-     * @param pos index
-     * @return value
-     * @throws AtlasException unexpected error
-     */
     public Object getValueAt(int pos) throws AtlasException {
-<span class="pc bpc" id="L174" title="1 of 2 branches missed.">        if (getCollectionType() == CollectionType.NONE) {</span>
-<span class="nc" id="L175">            return getRawValue();</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (getCollectionType() == CollectionType.NONE) {</span>
+<span class="nc" id="L118">            return getRawValue();</span>
         }
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        return this.collectionValues.size() &gt; pos ? this.collectionValues.get(pos) : null;</span>
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        return this.collectionValues.size() &gt; pos ? this.collectionValues.get(pos) : null;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

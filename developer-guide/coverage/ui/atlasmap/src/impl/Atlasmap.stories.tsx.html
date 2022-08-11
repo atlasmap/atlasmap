@@ -238,15 +238,7 @@
 <a name='L180'></a><a href='#L180'>180</a>
 <a name='L181'></a><a href='#L181'>181</a>
 <a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a>
-<a name='L188'></a><a href='#L188'>188</a>
-<a name='L189'></a><a href='#L189'>189</a>
-<a name='L190'></a><a href='#L190'>190</a>
-<a name='L191'></a><a href='#L191'>191</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L183'></a><a href='#L183'>183</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -381,10 +373,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -397,10 +385,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -515,10 +499,6 @@ const obj = <span class="cstat-no" title="statement not covered" >{</span>
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >wiredToTheBackend = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >(</span></span></span>
   &lt;AtlasmapProvider
-    baseAtlasServiceUrl={text(
-      'baseAtlasServiceUrl',
-      'http://localhost:8585/v2/atlas/',
-    )}
     baseJavaInspectionServiceUrl={text(
       'baseJavaInspectionServiceUrl',
       'http://localhost:8585/v2/atlas/java/',
@@ -535,9 +515,9 @@ export const <span class="cstat-no" title="statement not covered" >wiredToTheBac
       'baseCSVInspectionServiceUrl',
       'http://localhost:8585/v2/atlas/csv/',
     )}
-    baseKafkaConnectInspectionServiceUrl={text(
-      'baseKafkaConnectInspectionServiceUrl',
-      'http://localhost:8585/v2/atlas/kafkaconnect/',
+    baseMappingServiceUrl={text(
+      'baseMappingServiceUrl',
+      'http://localhost:8585/v2/atlas/',
     )}
     logLevel={text('logLevel', 'info')}
     onMappingChange={action('onMappingChange')}
@@ -545,7 +525,7 @@ export const <span class="cstat-no" title="statement not covered" >wiredToTheBac
     &lt;Atlasmap
       allowImport={boolean('allow Import', true)}
       allowExport={boolean('allow Export', true)}
-      allowDeleteReset={boolean('allow Delete and Reset', true)}
+      allowReset={boolean('allow Reset', true)}
       allowDelete={boolean('allow Delete', true)}
       allowCustomJavaClasses={boolean('allow Custom Java Classes', true)}
       toolbarOptions={{
@@ -588,10 +568,6 @@ export const <span class="cstat-no" title="statement not covered" >embeddedInSyn
   }
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;AtlasmapProvider
-      baseAtlasServiceUrl={text(
-        'baseAtlasServiceUrl',
-        'http://localhost:8585/v2/atlas/',
-      )}
       baseJavaInspectionServiceUrl={text(
         'baseJavaInspectionServiceUrl',
         'http://localhost:8585/v2/atlas/java/',
@@ -608,9 +584,9 @@ export const <span class="cstat-no" title="statement not covered" >embeddedInSyn
         'baseCSVInspectionServiceUrl',
         'http://localhost:8585/v2/atlas/csv/',
       )}
-      baseKafkaConnectInspectionServiceUrl={text(
-        'baseKafkaConnectInspectionServiceUrl',
-        'http://localhost:8585/v2/atlas/kafkaconnect/',
+      baseMappingServiceUrl={text(
+        'baseMappingServiceUrl',
+        'http://localhost:8585/v2/atlas/',
       )}
       logLevel={text('logLevel', 'info')}
       externalDocument={externalDocument}
@@ -619,7 +595,7 @@ export const <span class="cstat-no" title="statement not covered" >embeddedInSyn
       &lt;Atlasmap
         allowImport={false}
         allowExport={false}
-        allowDeleteReset={false}
+        allowReset={false}
         allowDelete={false}
         allowCustomJavaClasses={false}
       /&gt;
@@ -633,7 +609,7 @@ export const <span class="cstat-no" title="statement not covered" >embeddedInSyn
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 08 2022 17:02:09 GMT+0000 (Coordinated Universal Time)
+                at Thu Aug 11 2022 21:25:20 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -19,16 +19,12 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-/**
- * The model class for the &lt;strong&gt;Substring&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class SubString extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class SubString extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** start index */
     protected Integer startIndex;
-    /** end index */
+
     protected Integer endIndex;
 
     /**
@@ -40,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public Integer getStartIndex() {
-<span class="fc" id="L43">        return startIndex;</span>
+<span class="fc" id="L39">        return startIndex;</span>
     }
 
     /**
@@ -54,8 +50,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The start index to substring&quot;)
     @AtlasActionProperty(title = &quot;Start index&quot;, type = FieldType.STRING)
     public void setStartIndex(Integer value) {
-<span class="fc" id="L57">        this.startIndex = value;</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L53">        this.startIndex = value;</span>
+<span class="fc" id="L54">    }</span>
 
     /**
      * Gets the value of the endIndex property.
@@ -66,7 +62,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public Integer getEndIndex() {
-<span class="fc" id="L69">        return endIndex;</span>
+<span class="fc" id="L65">        return endIndex;</span>
     }
 
     /**
@@ -80,8 +76,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The end index to substring&quot;)
     @AtlasActionProperty(title = &quot;End index&quot;, type = FieldType.STRING)
     public void setEndIndex(Integer value) {
-<span class="fc" id="L83">        this.endIndex = value;</span>
-<span class="fc" id="L84">    }</span>
+<span class="fc" id="L79">        this.endIndex = value;</span>
+<span class="fc" id="L80">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -15,7 +15,6 @@
  */
 package io.atlasmap.core;
 
-import java.io.File;
 import java.io.InputStream;
 import java.lang.management.ManagementFactory;
 import java.net.URI;
@@ -25,11 +24,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TimeZone;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -63,9 +61,9 @@ import io.atlasmap.v2.ConstantField;
 import io.atlasmap.v2.CopyTo;
 import io.atlasmap.v2.CustomMapping;
 import io.atlasmap.v2.DataSource;
+import io.atlasmap.v2.DataSourceKey;
+import io.atlasmap.v2.DataSourceMetadata;
 import io.atlasmap.v2.DataSourceType;
-import io.atlasmap.v2.DocumentKey;
-import io.atlasmap.v2.DocumentMetadata;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.FieldType;
@@ -78,70 +76,47 @@ import io.atlasmap.v2.SimpleField;
 import io.atlasmap.v2.Validation;
 import io.atlasmap.v2.Validations;
 
-/**
- * The default implementation of {@link AtlasContext}.
- * @see AtlasContext
- */
 public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
-<span class="fc" id="L87">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);</span>
+<span class="fc" id="L81">    private static final Logger LOG = LoggerFactory.getLogger(DefaultAtlasContext.class);</span>
     private ObjectName jmxObjectName;
     private final UUID uuid;
     private DefaultAtlasContextFactory factory;
     private URI atlasMappingUri;
     private ADMArchiveHandler admHandler;
-<span class="fc" id="L93">    private Map&lt;String, AtlasModule&gt; sourceModules = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L94">    private Map&lt;String, AtlasModule&gt; targetModules = new LinkedHashMap&lt;&gt;();</span>
-<span class="fc" id="L95">    private Map&lt;String, LookupTable&gt; lookupTables = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L87">    private Map&lt;String, AtlasModule&gt; sourceModules = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L88">    private Map&lt;String, AtlasModule&gt; targetModules = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L89">    private Map&lt;String, LookupTable&gt; lookupTables = new HashMap&lt;&gt;();</span>
+    private Map&lt;DataSourceKey, DataSourceMetadata&gt; dataSourceMetadataMap;
     private boolean initialized;
 
-    /**
-     * A constructor.
-     * @param atlasMappingUri mapping defiition URI
-     */
     public DefaultAtlasContext(URI atlasMappingUri) {
-<span class="fc" id="L103">        this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri);</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L94">        this(DefaultAtlasContextFactory.getInstance(), atlasMappingUri);</span>
+<span class="fc" id="L95">    }</span>
 
-    /**
-     * A constructor.
-     * @param factory factory
-     * @param atlasMappingUri mapping definition URI
-     */
-<span class="fc" id="L111">    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) {</span>
-<span class="fc" id="L112">        this.factory = factory;</span>
-<span class="fc" id="L113">        this.uuid = UUID.randomUUID();</span>
-<span class="fc" id="L114">        this.atlasMappingUri = atlasMappingUri;</span>
-<span class="fc" id="L115">    }</span>
+<span class="fc" id="L97">    public DefaultAtlasContext(DefaultAtlasContextFactory factory, URI atlasMappingUri) {</span>
+<span class="fc" id="L98">        this.factory = factory;</span>
+<span class="fc" id="L99">        this.uuid = UUID.randomUUID();</span>
+<span class="fc" id="L100">        this.atlasMappingUri = atlasMappingUri;</span>
+<span class="fc" id="L101">    }</span>
 
-    /**
-     * A constructor.
-     * @param factory factory
-     * @param mapping mapping definition
-     */
-<span class="fc" id="L122">    public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) {</span>
-<span class="fc" id="L123">        this.factory = factory;</span>
-<span class="fc" id="L124">        this.uuid = UUID.randomUUID();</span>
-<span class="fc" id="L125">        this.admHandler = new ADMArchiveHandler(factory.getClassLoader());</span>
-<span class="fc" id="L126">        this.admHandler.setIgnoreLibrary(true);</span>
-<span class="fc" id="L127">        this.admHandler.setMappingDefinition(mapping);</span>
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L103">    public DefaultAtlasContext(DefaultAtlasContextFactory factory, AtlasMapping mapping) {</span>
+<span class="fc" id="L104">        this.factory = factory;</span>
+<span class="fc" id="L105">        this.uuid = UUID.randomUUID();</span>
+<span class="fc" id="L106">        this.admHandler = new ADMArchiveHandler(factory.getClassLoader());</span>
+<span class="fc" id="L107">        this.admHandler.setIgnoreLibrary(true);</span>
+<span class="fc" id="L108">        this.admHandler.setMappingDefinition(mapping);</span>
+<span class="fc" id="L109">    }</span>
 
-    /**
-     * A constructor.
-     * @param factory factory
-     * @param format {@link AtlasContextFactory.Format#ADM} or {@link AtlasContextFactory.Format#JSON}.
-     * @param stream mapping definition
-     * @throws AtlasException unexpected error
-     */
     public DefaultAtlasContext(DefaultAtlasContextFactory factory,
-<span class="fc" id="L138">            AtlasContextFactory.Format format, InputStream stream) throws AtlasException {</span>
-<span class="fc" id="L139">        this.factory = factory;</span>
-<span class="fc" id="L140">        this.uuid = UUID.randomUUID();</span>
-<span class="fc" id="L141">        this.admHandler = new ADMArchiveHandler(factory.getClassLoader());</span>
-<span class="fc" id="L142">        this.admHandler.setIgnoreLibrary(true);</span>
-<span class="fc" id="L143">        this.admHandler.load(format, stream);</span>
-<span class="fc" id="L144">    }</span>
+<span class="fc" id="L112">            AtlasContextFactory.Format format, InputStream stream) throws AtlasException {</span>
+<span class="fc" id="L113">        this.factory = factory;</span>
+<span class="fc" id="L114">        this.uuid = UUID.randomUUID();</span>
+<span class="fc" id="L115">        this.admHandler = new ADMArchiveHandler(factory.getClassLoader());</span>
+<span class="fc" id="L116">        this.admHandler.setIgnoreLibrary(true);</span>
+<span class="fc" id="L117">        this.admHandler.load(format, stream);</span>
+<span class="fc" id="L118">        this.dataSourceMetadataMap = this.admHandler.getDataSourceMetadataMap();</span>
+<span class="fc" id="L119">    }</span>
 
     /**
      * Compare the core version to the extract mapping version.  No mapping version
@@ -153,21 +128,21 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      * @return true if valid, false otherwise
      */
     private boolean validateVersion(String coreVersion, String mappingVersion) {
-<span class="pc bpc" id="L156" title="1 of 4 branches missed.">        if (mappingVersion != null &amp;&amp; mappingVersion.length() &gt; 0) {</span>
-<span class="fc" id="L157">            String[] mappingVersionComps = mappingVersion.split(&quot;\\.&quot;);</span>
-<span class="fc" id="L158">            String[] coreVersionComps = coreVersion.split(&quot;\\.&quot;);</span>
-<span class="pc bpc" id="L159" title="2 of 4 branches missed.">            if (coreVersionComps.length &lt; 2 || mappingVersionComps.length &lt; 2) {</span>
-<span class="nc" id="L160">                return false;</span>
+<span class="pc bpc" id="L131" title="1 of 4 branches missed.">        if (mappingVersion != null &amp;&amp; mappingVersion.length() &gt; 0) {</span>
+<span class="fc" id="L132">            String[] mappingVersionComps = mappingVersion.split(&quot;\\.&quot;);</span>
+<span class="fc" id="L133">            String[] coreVersionComps = coreVersion.split(&quot;\\.&quot;);</span>
+<span class="pc bpc" id="L134" title="2 of 4 branches missed.">            if (coreVersionComps.length &lt; 2 || mappingVersionComps.length &lt; 2) {</span>
+<span class="nc" id="L135">                return false;</span>
             }
-<span class="fc bfc" id="L162" title="All 2 branches covered.">            if (Integer.parseInt(coreVersionComps[0]) &lt; Integer.parseInt(mappingVersionComps[0])) {</span>
-<span class="fc" id="L163">                return false;</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">            if (Integer.parseInt(coreVersionComps[0]) &lt; Integer.parseInt(mappingVersionComps[0])) {</span>
+<span class="fc" id="L138">                return false;</span>
             }
-<span class="fc bfc" id="L165" title="All 2 branches covered.">            if (Integer.parseInt(coreVersionComps[0]) == Integer.parseInt(mappingVersionComps[0]) &amp;&amp;</span>
-<span class="pc bpc" id="L166" title="1 of 2 branches missed.">                Integer.parseInt(coreVersionComps[1]) &lt; Integer.parseInt(mappingVersionComps[1])) {</span>
-<span class="nc" id="L167">                return false;</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            if (Integer.parseInt(coreVersionComps[0]) == Integer.parseInt(mappingVersionComps[0]) &amp;&amp;</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                Integer.parseInt(coreVersionComps[1]) &lt; Integer.parseInt(mappingVersionComps[1])) {</span>
+<span class="nc" id="L142">                return false;</span>
             }
         }
-<span class="fc" id="L170">        return true;</span>
+<span class="fc" id="L145">        return true;</span>
     }
 
     /**
@@ -177,139 +152,132 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
      */
     protected synchronized void init() throws AtlasException {
 
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (this.initialized) {</span>
-<span class="fc" id="L181">            return;</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (this.initialized) {</span>
+<span class="fc" id="L156">            return;</span>
         }
 
-<span class="fc" id="L184">        registerJmx(this);</span>
+<span class="fc" id="L159">        registerJmx(this);</span>
 
-<span class="fc bfc" id="L186" title="All 2 branches covered.">        if (this.atlasMappingUri != null) {</span>
-<span class="fc" id="L187">            this.admHandler = new ADMArchiveHandler(factory.getClassLoader());</span>
-<span class="fc" id="L188">            this.admHandler.setIgnoreLibrary(true);</span>
-<span class="fc" id="L189">            this.admHandler.load(Paths.get(this.atlasMappingUri));</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (this.atlasMappingUri != null) {</span>
+<span class="fc" id="L162">            this.admHandler = new ADMArchiveHandler(factory.getClassLoader());</span>
+<span class="fc" id="L163">            this.admHandler.setIgnoreLibrary(true);</span>
+<span class="fc" id="L164">            this.admHandler.load(Paths.get(this.atlasMappingUri));</span>
+<span class="fc" id="L165">            this.dataSourceMetadataMap = this.admHandler.getDataSourceMetadataMap();</span>
         }
-<span class="pc bpc" id="L191" title="2 of 4 branches missed.">        if (this.admHandler == null || this.admHandler.getMappingDefinition() == null) {</span>
-<span class="nc" id="L192">            LOG.warn(&quot;AtlasMap context cannot initialize without mapping definition, ignoring:&quot;</span>
+<span class="pc bpc" id="L167" title="2 of 4 branches missed.">        if (this.admHandler == null || this.admHandler.getMappingDefinition() == null) {</span>
+<span class="nc" id="L168">            LOG.warn(&quot;AtlasMap context cannot initialize without mapping definition, ignoring:&quot;</span>
                     + &quot; Mapping URI={}&quot;
                     , this.atlasMappingUri);
-<span class="nc" id="L195">            return;</span>
+<span class="nc" id="L171">            return;</span>
         }
-<span class="fc" id="L197">        AtlasMapping atlasMapping = this.admHandler.getMappingDefinition();</span>
-<span class="fc" id="L198">        String version = factory.getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);</span>
-<span class="fc" id="L199">        String mappingVersion = atlasMapping.getVersion();</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (!validateVersion(version, mappingVersion)) {</span>
-<span class="nc" id="L201">            LOG.error(&quot;Mapping definition version {} detected. It may not work as expected with runtime version {}.&quot;,</span>
+<span class="fc" id="L173">        AtlasMapping atlasMapping = this.admHandler.getMappingDefinition();</span>
+<span class="fc" id="L174">        String version = factory.getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);</span>
+<span class="fc" id="L175">        String mappingVersion = atlasMapping.getVersion();</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (!validateVersion(version, mappingVersion)) {</span>
+<span class="nc" id="L177">            LOG.error(&quot;Mapping definition version {} detected. It may not work as expected with runtime version {}.&quot;,</span>
                 mappingVersion,
                 version);
         }
-<span class="fc" id="L205">        sourceModules.clear();</span>
-<span class="fc" id="L206">        ConstantModule constant = new ConstantModule();</span>
-<span class="fc" id="L207">        constant.setConversionService(factory.getConversionService());</span>
-<span class="fc" id="L208">        constant.setFieldActionService(factory.getFieldActionService());</span>
-<span class="fc" id="L209">        sourceModules.put(AtlasConstants.CONSTANTS_DOCUMENT_ID, constant);</span>
-<span class="fc" id="L210">        PropertyModule property = new PropertyModule(factory.getPropertyStrategy());</span>
-<span class="fc" id="L211">        property.setConversionService(factory.getConversionService());</span>
-<span class="fc" id="L212">        property.setFieldActionService(factory.getFieldActionService());</span>
-<span class="fc" id="L213">        property.setMode(AtlasModuleMode.SOURCE);</span>
-<span class="fc" id="L214">        sourceModules.put(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID, property);</span>
-<span class="fc" id="L215">        targetModules.clear();</span>
-<span class="fc" id="L216">        property = new PropertyModule(factory.getPropertyStrategy());</span>
-<span class="fc" id="L217">        property.setConversionService(factory.getConversionService());</span>
-<span class="fc" id="L218">        property.setFieldActionService(factory.getFieldActionService());</span>
-<span class="fc" id="L219">        property.setMode(AtlasModuleMode.TARGET);</span>
-<span class="fc" id="L220">        targetModules.put(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID, property);</span>
+<span class="fc" id="L181">        sourceModules.clear();</span>
+<span class="fc" id="L182">        ConstantModule constant = new ConstantModule();</span>
+<span class="fc" id="L183">        constant.setConversionService(factory.getConversionService());</span>
+<span class="fc" id="L184">        constant.setFieldActionService(factory.getFieldActionService());</span>
+<span class="fc" id="L185">        sourceModules.put(AtlasConstants.CONSTANTS_DOCUMENT_ID, constant);</span>
+<span class="fc" id="L186">        PropertyModule property = new PropertyModule(factory.getPropertyStrategy());</span>
+<span class="fc" id="L187">        property.setConversionService(factory.getConversionService());</span>
+<span class="fc" id="L188">        property.setFieldActionService(factory.getFieldActionService());</span>
+<span class="fc" id="L189">        property.setMode(AtlasModuleMode.SOURCE);</span>
+<span class="fc" id="L190">        sourceModules.put(AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID, property);</span>
+<span class="fc" id="L191">        targetModules.clear();</span>
+<span class="fc" id="L192">        property = new PropertyModule(factory.getPropertyStrategy());</span>
+<span class="fc" id="L193">        property.setConversionService(factory.getConversionService());</span>
+<span class="fc" id="L194">        property.setFieldActionService(factory.getFieldActionService());</span>
+<span class="fc" id="L195">        property.setMode(AtlasModuleMode.TARGET);</span>
+<span class="fc" id="L196">        targetModules.put(AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID, property);</span>
 
-<span class="fc" id="L222">        lookupTables.clear();</span>
-<span class="fc bfc" id="L223" title="All 2 branches covered.">        if (admHandler.getMappingDefinition().getLookupTables() != null</span>
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">                &amp;&amp; admHandler.getMappingDefinition().getLookupTables().getLookupTable() != null) {</span>
-<span class="fc bfc" id="L225" title="All 2 branches covered.">            for (LookupTable table : admHandler.getMappingDefinition().getLookupTables().getLookupTable()) {</span>
-<span class="fc" id="L226">                lookupTables.put(table.getName(), table);</span>
-<span class="fc" id="L227">            }</span>
+<span class="fc" id="L198">        lookupTables.clear();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (admHandler.getMappingDefinition().getLookupTables() != null</span>
+<span class="pc bpc" id="L200" title="1 of 2 branches missed.">                &amp;&amp; admHandler.getMappingDefinition().getLookupTables().getLookupTable() != null) {</span>
+<span class="fc bfc" id="L201" title="All 2 branches covered.">            for (LookupTable table : admHandler.getMappingDefinition().getLookupTables().getLookupTable()) {</span>
+<span class="fc" id="L202">                lookupTables.put(table.getName(), table);</span>
+<span class="fc" id="L203">            }</span>
         }
 
-<span class="fc" id="L230">        AtlasModuleInfoRegistry moduleInfoRegistry = factory.getModuleInfoRegistry();</span>
-<span class="fc bfc" id="L231" title="All 2 branches covered.">        for (DataSource ds : admHandler.getMappingDefinition().getDataSource()) {</span>
-<span class="fc" id="L232">            AtlasModuleInfo moduleInfo = moduleInfoRegistry.lookupByUri(ds.getUri());</span>
-<span class="fc bfc" id="L233" title="All 2 branches covered.">            if (moduleInfo == null) {</span>
-<span class="fc" id="L234">                LOG.error(&quot;Cannot find module info for the DataSource uri '{}'&quot;, ds.getUri());</span>
-<span class="fc" id="L235">                continue;</span>
+<span class="fc" id="L206">        AtlasModuleInfoRegistry moduleInfoRegistry = factory.getModuleInfoRegistry();</span>
+<span class="fc bfc" id="L207" title="All 2 branches covered.">        for (DataSource ds : admHandler.getMappingDefinition().getDataSource()) {</span>
+<span class="fc" id="L208">            AtlasModuleInfo moduleInfo = moduleInfoRegistry.lookupByUri(ds.getUri());</span>
+<span class="fc bfc" id="L209" title="All 2 branches covered.">            if (moduleInfo == null) {</span>
+<span class="fc" id="L210">                LOG.error(&quot;Cannot find module info for the DataSource uri '{}'&quot;, ds.getUri());</span>
+<span class="fc" id="L211">                continue;</span>
             }
-<span class="pc bpc" id="L237" title="1 of 4 branches missed.">            if (ds.getDataSourceType() != DataSourceType.SOURCE &amp;&amp; ds.getDataSourceType() != DataSourceType.TARGET) {</span>
-<span class="nc" id="L238">                LOG.error(&quot;Unsupported DataSource type '{}'&quot;, ds.getDataSourceType());</span>
-<span class="nc" id="L239">                continue;</span>
+<span class="pc bpc" id="L213" title="1 of 4 branches missed.">            if (ds.getDataSourceType() != DataSourceType.SOURCE &amp;&amp; ds.getDataSourceType() != DataSourceType.TARGET) {</span>
+<span class="nc" id="L214">                LOG.error(&quot;Unsupported DataSource type '{}'&quot;, ds.getDataSourceType());</span>
+<span class="nc" id="L215">                continue;</span>
             }
 
-<span class="fc" id="L242">            String docId = ds.getId();</span>
-<span class="pc bpc" id="L243" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
-<span class="fc bfc" id="L244" title="All 2 branches covered.">                docId = ds.getDataSourceType() == DataSourceType.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID</span>
-<span class="fc" id="L245">                        : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
+<span class="fc" id="L218">            String docId = ds.getId();</span>
+<span class="pc bpc" id="L219" title="1 of 4 branches missed.">            if (docId == null || docId.isEmpty()) {</span>
+<span class="fc bfc" id="L220" title="All 2 branches covered.">                docId = ds.getDataSourceType() == DataSourceType.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID</span>
+<span class="fc" id="L221">                        : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
             }
-<span class="pc bpc" id="L247" title="1 of 4 branches missed.">            if (ds.getDataSourceType() == DataSourceType.SOURCE &amp;&amp; sourceModules.containsKey(docId)) {</span>
-<span class="nc" id="L248">                LOG.error(&quot;Duplicated {} DataSource ID '{}' was detected, ignoring...&quot;, ds.getDataSourceType(),</span>
-<span class="nc" id="L249">                        ds.getId());</span>
-<span class="nc" id="L250">                continue;</span>
+<span class="pc bpc" id="L223" title="1 of 4 branches missed.">            if (ds.getDataSourceType() == DataSourceType.SOURCE &amp;&amp; sourceModules.containsKey(docId)) {</span>
+<span class="nc" id="L224">                LOG.error(&quot;Duplicated {} DataSource ID '{}' was detected, ignoring...&quot;, ds.getDataSourceType(),</span>
+<span class="nc" id="L225">                        ds.getId());</span>
+<span class="nc" id="L226">                continue;</span>
             }
-<span class="pc bpc" id="L252" title="1 of 4 branches missed.">            if (ds.getDataSourceType() == DataSourceType.TARGET &amp;&amp; targetModules.containsKey(docId)) {</span>
-<span class="nc" id="L253">                LOG.error(&quot;Duplicated {} DataSource ID '{}' was detected, ignoring...&quot;, ds.getDataSourceType(), docId);</span>
-<span class="nc" id="L254">                continue;</span>
+<span class="pc bpc" id="L228" title="1 of 4 branches missed.">            if (ds.getDataSourceType() == DataSourceType.TARGET &amp;&amp; targetModules.containsKey(docId)) {</span>
+<span class="nc" id="L229">                LOG.error(&quot;Duplicated {} DataSource ID '{}' was detected, ignoring...&quot;, ds.getDataSourceType(), docId);</span>
+<span class="nc" id="L230">                continue;</span>
             }
 
             try {
-<span class="fc" id="L258">                AtlasModule module = moduleInfo.getModuleClass().getDeclaredConstructor().newInstance();</span>
-<span class="fc" id="L259">                module.setClassLoader(factory.getClassLoader());</span>
-<span class="fc" id="L260">                module.setConversionService(factory.getConversionService());</span>
-<span class="fc" id="L261">                module.setFieldActionService(factory.getFieldActionService());</span>
-<span class="fc" id="L262">                module.setDataSource(ds);</span>
-<span class="fc bfc" id="L263" title="All 2 branches covered.">                if (ds.getDataSourceType() == DataSourceType.SOURCE) {</span>
-<span class="fc" id="L264">                    getSourceModules().put(docId, module);</span>
-<span class="pc bpc" id="L265" title="1 of 2 branches missed.">                } else if (ds.getDataSourceType() == DataSourceType.TARGET) {</span>
-<span class="fc" id="L266">                    getTargetModules().put(docId, module);</span>
+<span class="fc" id="L234">                AtlasModule module = moduleInfo.getModuleClass().getDeclaredConstructor().newInstance();</span>
+<span class="fc" id="L235">                module.setClassLoader(factory.getClassLoader());</span>
+<span class="fc" id="L236">                module.setConversionService(factory.getConversionService());</span>
+<span class="fc" id="L237">                module.setFieldActionService(factory.getFieldActionService());</span>
+<span class="fc" id="L238">                module.setUri(ds.getUri());</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">                if (ds.getDataSourceType() == DataSourceType.SOURCE) {</span>
+<span class="fc" id="L240">                    module.setMode(AtlasModuleMode.SOURCE);</span>
+<span class="fc" id="L241">                    getSourceModules().put(docId, module);</span>
+<span class="pc bpc" id="L242" title="1 of 2 branches missed.">                } else if (ds.getDataSourceType() == DataSourceType.TARGET) {</span>
+<span class="fc" id="L243">                    module.setMode(AtlasModuleMode.TARGET);</span>
+<span class="fc" id="L244">                    getTargetModules().put(docId, module);</span>
                 }
-<span class="fc bfc" id="L268" title="All 2 branches covered.">                if (this.admHandler.getDocumentCatalog() != null) {</span>
-<span class="fc bfc" id="L269" title="All 2 branches covered.">                    List&lt;DocumentMetadata&gt; docs = ds.getDataSourceType() == DataSourceType.SOURCE</span>
-<span class="fc" id="L270">                        ? this.admHandler.getDocumentCatalog().getSources()</span>
-<span class="fc" id="L271">                        : this.admHandler.getDocumentCatalog().getTargets();</span>
-<span class="fc" id="L272">                    final String did = docId;</span>
-<span class="fc" id="L273">                    Optional&lt;DocumentMetadata&gt; meta = docs.stream().filter(m -&gt; did.equals(m.getId())).findFirst();</span>
-<span class="fc bfc" id="L274" title="All 2 branches covered.">                    if (meta.isPresent()) {</span>
-<span class="fc" id="L275">                        module.setDocumentMetadata(meta.get());</span>
-                    }
-<span class="fc" id="L277">                    DocumentKey docKey = new DocumentKey(ds.getDataSourceType(), docId);</span>
-<span class="fc" id="L278">                    File specFile = this.admHandler.getDocumentSpecificationFile(docKey);</span>
-<span class="fc bfc" id="L279" title="All 2 branches covered.">                    if (specFile != null) {</span>
-<span class="fc" id="L280">                        module.setDocumentSpecificationFile(specFile);</span>
+<span class="fc" id="L246">                module.setDocId(docId);</span>
+<span class="fc" id="L247">                module.setDocName(ds.getName());</span>
+<span class="fc bfc" id="L248" title="All 2 branches covered.">                if (this.dataSourceMetadataMap != null) {</span>
+<span class="fc bfc" id="L249" title="All 2 branches covered.">                    DataSourceKey dskey = new DataSourceKey(ds.getDataSourceType() == DataSourceType.SOURCE, docId);</span>
+<span class="fc" id="L250">                    DataSourceMetadata meta = this.dataSourceMetadataMap.get(dskey);</span>
+<span class="pc bpc" id="L251" title="1 of 2 branches missed.">                    if (meta != null) {</span>
+<span class="fc" id="L252">                        module.setDataSourceMetadata(meta);</span>
                     }
                 }
-<span class="fc" id="L283">                module.init();</span>
-<span class="nc" id="L284">            } catch (Exception t) {</span>
-<span class="nc" id="L285">                LOG.error(&quot;Unable to initialize {} module: {}&quot;, ds.getDataSourceType(), moduleInfo);</span>
-<span class="nc" id="L286">                LOG.error(t.getMessage(), t);</span>
-<span class="nc" id="L287">                throw new AtlasException(String.format(&quot;Unable to initialize %s module: %s&quot;, ds.getDataSourceType(),</span>
-<span class="nc" id="L288">                        moduleInfo.toString()), t);</span>
-<span class="fc" id="L289">            }</span>
-<span class="fc" id="L290">        }</span>
-<span class="fc" id="L291">        initialized = true;</span>
-<span class="fc" id="L292">    }</span>
+<span class="fc" id="L255">                module.init();</span>
+<span class="nc" id="L256">            } catch (Exception t) {</span>
+<span class="nc" id="L257">                LOG.error(&quot;Unable to initialize {} module: {}&quot;, ds.getDataSourceType(), moduleInfo);</span>
+<span class="nc" id="L258">                LOG.error(t.getMessage(), t);</span>
+<span class="nc" id="L259">                throw new AtlasException(String.format(&quot;Unable to initialize %s module: %s&quot;, ds.getDataSourceType(),</span>
+<span class="nc" id="L260">                        moduleInfo.toString()), t);</span>
+<span class="fc" id="L261">            }</span>
+<span class="fc" id="L262">        }</span>
+<span class="fc" id="L263">        initialized = true;</span>
+<span class="fc" id="L264">    }</span>
 
-    /**
-     * Registers the JMX objects.
-     * @param context context
-     */
     protected void registerJmx(DefaultAtlasContext context) {
         try {
-<span class="fc" id="L300">            setJmxObjectName(new ObjectName(</span>
-<span class="fc" id="L301">                    getContextFactory().getJmxObjectName() + &quot;,context=Contexts,uuid=&quot; + uuid.toString()));</span>
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {</span>
-<span class="nc" id="L303">                ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());</span>
-<span class="nc bnc" id="L304" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L305">                    LOG.debug(&quot;Registered AtlasContext {} with JMX&quot;, context.getUuid());</span>
+<span class="fc" id="L268">            setJmxObjectName(new ObjectName(</span>
+<span class="fc" id="L269">                    getContextFactory().getJmxObjectName() + &quot;,context=Contexts,uuid=&quot; + uuid.toString()));</span>
+<span class="pc bpc" id="L270" title="1 of 2 branches missed.">            if (ManagementFactory.getPlatformMBeanServer().isRegistered(getJmxObjectName())) {</span>
+<span class="nc" id="L271">                ManagementFactory.getPlatformMBeanServer().registerMBean(this, getJmxObjectName());</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L273">                    LOG.debug(&quot;Registered AtlasContext {} with JMX&quot;, context.getUuid());</span>
                 }
             }
-<span class="nc" id="L308">        } catch (Exception t) {</span>
-<span class="nc" id="L309">            LOG.warn(&quot;Failed to register AtlasContext {} with JMX&quot;, context.getUuid());</span>
-<span class="nc" id="L310">            LOG.warn(t.getMessage(), t);</span>
-<span class="fc" id="L311">        }</span>
-<span class="fc" id="L312">    }</span>
+<span class="nc" id="L276">        } catch (Exception t) {</span>
+<span class="nc" id="L277">            LOG.warn(&quot;Failed to register AtlasContext {} with JMX&quot;, context.getUuid());</span>
+<span class="nc" id="L278">            LOG.warn(t.getMessage(), t);</span>
+<span class="fc" id="L279">        }</span>
+<span class="fc" id="L280">    }</span>
 
     /**
      * Process single mapping entry in preview mode. Since modules don't participate
@@ -321,820 +289,752 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
     @Override
     @Deprecated
     public Audits processPreview(Mapping mapping) throws AtlasException {
-<span class="nc" id="L324">        return this.factory.createPreviewContext().processPreview(mapping);</span>
+<span class="nc" id="L292">        return this.factory.createPreviewContext().processPreview(mapping);</span>
+    }
+
+    protected Field applyFieldActions(DefaultAtlasSession session, Field field) {
+<span class="fc bfc" id="L296" title="All 2 branches covered.">        if (field.getActions() == null) {</span>
+<span class="fc" id="L297">            return field;</span>
+        }
+        try {
+<span class="fc" id="L300">            return factory.getFieldActionService().processActions(session, field);</span>
+<span class="nc" id="L301">        } catch (AtlasException e) {</span>
+<span class="nc" id="L302">            AtlasUtil.addAudit(session, field, String.format(</span>
+<span class="nc" id="L303">                    &quot;Failed to apply field action: %s&quot;, AtlasUtil.getChainedMessage(e)),</span>
+                    AuditStatus.ERROR, null);
+<span class="nc bnc" id="L305" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L306">                LOG.error(&quot;&quot;, e);</span>
+            }
+<span class="nc" id="L308">            return field;</span>
+        }
     }
 
     /**
-     * Applies field actions declared on the field.
-     * @param session session
-     * @param field field
-     * @return processed field
+     * Process session lifecycle.
+     *
      */
-    protected Field applyFieldActions(DefaultAtlasSession session, Field field) {
-<span class="fc bfc" id="L334" title="All 2 branches covered.">        if (field.getActions() == null) {</span>
-<span class="fc" id="L335">            return field;</span>
-        }
-        try {
-<span class="fc" id="L338">            return factory.getFieldActionService().processActions(session, field);</span>
-<span class="nc" id="L339">        } catch (AtlasException e) {</span>
-<span class="nc" id="L340">            AtlasUtil.addAudit(session, field, String.format(</span>
-<span class="nc" id="L341">                    &quot;Failed to apply field action: %s&quot;, AtlasUtil.getChainedMessage(e)),</span>
-                    AuditStatus.ERROR, null);
-<span class="nc bnc" id="L343" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L344">                LOG.error(&quot;&quot;, e);</span>
-            }
-<span class="nc" id="L346">            return field;</span>
-        }
-    }
-
     @Override
     public void process(AtlasSession userSession) throws AtlasException {
-<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (!(userSession instanceof DefaultAtlasSession)) {</span>
-<span class="fc" id="L353">            throw new AtlasException(String.format(&quot;Unsupported session class '%s'&quot;, userSession.getClass().getName()));</span>
+<span class="fc bfc" id="L318" title="All 2 branches covered.">        if (!(userSession instanceof DefaultAtlasSession)) {</span>
+<span class="fc" id="L319">            throw new AtlasException(String.format(&quot;Unsupported session class '%s'&quot;, userSession.getClass().getName()));</span>
         }
-<span class="fc bfc" id="L355" title="All 2 branches covered.">        if (!this.equals(userSession.getAtlasContext())) {</span>
-<span class="fc" id="L356">            throw new AtlasException(&quot;Cannot execute AtlasSession created by the other AtlasContext&quot;);</span>
-        }
-
-<span class="fc" id="L359">        DefaultAtlasSession session = (DefaultAtlasSession) userSession;</span>
-<span class="pc bpc" id="L360" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L361" title="All 2 branches missed.">            LOG.debug(&quot;Begin process {}&quot;, (session == null ? null : session.toString()));</span>
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (!this.equals(userSession.getAtlasContext())) {</span>
+<span class="fc" id="L322">            throw new AtlasException(&quot;Cannot execute AtlasSession created by the other AtlasContext&quot;);</span>
         }
 
-<span class="fc" id="L364">        session.head().unset();</span>
-<span class="fc" id="L365">        session.getAudits().getAudit().clear();</span>
-<span class="fc" id="L366">        session.getValidations().getValidation().clear();</span>
+<span class="fc" id="L325">        DefaultAtlasSession session = (DefaultAtlasSession) userSession;</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L327" title="All 2 branches missed.">            LOG.debug(&quot;Begin process {}&quot;, (session == null ? null : session.toString()));</span>
+        }
+
+<span class="fc" id="L330">        session.head().unset();</span>
+<span class="fc" id="L331">        session.getAudits().getAudit().clear();</span>
+<span class="fc" id="L332">        session.getValidations().getValidation().clear();</span>
 
         // TODO https://github.com/atlasmap/atlasmap/issues/863 - Add an option to enable/disable runtime validation
-<span class="fc" id="L369">        processValidation(session);</span>
-<span class="fc bfc" id="L370" title="All 2 branches covered.">        for (Validation v : session.getValidations().getValidation()) {</span>
-<span class="fc" id="L371">            AtlasUtil.addAudit(session, v);</span>
-<span class="fc" id="L372">        }</span>
+<span class="fc" id="L335">        processValidation(session);</span>
+<span class="fc bfc" id="L336" title="All 2 branches covered.">        for (Validation v : session.getValidations().getValidation()) {</span>
+<span class="fc" id="L337">            AtlasUtil.addAudit(session, v);</span>
+<span class="fc" id="L338">        }</span>
 
         // Additional runtime only audit
-<span class="fc" id="L375">        Mappings mappings = session.getMapping().getMappings();</span>
-<span class="fc bfc" id="L376" title="All 4 branches covered.">        if (mappings != null &amp;&amp; mappings.getMapping().isEmpty()) {</span>
-<span class="fc" id="L377">            AtlasUtil.addAudit(session, (String)null,</span>
-<span class="fc" id="L378">                String.format(&quot;Field mappings should not be empty&quot;),</span>
+<span class="fc" id="L341">        Mappings mappings = session.getMapping().getMappings();</span>
+<span class="fc bfc" id="L342" title="All 4 branches covered.">        if (mappings != null &amp;&amp; mappings.getMapping().isEmpty()) {</span>
+<span class="fc" id="L343">            AtlasUtil.addAudit(session, (String)null,</span>
+<span class="fc" id="L344">                String.format(&quot;Field mappings should not be empty&quot;),</span>
                 AuditStatus.WARN, null);
         }
 
-<span class="fc" id="L382">        session.getValidations().getValidation().clear();</span>
-<span class="fc bfc" id="L383" title="All 2 branches covered.">        if (session.hasErrors()) {</span>
-<span class="pc bpc" id="L384" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L385">                LOG.error(&quot;Aborting due to {} errors in pre-validation&quot;, session.errorCount());</span>
+<span class="fc" id="L348">        session.getValidations().getValidation().clear();</span>
+<span class="fc bfc" id="L349" title="All 2 branches covered.">        if (session.hasErrors()) {</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L351">                LOG.error(&quot;Aborting due to {} errors in pre-validation&quot;, session.errorCount());</span>
             }
-<span class="fc" id="L387">            return;</span>
+<span class="fc" id="L353">            return;</span>
         }
 
-<span class="fc bfc" id="L390" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
-<span class="fc" id="L391">            module.processPreSourceExecution(session);</span>
-<span class="fc" id="L392">        }</span>
-<span class="fc bfc" id="L393" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
-<span class="fc" id="L394">            module.processPreTargetExecution(session);</span>
-<span class="fc" id="L395">        }</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
+<span class="fc" id="L357">            module.processPreSourceExecution(session);</span>
+<span class="fc" id="L358">        }</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
+<span class="fc" id="L360">            module.processPreTargetExecution(session);</span>
+<span class="fc" id="L361">        }</span>
 
-<span class="pc bpc" id="L397" title="1 of 2 branches missed.">        if (session.hasErrors()) {</span>
-<span class="nc bnc" id="L398" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L399">                LOG.error(&quot;Aborting due to {} errors in pre-execution&quot;, session.errorCount());</span>
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">        if (session.hasErrors()) {</span>
+<span class="nc bnc" id="L364" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L365">                LOG.error(&quot;Aborting due to {} errors in pre-execution&quot;, session.errorCount());</span>
             }
-<span class="nc" id="L401">            return;</span>
+<span class="nc" id="L367">            return;</span>
         }
 
-<span class="fc bfc" id="L404" title="All 2 branches covered.">        for (BaseMapping baseMapping : session.getMapping().getMappings().getMapping()) {</span>
-<span class="fc bfc" id="L405" title="All 2 branches covered.">            for (BaseMapping innerMapping : unwrapCollectionMappings(session, baseMapping)) {</span>
-<span class="fc bfc" id="L406" title="All 2 branches covered.">                if (innerMapping instanceof CustomMapping) {</span>
-<span class="fc" id="L407">                    DefaultAtlasCustomMappingProcessor.getInstance().process(</span>
+<span class="fc bfc" id="L370" title="All 2 branches covered.">        for (BaseMapping baseMapping : session.getMapping().getMappings().getMapping()) {</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">            for (BaseMapping innerMapping : unwrapCollectionMappings(session, baseMapping)) {</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">                if (innerMapping instanceof CustomMapping) {</span>
+<span class="fc" id="L373">                    DefaultAtlasCustomMappingProcessor.getInstance().process(</span>
                             session, (CustomMapping)innerMapping);
-<span class="fc" id="L409">                    continue;</span>
+<span class="fc" id="L375">                    continue;</span>
                 }
 
-<span class="fc" id="L412">                Mapping mapping = (Mapping) innerMapping;</span>
-<span class="fc" id="L413">                session.head().setMapping(mapping).setLookupTable(lookupTables.get(mapping.getLookupTableName()));</span>
+<span class="fc" id="L378">                Mapping mapping = (Mapping) innerMapping;</span>
+<span class="fc" id="L379">                session.head().setMapping(mapping).setLookupTable(lookupTables.get(mapping.getLookupTableName()));</span>
 
-<span class="pc bpc" id="L415" title="2 of 4 branches missed.">                if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {</span>
-<span class="nc" id="L416">                    AtlasUtil.addAudit(session, (String)null,</span>
-<span class="nc" id="L417">                            String.format(&quot;Mapping does not contain at least one target field: alias=%s desc=%s&quot;,</span>
-<span class="nc" id="L418">                                    mapping.getAlias(), mapping.getDescription()),</span>
+<span class="pc bpc" id="L381" title="2 of 4 branches missed.">                if (mapping.getOutputField() == null || mapping.getOutputField().isEmpty()) {</span>
+<span class="nc" id="L382">                    AtlasUtil.addAudit(session, (String)null,</span>
+<span class="nc" id="L383">                            String.format(&quot;Mapping does not contain at least one target field: alias=%s desc=%s&quot;,</span>
+<span class="nc" id="L384">                                    mapping.getAlias(), mapping.getDescription()),</span>
                             AuditStatus.WARN, null);
-<span class="nc" id="L420">                    continue;</span>
+<span class="nc" id="L386">                    continue;</span>
                 }
 
-<span class="fc" id="L423">                processSourceFieldMapping(session);</span>
-<span class="pc bpc" id="L424" title="1 of 2 branches missed.">                if (!session.head().hasError()) {</span>
-<span class="fc" id="L425">                    processTargetFieldMapping(session, mapping);</span>
+<span class="fc" id="L389">                processSourceFieldMapping(session);</span>
+<span class="pc bpc" id="L390" title="1 of 2 branches missed.">                if (!session.head().hasError()) {</span>
+<span class="fc" id="L391">                    processTargetFieldMapping(session, mapping);</span>
                 }
-<span class="fc" id="L427">                session.getAudits().getAudit().addAll(session.head().getAudits());</span>
-<span class="fc" id="L428">                session.head().unset();</span>
-<span class="fc" id="L429">            }</span>
-<span class="fc" id="L430">        }</span>
+<span class="fc" id="L393">                session.getAudits().getAudit().addAll(session.head().getAudits());</span>
+<span class="fc" id="L394">                session.head().unset();</span>
+<span class="fc" id="L395">            }</span>
+<span class="fc" id="L396">        }</span>
 
-<span class="fc bfc" id="L432" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
-<span class="fc" id="L433">            module.processPostValidation(session);</span>
-<span class="fc" id="L434">        }</span>
-<span class="fc bfc" id="L435" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
-<span class="fc" id="L436">            module.processPostValidation(session);</span>
-<span class="fc" id="L437">        }</span>
+<span class="fc bfc" id="L398" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
+<span class="fc" id="L399">            module.processPostValidation(session);</span>
+<span class="fc" id="L400">        }</span>
+<span class="fc bfc" id="L401" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
+<span class="fc" id="L402">            module.processPostValidation(session);</span>
+<span class="fc" id="L403">        }</span>
 
-<span class="fc bfc" id="L439" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
-<span class="fc" id="L440">            module.processPostSourceExecution(session);</span>
-<span class="fc" id="L441">        }</span>
-<span class="fc bfc" id="L442" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
-<span class="fc" id="L443">            module.processPostTargetExecution(session);</span>
-<span class="fc" id="L444">        }</span>
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
+<span class="fc" id="L406">            module.processPostSourceExecution(session);</span>
+<span class="fc" id="L407">        }</span>
+<span class="fc bfc" id="L408" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
+<span class="fc" id="L409">            module.processPostTargetExecution(session);</span>
+<span class="fc" id="L410">        }</span>
 
-<span class="pc bpc" id="L446" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L447" title="All 2 branches missed.">            LOG.debug(&quot;End process {}&quot;, session == null ? null : session.toString());</span>
+<span class="pc bpc" id="L412" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L413" title="All 2 branches missed.">            LOG.debug(&quot;End process {}&quot;, session == null ? null : session.toString());</span>
         }
-<span class="fc" id="L449">    }</span>
+<span class="fc" id="L415">    }</span>
 
     // just unwrap collection mappings to be compatible with older UI
     private List&lt;BaseMapping&gt; unwrapCollectionMappings(DefaultAtlasSession session, BaseMapping baseMapping) {
-<span class="fc bfc" id="L453" title="All 4 branches covered.">        if (baseMapping.getMappingType() == null || !baseMapping.getMappingType().equals(MappingType.COLLECTION)) {</span>
-<span class="pc bpc" id="L454" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L455">                LOG.debug(&quot;Mapping is not a collection mapping, not cloning: {}&quot;, baseMapping);</span>
+<span class="fc bfc" id="L419" title="All 4 branches covered.">        if (baseMapping.getMappingType() == null || !baseMapping.getMappingType().equals(MappingType.COLLECTION)) {</span>
+<span class="pc bpc" id="L420" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L421">                LOG.debug(&quot;Mapping is not a collection mapping, not cloning: {}&quot;, baseMapping);</span>
             }
-<span class="fc" id="L457">            return Arrays.asList((BaseMapping) baseMapping);</span>
+<span class="fc" id="L423">            return Arrays.asList((BaseMapping) baseMapping);</span>
         }
 
-<span class="fc" id="L460">        List&lt;BaseMapping&gt; mappings = new LinkedList&lt;&gt;();</span>
-<span class="fc bfc" id="L461" title="All 2 branches covered.">        for(BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {</span>
-<span class="fc" id="L462">            mappings.add(m);</span>
-<span class="fc" id="L463">        }</span>
-<span class="fc" id="L464">        return mappings;</span>
+<span class="fc" id="L426">        List&lt;BaseMapping&gt; mappings = new LinkedList&lt;&gt;();</span>
+<span class="fc bfc" id="L427" title="All 2 branches covered.">        for(BaseMapping m : ((Collection) baseMapping).getMappings().getMapping()) {</span>
+<span class="fc" id="L428">            mappings.add(m);</span>
+<span class="fc" id="L429">        }</span>
+<span class="fc" id="L430">        return mappings;</span>
     }
 
-    /**
-     * Processes source fields.
-     * @param session session
-     */
     protected void processSourceFieldMapping(DefaultAtlasSession session) {
         try {
-<span class="fc" id="L473">            Mapping mapping = session.head().getMapping();</span>
-<span class="fc bfc" id="L474" title="All 2 branches covered.">            if (mapping.getInputFieldGroup() != null) {</span>
-<span class="fc bfc" id="L475" title="All 2 branches covered.">                if (mapping.getExpression() != null) {</span>
-<span class="fc" id="L476">                    session.head().setSourceField(mapping.getInputFieldGroup());</span>
-<span class="fc" id="L477">                    DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());</span>
+<span class="fc" id="L435">            Mapping mapping = session.head().getMapping();</span>
+<span class="fc bfc" id="L436" title="All 2 branches covered.">            if (mapping.getInputFieldGroup() != null) {</span>
+<span class="fc bfc" id="L437" title="All 2 branches covered.">                if (mapping.getExpression() != null) {</span>
+<span class="fc" id="L438">                    session.head().setSourceField(mapping.getInputFieldGroup());</span>
+<span class="fc" id="L439">                    DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());</span>
                 } else {
-<span class="fc" id="L479">                    processSourceFieldGroup(session, mapping.getInputFieldGroup());</span>
+<span class="fc" id="L441">                    processSourceFieldGroup(session, mapping.getInputFieldGroup());</span>
                 }
-<span class="pc bpc" id="L481" title="2 of 4 branches missed.">            } else if (mapping.getInputField() != null &amp;&amp; !mapping.getInputField().isEmpty()) {</span>
-<span class="fc bfc" id="L482" title="All 2 branches covered.">                if (mapping.getExpression() != null) {</span>
-<span class="fc" id="L483">                    FieldGroup sourceFieldGroup = new FieldGroup();</span>
-<span class="fc" id="L484">                    sourceFieldGroup.getField().addAll(mapping.getInputField());</span>
-<span class="fc" id="L485">                    session.head().setSourceField(sourceFieldGroup);</span>
-<span class="fc" id="L486">                    DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());</span>
-<span class="fc" id="L487">                } else {</span>
-<span class="fc" id="L488">                    List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
-<span class="fc" id="L489">                    applyCopyToActions(sourceFields, mapping);</span>
-<span class="fc" id="L490">                    processSourceFields(session, sourceFields);</span>
-<span class="fc" id="L491">                }</span>
+<span class="pc bpc" id="L443" title="2 of 4 branches missed.">            } else if (mapping.getInputField() != null &amp;&amp; !mapping.getInputField().isEmpty()) {</span>
+<span class="fc bfc" id="L444" title="All 2 branches covered.">                if (mapping.getExpression() != null) {</span>
+<span class="fc" id="L445">                    FieldGroup sourceFieldGroup = new FieldGroup();</span>
+<span class="fc" id="L446">                    sourceFieldGroup.getField().addAll(mapping.getInputField());</span>
+<span class="fc" id="L447">                    session.head().setSourceField(sourceFieldGroup);</span>
+<span class="fc" id="L448">                    DefaultAtlasExpressionProcessor.processExpression(session, mapping.getExpression());</span>
+<span class="fc" id="L449">                } else {</span>
+<span class="fc" id="L450">                    List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="fc" id="L451">                    applyCopyToActions(sourceFields, mapping);</span>
+<span class="fc" id="L452">                    processSourceFields(session, sourceFields);</span>
+<span class="fc" id="L453">                }</span>
             } else {
-<span class="nc" id="L493">                session.head().addAudit(AuditStatus.WARN, null, String.format(</span>
+<span class="nc" id="L455">                session.head().addAudit(AuditStatus.WARN, null, String.format(</span>
                     &quot;Mapping does not contain expression or at least one source field: alias=%s desc=%s&quot;,
-<span class="nc" id="L495">                    mapping.getAlias(), mapping.getDescription()));</span>
+<span class="nc" id="L457">                    mapping.getAlias(), mapping.getDescription()));</span>
             }
-<span class="fc" id="L497">        } catch (Exception t) {</span>
-<span class="fc" id="L498">            Field sourceField = session.head().getSourceField();</span>
-<span class="pc bpc" id="L499" title="1 of 2 branches missed.">            String docId = sourceField != null ? sourceField.getDocId() : null;</span>
-<span class="pc bpc" id="L500" title="1 of 2 branches missed.">            String path =  sourceField != null ? sourceField.getPath() : null;</span>
-<span class="fc" id="L501">            session.head().addAudit(AuditStatus.ERROR, sourceField, String.format(</span>
-<span class="fc" id="L502">                    &quot;Unexpected exception is thrown while reading source field: %s&quot;, t.getMessage()));</span>
-<span class="pc bpc" id="L503" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L504">                LOG.error(&quot;&quot;, t);</span>
+<span class="fc" id="L459">        } catch (Exception t) {</span>
+<span class="fc" id="L460">            Field sourceField = session.head().getSourceField();</span>
+<span class="pc bpc" id="L461" title="1 of 2 branches missed.">            String docId = sourceField != null ? sourceField.getDocId() : null;</span>
+<span class="pc bpc" id="L462" title="1 of 2 branches missed.">            String path =  sourceField != null ? sourceField.getPath() : null;</span>
+<span class="fc" id="L463">            session.head().addAudit(AuditStatus.ERROR, sourceField, String.format(</span>
+<span class="fc" id="L464">                    &quot;Unexpected exception is thrown while reading source field: %s&quot;, t.getMessage()));</span>
+<span class="pc bpc" id="L465" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L466">                LOG.error(&quot;&quot;, t);</span>
             }
-<span class="fc" id="L506">        }</span>
-<span class="fc" id="L507">    }</span>
+<span class="fc" id="L468">        }</span>
+<span class="fc" id="L469">    }</span>
 
     private void processSourceFieldGroup(DefaultAtlasSession session, FieldGroup sourceFieldGroup) throws AtlasException {
-<span class="fc" id="L510">        processSourceFields(session, sourceFieldGroup.getField());</span>
-<span class="fc" id="L511">        session.head().setSourceField(sourceFieldGroup);</span>
-<span class="fc" id="L512">        Field processed = applyFieldActions(session, session.head().getSourceField());</span>
-<span class="fc" id="L513">        session.head().setSourceField(processed);</span>
-<span class="fc" id="L514">    }</span>
+<span class="fc" id="L472">        processSourceFields(session, sourceFieldGroup.getField());</span>
+<span class="fc" id="L473">        session.head().setSourceField(sourceFieldGroup);</span>
+<span class="fc" id="L474">        Field processed = applyFieldActions(session, session.head().getSourceField());</span>
+<span class="fc" id="L475">        session.head().setSourceField(processed);</span>
+<span class="fc" id="L476">    }</span>
 
     private void processSourceFields(DefaultAtlasSession session, List&lt;Field&gt; sourceFields)
             throws AtlasException {
-<span class="fc bfc" id="L518" title="All 2 branches covered.">        for (int i = 0; i &lt; sourceFields.size(); i++) {</span>
-<span class="fc" id="L519">            Field sourceField = sourceFields.get(i);</span>
-<span class="fc" id="L520">            session.head().setSourceField(sourceField);</span>
-<span class="fc bfc" id="L521" title="All 2 branches covered.">            if (sourceField instanceof FieldGroup) {</span>
-<span class="fc" id="L522">                processSourceFields(session, ((FieldGroup)sourceField).getField());</span>
-<span class="fc" id="L523">                Field processed = applyFieldActions(session, sourceField);</span>
-<span class="fc" id="L524">                session.head().setSourceField(processed);</span>
-<span class="fc" id="L525">                continue;</span>
+<span class="fc bfc" id="L480" title="All 2 branches covered.">        for (int i = 0; i &lt; sourceFields.size(); i++) {</span>
+<span class="fc" id="L481">            Field sourceField = sourceFields.get(i);</span>
+<span class="fc" id="L482">            session.head().setSourceField(sourceField);</span>
+<span class="fc bfc" id="L483" title="All 2 branches covered.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="fc" id="L484">                processSourceFields(session, ((FieldGroup)sourceField).getField());</span>
+<span class="fc" id="L485">                Field processed = applyFieldActions(session, sourceField);</span>
+<span class="fc" id="L486">                session.head().setSourceField(processed);</span>
+<span class="fc" id="L487">                continue;</span>
             }
 
-<span class="fc" id="L528">            AtlasModule module = resolveModule(FieldDirection.SOURCE, sourceField);</span>
-<span class="fc bfc" id="L529" title="All 2 branches covered.">            if (module == null) {</span>
-<span class="fc" id="L530">                AtlasUtil.addAudit(session, sourceField,</span>
-<span class="fc" id="L531">                        String.format(&quot;Module not found for docId '%s'&quot;, sourceField.getDocId()),</span>
+<span class="fc" id="L490">            AtlasModule module = resolveModule(FieldDirection.SOURCE, sourceField);</span>
+<span class="fc bfc" id="L491" title="All 2 branches covered.">            if (module == null) {</span>
+<span class="fc" id="L492">                AtlasUtil.addAudit(session, sourceField,</span>
+<span class="fc" id="L493">                        String.format(&quot;Module not found for docId '%s'&quot;, sourceField.getDocId()),</span>
                         AuditStatus.ERROR, null);
-<span class="fc" id="L533">                return;</span>
+<span class="fc" id="L495">                return;</span>
             }
-<span class="pc bpc" id="L535" title="1 of 2 branches missed.">            if (!module.isSupportedField(sourceField)) {</span>
-<span class="nc" id="L536">                AtlasUtil.addAudit(session, sourceField,</span>
-<span class="nc" id="L537">                        String.format(&quot;Unsupported source field type '%s' for DataSource '%s'&quot;,</span>
-<span class="nc" id="L538">                                sourceField.getClass().getName(), module.getUri()),</span>
+<span class="pc bpc" id="L497" title="1 of 2 branches missed.">            if (!module.isSupportedField(sourceField)) {</span>
+<span class="nc" id="L498">                AtlasUtil.addAudit(session, sourceField,</span>
+<span class="nc" id="L499">                        String.format(&quot;Unsupported source field type '%s' for DataSource '%s'&quot;,</span>
+<span class="nc" id="L500">                                sourceField.getClass().getName(), module.getUri()),</span>
                         AuditStatus.ERROR, null);
-<span class="nc" id="L540">                return;</span>
+<span class="nc" id="L502">                return;</span>
             }
 
-<span class="fc" id="L543">            module.readSourceValue(session);</span>
-<span class="fc" id="L544">            Field processed = applyFieldActions(session, session.head().getSourceField());</span>
-<span class="fc" id="L545">            session.head().setSourceField(processed);</span>
-<span class="fc" id="L546">            sourceFields.set(i, processed);</span>
+<span class="fc" id="L505">            module.readSourceValue(session);</span>
+<span class="fc" id="L506">            Field processed = applyFieldActions(session, session.head().getSourceField());</span>
+<span class="fc" id="L507">            session.head().setSourceField(processed);</span>
+<span class="fc" id="L508">            sourceFields.set(i, processed);</span>
         }
-<span class="fc" id="L548">    }</span>
+<span class="fc" id="L510">    }</span>
 
-    /**
-     * Resolves {@link AtlasModule} for the field.
-     * @param direction source or target
-     * @param field field
-     * @return module
-     */
     protected AtlasModule resolveModule(FieldDirection direction, Field field) {
-<span class="fc" id="L557">        String docId = field.getDocId();</span>
-<span class="pc bpc" id="L558" title="1 of 4 branches missed.">        if (docId == null || docId.isEmpty()) {</span>
-<span class="fc bfc" id="L559" title="All 2 branches covered.">            docId = direction == FieldDirection.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID</span>
-<span class="fc" id="L560">                    : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
+<span class="fc" id="L513">        String docId = field.getDocId();</span>
+<span class="pc bpc" id="L514" title="1 of 4 branches missed.">        if (docId == null || docId.isEmpty()) {</span>
+<span class="fc bfc" id="L515" title="All 2 branches covered.">            docId = direction == FieldDirection.SOURCE ? AtlasConstants.DEFAULT_SOURCE_DOCUMENT_ID</span>
+<span class="fc" id="L516">                    : AtlasConstants.DEFAULT_TARGET_DOCUMENT_ID;</span>
         }
         Map&lt;String, AtlasModule&gt; modules =
-<span class="fc bfc" id="L563" title="All 2 branches covered.">                direction == FieldDirection.SOURCE ? sourceModules : targetModules;</span>
-<span class="fc bfc" id="L564" title="All 4 branches covered.">        if (direction == FieldDirection.SOURCE &amp;&amp; field instanceof ConstantField) {</span>
-<span class="fc" id="L565">            AtlasModule answer = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
-<span class="fc bfc" id="L566" title="All 2 branches covered.">            if (!modules.containsKey(docId)) {</span>
-<span class="fc" id="L567">                modules.put(docId, answer);</span>
+<span class="fc bfc" id="L519" title="All 2 branches covered.">                direction == FieldDirection.SOURCE ? sourceModules : targetModules;</span>
+<span class="fc bfc" id="L520" title="All 4 branches covered.">        if (direction == FieldDirection.SOURCE &amp;&amp; field instanceof ConstantField) {</span>
+<span class="fc" id="L521">            AtlasModule answer = sourceModules.get(AtlasConstants.CONSTANTS_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L522" title="All 2 branches covered.">            if (!modules.containsKey(docId)) {</span>
+<span class="fc" id="L523">                modules.put(docId, answer);</span>
             }
-<span class="fc" id="L569">            return answer;</span>
+<span class="fc" id="L525">            return answer;</span>
         }
-<span class="fc bfc" id="L571" title="All 2 branches covered.">        if (field instanceof PropertyField) {</span>
-<span class="fc" id="L572">            AtlasModule answer = modules.get(</span>
-<span class="fc bfc" id="L573" title="All 2 branches covered.">                    direction == FieldDirection.SOURCE ? AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID : AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);</span>
-<span class="fc bfc" id="L574" title="All 2 branches covered.">            if (!modules.containsKey(docId)) {</span>
-<span class="fc" id="L575">                modules.put(docId, answer);</span>
+<span class="fc bfc" id="L527" title="All 2 branches covered.">        if (field instanceof PropertyField) {</span>
+<span class="fc" id="L528">            AtlasModule answer = modules.get(</span>
+<span class="fc bfc" id="L529" title="All 2 branches covered.">                    direction == FieldDirection.SOURCE ? AtlasConstants.PROPERTIES_SOURCE_DOCUMENT_ID : AtlasConstants.PROPERTIES_TARGET_DOCUMENT_ID);</span>
+<span class="fc bfc" id="L530" title="All 2 branches covered.">            if (!modules.containsKey(docId)) {</span>
+<span class="fc" id="L531">                modules.put(docId, answer);</span>
             }
-<span class="fc" id="L577">            return answer;</span>
+<span class="fc" id="L533">            return answer;</span>
         }
-<span class="fc" id="L579">        return modules.get(docId);</span>
+<span class="fc" id="L535">        return modules.get(docId);</span>
     }
 
     /**
      * Checks for CopyTo actions and correctly sets the path for targetField by setting the indexes specified in each action
      */
     private void applyCopyToActions(List&lt;Field&gt; sourceFields, Mapping mapping) {
-<span class="fc bfc" id="L586" title="All 2 branches covered.">        for (Field sourceField : sourceFields) {</span>
+<span class="fc bfc" id="L542" title="All 2 branches covered.">        for (Field sourceField : sourceFields) {</span>
 
-<span class="pc bpc" id="L588" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
-<span class="nc" id="L589">                applyCopyToActions(((FieldGroup) sourceField).getField(), mapping);</span>
-<span class="nc" id="L590">                continue;</span>
+<span class="pc bpc" id="L544" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="nc" id="L545">                applyCopyToActions(((FieldGroup) sourceField).getField(), mapping);</span>
+<span class="nc" id="L546">                continue;</span>
             }
 
-<span class="fc bfc" id="L593" title="All 2 branches covered.">            if (sourceField.getActions() == null) {</span>
-<span class="fc" id="L594">                continue;</span>
+<span class="fc bfc" id="L549" title="All 2 branches covered.">            if (sourceField.getActions() == null) {</span>
+<span class="fc" id="L550">                continue;</span>
             }
 
-<span class="fc" id="L597">            List&lt;CopyTo&gt; copyTos = sourceField.getActions().stream().filter(a -&gt; a instanceof CopyTo).map(a -&gt; (CopyTo) a).collect(Collectors.toList());</span>
-<span class="fc bfc" id="L598" title="All 2 branches covered.">            if (copyTos.size() == 0) {</span>
-<span class="fc" id="L599">                return;</span>
+<span class="fc" id="L553">            List&lt;CopyTo&gt; copyTos = sourceField.getActions().stream().filter(a -&gt; a instanceof CopyTo).map(a -&gt; (CopyTo) a).collect(Collectors.toList());</span>
+<span class="fc bfc" id="L554" title="All 2 branches covered.">            if (copyTos.size() == 0) {</span>
+<span class="fc" id="L555">                return;</span>
             }
 
-<span class="pc bpc" id="L602" title="2 of 4 branches missed.">            if (copyTos.stream().flatMap(c -&gt; c.getIndexes().stream().filter(i -&gt; i &lt; 0)).count() &gt; 0) {</span>
-<span class="nc" id="L603">                throw new IllegalArgumentException(&quot;Indexes must be &gt;= 0&quot;);</span>
+<span class="pc bpc" id="L558" title="2 of 4 branches missed.">            if (copyTos.stream().flatMap(c -&gt; c.getIndexes().stream().filter(i -&gt; i &lt; 0)).count() &gt; 0) {</span>
+<span class="nc" id="L559">                throw new IllegalArgumentException(&quot;Indexes must be &gt;= 0&quot;);</span>
             }
 
             /*
              * For each index present in CopyTo, set the corresponding index in the path.
              * each index of copyTo is supposed to have a counterpart in the path.
              */
-<span class="fc bfc" id="L610" title="All 2 branches covered.">            for (CopyTo copyTo : copyTos) {</span>
-<span class="fc bfc" id="L611" title="All 2 branches covered.">                for (Field field : mapping.getOutputField()) {</span>
-<span class="fc" id="L612">                    AtlasPath path = new AtlasPath(field.getPath());</span>
-<span class="fc" id="L613">                    List&lt;AtlasPath.SegmentContext&gt; segments = path.getCollectionSegments(true);</span>
-<span class="fc bfc" id="L614" title="All 2 branches covered.">                    for (int i = 0; i &lt; copyTo.getIndexes().size(); i++) {</span>
-<span class="fc bfc" id="L615" title="All 2 branches covered.">                        if (i &lt; segments.size()) { // In case there are too many indexes specified</span>
-<span class="fc" id="L616">                            path.setCollectionIndex(i + 1, copyTo.getIndexes().get(i));// +1 since 0 is the root segment</span>
+<span class="fc bfc" id="L566" title="All 2 branches covered.">            for (CopyTo copyTo : copyTos) {</span>
+<span class="fc bfc" id="L567" title="All 2 branches covered.">                for (Field field : mapping.getOutputField()) {</span>
+<span class="fc" id="L568">                    AtlasPath path = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L569">                    List&lt;AtlasPath.SegmentContext&gt; segments = path.getCollectionSegments(true);</span>
+<span class="fc bfc" id="L570" title="All 2 branches covered.">                    for (int i = 0; i &lt; copyTo.getIndexes().size(); i++) {</span>
+<span class="fc bfc" id="L571" title="All 2 branches covered.">                        if (i &lt; segments.size()) { // In case there are too many indexes specified</span>
+<span class="fc" id="L572">                            path.setCollectionIndex(i + 1, copyTo.getIndexes().get(i));// +1 since 0 is the root segment</span>
                         }
                     }
-<span class="fc" id="L619">                    field.setPath(path.toString());</span>
-<span class="fc" id="L620">                }</span>
+<span class="fc" id="L575">                    field.setPath(path.toString());</span>
+<span class="fc" id="L576">                }</span>
                 // The processor associated to this action is a fake. It shall not execute, so remove the action.
-<span class="fc" id="L622">                sourceField.getActions().remove(copyTo);</span>
-<span class="fc" id="L623">            }</span>
-<span class="fc" id="L624">        }</span>
-<span class="fc" id="L625">    }</span>
+<span class="fc" id="L578">                sourceField.getActions().remove(copyTo);</span>
+<span class="fc" id="L579">            }</span>
+<span class="fc" id="L580">        }</span>
+<span class="fc" id="L581">    }</span>
 
     private void processTargetFieldMapping(DefaultAtlasSession session, Mapping mapping) {
-<span class="fc" id="L628">        MappingType mappingType = mapping.getMappingType();</span>
-<span class="fc" id="L629">        List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
-<span class="fc" id="L630">        List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
+<span class="fc" id="L584">        MappingType mappingType = mapping.getMappingType();</span>
+<span class="fc" id="L585">        List&lt;Field&gt; sourceFields = mapping.getInputField();</span>
+<span class="fc" id="L586">        List&lt;Field&gt; targetFields = mapping.getOutputField();</span>
 
-<span class="fc" id="L632">        AtlasModule module = null;</span>
-<span class="fc" id="L633">        Field targetField = null;</span>
-<span class="fc bfc" id="L634" title="All 6 branches covered.">        if (mappingType == null || mappingType == MappingType.LOOKUP || mappingType == MappingType.MAP) {</span>
-<span class="fc" id="L635">            Field sourceField = session.head().getSourceField();</span>
-<span class="fc" id="L636">            FieldGroup sourceFieldGroup = null;</span>
-<span class="fc bfc" id="L637" title="All 2 branches covered.">            if (sourceField instanceof FieldGroup) {</span>
-<span class="fc" id="L638">                sourceFieldGroup = unwrapNestedGroup((FieldGroup)sourceField);</span>
+<span class="fc" id="L588">        AtlasModule module = null;</span>
+<span class="fc" id="L589">        Field targetField = null;</span>
+<span class="fc bfc" id="L590" title="All 6 branches covered.">        if (mappingType == null || mappingType == MappingType.LOOKUP || mappingType == MappingType.MAP) {</span>
+<span class="fc" id="L591">            Field sourceField = session.head().getSourceField();</span>
+<span class="fc" id="L592">            FieldGroup sourceFieldGroup = null;</span>
+<span class="fc bfc" id="L593" title="All 2 branches covered.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="fc" id="L594">                sourceFieldGroup = unwrapNestedGroup((FieldGroup)sourceField);</span>
             }
-<span class="fc bfc" id="L640" title="All 2 branches covered.">            for (Field f : targetFields) {</span>
-<span class="fc" id="L641">                targetField = f;</span>
-<span class="fc" id="L642">                module = resolveModule(FieldDirection.TARGET, targetField);</span>
-<span class="pc bpc" id="L643" title="1 of 2 branches missed.">                if (!auditTargetFieldType(session, module, targetField)) {</span>
-<span class="nc" id="L644">                    continue;</span>
+<span class="fc bfc" id="L596" title="All 2 branches covered.">            for (Field f : targetFields) {</span>
+<span class="fc" id="L597">                targetField = f;</span>
+<span class="fc" id="L598">                module = resolveModule(FieldDirection.TARGET, targetField);</span>
+<span class="pc bpc" id="L599" title="1 of 2 branches missed.">                if (!auditTargetFieldType(session, module, targetField)) {</span>
+<span class="nc" id="L600">                    continue;</span>
                 }
-<span class="fc" id="L646">                session.head().setTargetField(targetField);</span>
-<span class="fc bfc" id="L647" title="All 2 branches covered.">                if (sourceFieldGroup != null) {</span>
-<span class="fc" id="L648">                    Integer index = targetField.getIndex();</span>
-<span class="fc" id="L649">                    AtlasPath targetPath = new AtlasPath(targetField.getPath());</span>
-<span class="pc bpc" id="L650" title="1 of 4 branches missed.">                    if (targetPath.hasCollection() &amp;&amp; !targetPath.isIndexedCollection()) {</span>
-<span class="pc bpc" id="L651" title="1 of 2 branches missed.">                        if (targetFields.size() &gt; 1) {</span>
-<span class="nc" id="L652">                            AtlasUtil.addAudit(session, targetField,</span>
+<span class="fc" id="L602">                session.head().setTargetField(targetField);</span>
+<span class="fc bfc" id="L603" title="All 2 branches covered.">                if (sourceFieldGroup != null) {</span>
+<span class="fc" id="L604">                    Integer index = targetField.getIndex();</span>
+<span class="fc" id="L605">                    AtlasPath targetPath = new AtlasPath(targetField.getPath());</span>
+<span class="pc bpc" id="L606" title="1 of 4 branches missed.">                    if (targetPath.hasCollection() &amp;&amp; !targetPath.isIndexedCollection()) {</span>
+<span class="pc bpc" id="L607" title="1 of 2 branches missed.">                        if (targetFields.size() &gt; 1) {</span>
+<span class="nc" id="L608">                            AtlasUtil.addAudit(session, targetField,</span>
                                     &quot;It's not yet supported to have a collection field as a part of multiple target fields in a same mapping&quot;,
                                     AuditStatus.ERROR, null);
-<span class="nc" id="L655">                            return;</span>
+<span class="nc" id="L611">                            return;</span>
                         }
-<span class="fc" id="L657">                        session.head().setSourceField(sourceFieldGroup);</span>
-<span class="fc bfc" id="L658" title="All 2 branches covered.">                    } else if (index == null) {</span>
-<span class="fc bfc" id="L659" title="All 2 branches covered.">                        if (sourceFieldGroup.getField().size() &gt; 0) {</span>
-<span class="fc" id="L660">                            session.head().setSourceField(sourceFieldGroup.getField().get(sourceFieldGroup.getField().size()-1));</span>
+<span class="fc" id="L613">                        session.head().setSourceField(sourceFieldGroup);</span>
+<span class="fc bfc" id="L614" title="All 2 branches covered.">                    } else if (index == null) {</span>
+<span class="fc bfc" id="L615" title="All 2 branches covered.">                        if (sourceFieldGroup.getField().size() &gt; 0) {</span>
+<span class="fc" id="L616">                            session.head().setSourceField(sourceFieldGroup.getField().get(sourceFieldGroup.getField().size()-1));</span>
                         }
                     } else {
-<span class="pc bpc" id="L663" title="1 of 2 branches missed.">                        if (sourceFieldGroup.getField().size() &gt; index) {</span>
-<span class="fc" id="L664">                            session.head().setSourceField(sourceFieldGroup.getField().get(index));</span>
+<span class="pc bpc" id="L619" title="1 of 2 branches missed.">                        if (sourceFieldGroup.getField().size() &gt; index) {</span>
+<span class="fc" id="L620">                            session.head().setSourceField(sourceFieldGroup.getField().get(index));</span>
                         } else {
-<span class="nc" id="L666">                            AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="nc" id="L622">                            AtlasUtil.addAudit(session, targetField, String.format(</span>
                                     &quot;The number of source fields '%s' is fewer than expected via target field index '%s'&quot;,
-<span class="nc" id="L668">                                    sourceFieldGroup.getField().size(), targetField.getIndex()),</span>
+<span class="nc" id="L624">                                    sourceFieldGroup.getField().size(), targetField.getIndex()),</span>
                                     AuditStatus.WARN, null);
-<span class="nc" id="L670">                            continue;</span>
+<span class="nc" id="L626">                            continue;</span>
                         }
                     }
                 }
                 try {
-<span class="fc" id="L675">                    module.populateTargetField(session);</span>
-<span class="nc" id="L676">                } catch (Exception e) {</span>
-<span class="nc" id="L677">                    AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L678">                            &quot;Failed to populate target field: &quot; + e.getMessage(),</span>
+<span class="fc" id="L631">                    module.populateTargetField(session);</span>
+<span class="nc" id="L632">                } catch (Exception e) {</span>
+<span class="nc" id="L633">                    AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L634">                            &quot;Failed to populate target field: &quot; + e.getMessage(),</span>
                             AuditStatus.ERROR, null);
-<span class="nc bnc" id="L680" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L681">                        LOG.error(String.format(&quot;populateTargetField() failed for %s:%s&quot;,</span>
-<span class="nc" id="L682">                                targetField.getDocId(), targetField.getPath()), e);</span>
+<span class="nc bnc" id="L636" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L637">                        LOG.error(String.format(&quot;populateTargetField() failed for %s:%s&quot;,</span>
+<span class="nc" id="L638">                                targetField.getDocId(), targetField.getPath()), e);</span>
                     }
-<span class="nc" id="L684">                    return;</span>
-<span class="fc" id="L685">                }</span>
-<span class="fc" id="L686">                Field processed = applyFieldActions(session, session.head().getTargetField());</span>
-<span class="fc" id="L687">                session.head().setTargetField(processed);</span>
+<span class="nc" id="L640">                    return;</span>
+<span class="fc" id="L641">                }</span>
+<span class="fc" id="L642">                Field processed = applyFieldActions(session, session.head().getTargetField());</span>
+<span class="fc" id="L643">                session.head().setTargetField(processed);</span>
                 try {
-<span class="fc" id="L689">                    module.writeTargetValue(session);</span>
-<span class="nc" id="L690">                } catch (Exception e) {</span>
-<span class="nc" id="L691">                    AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L692">                            &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
+<span class="fc" id="L645">                    module.writeTargetValue(session);</span>
+<span class="nc" id="L646">                } catch (Exception e) {</span>
+<span class="nc" id="L647">                    AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L648">                            &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
                             AuditStatus.ERROR, null);
-<span class="nc bnc" id="L694" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L695">                        LOG.error(String.format(&quot;writeTargetValue() failed for %s:%s&quot;,</span>
-<span class="nc" id="L696">                                targetField.getDocId(), targetField.getPath()), e);</span>
+<span class="nc bnc" id="L650" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L651">                        LOG.error(String.format(&quot;writeTargetValue() failed for %s:%s&quot;,</span>
+<span class="nc" id="L652">                                targetField.getDocId(), targetField.getPath()), e);</span>
                     }
-<span class="nc" id="L698">                    return;</span>
-<span class="fc" id="L699">                }</span>
-<span class="fc" id="L700">            }</span>
-<span class="fc" id="L701">            return;</span>
+<span class="nc" id="L654">                    return;</span>
+<span class="fc" id="L655">                }</span>
+<span class="fc" id="L656">            }</span>
+<span class="fc" id="L657">            return;</span>
 
-<span class="fc bfc" id="L703" title="All 2 branches covered.">        } else if (mappingType == MappingType.COMBINE) {</span>
-<span class="fc" id="L704">            targetField = targetFields.get(0);</span>
-<span class="fc" id="L705">            module = resolveModule(FieldDirection.TARGET, targetField);</span>
-<span class="pc bpc" id="L706" title="1 of 2 branches missed.">            if (!auditTargetFieldType(session, module, targetField)) {</span>
-<span class="nc" id="L707">                return;</span>
+<span class="fc bfc" id="L659" title="All 2 branches covered.">        } else if (mappingType == MappingType.COMBINE) {</span>
+<span class="fc" id="L660">            targetField = targetFields.get(0);</span>
+<span class="fc" id="L661">            module = resolveModule(FieldDirection.TARGET, targetField);</span>
+<span class="pc bpc" id="L662" title="1 of 2 branches missed.">            if (!auditTargetFieldType(session, module, targetField)) {</span>
+<span class="nc" id="L663">                return;</span>
             }
-<span class="fc" id="L709">            Field sourceField = processCombineField(session, mapping, sourceFields, targetField);</span>
-<span class="fc" id="L710">            session.head().setSourceField(sourceField).setTargetField(targetField);</span>
+<span class="fc" id="L665">            Field sourceField = processCombineField(session, mapping, sourceFields, targetField);</span>
+<span class="fc" id="L666">            session.head().setSourceField(sourceField).setTargetField(targetField);</span>
             try {
-<span class="fc" id="L712">                module.populateTargetField(session);</span>
-<span class="nc" id="L713">            } catch (Exception e) {</span>
-<span class="nc" id="L714">                AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L715">                        &quot;Failed to populate target field: &quot; + e.getMessage(),</span>
+<span class="fc" id="L668">                module.populateTargetField(session);</span>
+<span class="nc" id="L669">            } catch (Exception e) {</span>
+<span class="nc" id="L670">                AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L671">                        &quot;Failed to populate target field: &quot; + e.getMessage(),</span>
                         AuditStatus.ERROR, null);
-<span class="nc" id="L717">                return;</span>
-<span class="fc" id="L718">            }</span>
-<span class="fc" id="L719">            applyFieldActions(session, session.head().getTargetField());</span>
+<span class="nc" id="L673">                return;</span>
+<span class="fc" id="L674">            }</span>
+<span class="fc" id="L675">            applyFieldActions(session, session.head().getTargetField());</span>
             try {
-<span class="fc" id="L721">                module.writeTargetValue(session);</span>
-<span class="nc" id="L722">            } catch (Exception e) {</span>
-<span class="nc" id="L723">                AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L724">                        &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
+<span class="fc" id="L677">                module.writeTargetValue(session);</span>
+<span class="nc" id="L678">            } catch (Exception e) {</span>
+<span class="nc" id="L679">                AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L680">                        &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
                         AuditStatus.ERROR, null);
-<span class="nc" id="L726">                return;</span>
-<span class="fc" id="L727">            }</span>
-<span class="fc" id="L728">            return;</span>
+<span class="nc" id="L682">                return;</span>
+<span class="fc" id="L683">            }</span>
+<span class="fc" id="L684">            return;</span>
 
-<span class="fc bfc" id="L730" title="All 2 branches covered.">        } else if (mappingType == MappingType.SEPARATE) {</span>
-<span class="fc" id="L731">            List&lt;Field&gt; separatedFields = null;</span>
+<span class="fc bfc" id="L686" title="All 2 branches covered.">        } else if (mappingType == MappingType.SEPARATE) {</span>
+<span class="fc" id="L687">            List&lt;Field&gt; separatedFields = null;</span>
             try {
-<span class="fc" id="L733">                separatedFields = processSeparateField(session, mapping, sourceFields.get(0));</span>
-<span class="nc" id="L734">            } catch (Exception e) {</span>
-<span class="nc" id="L735">                AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L736">                        &quot;Failed to process separate mode: &quot; + e.getMessage(),</span>
+<span class="fc" id="L689">                separatedFields = processSeparateField(session, mapping, sourceFields.get(0));</span>
+<span class="nc" id="L690">            } catch (Exception e) {</span>
+<span class="nc" id="L691">                AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L692">                        &quot;Failed to process separate mode: &quot; + e.getMessage(),</span>
                         AuditStatus.ERROR, null);
-<span class="nc" id="L738">                return;</span>
-<span class="fc" id="L739">            }</span>
-<span class="fc bfc" id="L740" title="All 2 branches covered.">            if (separatedFields == null) {</span>
-<span class="fc" id="L741">                return;</span>
+<span class="nc" id="L694">                return;</span>
+<span class="fc" id="L695">            }</span>
+<span class="fc bfc" id="L696" title="All 2 branches covered.">            if (separatedFields == null) {</span>
+<span class="fc" id="L697">                return;</span>
             }
 
-<span class="fc bfc" id="L744" title="All 2 branches covered.">            for (Field f : targetFields) {</span>
-<span class="fc" id="L745">                targetField = f;</span>
-<span class="fc" id="L746">                module = resolveModule(FieldDirection.TARGET, targetField);</span>
-<span class="pc bpc" id="L747" title="1 of 2 branches missed.">                if (!auditTargetFieldType(session, module, targetField)) {</span>
-<span class="nc" id="L748">                    continue;</span>
+<span class="fc bfc" id="L700" title="All 2 branches covered.">            for (Field f : targetFields) {</span>
+<span class="fc" id="L701">                targetField = f;</span>
+<span class="fc" id="L702">                module = resolveModule(FieldDirection.TARGET, targetField);</span>
+<span class="pc bpc" id="L703" title="1 of 2 branches missed.">                if (!auditTargetFieldType(session, module, targetField)) {</span>
+<span class="nc" id="L704">                    continue;</span>
                 }
-<span class="pc bpc" id="L750" title="2 of 4 branches missed.">                if (targetField.getIndex() == null || targetField.getIndex() &lt; 0) {</span>
-<span class="nc" id="L751">                    AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="pc bpc" id="L706" title="2 of 4 branches missed.">                if (targetField.getIndex() == null || targetField.getIndex() &lt; 0) {</span>
+<span class="nc" id="L707">                    AtlasUtil.addAudit(session, targetField, String.format(</span>
                             &quot;Separate requires zero or positive Index value to be set on targetField targetField.path=%s&quot;,
-<span class="nc" id="L753">                            targetField.getPath()), AuditStatus.WARN, null);</span>
-<span class="nc" id="L754">                    continue;</span>
+<span class="nc" id="L709">                            targetField.getPath()), AuditStatus.WARN, null);</span>
+<span class="nc" id="L710">                    continue;</span>
                 }
-<span class="fc bfc" id="L756" title="All 2 branches covered.">                if (separatedFields.size() &lt;= targetField.getIndex()) {</span>
-<span class="fc" id="L757">                    String errorMessage = String.format(</span>
+<span class="fc bfc" id="L712" title="All 2 branches covered.">                if (separatedFields.size() &lt;= targetField.getIndex()) {</span>
+<span class="fc" id="L713">                    String errorMessage = String.format(</span>
                             &quot;Separate returned fewer segments count=%s when targetField.path=%s requested index=%s&quot;,
-<span class="fc" id="L759">                            separatedFields.size(), targetField.getPath(), targetField.getIndex());</span>
-<span class="fc" id="L760">                    AtlasUtil.addAudit(session, targetField, errorMessage, AuditStatus.WARN, null);</span>
-<span class="fc" id="L761">                    break;</span>
+<span class="fc" id="L715">                            separatedFields.size(), targetField.getPath(), targetField.getIndex());</span>
+<span class="fc" id="L716">                    AtlasUtil.addAudit(session, targetField, errorMessage, AuditStatus.WARN, null);</span>
+<span class="fc" id="L717">                    break;</span>
                 }
-<span class="fc" id="L763">                session.head().setSourceField(separatedFields.get(targetField.getIndex())).setTargetField(targetField);</span>
+<span class="fc" id="L719">                session.head().setSourceField(separatedFields.get(targetField.getIndex())).setTargetField(targetField);</span>
                 try {
-<span class="fc" id="L765">                    module.populateTargetField(session);</span>
-<span class="nc" id="L766">                } catch (Exception e) {</span>
-<span class="nc" id="L767">                    AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L768">                            &quot;Failed to populate target field: &quot; + e.getMessage(),</span>
+<span class="fc" id="L721">                    module.populateTargetField(session);</span>
+<span class="nc" id="L722">                } catch (Exception e) {</span>
+<span class="nc" id="L723">                    AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L724">                            &quot;Failed to populate target field: &quot; + e.getMessage(),</span>
                             AuditStatus.ERROR, null);
-<span class="nc" id="L770">                    return;</span>
-<span class="fc" id="L771">                }</span>
-<span class="fc" id="L772">                Field processed = applyFieldActions(session, session.head().getTargetField());</span>
-<span class="fc" id="L773">                session.head().setTargetField(processed);</span>
+<span class="nc" id="L726">                    return;</span>
+<span class="fc" id="L727">                }</span>
+<span class="fc" id="L728">                Field processed = applyFieldActions(session, session.head().getTargetField());</span>
+<span class="fc" id="L729">                session.head().setTargetField(processed);</span>
                 try {
-<span class="fc" id="L775">                    module.writeTargetValue(session);</span>
-<span class="nc" id="L776">                } catch (Exception e) {</span>
-<span class="nc" id="L777">                    AtlasUtil.addAudit(session, targetField,</span>
-<span class="nc" id="L778">                            &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
+<span class="fc" id="L731">                    module.writeTargetValue(session);</span>
+<span class="nc" id="L732">                } catch (Exception e) {</span>
+<span class="nc" id="L733">                    AtlasUtil.addAudit(session, targetField,</span>
+<span class="nc" id="L734">                            &quot;Failed to write field value into target document: &quot; + e.getMessage(),</span>
                             AuditStatus.ERROR, null);
-<span class="nc" id="L780">                    return;</span>
-<span class="fc" id="L781">                }</span>
-<span class="fc" id="L782">            }</span>
-<span class="fc" id="L783">            return;</span>
+<span class="nc" id="L736">                    return;</span>
+<span class="fc" id="L737">                }</span>
+<span class="fc" id="L738">            }</span>
+<span class="fc" id="L739">            return;</span>
         }
 
-<span class="fc" id="L786">        AtlasUtil.addAudit(session, (String)null,</span>
-<span class="fc" id="L787">                String.format(&quot;Unsupported mappingType=%s detected&quot;, mapping.getMappingType()),</span>
+<span class="fc" id="L742">        AtlasUtil.addAudit(session, (String)null,</span>
+<span class="fc" id="L743">                String.format(&quot;Unsupported mappingType=%s detected&quot;, mapping.getMappingType()),</span>
                 AuditStatus.ERROR, null);
-<span class="fc" id="L789">    }</span>
+<span class="fc" id="L745">    }</span>
 
     private FieldGroup unwrapNestedGroup(FieldGroup parent) {
-<span class="pc bpc" id="L792" title="1 of 4 branches missed.">        if (parent.getPath() == null &amp;&amp; parent.getField().size() == 1</span>
-<span class="pc bpc" id="L793" title="1 of 2 branches missed.">                &amp;&amp; parent.getField().get(0) instanceof FieldGroup) {</span>
-<span class="fc" id="L794">            return (FieldGroup) parent.getField().get(0);</span>
+<span class="pc bpc" id="L748" title="1 of 4 branches missed.">        if (parent.getPath() == null &amp;&amp; parent.getField().size() == 1</span>
+<span class="pc bpc" id="L749" title="1 of 2 branches missed.">                &amp;&amp; parent.getField().get(0) instanceof FieldGroup) {</span>
+<span class="fc" id="L750">            return (FieldGroup) parent.getField().get(0);</span>
         }
-<span class="fc" id="L796">        return parent;</span>
+<span class="fc" id="L752">        return parent;</span>
     }
 
     private boolean auditTargetFieldType(DefaultAtlasSession session, AtlasModule module, Field field) {
-<span class="pc bpc" id="L800" title="1 of 2 branches missed.">        if (module == null) {</span>
-<span class="nc" id="L801">            AtlasUtil.addAudit(session, field, String</span>
-<span class="nc" id="L802">                    .format(&quot;Module not found for field type='%s', path='%s'&quot;, field.getFieldType(), field.getPath()),</span>
+<span class="pc bpc" id="L756" title="1 of 2 branches missed.">        if (module == null) {</span>
+<span class="nc" id="L757">            AtlasUtil.addAudit(session, field, String</span>
+<span class="nc" id="L758">                    .format(&quot;Module not found for field type='%s', path='%s'&quot;, field.getFieldType(), field.getPath()),</span>
                     AuditStatus.ERROR, null);
-<span class="nc" id="L804">            return false;</span>
+<span class="nc" id="L760">            return false;</span>
         }
-<span class="pc bpc" id="L806" title="1 of 2 branches missed.">        if (!module.isSupportedField(field)) {</span>
-<span class="nc" id="L807">            AtlasUtil</span>
-<span class="nc" id="L808">                    .addAudit(session, field,</span>
-<span class="nc" id="L809">                            String.format(&quot;Unsupported target field type '%s' for DataSource '%s'&quot;,</span>
-<span class="nc" id="L810">                                    field.getClass().getName(), module.getUri()),</span>
+<span class="pc bpc" id="L762" title="1 of 2 branches missed.">        if (!module.isSupportedField(field)) {</span>
+<span class="nc" id="L763">            AtlasUtil</span>
+<span class="nc" id="L764">                    .addAudit(session, field,</span>
+<span class="nc" id="L765">                            String.format(&quot;Unsupported target field type '%s' for DataSource '%s'&quot;,</span>
+<span class="nc" id="L766">                                    field.getClass().getName(), module.getUri()),</span>
                             AuditStatus.ERROR, null);
-<span class="nc" id="L812">            return false;</span>
+<span class="nc" id="L768">            return false;</span>
         }
-<span class="fc" id="L814">        return true;</span>
+<span class="fc" id="L770">        return true;</span>
     }
 
-    /**
-     * @deprecated .
-     * @param session session
-     * @param mapping mapping
-     * @param sourceFields source fields
-     * @param targetField target field
-     * @return processed
-     */
-    @Deprecated
     protected Field processCombineField(DefaultAtlasSession session, Mapping mapping, List&lt;Field&gt; sourceFields,
             Field targetField) {
-<span class="fc" id="L828">        Map&lt;Integer, String&gt; combineValues = null;</span>
-<span class="fc bfc" id="L829" title="All 2 branches covered.">        for (Field sourceField : sourceFields) {</span>
-<span class="pc bpc" id="L830" title="2 of 4 branches missed.">            if (sourceField.getIndex() == null || sourceField.getIndex() &lt; 0) {</span>
-<span class="nc" id="L831">                AtlasUtil.addAudit(session, targetField, String.format(</span>
+<span class="fc" id="L775">        Map&lt;Integer, String&gt; combineValues = null;</span>
+<span class="fc bfc" id="L776" title="All 2 branches covered.">        for (Field sourceField : sourceFields) {</span>
+<span class="pc bpc" id="L777" title="2 of 4 branches missed.">            if (sourceField.getIndex() == null || sourceField.getIndex() &lt; 0) {</span>
+<span class="nc" id="L778">                AtlasUtil.addAudit(session, targetField, String.format(</span>
                         &quot;Combine requires zero or positive Index value to be set on all sourceFields sourceField.path=%s&quot;,
-<span class="nc" id="L833">                        sourceField.getPath()), AuditStatus.WARN, null);</span>
-<span class="nc" id="L834">                continue;</span>
+<span class="nc" id="L780">                        sourceField.getPath()), AuditStatus.WARN, null);</span>
+<span class="nc" id="L781">                continue;</span>
             }
 
-<span class="fc bfc" id="L837" title="All 2 branches covered.">            if (combineValues == null) {</span>
+<span class="fc bfc" id="L784" title="All 2 branches covered.">            if (combineValues == null) {</span>
                 // We need to support a sorted map w/ null values
-<span class="fc" id="L839">                combineValues = new LinkedHashMap&lt;&gt;();</span>
+<span class="fc" id="L786">                combineValues = new HashMap&lt;&gt;();</span>
             }
 
-<span class="fc bfc" id="L842" title="All 2 branches covered.">            if (sourceField.getValue() != null) {</span>
+<span class="fc bfc" id="L789" title="All 2 branches covered.">            if (sourceField.getValue() != null) {</span>
                 String sourceValue;
                 try {
-<span class="fc" id="L845">                    sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),</span>
-<span class="fc" id="L846">                            sourceField.getFormat(), FieldType.STRING, null);</span>
-<span class="fc" id="L847">                } catch (AtlasConversionException e) {</span>
-<span class="fc" id="L848">                    AtlasUtil.addAudit(session, targetField,</span>
-<span class="fc" id="L849">                            String.format(&quot;Suitable converter for sourceField.path=%s hasn't been found&quot;,</span>
-<span class="fc" id="L850">                                    sourceField.getPath()),</span>
+<span class="fc" id="L792">                    sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),</span>
+<span class="fc" id="L793">                            sourceField.getFormat(), FieldType.STRING, null);</span>
+<span class="fc" id="L794">                } catch (AtlasConversionException e) {</span>
+<span class="fc" id="L795">                    AtlasUtil.addAudit(session, targetField,</span>
+<span class="fc" id="L796">                            String.format(&quot;Suitable converter for sourceField.path=%s hasn't been found&quot;,</span>
+<span class="fc" id="L797">                                    sourceField.getPath()),</span>
                             AuditStatus.WARN, null);
 
-<span class="pc bpc" id="L853" title="1 of 2 branches missed.">                    sourceValue = sourceField.getValue() != null ? sourceField.getValue().toString() : null;</span>
-<span class="fc" id="L854">                }</span>
-<span class="fc" id="L855">                combineValues.put(sourceField.getIndex(), sourceValue);</span>
+<span class="pc bpc" id="L800" title="1 of 2 branches missed.">                    sourceValue = sourceField.getValue() != null ? sourceField.getValue().toString() : null;</span>
+<span class="fc" id="L801">                }</span>
+<span class="fc" id="L802">                combineValues.put(sourceField.getIndex(), sourceValue);</span>
             }
-<span class="fc" id="L857">        }</span>
+<span class="fc" id="L804">        }</span>
 
-<span class="fc" id="L859">        String combinedValue = null;</span>
-<span class="fc" id="L860">        StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());</span>
-<span class="fc bfc" id="L861" title="All 2 branches covered.">        if (delimiter != null) {</span>
-<span class="fc" id="L862">            combinedValue = factory.getCombineStrategy().combineValues(combineValues, delimiter);</span>
-<span class="pc bpc" id="L863" title="1 of 4 branches missed.">        } else if (mapping.getDelimiterString() != null &amp;&amp; !mapping.getDelimiterString().isEmpty()) {</span>
-<span class="fc" id="L864">            combinedValue = factory.getCombineStrategy().combineValues(combineValues, mapping.getDelimiterString());</span>
+<span class="fc" id="L806">        String combinedValue = null;</span>
+<span class="fc" id="L807">        StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());</span>
+<span class="fc bfc" id="L808" title="All 2 branches covered.">        if (delimiter != null) {</span>
+<span class="fc" id="L809">            combinedValue = factory.getCombineStrategy().combineValues(combineValues, delimiter);</span>
+<span class="pc bpc" id="L810" title="1 of 4 branches missed.">        } else if (mapping.getDelimiterString() != null &amp;&amp; !mapping.getDelimiterString().isEmpty()) {</span>
+<span class="fc" id="L811">            combinedValue = factory.getCombineStrategy().combineValues(combineValues, mapping.getDelimiterString());</span>
         } else {
-<span class="fc" id="L866">            combinedValue = factory.getCombineStrategy().combineValues(combineValues);</span>
+<span class="fc" id="L813">            combinedValue = factory.getCombineStrategy().combineValues(combineValues);</span>
         }
 
-<span class="fc" id="L869">        Field answer = AtlasModelFactory.cloneFieldToSimpleField(sourceFields.get(0));</span>
-<span class="pc bpc" id="L870" title="2 of 4 branches missed.">        if (combinedValue == null || combinedValue.trim().isEmpty()) {</span>
-<span class="nc" id="L871">            LOG.debug(&quot;Empty combined string for Combine mapping targetField.path={}&quot;,</span>
-<span class="nc" id="L872">                      targetField.getPath());</span>
+<span class="fc" id="L816">        Field answer = AtlasModelFactory.cloneFieldToSimpleField(sourceFields.get(0));</span>
+<span class="pc bpc" id="L817" title="2 of 4 branches missed.">        if (combinedValue == null || combinedValue.trim().isEmpty()) {</span>
+<span class="nc" id="L818">            LOG.debug(&quot;Empty combined string for Combine mapping targetField.path={}&quot;,</span>
+<span class="nc" id="L819">                      targetField.getPath());</span>
         } else {
-<span class="fc" id="L874">            answer.setValue(combinedValue);</span>
+<span class="fc" id="L821">            answer.setValue(combinedValue);</span>
         }
-<span class="fc" id="L876">        return answer;</span>
+<span class="fc" id="L823">        return answer;</span>
     }
 
-    /**
-     * @deprecated .
-     * @param session session
-     * @param mapping mapping
-     * @param sourceField source field
-     * @return processed
-     * @throws AtlasException .
-     */
-    @Deprecated
     protected List&lt;Field&gt; processSeparateField(DefaultAtlasSession session, Mapping mapping, Field sourceField)
             throws AtlasException {
-<span class="fc bfc" id="L890" title="All 2 branches covered.">        if (sourceField.getValue() == null) {</span>
-<span class="fc" id="L891">            AtlasUtil.addAudit(session, sourceField,</span>
-<span class="fc" id="L892">                    String.format(&quot;null value can't be separated for sourceField.path=%s&quot;,</span>
-<span class="fc" id="L893">                            sourceField.getPath()),</span>
+<span class="fc bfc" id="L828" title="All 2 branches covered.">        if (sourceField.getValue() == null) {</span>
+<span class="fc" id="L829">            AtlasUtil.addAudit(session, sourceField,</span>
+<span class="fc" id="L830">                    String.format(&quot;null value can't be separated for sourceField.path=%s&quot;,</span>
+<span class="fc" id="L831">                            sourceField.getPath()),</span>
                     AuditStatus.WARN, null);
-<span class="fc" id="L895">            return null;</span>
+<span class="fc" id="L833">            return null;</span>
         }
-<span class="pc bpc" id="L897" title="1 of 2 branches missed.">        if (!sourceField.getValue().getClass().isAssignableFrom(String.class)) {</span>
-<span class="nc" id="L898">            Object converted = factory.getConversionService().convertType(</span>
-<span class="nc" id="L899">                    sourceField.getValue(), sourceField.getFormat(), FieldType.STRING, null);</span>
-<span class="nc" id="L900">            sourceField.setValue(converted);</span>
+<span class="pc bpc" id="L835" title="1 of 2 branches missed.">        if (!sourceField.getValue().getClass().isAssignableFrom(String.class)) {</span>
+<span class="nc" id="L836">            Object converted = factory.getConversionService().convertType(</span>
+<span class="nc" id="L837">                    sourceField.getValue(), sourceField.getFormat(), FieldType.STRING, null);</span>
+<span class="nc" id="L838">            sourceField.setValue(converted);</span>
         }
 
-<span class="fc" id="L903">        List&lt;Field&gt; answer = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L841">        List&lt;Field&gt; answer = new ArrayList&lt;&gt;();</span>
 
         String sourceValue;
         try {
-<span class="fc" id="L907">            sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),</span>
-<span class="fc" id="L908">                    sourceField.getFormat(), FieldType.STRING, null);</span>
-<span class="nc" id="L909">        } catch (AtlasConversionException e) {</span>
-<span class="nc" id="L910">            AtlasUtil.addAudit(session, sourceField, String</span>
-<span class="nc" id="L911">                    .format(&quot;Suitable converter for sourceField.path=%s hasn't been found&quot;, sourceField.getPath()),</span>
+<span class="fc" id="L845">            sourceValue = (String) factory.getConversionService().convertType(sourceField.getValue(),</span>
+<span class="fc" id="L846">                    sourceField.getFormat(), FieldType.STRING, null);</span>
+<span class="nc" id="L847">        } catch (AtlasConversionException e) {</span>
+<span class="nc" id="L848">            AtlasUtil.addAudit(session, sourceField, String</span>
+<span class="nc" id="L849">                    .format(&quot;Suitable converter for sourceField.path=%s hasn't been found&quot;, sourceField.getPath()),</span>
                     AuditStatus.WARN, null);
-<span class="nc" id="L913">            sourceValue = sourceField.getValue().toString();</span>
-<span class="fc" id="L914">        }</span>
-<span class="fc" id="L915">        List&lt;String&gt; separatedValues = null;</span>
-<span class="fc" id="L916">        StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());</span>
-<span class="fc bfc" id="L917" title="All 2 branches covered.">        if (delimiter != null) {</span>
-<span class="fc" id="L918">            separatedValues = factory.getSeparateStrategy().separateValue(sourceValue, delimiter);</span>
+<span class="nc" id="L851">            sourceValue = sourceField.getValue().toString();</span>
+<span class="fc" id="L852">        }</span>
+<span class="fc" id="L853">        List&lt;String&gt; separatedValues = null;</span>
+<span class="fc" id="L854">        StringDelimiter delimiter = StringDelimiter.fromName(mapping.getDelimiter());</span>
+<span class="fc bfc" id="L855" title="All 2 branches covered.">        if (delimiter != null) {</span>
+<span class="fc" id="L856">            separatedValues = factory.getSeparateStrategy().separateValue(sourceValue, delimiter);</span>
         } else {
-<span class="fc" id="L920">            separatedValues = factory.getSeparateStrategy().separateValue(sourceValue);</span>
+<span class="fc" id="L858">            separatedValues = factory.getSeparateStrategy().separateValue(sourceValue);</span>
         }
 
-<span class="pc bpc" id="L923" title="2 of 4 branches missed.">        if (separatedValues == null || separatedValues.isEmpty()) {</span>
-<span class="nc" id="L924">            LOG.debug(&quot;Empty string for Separate mapping sourceField.path={}&quot;, sourceField.getPath());</span>
+<span class="pc bpc" id="L861" title="2 of 4 branches missed.">        if (separatedValues == null || separatedValues.isEmpty()) {</span>
+<span class="nc" id="L862">            LOG.debug(&quot;Empty string for Separate mapping sourceField.path={}&quot;, sourceField.getPath());</span>
         } else {
-<span class="fc bfc" id="L926" title="All 2 branches covered.">            for (String separatedValue : separatedValues) {</span>
-<span class="fc" id="L927">                SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(sourceField);</span>
-<span class="fc" id="L928">                simpleField.setValue(separatedValue);</span>
-<span class="fc" id="L929">                simpleField.setFieldType(FieldType.STRING);</span>
-<span class="fc" id="L930">                answer.add(simpleField);</span>
-<span class="fc" id="L931">            }</span>
+<span class="fc bfc" id="L864" title="All 2 branches covered.">            for (String separatedValue : separatedValues) {</span>
+<span class="fc" id="L865">                SimpleField simpleField = AtlasModelFactory.cloneFieldToSimpleField(sourceField);</span>
+<span class="fc" id="L866">                simpleField.setValue(separatedValue);</span>
+<span class="fc" id="L867">                simpleField.setFieldType(FieldType.STRING);</span>
+<span class="fc" id="L868">                answer.add(simpleField);</span>
+<span class="fc" id="L869">            }</span>
         }
-<span class="fc" id="L933">        return answer;</span>
+<span class="fc" id="L871">        return answer;</span>
     }
 
     @Override
     public void processValidation(AtlasSession userSession) throws AtlasException {
-<span class="fc bfc" id="L938" title="All 2 branches covered.">        if (!(userSession instanceof DefaultAtlasSession)) {</span>
-<span class="fc" id="L939">            throw new AtlasException(String.format(&quot;Unsupported session class '%s'&quot;, userSession.getClass().getName()));</span>
+<span class="fc bfc" id="L876" title="All 2 branches covered.">        if (!(userSession instanceof DefaultAtlasSession)) {</span>
+<span class="fc" id="L877">            throw new AtlasException(String.format(&quot;Unsupported session class '%s'&quot;, userSession.getClass().getName()));</span>
         }
-<span class="fc bfc" id="L941" title="All 2 branches covered.">        if (!this.equals(userSession.getAtlasContext())) {</span>
-<span class="fc" id="L942">            throw new AtlasException(&quot;Cannot execute AtlasSession created by the other AtlasContext&quot;);</span>
-        }
-
-<span class="fc" id="L945">        DefaultAtlasSession session = (DefaultAtlasSession) userSession;</span>
-<span class="fc bfc" id="L946" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
-<span class="fc" id="L947">            LOG.debug(&quot;Begin processValidation {}&quot;, session);</span>
+<span class="fc bfc" id="L879" title="All 2 branches covered.">        if (!this.equals(userSession.getAtlasContext())) {</span>
+<span class="fc" id="L880">            throw new AtlasException(&quot;Cannot execute AtlasSession created by the other AtlasContext&quot;);</span>
         }
 
-<span class="fc" id="L950">        AtlasMapping atlasMapping = this.admHandler.getMappingDefinition();</span>
-<span class="fc" id="L951">        String version = factory.getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);</span>
-<span class="fc" id="L952">        String mappingVersion = atlasMapping.getVersion();</span>
-<span class="fc bfc" id="L953" title="All 2 branches covered.">        if (!validateVersion(version, mappingVersion)) {</span>
-<span class="fc" id="L954">            AtlasUtil.addAudit((AtlasInternalSession)userSession, (Field)null,</span>
-<span class="fc" id="L955">                String.format(&quot;Mapping definition version %s detected. It may not work as expected with runtime version %s.&quot;,</span>
+<span class="fc" id="L883">        DefaultAtlasSession session = (DefaultAtlasSession) userSession;</span>
+<span class="pc bpc" id="L884" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L885">            LOG.debug(&quot;Begin processValidation {}&quot;, session);</span>
+        }
+
+<span class="fc" id="L888">        AtlasMapping atlasMapping = this.admHandler.getMappingDefinition();</span>
+<span class="fc" id="L889">        String version = factory.getProperties().get(AtlasContextFactory.PROPERTY_ATLASMAP_CORE_VERSION);</span>
+<span class="fc" id="L890">        String mappingVersion = atlasMapping.getVersion();</span>
+<span class="fc bfc" id="L891" title="All 2 branches covered.">        if (!validateVersion(version, mappingVersion)) {</span>
+<span class="fc" id="L892">            AtlasUtil.addAudit((AtlasInternalSession)userSession, (Field)null,</span>
+<span class="fc" id="L893">                String.format(&quot;Mapping definition version %s detected. It may not work as expected with runtime version %s.&quot;,</span>
                     mappingVersion,
                     version),
                 AuditStatus.WARN, null);
         }
 
-<span class="fc" id="L961">        List&lt;Validation&gt; validations = getContextFactory().getValidationService().validateMapping(session.getMapping());</span>
-<span class="pc bpc" id="L962" title="1 of 4 branches missed.">        if (validations != null &amp;&amp; !validations.isEmpty()) {</span>
-<span class="fc" id="L963">            session.getValidations().getValidation().addAll(validations);</span>
+<span class="fc" id="L899">        List&lt;Validation&gt; validations = getContextFactory().getValidationService().validateMapping(session.getMapping());</span>
+<span class="pc bpc" id="L900" title="1 of 4 branches missed.">        if (validations != null &amp;&amp; !validations.isEmpty()) {</span>
+<span class="fc" id="L901">            session.getValidations().getValidation().addAll(validations);</span>
         }
 
-<span class="fc bfc" id="L966" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
-<span class="pc bpc" id="L967" title="1 of 2 branches missed.">            LOG.debug(&quot;Detected {} core validation notices&quot;, validations == null ? 0 : validations.size());</span>
+<span class="pc bpc" id="L904" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L905" title="All 2 branches missed.">            LOG.debug(&quot;Detected {} core validation notices&quot;, validations == null ? 0 : validations.size());</span>
         }
 
-<span class="fc bfc" id="L970" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
-<span class="fc" id="L971">            module.processPreValidation(session);</span>
-<span class="fc" id="L972">        }</span>
-<span class="fc bfc" id="L973" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
-<span class="fc" id="L974">            module.processPreValidation(session);</span>
-<span class="fc" id="L975">        }</span>
+<span class="fc bfc" id="L908" title="All 2 branches covered.">        for (AtlasModule module : getSourceModules().values()) {</span>
+<span class="fc" id="L909">            module.processPreValidation(session);</span>
+<span class="fc" id="L910">        }</span>
+<span class="fc bfc" id="L911" title="All 2 branches covered.">        for (AtlasModule module : getTargetModules().values()) {</span>
+<span class="fc" id="L912">            module.processPreValidation(session);</span>
+<span class="fc" id="L913">        }</span>
 
-<span class="fc bfc" id="L977" title="All 2 branches covered.">        if (LOG.isDebugEnabled()) {</span>
-<span class="fc" id="L978">            LOG.debug(&quot;End processValidation {}&quot;, session);</span>
+<span class="pc bpc" id="L915" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L916">            LOG.debug(&quot;End processValidation {}&quot;, session);</span>
         }
-<span class="fc" id="L980">    }</span>
+<span class="fc" id="L918">    }</span>
 
     @Override
     public DefaultAtlasContextFactory getContextFactory() {
-<span class="fc" id="L984">        return this.factory;</span>
+<span class="fc" id="L922">        return this.factory;</span>
     }
 
-    /**
-     * Gets the mapping definition.
-     * @return mapping definition
-     */
     public AtlasMapping getMapping() {
-<span class="fc bfc" id="L992" title="All 2 branches covered.">        return admHandler != null ? admHandler.getMappingDefinition() : null;</span>
+<span class="fc bfc" id="L926" title="All 2 branches covered.">        return admHandler != null ? admHandler.getMappingDefinition() : null;</span>
     }
 
     @Override
     public AtlasSession createSession() throws AtlasException {
-<span class="fc" id="L997">        init();</span>
-<span class="fc" id="L998">        return doCreateSession();</span>
+<span class="fc" id="L931">        init();</span>
+<span class="fc" id="L932">        return doCreateSession();</span>
+    }
+
+    public AtlasSession createSession(AtlasMapping mappingDefinition) throws AtlasException {
+<span class="fc" id="L936">        this.atlasMappingUri = null;</span>
+<span class="fc" id="L937">        this.admHandler = new ADMArchiveHandler(this.factory.getClassLoader());</span>
+<span class="fc" id="L938">        this.admHandler.setIgnoreLibrary(true);</span>
+<span class="fc" id="L939">        this.admHandler.setMappingDefinition(mappingDefinition);</span>
+<span class="fc" id="L940">        this.initialized = false;</span>
+<span class="fc" id="L941">        init();</span>
+<span class="fc" id="L942">        return doCreateSession();</span>
     }
 
     private AtlasSession doCreateSession() throws AtlasException {
-<span class="fc" id="L1002">        AtlasSession session = new DefaultAtlasSession(this);</span>
-<span class="fc" id="L1003">        session.setAtlasContext(this);</span>
-<span class="fc" id="L1004">        session.setAudits(new Audits());</span>
-<span class="fc" id="L1005">        session.setValidations(new Validations());</span>
-<span class="fc" id="L1006">        setDefaultSessionProperties(session);</span>
-<span class="fc" id="L1007">        return session;</span>
+<span class="fc" id="L946">        AtlasSession session = new DefaultAtlasSession(this);</span>
+<span class="fc" id="L947">        session.setAtlasContext(this);</span>
+<span class="fc" id="L948">        session.setAudits(new Audits());</span>
+<span class="fc" id="L949">        session.setValidations(new Validations());</span>
+<span class="fc" id="L950">        setDefaultSessionProperties(session);</span>
+<span class="fc" id="L951">        return session;</span>
     }
 
-    /**
-     * Sets the default session properties.
-     * @param session session
-     */
     protected void setDefaultSessionProperties(AtlasSession session) {
-<span class="fc" id="L1015">        Date date = new Date();</span>
-<span class="fc" id="L1016">        DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;);</span>
-<span class="fc" id="L1017">        df.setTimeZone(TimeZone.getDefault());</span>
-<span class="fc" id="L1018">        session.getSourceProperties().put(&quot;Atlas.CreatedDateTimeTZ&quot;, df.format(date));</span>
-<span class="fc" id="L1019">    }</span>
+<span class="fc" id="L955">        Date date = new Date();</span>
+<span class="fc" id="L956">        DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd'T'HH:mm:ssZ&quot;);</span>
+<span class="fc" id="L957">        df.setTimeZone(TimeZone.getDefault());</span>
+<span class="fc" id="L958">        session.getProperties().put(&quot;Atlas.CreatedDateTimeTZ&quot;, df.format(date));</span>
+<span class="fc" id="L959">    }</span>
 
-    /**
-     * Gets the source modules.
-     * @return source modules
-     */
     public Map&lt;String, AtlasModule&gt; getSourceModules() {
-<span class="fc" id="L1026">        return sourceModules;</span>
+<span class="fc" id="L962">        return sourceModules;</span>
     }
 
-    /**
-     * Sets the source modules.
-     * @param sourceModules source modules
-     */
     public void setSourceModules(Map&lt;String, AtlasModule&gt; sourceModules) {
-<span class="fc" id="L1034">        this.sourceModules = sourceModules;</span>
-<span class="fc" id="L1035">    }</span>
+<span class="fc" id="L966">        this.sourceModules = sourceModules;</span>
+<span class="fc" id="L967">    }</span>
 
-    /**
-     * Gets the target modules.
-     * @return target modules
-     */
     public Map&lt;String, AtlasModule&gt; getTargetModules() {
-<span class="fc" id="L1042">        return targetModules;</span>
+<span class="fc" id="L970">        return targetModules;</span>
     }
 
-    /**
-     * Sets the target modules.
-     * @param targetModules target modules
-     */
     public void setTargetModules(Map&lt;String, AtlasModule&gt; targetModules) {
-<span class="fc" id="L1050">        this.targetModules = targetModules;</span>
-<span class="fc" id="L1051">    }</span>
+<span class="fc" id="L974">        this.targetModules = targetModules;</span>
+<span class="fc" id="L975">    }</span>
 
-    /**
-     * Gets the lookup tables.
-     * @return lookup tables
-     */
     public Map&lt;String, LookupTable&gt; getLookupTables() {
-<span class="fc" id="L1058">        return lookupTables;</span>
+<span class="fc" id="L978">        return lookupTables;</span>
     }
 
-    /**
-     * Sets the lookup tables.
-     * @param lookupTables lookup tables
-     */
     public void setLookupTables(Map&lt;String, LookupTable&gt; lookupTables) {
-<span class="fc" id="L1066">        this.lookupTables = lookupTables;</span>
-<span class="fc" id="L1067">    }</span>
+<span class="fc" id="L982">        this.lookupTables = lookupTables;</span>
+<span class="fc" id="L983">    }</span>
 
-    /**
-     * Sets the JMX name.
-     * @param jmxObjectName name
-     */
     protected void setJmxObjectName(ObjectName jmxObjectName) {
-<span class="fc" id="L1074">        this.jmxObjectName = jmxObjectName;</span>
-<span class="fc" id="L1075">    }</span>
+<span class="fc" id="L986">        this.jmxObjectName = jmxObjectName;</span>
+<span class="fc" id="L987">    }</span>
 
-    /**
-     * Gets the JMX name.
-     * @return name
-     */
     public ObjectName getJmxObjectName() {
-<span class="fc" id="L1082">        return this.jmxObjectName;</span>
+<span class="fc" id="L990">        return this.jmxObjectName;</span>
     }
 
     @Override
     public String getUuid() {
-<span class="nc bnc" id="L1087" title="All 2 branches missed.">        return (this.uuid != null ? this.uuid.toString() : null);</span>
+<span class="nc bnc" id="L995" title="All 2 branches missed.">        return (this.uuid != null ? this.uuid.toString() : null);</span>
     }
 
     @Override
     public String getVersion() {
-<span class="fc" id="L1092">        return this.getClass().getPackage().getImplementationVersion();</span>
+<span class="fc" id="L1000">        return this.getClass().getPackage().getImplementationVersion();</span>
     }
 
     @Override
     public String getMappingName() {
-<span class="pc bpc" id="L1097" title="1 of 2 branches missed.">        return (admHandler.getMappingDefinition() != null</span>
-<span class="pc" id="L1098">                ? admHandler.getMappingDefinition().getName() : null);</span>
+<span class="pc bpc" id="L1005" title="1 of 2 branches missed.">        return (admHandler.getMappingDefinition() != null</span>
+<span class="pc" id="L1006">                ? admHandler.getMappingDefinition().getName() : null);</span>
     }
 
-    /**
-     * Sets the mapping definition URI.
-     * @param atlasMappingUri URI
-     */
     protected void setMappingUri(URI atlasMappingUri) {
-<span class="fc" id="L1106">        this.atlasMappingUri = atlasMappingUri;</span>
-<span class="fc" id="L1107">    }</span>
+<span class="fc" id="L1010">        this.atlasMappingUri = atlasMappingUri;</span>
+<span class="fc" id="L1011">    }</span>
 
     @Override
     public String getMappingUri() {
-<span class="pc bpc" id="L1111" title="1 of 2 branches missed.">        return (atlasMappingUri != null ? atlasMappingUri.toString() : null);</span>
+<span class="pc bpc" id="L1015" title="1 of 2 branches missed.">        return (atlasMappingUri != null ? atlasMappingUri.toString() : null);</span>
     }
 
     @Override
     public String getClassName() {
-<span class="fc" id="L1116">        return this.getClass().getSimpleName();</span>
+<span class="fc" id="L1020">        return this.getClass().getSimpleName();</span>
     }
 
     @Override
     public String getThreadName() {
-<span class="fc" id="L1121">        return Thread.currentThread().getName();</span>
+<span class="fc" id="L1025">        return Thread.currentThread().getName();</span>
     }
 
     @Override
     public String toString() {
-<span class="fc" id="L1126">        return &quot;DefaultAtlasContext [jmxObjectName=&quot; + jmxObjectName + &quot;, uuid=&quot; + uuid + &quot;, factory=&quot; + factory</span>
-<span class="fc" id="L1127">                + &quot;, mappingName=&quot; + getMappingName() + &quot;, mappingUri=&quot; + getMappingUri() + &quot;, sourceModules=&quot;</span>
+<span class="fc" id="L1030">        return &quot;DefaultAtlasContext [jmxObjectName=&quot; + jmxObjectName + &quot;, uuid=&quot; + uuid + &quot;, factory=&quot; + factory</span>
+<span class="fc" id="L1031">                + &quot;, mappingName=&quot; + getMappingName() + &quot;, mappingUri=&quot; + getMappingUri() + &quot;, sourceModules=&quot;</span>
                 + sourceModules + &quot;, targetModules=&quot; + targetModules + &quot;]&quot;;
     }
 
-    /**
-     * Gets the {@link ADMArchiveHandler}.
-     * @return handler
-     */
     public ADMArchiveHandler getADMArchiveHandler() {
-<span class="fc" id="L1136">        return this.admHandler;</span>
+<span class="fc" id="L1036">        return this.admHandler;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

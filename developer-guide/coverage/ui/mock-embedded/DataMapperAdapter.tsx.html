@@ -230,16 +230,7 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a>
-<a name='L176'></a><a href='#L176'>176</a>
-<a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -301,7 +292,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -313,10 +303,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -449,12 +435,11 @@ export interface IDataMapperAdapterProps {
   inputDocuments: IExternalDocumentProps[];
   outputDocument: IExternalDocumentProps;
   initialMappings?: string;
-  baseAtlasServiceUrl: string;
+  baseMappingServiceUrl: string;
   baseJavaInspectionServiceUrl: string;
   baseXMLInspectionServiceUrl: string;
   baseJSONInspectionServiceUrl: string;
   baseCSVInspectionServiceUrl: string;
-  baseKafkaConnectInspectionServiceUrl: string;
   onMappings(mappings: string): void;
 }
 &nbsp;
@@ -468,55 +453,49 @@ export interface IParameter {
   required?: boolean;
 }
 &nbsp;
-export const DataMapperAdapter: React.FunctionComponent&lt;
-  IDataMapperAdapterProps
-&gt; = ({
-  documentId,
-  inputDocuments,
-  outputDocument,
-  initialMappings,
-  baseAtlasServiceUrl,
-  baseJavaInspectionServiceUrl,
-  baseXMLInspectionServiceUrl,
-  baseJSONInspectionServiceUrl,
-  baseCSVInspectionServiceUrl,
-  baseKafkaConnectInspectionServiceUrl,
-  onMappings,
-}) =&gt; {
-  const externalDocument = React.useMemo(
-    () =&gt;
-      ({
-        documentId,
-        initialMappings,
-        inputDocuments,
-        outputDocument,
-      } as IAtlasmapProviderProps['externalDocument']),
-    [initialMappings, documentId, inputDocuments, outputDocument],
-  );
-  return (
-    &lt;AtlasmapProvider
-      logLevel={'warn'}
-      baseAtlasServiceUrl={baseAtlasServiceUrl}
-      baseJSONInspectionServiceUrl={baseJSONInspectionServiceUrl}
-      baseJavaInspectionServiceUrl={baseJavaInspectionServiceUrl}
-      baseXMLInspectionServiceUrl={baseXMLInspectionServiceUrl}
-      baseCSVInspectionServiceUrl={baseCSVInspectionServiceUrl}
-      baseKafkaConnectInspectionServiceUrl={
-        baseKafkaConnectInspectionServiceUrl
-      }
-      externalDocument={externalDocument}
-      onMappingChange={onMappings}
-    &gt;
-      &lt;Atlasmap
-        allowImport={false}
-        allowExport={false}
-        allowDeleteReset={false}
-        allowDelete={false}
-        allowCustomJavaClasses={false}
-      /&gt;
-    &lt;/AtlasmapProvider&gt;
-  );
-};
+export const DataMapperAdapter: React.FunctionComponent&lt;IDataMapperAdapterProps&gt; =
+  ({
+    documentId,
+    inputDocuments,
+    outputDocument,
+    initialMappings,
+    baseMappingServiceUrl,
+    baseJavaInspectionServiceUrl,
+    baseXMLInspectionServiceUrl,
+    baseJSONInspectionServiceUrl,
+    baseCSVInspectionServiceUrl,
+    onMappings,
+  }) =&gt; {
+    const externalDocument = React.useMemo(
+      () =&gt;
+        ({
+          documentId,
+          initialMappings,
+          inputDocuments,
+          outputDocument,
+        } as IAtlasmapProviderProps['externalDocument']),
+      [initialMappings, documentId, inputDocuments, outputDocument],
+    );
+    return (
+      &lt;AtlasmapProvider
+        logLevel={'warn'}
+        baseMappingServiceUrl={baseMappingServiceUrl}
+        baseJSONInspectionServiceUrl={baseJSONInspectionServiceUrl}
+        baseJavaInspectionServiceUrl={baseJavaInspectionServiceUrl}
+        baseXMLInspectionServiceUrl={baseXMLInspectionServiceUrl}
+        baseCSVInspectionServiceUrl={baseCSVInspectionServiceUrl}
+        externalDocument={externalDocument}
+        onMappingChange={onMappings}
+      &gt;
+        &lt;Atlasmap
+          allowImport={false}
+          allowExport={false}
+          allowDelete={false}
+          allowCustomJavaClasses={false}
+        /&gt;
+      &lt;/AtlasmapProvider&gt;
+    );
+  };
 &nbsp;
 export interface IParameterOption {
   label: string;
@@ -606,7 +585,7 @@ export const atlasmapCSVParameterOptions = getCsvParameterOptions;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 08 2022 17:03:51 GMT+0000 (Coordinated Universal Time)
+                at Thu Aug 11 2022 21:27:12 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="prettify.js"></script>

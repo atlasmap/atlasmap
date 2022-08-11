@@ -29,16 +29,8 @@ import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContext;
 import io.atlasmap.core.DefaultAtlasContextFactory;
 
-/**
- * Kafka Connect Single Message Transformation that uses AtlasMap to transform.
- * This maps from 2 source Documents which are key and value, to the
- * 2 target Documents (key and value). Not only the Kafka Connect data structure
- * defined with the Kafka Connect schema, the Document could be also a serialized
- * data format that is supported by AtlasMap, such as JSON or XML.
- * @param &lt;R&gt; ConnectRecord type
- */
-<span class="fc" id="L40">public class AtlasMapSMT&lt;R extends ConnectRecord&lt;R&gt;&gt; implements Transformation&lt;R&gt; {</span>
-    /** Overview. */
+<span class="fc" id="L32">public class AtlasMapSMT&lt;R extends ConnectRecord&lt;R&gt;&gt; implements Transformation&lt;R&gt; {</span>
+
     public static final String OVERVIEW_DOC = &quot;Process AtlasMap data mapping with a Kafka Connect record&quot;;
 
     private interface ConfigName {
@@ -49,15 +41,14 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
         String DOCID_TARGET_VALUE = &quot;docid.target.value&quot;;
     }
 
-    /** Config Def. */
-<span class="fc" id="L53">    public static final ConfigDef CONFIG_DEF = new ConfigDef()</span>
-<span class="fc" id="L54">        .define(ConfigName.ADM_PATH, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.HIGH, &quot;Path for the ADM file&quot;)</span>
-<span class="fc" id="L55">        .define(ConfigName.DOCID_SOURCE_KEY, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the source key&quot;)</span>
-<span class="fc" id="L56">        .define(ConfigName.DOCID_SOURCE_VALUE, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the source value&quot;)</span>
-<span class="fc" id="L57">        .define(ConfigName.DOCID_TARGET_KEY, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the target key&quot;)</span>
-<span class="fc" id="L58">        .define(ConfigName.DOCID_TARGET_VALUE, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the target value&quot;);</span>
+<span class="fc" id="L44">    public static final ConfigDef CONFIG_DEF = new ConfigDef()</span>
+<span class="fc" id="L45">        .define(ConfigName.ADM_PATH, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.HIGH, &quot;Path for the ADM file&quot;)</span>
+<span class="fc" id="L46">        .define(ConfigName.DOCID_SOURCE_KEY, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the source key&quot;)</span>
+<span class="fc" id="L47">        .define(ConfigName.DOCID_SOURCE_VALUE, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the source value&quot;)</span>
+<span class="fc" id="L48">        .define(ConfigName.DOCID_TARGET_KEY, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the target key&quot;)</span>
+<span class="fc" id="L49">        .define(ConfigName.DOCID_TARGET_VALUE, ConfigDef.Type.STRING, &quot;&quot;, ConfigDef.Importance.MEDIUM, &quot;Document ID for the target value&quot;);</span>
 
-<span class="fc" id="L60">    private static final Logger LOG = LoggerFactory.getLogger(AtlasMapSMT.class);</span>
+<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(AtlasMapSMT.class);</span>
 
     private String admPath;
     private String docIdSourceKey;
@@ -68,64 +59,64 @@ import io.atlasmap.core.DefaultAtlasContextFactory;
 
     @Override
     public void configure(Map&lt;String, ?&gt; props) {
-<span class="fc" id="L71">        final SimpleConfig config = new SimpleConfig(CONFIG_DEF, props);</span>
-<span class="fc" id="L72">        admPath = config.getString(ConfigName.ADM_PATH);</span>
-<span class="fc" id="L73">        docIdSourceKey = config.getString(ConfigName.DOCID_SOURCE_KEY);</span>
-<span class="fc" id="L74">        docIdSourceValue = config.getString(ConfigName.DOCID_SOURCE_VALUE);</span>
-<span class="fc" id="L75">        docIdTargetKey = config.getString(ConfigName.DOCID_TARGET_KEY);</span>
-<span class="fc" id="L76">        docIdTargetValue = config.getString(ConfigName.DOCID_TARGET_VALUE);</span>
+<span class="fc" id="L62">        final SimpleConfig config = new SimpleConfig(CONFIG_DEF, props);</span>
+<span class="fc" id="L63">        admPath = config.getString(ConfigName.ADM_PATH);</span>
+<span class="fc" id="L64">        docIdSourceKey = config.getString(ConfigName.DOCID_SOURCE_KEY);</span>
+<span class="fc" id="L65">        docIdSourceValue = config.getString(ConfigName.DOCID_SOURCE_VALUE);</span>
+<span class="fc" id="L66">        docIdTargetKey = config.getString(ConfigName.DOCID_TARGET_KEY);</span>
+<span class="fc" id="L67">        docIdTargetValue = config.getString(ConfigName.DOCID_TARGET_VALUE);</span>
 
         try {
-<span class="fc" id="L79">            atlasContext = DefaultAtlasContextFactory.getInstance().createContext(new File(admPath));</span>
-<span class="nc" id="L80">        } catch (Exception e) {</span>
-<span class="nc" id="L81">            LOG.error(&quot;Could not load ADM archive file: {}&quot;, e.getMessage());</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L83">                LOG.error(&quot;&quot;, e);</span>
+<span class="fc" id="L70">            atlasContext = DefaultAtlasContextFactory.getInstance().createContext(new File(admPath));</span>
+<span class="nc" id="L71">        } catch (Exception e) {</span>
+<span class="nc" id="L72">            LOG.error(&quot;Could not load ADM archive file: {}&quot;, e.getMessage());</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L74">                LOG.error(&quot;&quot;, e);</span>
             }
-<span class="fc" id="L85">        }</span>
-<span class="fc" id="L86">    }</span>
+<span class="fc" id="L76">        }</span>
+<span class="fc" id="L77">    }</span>
 
     @Override
     public R apply(R record) {
         try {
-<span class="fc" id="L91">            AtlasSession session = atlasContext.createSession();</span>
-<span class="pc bpc" id="L92" title="2 of 4 branches missed.">            if (docIdSourceKey != null &amp;&amp; !docIdSourceKey.isEmpty()) {</span>
-<span class="nc" id="L93">                session.setSourceDocument(docIdSourceKey, record.key());</span>
+<span class="fc" id="L82">            AtlasSession session = atlasContext.createSession();</span>
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">            if (docIdSourceKey != null &amp;&amp; !docIdSourceKey.isEmpty()) {</span>
+<span class="nc" id="L84">                session.setSourceDocument(docIdSourceKey, record.key());</span>
             }
-<span class="pc bpc" id="L95" title="2 of 4 branches missed.">            if (docIdSourceValue != null &amp;&amp; !docIdSourceValue.isEmpty()) {</span>
-<span class="fc" id="L96">                session.setSourceDocument(docIdSourceValue, record.value());</span>
+<span class="pc bpc" id="L86" title="2 of 4 branches missed.">            if (docIdSourceValue != null &amp;&amp; !docIdSourceValue.isEmpty()) {</span>
+<span class="fc" id="L87">                session.setSourceDocument(docIdSourceValue, record.value());</span>
             } else {
-<span class="nc" id="L98">                session.setDefaultSourceDocument(record.value());</span>
+<span class="nc" id="L89">                session.setDefaultSourceDocument(record.value());</span>
             }
-<span class="fc" id="L100">            atlasContext.process(session);</span>
-<span class="fc" id="L101">            Object outKey = null, outValue = null;</span>
-<span class="pc bpc" id="L102" title="2 of 4 branches missed.">            if (docIdTargetKey != null &amp;&amp; !docIdTargetKey.isEmpty()) {</span>
-<span class="nc" id="L103">                outKey = session.getTargetDocument(docIdTargetKey);</span>
+<span class="fc" id="L91">            atlasContext.process(session);</span>
+<span class="fc" id="L92">            Object outKey = null, outValue = null;</span>
+<span class="pc bpc" id="L93" title="2 of 4 branches missed.">            if (docIdTargetKey != null &amp;&amp; !docIdTargetKey.isEmpty()) {</span>
+<span class="nc" id="L94">                outKey = session.getTargetDocument(docIdTargetKey);</span>
             }
-<span class="pc bpc" id="L105" title="2 of 4 branches missed.">            if (docIdTargetValue != null &amp;&amp; !docIdTargetValue.isEmpty()) {</span>
-<span class="fc" id="L106">                outValue = session.getTargetDocument(docIdTargetValue);</span>
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">            if (docIdTargetValue != null &amp;&amp; !docIdTargetValue.isEmpty()) {</span>
+<span class="fc" id="L97">                outValue = session.getTargetDocument(docIdTargetValue);</span>
             } else {
-<span class="nc" id="L108">                outValue = session.getDefaultTargetDocument();</span>
+<span class="nc" id="L99">                outValue = session.getDefaultTargetDocument();</span>
             }
-<span class="fc" id="L110">            return record.newRecord(record.topic(), record.kafkaPartition(),</span>
-<span class="fc" id="L111">                null, outKey, null, outValue, record.timestamp());</span>
-<span class="nc" id="L112">        } catch (Exception e) {</span>
-<span class="nc" id="L113">            LOG.error(&quot;Could not process AtlasMap mapping: {}&quot;, e.getMessage());</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L115">                LOG.error(&quot;&quot;, e);</span>
+<span class="fc" id="L101">            return record.newRecord(record.topic(), record.kafkaPartition(),</span>
+<span class="fc" id="L102">                null, outKey, null, outValue, record.timestamp());</span>
+<span class="nc" id="L103">        } catch (Exception e) {</span>
+<span class="nc" id="L104">            LOG.error(&quot;Could not process AtlasMap mapping: {}&quot;, e.getMessage());</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L106">                LOG.error(&quot;&quot;, e);</span>
             }
-<span class="nc" id="L117">            return record;</span>
+<span class="nc" id="L108">            return record;</span>
         }
     }
 
     @Override
     public ConfigDef config() {
-<span class="fc" id="L123">        return CONFIG_DEF;</span>
+<span class="fc" id="L114">        return CONFIG_DEF;</span>
     }
 
     @Override
     public void close() {
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L119">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

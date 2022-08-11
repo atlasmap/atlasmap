@@ -27,37 +27,24 @@ import io.atlasmap.spi.AtlasActionProcessor;
 import io.atlasmap.spi.AtlasFieldAction;
 import io.atlasmap.v2.Field;
 
-/**
- * The expression field action.
- * @deprecated expression is now decleared at {@link io.atlasmap.v2.Mapping} level and processed directly in {@link io.atlasmap.core.DefaultAtlasContext}.
- */
-@Deprecated
-<span class="fc" id="L35">public class ExpressionFieldAction implements AtlasFieldAction {</span>
+<span class="fc" id="L30">public class ExpressionFieldAction implements AtlasFieldAction {</span>
 
-    /**
-     * Processes expression field action.
-     * @param action action model
-     * @param args expression arguments
-     * @return processed
-     * @throws ExpressionException expression processing error
-     */
-    @Deprecated
     @AtlasActionProcessor
     public static Object process(io.atlasmap.v2.Expression action, List&lt;Object&gt; args) throws ExpressionException {
-<span class="fc bfc" id="L47" title="All 4 branches covered.">        if (action.getExpression() == null || action.getExpression().trim().isEmpty()) {</span>
-<span class="fc" id="L48">            return null;</span>
+<span class="fc bfc" id="L34" title="All 4 branches covered.">        if (action.getExpression() == null || action.getExpression().trim().isEmpty()) {</span>
+<span class="fc" id="L35">            return null;</span>
         }
 
-<span class="fc" id="L51">        Expression parsedExpression = Expression.parse(action.getExpression(), DefaultAtlasFunctionResolver.getInstance());</span>
-<span class="fc" id="L52">        Field answer = parsedExpression.evaluate((index) -&gt; {</span>
+<span class="fc" id="L38">        Expression parsedExpression = Expression.parse(action.getExpression(), DefaultAtlasFunctionResolver.getInstance());</span>
+<span class="fc" id="L39">        Field answer = parsedExpression.evaluate((index) -&gt; {</span>
             try {
-<span class="fc" id="L54">                return wrapWithField(args.get(Integer.parseInt(index)));</span>
-<span class="nc" id="L55">            } catch (Throwable e) {</span>
-<span class="nc" id="L56">                throw new ExpressionException(&quot;Invalid variable: &quot; + index);</span>
+<span class="fc" id="L41">                return wrapWithField(args.get(Integer.parseInt(index)));</span>
+<span class="nc" id="L42">            } catch (Throwable e) {</span>
+<span class="nc" id="L43">                throw new ExpressionException(&quot;Invalid variable: &quot; + index);</span>
             }
         });
-<span class="fc" id="L59">        return unwrapField(answer);</span>
+<span class="fc" id="L46">        return unwrapField(answer);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

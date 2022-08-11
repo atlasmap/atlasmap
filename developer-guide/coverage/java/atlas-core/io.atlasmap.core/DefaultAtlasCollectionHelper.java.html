@@ -27,182 +27,149 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
 import io.atlasmap.v2.Multiplicity;
 
-/**
- * The default implementation of {@link AtlasCollectionHelper}.
- */
 public class DefaultAtlasCollectionHelper implements AtlasCollectionHelper {
 
     private AtlasFieldActionService fieldActionService;
 
-    /**
-     * A constructor.
-     */
-<span class="nc" id="L40">    public DefaultAtlasCollectionHelper() {</span>
-<span class="nc" id="L41">        this.fieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L34">    public DefaultAtlasCollectionHelper() {</span>
+<span class="nc" id="L35">        this.fieldActionService = DefaultAtlasFieldActionService.getInstance();</span>
+<span class="nc" id="L36">    }</span>
 
-    /**
-     * A constructor.
-     * @param fieldActionService field action service
-     */
-<span class="fc" id="L48">    public DefaultAtlasCollectionHelper(AtlasFieldActionService fieldActionService) {</span>
-<span class="fc" id="L49">        this.fieldActionService = fieldActionService;</span>
-<span class="fc" id="L50">    }</span>
+<span class="fc" id="L38">    public DefaultAtlasCollectionHelper(AtlasFieldActionService fieldActionService) {</span>
+<span class="fc" id="L39">        this.fieldActionService = fieldActionService;</span>
+<span class="fc" id="L40">    }</span>
 
-    /**
-     * Creates the {@link AtlasPath} for the target field.
-     * @param path path string
-     * @return created
-     */
     protected AtlasPath createTargetAtlasPath(String path) {
-<span class="fc" id="L58">        return new AtlasPath(path);</span>
+<span class="fc" id="L43">        return new AtlasPath(path);</span>
     }
 
-    /**
-     * Determines the collection count of the target field.
-     * @param targetField target field
-     * @return count
-     */
     public int determineTargetCollectionCount(Field targetField) {
-<span class="fc" id="L67">        AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());</span>
-<span class="fc" id="L68">        int targetCollectionCount = targetPath.getCollectionSegmentCount();</span>
-<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (targetField.getIndex() != null) {</span>
-<span class="fc" id="L70">            targetCollectionCount++; //adjust based on index</span>
+<span class="fc" id="L47">        AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());</span>
+<span class="fc" id="L48">        int targetCollectionCount = targetPath.getCollectionSegmentCount();</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if (targetField.getIndex() != null) {</span>
+<span class="fc" id="L50">            targetCollectionCount++; //adjust based on index</span>
         }
-<span class="fc" id="L72">        return targetCollectionCount;</span>
+<span class="fc" id="L52">        return targetCollectionCount;</span>
     }
 
-    /**
-     * Determines the collection cound of the source field.
-     * @param sourceParentField source parent field
-     * @param sourceField source field
-     * @return count
-     */
     public int determineSourceCollectionCount(Field sourceParentField, Field sourceField) {
-<span class="fc" id="L82">        AtlasPath sourcePath = new AtlasPath(sourceField.getPath());</span>
-<span class="fc" id="L83">        int sourceCollectionCount = sourcePath.getCollectionSegmentCount();</span>
-<span class="fc" id="L84">        sourceCollectionCount += getCollectionCountAdjustmentForActions(sourceParentField);</span>
-<span class="fc" id="L85">        sourceCollectionCount += getCollectionCountAdjustmentForActions(sourceField);</span>
-<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (sourceField.getIndex() != null) {</span>
-<span class="fc" id="L87">            sourceCollectionCount--; //adjust based on index</span>
+<span class="fc" id="L56">        AtlasPath sourcePath = new AtlasPath(sourceField.getPath());</span>
+<span class="fc" id="L57">        int sourceCollectionCount = sourcePath.getCollectionSegmentCount();</span>
+<span class="fc" id="L58">        sourceCollectionCount += getCollectionCountAdjustmentForActions(sourceParentField);</span>
+<span class="fc" id="L59">        sourceCollectionCount += getCollectionCountAdjustmentForActions(sourceField);</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (sourceField.getIndex() != null) {</span>
+<span class="fc" id="L61">            sourceCollectionCount--; //adjust based on index</span>
         }
-<span class="fc" id="L89">        return sourceCollectionCount;</span>
+<span class="fc" id="L63">        return sourceCollectionCount;</span>
     }
 
     private int getCollectionCountAdjustmentForActions(Field sourceField) {
-<span class="fc" id="L93">        int sourceCollectionCount = 0;</span>
-<span class="fc bfc" id="L94" title="All 4 branches covered.">        if (sourceField != null &amp;&amp; sourceField.getActions() != null) {</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">            for (Action action : sourceField.getActions()) {</span>
-<span class="fc" id="L96">                ActionDetail actionDetail = null;</span>
+<span class="fc" id="L67">        int sourceCollectionCount = 0;</span>
+<span class="fc bfc" id="L68" title="All 4 branches covered.">        if (sourceField != null &amp;&amp; sourceField.getActions() != null) {</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">            for (Action action : sourceField.getActions()) {</span>
+<span class="fc" id="L70">                ActionDetail actionDetail = null;</span>
                 try {
-<span class="fc" id="L98">                    actionDetail = fieldActionService.findActionDetail(action, sourceField.getFieldType());</span>
-<span class="nc" id="L99">                } catch (AtlasException e) {</span>
-<span class="nc" id="L100">                    throw new RuntimeException(e);</span>
-<span class="fc" id="L101">                }</span>
+<span class="fc" id="L72">                    actionDetail = fieldActionService.findActionDetail(action, sourceField.getFieldType());</span>
+<span class="nc" id="L73">                } catch (AtlasException e) {</span>
+<span class="nc" id="L74">                    throw new RuntimeException(e);</span>
+<span class="fc" id="L75">                }</span>
 
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                if (actionDetail != null) {</span>
-<span class="fc bfc" id="L104" title="All 2 branches covered.">                    if (Multiplicity.ONE_TO_MANY.equals(actionDetail.getMultiplicity())) {</span>
-<span class="fc" id="L105">                        sourceCollectionCount++;</span>
-<span class="fc bfc" id="L106" title="All 2 branches covered.">                    } else if (Multiplicity.MANY_TO_ONE.equals(actionDetail.getMultiplicity())) {</span>
-<span class="fc" id="L107">                        sourceCollectionCount--;</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">                if (actionDetail != null) {</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">                    if (Multiplicity.ONE_TO_MANY.equals(actionDetail.getMultiplicity())) {</span>
+<span class="fc" id="L79">                        sourceCollectionCount++;</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">                    } else if (Multiplicity.MANY_TO_ONE.equals(actionDetail.getMultiplicity())) {</span>
+<span class="fc" id="L81">                        sourceCollectionCount--;</span>
                     }
                 }
-<span class="fc" id="L110">            }</span>
+<span class="fc" id="L84">            }</span>
         }
-<span class="fc" id="L112">        return sourceCollectionCount;</span>
+<span class="fc" id="L86">        return sourceCollectionCount;</span>
     }
 
-    /**
-     * Copies collection indexes from source to target.
-     * @param sourceParentField source parent field
-     * @param sourceField source field
-     * @param targetField target field
-     * @param previousTargetField previous target field
-     */
     public void copyCollectionIndexes(Field sourceParentField, Field sourceField, Field targetField, Field previousTargetField) {
-<span class="fc" id="L123">        AtlasPath sourcePath = new AtlasPath(sourceField.getPath());</span>
-<span class="fc" id="L124">        AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());</span>
-<span class="fc" id="L125">        int targetCollectionCount = determineTargetCollectionCount(targetField);</span>
-<span class="fc" id="L126">        int sourceCollectionCount = determineSourceCollectionCount(sourceParentField, sourceField);</span>
-<span class="fc" id="L127">        int targetIndex = 0;</span>
-<span class="fc" id="L128">        int collectionCount = 0;</span>
-<span class="fc" id="L129">        List&lt;AtlasPath.SegmentContext&gt; targetSegments = targetPath.getSegments(true);</span>
+<span class="fc" id="L90">        AtlasPath sourcePath = new AtlasPath(sourceField.getPath());</span>
+<span class="fc" id="L91">        AtlasPath targetPath = createTargetAtlasPath(targetField.getPath());</span>
+<span class="fc" id="L92">        int targetCollectionCount = determineTargetCollectionCount(targetField);</span>
+<span class="fc" id="L93">        int sourceCollectionCount = determineSourceCollectionCount(sourceParentField, sourceField);</span>
+<span class="fc" id="L94">        int targetIndex = 0;</span>
+<span class="fc" id="L95">        int collectionCount = 0;</span>
+<span class="fc" id="L96">        List&lt;AtlasPath.SegmentContext&gt; targetSegments = targetPath.getSegments(true);</span>
 
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        if (targetCollectionCount &gt; sourceCollectionCount) {</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (targetCollectionCount &gt; sourceCollectionCount) {</span>
             //Put 0 index in excessive target collections, if targetCollectionCount &gt; sourceCollectionCount
-<span class="fc bfc" id="L133" title="All 2 branches covered.">            while (collectionCount &lt; targetCollectionCount - sourceCollectionCount) {</span>
-<span class="fc" id="L134">                AtlasPath.SegmentContext targetSegment = targetSegments.get(targetIndex);</span>
-<span class="fc bfc" id="L135" title="All 2 branches covered.">                if (targetSegment.getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc" id="L136">                    targetPath.setCollectionIndex(targetIndex, 0);</span>
-<span class="fc" id="L137">                    collectionCount++;</span>
+<span class="fc bfc" id="L100" title="All 2 branches covered.">            while (collectionCount &lt; targetCollectionCount - sourceCollectionCount) {</span>
+<span class="fc" id="L101">                AtlasPath.SegmentContext targetSegment = targetSegments.get(targetIndex);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">                if (targetSegment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L103">                    targetPath.setCollectionIndex(targetIndex, 0);</span>
+<span class="fc" id="L104">                    collectionCount++;</span>
                 }
-<span class="fc" id="L139">                targetIndex++;</span>
-<span class="fc" id="L140">            }</span>
+<span class="fc" id="L106">                targetIndex++;</span>
+<span class="fc" id="L107">            }</span>
         }
 
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        AtlasPath previousTargetPath = previousTargetField != null ? createTargetAtlasPath(previousTargetField.getPath()) : null;</span>
-<span class="fc" id="L144">        List&lt;AtlasPath.SegmentContext&gt; sourceCollectionSegments = sourcePath.getCollectionSegments(true);</span>
-<span class="fc" id="L145">        AtlasPath.SegmentContext lastSourceSegment = sourcePath.getLastSegment();</span>
-<span class="fc" id="L146">        AtlasPath.SegmentContext lastTargetCollectionSegment = targetPath.getLastCollectionSegment();</span>
-<span class="fc bfc" id="L147" title="All 2 branches covered.">        for (AtlasPath.SegmentContext sourceSegment : sourcePath.getSegments(true)) {</span>
-<span class="fc bfc" id="L148" title="All 4 branches covered.">            if (sourceSegment.getCollectionType() == CollectionType.NONE &amp;&amp; sourceSegment != lastSourceSegment) {</span>
+<span class="fc bfc" id="L110" title="All 2 branches covered.">        AtlasPath previousTargetPath = previousTargetField != null ? createTargetAtlasPath(previousTargetField.getPath()) : null;</span>
+<span class="fc" id="L111">        List&lt;AtlasPath.SegmentContext&gt; sourceCollectionSegments = sourcePath.getCollectionSegments(true);</span>
+<span class="fc" id="L112">        AtlasPath.SegmentContext lastSourceSegment = sourcePath.getLastSegment();</span>
+<span class="fc" id="L113">        AtlasPath.SegmentContext lastTargetCollectionSegment = targetPath.getLastCollectionSegment();</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        for (AtlasPath.SegmentContext sourceSegment : sourcePath.getSegments(true)) {</span>
+<span class="fc bfc" id="L115" title="All 4 branches covered.">            if (sourceSegment.getCollectionType() == CollectionType.NONE &amp;&amp; sourceSegment != lastSourceSegment) {</span>
                 //always process last segment even if not a collection (in case e.g. split has been applied)
-<span class="fc" id="L150">                continue;</span>
+<span class="fc" id="L117">                continue;</span>
             }
 
-<span class="fc bfc" id="L153" title="All 2 branches covered.">            while (targetSegments.size() &gt; targetIndex) {</span>
-<span class="fc" id="L154">                AtlasPath.SegmentContext targetSegment = targetSegments.get(targetIndex);</span>
-<span class="fc bfc" id="L155" title="All 2 branches covered.">                if (targetSegment.getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc" id="L156">                    collectionCount++;</span>
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">                    if (sourceSegment.getCollectionIndex() != null) {</span>
-<span class="fc bfc" id="L158" title="All 4 branches covered.">                        if (sourceCollectionCount &gt; targetCollectionCount &amp;&amp; targetCollectionCount == collectionCount) {</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">            while (targetSegments.size() &gt; targetIndex) {</span>
+<span class="fc" id="L121">                AtlasPath.SegmentContext targetSegment = targetSegments.get(targetIndex);</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">                if (targetSegment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L123">                    collectionCount++;</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">                    if (sourceSegment.getCollectionIndex() != null) {</span>
+<span class="fc bfc" id="L125" title="All 4 branches covered.">                        if (sourceCollectionCount &gt; targetCollectionCount &amp;&amp; targetCollectionCount == collectionCount) {</span>
                             //if needs to flatten excessive rightmost source collections
-<span class="fc" id="L160">                            int nextCollectionIndex = determineNextCollectionIndex(previousTargetPath, sourceCollectionSegments);</span>
-<span class="fc" id="L161">                            targetPath.setCollectionIndex(targetIndex, nextCollectionIndex);</span>
-<span class="fc" id="L162">                        } else {</span>
-<span class="fc" id="L163">                            targetPath.setCollectionIndex(targetIndex, sourceSegment.getCollectionIndex());</span>
+<span class="fc" id="L127">                            int nextCollectionIndex = determineNextCollectionIndex(previousTargetPath, sourceCollectionSegments);</span>
+<span class="fc" id="L128">                            targetPath.setCollectionIndex(targetIndex, nextCollectionIndex);</span>
+<span class="fc" id="L129">                        } else {</span>
+<span class="fc" id="L130">                            targetPath.setCollectionIndex(targetIndex, sourceSegment.getCollectionIndex());</span>
                         }
 
-<span class="fc" id="L166">                        targetIndex++;</span>
-<span class="fc" id="L167">                        break;</span>
-<span class="nc bnc" id="L168" title="All 4 branches missed.">                    } else if (targetSegment == lastTargetCollectionSegment &amp;&amp; sourceParentField instanceof FieldGroup) {</span>
+<span class="fc" id="L133">                        targetIndex++;</span>
+<span class="fc" id="L134">                        break;</span>
+<span class="nc bnc" id="L135" title="All 4 branches missed.">                    } else if (targetSegment == lastTargetCollectionSegment &amp;&amp; sourceParentField instanceof FieldGroup) {</span>
                         //if the last collection target segment, but no collection index specified (e.g. after split)
-<span class="nc" id="L170">                        int nextCollectionIndex = determineNextCollectionIndex(previousTargetPath, sourceCollectionSegments);</span>
-<span class="nc" id="L171">                        targetPath.setCollectionIndex(targetIndex, nextCollectionIndex);</span>
+<span class="nc" id="L137">                        int nextCollectionIndex = determineNextCollectionIndex(previousTargetPath, sourceCollectionSegments);</span>
+<span class="nc" id="L138">                        targetPath.setCollectionIndex(targetIndex, nextCollectionIndex);</span>
 
-<span class="nc" id="L173">                        targetIndex++;</span>
-<span class="nc" id="L174">                        break;</span>
+<span class="nc" id="L140">                        targetIndex++;</span>
+<span class="nc" id="L141">                        break;</span>
                     }
                 }
 
-<span class="fc" id="L178">                targetIndex++;</span>
-<span class="fc" id="L179">            }</span>
-<span class="fc" id="L180">        }</span>
+<span class="fc" id="L145">                targetIndex++;</span>
+<span class="fc" id="L146">            }</span>
+<span class="fc" id="L147">        }</span>
 
-<span class="fc" id="L182">        targetField.setPath(targetPath.toString());</span>
-<span class="fc" id="L183">    }</span>
+<span class="fc" id="L149">        targetField.setPath(targetPath.toString());</span>
+<span class="fc" id="L150">    }</span>
 
     private int determineNextCollectionIndex(AtlasPath previousTargetPath, List&lt;AtlasPath.SegmentContext&gt; sourceCollectionSegments) {
-<span class="fc" id="L186">        int nextCollectionIndex = 0;</span>
-<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (previousTargetPath != null) {</span>
-<span class="fc" id="L188">            List&lt;AtlasPath.SegmentContext&gt; previousTargetCollectionSegments = previousTargetPath.getCollectionSegments(true);</span>
-<span class="fc" id="L189">            boolean parentIndexesChanged = false;</span>
-<span class="fc bfc" id="L190" title="All 2 branches covered.">            for (int i = previousTargetCollectionSegments.size() - 2; i &gt;= 0; i--) {</span>
-<span class="fc" id="L191">                if (!previousTargetCollectionSegments.get(i).getCollectionIndex()</span>
-<span class="fc bfc" id="L192" title="All 2 branches covered.">                    .equals(sourceCollectionSegments.get(i).getCollectionIndex())) {</span>
-<span class="fc" id="L193">                    parentIndexesChanged = true;</span>
-<span class="fc" id="L194">                    break;</span>
+<span class="fc" id="L153">        int nextCollectionIndex = 0;</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (previousTargetPath != null) {</span>
+<span class="fc" id="L155">            List&lt;AtlasPath.SegmentContext&gt; previousTargetCollectionSegments = previousTargetPath.getCollectionSegments(true);</span>
+<span class="fc" id="L156">            boolean parentIndexesChanged = false;</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            for (int i = previousTargetCollectionSegments.size() - 2; i &gt;= 0; i--) {</span>
+<span class="fc" id="L158">                if (!previousTargetCollectionSegments.get(i).getCollectionIndex()</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">                    .equals(sourceCollectionSegments.get(i).getCollectionIndex())) {</span>
+<span class="fc" id="L160">                    parentIndexesChanged = true;</span>
+<span class="fc" id="L161">                    break;</span>
                 }
             }
 
-<span class="fc bfc" id="L198" title="All 2 branches covered.">            if (!parentIndexesChanged) {</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            if (!parentIndexesChanged) {</span>
                 //determine previous collection index
-<span class="fc" id="L200">                nextCollectionIndex = previousTargetCollectionSegments</span>
-<span class="fc" id="L201">                    .get(previousTargetCollectionSegments.size() - 1).getCollectionIndex();</span>
-<span class="fc" id="L202">                nextCollectionIndex++;</span>
+<span class="fc" id="L167">                nextCollectionIndex = previousTargetCollectionSegments</span>
+<span class="fc" id="L168">                    .get(previousTargetCollectionSegments.size() - 1).getCollectionIndex();</span>
+<span class="fc" id="L169">                nextCollectionIndex++;</span>
             }
         }
-<span class="fc" id="L205">        return nextCollectionIndex;</span>
+<span class="fc" id="L172">        return nextCollectionIndex;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

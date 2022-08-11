@@ -30,255 +30,123 @@ import io.atlasmap.spi.AtlasConversionInfo;
 import io.atlasmap.spi.AtlasConverter;
 import io.atlasmap.v2.FieldType;
 
-/**
- * The type converter for {@link StringBuffer}.
- */
-<span class="fc" id="L36">public class StringBufferConverter implements AtlasConverter&lt;StringBuffer&gt; {</span>
+<span class="fc" id="L33">public class StringBufferConverter implements AtlasConverter&lt;StringBuffer&gt; {</span>
 
-<span class="fc" id="L38">    private CharSequenceConverter delegate = new CharSequenceConverter();</span>
+<span class="fc" id="L35">    private CharSequenceConverter delegate = new CharSequenceConverter();</span>
 
-    /**
-     * Converts to {@link BigDecimal}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DECIMAL,
             concerns = AtlasConversionConcern.FORMAT)
     public BigDecimal toBigDecimal(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L49">        return delegate.toBigDecimal(value);</span>
+<span class="nc" id="L40">        return delegate.toBigDecimal(value);</span>
     }
 
-    /**
-     * Converts to {@link BigInteger}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BIG_INTEGER,
             concerns = AtlasConversionConcern.FORMAT)
     public BigInteger toBigInteger(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L61">        return delegate.toBigInteger(value);</span>
+<span class="nc" id="L46">        return delegate.toBigInteger(value);</span>
     }
 
-    /**
-     * Converts to {@link Boolean}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BOOLEAN, concerns = AtlasConversionConcern.CONVENTION)
     public Boolean toBoolean(StringBuffer value, String sourceFormat, String targetFormat) {
-<span class="nc" id="L73">        return delegate.toBoolean(value, sourceFormat, targetFormat);</span>
+<span class="nc" id="L51">        return delegate.toBoolean(value, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link Byte}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.BYTE, concerns = {
             AtlasConversionConcern.RANGE, AtlasConversionConcern.FORMAT, AtlasConversionConcern.FRACTIONAL_PART})
     public Byte toByte(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L85">        return delegate.toByte(value);</span>
+<span class="nc" id="L57">        return delegate.toByte(value);</span>
     }
 
-    /**
-     * Converts to {@link Character}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or longer than one character
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.CHAR, concerns = AtlasConversionConcern.RANGE)
     public Character toCharacter(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L96">        return delegate.toCharacter(value);</span>
+<span class="nc" id="L62">        return delegate.toCharacter(value);</span>
     }
 
-    /**
-     * Converts to {@link Date}.
-     * @param date value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
     public Date toDate(StringBuffer date, String sourceFormat, String targetFormat) {
-<span class="nc" id="L108">        return delegate.toDate(date, sourceFormat, targetFormat);</span>
+<span class="nc" id="L67">        return delegate.toDate(date, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link Double}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DOUBLE, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Double toDouble(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L120">        return delegate.toDouble(value);</span>
+<span class="nc" id="L73">        return delegate.toDouble(value);</span>
     }
 
-    /**
-     * Converts to {@link Float}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.FLOAT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE })
     public Float toFloat(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L132">        return delegate.toFloat(value);</span>
+<span class="nc" id="L79">        return delegate.toFloat(value);</span>
     }
 
-    /**
-     * Converts to {@link Integer}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.INTEGER, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Integer toInteger(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L144">        return delegate.toInteger(value);</span>
+<span class="nc" id="L85">        return delegate.toInteger(value);</span>
     }
 
-    /**
-     * Converts to {@link LocalDate}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE)
     public LocalDate toLocalDate(StringBuffer value) {
-<span class="nc" id="L154">        return delegate.toLocalDate(value);</span>
+<span class="nc" id="L90">        return delegate.toLocalDate(value);</span>
     }
 
-    /**
-     * Converts to {@link LocalTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.TIME)
     public LocalTime toLocalTime(StringBuffer value) {
-<span class="nc" id="L164">        return delegate.toLocalTime(value);</span>
+<span class="nc" id="L95">        return delegate.toLocalTime(value);</span>
     }
 
-    /**
-     * Converts to {@link LocalDateTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME)
     public LocalDateTime toLocalDateTime(StringBuffer value) {
-<span class="nc" id="L174">        return delegate.toLocalDateTime(value);</span>
+<span class="nc" id="L100">        return delegate.toLocalDateTime(value);</span>
     }
 
-    /**
-     * Converts to {@link Long}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.LONG, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Long toLong(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L186">        return delegate.toLong(value);</span>
+<span class="nc" id="L106">        return delegate.toLong(value);</span>
     }
 
-    /**
-     * Converts to {@link Short}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.SHORT, concerns = {
             AtlasConversionConcern.FORMAT, AtlasConversionConcern.RANGE, AtlasConversionConcern.FRACTIONAL_PART })
     public Short toShort(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L198">        return delegate.toShort(value);</span>
+<span class="nc" id="L112">        return delegate.toShort(value);</span>
     }
 
-    /**
-     * Converts to {@link CharBuffer}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public CharBuffer toCharBuffer(StringBuffer value, String sourceFormat, String targetFormat) {
-<span class="nc" id="L210">        return delegate.toCharBuffer(value, sourceFormat, targetFormat);</span>
+<span class="nc" id="L117">        return delegate.toCharBuffer(value, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link CharSequence}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public CharSequence toCharSequence(StringBuffer value, String sourceFormat, String targetFormat) {
-<span class="nc" id="L222">        return delegate.toCharSequence(value, sourceFormat, targetFormat);</span>
+<span class="nc" id="L122">        return delegate.toCharSequence(value, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link String}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public String toString(StringBuffer value, String sourceFormat, String targetFormat) {
-<span class="nc" id="L234">        return delegate.toString(value, sourceFormat, targetFormat);</span>
+<span class="nc" id="L127">        return delegate.toString(value, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link StringBuffer}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public StringBuffer toStringBuffer(StringBuffer value, String sourceFormat, String targetFormat) {
-<span class="nc" id="L246">        return delegate.toStringBuffer(value, sourceFormat, targetFormat);</span>
+<span class="nc" id="L132">        return delegate.toStringBuffer(value, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link StringBuilder}.
-     * @param value value
-     * @param sourceFormat source format
-     * @param targetFormat target format
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.STRING)
     public StringBuilder toStringBuilder(StringBuffer value, String sourceFormat, String targetFormat) {
-<span class="fc" id="L258">        return delegate.toStringBuilder(value, sourceFormat, targetFormat);</span>
+<span class="fc" id="L137">        return delegate.toStringBuilder(value, sourceFormat, targetFormat);</span>
     }
 
-    /**
-     * Converts to {@link Number}.
-     * @param value value
-     * @return converted
-     * @throws AtlasConversionException out of range or not a number
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.NUMBER, concerns = {
             AtlasConversionConcern.FORMAT })
     public Number toNumber(StringBuffer value) throws AtlasConversionException {
-<span class="nc" id="L270">        return delegate.toNumber(value);</span>
+<span class="nc" id="L143">        return delegate.toNumber(value);</span>
     }
 
-    /**
-     * Converts to {@link ZonedDateTime}.
-     * @param value value
-     * @return converted
-     */
     @AtlasConversionInfo(sourceType = FieldType.STRING, targetType = FieldType.DATE_TIME_TZ)
     public ZonedDateTime toZonedDateTime(StringBuffer value) {
-<span class="nc" id="L280">        return delegate.toZonedDateTime(value);</span>
+<span class="nc" id="L148">        return delegate.toZonedDateTime(value);</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

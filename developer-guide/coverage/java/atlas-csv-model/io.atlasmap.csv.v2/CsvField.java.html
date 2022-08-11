@@ -20,42 +20,26 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.Field;
 
-/**
- * The CSV field.
- */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L27">public class CsvField extends Field {</span>
+<span class="fc" id="L24">public class CsvField extends Field {</span>
 
     private static final long serialVersionUID = 1L;
-    /** Column index. */
+
     private Integer column;
 
-    /**
-     * Sets the column index.
-     * @param column index
-     */
     public void setColumn(Integer column) {
-<span class="fc" id="L38">        this.column = column;</span>
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L31">        this.column = column;</span>
+<span class="fc" id="L32">    }</span>
 
-    /**
-     * Gets the column index.
-     * @return index
-     */
     public Integer getColumn() {
-<span class="fc" id="L46">        return column;</span>
+<span class="fc" id="L35">        return column;</span>
     }
 
-    /**
-     * Clones the CSV field.
-     * @param field field
-     * @return cloned
-     */
     public static CsvField cloneOf(CsvField field) {
-<span class="fc" id="L55">        CsvField newField = new CsvField();</span>
-<span class="fc" id="L56">        AtlasModelFactory.copyField(field, newField, true);</span>
-<span class="fc" id="L57">        newField.setColumn(field.getColumn());</span>
-<span class="fc" id="L58">        return newField;</span>
+<span class="fc" id="L39">        CsvField newField = new CsvField();</span>
+<span class="fc" id="L40">        AtlasModelFactory.copyField(field, newField, true);</span>
+<span class="fc" id="L41">        newField.setColumn(field.getColumn());</span>
+<span class="fc" id="L42">        return newField;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

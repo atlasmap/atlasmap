@@ -56,683 +56,568 @@ import org.slf4j.LoggerFactory;
 
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.core.AtlasPath.SegmentContext;
-import io.atlasmap.core.AtlasUtil;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.v2.CollectionType;
 
-/**
- * The utility class for {@link JavaFieldWriter}.
- * TODO: Migrate with {@link io.atlasmap.java.core.accessor.JavaChildAccessor}
- */
 public class JavaFieldWriterUtil {
-<span class="fc" id="L68">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldWriterUtil.class);</span>
-<span class="fc" id="L69">    private AtlasConversionService conversionService = null;</span>
+<span class="fc" id="L63">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(JavaFieldWriterUtil.class);</span>
+<span class="fc" id="L64">    private AtlasConversionService conversionService = null;</span>
     private ClassLoader classLoader;
-<span class="fc" id="L71">    private Map&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt; defaultCollectionImplClasses = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L66">    private Map&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt; defaultCollectionImplClasses = new HashMap&lt;&gt;();</span>
 
-    /**
-     * A constructor.
-     * @param conversionService conversion service
-     */
     public JavaFieldWriterUtil(AtlasConversionService conversionService) {
-<span class="fc" id="L78">        this(Thread.currentThread().getContextClassLoader(), conversionService);</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L69">        this(Thread.currentThread().getContextClassLoader(), conversionService);</span>
+<span class="fc" id="L70">    }</span>
 
-    /**
-     * A constructor.
-     * @param classLoader class loader
-     * @param conversionService conversion service
-     */
-<span class="fc" id="L86">    public JavaFieldWriterUtil(ClassLoader classLoader, AtlasConversionService conversionService) {</span>
-<span class="fc" id="L87">        this.conversionService = conversionService;</span>
-<span class="fc" id="L88">        this.classLoader = classLoader;</span>
-<span class="fc" id="L89">        defaultCollectionImplClasses.put(BeanContext.class, BeanContextServicesSupport.class);</span>
-<span class="fc" id="L90">        defaultCollectionImplClasses.put(BeanContextServices.class, BeanContextServicesSupport.class);</span>
-<span class="fc" id="L91">        defaultCollectionImplClasses.put(BlockingDeque.class, LinkedBlockingDeque.class);</span>
-<span class="fc" id="L92">        defaultCollectionImplClasses.put(BlockingQueue.class, LinkedBlockingQueue.class);</span>
-<span class="fc" id="L93">        defaultCollectionImplClasses.put(Collection.class, LinkedList.class);</span>
-<span class="fc" id="L94">        defaultCollectionImplClasses.put(ConcurrentMap.class, ConcurrentHashMap.class);</span>
-<span class="fc" id="L95">        defaultCollectionImplClasses.put(ConcurrentNavigableMap.class, ConcurrentSkipListMap.class);</span>
-<span class="fc" id="L96">        defaultCollectionImplClasses.put(Deque.class, ArrayDeque.class);</span>
-<span class="fc" id="L97">        defaultCollectionImplClasses.put(List.class, LinkedList.class);</span>
-<span class="fc" id="L98">        defaultCollectionImplClasses.put(Map.class, HashMap.class);</span>
-<span class="fc" id="L99">        defaultCollectionImplClasses.put(NavigableSet.class, TreeSet.class);</span>
-<span class="fc" id="L100">        defaultCollectionImplClasses.put(NavigableMap.class, TreeMap.class);</span>
-<span class="fc" id="L101">        defaultCollectionImplClasses.put(Queue.class, LinkedList.class);</span>
-<span class="fc" id="L102">        defaultCollectionImplClasses.put(Set.class, HashSet.class);</span>
-<span class="fc" id="L103">        defaultCollectionImplClasses.put(SortedSet.class, TreeSet.class);</span>
-<span class="fc" id="L104">        defaultCollectionImplClasses.put(SortedMap.class, TreeMap.class);</span>
-<span class="fc" id="L105">        defaultCollectionImplClasses.put(TransferQueue.class, LinkedTransferQueue.class);</span>
-<span class="fc" id="L106">    }</span>
+<span class="fc" id="L72">    public JavaFieldWriterUtil(ClassLoader classLoader, AtlasConversionService conversionService) {</span>
+<span class="fc" id="L73">        this.conversionService = conversionService;</span>
+<span class="fc" id="L74">        this.classLoader = classLoader;</span>
+<span class="fc" id="L75">        defaultCollectionImplClasses.put(BeanContext.class, BeanContextServicesSupport.class);</span>
+<span class="fc" id="L76">        defaultCollectionImplClasses.put(BeanContextServices.class, BeanContextServicesSupport.class);</span>
+<span class="fc" id="L77">        defaultCollectionImplClasses.put(BlockingDeque.class, LinkedBlockingDeque.class);</span>
+<span class="fc" id="L78">        defaultCollectionImplClasses.put(BlockingQueue.class, LinkedBlockingQueue.class);</span>
+<span class="fc" id="L79">        defaultCollectionImplClasses.put(Collection.class, LinkedList.class);</span>
+<span class="fc" id="L80">        defaultCollectionImplClasses.put(ConcurrentMap.class, ConcurrentHashMap.class);</span>
+<span class="fc" id="L81">        defaultCollectionImplClasses.put(ConcurrentNavigableMap.class, ConcurrentSkipListMap.class);</span>
+<span class="fc" id="L82">        defaultCollectionImplClasses.put(Deque.class, ArrayDeque.class);</span>
+<span class="fc" id="L83">        defaultCollectionImplClasses.put(List.class, LinkedList.class);</span>
+<span class="fc" id="L84">        defaultCollectionImplClasses.put(Map.class, HashMap.class);</span>
+<span class="fc" id="L85">        defaultCollectionImplClasses.put(NavigableSet.class, TreeSet.class);</span>
+<span class="fc" id="L86">        defaultCollectionImplClasses.put(NavigableMap.class, TreeMap.class);</span>
+<span class="fc" id="L87">        defaultCollectionImplClasses.put(Queue.class, LinkedList.class);</span>
+<span class="fc" id="L88">        defaultCollectionImplClasses.put(Set.class, HashSet.class);</span>
+<span class="fc" id="L89">        defaultCollectionImplClasses.put(SortedSet.class, TreeSet.class);</span>
+<span class="fc" id="L90">        defaultCollectionImplClasses.put(SortedMap.class, TreeMap.class);</span>
+<span class="fc" id="L91">        defaultCollectionImplClasses.put(TransferQueue.class, LinkedTransferQueue.class);</span>
+<span class="fc" id="L92">    }</span>
 
-    /**
-     * Instantiates the class.
-     * @param clz class
-     * @return instantiated
-     * @throws AtlasException unexpected error
-     */
     public Object instantiateObject(Class&lt;?&gt; clz) throws AtlasException {
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (clz == null) {</span>
-<span class="fc" id="L116">            throw new AtlasException(&quot;Cannot instantiate null class&quot;);</span>
+<span class="fc bfc" id="L95" title="All 2 branches covered.">        if (clz == null) {</span>
+<span class="fc" id="L96">            throw new AtlasException(&quot;Cannot instantiate null class&quot;);</span>
         }
         // TODO https://github.com/atlasmap/atlasmap/issues/48
         // - Allow default implementation for abstract target field
         // TODO support hierarchical class loader
-<span class="fc" id="L121">        Class&lt;?&gt; clazz = clz;</span>
-<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
-<span class="fc" id="L123">            return Array.newInstance(clazz.getComponentType(), 0);</span>
+<span class="fc" id="L101">        Class&lt;?&gt; clazz = clz;</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (clazz.isArray()) {</span>
+<span class="fc" id="L103">            return Array.newInstance(clazz.getComponentType(), 0);</span>
         }
 
-<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (this.defaultCollectionImplClasses.get(clazz) != null) {</span>
-<span class="fc" id="L127">            clazz = this.defaultCollectionImplClasses.get(clazz);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (this.defaultCollectionImplClasses.get(clazz) != null) {</span>
+<span class="fc" id="L107">            clazz = this.defaultCollectionImplClasses.get(clazz);</span>
         }
         try {
-<span class="fc" id="L130">            Constructor&lt;?&gt; constructor = null;</span>
-<span class="pc bpc" id="L131" title="1 of 4 branches missed.">            if (clazz.getEnclosingClass() != null &amp;&amp; !Modifier.isStatic(clazz.getModifiers())) {</span>
+<span class="fc" id="L110">            Constructor&lt;?&gt; constructor = null;</span>
+<span class="pc bpc" id="L111" title="1 of 4 branches missed.">            if (clazz.getEnclosingClass() != null &amp;&amp; !Modifier.isStatic(clazz.getModifiers())) {</span>
                 // Nested class requires an instance of enclosing class to instantiate
-<span class="nc" id="L133">                Object enclosing = clazz.getEnclosingClass()</span>
-<span class="nc" id="L134">                                        .getDeclaredConstructor(new Class[0])</span>
-<span class="nc" id="L135">                                        .newInstance(new Object[0]);</span>
-<span class="nc" id="L136">                constructor = clazz.getDeclaredConstructor(new Class[] { enclosing.getClass() });</span>
-<span class="nc" id="L137">                constructor.setAccessible(true);</span>
-<span class="nc" id="L138">                return constructor.newInstance(new Object[] { enclosing });</span>
+<span class="nc" id="L113">                Object enclosing = clazz.getEnclosingClass()</span>
+<span class="nc" id="L114">                                        .getDeclaredConstructor(new Class[0])</span>
+<span class="nc" id="L115">                                        .newInstance(new Object[0]);</span>
+<span class="nc" id="L116">                constructor = clazz.getDeclaredConstructor(new Class[] { enclosing.getClass() });</span>
+<span class="nc" id="L117">                constructor.setAccessible(true);</span>
+<span class="nc" id="L118">                return constructor.newInstance(new Object[] { enclosing });</span>
             } else {
-<span class="fc" id="L140">                constructor = clazz.getDeclaredConstructor(new Class[0]);</span>
-<span class="fc" id="L141">                constructor.setAccessible(true);</span>
-<span class="fc" id="L142">                return constructor.newInstance(new Object[0]);</span>
+<span class="fc" id="L120">                constructor = clazz.getDeclaredConstructor(new Class[0]);</span>
+<span class="fc" id="L121">                constructor.setAccessible(true);</span>
+<span class="fc" id="L122">                return constructor.newInstance(new Object[0]);</span>
             }
-<span class="fc" id="L144">        } catch (Exception e) {</span>
-<span class="fc" id="L145">            throw new AtlasException(&quot;Could not instantiate class: &quot; + clazz.getName(), e);</span>
+<span class="fc" id="L124">        } catch (Exception e) {</span>
+<span class="fc" id="L125">            throw new AtlasException(&quot;Could not instantiate class: &quot; + clazz.getName(), e);</span>
         }
     }
 
-    /**
-     * Loads the class.
-     * @param name name
-     * @return loaded
-     * @throws AtlasException unexpected error
-     */
     public Class&lt;?&gt; loadClass(String name) throws AtlasException {
         try {
-<span class="fc" id="L157">            return this.classLoader.loadClass(name);</span>
-<span class="fc" id="L158">        } catch (Exception e) {</span>
-<span class="fc" id="L159">            throw new AtlasException(e);</span>
+<span class="fc" id="L131">            return this.classLoader.loadClass(name);</span>
+<span class="fc" id="L132">        } catch (Exception e) {</span>
+<span class="fc" id="L133">            throw new AtlasException(e);</span>
         }
     }
 
-    /**
-     * Gets the default collection implementation class.
-     * @param type collection type
-     * @return class
-     */
     public Class&lt;?&gt; getDefaultCollectionImplClass(CollectionType type) {
-<span class="fc bfc" id="L169" title="All 2 branches covered.">        if (type == CollectionType.LIST) {</span>
-<span class="fc" id="L170">            return this.defaultCollectionImplClasses.get(List.class);</span>
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        } else if (type == CollectionType.MAP) {</span>
-<span class="fc" id="L172">            return this.defaultCollectionImplClasses.get(Map.class);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (type == CollectionType.LIST) {</span>
+<span class="fc" id="L139">            return this.defaultCollectionImplClasses.get(List.class);</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">        } else if (type == CollectionType.MAP) {</span>
+<span class="fc" id="L141">            return this.defaultCollectionImplClasses.get(Map.class);</span>
         }
-<span class="fc" id="L174">        return null;</span>
+<span class="fc" id="L143">        return null;</span>
     }
 
-    /**
-     * Gets the child object.
-     * @param parentObject parent
-     * @param segment segment
-     * @return child
-     * @throws AtlasException unexpected error
-     */
     public Object getChildObject(Object parentObject, SegmentContext segment) throws AtlasException {
-<span class="fc" id="L185">        String fieldName = segment.getName();</span>
-<span class="pc bpc" id="L186" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L187">            LOG.debug(</span>
+<span class="fc" id="L147">        String fieldName = segment.getName();</span>
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L149">            LOG.debug(</span>
                     &quot;Retrieving child '&quot; + fieldName + &quot;'.\n\tparentObject: &quot; + parentObject);
         }
 
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (parentObject == null) {</span>
-<span class="nc bnc" id="L192" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L193">                LOG.debug(&quot;Cannot find child '&quot; + fieldName + &quot;', parent is null.&quot;);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (parentObject == null) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L155">                LOG.debug(&quot;Cannot find child '&quot; + fieldName + &quot;', parent is null.&quot;);</span>
             }
-<span class="nc" id="L195">            return null;</span>
+<span class="nc" id="L157">            return null;</span>
         }
 
-<span class="fc" id="L198">        Method getterMethod = resolveGetterMethod(parentObject.getClass(), fieldName);</span>
-<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (getterMethod == null) {</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L201">                LOG.debug(String.format(</span>
+<span class="fc" id="L160">        Method getterMethod = resolveGetterMethod(parentObject.getClass(), fieldName);</span>
+<span class="fc bfc" id="L161" title="All 2 branches covered.">        if (getterMethod == null) {</span>
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L163">                LOG.debug(String.format(</span>
                         &quot;Unable to detect getter method for: %s on parent: %s&quot;,
                         fieldName, parentObject));
             }
-<span class="fc" id="L205">            return null;</span>
+<span class="fc" id="L167">            return null;</span>
         }
 
-<span class="fc" id="L208">        getterMethod.setAccessible(true);</span>
+<span class="fc" id="L170">        getterMethod.setAccessible(true);</span>
         Object childObject;
         try {
-<span class="fc" id="L211">            childObject = getterMethod.invoke(parentObject);</span>
-<span class="nc" id="L212">        } catch (Exception e) {</span>
-<span class="nc" id="L213">            throw new AtlasException(e);</span>
-<span class="fc" id="L214">        }</span>
+<span class="fc" id="L173">            childObject = getterMethod.invoke(parentObject);</span>
+<span class="nc" id="L174">        } catch (Exception e) {</span>
+<span class="nc" id="L175">            throw new AtlasException(e);</span>
+<span class="fc" id="L176">        }</span>
 
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L217" title="All 2 branches missed.">            if (childObject == null) {</span>
-<span class="nc" id="L218">                LOG.debug(&quot;Could not find child object for path: &quot; + fieldName);</span>
+<span class="pc bpc" id="L178" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">            if (childObject == null) {</span>
+<span class="nc" id="L180">                LOG.debug(&quot;Could not find child object for path: &quot; + fieldName);</span>
             } else {
-<span class="nc" id="L220">                LOG.debug(&quot;Found child object for path '&quot; + fieldName + &quot;': &quot; + childObject);</span>
+<span class="nc" id="L182">                LOG.debug(&quot;Found child object for path '&quot; + fieldName + &quot;': &quot; + childObject);</span>
             }
         }
 
-<span class="fc" id="L224">        return childObject;</span>
+<span class="fc" id="L186">        return childObject;</span>
     }
 
-    /**
-     * Creates the complex child object.
-     * @param parentObject parent
-     * @param segmentContext segment
-     * @param clazz class
-     * @return created
-     * @throws AtlasException unexpected error
-     */
     public Object createComplexChildObject(Object parentObject, SegmentContext segmentContext, Class&lt;?&gt; clazz) throws AtlasException {
-<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L237">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {} \n\tclass: {}&quot;,</span>
-<span class="nc" id="L238">            segmentContext, parentObject, clazz.getName());</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L191">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {} \n\tclass: {}&quot;,</span>
+<span class="nc" id="L192">            segmentContext, parentObject, clazz.getName());</span>
         }
 
         try {
-<span class="fc" id="L242">            Method setterMethod = resolveSetterMethod(parentObject, segmentContext, null);</span>
-<span class="fc" id="L243">            Object targetObject = instantiateObject(clazz);</span>
-<span class="fc" id="L244">            setterMethod.setAccessible(true);</span>
-<span class="fc" id="L245">            setterMethod.invoke(parentObject, targetObject);</span>
-<span class="fc" id="L246">            return targetObject;</span>
-<span class="nc" id="L247">        } catch (Exception e) {</span>
+<span class="fc" id="L196">            Method setterMethod = resolveSetterMethod(parentObject, segmentContext, null);</span>
+<span class="fc" id="L197">            Object targetObject = instantiateObject(clazz);</span>
+<span class="fc" id="L198">            setterMethod.setAccessible(true);</span>
+<span class="fc" id="L199">            setterMethod.invoke(parentObject, targetObject);</span>
+<span class="fc" id="L200">            return targetObject;</span>
+<span class="nc" id="L201">        } catch (Exception e) {</span>
             try {
-<span class="nc" id="L249">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
-<span class="nc" id="L250">                field.setAccessible(true);</span>
-<span class="nc" id="L251">                Object targetObject = instantiateObject(clazz);</span>
-<span class="nc" id="L252">                field.set(parentObject, targetObject);</span>
-<span class="nc" id="L253">                return targetObject;</span>
-<span class="nc" id="L254">            } catch (Exception e2) {</span>
-<span class="nc bnc" id="L255" title="All 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="nc" id="L256">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
+<span class="nc" id="L203">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
+<span class="nc" id="L204">                field.setAccessible(true);</span>
+<span class="nc" id="L205">                Object targetObject = instantiateObject(clazz);</span>
+<span class="nc" id="L206">                field.set(parentObject, targetObject);</span>
+<span class="nc" id="L207">                return targetObject;</span>
+<span class="nc" id="L208">            } catch (Exception e2) {</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="nc" id="L210">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
                         + parentClassName, e2);
             }
         }
     }
 
-    /**
-     * Creates the complex child object.
-     * @param parentObject parent
-     * @param segmentContext segment
-     * @return created
-     * @throws AtlasException unexpected error
-     */
     public Object createComplexChildObject(Object parentObject, SegmentContext segmentContext) throws AtlasException {
-<span class="pc bpc" id="L270" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L271">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {}&quot;, segmentContext, parentObject);</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L218">            LOG.debug(&quot;Creating object for segment:'{} \n\tparentObject: {}&quot;, segmentContext, parentObject);</span>
         }
 
         Class&lt;?&gt; clazz;
         try {
-<span class="fc" id="L276">            Method setterMethod = resolveSetterMethod(parentObject, segmentContext, null);</span>
-<span class="fc" id="L277">            clazz = setterMethod.getParameterTypes()[0];</span>
-<span class="fc" id="L278">            Object targetObject = instantiateObject(clazz);</span>
-<span class="fc" id="L279">            setterMethod.setAccessible(true);</span>
-<span class="fc" id="L280">            setterMethod.invoke(parentObject, targetObject);</span>
-<span class="fc" id="L281">            return targetObject;</span>
-<span class="fc" id="L282">        } catch (Exception e) {</span>
+<span class="fc" id="L223">            Method setterMethod = resolveSetterMethod(parentObject, segmentContext, null);</span>
+<span class="fc" id="L224">            clazz = setterMethod.getParameterTypes()[0];</span>
+<span class="fc" id="L225">            Object targetObject = instantiateObject(clazz);</span>
+<span class="fc" id="L226">            setterMethod.setAccessible(true);</span>
+<span class="fc" id="L227">            setterMethod.invoke(parentObject, targetObject);</span>
+<span class="fc" id="L228">            return targetObject;</span>
+<span class="fc" id="L229">        } catch (Exception e) {</span>
             try {
-<span class="fc" id="L284">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
-<span class="nc" id="L285">                field.setAccessible(true);</span>
-<span class="nc" id="L286">                clazz = field.getType();</span>
-<span class="nc" id="L287">                Object targetObject = instantiateObject(clazz);</span>
-<span class="nc" id="L288">                field.set(parentObject, targetObject);</span>
-<span class="nc" id="L289">                return targetObject;</span>
-<span class="fc" id="L290">            } catch (Exception e2) {</span>
-<span class="pc bpc" id="L291" title="1 of 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="fc" id="L292">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
+<span class="fc" id="L231">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
+<span class="nc" id="L232">                field.setAccessible(true);</span>
+<span class="nc" id="L233">                clazz = field.getType();</span>
+<span class="nc" id="L234">                Object targetObject = instantiateObject(clazz);</span>
+<span class="nc" id="L235">                field.set(parentObject, targetObject);</span>
+<span class="nc" id="L236">                return targetObject;</span>
+<span class="fc" id="L237">            } catch (Exception e2) {</span>
+<span class="pc bpc" id="L238" title="1 of 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="fc" id="L239">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segmentContext.getExpression() + &quot; parentObject: &quot;</span>
                         + parentClassName, e2);
             }
         }
     }
 
-    /**
-     * Sets the child object.
-     * @param parentObject parent
-     * @param childObject child
-     * @param segmentContext segment
-     * @throws AtlasException unexpected error
-     */
     public void setChildObject(Object parentObject, Object childObject, SegmentContext segmentContext) throws AtlasException {
-<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L307">            LOG.debug(&quot;Setting object for segment:'&quot; + segmentContext.getExpression() + &quot;'.\n\tchildObject: &quot; + childObject</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L247">            LOG.debug(&quot;Setting object for segment:'&quot; + segmentContext.getExpression() + &quot;'.\n\tchildObject: &quot; + childObject</span>
                     + &quot;\n\tparentObject: &quot; + parentObject);
         }
 
         try {
-<span class="fc bfc" id="L312" title="All 2 branches covered.">            Class&lt;?&gt; childClass = childObject == null ? null : childObject.getClass();</span>
-<span class="fc" id="L313">            Object targetObject = parentObject;</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">            Class&lt;?&gt; childClass = childObject == null ? null : childObject.getClass();</span>
+<span class="fc" id="L253">            Object targetObject = parentObject;</span>
             try {
-<span class="fc" id="L315">                Method setterMethod = resolveSetterMethod(parentObject, segmentContext, childClass);</span>
-<span class="fc" id="L316">                Class&lt;?&gt; targetClass = setterMethod.getParameterTypes()[0];</span>
+<span class="fc" id="L255">                Method setterMethod = resolveSetterMethod(parentObject, segmentContext, childClass);</span>
+<span class="fc" id="L256">                Class&lt;?&gt; targetClass = setterMethod.getParameterTypes()[0];</span>
 
-<span class="fc bfc" id="L318" title="All 2 branches covered.">                if (childObject != null) {</span>
-<span class="fc" id="L319">                    childObject = conversionService.convertType(childObject, null, targetClass, null);</span>
+<span class="fc bfc" id="L258" title="All 2 branches covered.">                if (childObject != null) {</span>
+<span class="fc" id="L259">                    childObject = conversionService.convertType(childObject, null, targetClass, null);</span>
                 }
 
                 // We already know we have a 1 paramter setter here
-<span class="pc bpc" id="L323" title="1 of 4 branches missed.">                if (childObject == null &amp;&amp; conversionService.isPrimitive(targetClass)) {</span>
-<span class="nc bnc" id="L324" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L325">                        LOG.debug(&quot;Not setting null value for primitive method paramter for segment:'&quot; + segmentContext.getExpression()</span>
+<span class="pc bpc" id="L263" title="1 of 4 branches missed.">                if (childObject == null &amp;&amp; conversionService.isPrimitive(targetClass)) {</span>
+<span class="nc bnc" id="L264" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L265">                        LOG.debug(&quot;Not setting null value for primitive method paramter for segment:'&quot; + segmentContext.getExpression()</span>
                                 + &quot;'.\n\tchildObject: &quot; + childObject + &quot;\n\tparentObject: &quot; + parentObject);
                     }
-<span class="nc" id="L328">                    return;</span>
+<span class="nc" id="L268">                    return;</span>
                 }
-<span class="fc" id="L330">                setterMethod.setAccessible(true);</span>
-<span class="fc" id="L331">                setterMethod.invoke(targetObject, childObject);</span>
-<span class="fc" id="L332">            } catch (Exception e) {</span>
-<span class="fc" id="L333">                java.lang.reflect.Field field = resolveField(targetObject.getClass(), segmentContext.getName());</span>
-<span class="pc bpc" id="L334" title="1 of 2 branches missed.">                if (field == null) {</span>
-<span class="nc bnc" id="L335" title="All 2 branches missed.">                    String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="nc bnc" id="L336" title="All 2 branches missed.">                    String childClassName = childObject == null ? null : childObject.getClass().getName();</span>
-<span class="nc" id="L337">                    throw new AtlasException(String.format(</span>
+<span class="fc" id="L270">                setterMethod.setAccessible(true);</span>
+<span class="fc" id="L271">                setterMethod.invoke(targetObject, childObject);</span>
+<span class="fc" id="L272">            } catch (Exception e) {</span>
+<span class="fc" id="L273">                java.lang.reflect.Field field = resolveField(targetObject.getClass(), segmentContext.getName());</span>
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">                if (field == null) {</span>
+<span class="nc bnc" id="L275" title="All 2 branches missed.">                    String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">                    String childClassName = childObject == null ? null : childObject.getClass().getName();</span>
+<span class="nc" id="L277">                    throw new AtlasException(String.format(</span>
                         &quot;Unable to set value for segment: %s parentObject: %s childObject: %s&quot;,
-<span class="nc" id="L339">                    segmentContext.getExpression(), parentClassName, childClassName), e);</span>
+<span class="nc" id="L279">                    segmentContext.getExpression(), parentClassName, childClassName), e);</span>
                 }
-<span class="pc bpc" id="L341" title="1 of 2 branches missed.">                if (childObject != null) {</span>
-<span class="fc" id="L342">                    childObject = conversionService.convertType(childObject, null, field.getType(), null);</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">                if (childObject != null) {</span>
+<span class="fc" id="L282">                    childObject = conversionService.convertType(childObject, null, field.getType(), null);</span>
                 }
-<span class="pc bpc" id="L344" title="3 of 4 branches missed.">                if (childObject == null &amp;&amp; conversionService.isPrimitive(field.getType())) {</span>
-<span class="nc bnc" id="L345" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L346">                        LOG.debug(&quot;Not setting null value for primitive method paramter for segment:'&quot; + segmentContext.getExpression()</span>
+<span class="pc bpc" id="L284" title="3 of 4 branches missed.">                if (childObject == null &amp;&amp; conversionService.isPrimitive(field.getType())) {</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L286">                        LOG.debug(&quot;Not setting null value for primitive method paramter for segment:'&quot; + segmentContext.getExpression()</span>
                                 + &quot;'.\n\tchildObject: &quot; + childObject + &quot;\n\tparentObject: &quot; + parentObject);
                     }
-<span class="nc" id="L349">                    return;</span>
+<span class="nc" id="L289">                    return;</span>
                 }
-<span class="fc" id="L351">                field.setAccessible(true);</span>
-<span class="fc" id="L352">                field.set(targetObject, childObject);</span>
-<span class="fc" id="L353">            }</span>
-<span class="nc" id="L354">        } catch (Exception e) {</span>
-<span class="nc bnc" id="L355" title="All 2 branches missed.">            String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="nc bnc" id="L356" title="All 2 branches missed.">            String childClassName = childObject == null ? null : childObject.getClass().getName();</span>
-<span class="nc" id="L357">            throw new AtlasException(String.format(</span>
+<span class="fc" id="L291">                field.setAccessible(true);</span>
+<span class="fc" id="L292">                field.set(targetObject, childObject);</span>
+<span class="fc" id="L293">            }</span>
+<span class="nc" id="L294">        } catch (Exception e) {</span>
+<span class="nc bnc" id="L295" title="All 2 branches missed.">            String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="nc bnc" id="L296" title="All 2 branches missed.">            String childClassName = childObject == null ? null : childObject.getClass().getName();</span>
+<span class="nc" id="L297">            throw new AtlasException(String.format(</span>
                 &quot;Unable to set value for segment: %s parentObject: %s childObject: %s&quot;,
                 segmentContext, parentClassName, childClassName), e);
-<span class="fc" id="L360">        }</span>
-<span class="fc" id="L361">    }</span>
+<span class="fc" id="L300">        }</span>
+<span class="fc" id="L301">    }</span>
 
-    /**
-     * Resolves the child class.
-     * @param parentObject parent
-     * @param segment segment
-     * @return class
-     * @throws AtlasException unexpected error
-     */
     public Class&lt;?&gt; resolveChildClass(Object parentObject, SegmentContext segment) throws AtlasException {
         try {
-<span class="fc" id="L372">            Method setterMethod = resolveSetterMethod(parentObject, segment, null);</span>
-<span class="fc" id="L373">            return setterMethod.getParameterTypes()[0];</span>
-<span class="nc" id="L374">        } catch (NoSuchMethodException e) {</span>
+<span class="fc" id="L305">            Method setterMethod = resolveSetterMethod(parentObject, segment, null);</span>
+<span class="fc" id="L306">            return setterMethod.getParameterTypes()[0];</span>
+<span class="nc" id="L307">        } catch (NoSuchMethodException e) {</span>
             try {
-<span class="nc" id="L376">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segment.getName());</span>
-<span class="nc" id="L377">                field.setAccessible(true);</span>
-<span class="nc" id="L378">                return field.getType();</span>
-<span class="nc" id="L379">            } catch (Exception e2) {</span>
-<span class="nc bnc" id="L380" title="All 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
-<span class="nc" id="L381">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segment + &quot; parentObject: &quot;</span>
+<span class="nc" id="L309">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segment.getName());</span>
+<span class="nc" id="L310">                field.setAccessible(true);</span>
+<span class="nc" id="L311">                return field.getType();</span>
+<span class="nc" id="L312">            } catch (Exception e2) {</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">                String parentClassName = parentObject == null ? null : parentObject.getClass().getName();</span>
+<span class="nc" id="L314">                throw new AtlasException(&quot;Unable to create value for segment: &quot; + segment + &quot; parentObject: &quot;</span>
                         + parentClassName, e2);
             }
         }
     }
 
-    /**
-     * Gets the collection item.
-     * @param collectionObject collection
-     * @param segmentContext segment
-     * @return item
-     * @throws AtlasException unexpected error
-     */
     public Object getCollectionItem(Object collectionObject, SegmentContext segmentContext) throws AtlasException {
-<span class="fc" id="L395">        Integer index = segmentContext.getCollectionIndex();</span>
-<span class="pc bpc" id="L396" title="1 of 2 branches missed.">        if (index == null) {</span>
-<span class="nc" id="L397">            return new AtlasException(&quot;Collection item is requested without an index&quot;);</span>
+<span class="fc" id="L321">        Integer index = segmentContext.getCollectionIndex();</span>
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">        if (index == null) {</span>
+<span class="nc" id="L323">            return new AtlasException(&quot;Collection item is requested without an index&quot;);</span>
         }
-<span class="fc bfc" id="L399" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.ARRAY) {</span>
-<span class="fc bfc" id="L400" title="All 2 branches covered.">            return Array.getLength(collectionObject) &gt; index ? Array.get(collectionObject, index) : null;</span>
-<span class="pc bpc" id="L401" title="1 of 2 branches missed.">        } else if (segmentContext.getCollectionType() == CollectionType.LIST) {</span>
-<span class="pc bpc" id="L402" title="1 of 2 branches missed.">            if (collectionObject instanceof List) {</span>
-<span class="fc" id="L403">                List&lt;?&gt; list = (List&lt;?&gt;)collectionObject;</span>
-<span class="fc bfc" id="L404" title="All 2 branches covered.">                return list.size() &gt; index ? list.get(index) : null;</span>
+<span class="fc bfc" id="L325" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.ARRAY) {</span>
+<span class="fc bfc" id="L326" title="All 2 branches covered.">            return Array.getLength(collectionObject) &gt; index ? Array.get(collectionObject, index) : null;</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        } else if (segmentContext.getCollectionType() == CollectionType.LIST) {</span>
+<span class="pc bpc" id="L328" title="1 of 2 branches missed.">            if (collectionObject instanceof List) {</span>
+<span class="fc" id="L329">                List&lt;?&gt; list = (List&lt;?&gt;)collectionObject;</span>
+<span class="fc bfc" id="L330" title="All 2 branches covered.">                return list.size() &gt; index ? list.get(index) : null;</span>
             } else {
-<span class="nc" id="L406">                LOG.warn(&quot;Converting non-List Collection into array - order might not be preserved: segment={}&quot;,</span>
-<span class="nc" id="L407">                    segmentContext.getExpression());</span>
-<span class="nc" id="L408">                Object[] array = ((Collection&lt;?&gt;)collectionObject).toArray();</span>
-<span class="nc bnc" id="L409" title="All 2 branches missed.">                return array.length &gt; index ? array[index] : null;</span>
+<span class="nc" id="L332">                LOG.warn(&quot;Converting non-List Collection into array - order might not be preserved: segment={}&quot;,</span>
+<span class="nc" id="L333">                    segmentContext.getExpression());</span>
+<span class="nc" id="L334">                Object[] array = ((Collection&lt;?&gt;)collectionObject).toArray();</span>
+<span class="nc bnc" id="L335" title="All 2 branches missed.">                return array.length &gt; index ? array[index] : null;</span>
             }
-<span class="nc bnc" id="L411" title="All 2 branches missed.">        } else if (segmentContext.getCollectionType() == CollectionType.MAP) {</span>
-<span class="nc" id="L412">            throw new AtlasException(&quot;TODO: java.util.Map is not yet supported, segment: &quot; + segmentContext.getExpression());</span>
+<span class="nc bnc" id="L337" title="All 2 branches missed.">        } else if (segmentContext.getCollectionType() == CollectionType.MAP) {</span>
+<span class="nc" id="L338">            throw new AtlasException(&quot;TODO: java.util.Map is not yet supported, segment: &quot; + segmentContext.getExpression());</span>
         }
-<span class="nc" id="L414">        throw new AtlasException(&quot;Cannot determine collection type from segment: &quot; + segmentContext.getExpression());</span>
+<span class="nc" id="L340">        throw new AtlasException(&quot;Cannot determine collection type from segment: &quot; + segmentContext.getExpression());</span>
     }
 
-    /**
-     * Adjusts the collection size.
-     * @param collectionObject collection
-     * @param segmentContext segment
-     * @return adjusted
-     * @throws AtlasException unexpected error
-     */
     public Object adjustCollectionSize(Object collectionObject, SegmentContext segmentContext) throws AtlasException {
-<span class="fc" id="L425">        Object answer = collectionObject;</span>
-<span class="fc" id="L426">        Integer index = segmentContext.getCollectionIndex();</span>
-<span class="fc bfc" id="L427" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.MAP) {</span>
-<span class="fc" id="L428">            LOG.warn(&quot;It doesn't make sense to adjust the size of {}, Ignoring... {}&quot;, CollectionType.MAP, segmentContext);</span>
-<span class="fc" id="L429">            return answer;</span>
+<span class="fc" id="L344">        Object answer = collectionObject;</span>
+<span class="fc" id="L345">        Integer index = segmentContext.getCollectionIndex();</span>
+<span class="fc bfc" id="L346" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.MAP) {</span>
+<span class="fc" id="L347">            LOG.warn(&quot;It doesn't make sense to adjust the size of {}, Ignoring... {}&quot;, CollectionType.MAP, segmentContext);</span>
+<span class="fc" id="L348">            return answer;</span>
         }
-<span class="pc bpc" id="L431" title="1 of 2 branches missed.">        if (index == null) {</span>
-<span class="nc" id="L432">            throw new AtlasException(String.format(</span>
-<span class="nc" id="L433">                    &quot;No index was specified for adjusting collection size, segment=%s&quot;, segmentContext.getExpression()));</span>
+<span class="pc bpc" id="L350" title="1 of 2 branches missed.">        if (index == null) {</span>
+<span class="nc" id="L351">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L352">                    &quot;No index was specified for adjusting collection size, segment=%s&quot;, segmentContext.getExpression()));</span>
         }
 
-<span class="fc bfc" id="L436" title="All 2 branches covered.">        if (answer.getClass().isArray()) {</span>
-<span class="fc bfc" id="L437" title="All 2 branches covered.">            if (Array.getLength(answer) &lt; (index + 1)) {</span>
-<span class="fc" id="L438">                Object newArray = Array.newInstance(answer.getClass().getComponentType(), segmentContext.getCollectionIndex() + 1);</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">        if (answer.getClass().isArray()) {</span>
+<span class="fc bfc" id="L356" title="All 2 branches covered.">            if (Array.getLength(answer) &lt; (index + 1)) {</span>
+<span class="fc" id="L357">                Object newArray = Array.newInstance(answer.getClass().getComponentType(), segmentContext.getCollectionIndex() + 1);</span>
                 // copy pre-existing items over to new array
-<span class="fc bfc" id="L440" title="All 2 branches covered.">                for (int i = 0; i &lt; Array.getLength(answer); i++) {</span>
-<span class="fc" id="L441">                    Array.set(newArray, i, Array.get(answer, i));</span>
+<span class="fc bfc" id="L359" title="All 2 branches covered.">                for (int i = 0; i &lt; Array.getLength(answer); i++) {</span>
+<span class="fc" id="L360">                    Array.set(newArray, i, Array.get(answer, i));</span>
                 }
-<span class="fc" id="L443">                answer = newArray;</span>
-<span class="fc" id="L444">            }</span>
-<span class="fc bfc" id="L445" title="All 2 branches covered.">        } else if (answer instanceof List) {</span>
-<span class="fc" id="L446">            List&lt;?&gt; list = (List&lt;?&gt;) answer;</span>
-<span class="fc bfc" id="L447" title="All 2 branches covered.">            while (list.size() &lt; index + 1) {</span>
-<span class="fc" id="L448">                int size = list.size();</span>
-<span class="fc" id="L449">                list.add(null);</span>
-<span class="fc" id="L450">            }</span>
-<span class="pc bpc" id="L451" title="1 of 2 branches missed.">        } else if (answer instanceof Collection) {</span>
-<span class="fc" id="L452">            LOG.warn(&quot;Collection object other than List doesn't support indexed operation. Ignoring... &quot;</span>
+<span class="fc" id="L362">                answer = newArray;</span>
+<span class="fc" id="L363">            }</span>
+<span class="fc bfc" id="L364" title="All 2 branches covered.">        } else if (answer instanceof List) {</span>
+<span class="fc" id="L365">            List&lt;?&gt; list = (List&lt;?&gt;) answer;</span>
+<span class="fc bfc" id="L366" title="All 2 branches covered.">            while (list.size() &lt; index + 1) {</span>
+<span class="fc" id="L367">                int size = list.size();</span>
+<span class="fc" id="L368">                list.add(null);</span>
+<span class="fc" id="L369">            }</span>
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">        } else if (answer instanceof Collection) {</span>
+<span class="fc" id="L371">            LOG.warn(&quot;Collection object other than List doesn't support indexed operation. Ignoring... &quot;</span>
                     + &quot;segment: {} \n\tparentObject: {}&quot;, segmentContext, collectionObject);
         }
-<span class="fc" id="L455">        return answer;</span>
+<span class="fc" id="L374">        return answer;</span>
     }
 
-    /**
-     * Create complex collection item.
-     * @param collectionObject collection
-     * @param itemType item type
-     * @param segmentContext segment
-     * @return created
-     * @throws AtlasException unexpected error
-     */
     @SuppressWarnings({ &quot;rawtypes&quot;, &quot;unchecked&quot; })
     public Object createComplexCollectionItem(Object collectionObject, Class&lt;?&gt; itemType, SegmentContext segmentContext) throws AtlasException {
-<span class="fc" id="L468">        Integer index = segmentContext.getCollectionIndex();</span>
-<span class="pc bpc" id="L469" title="1 of 4 branches missed.">        if (segmentContext.getCollectionType() != CollectionType.MAP &amp;&amp; index == null) {</span>
-<span class="nc" id="L470">            throw new AtlasException(String.format(</span>
-<span class="nc" id="L471">                    &quot;No index was specified for setting collection item, segment=%s&quot;, segmentContext.getExpression()));</span>
+<span class="fc" id="L379">        Integer index = segmentContext.getCollectionIndex();</span>
+<span class="pc bpc" id="L380" title="1 of 4 branches missed.">        if (segmentContext.getCollectionType() != CollectionType.MAP &amp;&amp; index == null) {</span>
+<span class="nc" id="L381">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L382">                    &quot;No index was specified for setting collection item, segment=%s&quot;, segmentContext.getExpression()));</span>
         }
 
-<span class="fc bfc" id="L474" title="All 2 branches covered.">        if (collectionObject.getClass().isArray()) {</span>
-<span class="pc bpc" id="L475" title="1 of 2 branches missed.">            if (index &gt;= Array.getLength(collectionObject)) {</span>
-<span class="nc" id="L476">                throw new AtlasException(&quot;Cannot fit item in array, array size: &quot; + Array.getLength(collectionObject)</span>
+<span class="fc bfc" id="L385" title="All 2 branches covered.">        if (collectionObject.getClass().isArray()) {</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">            if (index &gt;= Array.getLength(collectionObject)) {</span>
+<span class="nc" id="L387">                throw new AtlasException(&quot;Cannot fit item in array, array size: &quot; + Array.getLength(collectionObject)</span>
                         + &quot;, item index: &quot; + index + &quot;, segment: &quot; + segmentContext);
             }
-<span class="fc" id="L479">            Class&lt;?&gt; clazz = collectionObject.getClass().getComponentType();</span>
-<span class="pc bpc" id="L480" title="1 of 2 branches missed.">            if (clazz.isPrimitive()) {</span>
-<span class="nc" id="L481">                return Array.get(collectionObject, index);</span>
+<span class="fc" id="L390">            Class&lt;?&gt; clazz = collectionObject.getClass().getComponentType();</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">            if (clazz.isPrimitive()) {</span>
+<span class="nc" id="L392">                return Array.get(collectionObject, index);</span>
             }
-<span class="pc bpc" id="L483" title="1 of 2 branches missed.">            Object answer = instantiateObject(itemType != null ? itemType : clazz);</span>
-<span class="fc" id="L484">            Array.set(collectionObject, index, answer);</span>
-<span class="fc" id="L485">            return answer;</span>
-<span class="fc bfc" id="L486" title="All 2 branches covered.">        } else if (collectionObject instanceof Collection) {</span>
-<span class="fc" id="L487">            Object newItem = null;</span>
-<span class="fc" id="L488">            newItem = instantiateObject(itemType);</span>
-<span class="fc" id="L489">            Collection collection = (Collection) collectionObject;</span>
-<span class="pc bpc" id="L490" title="1 of 2 branches missed.">            if (collection instanceof List) {</span>
-<span class="pc bpc" id="L491" title="1 of 2 branches missed.">                if (index &gt; collection.size()) {</span>
-<span class="nc" id="L492">                    throw new AtlasException(&quot;Cannot fit item in list, list size: &quot; + collection.size()</span>
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">            Object answer = instantiateObject(itemType != null ? itemType : clazz);</span>
+<span class="fc" id="L395">            Array.set(collectionObject, index, answer);</span>
+<span class="fc" id="L396">            return answer;</span>
+<span class="fc bfc" id="L397" title="All 2 branches covered.">        } else if (collectionObject instanceof Collection) {</span>
+<span class="fc" id="L398">            Object newItem = null;</span>
+<span class="fc" id="L399">            newItem = instantiateObject(itemType);</span>
+<span class="fc" id="L400">            Collection collection = (Collection) collectionObject;</span>
+<span class="pc bpc" id="L401" title="1 of 2 branches missed.">            if (collection instanceof List) {</span>
+<span class="pc bpc" id="L402" title="1 of 2 branches missed.">                if (index &gt; collection.size()) {</span>
+<span class="nc" id="L403">                    throw new AtlasException(&quot;Cannot fit item in list, list size: &quot; + collection.size()</span>
                             + &quot;, item index: &quot; + index + &quot;, segment: &quot; + segmentContext);
                 }
-<span class="fc" id="L495">                List list = (List) collection;</span>
-<span class="fc" id="L496">                list.set(index, newItem);</span>
-<span class="pc bnc" id="L497" title="All 2 branches missed.">            } else if (index == collection.size()) {</span>
-<span class="nc" id="L498">                collection.add(newItem);</span>
+<span class="fc" id="L406">                List list = (List) collection;</span>
+<span class="fc" id="L407">                list.set(index, newItem);</span>
+<span class="pc bnc" id="L408" title="All 2 branches missed.">            } else if (index == collection.size()) {</span>
+<span class="nc" id="L409">                collection.add(newItem);</span>
             } else {
-<span class="nc" id="L500">                LOG.warn(String.format(</span>
+<span class="nc" id="L411">                LOG.warn(String.format(</span>
                         &quot;Writing into non-List collection - it will be added as a last element anyway. &quot;
                                 + &quot;segment: %s \n\tparentObject: %s\n\tchild: %s&quot;,
                         segmentContext, collectionObject, newItem));
-<span class="nc" id="L504">                collection.add(newItem);</span>
+<span class="nc" id="L415">                collection.add(newItem);</span>
             }
-<span class="fc" id="L506">            return newItem;</span>
-<span class="pc bpc" id="L507" title="1 of 2 branches missed.">        } else if (collectionObject instanceof Map) {</span>
-<span class="fc" id="L508">            throw new AtlasException(&quot;TODO: Cannot yet handle adding children to maps&quot;);</span>
+<span class="fc" id="L417">            return newItem;</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">        } else if (collectionObject instanceof Map) {</span>
+<span class="fc" id="L419">            throw new AtlasException(&quot;TODO: Cannot yet handle adding children to maps&quot;);</span>
         }
-<span class="nc" id="L510">        throw new AtlasException(&quot;Cannot determine collection type for: &quot; + collectionObject);</span>
+<span class="nc" id="L421">        throw new AtlasException(&quot;Cannot determine collection type for: &quot; + collectionObject);</span>
     }
 
-    /**
-     * Create complex collection item.
-     * @param parentObject parent
-     * @param collectionObject collection
-     * @param segmentContext segment
-     * @return created
-     * @throws AtlasException unexpected error
-     */
     public Object createComplexCollectionItem(Object parentObject, Object collectionObject, SegmentContext segmentContext) throws AtlasException {
-<span class="fc" id="L522">        Class&lt;?&gt; itemClazz = resolveCollectionItemClass(parentObject, segmentContext);</span>
-<span class="fc" id="L523">        return createComplexCollectionItem(collectionObject, itemClazz, segmentContext);</span>
+<span class="fc" id="L425">        Class&lt;?&gt; itemClazz = resolveCollectionItemClass(parentObject, segmentContext);</span>
+<span class="fc" id="L426">        return createComplexCollectionItem(collectionObject, itemClazz, segmentContext);</span>
     }
 
-    /**
-     * Resolves collection item class.
-     * @param parentObject parent
-     * @param segmentContext segment
-     * @return class
-     * @throws AtlasException unexpected error
-     */
     public Class&lt;?&gt; resolveCollectionItemClass(Object parentObject, SegmentContext segmentContext) throws AtlasException {
-<span class="fc" id="L534">        Class&lt;?&gt; itemType = null;</span>
-<span class="fc" id="L535">        Method getterMethod = resolveGetterMethod(parentObject.getClass(), segmentContext.getName());</span>
+<span class="fc" id="L430">        Class&lt;?&gt; itemType = null;</span>
+<span class="fc" id="L431">        Method getterMethod = resolveGetterMethod(parentObject.getClass(), segmentContext.getName());</span>
         try {
-<span class="fc" id="L537">            Type genericType = null;</span>
-<span class="fc bfc" id="L538" title="All 2 branches covered.">            if (getterMethod != null) {</span>
-<span class="fc" id="L539">                genericType = getterMethod.getGenericReturnType();</span>
+<span class="fc" id="L433">            Type genericType = null;</span>
+<span class="fc bfc" id="L434" title="All 2 branches covered.">            if (getterMethod != null) {</span>
+<span class="fc" id="L435">                genericType = getterMethod.getGenericReturnType();</span>
             } else {
-<span class="fc" id="L541">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
-<span class="pc bpc" id="L542" title="1 of 2 branches missed.">                if (field == null) {</span>
-<span class="nc" id="L543">                    throw new AtlasException(String.format(</span>
+<span class="fc" id="L437">                java.lang.reflect.Field field = resolveField(parentObject.getClass(), segmentContext.getName());</span>
+<span class="pc bpc" id="L438" title="1 of 2 branches missed.">                if (field == null) {</span>
+<span class="nc" id="L439">                    throw new AtlasException(String.format(</span>
                         &quot;Failed to create a collection item, parent class={}, field name={}&quot;,
-<span class="nc" id="L545">                        parentObject.getClass(), segmentContext.getName()));</span>
+<span class="nc" id="L441">                        parentObject.getClass(), segmentContext.getName()));</span>
                 }
-<span class="fc" id="L547">                genericType = field.getGenericType();</span>
+<span class="fc" id="L443">                genericType = field.getGenericType();</span>
             }
-<span class="fc bfc" id="L549" title="All 2 branches covered.">            if (genericType instanceof Class) {</span>
-<span class="pc bpc" id="L550" title="1 of 2 branches missed.">                if (((Class&lt;?&gt;)genericType).isArray()) {</span>
-<span class="fc" id="L551">                    itemType = ((Class&lt;?&gt;)genericType).getComponentType();</span>
+<span class="fc bfc" id="L445" title="All 2 branches covered.">            if (genericType instanceof Class) {</span>
+<span class="pc bpc" id="L446" title="1 of 2 branches missed.">                if (((Class&lt;?&gt;)genericType).isArray()) {</span>
+<span class="fc" id="L447">                    itemType = ((Class&lt;?&gt;)genericType).getComponentType();</span>
                 } else {
-<span class="nc" id="L553">                    itemType = Object.class;</span>
+<span class="nc" id="L449">                    itemType = Object.class;</span>
                 }
-<span class="pc bpc" id="L555" title="1 of 2 branches missed.">            } else if (genericType instanceof ParameterizedType</span>
-<span class="pc bpc" id="L556" title="1 of 2 branches missed.">                    &amp;&amp; ((ParameterizedType) genericType).getActualTypeArguments().length &gt; 0) {</span>
-<span class="fc" id="L557">                String typeArg = ((ParameterizedType) genericType).getActualTypeArguments()[0].getTypeName();</span>
-<span class="fc" id="L558">                itemType = classLoader.loadClass(typeArg);</span>
-<span class="fc" id="L559">            } else {</span>
-<span class="nc" id="L560">                itemType = Object.class;</span>
+<span class="pc bpc" id="L451" title="1 of 2 branches missed.">            } else if (genericType instanceof ParameterizedType</span>
+<span class="pc bpc" id="L452" title="1 of 2 branches missed.">                    &amp;&amp; ((ParameterizedType) genericType).getActualTypeArguments().length &gt; 0) {</span>
+<span class="fc" id="L453">                String typeArg = ((ParameterizedType) genericType).getActualTypeArguments()[0].getTypeName();</span>
+<span class="fc" id="L454">                itemType = classLoader.loadClass(typeArg);</span>
+<span class="fc" id="L455">            } else {</span>
+<span class="nc" id="L456">                itemType = Object.class;</span>
             }
-<span class="nc" id="L562">        } catch (Throwable t) {</span>
-<span class="nc" id="L563">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L458">        } catch (Throwable t) {</span>
+<span class="nc" id="L459">            throw new AtlasException(String.format(</span>
                 &quot;Failed to resolve collection item class, parent class={}, field name={}&quot;,
-<span class="nc" id="L565">                parentObject.getClass(), segmentContext.getName()), t);</span>
-<span class="fc" id="L566">        }</span>
-<span class="fc" id="L567">        return itemType;</span>
+<span class="nc" id="L461">                parentObject.getClass(), segmentContext.getName()), t);</span>
+<span class="fc" id="L462">        }</span>
+<span class="fc" id="L463">        return itemType;</span>
     }
 
-    /**
-     * Sets the collection item.
-     * @param collectionObject collection
-     * @param item item
-     * @param segmentContext segment
-     * @throws AtlasException unexpected error
-     */
     @SuppressWarnings({ &quot;rawtypes&quot;, &quot;unchecked&quot; })
     public void setCollectionItem(Object collectionObject, Object item, SegmentContext segmentContext)
             throws AtlasException {
-<span class="fc" id="L580">        Integer index = segmentContext.getCollectionIndex();</span>
-<span class="pc bpc" id="L581" title="1 of 4 branches missed.">        if (segmentContext.getCollectionType() != CollectionType.MAP &amp;&amp; index == null) {</span>
-<span class="nc" id="L582">            throw new AtlasException(String.format(</span>
-<span class="nc" id="L583">                &quot;No index was specified for setting collection item, segment=%s&quot;, segmentContext.getExpression()));</span>
+<span class="fc" id="L469">        Integer index = segmentContext.getCollectionIndex();</span>
+<span class="pc bpc" id="L470" title="1 of 4 branches missed.">        if (segmentContext.getCollectionType() != CollectionType.MAP &amp;&amp; index == null) {</span>
+<span class="nc" id="L471">            throw new AtlasException(String.format(</span>
+<span class="nc" id="L472">                &quot;No index was specified for setting collection item, segment=%s&quot;, segmentContext.getExpression()));</span>
         }
 
-<span class="fc bfc" id="L586" title="All 2 branches covered.">        if (collectionObject.getClass().isArray()) {</span>
-<span class="pc bpc" id="L587" title="1 of 2 branches missed.">            if (index &gt;= Array.getLength(collectionObject)) {</span>
-<span class="nc" id="L588">                throw new AtlasException(&quot;Cannot fit item in array, array size: &quot; + Array.getLength(collectionObject)</span>
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        if (collectionObject.getClass().isArray()) {</span>
+<span class="pc bpc" id="L476" title="1 of 2 branches missed.">            if (index &gt;= Array.getLength(collectionObject)) {</span>
+<span class="nc" id="L477">                throw new AtlasException(&quot;Cannot fit item in array, array size: &quot; + Array.getLength(collectionObject)</span>
                         + &quot;, item index: &quot; + index + &quot;, segment: &quot; + segmentContext);
             }
             try {
-<span class="fc" id="L592">                Array.set(collectionObject, index, item);</span>
-<span class="nc" id="L593">            } catch (Exception e) {</span>
-<span class="nc bnc" id="L594" title="All 2 branches missed.">                String parentClass = collectionObject == null ? null : collectionObject.getClass().getName();</span>
-<span class="nc bnc" id="L595" title="All 2 branches missed.">                String childClass = item == null ? null : item.getClass().getName();</span>
-<span class="nc" id="L596">                throw new AtlasException(&quot;Could not set child class '&quot; + childClass + &quot;' on parent '&quot; + parentClass</span>
+<span class="fc" id="L481">                Array.set(collectionObject, index, item);</span>
+<span class="nc" id="L482">            } catch (Exception e) {</span>
+<span class="nc bnc" id="L483" title="All 2 branches missed.">                String parentClass = collectionObject == null ? null : collectionObject.getClass().getName();</span>
+<span class="nc bnc" id="L484" title="All 2 branches missed.">                String childClass = item == null ? null : item.getClass().getName();</span>
+<span class="nc" id="L485">                throw new AtlasException(&quot;Could not set child class '&quot; + childClass + &quot;' on parent '&quot; + parentClass</span>
                         + &quot;' for: &quot; + segmentContext, e);
-<span class="fc" id="L598">            }</span>
-<span class="fc" id="L599">            return;</span>
-<span class="fc bfc" id="L600" title="All 2 branches covered.">        } else if (collectionObject instanceof Collection) {</span>
-<span class="fc" id="L601">            Collection collection = (Collection) collectionObject;</span>
-<span class="fc bfc" id="L602" title="All 2 branches covered.">            if (collection instanceof List) {</span>
-<span class="pc bpc" id="L603" title="1 of 2 branches missed.">                if (index &gt; collection.size()) {</span>
-<span class="nc" id="L604">                    throw new AtlasException(&quot;Cannot fit item in list, list size: &quot; + collection.size()</span>
+<span class="fc" id="L487">            }</span>
+<span class="fc" id="L488">            return;</span>
+<span class="fc bfc" id="L489" title="All 2 branches covered.">        } else if (collectionObject instanceof Collection) {</span>
+<span class="fc" id="L490">            Collection collection = (Collection) collectionObject;</span>
+<span class="fc bfc" id="L491" title="All 2 branches covered.">            if (collection instanceof List) {</span>
+<span class="pc bpc" id="L492" title="1 of 2 branches missed.">                if (index &gt; collection.size()) {</span>
+<span class="nc" id="L493">                    throw new AtlasException(&quot;Cannot fit item in list, list size: &quot; + collection.size()</span>
                             + &quot;, item index: &quot; + index + &quot;, segment: &quot; + segmentContext);
                 }
-<span class="fc" id="L607">                List list = (List) collection;</span>
-<span class="fc" id="L608">                list.set(index, item);</span>
-<span class="fc bfc" id="L609" title="All 2 branches covered.">            } else if (index == collection.size()) {</span>
-<span class="fc" id="L610">                collection.add(item);</span>
+<span class="fc" id="L496">                List list = (List) collection;</span>
+<span class="fc" id="L497">                list.set(index, item);</span>
+<span class="fc bfc" id="L498" title="All 2 branches covered.">            } else if (index == collection.size()) {</span>
+<span class="fc" id="L499">                collection.add(item);</span>
             } else {
-<span class="fc" id="L612">                LOG.warn(String.format(</span>
+<span class="fc" id="L501">                LOG.warn(String.format(</span>
                         &quot;Writing into non-List collection - it will be added as a last element anyway. &quot;
                                 + &quot;segment: %s \n\tparentObject: %s\n\tchild: %s&quot;,
                         segmentContext, collectionObject, item));
-<span class="fc" id="L616">                collection.add(item);</span>
+<span class="fc" id="L505">                collection.add(item);</span>
             }
-<span class="fc" id="L618">            return;</span>
-<span class="pc bpc" id="L619" title="1 of 2 branches missed.">        } else if (collectionObject instanceof Map) {</span>
-<span class="fc" id="L620">            throw new AtlasException(&quot;TODO: Cannot yet handle adding children to maps&quot;);</span>
+<span class="fc" id="L507">            return;</span>
+<span class="pc bpc" id="L508" title="1 of 2 branches missed.">        } else if (collectionObject instanceof Map) {</span>
+<span class="fc" id="L509">            throw new AtlasException(&quot;TODO: Cannot yet handle adding children to maps&quot;);</span>
         }
-<span class="nc" id="L622">        throw new AtlasException(&quot;Cannot determine collection type for: &quot; + collectionObject);</span>
+<span class="nc" id="L511">        throw new AtlasException(&quot;Cannot determine collection type for: &quot; + collectionObject);</span>
     }
 
-    /**
-     * Gets the default collection implementation classes.
-     * @return default collection implementation classes.
-     */
     public Map&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt; getDefaultCollectionImplClasses() {
-<span class="nc" id="L630">        return this.defaultCollectionImplClasses;</span>
+<span class="nc" id="L515">        return this.defaultCollectionImplClasses;</span>
     }
 
     private Method resolveGetterMethod(Class&lt;?&gt; clz, String fieldName) {
-<span class="fc" id="L634">        List&lt;String&gt; getters = ClassHelper.getterMethodNames(fieldName);</span>
-<span class="fc" id="L635">        List&lt;Class&lt;?&gt;&gt; classTree = resolveMappableClasses(clz);</span>
-<span class="fc" id="L636">        Method getterMethod = null;</span>
-<span class="fc bfc" id="L637" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
-<span class="fc bfc" id="L638" title="All 2 branches covered.">            for (String getter : getters) {</span>
+<span class="fc" id="L519">        List&lt;String&gt; getters = ClassHelper.getterMethodNames(fieldName);</span>
+<span class="fc" id="L520">        List&lt;Class&lt;?&gt;&gt; classTree = resolveMappableClasses(clz);</span>
+<span class="fc" id="L521">        Method getterMethod = null;</span>
+<span class="fc bfc" id="L522" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
+<span class="fc bfc" id="L523" title="All 2 branches covered.">            for (String getter : getters) {</span>
                 try {
-<span class="fc" id="L640">                    return ClassHelper.detectGetterMethod(clazz, getter);</span>
-<span class="fc" id="L641">                } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L642" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L643">                        LOG.debug(&quot;Looking for getter for '{}' on this class: {}&quot;,</span>
-<span class="nc" id="L644">                            fieldName, clazz.getName(), e);</span>
+<span class="fc" id="L525">                    return ClassHelper.detectGetterMethod(clazz, getter);</span>
+<span class="fc" id="L526">                } catch (NoSuchMethodException e) {</span>
+<span class="pc bpc" id="L527" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L528">                        LOG.debug(&quot;Looking for getter for '{}' on this class: {}&quot;,</span>
+<span class="nc" id="L529">                            fieldName, clazz.getName(), e);</span>
                     }
                 }
-<span class="fc" id="L647">            }</span>
-<span class="fc" id="L648">        }</span>
-<span class="fc" id="L649">        return getterMethod;</span>
+<span class="fc" id="L532">            }</span>
+<span class="fc" id="L533">        }</span>
+<span class="fc" id="L534">        return getterMethod;</span>
     }
 
     private Method resolveSetterMethod(Object sourceObject, SegmentContext segmentContext, Class&lt;?&gt; targetType)
             throws NoSuchMethodException {
-<span class="fc" id="L654">        String setterMethodName = &quot;set&quot; + capitalizeFirstLetter(segmentContext.getName());</span>
-<span class="fc" id="L655">        List&lt;Class&lt;?&gt;&gt; classTree = resolveMappableClasses(sourceObject.getClass());</span>
+<span class="fc" id="L539">        String setterMethodName = &quot;set&quot; + capitalizeFirstLetter(segmentContext.getName());</span>
+<span class="fc" id="L540">        List&lt;Class&lt;?&gt;&gt; classTree = resolveMappableClasses(sourceObject.getClass());</span>
 
-<span class="fc" id="L657">        Method m = null;</span>
-<span class="fc bfc" id="L658" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
-<span class="pc bpc" id="L659" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L660">                LOG.debug(&quot;Looking for setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
+<span class="fc" id="L542">        Method m = null;</span>
+<span class="fc bfc" id="L543" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
+<span class="pc bpc" id="L544" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L545">                LOG.debug(&quot;Looking for setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
             }
             try {
-<span class="fc" id="L663">                m = ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);</span>
-<span class="pc bpc" id="L664" title="1 of 2 branches missed.">                if (m != null) {</span>
-<span class="pc bpc" id="L665" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L666">                        LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
+<span class="fc" id="L548">                m = ClassHelper.detectSetterMethod(clazz, setterMethodName, targetType);</span>
+<span class="pc bpc" id="L549" title="1 of 2 branches missed.">                if (m != null) {</span>
+<span class="pc bpc" id="L550" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L551">                        LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
                     }
-<span class="fc" id="L668">                    return m;</span>
+<span class="fc" id="L553">                    return m;</span>
                 }
-<span class="fc" id="L670">            } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L671" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L672">                    LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(), e);</span>
+<span class="fc" id="L555">            } catch (NoSuchMethodException e) {</span>
+<span class="pc bpc" id="L556" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L557">                    LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(), e);</span>
                 }
-<span class="nc" id="L674">            }</span>
+<span class="nc" id="L559">            }</span>
 
             // Try the boxUnboxed version
-<span class="pc bpc" id="L677" title="1 of 4 branches missed.">            if (conversionService.isPrimitive(targetType) || conversionService.isBoxedPrimitive(targetType)) {</span>
+<span class="pc bpc" id="L562" title="1 of 4 branches missed.">            if (conversionService.isPrimitive(targetType) || conversionService.isBoxedPrimitive(targetType)) {</span>
                 try {
-<span class="pc bpc" id="L679" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L680">                        LOG.debug(&quot;Looking for boxed setter '&quot; + setterMethodName + &quot;' on this class: &quot;</span>
-<span class="nc" id="L681">                                + clazz.getName());</span>
+<span class="pc bpc" id="L564" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L565">                        LOG.debug(&quot;Looking for boxed setter '&quot; + setterMethodName + &quot;' on this class: &quot;</span>
+<span class="nc" id="L566">                                + clazz.getName());</span>
                     }
-<span class="fc" id="L683">                    m = ClassHelper.detectSetterMethod(clazz, setterMethodName,</span>
-<span class="fc" id="L684">                            conversionService.boxOrUnboxPrimitive(targetType));</span>
-<span class="pc bpc" id="L685" title="1 of 2 branches missed.">                    if (m != null) {</span>
-<span class="pc bpc" id="L686" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L687">                            LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
+<span class="fc" id="L568">                    m = ClassHelper.detectSetterMethod(clazz, setterMethodName,</span>
+<span class="fc" id="L569">                            conversionService.boxOrUnboxPrimitive(targetType));</span>
+<span class="pc bpc" id="L570" title="1 of 2 branches missed.">                    if (m != null) {</span>
+<span class="pc bpc" id="L571" title="1 of 2 branches missed.">                        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L572">                            LOG.debug(&quot;Found setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName());</span>
                         }
-<span class="fc" id="L689">                        return m;</span>
+<span class="fc" id="L574">                        return m;</span>
                     }
-<span class="fc" id="L691">                } catch (NoSuchMethodException e) {</span>
-<span class="pc bpc" id="L692" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L693">                        LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(),</span>
+<span class="fc" id="L576">                } catch (NoSuchMethodException e) {</span>
+<span class="pc bpc" id="L577" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L578">                        LOG.debug(&quot;Did not find setter '&quot; + setterMethodName + &quot;' on this class: &quot; + clazz.getName(),</span>
                                 e);
                     }
-<span class="nc" id="L696">                }</span>
+<span class="nc" id="L581">                }</span>
             }
-<span class="fc" id="L698">        }</span>
+<span class="fc" id="L583">        }</span>
 
-<span class="fc" id="L700">        throw new NoSuchMethodException(&quot;Unable to resolve expected setter '&quot; + setterMethodName + &quot;' for segment: &quot;</span>
-<span class="fc" id="L701">                + segmentContext.getExpression() + &quot;, on object: &quot; + sourceObject);</span>
+<span class="fc" id="L585">        throw new NoSuchMethodException(&quot;Unable to resolve expected setter '&quot; + setterMethodName + &quot;' for segment: &quot;</span>
+<span class="fc" id="L586">                + segmentContext.getExpression() + &quot;, on object: &quot; + sourceObject);</span>
     }
 
     private java.lang.reflect.Field resolveField(Class&lt;?&gt; clz, String name) {
-<span class="fc" id="L705">        List&lt;Class&lt;?&gt;&gt; classTree = resolveMappableClasses(clz);</span>
-<span class="fc bfc" id="L706" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
+<span class="fc" id="L590">        List&lt;Class&lt;?&gt;&gt; classTree = resolveMappableClasses(clz);</span>
+<span class="fc bfc" id="L591" title="All 2 branches covered.">        for (Class&lt;?&gt; clazz : classTree) {</span>
             try {
-<span class="fc" id="L708">                return clazz.getDeclaredField(name);</span>
-<span class="fc" id="L709">            } catch (Exception e) {</span>
-<span class="fc" id="L710">                continue;</span>
+<span class="fc" id="L593">                return clazz.getDeclaredField(name);</span>
+<span class="fc" id="L594">            } catch (Exception e) {</span>
+<span class="fc" id="L595">                continue;</span>
             }
         }
-<span class="fc" id="L713">        return null;</span>
+<span class="fc" id="L598">        return null;</span>
     }
 
     private static String capitalizeFirstLetter(String string) {
-<span class="pc bpc" id="L717" title="1 of 2 branches missed.">        if (AtlasUtil.isEmpty(string)) {</span>
-<span class="nc" id="L718">            return string;</span>
+<span class="pc bpc" id="L602" title="1 of 2 branches missed.">        if (StringUtil.isEmpty(string)) {</span>
+<span class="nc" id="L603">            return string;</span>
         }
-<span class="pc bpc" id="L720" title="1 of 2 branches missed.">        if (string.length() == 1) {</span>
-<span class="nc" id="L721">            return String.valueOf(string.charAt(0)).toUpperCase();</span>
+<span class="pc bpc" id="L605" title="1 of 2 branches missed.">        if (string.length() == 1) {</span>
+<span class="nc" id="L606">            return String.valueOf(string.charAt(0)).toUpperCase();</span>
         }
-<span class="fc" id="L723">        return String.valueOf(string.charAt(0)).toUpperCase() + string.substring(1);</span>
+<span class="fc" id="L608">        return String.valueOf(string.charAt(0)).toUpperCase() + string.substring(1);</span>
     }
 
     private List&lt;Class&lt;?&gt;&gt; resolveMappableClasses(Class&lt;?&gt; clazz) {
-<span class="fc" id="L727">        List&lt;Class&lt;?&gt;&gt; classTree = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L728">        classTree.add(clazz);</span>
-<span class="fc" id="L729">        Class&lt;?&gt; superClazz = clazz.getSuperclass();</span>
-<span class="fc bfc" id="L730" title="All 2 branches covered.">        while (superClazz != null) {</span>
-<span class="fc bfc" id="L731" title="All 2 branches covered.">            if (JdkPackages.contains(superClazz.getPackage().getName())) {</span>
-<span class="fc" id="L732">                superClazz = null;</span>
+<span class="fc" id="L612">        List&lt;Class&lt;?&gt;&gt; classTree = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L613">        classTree.add(clazz);</span>
+<span class="fc" id="L614">        Class&lt;?&gt; superClazz = clazz.getSuperclass();</span>
+<span class="fc bfc" id="L615" title="All 2 branches covered.">        while (superClazz != null) {</span>
+<span class="fc bfc" id="L616" title="All 2 branches covered.">            if (JdkPackages.contains(superClazz.getPackage().getName())) {</span>
+<span class="fc" id="L617">                superClazz = null;</span>
             } else {
-<span class="fc" id="L734">                classTree.add(superClazz);</span>
-<span class="fc" id="L735">                superClazz = superClazz.getSuperclass();</span>
+<span class="fc" id="L619">                classTree.add(superClazz);</span>
+<span class="fc" id="L620">                superClazz = superClazz.getSuperclass();</span>
             }
         }
 
@@ -741,13 +626,13 @@ public class JavaFieldWriterUtil {
         // Collections.reverse(reverseTree);
         // return reverseTree;
 
-<span class="pc bpc" id="L744" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L745">            LOG.debug(&quot;Found &quot; + classTree.size() + &quot; mappable classes for class '&quot;</span>
-<span class="nc" id="L746">                    + clazz.getName() + &quot;': &quot; + classTree);</span>
+<span class="pc bpc" id="L629" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L630">            LOG.debug(&quot;Found &quot; + classTree.size() + &quot; mappable classes for class '&quot;</span>
+<span class="nc" id="L631">                    + clazz.getName() + &quot;': &quot; + classTree);</span>
         }
 
-<span class="fc" id="L749">        return classTree;</span>
+<span class="fc" id="L634">        return classTree;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

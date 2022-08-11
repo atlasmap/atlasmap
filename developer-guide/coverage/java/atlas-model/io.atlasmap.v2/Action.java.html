@@ -21,28 +21,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonTypeIdResolver;
 
-/**
- * A base class for the field action model. The actual field action
- * extends this class and declare its own parameters.
- */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.EXISTING_PROPERTY,
     property = &quot;@type&quot;
 )
 @JsonTypeIdResolver(ActionResolver.class)
-<span class="fc" id="L34">public abstract class Action implements Serializable, FieldAction {</span>
+<span class="fc" id="L30">public abstract class Action implements Serializable, FieldAction {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Return a type name of the field action.
-     * @return field action type name
-     */
     @JsonProperty(&quot;@type&quot;)
     public String getType() {
-<span class="fc" id="L44">        return ActionResolver.getInstance().toId(getClass());</span>
+<span class="fc" id="L36">        return ActionResolver.getInstance().toId(getClass());</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

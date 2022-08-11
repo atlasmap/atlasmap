@@ -22,34 +22,24 @@ import io.atlasmap.expression.Expression;
 import io.atlasmap.expression.internal.BooleanExpression;
 import io.atlasmap.expression.parser.ParseException;
 
-/**
- * The {@code IF()} function for conditional mapping expression.
- * &lt;pre&gt;
- * {@code
- *   IF(ISEMPTY(${DOC:/foo}), null, ${DOC:/foo})
- * }
- * &lt;/pre&gt;
- * which returns {@code null} if the field {@code ${DOC:/foo}} is empty,
- * otherwise returns {@code ${DOC:/foo}}
- */
-<span class="fc" id="L35">public class IF extends BaseFunctionFactory {</span>
+<span class="fc" id="L25">public class IF extends BaseFunctionFactory {</span>
 
     @Override
     public Expression create(List&lt;Expression&gt; args) throws ParseException {
-<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (args.size() != 3) {</span>
-<span class="nc" id="L40">            throw new ParseException(&quot;IF expects 3 arguments.&quot;);</span>
+<span class="pc bpc" id="L29" title="1 of 2 branches missed.">        if (args.size() != 3) {</span>
+<span class="nc" id="L30">            throw new ParseException(&quot;IF expects 3 arguments.&quot;);</span>
         }
-<span class="fc" id="L42">        BooleanExpression conditional = BooleanExpression.asBooleanExpression(args.get(0));</span>
-<span class="fc" id="L43">        Expression trueExpression = args.get(1);</span>
-<span class="fc" id="L44">        Expression falseExpression = args.get(2);</span>
-<span class="fc" id="L45">        return (ctx) -&gt; {</span>
-<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (conditional.matches(ctx)) {</span>
-<span class="fc" id="L47">                return trueExpression.evaluate(ctx);</span>
+<span class="fc" id="L32">        BooleanExpression conditional = BooleanExpression.asBooleanExpression(args.get(0));</span>
+<span class="fc" id="L33">        Expression trueExpression = args.get(1);</span>
+<span class="fc" id="L34">        Expression falseExpression = args.get(2);</span>
+<span class="fc" id="L35">        return (ctx) -&gt; {</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            if (conditional.matches(ctx)) {</span>
+<span class="fc" id="L37">                return trueExpression.evaluate(ctx);</span>
             } else {
-<span class="fc" id="L49">                return falseExpression.evaluate(ctx);</span>
+<span class="fc" id="L39">                return falseExpression.evaluate(ctx);</span>
             }
         };
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

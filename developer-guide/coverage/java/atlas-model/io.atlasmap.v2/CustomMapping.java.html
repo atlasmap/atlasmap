@@ -17,32 +17,20 @@ package io.atlasmap.v2;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The custom mapping entry.
- */
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L24">public class CustomMapping extends BaseMapping {</span>
+<span class="fc" id="L21">public class CustomMapping extends BaseMapping {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** class name */
     private String className;
 
-    /**
-     * Gets the custom mapping class name.
-     * @return custom mapping class name
-     */
     public String getClassName() {
-<span class="fc" id="L36">        return className;</span>
+<span class="fc" id="L28">        return className;</span>
     }
 
-    /**
-     * Sets the custom mapping class name.
-     * @param className custom mapping class name.
-     */
     public void setClassName(String className) {
-<span class="fc" id="L44">        this.className = className;</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc" id="L32">        this.className = className;</span>
+<span class="fc" id="L33">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

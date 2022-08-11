@@ -19,14 +19,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The container of {@link Field}.
- */
-<span class="fc" id="L25">public class Fields implements Serializable {</span>
+<span class="fc" id="L22">public class Fields implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** A list of {@link Field} */
     protected List&lt;Field&gt; field;
 
     /**
@@ -52,11 +48,11 @@ import java.util.List;
      * @return A list of {@link Field}
      */
     public List&lt;Field&gt; getField() {
-<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (field == null) {</span>
-<span class="fc" id="L56">            field = new ArrayList&lt;Field&gt;();</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (field == null) {</span>
+<span class="fc" id="L52">            field = new ArrayList&lt;Field&gt;();</span>
         }
-<span class="fc" id="L58">        return this.field;</span>
+<span class="fc" id="L54">        return this.field;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

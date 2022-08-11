@@ -21,18 +21,13 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 
-/**
- * The result of processing mappings.
- */
 @JsonRootName(&quot;AtlasMappingResult&quot;)
-<span class="nc" id="L28">public class AtlasMappingResult implements Serializable {</span>
+<span class="nc" id="L25">public class AtlasMappingResult implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** A list of {@link TargetDocument} */
     protected List&lt;TargetDocument&gt; targetDocuments;
 
-    /** {@link Audits} */
     protected Audits audits;
 
     /**
@@ -58,10 +53,10 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      * @return A list of {@link TargetDocument}
      */
     public List&lt;TargetDocument&gt; getTargetDocuments() {
-<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (targetDocuments == null) {</span>
-<span class="nc" id="L62">            targetDocuments = new ArrayList&lt;TargetDocument&gt;();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        if (targetDocuments == null) {</span>
+<span class="nc" id="L57">            targetDocuments = new ArrayList&lt;TargetDocument&gt;();</span>
         }
-<span class="nc" id="L64">        return this.targetDocuments;</span>
+<span class="nc" id="L59">        return this.targetDocuments;</span>
     }
 
     /**
@@ -73,7 +68,7 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public Audits getAudits() {
-<span class="nc" id="L76">        return audits;</span>
+<span class="nc" id="L71">        return audits;</span>
     }
 
     /**
@@ -85,8 +80,8 @@ import com.fasterxml.jackson.annotation.JsonRootName;
      *     
      */
     public void setAudits(Audits value) {
-<span class="nc" id="L88">        this.audits = value;</span>
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L83">        this.audits = value;</span>
+<span class="nc" id="L84">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

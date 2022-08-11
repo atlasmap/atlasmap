@@ -33,117 +33,68 @@ package io.atlasmap.spi;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The enumeration of the string delimters.
- */
-<span class="fc" id="L39">public enum StringDelimiter {</span>
-    /** Ampersand(&amp;amp;). */
-<span class="fc" id="L41">    AMPERSAND(&quot;Ampersand&quot;, &quot;&amp;&quot;, &quot;&amp;&quot;),</span>
-    /** At sign(@). */
-<span class="fc" id="L43">    AT_SIGN(&quot;AtSign&quot;, &quot;@&quot;, &quot;@&quot;),</span>
-    /** Backslash(\). */
-<span class="fc" id="L45">    BACKSLASH(&quot;Backslash&quot;, &quot;\\\\&quot;, &quot;\\&quot;),</span>
-    /** Colon(:). */
-<span class="fc" id="L47">    COLON(&quot;Colon&quot;, &quot;:&quot;, &quot;:&quot;),</span>
-    /** Comma(,). */
-<span class="fc" id="L49">    COMMA(&quot;Comma&quot;, &quot;,&quot;, &quot;,&quot;),</span>
-    /** Dash(-). */
-<span class="fc" id="L51">    DASH(&quot;Dash&quot;, &quot;-&quot;, &quot;-&quot;),</span>
-    /** Equal(=). */
-<span class="fc" id="L53">    EQUAL(&quot;Equal&quot;, &quot;=&quot;, &quot;=&quot;),</span>
-    /** Hash(#). */
-<span class="fc" id="L55">    HASH(&quot;Hash&quot;, &quot;#&quot;, &quot;#&quot;),</span>
-    /** Multispace(  ). */
-<span class="fc" id="L57">    MULTI_SPACE(&quot;MultiSpace&quot;, &quot;\\s+&quot;, &quot;    &quot;),</span>
-    /** Period(.). */
-<span class="fc" id="L59">    PERIOD(&quot;Period&quot;, &quot;\\.&quot;, &quot;.&quot;),</span>
-    /** Pipe(|). */
-<span class="fc" id="L61">    PIPE(&quot;Pipe&quot;, &quot;\\|&quot;, &quot;|&quot;),</span>
-    /** Semicolon(;). */
-<span class="fc" id="L63">    SEMICOLON(&quot;Semicolon&quot;, &quot;;&quot;, &quot;;&quot;),</span>
-    /** Slash(/). */
-<span class="fc" id="L65">    SLASH(&quot;Slash&quot;, &quot;/&quot;, &quot;/&quot;),</span>
-    /** Space( ). */
-<span class="fc" id="L67">    SPACE(&quot;Space&quot;, &quot;\\s&quot;, &quot; &quot;),</span>
-    /** Underscore(_). */
-<span class="fc" id="L69">    UNDERSCORE(&quot;Underscore&quot;, &quot;_&quot;, &quot;_&quot;);</span>
+<span class="fc" id="L36">public enum StringDelimiter {</span>
+<span class="fc" id="L37">    AMPERSAND(&quot;Ampersand&quot;, &quot;&amp;&quot;, &quot;&amp;&quot;),</span>
+<span class="fc" id="L38">    AT_SIGN(&quot;AtSign&quot;, &quot;@&quot;, &quot;@&quot;),</span>
+<span class="fc" id="L39">    BACKSLASH(&quot;Backslash&quot;, &quot;\\\\&quot;, &quot;\\&quot;),</span>
+<span class="fc" id="L40">    COLON(&quot;Colon&quot;, &quot;:&quot;, &quot;:&quot;),</span>
+<span class="fc" id="L41">    COMMA(&quot;Comma&quot;, &quot;,&quot;, &quot;,&quot;),</span>
+<span class="fc" id="L42">    DASH(&quot;Dash&quot;, &quot;-&quot;, &quot;-&quot;),</span>
+<span class="fc" id="L43">    EQUAL(&quot;Equal&quot;, &quot;=&quot;, &quot;=&quot;),</span>
+<span class="fc" id="L44">    HASH(&quot;Hash&quot;, &quot;#&quot;, &quot;#&quot;),</span>
+<span class="fc" id="L45">    MULTI_SPACE(&quot;MultiSpace&quot;, &quot;\\s+&quot;, &quot;    &quot;),</span>
+<span class="fc" id="L46">    PERIOD(&quot;Period&quot;, &quot;\\.&quot;, &quot;.&quot;),</span>
+<span class="fc" id="L47">    PIPE(&quot;Pipe&quot;, &quot;\\|&quot;, &quot;|&quot;),</span>
+<span class="fc" id="L48">    SEMICOLON(&quot;Semicolon&quot;, &quot;;&quot;, &quot;;&quot;),</span>
+<span class="fc" id="L49">    SLASH(&quot;Slash&quot;, &quot;/&quot;, &quot;/&quot;),</span>
+<span class="fc" id="L50">    SPACE(&quot;Space&quot;, &quot;\\s&quot;, &quot; &quot;),</span>
+<span class="fc" id="L51">    UNDERSCORE(&quot;Underscore&quot;, &quot;_&quot;, &quot;_&quot;);</span>
 
     private String name;
     private String regex;
     private String value;
 
-    /**
-     * A constructor.
-     * @param name name
-     * @param regex regular expression
-     * @param value value
-     */
-<span class="fc" id="L81">    StringDelimiter(String name, String regex, String value) {</span>
-<span class="fc" id="L82">        this.name = name;</span>
-<span class="fc" id="L83">        this.regex = regex;</span>
-<span class="fc" id="L84">        this.value = value;</span>
-<span class="fc" id="L85">    }</span>
+<span class="fc" id="L57">    StringDelimiter(String name, String regex, String value) {</span>
+<span class="fc" id="L58">        this.name = name;</span>
+<span class="fc" id="L59">        this.regex = regex;</span>
+<span class="fc" id="L60">        this.value = value;</span>
+<span class="fc" id="L61">    }</span>
 
-    /**
-     * Gets the name.
-     * @return name
-     */
     public String getName() {
-<span class="fc" id="L92">        return name;</span>
+<span class="fc" id="L64">        return name;</span>
     }
 
-    /**
-     * Gets the regular expression.
-     * @return regular expression
-     */
     public String getRegex() {
-<span class="fc" id="L100">        return regex;</span>
+<span class="fc" id="L68">        return regex;</span>
     }
 
-    /**
-     * Gets the value.
-     * @return value
-     */
     public String getValue() {
-<span class="fc" id="L108">        return value;</span>
+<span class="fc" id="L72">        return value;</span>
     }
 
-    /**
-     * Gets the enum from the name.
-     * @param name name
-     * @return the enum
-     */
     public static StringDelimiter fromName(String name) {
-<span class="fc bfc" id="L117" title="All 2 branches covered.">        for (StringDelimiter entry : values()) {</span>
-<span class="fc bfc" id="L118" title="All 2 branches covered.">            if (entry.getName().equals(name)) {</span>
-<span class="fc" id="L119">                return entry;</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (StringDelimiter entry : values()) {</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">            if (entry.getName().equals(name)) {</span>
+<span class="fc" id="L78">                return entry;</span>
             }
         }
-<span class="fc" id="L122">        return null;</span>
+<span class="fc" id="L81">        return null;</span>
     }
 
-    /**
-     * Gets all regular expressions.
-     * @return a list of regular expression strings
-     */
     public static List&lt;String&gt; getAllRegexes() {
-<span class="fc" id="L130">        List&lt;String&gt; values = new ArrayList&lt;String&gt;();</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        for (StringDelimiter en : values()) {</span>
-<span class="fc" id="L132">            values.add(en.getRegex());</span>
+<span class="fc" id="L85">        List&lt;String&gt; values = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        for (StringDelimiter en : values()) {</span>
+<span class="fc" id="L87">            values.add(en.getRegex());</span>
         }
-<span class="fc" id="L134">        return values;</span>
+<span class="fc" id="L89">        return values;</span>
     }
 
-    /**
-     * Gets all names.
-     * @return a list of names.
-     */
     public static List&lt;String&gt; getAllNames() {
-<span class="fc" id="L142">        List&lt;String&gt; names = new ArrayList&lt;String&gt;();</span>
-<span class="fc bfc" id="L143" title="All 2 branches covered.">        for (StringDelimiter en : values()) {</span>
-<span class="fc" id="L144">            names.add(en.getName());</span>
+<span class="fc" id="L93">        List&lt;String&gt; names = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        for (StringDelimiter en : values()) {</span>
+<span class="fc" id="L95">            names.add(en.getName());</span>
         }
-<span class="fc" id="L146">        return names;</span>
+<span class="fc" id="L97">        return names;</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

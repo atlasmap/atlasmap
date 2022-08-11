@@ -22,68 +22,38 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import io.atlasmap.v2.Document;
 
-/**
- * The top container object of XML Document inspection response that AtlasMap design time backend
- * service sends back to the UI in return for CSV inspection request.
- */
 @JsonRootName(&quot;CsvInspectionResponse&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L31">public class CsvInspectionResponse implements Serializable {</span>
+<span class="fc" id="L27">public class CsvInspectionResponse implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
-    /** CSV Document. */
+
     private Document csvDocument;
-    /** Error message. */
     private String errorMessage;
-    /** Execution time. */
     private long executionTime;
 
-    /**
-     * Gets the CSV Document.
-     * @return CSV document
-     */
     public Document getCsvDocument() {
-<span class="fc" id="L46">        return csvDocument;</span>
+<span class="fc" id="L36">        return csvDocument;</span>
     }
 
-    /**
-     * Gets the error message.
-     * @return error message
-     */
     public String getErrorMessage() {
-<span class="fc" id="L54">        return errorMessage;</span>
+<span class="fc" id="L40">        return errorMessage;</span>
     }
 
-    /**
-     * Gets the execution time.
-     * @return execution time.
-     */
     public long getExecutionTime() {
-<span class="fc" id="L62">        return executionTime;</span>
+<span class="fc" id="L44">        return executionTime;</span>
     }
 
-    /**
-     * Sets the CSV Document.
-     * @param csvDocument CSV Document.
-     */
     public void setCsvDocument(Document csvDocument) {
-<span class="fc" id="L70">        this.csvDocument = csvDocument;</span>
-<span class="fc" id="L71">    }</span>
+<span class="fc" id="L48">        this.csvDocument = csvDocument;</span>
+<span class="fc" id="L49">    }</span>
 
-    /**
-     * Sets the error message.
-     * @param message message
-     */
     public void setErrorMessage(String message) {
-<span class="nc" id="L78">        this.errorMessage = message;</span>
-<span class="nc" id="L79">    }</span>
+<span class="nc" id="L52">        this.errorMessage = message;</span>
+<span class="nc" id="L53">    }</span>
 
-    /**
-     * Sets the execution time.
-     * @param executionTime execution time
-     */
     public void setExecutionTime(long executionTime) {
-<span class="fc" id="L86">        this.executionTime = executionTime;</span>
-<span class="fc" id="L87">    }</span>
+<span class="fc" id="L56">        this.executionTime = executionTime;</span>
+<span class="fc" id="L57">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

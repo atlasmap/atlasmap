@@ -31,115 +31,83 @@ import org.w3c.dom.NodeList;
 
 import io.atlasmap.api.AtlasException;
 
-/**
- * The XML IO helper.
- */
 public final class XmlIOHelper {
 
     private TransformerFactory transformerFactory;
 
-    /**
-     * A constructor.
-     * @param cl class loader
-     */
-<span class="fc" id="L45">    public XmlIOHelper(ClassLoader cl) {</span>
-<span class="fc" id="L46">        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();</span>
+<span class="fc" id="L38">    public XmlIOHelper(ClassLoader cl) {</span>
+<span class="fc" id="L39">        ClassLoader origTccl = Thread.currentThread().getContextClassLoader();</span>
         try {
-<span class="fc" id="L48">            Thread.currentThread().setContextClassLoader(cl);</span>
-<span class="fc" id="L49">            this.transformerFactory = TransformerFactory.newInstance();</span>
+<span class="fc" id="L41">            Thread.currentThread().setContextClassLoader(cl);</span>
+<span class="fc" id="L42">            this.transformerFactory = TransformerFactory.newInstance();</span>
         } finally {
-<span class="fc" id="L51">            Thread.currentThread().setContextClassLoader(origTccl);</span>
+<span class="fc" id="L44">            Thread.currentThread().setContextClassLoader(origTccl);</span>
         }
-<span class="fc" id="L53">    }</span>
+<span class="fc" id="L46">    }</span>
 
-    /**
-     * Gets the children which has the specified name.
-     * @param name name
-     * @param parentNode parent
-     * @return children
-     */
     public static List&lt;Element&gt; getChildrenWithName(String name, Element parentNode) {
-<span class="fc" id="L62">        List&lt;Element&gt; children = new LinkedList&lt;&gt;();</span>
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
-<span class="nc" id="L64">            return children;</span>
+<span class="fc" id="L49">        List&lt;Element&gt; children = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
+<span class="nc" id="L51">            return children;</span>
         }
-<span class="fc" id="L66">        NodeList nodeChildren = parentNode.getChildNodes();</span>
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeChildren.getLength(); i++) {</span>
-<span class="fc" id="L68">            Node child = nodeChildren.item(i);</span>
-<span class="fc bfc" id="L69" title="All 4 branches covered.">            if ((child instanceof Element) &amp;&amp; child.getNodeName().equals(name)) {</span>
-<span class="fc" id="L70">                children.add((Element) child);</span>
+<span class="fc" id="L53">        NodeList nodeChildren = parentNode.getChildNodes();</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeChildren.getLength(); i++) {</span>
+<span class="fc" id="L55">            Node child = nodeChildren.item(i);</span>
+<span class="fc bfc" id="L56" title="All 4 branches covered.">            if ((child instanceof Element) &amp;&amp; child.getNodeName().equals(name)) {</span>
+<span class="fc" id="L57">                children.add((Element) child);</span>
             }
         }
-<span class="fc" id="L73">        return children;</span>
+<span class="fc" id="L60">        return children;</span>
     }
 
-    /**
-     * Gets the children which has the specified name with stripping namespace alias.
-     * @param name name
-     * @param namespace namespace
-     * @param parentNode parent
-     * @return children
-     */
     public static List&lt;Element&gt; getChildrenWithNameStripAlias(String name, Optional&lt;String&gt; namespace, Element parentNode) {
-<span class="fc" id="L84">        List&lt;Element&gt; children = new LinkedList&lt;&gt;();</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
-<span class="nc" id="L86">            return children;</span>
+<span class="fc" id="L64">        List&lt;Element&gt; children = new LinkedList&lt;&gt;();</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
+<span class="nc" id="L66">            return children;</span>
         }
-<span class="fc" id="L88">        NodeList nodeChildren = parentNode.getChildNodes();</span>
-<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeChildren.getLength(); i++) {</span>
-<span class="fc" id="L90">            Node child = nodeChildren.item(i);</span>
-<span class="fc" id="L91">            String nodeName = getNodeNameWithoutNamespaceAlias(child);</span>
-<span class="fc bfc" id="L92" title="All 4 branches covered.">            if ((child instanceof Element) &amp;&amp; nodeName.equals(name)) {</span>
-<span class="fc bfc" id="L93" title="All 2 branches covered.">                if (!namespace.isPresent()) {</span>
-<span class="fc" id="L94">                    children.add((Element) child);</span>
-<span class="fc bfc" id="L95" title="All 2 branches covered.">                } else if (namespace.get().equals(child.getNamespaceURI())) {</span>
-<span class="fc" id="L96">                    children.add((Element) child);</span>
+<span class="fc" id="L68">        NodeList nodeChildren = parentNode.getChildNodes();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        for (int i = 0; i &lt; nodeChildren.getLength(); i++) {</span>
+<span class="fc" id="L70">            Node child = nodeChildren.item(i);</span>
+<span class="fc" id="L71">            String nodeName = getNodeNameWithoutNamespaceAlias(child);</span>
+<span class="fc bfc" id="L72" title="All 4 branches covered.">            if ((child instanceof Element) &amp;&amp; nodeName.equals(name)) {</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">                if (!namespace.isPresent()) {</span>
+<span class="fc" id="L74">                    children.add((Element) child);</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">                } else if (namespace.get().equals(child.getNamespaceURI())) {</span>
+<span class="fc" id="L76">                    children.add((Element) child);</span>
                 }
             }
         }
-<span class="fc" id="L100">        return children;</span>
+<span class="fc" id="L80">        return children;</span>
     }
 
-    /**
-     * Writes the XML Document into a String.
-     * @param stripSpaces true to strip spaces
-     * @param node node
-     * @return wrtten Document in String
-     * @throws AtlasException unexpected error
-     */
     public String writeDocumentToString(boolean stripSpaces, Node node) throws AtlasException {
         try {
-<span class="pc bpc" id="L112" title="1 of 2 branches missed.">            if (node == null) {</span>
-<span class="nc" id="L113">                return &quot;&quot;;</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">            if (node == null) {</span>
+<span class="nc" id="L86">                return &quot;&quot;;</span>
             }
-<span class="fc" id="L115">            Transformer transformer = transformerFactory.newTransformer();</span>
-<span class="fc" id="L116">            StringWriter writer = new StringWriter();</span>
-<span class="fc" id="L117">            transformer.transform(new DOMSource(node), new StreamResult(writer));</span>
+<span class="fc" id="L88">            Transformer transformer = transformerFactory.newTransformer();</span>
+<span class="fc" id="L89">            StringWriter writer = new StringWriter();</span>
+<span class="fc" id="L90">            transformer.transform(new DOMSource(node), new StreamResult(writer));</span>
 
-<span class="fc" id="L119">            String result = writer.getBuffer().toString();</span>
-<span class="fc bfc" id="L120" title="All 2 branches covered.">            if (stripSpaces) {</span>
-<span class="fc" id="L121">                result = result.replaceAll(&quot;\n|\r&quot;, &quot;&quot;);</span>
-<span class="fc" id="L122">                result = result.replaceAll(&quot;&gt; *?&lt;&quot;, &quot;&gt;&lt;&quot;);</span>
+<span class="fc" id="L92">            String result = writer.getBuffer().toString();</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">            if (stripSpaces) {</span>
+<span class="fc" id="L94">                result = result.replaceAll(&quot;\n|\r&quot;, &quot;&quot;);</span>
+<span class="fc" id="L95">                result = result.replaceAll(&quot;&gt; *?&lt;&quot;, &quot;&gt;&lt;&quot;);</span>
             }
-<span class="fc" id="L124">            return result;</span>
-<span class="nc" id="L125">        } catch (Exception e) {</span>
-<span class="nc" id="L126">            throw new AtlasException(e);</span>
+<span class="fc" id="L97">            return result;</span>
+<span class="nc" id="L98">        } catch (Exception e) {</span>
+<span class="nc" id="L99">            throw new AtlasException(e);</span>
         }
     }
 
-    /**
-     * Gets the node name without namespace alias.
-     * @param child node
-     * @return name
-     */
     public static String getNodeNameWithoutNamespaceAlias(Node child) {
-<span class="fc" id="L136">        String nodeName = child.getNodeName();</span>
-<span class="fc" id="L137">        int index = nodeName.indexOf(&quot;:&quot;);</span>
-<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (index &gt;= 0) {</span>
-<span class="fc" id="L139">            nodeName = nodeName.substring(index + 1);</span>
+<span class="fc" id="L104">        String nodeName = child.getNodeName();</span>
+<span class="fc" id="L105">        int index = nodeName.indexOf(&quot;:&quot;);</span>
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if (index &gt;= 0) {</span>
+<span class="fc" id="L107">            nodeName = nodeName.substring(index + 1);</span>
         }
-<span class="fc" id="L141">        return nodeName;</span>
+<span class="fc" id="L109">        return nodeName;</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

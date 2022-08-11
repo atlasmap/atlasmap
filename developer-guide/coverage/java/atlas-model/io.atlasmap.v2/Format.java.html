@@ -18,15 +18,10 @@ package io.atlasmap.v2;
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-
-/**
- * The model class for the &lt;strong&gt;Format&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class Format extends Action implements Serializable {</span>
+<span class="fc" id="L21">public class Format extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** template */
     protected String template;
 
     /**
@@ -38,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     
      */
     public String getTemplate() {
-<span class="fc" id="L41">        return template;</span>
+<span class="fc" id="L36">        return template;</span>
     }
 
     /**
@@ -52,8 +47,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The template string&quot;)
     @AtlasActionProperty(title = &quot;Template&quot;, type = FieldType.STRING)
     public void setTemplate(String value) {
-<span class="fc" id="L55">        this.template = value;</span>
-<span class="fc" id="L56">    }</span>
+<span class="fc" id="L50">        this.template = value;</span>
+<span class="fc" id="L51">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

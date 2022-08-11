@@ -19,18 +19,13 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-/**
- * The model class for the &lt;strong&gt;Concatenate&lt;/strong&gt; field action.
- */
-<span class="fc" id="L25">public class Concatenate extends Action implements Serializable {</span>
+<span class="fc" id="L22">public class Concatenate extends Action implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** delimiter */
     protected String delimiter;
 
-    /** true to delimiting empty values */
-<span class="fc" id="L33">    protected Boolean delimitingEmptyValues = true;</span>
+<span class="fc" id="L28">    protected Boolean delimitingEmptyValues = true;</span>
 
     /**
      * Gets the value of the delimiter property.
@@ -41,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *
      */
     public String getDelimiter() {
-<span class="fc" id="L44">        return delimiter;</span>
+<span class="fc" id="L39">        return delimiter;</span>
     }
 
     /**
@@ -49,7 +44,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
      *     &lt;code&gt;true&lt;/code&gt; if delimiting empty values
      */
     public Boolean getDelimitingEmptyValues() {
-<span class="fc" id="L52">        return delimitingEmptyValues;</span>
+<span class="fc" id="L47">        return delimitingEmptyValues;</span>
     }
 
     // !!!! Warning !!!! these setters must be kept in alphabetical order
@@ -65,8 +60,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;The delimiter string to concatenate input strings with&quot;)
     @AtlasActionProperty(title = &quot;Delimiter&quot;, type = FieldType.STRING)
     public void setDelimiter(String value) {
-<span class="fc" id="L68">        this.delimiter = value;</span>
-<span class="fc" id="L69">    }</span>
+<span class="fc" id="L63">        this.delimiter = value;</span>
+<span class="fc" id="L64">    }</span>
 
     /**
      * @param delimitingEmptyValues
@@ -75,7 +70,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
     @JsonPropertyDescription(&quot;Determines if delimiters are added around empty values&quot;)
     @AtlasActionProperty(title = &quot;Delimit empty values&quot;, type = FieldType.BOOLEAN)
     public void setDelimitingEmptyValues(Boolean delimitingEmptyValues) {
-<span class="fc" id="L78">        this.delimitingEmptyValues = delimitingEmptyValues;</span>
-<span class="fc" id="L79">    }</span>
+<span class="fc" id="L73">        this.delimitingEmptyValues = delimitingEmptyValues;</span>
+<span class="fc" id="L74">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

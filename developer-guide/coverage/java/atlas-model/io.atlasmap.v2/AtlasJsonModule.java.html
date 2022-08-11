@@ -18,21 +18,15 @@ package io.atlasmap.v2;
 import com.fasterxml.jackson.core.util.VersionUtil;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 
-/**
- * The jackson {@link com.fasterxml.jackson.databind.Module} of the field action.
- */
 public class AtlasJsonModule extends SimpleModule {
 
     private static final long serialVersionUID = -2352383379765836801L;
     private static final String NAME = &quot;AtlasJsonModule&quot;;
-<span class="fc" id="L28">    private static final VersionUtil VERSION_UTIL = new VersionUtil() {</span>
+<span class="fc" id="L25">    private static final VersionUtil VERSION_UTIL = new VersionUtil() {</span>
     };
 
-    /**
-     * A constructor.
-     */
     public AtlasJsonModule() {
-<span class="fc" id="L35">        super(NAME, VERSION_UTIL.version());</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L29">        super(NAME, VERSION_UTIL.version());</span>
+<span class="fc" id="L30">    }</span>
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

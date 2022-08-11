@@ -20,19 +20,14 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The process mapping request model object.
- */
 @JsonRootName(&quot;ProcessMappingRequest&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L28">public class ProcessMappingRequest implements Serializable {</span>
+<span class="fc" id="L25">public class ProcessMappingRequest implements Serializable {</span>
 
     private static final long serialVersionUID = 1L;
 
-    /** single {@link Mapping} entry */
     protected Mapping mapping;
 
-    /** whole {@link AtlasMapping} */
     protected AtlasMapping atlasMapping;
 
     /**
@@ -44,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public Mapping getMapping() {
-<span class="fc" id="L47">        return mapping;</span>
+<span class="fc" id="L42">        return mapping;</span>
     }
 
     /**
@@ -56,8 +51,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setMapping(Mapping value) {
-<span class="fc" id="L59">        this.mapping = value;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L54">        this.mapping = value;</span>
+<span class="fc" id="L55">    }</span>
 
     /**
      * Gets the value of the atlasMapping property.
@@ -68,7 +63,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public AtlasMapping getAtlasMapping() {
-<span class="fc" id="L71">        return atlasMapping;</span>
+<span class="fc" id="L66">        return atlasMapping;</span>
     }
 
     /**
@@ -80,8 +75,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
      *     
      */
     public void setAtlasMapping(AtlasMapping value) {
-<span class="nc" id="L83">        this.atlasMapping = value;</span>
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L78">        this.atlasMapping = value;</span>
+<span class="nc" id="L79">    }</span>
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -17,6 +17,7 @@ package io.atlasmap.actions;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import io.atlasmap.spi.AtlasActionProcessor;
@@ -26,6 +27,7 @@ import io.atlasmap.v2.Concatenate;
 import io.atlasmap.v2.EndsWith;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.v2.Format;
+import io.atlasmap.v2.GenerateUUID;
 import io.atlasmap.v2.IndexOf;
 import io.atlasmap.v2.LastIndexOf;
 import io.atlasmap.v2.PadStringLeft;
@@ -40,368 +42,270 @@ import io.atlasmap.v2.SubString;
 import io.atlasmap.v2.SubStringAfter;
 import io.atlasmap.v2.SubStringBefore;
 
-/**
- * The String field action that has parameter(s).
- */
-<span class="fc" id="L46">public class StringComplexFieldActions implements AtlasFieldAction {</span>
+<span class="fc" id="L45">public class StringComplexFieldActions implements AtlasFieldAction {</span>
 
-    /**
-     * Appends to the source String.
-     * @param append action model
-     * @param input source
-     * @return processed
-     */
+    public static final String STRING_SEPARATOR_REGEX = &quot;^\\s+:_+=&quot;;
+<span class="fc" id="L48">    public static final Pattern STRING_SEPARATOR_PATTERN = Pattern.compile(STRING_SEPARATOR_REGEX);</span>
+
     @AtlasActionProcessor
     public static String append(Append append, String input) {
-<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (append == null) {</span>
-<span class="fc" id="L57">            throw new IllegalArgumentException(&quot;Append must be specified with a string&quot;);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (append == null) {</span>
+<span class="fc" id="L53">            throw new IllegalArgumentException(&quot;Append must be specified with a string&quot;);</span>
         }
-<span class="fc" id="L59">        String string = append.getString();</span>
-<span class="fc bfc" id="L60" title="All 4 branches covered.">        if (input == null &amp;&amp; string == null) {</span>
-<span class="fc" id="L61">            return null;</span>
+<span class="fc" id="L55">        String string = append.getString();</span>
+<span class="fc bfc" id="L56" title="All 4 branches covered.">        if (input == null &amp;&amp; string == null) {</span>
+<span class="fc" id="L57">            return null;</span>
         }
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (string == null) {</span>
-<span class="fc" id="L64">            return input.toString();</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (string == null) {</span>
+<span class="fc" id="L60">            return input.toString();</span>
         }
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        return input == null ? string : input.toString().concat(string);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        return input == null ? string : input.toString().concat(string);</span>
     }
 
-    /**
-     * Concatenates a list of String.
-     * @param concat action model
-     * @param inputs a list of source String
-     * @return processed
-     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String concatenate(Concatenate concat, List&lt;String&gt; inputs) {
-<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (concat == null) {</span>
-<span class="fc" id="L78">            throw new IllegalArgumentException(&quot;Concatenate must be specified with a delimiter&quot;);</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (concat == null) {</span>
+<span class="fc" id="L68">            throw new IllegalArgumentException(&quot;Concatenate must be specified with a delimiter&quot;);</span>
         }
-<span class="fc bfc" id="L80" title="All 2 branches covered.">        if (inputs == null) {</span>
-<span class="fc" id="L81">            return null;</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (inputs == null) {</span>
+<span class="fc" id="L71">            return null;</span>
         }
 
-<span class="fc bfc" id="L84" title="All 2 branches covered.">        String delim = concat.getDelimiter() == null ? &quot;&quot; : concat.getDelimiter();</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        boolean delimitingEmptyValues = concat.getDelimitingEmptyValues() == null</span>
-<span class="nc" id="L86">            ? false</span>
-<span class="fc" id="L87">            : concat.getDelimitingEmptyValues();</span>
-<span class="fc" id="L88">        boolean isFirst = true;</span>
-<span class="fc" id="L89">        StringBuilder builder = new StringBuilder();</span>
-<span class="fc bfc" id="L90" title="All 2 branches covered.">        for (String entry : inputs) {</span>
-<span class="pc bpc" id="L91" title="2 of 8 branches missed.">            if (!isFirst &amp;&amp; ((entry != null &amp;&amp; !entry.isEmpty()) || delimitingEmptyValues)) {</span>
-<span class="fc" id="L92">                builder.append(delim);</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        String delim = concat.getDelimiter() == null ? &quot;&quot; : concat.getDelimiter();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        boolean delimitingEmptyValues = concat.getDelimitingEmptyValues() == null</span>
+<span class="nc" id="L76">            ? false</span>
+<span class="fc" id="L77">            : concat.getDelimitingEmptyValues();</span>
+<span class="fc" id="L78">        boolean isFirst = true;</span>
+<span class="fc" id="L79">        StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">        for (String entry : inputs) {</span>
+<span class="pc bpc" id="L81" title="2 of 8 branches missed.">            if (!isFirst &amp;&amp; ((entry != null &amp;&amp; !entry.isEmpty()) || delimitingEmptyValues)) {</span>
+<span class="fc" id="L82">                builder.append(delim);</span>
             }
-<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (entry != null) {</span>
-<span class="fc" id="L95">                builder.append(entry);</span>
+<span class="fc bfc" id="L84" title="All 2 branches covered.">            if (entry != null) {</span>
+<span class="fc" id="L85">                builder.append(entry);</span>
             }
-<span class="fc" id="L97">            isFirst = false;</span>
-<span class="fc" id="L98">        }</span>
+<span class="fc" id="L87">            isFirst = false;</span>
+<span class="fc" id="L88">        }</span>
 
-<span class="fc" id="L100">        return builder.toString();</span>
+<span class="fc" id="L90">        return builder.toString();</span>
     }
 
-    /**
-     * Gets if the source string ends with the String specified as a parameter.
-     * @param endsWith action model
-     * @param input source
-     * @return true if it ends with the one, or false
-     */
     @AtlasActionProcessor
     public static Boolean endsWith(EndsWith endsWith, String input) {
-<span class="fc bfc" id="L111" title="All 4 branches covered.">        if (endsWith == null || endsWith.getString() == null) {</span>
-<span class="fc" id="L112">            throw new IllegalArgumentException(&quot;EndsWith must be specified with a string&quot;);</span>
+<span class="fc bfc" id="L95" title="All 4 branches covered.">        if (endsWith == null || endsWith.getString() == null) {</span>
+<span class="fc" id="L96">            throw new IllegalArgumentException(&quot;EndsWith must be specified with a string&quot;);</span>
         }
 
-<span class="fc bfc" id="L115" title="All 2 branches covered.">        return input == null ? false : input.endsWith(endsWith.getString());</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        return input == null ? false : input.endsWith(endsWith.getString());</span>
     }
 
-    /**
-     * Formats the template String specified as a parameter by using {@link String#format(Locale, String, Object...)}.
-     * Source Strings are used as template parameters.
-     * @param format action model
-     * @param input a list of source Strings
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String format(Format format, List&lt;Object&gt; input) {
-<span class="fc bfc" id="L127" title="All 4 branches covered.">        if (format == null || format.getTemplate() == null) {</span>
-<span class="fc" id="L128">            throw new IllegalArgumentException(&quot;Format must be specified with a template&quot;);</span>
+<span class="fc bfc" id="L104" title="All 4 branches covered.">        if (format == null || format.getTemplate() == null) {</span>
+<span class="fc" id="L105">            throw new IllegalArgumentException(&quot;Format must be specified with a template&quot;);</span>
         }
 
-<span class="fc bfc" id="L131" title="All 2 branches covered.">        return String.format(Locale.ROOT, format.getTemplate(), input == null ? null : input.toArray(new Object[0]));</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">        return String.format(Locale.ROOT, format.getTemplate(), input == null ? null : input.toArray(new Object[0]));</span>
     }
 
-    /**
-     * Gets the index of the String specified as a parameter in the source String by using {@link String#indexOf(String)}.
-     * @param indexOf action model
-     * @param input source
-     * @return index
-     */
+    @AtlasActionProcessor
+    public static String genareteUUID(GenerateUUID action) {
+<span class="fc" id="L113">        return UUID.randomUUID().toString();</span>
+    }
+
     @AtlasActionProcessor
     public static Number indexOf(IndexOf indexOf, String input) {
-<span class="fc bfc" id="L142" title="All 4 branches covered.">        if (indexOf == null || indexOf.getString() == null) {</span>
-<span class="fc" id="L143">            throw new IllegalArgumentException(&quot;IndexOf must be specified with a string&quot;);</span>
+<span class="fc bfc" id="L118" title="All 4 branches covered.">        if (indexOf == null || indexOf.getString() == null) {</span>
+<span class="fc" id="L119">            throw new IllegalArgumentException(&quot;IndexOf must be specified with a string&quot;);</span>
         }
 
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        return input == null ? -1 : input.indexOf(indexOf.getString());</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        return input == null ? -1 : input.indexOf(indexOf.getString());</span>
     }
 
-    /**
-     * Gets the last index of the String specified as a parameter in the source String by using {@link String#lastIndexOf(String)}.
-     * @param lastIndexOf action model
-     * @param input source
-     * @return index
-     */
     @AtlasActionProcessor
     public static Number lastIndexOf(LastIndexOf lastIndexOf, String input) {
-<span class="fc bfc" id="L157" title="All 4 branches covered.">        if (lastIndexOf == null || lastIndexOf.getString() == null) {</span>
-<span class="fc" id="L158">            throw new IllegalArgumentException(&quot;LastIndexOf must be specified with a string&quot;);</span>
+<span class="fc bfc" id="L127" title="All 4 branches covered.">        if (lastIndexOf == null || lastIndexOf.getString() == null) {</span>
+<span class="fc" id="L128">            throw new IllegalArgumentException(&quot;LastIndexOf must be specified with a string&quot;);</span>
         }
 
-<span class="fc bfc" id="L161" title="All 2 branches covered.">        return input == null ? -1 : input.lastIndexOf(lastIndexOf.getString());</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        return input == null ? -1 : input.lastIndexOf(lastIndexOf.getString());</span>
     }
 
-    /**
-     * Appends the specified number of padding characters to the right.
-     * @param padStringRight action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String padStringRight(PadStringRight padStringRight, String input) {
-<span class="fc bfc" id="L172" title="All 4 branches covered.">        if (padStringRight == null || padStringRight.getPadCharacter() == null</span>
-<span class="fc bfc" id="L173" title="All 2 branches covered.">                || padStringRight.getPadCount() == null) {</span>
-<span class="fc" id="L174">            throw new IllegalArgumentException(&quot;PadStringRight must be specified with padCharacter and padCount&quot;);</span>
+<span class="fc bfc" id="L136" title="All 4 branches covered.">        if (padStringRight == null || padStringRight.getPadCharacter() == null</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                || padStringRight.getPadCount() == null) {</span>
+<span class="fc" id="L138">            throw new IllegalArgumentException(&quot;PadStringRight must be specified with padCharacter and padCount&quot;);</span>
         }
 
-<span class="fc" id="L177">        StringBuilder builder = new StringBuilder();</span>
-<span class="fc bfc" id="L178" title="All 2 branches covered.">        if (input != null) {</span>
-<span class="fc" id="L179">            builder.append(input);</span>
+<span class="fc" id="L141">        StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (input != null) {</span>
+<span class="fc" id="L143">            builder.append(input);</span>
         }
-<span class="fc bfc" id="L181" title="All 2 branches covered.">        for (int i = 0; i &lt; padStringRight.getPadCount(); i++) {</span>
-<span class="fc" id="L182">            builder.append(padStringRight.getPadCharacter());</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        for (int i = 0; i &lt; padStringRight.getPadCount(); i++) {</span>
+<span class="fc" id="L146">            builder.append(padStringRight.getPadCharacter());</span>
         }
 
-<span class="fc" id="L185">        return builder.toString();</span>
+<span class="fc" id="L149">        return builder.toString();</span>
     }
 
-    /**
-     *  Prepends the specified number of padding character to the left.
-     * @param padStringLeft action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String padStringLeft(PadStringLeft padStringLeft, String input) {
-<span class="fc bfc" id="L196" title="All 4 branches covered.">        if (padStringLeft == null || padStringLeft.getPadCharacter() == null</span>
-<span class="fc bfc" id="L197" title="All 2 branches covered.">                || padStringLeft.getPadCount() == null) {</span>
-<span class="fc" id="L198">            throw new IllegalArgumentException(&quot;PadStringLeft must be specified with padCharacter and padCount&quot;);</span>
+<span class="fc bfc" id="L154" title="All 4 branches covered.">        if (padStringLeft == null || padStringLeft.getPadCharacter() == null</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                || padStringLeft.getPadCount() == null) {</span>
+<span class="fc" id="L156">            throw new IllegalArgumentException(&quot;PadStringLeft must be specified with padCharacter and padCount&quot;);</span>
         }
 
-<span class="fc" id="L201">        StringBuilder builder = new StringBuilder();</span>
-<span class="fc bfc" id="L202" title="All 2 branches covered.">        for (int i = 0; i &lt; padStringLeft.getPadCount(); i++) {</span>
-<span class="fc" id="L203">            builder.append(padStringLeft.getPadCharacter());</span>
+<span class="fc" id="L159">        StringBuilder builder = new StringBuilder();</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        for (int i = 0; i &lt; padStringLeft.getPadCount(); i++) {</span>
+<span class="fc" id="L161">            builder.append(padStringLeft.getPadCharacter());</span>
         }
-<span class="fc bfc" id="L205" title="All 2 branches covered.">        if (input != null) {</span>
-<span class="fc" id="L206">            builder.append(input);</span>
+<span class="fc bfc" id="L163" title="All 2 branches covered.">        if (input != null) {</span>
+<span class="fc" id="L164">            builder.append(input);</span>
         }
 
-<span class="fc" id="L209">        return builder.toString();</span>
+<span class="fc" id="L167">        return builder.toString();</span>
     }
 
-    /**
-     * Prepends the specified String to the left.
-     * @param action action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String prepend(Prepend action, String input) {
-<span class="fc" id="L220">        String string = action.getString();</span>
-<span class="fc bfc" id="L221" title="All 2 branches covered.">        if (input == null) {</span>
-<span class="fc" id="L222">            return string;</span>
+<span class="fc" id="L172">        String string = action.getString();</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (input == null) {</span>
+<span class="fc" id="L174">            return string;</span>
         }
-<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (string == null) {</span>
-<span class="fc" id="L225">            return input;</span>
+<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (string == null) {</span>
+<span class="fc" id="L177">            return input;</span>
         }
-<span class="fc" id="L227">        return string.concat(input);</span>
+<span class="fc" id="L179">        return string.concat(input);</span>
     }
 
-    /**
-     * Replaces all hits with the regular expression specified as a parameter.
-     * @param replaceAll action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String replaceAll(ReplaceAll replaceAll, String input) {
-<span class="fc bfc" id="L238" title="All 6 branches covered.">        if (replaceAll == null || replaceAll.getMatch() == null || replaceAll.getMatch().isEmpty()) {</span>
-<span class="fc" id="L239">            throw new IllegalArgumentException(&quot;ReplaceAll action must be specified with a non-empty old string&quot;);</span>
+<span class="fc bfc" id="L184" title="All 6 branches covered.">        if (replaceAll == null || replaceAll.getMatch() == null || replaceAll.getMatch().isEmpty()) {</span>
+<span class="fc" id="L185">            throw new IllegalArgumentException(&quot;ReplaceAll action must be specified with a non-empty old string&quot;);</span>
         }
-<span class="fc" id="L241">        String match = replaceAll.getMatch();</span>
-<span class="fc" id="L242">        String newString = replaceAll.getNewString();</span>
-<span class="fc bfc" id="L243" title="All 4 branches covered.">        return input == null ? null : input.replaceAll(match, newString == null ? &quot;&quot; : newString);</span>
+<span class="fc" id="L187">        String match = replaceAll.getMatch();</span>
+<span class="fc" id="L188">        String newString = replaceAll.getNewString();</span>
+<span class="fc bfc" id="L189" title="All 4 branches covered.">        return input == null ? null : input.replaceAll(match, newString == null ? &quot;&quot; : newString);</span>
     }
 
-    /**
-     * Replaces first hit with the regular expression specified as a parameter.
-     * @param replaceFirst action model
-     * @param input source
-     * @return processed
-     */
     @AtlasActionProcessor
     public static String replaceFirst(ReplaceFirst replaceFirst, String input) {
-<span class="fc bfc" id="L254" title="All 6 branches covered.">        if (replaceFirst == null || replaceFirst.getMatch() == null || replaceFirst.getMatch().isEmpty()) {</span>
-<span class="fc" id="L255">            throw new IllegalArgumentException(&quot;ReplaceFirst action must be specified with a non-empty old string&quot;);</span>
+<span class="fc bfc" id="L194" title="All 6 branches covered.">        if (replaceFirst == null || replaceFirst.getMatch() == null || replaceFirst.getMatch().isEmpty()) {</span>
+<span class="fc" id="L195">            throw new IllegalArgumentException(&quot;ReplaceFirst action must be specified with a non-empty old string&quot;);</span>
         }
-<span class="fc" id="L257">        String match = replaceFirst.getMatch();</span>
-<span class="fc" id="L258">        String newString = replaceFirst.getNewString();</span>
-<span class="fc bfc" id="L259" title="All 4 branches covered.">        return input == null ? null : input.replaceFirst(match, newString == null ? &quot;&quot; : newString);</span>
+<span class="fc" id="L197">        String match = replaceFirst.getMatch();</span>
+<span class="fc" id="L198">        String newString = replaceFirst.getNewString();</span>
+<span class="fc bfc" id="L199" title="All 4 branches covered.">        return input == null ? null : input.replaceFirst(match, newString == null ? &quot;&quot; : newString);</span>
     }
 
-    /**
-     * Splits the String with the specified delimiter.
-     * @param split action model
-     * @param input source
-     * @return splitted
-     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String[] split(Split split, String input) {
-<span class="pc bpc" id="L270" title="1 of 4 branches missed.">        if (split == null || split.getDelimiter() == null) {</span>
-<span class="fc" id="L271">            throw new IllegalArgumentException(&quot;Split must be specified with a delimiter&quot;);</span>
+<span class="pc bpc" id="L204" title="1 of 4 branches missed.">        if (split == null || split.getDelimiter() == null) {</span>
+<span class="fc" id="L205">            throw new IllegalArgumentException(&quot;Split must be specified with a delimiter&quot;);</span>
         }
-<span class="fc" id="L273">        String quotedDelimiter = Pattern.quote(split.getDelimiter());</span>
-<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        boolean collapseRepeatingDelimiter = split.getCollapseRepeatingDelimiters() == null</span>
-<span class="nc" id="L275">                ? false</span>
-<span class="fc" id="L276">                : split.getCollapseRepeatingDelimiters();</span>
-<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (collapseRepeatingDelimiter) {</span>
-<span class="fc" id="L278">            quotedDelimiter = &quot;(&quot; + quotedDelimiter + &quot;)+&quot;;</span>
+<span class="fc" id="L207">        String quotedDelimiter = Pattern.quote(split.getDelimiter());</span>
+<span class="pc bpc" id="L208" title="1 of 2 branches missed.">        boolean collapseRepeatingDelimiter = split.getCollapseRepeatingDelimiters() == null</span>
+<span class="nc" id="L209">                ? false</span>
+<span class="fc" id="L210">                : split.getCollapseRepeatingDelimiters();</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        if (collapseRepeatingDelimiter) {</span>
+<span class="fc" id="L212">            quotedDelimiter = &quot;(&quot; + quotedDelimiter + &quot;)+&quot;;</span>
         }
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        return input == null ? null : input.toString().split(quotedDelimiter);</span>
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        return input == null ? null : input.toString().split(quotedDelimiter);</span>
     }
 
-    /**
-     * Repeats the source value based on the {@code Count} parameter.
-     * @param repeat action model
-     * @param input source
-     * @return repeated
-     */
     @AtlasActionProcessor(sourceType = FieldType.ANY)
     public static String[] repeat(Repeat repeat, String input) {
 
-<span class="pc bpc" id="L292" title="1 of 2 branches missed.">        if (repeat == null) {</span>
-<span class="nc" id="L293">            throw new IllegalArgumentException(&quot;repeat is not defined&quot;);</span>
+<span class="pc bpc" id="L220" title="1 of 2 branches missed.">        if (repeat == null) {</span>
+<span class="nc" id="L221">            throw new IllegalArgumentException(&quot;repeat is not defined&quot;);</span>
         }
 
-<span class="fc" id="L296">        String[] returnObj = null;</span>
+<span class="fc" id="L224">        String[] returnObj = null;</span>
 
         // Repeat the value based on count
-<span class="fc" id="L299">        int count = repeat.getCount();</span>
+<span class="fc" id="L227">        int count = repeat.getCount();</span>
 
-<span class="fc" id="L301">        returnObj = new String[count];</span>
-<span class="fc bfc" id="L302" title="All 2 branches covered.">        for (int i = 0; i &lt; count; i++) {</span>
-<span class="fc" id="L303">            returnObj[i] = input;</span>
+<span class="fc" id="L229">        returnObj = new String[count];</span>
+<span class="fc bfc" id="L230" title="All 2 branches covered.">        for (int i = 0; i &lt; count; i++) {</span>
+<span class="fc" id="L231">            returnObj[i] = input;</span>
         }
 
-<span class="fc" id="L306">        return returnObj;</span>
+<span class="fc" id="L234">        return returnObj;</span>
     }
 
-    /**
-     * Gets if the source String starts with the {@code String} parameter.
-     * @param startsWith action model
-     * @param input source
-     * @return true if it starts with {@code String}, or false
-     */
     @AtlasActionProcessor
     public static Boolean startsWith(StartsWith startsWith, String input) {
-<span class="fc bfc" id="L317" title="All 4 branches covered.">        if (startsWith == null || startsWith.getString() == null) {</span>
-<span class="fc" id="L318">            throw new IllegalArgumentException(&quot;StartsWith must be specified with a string&quot;);</span>
+<span class="fc bfc" id="L239" title="All 4 branches covered.">        if (startsWith == null || startsWith.getString() == null) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException(&quot;StartsWith must be specified with a string&quot;);</span>
         }
 
-<span class="fc bfc" id="L321" title="All 2 branches covered.">        return input == null ? false : input.startsWith(startsWith.getString());</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        return input == null ? false : input.startsWith(startsWith.getString());</span>
     }
 
-    /**
-     * Gets the substring from the source String with specified indexes.
-     * @param subString action model
-     * @param input source
-     * @return substring
-     */
     @AtlasActionProcessor
     public static String subString(SubString subString, String input) {
-<span class="fc bfc" id="L332" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L333">            return input;</span>
+<span class="fc bfc" id="L248" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L249">            return input;</span>
         }
 
-<span class="pc bpc" id="L336" title="2 of 6 branches missed.">        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() &lt; 0) {</span>
-<span class="fc" id="L337">            throw new IllegalArgumentException(&quot;SubString action must be specified with a positive startIndex&quot;);</span>
+<span class="pc bpc" id="L252" title="2 of 6 branches missed.">        if (subString == null || subString.getStartIndex() == null || subString.getStartIndex() &lt; 0) {</span>
+<span class="fc" id="L253">            throw new IllegalArgumentException(&quot;SubString action must be specified with a positive startIndex&quot;);</span>
         }
 
-<span class="fc" id="L340">        return doSubString(input, subString.getStartIndex(), subString.getEndIndex());</span>
+<span class="fc" id="L256">        return doSubString(input, subString.getStartIndex(), subString.getEndIndex());</span>
     }
 
-    /**
-     * Gets the substring from the source String which is after the part matches the regular expression.
-     * @param subStringAfter action model
-     * @param input source
-     * @return substring
-     */
     @AtlasActionProcessor
     public static String subStringAfter(SubStringAfter subStringAfter, String input) {
-<span class="fc bfc" id="L351" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L352">            return input;</span>
+<span class="fc bfc" id="L261" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L262">            return input;</span>
         }
 
-<span class="fc bfc" id="L355" title="All 4 branches covered.">        if (subStringAfter == null || subStringAfter.getStartIndex() == null</span>
-<span class="pc bpc" id="L356" title="1 of 4 branches missed.">                || subStringAfter.getStartIndex() &lt; 0 || subStringAfter.getMatch() == null</span>
-<span class="fc bfc" id="L357" title="All 2 branches covered.">                || (subStringAfter.getEndIndex() != null</span>
-<span class="pc bpc" id="L358" title="1 of 2 branches missed.">                        &amp;&amp; subStringAfter.getEndIndex() &lt; subStringAfter.getStartIndex())) {</span>
-<span class="fc" id="L359">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L265" title="All 4 branches covered.">        if (subStringAfter == null || subStringAfter.getStartIndex() == null</span>
+<span class="pc bpc" id="L266" title="1 of 4 branches missed.">                || subStringAfter.getStartIndex() &lt; 0 || subStringAfter.getMatch() == null</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">                || (subStringAfter.getEndIndex() != null</span>
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                        &amp;&amp; subStringAfter.getEndIndex() &lt; subStringAfter.getStartIndex())) {</span>
+<span class="fc" id="L269">            throw new IllegalArgumentException(</span>
                     &quot;SubStringAfter action must be specified with a positive startIndex and a string to match&quot;);
         }
 
-<span class="fc" id="L363">        int idx = input.indexOf(subStringAfter.getMatch());</span>
-<span class="fc bfc" id="L364" title="All 2 branches covered.">        if (idx &lt; 0) {</span>
-<span class="fc" id="L365">            return input;</span>
+<span class="fc" id="L273">        int idx = input.indexOf(subStringAfter.getMatch());</span>
+<span class="fc bfc" id="L274" title="All 2 branches covered.">        if (idx &lt; 0) {</span>
+<span class="fc" id="L275">            return input;</span>
         }
-<span class="fc" id="L367">        idx = idx + subStringAfter.getMatch().length();</span>
-<span class="fc" id="L368">        return doSubString(input.substring(idx), subStringAfter.getStartIndex(), subStringAfter.getEndIndex());</span>
+<span class="fc" id="L277">        idx = idx + subStringAfter.getMatch().length();</span>
+<span class="fc" id="L278">        return doSubString(input.substring(idx), subStringAfter.getStartIndex(), subStringAfter.getEndIndex());</span>
     }
 
-    /**
-     * Gets the substring from the source String which is before the part matches the regular expression.
-     * @param subStringBefore action model
-     * @param input source
-     * @return substring
-     */
     @AtlasActionProcessor
     public static String subStringBefore(SubStringBefore subStringBefore, String input) {
-<span class="fc bfc" id="L379" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
-<span class="fc" id="L380">            return input;</span>
+<span class="fc bfc" id="L283" title="All 4 branches covered.">        if (input == null || input.length() == 0) {</span>
+<span class="fc" id="L284">            return input;</span>
         }
 
-<span class="fc bfc" id="L383" title="All 4 branches covered.">        if (subStringBefore == null || subStringBefore.getStartIndex() == null</span>
-<span class="pc bpc" id="L384" title="1 of 4 branches missed.">                || subStringBefore.getStartIndex() &lt; 0 || subStringBefore.getMatch() == null</span>
-<span class="fc bfc" id="L385" title="All 2 branches covered.">                || (subStringBefore.getEndIndex() != null</span>
-<span class="pc bpc" id="L386" title="1 of 2 branches missed.">                        &amp;&amp; subStringBefore.getEndIndex() &lt; subStringBefore.getStartIndex())) {</span>
-<span class="fc" id="L387">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L287" title="All 4 branches covered.">        if (subStringBefore == null || subStringBefore.getStartIndex() == null</span>
+<span class="pc bpc" id="L288" title="1 of 4 branches missed.">                || subStringBefore.getStartIndex() &lt; 0 || subStringBefore.getMatch() == null</span>
+<span class="fc bfc" id="L289" title="All 2 branches covered.">                || (subStringBefore.getEndIndex() != null</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">                        &amp;&amp; subStringBefore.getEndIndex() &lt; subStringBefore.getStartIndex())) {</span>
+<span class="fc" id="L291">            throw new IllegalArgumentException(</span>
                     &quot;SubStringBefore action must be specified with a positive startIndex and a string to match&quot;);
         }
 
-<span class="fc" id="L391">        int idx = input.indexOf(subStringBefore.getMatch());</span>
-<span class="pc bpc" id="L392" title="1 of 2 branches missed.">        if (idx &lt; 0) {</span>
-<span class="nc" id="L393">            return input;</span>
+<span class="fc" id="L295">        int idx = input.indexOf(subStringBefore.getMatch());</span>
+<span class="pc bpc" id="L296" title="1 of 2 branches missed.">        if (idx &lt; 0) {</span>
+<span class="nc" id="L297">            return input;</span>
         }
 
-<span class="fc" id="L396">        return doSubString(input.substring(0, idx), subStringBefore.getStartIndex(), subStringBefore.getEndIndex());</span>
+<span class="fc" id="L300">        return doSubString(input.substring(0, idx), subStringBefore.getStartIndex(), subStringBefore.getEndIndex());</span>
     }
 
     private static String doSubString(String input, Integer startIndex, Integer endIndex) {
-<span class="fc bfc" id="L400" title="All 2 branches covered.">        if (endIndex == null) {</span>
-<span class="fc" id="L401">            return input.substring(startIndex);</span>
+<span class="fc bfc" id="L304" title="All 2 branches covered.">        if (endIndex == null) {</span>
+<span class="fc" id="L305">            return input.substring(startIndex);</span>
         }
 
-<span class="fc" id="L404">        return input.substring(startIndex, endIndex);</span>
+<span class="fc" id="L308">        return input.substring(startIndex, endIndex);</span>
     }
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

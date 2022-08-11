@@ -15,19 +15,19 @@
  */
 package io.atlasmap.v2;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-/**
- * The Document model object.
- */
 @JsonRootName(&quot;Document&quot;)
 @JsonTypeInfo(include = JsonTypeInfo.As.PROPERTY, use = JsonTypeInfo.Id.CLASS, property = &quot;jsonType&quot;)
-<span class="fc" id="L26">public class Document extends Field {</span>
+<span class="fc" id="L25">public class Document</span>
+    implements Serializable
+{
 
     private static final long serialVersionUID = 1L;
 
-    /** {@link Fields} */
     protected Fields fields;
 
     /**
@@ -53,5 +53,6 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     public void setFields(Fields value) {
 <span class="fc" id="L54">        this.fields = value;</span>
 <span class="fc" id="L55">    }</span>
+
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

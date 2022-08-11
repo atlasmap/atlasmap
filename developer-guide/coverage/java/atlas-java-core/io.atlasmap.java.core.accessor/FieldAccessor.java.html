@@ -20,43 +20,34 @@ import java.lang.reflect.Type;
 
 import io.atlasmap.api.AtlasException;
 
-/**
- * The {@link JavaChildAccessor} which accesses the field through {@link Field}.
- */
 public class FieldAccessor extends JavaChildAccessor {
 
     private Field field;
 
-    /**
-     * A constructor.
-     * @param parent parent
-     * @param name name
-     * @param field field
-     */
     public FieldAccessor(Object parent, String name, Field field) {
-<span class="nc" id="L37">        super(parent, name);</span>
-<span class="nc" id="L38">        field.setAccessible(true);</span>
-<span class="nc" id="L39">        this.field = field;</span>
-<span class="nc" id="L40">    }</span>
+<span class="nc" id="L28">        super(parent, name);</span>
+<span class="nc" id="L29">        field.setAccessible(true);</span>
+<span class="nc" id="L30">        this.field = field;</span>
+<span class="nc" id="L31">    }</span>
 
     @Override
     public Object getRawValue() throws AtlasException {
         try {
-<span class="nc" id="L45">            return field.get(getParentObject());</span>
-<span class="nc" id="L46">        } catch (Exception e) {</span>
-<span class="nc" id="L47">            throw new AtlasException(e);</span>
+<span class="nc" id="L36">            return field.get(getParentObject());</span>
+<span class="nc" id="L37">        } catch (Exception e) {</span>
+<span class="nc" id="L38">            throw new AtlasException(e);</span>
         }
     }
 
     @Override
     public Class&lt;?&gt; getRawClass() throws AtlasException {
-<span class="nc" id="L53">        return field.getType();</span>
+<span class="nc" id="L44">        return field.getType();</span>
     }
 
     @Override
     public Type getRawGenericType() throws AtlasException {
-<span class="nc" id="L58">        return field.getGenericType();</span>
+<span class="nc" id="L49">        return field.getGenericType();</span>
     }
 
 }
-</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
