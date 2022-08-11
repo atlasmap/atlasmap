@@ -2,7 +2,7 @@ name: 'Master'
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-master:
@@ -17,8 +17,8 @@ jobs:
       - name: Set up Java versions
         uses: actions/setup-java@v2
         with:
-          java-version: 11
-          distribution: 'adopt'
+          java-version: 18.0.0
+          distribution: 'temurin'
       - name: Cache Maven repo
         uses: actions/cache@v2
         with:
