@@ -45,48 +45,48 @@ import com.sun.xml.xsom.parser.AnnotationParser;
 /**
  * NGCCRuntime extended with various utility methods for
  * parsing XML Schema.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
-    
+
     /** coordinator. */
     public final ParserContext parser;
-    
+
     /** The schema currently being parsed. */
     public SchemaImpl currentSchema;
-    
+
     /** The @finalDefault value of the current schema. */
     public int finalDefault = 0;
     /** The @blockDefault value of the current schema. */
     public int blockDefault = 0;
-    
+
     /**
      * The @elementFormDefault value of the current schema.
      * True if local elements are qualified by default.
      */
     public boolean elementFormDefault = false;
-    
+
     /**
      * The @attributeFormDefault value of the current schema.
      * True if local attributes are qualified by default.
      */
     public boolean attributeFormDefault = false;
-    
+
     /**
      * True if the current schema is in a chameleon mode.
      * This changes the way QNames are interpreted.
-     * 
-     * Life is very miserable with XML Schema, as you see. 
+     *
+     * Life is very miserable with XML Schema, as you see.
      */
     public boolean chameleonMode = false;
-    
+
     /**
      * URI that identifies the schema document.
      * Maybe null if the system ID is not available.
      */
     private String documentSystemId;
-    
+
     /**
      * Keep the local name of elements encountered so far.
      * This information is passed to AnnotationParser as
@@ -109,17 +109,17 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
     NGCCRuntimeEx( ParserContext _parser ) {
         this(_parser,false,null);
     }
-    
+
     private NGCCRuntimeEx( ParserContext _parser, boolean chameleonMode, NGCCRuntimeEx referer ) {
         this.parser = _parser;
         this.chameleonMode = chameleonMode;
         this.referer = referer;
-        
+
         // set up the default namespace binding
         currentContext = new Context("","",null);
         currentContext = new Context("xml","http://www.w3.org/XML/1998/namespace",currentContext);
     }
-    
+
     public void checkDoubleDefError( XSDeclaration c ) throws SAXException {
         if(c==null || ignorableDuplicateComponent(c)) return;
 
@@ -137,9 +137,9 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         }
         return false;
     }
-    
-    
-    
+
+
+
     /* registers a patcher that will run after all the parsing has finished. */
     public void addPatcher( Patch patcher ) {
         parser.patcherManager.addPatcher(patcher);
@@ -154,7 +154,7 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         reportError(msg,getLocator());
     }
 
-    
+
     /**
      * Resolves relative URI found in the document.
      *
@@ -209,25 +209,25 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
             return null;
         }
     }
-    
+
     /** Includes the specified schema. */
     public void includeSchema( String schemaLocation ) throws SAXException {
         NGCCRuntimeEx runtime = new NGCCRuntimeEx(parser,chameleonMode,this);
         runtime.currentSchema = this.currentSchema;
         runtime.blockDefault = this.blockDefault;
         runtime.finalDefault = this.finalDefault;
-        
+
         if( schemaLocation==null ) {
             SAXParseException e = new SAXParseException(
                 Messages.format( Messages.ERR_MISSING_SCHEMALOCATION ), getLocator() );
             parser.errorHandler.fatalError(e);
             throw e;
         }
-            
+
         runtime.parseEntity( resolveRelativeURL(null,schemaLocation),
             true, currentSchema.getTargetNamespace(), getLocator() );
     }
-    
+
     /** Imports the specified schema. */
     public void importSchema( String ns, String schemaLocation ) throws SAXException {
         NGCCRuntimeEx newRuntime = new NGCCRuntimeEx(parser,false,this);
@@ -239,35 +239,35 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         // we already have the schema components for this schema
         // or we will receive them in the future.
     }
-    
+
     /**
      * Called when a new document is being parsed and checks
      * if the document has already been parsed before.
-     * 
+     *
      * <p>
      * Used to avoid recursive inclusion. Note that the same
      * document will be parsed multiple times if they are for different
      * target namespaces.
-     * 
-     * <h2>Document Graph Model</h2>
+     *
+     * <h4>Document Graph Model</h4>
      * <p>
-     * The challenge we are facing here is that you have a graph of 
+     * The challenge we are facing here is that you have a graph of
      * documents that reference each other. Each document has an unique
      * URI to identify themselves, and references are done by using those.
      * The graph may contain cycles.
-     * 
+     *
      * <p>
      * Our goal here is to parse all the documents in the graph, without
      * parsing the same document twice. This method implements this check.
-     * 
+     *
      * <p>
      * One complication is the chameleon schema; a document can be parsed
      * multiple times if they are under different target namespaces.
-     * 
+     *
      * <p>
      * Also, note that when you resolve relative URIs in the @schemaLocation,
      * their base URI is *NOT* the URI of the document.
-     * 
+     *
      * @return true if the document has already been processed and thus
      *      needs to be skipped.
      */
@@ -306,21 +306,21 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
 
         return existing!=null;
     }
-    
+
     /**
      * Parses the specified entity.
-     * 
+     *
      * @param importLocation
      *      The source location of the import/include statement.
      *      Used for reporting errors.
      */
     public void parseEntity( InputSource source, boolean includeMode, String expectedNamespace, Locator importLocation )
             throws SAXException {
-                
+
         documentSystemId = source.getSystemId();
         try {
             Schema s = new Schema(this,includeMode,expectedNamespace);
-            setRootHandler(s);           
+            setRootHandler(s);
             try {
                 parser.parser.parse(source,this, getErrorHandler(), parser.getEntityResolver());
             } catch( IOException fnfe ) {
@@ -332,7 +332,7 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
             throw e;
         }
     }
-    
+
     /**
      * Creates a new instance of annotation parser.
      */
@@ -342,7 +342,7 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         else
             return parser.getAnnotationParserFactory().create();
     }
-    
+
     /**
      * Gets the element name that contains the annotation element.
      * This method works correctly only when called by the annotation handler.
@@ -389,25 +389,25 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
             this.prefix = _prefix;
             this.uri = _uri;
         }
-        
+
         public String resolveNamespacePrefix(String p) {
             if(p.equals(prefix))    return uri;
             if(previous==null)      return null;
             else                    return previous.resolveNamespacePrefix(p);
         }
-        
+
         private final String prefix;
         private final String uri;
         private final Context previous;
-        
+
         // XSDLib don't use those methods, so we cut a corner here.
         public String getBaseUri() { return null; }
         public boolean isNotation(String arg0) { return false; }
         public boolean isUnparsedEntity(String arg0) { return false; }
     }
-    
+
     private Context currentContext=null;
-    
+
     /** Returns an immutable snapshot of the current context. */
     public ValidationContext createValidationContext() {
         return currentContext;
@@ -445,11 +445,11 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
         int idx = qname.indexOf(':');
         if(idx<0) {
             String uri = resolveNamespacePrefix("");
-            
+
             // chamelon behavior. ugly...
             if( uri.equals("") && chameleonMode )
                 uri = currentSchema.getTargetNamespace();
-            
+
             // this is guaranteed to resolve
             return new UName(uri,qname,qname);
         } else {
@@ -480,7 +480,7 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
                 getLocator().getLineNumber(),
                 getLocator().getColumnNumber()),
             getLocator());
-            
+
         parser.errorHandler.fatalError(e);
         throw e;    // we will abort anyway
     }
