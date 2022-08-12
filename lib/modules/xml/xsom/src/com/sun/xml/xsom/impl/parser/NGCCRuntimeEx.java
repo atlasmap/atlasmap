@@ -249,7 +249,7 @@ public class NGCCRuntimeEx extends NGCCRuntime implements PatcherManager {
      * document will be parsed multiple times if they are for different
      * target namespaces.
      *
-     * <h4>Document Graph Model</h4>
+     * <strong>Document Graph Model</strong>
      * <p>
      * The challenge we are facing here is that you have a graph of
      * documents that reference each other. Each document has an unique
