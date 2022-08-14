@@ -62,7 +62,7 @@
     <junit-jupiter.version>5.8.1</junit-jupiter.version>
     <kafka.version>2.8.1</kafka.version>
     <kafka-junit.version>2.8.0</kafka-junit.version>
-    <keytool-maven-plugin.version>1.5</keytool-maven-plugin.version>
+    <keytool-maven-plugin.version>1.6</keytool-maven-plugin.version>
     <lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
     <log4j2.version>2.17.2</log4j2.version>
     <osgi.include.resource>{maven-resources}</osgi.include.resource>
