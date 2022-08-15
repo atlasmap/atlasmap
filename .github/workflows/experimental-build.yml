@@ -16,7 +16,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        java: []
+        java: [ '19' ]
     name: Java ${{ matrix.Java }} build
     steps:
     - uses: actions/checkout@v2
