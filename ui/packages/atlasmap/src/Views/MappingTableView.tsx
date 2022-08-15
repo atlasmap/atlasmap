@@ -29,7 +29,7 @@ import {
   TableBody,
   TableHeader,
 } from '@patternfly/react-table';
-import React, { FunctionComponent, MouseEvent } from 'react';
+import React, { FunctionComponent, KeyboardEvent, MouseEvent } from 'react';
 
 import { MainContent } from '../Layout';
 import { TableIcon } from '@patternfly/react-icons';
@@ -122,7 +122,7 @@ export const MappingTableView: FunctionComponent<IMappingTableProps> = ({
 
   const columns = ['Sources', 'Targets', 'Types'];
 
-  const handleSelectMapping = (_event: MouseEvent, row: IRow) => {
+  const handleSelectMapping = (_event: MouseEvent | KeyboardEvent<Element>, row: IRow) => {
     const mapping: IAtlasmapMapping | undefined = mappings.find(
       (mapping) => (row.cells?.[0] as ICell).data === mapping.id,
     );
