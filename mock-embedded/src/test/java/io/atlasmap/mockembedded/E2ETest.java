@@ -77,7 +77,7 @@ public class E2ETest {
     @Test
     public void test() throws Exception {
         driver.get("http://127.0.0.1:" + port);
-        WebDriverWait waitForLoad = new WebDriverWait(driver, 30);
+        WebDriverWait waitForLoad = new WebDriverWait(driver, Duration.ofSeconds(30));
         /** TODO possibly a bug related to https://github.com/atlasmap/atlasmap/issues/3994
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='JSONSchemaSource']")));
 
