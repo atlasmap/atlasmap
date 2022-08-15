@@ -47,49 +47,50 @@ export interface IParameter {
   required?: boolean;
 }
 
-export const DataMapperAdapter: React.FunctionComponent<IDataMapperAdapterProps> =
-  ({
-    documentId,
-    inputDocuments,
-    outputDocument,
-    initialMappings,
-    baseMappingServiceUrl,
-    baseJavaInspectionServiceUrl,
-    baseXMLInspectionServiceUrl,
-    baseJSONInspectionServiceUrl,
-    baseCSVInspectionServiceUrl,
-    onMappings,
-  }) => {
-    const externalDocument = React.useMemo(
-      () =>
-        ({
-          documentId,
-          initialMappings,
-          inputDocuments,
-          outputDocument,
-        } as IAtlasmapProviderProps['externalDocument']),
-      [initialMappings, documentId, inputDocuments, outputDocument],
-    );
-    return (
-      <AtlasmapProvider
-        logLevel={'warn'}
-        baseMappingServiceUrl={baseMappingServiceUrl}
-        baseJSONInspectionServiceUrl={baseJSONInspectionServiceUrl}
-        baseJavaInspectionServiceUrl={baseJavaInspectionServiceUrl}
-        baseXMLInspectionServiceUrl={baseXMLInspectionServiceUrl}
-        baseCSVInspectionServiceUrl={baseCSVInspectionServiceUrl}
-        externalDocument={externalDocument}
-        onMappingChange={onMappings}
-      >
-        <Atlasmap
-          allowImport={false}
-          allowExport={false}
-          allowDelete={false}
-          allowCustomJavaClasses={false}
-        />
-      </AtlasmapProvider>
-    );
-  };
+export const DataMapperAdapter: React.FunctionComponent<
+  IDataMapperAdapterProps
+> = ({
+  documentId,
+  inputDocuments,
+  outputDocument,
+  initialMappings,
+  baseMappingServiceUrl,
+  baseJavaInspectionServiceUrl,
+  baseXMLInspectionServiceUrl,
+  baseJSONInspectionServiceUrl,
+  baseCSVInspectionServiceUrl,
+  onMappings,
+}) => {
+  const externalDocument = React.useMemo(
+    () =>
+      ({
+        documentId,
+        initialMappings,
+        inputDocuments,
+        outputDocument,
+      } as IAtlasmapProviderProps['externalDocument']),
+    [initialMappings, documentId, inputDocuments, outputDocument],
+  );
+  return (
+    <AtlasmapProvider
+      logLevel={'warn'}
+      baseMappingServiceUrl={baseMappingServiceUrl}
+      baseJSONInspectionServiceUrl={baseJSONInspectionServiceUrl}
+      baseJavaInspectionServiceUrl={baseJavaInspectionServiceUrl}
+      baseXMLInspectionServiceUrl={baseXMLInspectionServiceUrl}
+      baseCSVInspectionServiceUrl={baseCSVInspectionServiceUrl}
+      externalDocument={externalDocument}
+      onMappingChange={onMappings}
+    >
+      <Atlasmap
+        allowImport={false}
+        allowExport={false}
+        allowDelete={false}
+        allowCustomJavaClasses={false}
+      />
+    </AtlasmapProvider>
+  );
+};
 
 export interface IParameterOption {
   label: string;

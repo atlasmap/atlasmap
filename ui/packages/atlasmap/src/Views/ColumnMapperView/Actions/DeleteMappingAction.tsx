@@ -22,20 +22,21 @@ export interface IDeleteMappingActionProps {
   id: string;
   onClick: () => void;
 }
-export const DeleteMappingAction: FunctionComponent<IDeleteMappingActionProps> =
-  ({ id, onClick }) => (
-    <Tooltip
-      position={'auto'}
-      enableFlip={true}
-      content={<div>Remove the mapping</div>}
+export const DeleteMappingAction: FunctionComponent<
+  IDeleteMappingActionProps
+> = ({ id, onClick }) => (
+  <Tooltip
+    position={'auto'}
+    enableFlip={true}
+    content={<div>Remove the mapping</div>}
+  >
+    <Button
+      variant="plain"
+      onClick={onClick}
+      aria-label="Remove the mapping"
+      data-testid={`remove-${id}-mapping-button`}
     >
-      <Button
-        variant="plain"
-        onClick={onClick}
-        aria-label="Remove the mapping"
-        data-testid={`remove-${id}-mapping-button`}
-      >
-        <TrashIcon />
-      </Button>
-    </Tooltip>
-  );
+      <TrashIcon />
+    </Button>
+  </Tooltip>
+);
