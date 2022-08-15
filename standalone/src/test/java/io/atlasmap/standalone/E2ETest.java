@@ -28,6 +28,7 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class E2ETest {
     @Test
     public void test() throws Exception {
         driver.get("http://127.0.0.1:" + port);
-        WebDriverWait waitForLoad = new WebDriverWait(driver, 30);
+        WebDriverWait waitForLoad = new WebDriverWait(driver, Duration.ofSeconds(30));
         waitForLoad.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//article[@aria-label='Properties']")));
         WebElement atlasmapMenuBtn = driver.findElement(By.xpath("//button[@data-testid='atlasmap-menu-button']"));
         atlasmapMenuBtn.click();
