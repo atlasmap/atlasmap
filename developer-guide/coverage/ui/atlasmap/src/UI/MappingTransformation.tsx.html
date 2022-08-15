@@ -360,7 +360,8 @@
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L305'></a><a href='#L305'>305</a>
+<a name='L306'></a><a href='#L306'>306</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -438,6 +439,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -741,233 +743,234 @@ const formTransTextInputStyle = {
   marginTop: '0rem',
 } as React.CSSProperties;
 &nbsp;
-export const MappingTransformation: FunctionComponent&lt;IMappingTransformationProps&gt; =
-  ({
-    name,
-    transformationsOptions,
-    transformationsArguments = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span>
-    disableTransformation,
-    onTransformationArgumentChange,
-    onTransformationChange,
-    onRemoveTransformation,
-  }) =&gt; {
-    const RenderTransformationArgumentOptions = (
-      argId: string,
-      arg: ITransformationArgument,
-      disableTransformation: boolean,
-      onTransformationArgumentChange: (name: string, value: string) =&gt; void,
+export const MappingTransformation: FunctionComponent&lt;
+  IMappingTransformationProps
+&gt; = ({
+  name,
+  transformationsOptions,
+  transformationsArguments = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span>
+  disableTransformation,
+  onTransformationArgumentChange,
+  onTransformationChange,
+  onRemoveTransformation,
+}) =&gt; {
+  const RenderTransformationArgumentOptions = (
+    argId: string,
+    arg: ITransformationArgument,
+    disableTransformation: boolean,
+    onTransformationArgumentChange: (name: string, value: string) =&gt; void,
+  ) =&gt; {
+    /** If the option name is 'User defined', we assume it accepts a user input */
+    const isUserDefined = (option?: ITransformationSelectOption) =&gt; {
+      return option<span class="branch-0 cbranch-no" title="branch not covered" >?.n</span>ame === 'User defined';
+    };
+&nbsp;
+    const userDefinedOption = arg.options<span class="branch-0 cbranch-no" title="branch not covered" >?.f</span>ind((option) =&gt;
+      isUserDefined(option),
+    );
+&nbsp;
+    let initialSelected = arg.options<span class="branch-0 cbranch-no" title="branch not covered" >?.f</span>ind(
+      (option) =&gt; option.value === arg.value,
+    );
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!initialSelected) {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (arg.value) {
+        initialSelected = userDefinedOption;
+      } else <span class="cstat-no" title="statement not covered" >if (arg.options) {</span>
+<span class="cstat-no" title="statement not covered" >        initialSelected = arg.options[1];</span>
+<span class="cstat-no" title="statement not covered" >        arg.value = arg.options[1].value;</span>
+      }
+    }
+    let initialUserDefined = '';
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (isUserDefined(initialSelected)) {
+      initialUserDefined = arg.value;
+    }
+&nbsp;
+    const [isOpen, setIsOpen] = useState(false);
+    const [selected, setSelected] = useState&lt;
+      ITransformationSelectOption | undefined
+    &gt;(initialSelected);
+    const [userDefinedValue, setUserDefinedValue] =
+      useState&lt;string&gt;(initialUserDefined);
+&nbsp;
+    const onToggle = <span class="fstat-no" title="function not covered" >(i</span>sOpen: boolean) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setIsOpen(isOpen);</span>
+    };
+&nbsp;
+    const onSelect = <span class="fstat-no" title="function not covered" >(</span>
+      _event:
+        | React.MouseEvent&lt;Element, MouseEvent&gt;
+        | React.ChangeEvent&lt;Element&gt;,
+      selection: string | SelectOptionObject,
+      _isPlaceholder?: boolean,
     ) =&gt; {
-      /** If the option name is 'User defined', we assume it accepts a user input */
-      const isUserDefined = (option?: ITransformationSelectOption) =&gt; {
-        return option<span class="branch-0 cbranch-no" title="branch not covered" >?.n</span>ame === 'User defined';
-      };
-&nbsp;
-      const userDefinedOption = arg.options<span class="branch-0 cbranch-no" title="branch not covered" >?.f</span>ind((option) =&gt;
-        isUserDefined(option),
+<span class="cstat-no" title="statement not covered" >      setIsOpen(false);</span>
+      const selectedOption = <span class="cstat-no" title="statement not covered" >arg.options!.find(</span>
+<span class="fstat-no" title="function not covered" >        (o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.value === selection,</span>
       );
-&nbsp;
-      let initialSelected = arg.options<span class="branch-0 cbranch-no" title="branch not covered" >?.f</span>ind(
-        (option) =&gt; option.value === arg.value,
-      );
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (!initialSelected) {
-        <span class="missing-if-branch" title="else path not taken" >E</span>if (arg.value) {
-          initialSelected = userDefinedOption;
-        } else <span class="cstat-no" title="statement not covered" >if (arg.options) {</span>
-<span class="cstat-no" title="statement not covered" >          initialSelected = arg.options[1];</span>
-<span class="cstat-no" title="statement not covered" >          arg.value = arg.options[1].value;</span>
-        }
+<span class="cstat-no" title="statement not covered" >      if (!selectedOption) {</span>
+<span class="cstat-no" title="statement not covered" >        return;</span>
       }
-      let initialUserDefined = '';
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (isUserDefined(initialSelected)) {
-        initialUserDefined = arg.value;
-      }
-&nbsp;
-      const [isOpen, setIsOpen] = useState(false);
-      const [selected, setSelected] = useState&lt;
-        ITransformationSelectOption | undefined
-      &gt;(initialSelected);
-      const [userDefinedValue, setUserDefinedValue] =
-        useState&lt;string&gt;(initialUserDefined);
-&nbsp;
-      const onToggle = <span class="fstat-no" title="function not covered" >(i</span>sOpen: boolean) =&gt; {
-<span class="cstat-no" title="statement not covered" >        setIsOpen(isOpen);</span>
-      };
-&nbsp;
-      const onSelect = <span class="fstat-no" title="function not covered" >(</span>
-        _event:
-          | React.MouseEvent&lt;Element, MouseEvent&gt;
-          | React.ChangeEvent&lt;Element&gt;,
-        selection: string | SelectOptionObject,
-        _isPlaceholder?: boolean,
-      ) =&gt; {
-<span class="cstat-no" title="statement not covered" >        setIsOpen(false);</span>
-        const selectedOption = <span class="cstat-no" title="statement not covered" >arg.options!.find(</span>
-<span class="fstat-no" title="function not covered" >          (o</span>ption) =&gt; <span class="cstat-no" title="statement not covered" >option.value === selection,</span>
-        );
-<span class="cstat-no" title="statement not covered" >        if (!selectedOption) {</span>
-<span class="cstat-no" title="statement not covered" >          return;</span>
-        }
-<span class="cstat-no" title="statement not covered" >        setSelected(selectedOption);</span>
-<span class="cstat-no" title="statement not covered" >        arg.value = isUserDefined(selectedOption)</span>
+<span class="cstat-no" title="statement not covered" >      setSelected(selectedOption);</span>
+<span class="cstat-no" title="statement not covered" >      arg.value = isUserDefined(selectedOption)</span>
+        ? userDefinedValue
           ? userDefinedValue
-            ? userDefinedValue
-            : ''
-          : selection.toString();
-<span class="cstat-no" title="statement not covered" >        onTransformationArgumentChange(arg.name, arg.value);</span>
-      };
-&nbsp;
-      const onChangeUserDefinedValue = <span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; {
-<span class="cstat-no" title="statement not covered" >        setUserDefinedValue(value);</span>
-<span class="cstat-no" title="statement not covered" >        arg.value = value;</span>
-<span class="cstat-no" title="statement not covered" >        onTransformationArgumentChange(arg.name, value);</span>
-      };
-&nbsp;
-      return (
-        &lt;Split&gt;
-          &lt;SplitItem&gt;
-            &lt;Select
-              variant={SelectVariant.single}
-              aria-label={arg.label}
-              onSelect={onSelect}
-              selections={selected<span class="branch-0 cbranch-no" title="branch not covered" >?.v</span>alue}
-              onToggle={onToggle}
-              isOpen={isOpen}
-              placeholderText={'[None]'}
-              id={argId}
-              isDisabled={disableTransformation}
-              data-testid={arg.name}
-              style={formTransStyle}
-            &gt;
-              {arg.options<span class="branch-0 cbranch-no" title="branch not covered" >?.m</span>ap((option, optIndx) =&gt; {
-                return (
-                  &lt;SelectOption value={option.value} key={optIndx}&gt;
-                    {option.name}
-                  &lt;/SelectOption&gt;
-                );
-              })}
-            &lt;/Select&gt;
-          &lt;/SplitItem&gt;
-          {isUserDefined(selected) &amp;&amp; (
-            &lt;SplitItem&gt;
-              &lt;TextInput
-                id="userDefined"
-                type="text"
-                name="userDefined"
-                value={userDefinedValue}
-                onChange={onChangeUserDefinedValue}
-                style={formTransTextInputStyle}
-                data-testid={`userDefined`}
-                autoFocus
-              /&gt;
-            &lt;/SplitItem&gt;
-          )}
-        &lt;/Split&gt;
-      );
+          : ''
+        : selection.toString();
+<span class="cstat-no" title="statement not covered" >      onTransformationArgumentChange(arg.name, arg.value);</span>
     };
 &nbsp;
-    const renderTransformationArgumentText = (
-      argId: string,
-      a: ITransformationArgument,
-    ) =&gt; {
-      return (
-        &lt;TextInput
-          id={argId}
-          type="text"
-          name={a.name}
-          isDisabled={disableTransformation}
-          value={a.value}
-          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onTransformationArgumentChange(a.name, value)}</span>
-          data-testid={`insert-transformation-parameter-${a.name}-input-field`}
-          style={formTransTextInputStyle}
-        /&gt;
-      );
+    const onChangeUserDefinedValue = <span class="fstat-no" title="function not covered" >(v</span>alue: string) =&gt; {
+<span class="cstat-no" title="statement not covered" >      setUserDefinedValue(value);</span>
+<span class="cstat-no" title="statement not covered" >      arg.value = value;</span>
+<span class="cstat-no" title="statement not covered" >      onTransformationArgumentChange(arg.name, value);</span>
     };
 &nbsp;
-    const renderTransformationArgumentBoolean = (
-      argId: string,
-      a: ITransformationArgument,
-    ) =&gt; {
-      return (
-        &lt;Checkbox
-          className={css(styles.transArgs)}
-          id={argId}
-          data-testid={argId + '-checkbox'}
-          key={argId}
-          label={a.label}
-          aria-label={a.label}
-          isChecked={a.value === 'true'}
-          onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt;
-<span class="cstat-no" title="statement not covered" >            onTransformationArgumentChange(a.name, value.toString())</span>
-          }
-        /&gt;
-      );
-    };
-&nbsp;
-    const renderTransformationArgument = (
-      a: ITransformationArgument,
-      idx: number,
-    ) =&gt; {
-      const argId = `${id}-transformation-${idx}`;
-      switch (a.type) {
-        case FieldType.BOOLEAN: {
-          return renderTransformationArgumentBoolean(argId, a);
-        }
-        default: {
-          return (
-            &lt;FormGroup
-              className={css(styles.transArgs)}
-              fieldId={argId}
-              label={a.label}
-              key={idx}
-              style={formTransGroupStyle}
-            &gt;
-              {a.options
-                ? RenderTransformationArgumentOptions(
-                    argId,
-                    a,
-                    disableTransformation,
-                    onTransformationArgumentChange,
-                  )
-                : renderTransformationArgumentText(argId, a)}
-            &lt;/FormGroup&gt;
-          );
-        }
-      }
-    };
-&nbsp;
-    const id = `user-field-action-${name}`;
     return (
-      &lt;&gt;
-        &lt;FormGroup fieldId={`${id}-transformation`}&gt;
-          &lt;InputGroup style={{ background: 'transparent' }}&gt;
-            &lt;FormSelect
-              value={name}
-              id={id}
-              isDisabled={disableTransformation}
-              onChange={onTransformationChange}
-              data-testid={id}
-              style={formTransStyle}
-            &gt;
-              {transformationsOptions.map((a, idx) =&gt; (
-                &lt;FormSelectOption label={a.name} value={a.value} key={idx} /&gt;
-              ))}
-            &lt;/FormSelect&gt;
-            {onRemoveTransformation &amp;&amp; (
-              &lt;Button
-                variant={'plain'}
-                onClick={onRemoveTransformation}
-                data-testid={`close-transformation-${name}-button`}
-                aria-label="Remove the transformation"
-              &gt;
-                &lt;TrashIcon /&gt;
-              &lt;/Button&gt;
-            )}
-          &lt;/InputGroup&gt;
-        &lt;/FormGroup&gt;
-        {transformationsArguments.map(renderTransformationArgument)}
-      &lt;/&gt;
+      &lt;Split&gt;
+        &lt;SplitItem&gt;
+          &lt;Select
+            variant={SelectVariant.single}
+            aria-label={arg.label}
+            onSelect={onSelect}
+            selections={selected<span class="branch-0 cbranch-no" title="branch not covered" >?.v</span>alue}
+            onToggle={onToggle}
+            isOpen={isOpen}
+            placeholderText={'[None]'}
+            id={argId}
+            isDisabled={disableTransformation}
+            data-testid={arg.name}
+            style={formTransStyle}
+          &gt;
+            {arg.options<span class="branch-0 cbranch-no" title="branch not covered" >?.m</span>ap((option, optIndx) =&gt; {
+              return (
+                &lt;SelectOption value={option.value} key={optIndx}&gt;
+                  {option.name}
+                &lt;/SelectOption&gt;
+              );
+            })}
+          &lt;/Select&gt;
+        &lt;/SplitItem&gt;
+        {isUserDefined(selected) &amp;&amp; (
+          &lt;SplitItem&gt;
+            &lt;TextInput
+              id="userDefined"
+              type="text"
+              name="userDefined"
+              value={userDefinedValue}
+              onChange={onChangeUserDefinedValue}
+              style={formTransTextInputStyle}
+              data-testid={`userDefined`}
+              autoFocus
+            /&gt;
+          &lt;/SplitItem&gt;
+        )}
+      &lt;/Split&gt;
     );
   };
+&nbsp;
+  const renderTransformationArgumentText = (
+    argId: string,
+    a: ITransformationArgument,
+  ) =&gt; {
+    return (
+      &lt;TextInput
+        id={argId}
+        type="text"
+        name={a.name}
+        isDisabled={disableTransformation}
+        value={a.value}
+        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt; <span class="cstat-no" title="statement not covered" >onTransformationArgumentChange(a.name, value)}</span>
+        data-testid={`insert-transformation-parameter-${a.name}-input-field`}
+        style={formTransTextInputStyle}
+      /&gt;
+    );
+  };
+&nbsp;
+  const renderTransformationArgumentBoolean = (
+    argId: string,
+    a: ITransformationArgument,
+  ) =&gt; {
+    return (
+      &lt;Checkbox
+        className={css(styles.transArgs)}
+        id={argId}
+        data-testid={argId + '-checkbox'}
+        key={argId}
+        label={a.label}
+        aria-label={a.label}
+        isChecked={a.value === 'true'}
+        onChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt;
+<span class="cstat-no" title="statement not covered" >          onTransformationArgumentChange(a.name, value.toString())</span>
+        }
+      /&gt;
+    );
+  };
+&nbsp;
+  const renderTransformationArgument = (
+    a: ITransformationArgument,
+    idx: number,
+  ) =&gt; {
+    const argId = `${id}-transformation-${idx}`;
+    switch (a.type) {
+      case FieldType.BOOLEAN: {
+        return renderTransformationArgumentBoolean(argId, a);
+      }
+      default: {
+        return (
+          &lt;FormGroup
+            className={css(styles.transArgs)}
+            fieldId={argId}
+            label={a.label}
+            key={idx}
+            style={formTransGroupStyle}
+          &gt;
+            {a.options
+              ? RenderTransformationArgumentOptions(
+                  argId,
+                  a,
+                  disableTransformation,
+                  onTransformationArgumentChange,
+                )
+              : renderTransformationArgumentText(argId, a)}
+          &lt;/FormGroup&gt;
+        );
+      }
+    }
+  };
+&nbsp;
+  const id = `user-field-action-${name}`;
+  return (
+    &lt;&gt;
+      &lt;FormGroup fieldId={`${id}-transformation`}&gt;
+        &lt;InputGroup style={{ background: 'transparent' }}&gt;
+          &lt;FormSelect
+            value={name}
+            id={id}
+            isDisabled={disableTransformation}
+            onChange={onTransformationChange}
+            data-testid={id}
+            style={formTransStyle}
+          &gt;
+            {transformationsOptions.map((a, idx) =&gt; (
+              &lt;FormSelectOption label={a.name} value={a.value} key={idx} /&gt;
+            ))}
+          &lt;/FormSelect&gt;
+          {onRemoveTransformation &amp;&amp; (
+            &lt;Button
+              variant={'plain'}
+              onClick={onRemoveTransformation}
+              data-testid={`close-transformation-${name}-button`}
+              aria-label="Remove the transformation"
+            &gt;
+              &lt;TrashIcon /&gt;
+            &lt;/Button&gt;
+          )}
+        &lt;/InputGroup&gt;
+      &lt;/FormGroup&gt;
+      {transformationsArguments.map(renderTransformationArgument)}
+    &lt;/&gt;
+  );
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -975,7 +978,7 @@ export const MappingTransformation: FunctionComponent&lt;IMappingTransformationP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 15 2022 20:18:26 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 15 2022 21:55:36 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

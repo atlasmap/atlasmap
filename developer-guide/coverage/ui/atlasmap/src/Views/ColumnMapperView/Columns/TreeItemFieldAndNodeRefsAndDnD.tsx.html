@@ -277,8 +277,7 @@
 <a name='L219'></a><a href='#L219'>219</a>
 <a name='L220'></a><a href='#L220'>220</a>
 <a name='L221'></a><a href='#L221'>221</a>
-<a name='L222'></a><a href='#L222'>222</a>
-<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L222'></a><a href='#L222'>222</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -333,6 +332,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-yes">24x</span>
@@ -386,8 +386,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -554,174 +552,173 @@ export interface ITreeItemFieldAndNodeRefsAndDnDProps {
   onDrop: (source: IAtlasmapField, target: IDragAndDropField | null) =&gt; void;
 }
 &nbsp;
-export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent&lt;ITreeItemFieldAndNodeRefsAndDnDProps&gt; =
-  ({
-    fieldId,
-    field,
-    showTypes,
-    boundaryId,
-    overrideWidth,
-    parentId,
-    acceptDropType,
-    draggableType,
-    level = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-    position = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-    setSize = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
-    canDrop,
-    onDrop,
-    renderActions = <span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >[</span>],</span></span>
-    renderPreview,
-  }) =&gt; {
-    const preview = renderPreview &amp;&amp; renderPreview(field);
-    return (
-      &lt;FieldDropTarget
-        key={fieldId}
-        target={{
-          id: field.id,
-          name: field.name,
-          type: draggableType,
-          payload: field,
-        }}
-        canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >canDrop(field, item)}</span>
-        accept={[acceptDropType]}
-      &gt;
-        {({ isDroppable, isTarget }) =&gt; (
-          &lt;DraggableField
-            field={{
-              type: draggableType,
-              id: field.id,
-              name: field.name,
-              payload: field,
-            }}
-            onDrop={<span class="fstat-no" title="function not covered" >(_</span>, target) =&gt; <span class="cstat-no" title="statement not covered" >onDrop(field, target)}</span>
-          &gt;
-            {({ isDragging }) =&gt; (
-              &lt;NodeRef
-                id={[
-                  fieldId,
-                  isDragging ? <span class="branch-0 cbranch-no" title="branch not covered" >'dnd-start' </span>: undefined,
-                  isTarget ? <span class="branch-0 cbranch-no" title="branch not covered" >'dnd-target-field' </span>: undefined,
-                ]}
-                parentId={parentId}
-                boundaryId={boundaryId}
-                overrideWidth={overrideWidth}
-              &gt;
-                &lt;TreeItem level={level} position={position} setSize={setSize}&gt;
-                  {({ focused }) =&gt; (
-                    &lt;&gt;
-                      &lt;DocumentField
-                        name={field.name}
-                        icon={
-                          isDroppable || isTarget ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                            &lt;Button</span>
-                              variant={isTarget ? 'link' : 'plain'}
+export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent&lt;
+  ITreeItemFieldAndNodeRefsAndDnDProps
+&gt; = ({
+  fieldId,
+  field,
+  showTypes,
+  boundaryId,
+  overrideWidth,
+  parentId,
+  acceptDropType,
+  draggableType,
+  level = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  position = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  setSize = <span class="branch-0 cbranch-no" title="branch not covered" >1,</span>
+  canDrop,
+  onDrop,
+  renderActions = <span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >[</span>],</span></span>
+  renderPreview,
+}) =&gt; {
+  const preview = renderPreview &amp;&amp; renderPreview(field);
+  return (
+    &lt;FieldDropTarget
+      key={fieldId}
+      target={{
+        id: field.id,
+        name: field.name,
+        type: draggableType,
+        payload: field,
+      }}
+      canDrop={<span class="fstat-no" title="function not covered" >(i</span>tem) =&gt; <span class="cstat-no" title="statement not covered" >canDrop(field, item)}</span>
+      accept={[acceptDropType]}
+    &gt;
+      {({ isDroppable, isTarget }) =&gt; (
+        &lt;DraggableField
+          field={{
+            type: draggableType,
+            id: field.id,
+            name: field.name,
+            payload: field,
+          }}
+          onDrop={<span class="fstat-no" title="function not covered" >(_</span>, target) =&gt; <span class="cstat-no" title="statement not covered" >onDrop(field, target)}</span>
+        &gt;
+          {({ isDragging }) =&gt; (
+            &lt;NodeRef
+              id={[
+                fieldId,
+                isDragging ? <span class="branch-0 cbranch-no" title="branch not covered" >'dnd-start' </span>: undefined,
+                isTarget ? <span class="branch-0 cbranch-no" title="branch not covered" >'dnd-target-field' </span>: undefined,
+              ]}
+              parentId={parentId}
+              boundaryId={boundaryId}
+              overrideWidth={overrideWidth}
+            &gt;
+              &lt;TreeItem level={level} position={position} setSize={setSize}&gt;
+                {({ focused }) =&gt; (
+                  &lt;&gt;
+                    &lt;DocumentField
+                      name={field.name}
+                      icon={
+                        isDroppable || isTarget ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                          &lt;Button</span>
+                            variant={isTarget ? 'link' : 'plain'}
+                            tabIndex={-1}
+                            aria-label={'Drop target'}
+                            isDisabled={!isDroppable}
+                            data-testid={`is-droppable-${field.name}-button`}
+                          &gt;
+                            &lt;BullseyeIcon size="sm" /&gt;
+                          &lt;/Button&gt;
+                        ) : (
+                          &lt;Button
+                            variant={'plain'}
+                            tabIndex={-1}
+                            aria-hidden={true}
+                            data-testid={`grip-${field.name}-button`}
+                          &gt;
+                            &lt;GripVerticalIcon /&gt;
+                          &lt;/Button&gt;
+                        )
+                      }
+                      type={field.enumeration ? <span class="branch-0 cbranch-no" title="branch not covered" >'ENUM' </span>: field.type}
+                      scope={field.scope}
+                      showType={showTypes}
+                      isDragging={isDragging}
+                      isFocused={focused}
+                      isSelected={!!preview}
+                      isDisabled={field.isDisabled}
+                      statusIcons={[
+                        field.isConnected ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                          &lt;Tooltip</span>
+                            key="connected"
+                            position={'auto'}
+                            enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
+                            content={&lt;div&gt;This field is connected&lt;/div&gt;}
+                          &gt;
+                            &lt;CircleIcon
+                              label={'This field is connected'}
+                              size="sm"
                               tabIndex={-1}
-                              aria-label={'Drop target'}
-                              isDisabled={!isDroppable}
-                              data-testid={`is-droppable-${field.name}-button`}
-                            &gt;
-                              &lt;BullseyeIcon size="sm" /&gt;
-                            &lt;/Button&gt;
-                          ) : (
-                            &lt;Button
-                              variant={'plain'}
+                            /&gt;
+                          &lt;/Tooltip&gt;
+                        ) : null,
+                        field.isCollection ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                          &lt;Tooltip</span>
+                            key={'collection'}
+                            position={'auto'}
+                            enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
+                            content={&lt;div&gt;This field is a collection&lt;/div&gt;}
+                          &gt;
+                            &lt;LayerGroupIcon
+                              label={'This field is a collection'}
+                              size="sm"
                               tabIndex={-1}
-                              aria-hidden={true}
-                              data-testid={`grip-${field.name}-button`}
-                            &gt;
-                              &lt;GripVerticalIcon /&gt;
-                            &lt;/Button&gt;
-                          )
-                        }
-                        type={field.enumeration ? <span class="branch-0 cbranch-no" title="branch not covered" >'ENUM' </span>: field.type}
-                        scope={field.scope}
-                        showType={showTypes}
-                        isDragging={isDragging}
-                        isFocused={focused}
-                        isSelected={!!preview}
-                        isDisabled={field.isDisabled}
-                        statusIcons={[
-                          field.isConnected ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                            &lt;Tooltip</span>
-                              key="connected"
-                              position={'auto'}
-                              enableFlip={true}
-                              entryDelay={750}
-                              exitDelay={100}
-                              content={&lt;div&gt;This field is connected&lt;/div&gt;}
-                            &gt;
-                              &lt;CircleIcon
-                                label={'This field is connected'}
-                                size="sm"
-                                tabIndex={-1}
-                              /&gt;
-                            &lt;/Tooltip&gt;
-                          ) : null,
-                          field.isCollection ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                            &lt;Tooltip</span>
-                              key={'collection'}
-                              position={'auto'}
-                              enableFlip={true}
-                              entryDelay={750}
-                              exitDelay={100}
-                              content={&lt;div&gt;This field is a collection&lt;/div&gt;}
-                            &gt;
-                              &lt;LayerGroupIcon
-                                label={'This field is a collection'}
-                                size="sm"
-                                tabIndex={-1}
-                              /&gt;
-                            &lt;/Tooltip&gt;
-                          ) : null,
-                          field.hasTransformations ? (
-                            &lt;Tooltip
-                              key={'transformations'}
-                              position={'auto'}
-                              enableFlip={true}
-                              entryDelay={750}
-                              exitDelay={100}
-                              content={
-                                &lt;div&gt;This field has transformations&lt;/div&gt;
-                              }
-                            &gt;
-                              &lt;BoltIcon
-                                label={'This field has transformations'}
-                                size="sm"
-                                tabIndex={-1}
-                              /&gt;
-                            &lt;/Tooltip&gt;
-                          ) : null,
-                          field.isAttribute ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                            &lt;Tooltip</span>
-                              key={'attribute'}
-                              position={'auto'}
-                              enableFlip={true}
-                              entryDelay={750}
-                              exitDelay={100}
-                              content={&lt;div&gt;This field is an attribute&lt;/div&gt;}
-                            &gt;
-                              &lt;AtIcon
-                                label={'This field is an attribute'}
-                                size="sm"
-                                tabIndex={-1}
-                              /&gt;
-                            &lt;/Tooltip&gt;
-                          ) : null,
-                        ]}
-                        actions={renderActions(field)}
-                      &gt;
-                        {preview}
-                      &lt;/DocumentField&gt;
-                    &lt;/&gt;
-                  )}
-                &lt;/TreeItem&gt;
-              &lt;/NodeRef&gt;
-            )}
-          &lt;/DraggableField&gt;
-        )}
-      &lt;/FieldDropTarget&gt;
-    );
-  };
+                            /&gt;
+                          &lt;/Tooltip&gt;
+                        ) : null,
+                        field.hasTransformations ? (
+                          &lt;Tooltip
+                            key={'transformations'}
+                            position={'auto'}
+                            enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
+                            content={&lt;div&gt;This field has transformations&lt;/div&gt;}
+                          &gt;
+                            &lt;BoltIcon
+                              label={'This field has transformations'}
+                              size="sm"
+                              tabIndex={-1}
+                            /&gt;
+                          &lt;/Tooltip&gt;
+                        ) : null,
+                        field.isAttribute ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                          &lt;Tooltip</span>
+                            key={'attribute'}
+                            position={'auto'}
+                            enableFlip={true}
+                            entryDelay={750}
+                            exitDelay={100}
+                            content={&lt;div&gt;This field is an attribute&lt;/div&gt;}
+                          &gt;
+                            &lt;AtIcon
+                              label={'This field is an attribute'}
+                              size="sm"
+                              tabIndex={-1}
+                            /&gt;
+                          &lt;/Tooltip&gt;
+                        ) : null,
+                      ]}
+                      actions={renderActions(field)}
+                    &gt;
+                      {preview}
+                    &lt;/DocumentField&gt;
+                  &lt;/&gt;
+                )}
+              &lt;/TreeItem&gt;
+            &lt;/NodeRef&gt;
+          )}
+        &lt;/DraggableField&gt;
+      )}
+    &lt;/FieldDropTarget&gt;
+  );
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -729,7 +726,7 @@ export const TreeItemWithFieldAndNodeRefsAndDnD: FunctionComponent&lt;ITreeItemF
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 15 2022 20:18:26 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 15 2022 21:55:36 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

@@ -234,7 +234,8 @@
 <a name='L176'></a><a href='#L176'>176</a>
 <a name='L177'></a><a href='#L177'>177</a>
 <a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -267,6 +268,7 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -444,152 +446,153 @@ export interface IExpressionFieldSearchProps {
 }
 let selectedField = '';
 &nbsp;
-export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchProps&gt; =
-<span class="fstat-no" title="function not covered" >  ({</span> clearSearchMode<span class="cstat-no" title="statement not covered" >, i</span>nsertSelectedField<span class="cstat-no" title="statement not covered" >, m</span>appedFieldCandidates<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
-    function <span class="fstat-no" title="function not covered" >onToggleFieldSearch(</span>toggled: boolean): any {
-<span class="cstat-no" title="statement not covered" >      if (!toggled) {</span>
-<span class="cstat-no" title="statement not covered" >        mappedFieldCandidates = [];</span>
-<span class="cstat-no" title="statement not covered" >        clearSearchMode(true);</span>
-<span class="cstat-no" title="statement not covered" >        candidateSrcElement = null;</span>
-      }
+export const ExpressionFieldSearch: FunctionComponent&lt;
+  IExpressionFieldSearchProps
+&gt; = <span class="fstat-no" title="function not covered" >({</span> clearSearchMode<span class="cstat-no" title="statement not covered" >, i</span>nsertSelectedField<span class="cstat-no" title="statement not covered" >, m</span>appedFieldCandidates<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
+  function <span class="fstat-no" title="function not covered" >onToggleFieldSearch(</span>toggled: boolean): any {
+<span class="cstat-no" title="statement not covered" >    if (!toggled) {</span>
+<span class="cstat-no" title="statement not covered" >      mappedFieldCandidates = [];</span>
+<span class="cstat-no" title="statement not covered" >      clearSearchMode(true);</span>
+<span class="cstat-no" title="statement not covered" >      candidateSrcElement = null;</span>
     }
+  }
 &nbsp;
-    const id = <span class="cstat-no" title="statement not covered" >`expr-field-search-${selectedField}`;</span>
-    let candidateSrcElement: any;
-    const { state<span class="cstat-no" title="statement not covered" >, t</span>oggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(true, onToggleFieldSearch);</span>
+  const id = <span class="cstat-no" title="statement not covered" >`expr-field-search-${selectedField}`;</span>
+  let candidateSrcElement: any;
+  const { state<span class="cstat-no" title="statement not covered" >, t</span>oggle<span class="cstat-no" title="statement not covered" >, t</span>oggleOff<span class="cstat-no" title="statement not covered" > } = <span class="cstat-no" title="statement not covered" >u</span>seToggle(true, onToggleFieldSearch);</span>
 &nbsp;
-    /**
-     * Track a candidate selection from either a mouse hover or arrow
-     * key navigation.
-     *
-     * @param event
-     * @param index
-     */
-    function <span class="fstat-no" title="function not covered" >trackSelection(</span>event: any): void {
-<span class="cstat-no" title="statement not covered" >      if (event.srcElement) {</span>
-        // const docId = event.target.getAttribute('label');
-<span class="cstat-no" title="statement not covered" >        candidateSrcElement = event.srcElement;</span>
-      }
+  /**
+   * Track a candidate selection from either a mouse hover or arrow
+   * key navigation.
+   *
+   * @param event
+   * @param index
+   */
+  function <span class="fstat-no" title="function not covered" >trackSelection(</span>event: any): void {
+<span class="cstat-no" title="statement not covered" >    if (event.srcElement) {</span>
+      // const docId = event.target.getAttribute('label');
+<span class="cstat-no" title="statement not covered" >      candidateSrcElement = event.srcElement;</span>
     }
+  }
 &nbsp;
-    /**
-     * Update the candidate source element and reset the focus.
-     *
-     * @param sibling
-     */
-    function <span class="fstat-no" title="function not covered" >updateCandidate(</span>sibling: any): void {
-<span class="cstat-no" title="statement not covered" >      if (candidateSrcElement &amp;&amp; sibling) {</span>
-<span class="cstat-no" title="statement not covered" >        candidateSrcElement.style.backgroundColor = 'white';</span>
-<span class="cstat-no" title="statement not covered" >        sibling.focus();</span>
-<span class="cstat-no" title="statement not covered" >        candidateSrcElement = sibling;</span>
+  /**
+   * Update the candidate source element and reset the focus.
+   *
+   * @param sibling
+   */
+  function <span class="fstat-no" title="function not covered" >updateCandidate(</span>sibling: any): void {
+<span class="cstat-no" title="statement not covered" >    if (candidateSrcElement &amp;&amp; sibling) {</span>
+<span class="cstat-no" title="statement not covered" >      candidateSrcElement.style.backgroundColor = 'white';</span>
+<span class="cstat-no" title="statement not covered" >      sibling.focus();</span>
+<span class="cstat-no" title="statement not covered" >      candidateSrcElement = sibling;</span>
+<span class="cstat-no" title="statement not covered" >      candidateSrcElement.style.backgroundColor = 'lightblue';</span>
+    }
+  }
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >onKeyHandler(</span>
+    _index: number,
+    _innerIndex: number,
+    _position: string,
+  ): void {
+    // TODO
+  }
+&nbsp;
+  function <span class="fstat-no" title="function not covered" >onKeyDown(</span>event: any): void {
+<span class="cstat-no" title="statement not covered" >    if ('Enter' === event.key) {</span>
+<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      if (candidateSrcElement) {</span>
+        // insertSelectedField(candidateIndex);
+      }
+    } else <span class="cstat-no" title="statement not covered" >if ('ArrowDown' === event.key) {</span>
+<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      trackSelection(event);</span>
+<span class="cstat-no" title="statement not covered" >      if (candidateSrcElement) {</span>
+<span class="cstat-no" title="statement not covered" >        updateCandidate(candidateSrcElement.nextElementSibling);</span>
+      }
+    } else <span class="cstat-no" title="statement not covered" >if ('ArrowUp' === event.key) {</span>
+<span class="cstat-no" title="statement not covered" >      event.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >      trackSelection(event);</span>
+<span class="cstat-no" title="statement not covered" >      if (candidateSrcElement) {</span>
+<span class="cstat-no" title="statement not covered" >        updateCandidate(candidateSrcElement.previousElementSibling);</span>
+      }
+    } else <span class="cstat-no" title="statement not covered" >if ('Tab' === event.key) {</span>
+<span class="cstat-no" title="statement not covered" >      if (!candidateSrcElement &amp;&amp; event.srcElement) {</span>
+<span class="cstat-no" title="statement not covered" >        candidateSrcElement =</span>
+          event.srcElement.nextElementSibling.firstElementChild;
 <span class="cstat-no" title="statement not covered" >        candidateSrcElement.style.backgroundColor = 'lightblue';</span>
-      }
-    }
-&nbsp;
-    function <span class="fstat-no" title="function not covered" >onKeyHandler(</span>
-      _index: number,
-      _innerIndex: number,
-      _position: string,
-    ): void {
-      // TODO
-    }
-&nbsp;
-    function <span class="fstat-no" title="function not covered" >onKeyDown(</span>event: any): void {
-<span class="cstat-no" title="statement not covered" >      if ('Enter' === event.key) {</span>
+      } else <span class="cstat-no" title="statement not covered" >if (</span>
+        candidateSrcElement &amp;&amp;
+        candidateSrcElement.nextElementSibling
+      ) {
 <span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
-          // insertSelectedField(candidateIndex);
-        }
-      } else <span class="cstat-no" title="statement not covered" >if ('ArrowDown' === event.key) {</span>
-<span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >        trackSelection(event);</span>
-<span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
-<span class="cstat-no" title="statement not covered" >          updateCandidate(candidateSrcElement.nextElementSibling);</span>
-        }
-      } else <span class="cstat-no" title="statement not covered" >if ('ArrowUp' === event.key) {</span>
-<span class="cstat-no" title="statement not covered" >        event.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >        trackSelection(event);</span>
-<span class="cstat-no" title="statement not covered" >        if (candidateSrcElement) {</span>
-<span class="cstat-no" title="statement not covered" >          updateCandidate(candidateSrcElement.previousElementSibling);</span>
-        }
-      } else <span class="cstat-no" title="statement not covered" >if ('Tab' === event.key) {</span>
-<span class="cstat-no" title="statement not covered" >        if (!candidateSrcElement &amp;&amp; event.srcElement) {</span>
-<span class="cstat-no" title="statement not covered" >          candidateSrcElement =</span>
-            event.srcElement.nextElementSibling.firstElementChild;
-<span class="cstat-no" title="statement not covered" >          candidateSrcElement.style.backgroundColor = 'lightblue';</span>
-        } else <span class="cstat-no" title="statement not covered" >if (</span>
-          candidateSrcElement &amp;&amp;
-          candidateSrcElement.nextElementSibling
-        ) {
-<span class="cstat-no" title="statement not covered" >          event.preventDefault();</span>
-<span class="cstat-no" title="statement not covered" >          updateCandidate(candidateSrcElement!.nextElementSibling);</span>
-        }
+<span class="cstat-no" title="statement not covered" >        updateCandidate(candidateSrcElement!.nextElementSibling);</span>
       }
     }
+  }
 &nbsp;
-    function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
-      event: any,
-      value: string | SelectOptionObject,
-      isPlaceholder?: boolean | undefined,
-    ): void {
-<span class="cstat-no" title="statement not covered" >      if (!isPlaceholder) {</span>
-        const docId = <span class="cstat-no" title="statement not covered" >event.target.getAttribute('label');</span>
-<span class="cstat-no" title="statement not covered" >        selectedField = value as string;</span>
-<span class="cstat-no" title="statement not covered" >        insertSelectedField(docId, selectedField);</span>
-      }
-<span class="cstat-no" title="statement not covered" >      onToggleFieldSearch(false);</span>
-<span class="cstat-no" title="statement not covered" >      toggleOff();</span>
+  function <span class="fstat-no" title="function not covered" >selectionChanged(</span>
+    event: any,
+    value: string | SelectOptionObject,
+    isPlaceholder?: boolean | undefined,
+  ): void {
+<span class="cstat-no" title="statement not covered" >    if (!isPlaceholder) {</span>
+      const docId = <span class="cstat-no" title="statement not covered" >event.target.getAttribute('label');</span>
+<span class="cstat-no" title="statement not covered" >      selectedField = value as string;</span>
+<span class="cstat-no" title="statement not covered" >      insertSelectedField(docId, selectedField);</span>
     }
+<span class="cstat-no" title="statement not covered" >    onToggleFieldSearch(false);</span>
+<span class="cstat-no" title="statement not covered" >    toggleOff();</span>
+  }
 &nbsp;
-    function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string[], idx: number): any {
-      // Use the display name for documents and field path for fields.
-<span class="cstat-no" title="statement not covered" >      if (selectField[1][0] !== '/') {</span>
-<span class="cstat-no" title="statement not covered" >        return (</span>
-          &lt;SelectOption
-            label={selectField[0]}
-            value={selectField[0]}
-            key={idx}
-            index={idx}
-            className={styles.document}
-            isPlaceholder={true}
-          /&gt;
-        );
-      } else {
-<span class="cstat-no" title="statement not covered" >        return (</span>
-          &lt;SelectOption
-            label={selectField[0]}
-            value={selectField[1]}
-            key={idx}
-            keyHandler={onKeyHandler}
-            index={idx}
-            className={styles.field}
-          /&gt;
-        );
-      }
+  function <span class="fstat-no" title="function not covered" >createSelectOption(</span>selectField: string[], idx: number): any {
+    // Use the display name for documents and field path for fields.
+<span class="cstat-no" title="statement not covered" >    if (selectField[1][0] !== '/') {</span>
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;SelectOption
+          label={selectField[0]}
+          value={selectField[0]}
+          key={idx}
+          index={idx}
+          className={styles.document}
+          isPlaceholder={true}
+        /&gt;
+      );
+    } else {
+<span class="cstat-no" title="statement not covered" >      return (</span>
+        &lt;SelectOption
+          label={selectField[0]}
+          value={selectField[1]}
+          key={idx}
+          keyHandler={onKeyHandler}
+          index={idx}
+          className={styles.field}
+        /&gt;
+      );
     }
+  }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;div
-        aria-label="Expression Field Search"
-        className={styles.searchMenu}
-        data-testid={'expression-field-search'}
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;div
+      aria-label="Expression Field Search"
+      className={styles.searchMenu}
+      data-testid={'expression-field-search'}
+    &gt;
+      &lt;Select
+        onToggle={toggle}
+        isOpen={state}
+        value={selectedField}
+        id={id}
+        onKeyDown={onKeyDown}
+        onSelect={selectionChanged}
+        data-testid={id}
       &gt;
-        &lt;Select
-          onToggle={toggle}
-          isOpen={state}
-          value={selectedField}
-          id={id}
-          onKeyDown={onKeyDown}
-          onSelect={selectionChanged}
-          data-testid={id}
-        &gt;
-          {mappedFieldCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
-<span class="cstat-no" title="statement not covered" >            createSelectOption(s, idx),</span>
-          )}
-        &lt;/Select&gt;
-      &lt;/div&gt;
-    );
-  };
+        {mappedFieldCandidates.map(<span class="fstat-no" title="function not covered" >(s</span>, idx: number) =&gt;
+<span class="cstat-no" title="statement not covered" >          createSelectOption(s, idx),</span>
+        )}
+      &lt;/Select&gt;
+    &lt;/div&gt;
+  );
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -597,7 +600,7 @@ export const ExpressionFieldSearch: FunctionComponent&lt;IExpressionFieldSearchP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 15 2022 20:18:26 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 15 2022 21:55:36 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

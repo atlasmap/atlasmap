@@ -414,7 +414,8 @@
 <a name='L356'></a><a href='#L356'>356</a>
 <a name='L357'></a><a href='#L357'>357</a>
 <a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -504,6 +505,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -861,235 +863,236 @@ export interface IMappingDetailsViewProps {
   canAddToSelectedMapping: (isSource: boolean) =&gt; boolean;
 }
 &nbsp;
-export const MappingDetailsView: FunctionComponent&lt;IMappingDetailsViewProps&gt; =
-<span class="fstat-no" title="function not covered" >  ({</span>
-    notifications<span class="cstat-no" title="statement not covered" >,</span>
-    sources<span class="cstat-no" title="statement not covered" >,</span>
-    targets<span class="cstat-no" title="statement not covered" >,</span>
-    addableSources<span class="cstat-no" title="statement not covered" >,</span>
-    addableTargets<span class="cstat-no" title="statement not covered" >,</span>
-    showSourcesIndex<span class="cstat-no" title="statement not covered" >,</span>
-    showTargetsIndex<span class="cstat-no" title="statement not covered" >,</span>
-    onClose<span class="cstat-no" title="statement not covered" >,</span>
-    mappingExpressionEnabled<span class="cstat-no" title="statement not covered" >,</span>
-    onRemoveMapping<span class="cstat-no" title="statement not covered" >,</span>
-    onRemoveMappedField<span class="cstat-no" title="statement not covered" >,</span>
-    onIndexChange<span class="cstat-no" title="statement not covered" >,</span>
-    onNewTransformation<span class="cstat-no" title="statement not covered" >,</span>
-    onTransformationChange<span class="cstat-no" title="statement not covered" >,</span>
-    onTransformationArgumentChange<span class="cstat-no" title="statement not covered" >,</span>
-    onRemoveTransformation<span class="cstat-no" title="statement not covered" >,</span>
-    onAddFieldToMapping<span class="cstat-no" title="statement not covered" >,</span>
-    onNotificationRead<span class="cstat-no" title="statement not covered" >,</span>
-    onEditEnum<span class="cstat-no" title="statement not covered" >,</span>
-    isEnumMapping<span class="cstat-no" title="statement not covered" >,</span>
-    onCreateConstant<span class="cstat-no" title="statement not covered" >,</span>
-    onCreateProperty<span class="cstat-no" title="statement not covered" >,</span>
-    canAddToSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
-    multiplicity<span class="cstat-no" title="statement not covered" >,</span>
-  }) =&gt; {
-    const formInputGroupStyle = <span class="cstat-no" title="statement not covered" >{</span>
-      '--pf-c-form--GridGap': '0',
-      marginTop: '1.0rem',
-    } as React.CSSProperties;
+export const MappingDetailsView: FunctionComponent&lt;
+  IMappingDetailsViewProps
+&gt; = <span class="fstat-no" title="function not covered" >({</span>
+  notifications<span class="cstat-no" title="statement not covered" >,</span>
+  sources<span class="cstat-no" title="statement not covered" >,</span>
+  targets<span class="cstat-no" title="statement not covered" >,</span>
+  addableSources<span class="cstat-no" title="statement not covered" >,</span>
+  addableTargets<span class="cstat-no" title="statement not covered" >,</span>
+  showSourcesIndex<span class="cstat-no" title="statement not covered" >,</span>
+  showTargetsIndex<span class="cstat-no" title="statement not covered" >,</span>
+  onClose<span class="cstat-no" title="statement not covered" >,</span>
+  mappingExpressionEnabled<span class="cstat-no" title="statement not covered" >,</span>
+  onRemoveMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onRemoveMappedField<span class="cstat-no" title="statement not covered" >,</span>
+  onIndexChange<span class="cstat-no" title="statement not covered" >,</span>
+  onNewTransformation<span class="cstat-no" title="statement not covered" >,</span>
+  onTransformationChange<span class="cstat-no" title="statement not covered" >,</span>
+  onTransformationArgumentChange<span class="cstat-no" title="statement not covered" >,</span>
+  onRemoveTransformation<span class="cstat-no" title="statement not covered" >,</span>
+  onAddFieldToMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onNotificationRead<span class="cstat-no" title="statement not covered" >,</span>
+  onEditEnum<span class="cstat-no" title="statement not covered" >,</span>
+  isEnumMapping<span class="cstat-no" title="statement not covered" >,</span>
+  onCreateConstant<span class="cstat-no" title="statement not covered" >,</span>
+  onCreateProperty<span class="cstat-no" title="statement not covered" >,</span>
+  canAddToSelectedMapping<span class="cstat-no" title="statement not covered" >,</span>
+  multiplicity<span class="cstat-no" title="statement not covered" >,</span>
+}) =&gt; {
+  const formInputGroupStyle = <span class="cstat-no" title="statement not covered" >{</span>
+    '--pf-c-form--GridGap': '0',
+    marginTop: '1.0rem',
+  } as React.CSSProperties;
 &nbsp;
-    const mappingAction = <span class="cstat-no" title="statement not covered" >multiplicity &amp;&amp; (</span>
-      &lt;MappingTransformation
-        name={multiplicity.name}
-        disableTransformation={mappingExpressionEnabled}
-        transformationsOptions={multiplicity.transformationsOptions}
-        transformationsArguments={multiplicity.transformationsArguments}
-        onTransformationChange={multiplicity.onChange}
-        onTransformationArgumentChange={multiplicity.onArgumentChange}
+  const mappingAction = <span class="cstat-no" title="statement not covered" >multiplicity &amp;&amp; (</span>
+    &lt;MappingTransformation
+      name={multiplicity.name}
+      disableTransformation={mappingExpressionEnabled}
+      transformationsOptions={multiplicity.transformationsOptions}
+      transformationsArguments={multiplicity.transformationsArguments}
+      onTransformationChange={multiplicity.onChange}
+      onTransformationArgumentChange={multiplicity.onArgumentChange}
+    /&gt;
+  );
+&nbsp;
+  const genericPaddingField: IAtlasmapField = <span class="cstat-no" title="statement not covered" >{</span>
+    id: '',
+    name: 'Padding field',
+    value: '',
+    type: '',
+    scope: 'current',
+    path: '',
+    mappings: [],
+    hasTransformations: false,
+    isAttribute: false,
+    isCollection: false,
+    isConnected: false,
+    isInCollection: false,
+    isDisabled: false,
+    amField: {} as IAtlasmapField['amField'],
+    enumeration: false,
+  };
+&nbsp;
+  const renderMappingField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+    isSource: boolean,
+    canShowIndex: boolean,
+    f: IAtlasmapMappedField | null,
+    index: number,
+  ) =&gt; {
+<span class="cstat-no" title="statement not covered" >    return f ? (</span>
+      &lt;MappingField
+        key={f.id}
+        field={f}
+        name={f.name}
+        info={
+          f.scope
+            ? `${f.path} &lt;${f.scope}&gt; (${f.type})`
+            : `${f.path} (${f.type})`
+        }
+        mappingExpressionEnabled={mappingExpressionEnabled}
+        hasTransformations={f.transformations.length &gt; 0}
+        onDelete={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nRemoveMappedField(isSource, index)}</span>
+        onIndexChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string | IAtlasmapField) =&gt;
+<span class="cstat-no" title="statement not covered" >          typeof value === 'string'</span>
+            ? onIndexChange(isSource, index, parseInt(value, 10))
+            : onIndexChange(isSource, index, value.amField)
+        }
+        onNewTransformation={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nNewTransformation(isSource, index)}</span>
+        index={index + 1}
+        canShowIndex={canShowIndex}
+      &gt;
+        &lt;div className={'pf-c-form'} style={formInputGroupStyle}&gt;
+          {f.transformations.map(<span class="fstat-no" title="function not covered" >(t</span>, transformationIndex) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
+            &lt;MappingTransformation
+              key={transformationIndex}
+              name={t.name}
+              transformationsOptions={t.options}
+              transformationsArguments={t.arguments}
+              disableTransformation={mappingExpressionEnabled}
+              onTransformationChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt;
+<span class="cstat-no" title="statement not covered" >                onTransformationChange(</span>
+                  isSource,
+                  index,
+                  transformationIndex,
+                  value,
+                )
+              }
+              onTransformationArgumentChange={<span class="fstat-no" title="function not covered" >(n</span>ame, value) =&gt;
+<span class="cstat-no" title="statement not covered" >                onTransformationArgumentChange(</span>
+                  isSource,
+                  index,
+                  transformationIndex,
+                  name,
+                  value,
+                )
+              }
+              onRemoveTransformation={<span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >                onRemoveTransformation(isSource, index, transformationIndex);</span>
+              }}
+            /&gt;
+          ))}
+        &lt;/div&gt;
+      &lt;/MappingField&gt;
+    ) : (
+      &lt;MappingField
+        field={genericPaddingField}
+        key={index}
+        name={'Padding field'}
+        info={'This padding field has been automatically added'}
+        mappingExpressionEnabled={mappingExpressionEnabled}
+        hasTransformations={false}
+        onDelete={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nRemoveMappedField(isSource, index)}</span>
+        index={index + 1}
+        canShowIndex={showSourcesIndex}
       /&gt;
     );
-&nbsp;
-    const genericPaddingField: IAtlasmapField = <span class="cstat-no" title="statement not covered" >{</span>
-      id: '',
-      name: 'Padding field',
-      value: '',
-      type: '',
-      scope: 'current',
-      path: '',
-      mappings: [],
-      hasTransformations: false,
-      isAttribute: false,
-      isCollection: false,
-      isConnected: false,
-      isInCollection: false,
-      isDisabled: false,
-      amField: {} as IAtlasmapField['amField'],
-      enumeration: false,
-    };
-&nbsp;
-    const renderMappingField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-      isSource: boolean,
-      canShowIndex: boolean,
-      f: IAtlasmapMappedField | null,
-      index: number,
-    ) =&gt; {
-<span class="cstat-no" title="statement not covered" >      return f ? (</span>
-        &lt;MappingField
-          key={f.id}
-          field={f}
-          name={f.name}
-          info={
-            f.scope
-              ? `${f.path} &lt;${f.scope}&gt; (${f.type})`
-              : `${f.path} (${f.type})`
-          }
-          mappingExpressionEnabled={mappingExpressionEnabled}
-          hasTransformations={f.transformations.length &gt; 0}
-          onDelete={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nRemoveMappedField(isSource, index)}</span>
-          onIndexChange={<span class="fstat-no" title="function not covered" >(v</span>alue: string | IAtlasmapField) =&gt;
-<span class="cstat-no" title="statement not covered" >            typeof value === 'string'</span>
-              ? onIndexChange(isSource, index, parseInt(value, 10))
-              : onIndexChange(isSource, index, value.amField)
-          }
-          onNewTransformation={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nNewTransformation(isSource, index)}</span>
-          index={index + 1}
-          canShowIndex={canShowIndex}
-        &gt;
-          &lt;div className={'pf-c-form'} style={formInputGroupStyle}&gt;
-            {f.transformations.map(<span class="fstat-no" title="function not covered" >(t</span>, transformationIndex) =&gt; <span class="cstat-no" title="statement not covered" >(</span>
-              &lt;MappingTransformation
-                key={transformationIndex}
-                name={t.name}
-                transformationsOptions={t.options}
-                transformationsArguments={t.arguments}
-                disableTransformation={mappingExpressionEnabled}
-                onTransformationChange={<span class="fstat-no" title="function not covered" >(v</span>alue) =&gt;
-<span class="cstat-no" title="statement not covered" >                  onTransformationChange(</span>
-                    isSource,
-                    index,
-                    transformationIndex,
-                    value,
-                  )
-                }
-                onTransformationArgumentChange={<span class="fstat-no" title="function not covered" >(n</span>ame, value) =&gt;
-<span class="cstat-no" title="statement not covered" >                  onTransformationArgumentChange(</span>
-                    isSource,
-                    index,
-                    transformationIndex,
-                    name,
-                    value,
-                  )
-                }
-                onRemoveTransformation={<span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >                  onRemoveTransformation(isSource, index, transformationIndex);</span>
-                }}
-              /&gt;
-            ))}
-          &lt;/div&gt;
-        &lt;/MappingField&gt;
-      ) : (
-        &lt;MappingField
-          field={genericPaddingField}
-          key={index}
-          name={'Padding field'}
-          info={'This padding field has been automatically added'}
-          mappingExpressionEnabled={mappingExpressionEnabled}
-          hasTransformations={false}
-          onDelete={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nRemoveMappedField(isSource, index)}</span>
-          index={index + 1}
-          canShowIndex={showSourcesIndex}
-        /&gt;
-      );
-    };
-&nbsp;
-    const renderSourceMappingField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-      f: IAtlasmapMappedField | null,
-      index: number,
-    ) =&gt; <span class="cstat-no" title="statement not covered" >renderMappingField(true, showSourcesIndex, f, index);</span>
-    const renderTargetMappingField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
-      f: IAtlasmapMappedField | null,
-      index: number,
-    ) =&gt; <span class="cstat-no" title="statement not covered" >renderMappingField(false, showTargetsIndex, f, index);</span>
-&nbsp;
-    const errors = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === 'danger');</span></span>
-    const warnings = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === 'warning');</span></span>
-    const messages = <span class="cstat-no" title="statement not covered" >notifications.filter(</span>
-<span class="fstat-no" title="function not covered" >      (n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant !== 'warning' &amp;&amp; n.variant !== 'danger',</span>
-    );
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;MappingDetailsSidebar
-        onClose={onClose}
-        onDelete={onRemoveMapping}
-        onEditEnum={onEditEnum}
-        isEnumMapping={isEnumMapping}
-      &gt;
-        {errors.length &gt; 0 &amp;&amp; (
-          &lt;NotificationsGroup
-            notifications={errors}
-            title={'Errors'}
-            onNotificationRead={onNotificationRead}
-          /&gt;
-        )}
-        {warnings.length &gt; 0 &amp;&amp; (
-          &lt;NotificationsGroup
-            notifications={warnings}
-            title={'Warnings'}
-            onNotificationRead={onNotificationRead}
-          /&gt;
-        )}
-        {messages.length &gt; 0 &amp;&amp; (
-          &lt;NotificationsGroup
-            notifications={messages}
-            title={'Messages'}
-            onNotificationRead={onNotificationRead}
-          /&gt;
-        )}
-        &lt;div className={'pf-c-form'} style={formInputGroupStyle}&gt;
-          {mappingAction}
-          &lt;MappingFields
-            isSource={true}
-            title={'Sources'}
-            onCreateConstant={onCreateConstant}
-            onCreateProperty={onCreateProperty}
-            canAddToSelectedMapping={canAddToSelectedMapping}
-          &gt;
-            {sources.map(renderSourceMappingField)}
-            {targets.length &lt;= 1 &amp;&amp; (
-              &lt;AddFieldTypeahead
-                ariaLabelTypeAhead={'Select source to add to the mapping'}
-                placeholderText={'Select source to add to the mapping'}
-                isSource={true}
-                fields={addableSources.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
-                  label: s.amField.isPropertyOrConstant() ? s.name : s.path,
-                  group: s.amField!.docDef.name,
-                  onAdd: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nAddFieldToMapping(true, s),</span>
-                }))}
-                data-testid={'add-source-to-mapping'}
-              /&gt;
-            )}
-          &lt;/MappingFields&gt;
-          &lt;MappingFields
-            isSource={false}
-            title={'Targets'}
-            onCreateConstant={onCreateConstant}
-            onCreateProperty={onCreateProperty}
-            canAddToSelectedMapping={canAddToSelectedMapping}
-          &gt;
-            {targets.map(renderTargetMappingField)}
-            {sources.length &lt;= 1 &amp;&amp; (
-              &lt;AddFieldTypeahead
-                ariaLabelTypeAhead={'Select target to add to the mapping'}
-                placeholderText={'Select target to add to the mapping'}
-                isSource={false}
-                fields={addableTargets.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
-                  label: t.amField.isProperty() ? t.name : t.path,
-                  group: t.amField!.docDef.name,
-                  onAdd: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nAddFieldToMapping(false, t),</span>
-                }))}
-                data-testid={'add-target-to-mapping'}
-              /&gt;
-            )}
-          &lt;/MappingFields&gt;
-        &lt;/div&gt;
-      &lt;/MappingDetailsSidebar&gt;
-    );
   };
+&nbsp;
+  const renderSourceMappingField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+    f: IAtlasmapMappedField | null,
+    index: number,
+  ) =&gt; <span class="cstat-no" title="statement not covered" >renderMappingField(true, showSourcesIndex, f, index);</span>
+  const renderTargetMappingField = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(</span></span>
+    f: IAtlasmapMappedField | null,
+    index: number,
+  ) =&gt; <span class="cstat-no" title="statement not covered" >renderMappingField(false, showTargetsIndex, f, index);</span>
+&nbsp;
+  const errors = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === 'danger');</span></span>
+  const warnings = <span class="cstat-no" title="statement not covered" >notifications.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant === 'warning');</span></span>
+  const messages = <span class="cstat-no" title="statement not covered" >notifications.filter(</span>
+<span class="fstat-no" title="function not covered" >    (n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n.variant !== 'warning' &amp;&amp; n.variant !== 'danger',</span>
+  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;MappingDetailsSidebar
+      onClose={onClose}
+      onDelete={onRemoveMapping}
+      onEditEnum={onEditEnum}
+      isEnumMapping={isEnumMapping}
+    &gt;
+      {errors.length &gt; 0 &amp;&amp; (
+        &lt;NotificationsGroup
+          notifications={errors}
+          title={'Errors'}
+          onNotificationRead={onNotificationRead}
+        /&gt;
+      )}
+      {warnings.length &gt; 0 &amp;&amp; (
+        &lt;NotificationsGroup
+          notifications={warnings}
+          title={'Warnings'}
+          onNotificationRead={onNotificationRead}
+        /&gt;
+      )}
+      {messages.length &gt; 0 &amp;&amp; (
+        &lt;NotificationsGroup
+          notifications={messages}
+          title={'Messages'}
+          onNotificationRead={onNotificationRead}
+        /&gt;
+      )}
+      &lt;div className={'pf-c-form'} style={formInputGroupStyle}&gt;
+        {mappingAction}
+        &lt;MappingFields
+          isSource={true}
+          title={'Sources'}
+          onCreateConstant={onCreateConstant}
+          onCreateProperty={onCreateProperty}
+          canAddToSelectedMapping={canAddToSelectedMapping}
+        &gt;
+          {sources.map(renderSourceMappingField)}
+          {targets.length &lt;= 1 &amp;&amp; (
+            &lt;AddFieldTypeahead
+              ariaLabelTypeAhead={'Select source to add to the mapping'}
+              placeholderText={'Select source to add to the mapping'}
+              isSource={true}
+              fields={addableSources.map(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
+                label: s.amField.isPropertyOrConstant() ? s.name : s.path,
+                group: s.amField!.docDef.name,
+                onAdd: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nAddFieldToMapping(true, s),</span>
+              }))}
+              data-testid={'add-source-to-mapping'}
+            /&gt;
+          )}
+        &lt;/MappingFields&gt;
+        &lt;MappingFields
+          isSource={false}
+          title={'Targets'}
+          onCreateConstant={onCreateConstant}
+          onCreateProperty={onCreateProperty}
+          canAddToSelectedMapping={canAddToSelectedMapping}
+        &gt;
+          {targets.map(renderTargetMappingField)}
+          {sources.length &lt;= 1 &amp;&amp; (
+            &lt;AddFieldTypeahead
+              ariaLabelTypeAhead={'Select target to add to the mapping'}
+              placeholderText={'Select target to add to the mapping'}
+              isSource={false}
+              fields={addableTargets.map(<span class="fstat-no" title="function not covered" >(t</span>) =&gt; <span class="cstat-no" title="statement not covered" >({</span>
+                label: t.amField.isProperty() ? t.name : t.path,
+                group: t.amField!.docDef.name,
+                onAdd: <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >o</span>nAddFieldToMapping(false, t),</span>
+              }))}
+              data-testid={'add-target-to-mapping'}
+            /&gt;
+          )}
+        &lt;/MappingFields&gt;
+      &lt;/div&gt;
+    &lt;/MappingDetailsSidebar&gt;
+  );
+};
 &nbsp;
 interface INotificationsGroupProps {
   title: string;
@@ -1137,7 +1140,7 @@ const NotificationsGroup: FunctionComponent&lt;INotificationsGroupProps&gt; = <s
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 15 2022 20:18:26 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 15 2022 21:55:36 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

@@ -147,7 +147,8 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,6 +178,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -267,68 +269,69 @@ export interface IMappingDetailsSidebarProps {
   isEnumMapping: () =&gt; boolean;
 }
 &nbsp;
-export const MappingDetailsSidebar: FunctionComponent&lt;IMappingDetailsSidebarProps&gt; =
-<span class="fstat-no" title="function not covered" >  ({</span> onDelete<span class="cstat-no" title="statement not covered" >, o</span>nClose<span class="cstat-no" title="statement not covered" >, o</span>nEditEnum<span class="cstat-no" title="statement not covered" >, i</span>sEnumMapping<span class="cstat-no" title="statement not covered" >, c</span>hildren<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >    return (</span>
-      &lt;Stack data-testid="column-mapping-details-area"&gt;
-        &lt;StackItem&gt;
-          &lt;ColumnHeader
-            title={'Mapping Details'}
-            variant={'plain'}
-            actions={[
+export const MappingDetailsSidebar: FunctionComponent&lt;
+  IMappingDetailsSidebarProps
+&gt; = <span class="fstat-no" title="function not covered" >({</span> onDelete<span class="cstat-no" title="statement not covered" >, o</span>nClose<span class="cstat-no" title="statement not covered" >, o</span>nEditEnum<span class="cstat-no" title="statement not covered" >, i</span>sEnumMapping<span class="cstat-no" title="statement not covered" >, c</span>hildren<span class="cstat-no" title="statement not covered" > })</span> =&gt; {
+<span class="cstat-no" title="statement not covered" >  return (</span>
+    &lt;Stack data-testid="column-mapping-details-area"&gt;
+      &lt;StackItem&gt;
+        &lt;ColumnHeader
+          title={'Mapping Details'}
+          variant={'plain'}
+          actions={[
+            &lt;Button
+              onClick={onClose}
+              variant={'plain'}
+              aria-label="Close the mapping details panel"
+              data-testid={'close-mapping-detail-button'}
+              key={'close'}
+            &gt;
+              &lt;CloseIcon /&gt;
+            &lt;/Button&gt;,
+            &lt;Tooltip
+              key={'edit-enum'}
+              position={'auto'}
+              enableFlip={true}
+              content={&lt;div&gt;Edit the enumeration mappings&lt;/div&gt;}
+              entryDelay={750}
+              exitDelay={100}
+            &gt;
               &lt;Button
-                onClick={onClose}
                 variant={'plain'}
-                aria-label="Close the mapping details panel"
-                data-testid={'close-mapping-detail-button'}
-                key={'close'}
+                onClick={onEditEnum}
+                aria-label="Edit the enumeration mappings"
+                data-testid={'edit-enum-mapping-button'}
+                isDisabled={!isEnumMapping()}
               &gt;
-                &lt;CloseIcon /&gt;
-              &lt;/Button&gt;,
-              &lt;Tooltip
-                key={'edit-enum'}
-                position={'auto'}
-                enableFlip={true}
-                content={&lt;div&gt;Edit the enumeration mappings&lt;/div&gt;}
-                entryDelay={750}
-                exitDelay={100}
+                &lt;EditIcon /&gt;
+              &lt;/Button&gt;
+            &lt;/Tooltip&gt;,
+            &lt;Tooltip
+              key={'remove'}
+              position={'auto'}
+              enableFlip={true}
+              content={&lt;div&gt;Remove the current mapping&lt;/div&gt;}
+              entryDelay={750}
+              exitDelay={100}
+            &gt;
+              &lt;Button
+                variant={'plain'}
+                onClick={onDelete}
+                aria-label="Remove the current mapping"
+                data-testid={'remove-current-mapping-button'}
               &gt;
-                &lt;Button
-                  variant={'plain'}
-                  onClick={onEditEnum}
-                  aria-label="Edit the enumeration mappings"
-                  data-testid={'edit-enum-mapping-button'}
-                  isDisabled={!isEnumMapping()}
-                &gt;
-                  &lt;EditIcon /&gt;
-                &lt;/Button&gt;
-              &lt;/Tooltip&gt;,
-              &lt;Tooltip
-                key={'remove'}
-                position={'auto'}
-                enableFlip={true}
-                content={&lt;div&gt;Remove the current mapping&lt;/div&gt;}
-                entryDelay={750}
-                exitDelay={100}
-              &gt;
-                &lt;Button
-                  variant={'plain'}
-                  onClick={onDelete}
-                  aria-label="Remove the current mapping"
-                  data-testid={'remove-current-mapping-button'}
-                &gt;
-                  &lt;TrashIcon /&gt;
-                &lt;/Button&gt;
-              &lt;/Tooltip&gt;,
-            ]}
-          /&gt;
-        &lt;/StackItem&gt;
-        &lt;StackItem isFilled={true} className={styles.content}&gt;
-          {children}
-        &lt;/StackItem&gt;
-      &lt;/Stack&gt;
-    );
-  };
+                &lt;TrashIcon /&gt;
+              &lt;/Button&gt;
+            &lt;/Tooltip&gt;,
+          ]}
+        /&gt;
+      &lt;/StackItem&gt;
+      &lt;StackItem isFilled={true} className={styles.content}&gt;
+        {children}
+      &lt;/StackItem&gt;
+    &lt;/Stack&gt;
+  );
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -336,7 +339,7 @@ export const MappingDetailsSidebar: FunctionComponent&lt;IMappingDetailsSidebarP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Aug 15 2022 20:18:26 GMT+0000 (Coordinated Universal Time)
+                at Mon Aug 15 2022 21:55:36 GMT+0000 (Coordinated Universal Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
