@@ -1,7 +1,7 @@
 name: Cancel Previous
 on:
   workflow_run:
-    workflows: ["__Experimental", "Master", "Checked", "Node"]
+    workflows: ["__Experimental", "Main", "Checked", "Node"]
     types:
       - requested
 jobs:
