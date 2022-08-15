@@ -24,7 +24,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-<span class="nc" id="L27">public class SecurityConfiguration extends WebSecurityConfigurerAdapter {</span>
+<span class="fc" id="L27">public class SecurityConfiguration extends WebSecurityConfigurerAdapter {</span>
 
     private static final String DISABLE_FRAME_OPTIONS = &quot;atlasmap.disable.frame.options&quot;;
     @Autowired
@@ -32,11 +32,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-<span class="nc" id="L35">        httpSecurity.csrf().csrfTokenRepository(new AtlasMapXsrfRepository());</span>
-<span class="nc" id="L36">        String disableFrameOptions = context.getEnvironment().getProperty(DISABLE_FRAME_OPTIONS);</span>
-<span class="nc bnc" id="L37" title="All 4 branches missed.">        if (disableFrameOptions != null &amp;&amp; &quot;true&quot;.equals(disableFrameOptions)) {</span>
+<span class="fc" id="L35">        httpSecurity.csrf().csrfTokenRepository(new AtlasMapXsrfRepository());</span>
+<span class="fc" id="L36">        String disableFrameOptions = context.getEnvironment().getProperty(DISABLE_FRAME_OPTIONS);</span>
+<span class="pc bpc" id="L37" title="3 of 4 branches missed.">        if (disableFrameOptions != null &amp;&amp; &quot;true&quot;.equals(disableFrameOptions)) {</span>
 <span class="nc" id="L38">            httpSecurity.headers().frameOptions().disable();</span>
         }
-<span class="nc" id="L40">    }</span>
+<span class="fc" id="L40">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

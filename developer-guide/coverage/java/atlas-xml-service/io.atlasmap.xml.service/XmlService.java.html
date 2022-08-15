@@ -60,7 +60,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
     protected &lt;T&gt; T fromJson(InputStream value, Class&lt;T&gt;clazz) {
         try {
-<span class="nc" id="L63">            return Json.mapper().readValue(value, clazz);</span>
+<span class="fc" id="L63">            return Json.mapper().readValue(value, clazz);</span>
 <span class="nc" id="L64">        } catch (IOException e) {</span>
 <span class="nc" id="L65">            throw new WebApplicationException(e, Response.Status.BAD_REQUEST);</span>
         }
@@ -84,7 +84,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
     @RequestBody(description = &quot;XmlInspectionRequest object&quot;, content = @Content(schema = @Schema(implementation = XmlInspectionRequest.class)))
     @ApiResponses(@ApiResponse(responseCode = &quot;200&quot;,  content = @Content(schema = @Schema(implementation = XmlInspectionResponse.class)), description = &quot;Return a Document object represented by XmlDocument&quot;))
     public Response inspect(InputStream request) {
-<span class="nc" id="L87">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
+<span class="fc" id="L87">        return inspect(fromJson(request, XmlInspectionRequest.class));</span>
     }
 
     public Response inspect(XmlInspectionRequest request) {

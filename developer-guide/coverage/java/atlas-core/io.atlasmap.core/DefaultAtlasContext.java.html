@@ -137,8 +137,8 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 <span class="fc bfc" id="L137" title="All 2 branches covered.">            if (Integer.parseInt(coreVersionComps[0]) &lt; Integer.parseInt(mappingVersionComps[0])) {</span>
 <span class="fc" id="L138">                return false;</span>
             }
-<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            if (Integer.parseInt(coreVersionComps[0]) == Integer.parseInt(mappingVersionComps[0]) &amp;&amp;</span>
-<span class="nc bnc" id="L141" title="All 2 branches missed.">                Integer.parseInt(coreVersionComps[1]) &lt; Integer.parseInt(mappingVersionComps[1])) {</span>
+<span class="fc bfc" id="L140" title="All 2 branches covered.">            if (Integer.parseInt(coreVersionComps[0]) == Integer.parseInt(mappingVersionComps[0]) &amp;&amp;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                Integer.parseInt(coreVersionComps[1]) &lt; Integer.parseInt(mappingVersionComps[1])) {</span>
 <span class="nc" id="L142">                return false;</span>
             }
         }

@@ -55,7 +55,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
 <span class="fc" id="L55">    public AtlasLibraryLoader(String saveDirName) throws AtlasException {</span>
 <span class="fc" id="L56">        LOG.debug(&quot;Using {} as a lib directory&quot;, saveDirName);</span>
 <span class="fc" id="L57">        this.saveDir = new File(saveDirName);</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">        if (!saveDir.exists()) {</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (!saveDir.exists()) {</span>
 <span class="fc" id="L59">            saveDir.mkdirs();</span>
         }
 <span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (!saveDir.isDirectory()) {</span>
@@ -216,7 +216,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         }
 <span class="fc" id="L217">        loaders.addAll(this.alternativeLoaders);</span>
 <span class="fc" id="L218">        ClassLoader tccl = Thread.currentThread().getContextClassLoader();</span>
-<span class="pc bpc" id="L219" title="1 of 2 branches missed.">        if (this != tccl) {</span>
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (this != tccl) {</span>
 <span class="fc" id="L220">            loaders.add(tccl);</span>
         }
 <span class="fc" id="L222">        return loaders;</span>
