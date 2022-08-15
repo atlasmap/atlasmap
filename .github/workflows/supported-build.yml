@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        java: [ '18.0.0', '11.0.14' ]
+        java: [ '18', '11' ]
         os: [ubuntu-latest, macos-latest, windows-latest]
     name: ${{ matrix.os }}/Java${{ matrix.java }}
     steps:
