@@ -3189,11 +3189,6 @@
   resolved "https://registry.yarnpkg.com/@react-dnd/shallowequal/-/shallowequal-3.0.1.tgz#8056fe046a8d10a275e321ec0557ae652d7a4d06"
   integrity sha512-XjDVbs3ZU16CO1h5Q3Ew2RPJqmZBDE/EVf1LYp6ePEffs3V/MX9ZbL5bJr8qiK5SbGmUMuDoaFgyKacYz8prRA==
 
-"@react-dnd/shallowequal@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@react-dnd/shallowequal/-/shallowequal-2.0.0.tgz#a3031eb54129f2c66b2753f8404266ec7bf67f0a"
-  integrity sha512-Pc/AFTdwZwEKJxFJvlxrSmGe/di+aAOBn60sremrpLo6VI/6cmiUYNNwlI5KNYttg7uypzA3ILPMPgxB2GYZEg==
-
 "@react-spring/animated@~9.5.2":
   version "9.5.2"
   resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-9.5.2.tgz#42785b4f369d9715e9ee32c04b78483e7bb85489"
@@ -6075,7 +6070,7 @@ babel-jest@^24.9.0:
     chalk "^2.4.2"
     slash "^2.0.0"
 
-babel-loader@8.1.0:
+babel-loader@8.1.0, babel-loader@^8.0.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.1.0.tgz#c611d5112bd5209abe8b9fa84c3e4da25275f1c3"
   integrity sha512-7q7nC1tYOrqvUrN3LQK4GwSk/TQorZSOlO9C+RZDZpODgyN4ZlCqE5q9cDsyWOliN+aU9B4JX01xK9eJXowJLw==
@@ -6086,7 +6081,7 @@ babel-loader@8.1.0:
     pify "^4.0.1"
     schema-utils "^2.6.5"
 
-babel-loader@^8.0.0, babel-loader@^8.2.2:
+babel-loader@^8.2.2:
   version "8.2.5"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.2.5.tgz#d45f585e654d5a5d90f5350a779d7647c5ed512e"
   integrity sha512-OSiFfH89LrEMiWd4pLNqGz4CwJDtbs2ZVc+iGu2HrkRfPxId9F2anQj38IxWpmRfsUY0aBZYi1EFcd3mhtRMLQ==
@@ -17826,18 +17821,7 @@ react-dnd-touch-backend@^15.1.0:
     "@react-dnd/invariant" "3.0.1"
     dnd-core "15.1.2"
 
-react-dnd@^14.0.2:
-  version "14.0.4"
-  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-14.0.4.tgz#ffb4ea0e2a3a5532f9c6294d565742008a52b8b0"
-  integrity sha512-AFJJXzUIWp5WAhgvI85ESkDCawM0lhoVvfo/lrseLXwFdH3kEO3v8I2C81QPqBW2UEyJBIPStOhPMGYGFtq/bg==
-  dependencies:
-    "@react-dnd/invariant" "^2.0.0"
-    "@react-dnd/shallowequal" "^2.0.0"
-    dnd-core "14.0.1"
-    fast-deep-equal "^3.1.3"
-    hoist-non-react-statics "^3.3.2"
-
-react-dnd@^15.1.0:
+react-dnd@^15.1.0, react-dnd@^15.1.2:
   version "15.1.2"
   resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-15.1.2.tgz#211b30fd842326209c63f26f1bdf1bc52eef4f64"
   integrity sha512-EaSbMD9iFJDY/o48T3c8wn3uWU+2uxfFojhesZN3LhigJoAIvH2iOjxofSA9KbqhAKP6V9P853G6XG8JngKVtA==
