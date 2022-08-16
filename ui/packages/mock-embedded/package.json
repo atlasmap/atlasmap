@@ -2,7 +2,7 @@
   "name": "@atlasmap/mock-embedded",
   "description": "AtlasMap UI mock up for embedded usage",
   "license": "Apache-2.0",
-  "version": "2.4.0-SNAPSHOT",
+  "version": "2.6.0-SNAPSHOT",
   "private": true,
   "scripts": {
     "start": "react-scripts --max_old_space_size=4096 start",
@@ -15,7 +15,7 @@
     "format": "yarn lint --fix"
   },
   "dependencies": {
-    "@atlasmap/atlasmap": "^2.4.0-SNAPSHOT",
+    "@atlasmap/atlasmap": "^2.6.0-SNAPSHOT",
     "@patternfly/react-core": "^4.224.1",
     "@patternfly/react-icons": "^4.75.1",
     "@patternfly/react-styles": "^4.74.1",

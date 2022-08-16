@@ -1,7 +1,7 @@
 {
   "name": "@atlasmap/atlasmap",
   "description": "AtlasMap UI presentation layer consists of React components",
-  "version": "2.5.0",
+  "version": "2.6.0-SNAPSHOT",
   "license": "Apache-2.0",
   "publishConfig": {
     "access": "public"
@@ -26,7 +26,7 @@
     "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
-    "@atlasmap/core": "^2.5.0"
+    "@atlasmap/core": "^2.6.0-SNAPSHOT"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
