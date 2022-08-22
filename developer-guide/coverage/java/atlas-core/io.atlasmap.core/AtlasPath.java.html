@@ -461,8 +461,8 @@ public class AtlasPath implements Cloneable {
 
         @Override
         public String toString() {
-<span class="fc bfc" id="L464" title="All 2 branches covered.">            return collectionType == CollectionType.MAP</span>
-<span class="fc" id="L465">                ? String.format(&quot;SegmentContext [name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
+<span class="pc bpc" id="L464" title="1 of 2 branches missed.">            return collectionType == CollectionType.MAP</span>
+<span class="nc" id="L465">                ? String.format(&quot;SegmentContext [name=%s, expression=%s, collectionType=%s, mapKey=%s]&quot;,</span>
                     name, expression, collectionType, mapKey)
 <span class="fc" id="L467">                : String.format(</span>
                     &quot;SegmentContext [name=%s, expression=%s, collectionType=%s, collectionIndex=%s]&quot;,

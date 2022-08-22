@@ -176,8 +176,8 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 <span class="fc" id="L176">                continue;</span>
             }
 
-<span class="fc bfc" id="L179" title="All 2 branches covered.">            if (LOG.isTraceEnabled()) {</span>
-<span class="fc" id="L180">                LOG.trace(&quot;adding a namespace &gt;&gt;&gt; prefix={}, uri={}&quot;, prefix, uri);</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">            if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L180">                LOG.trace(&quot;adding a namespace &gt;&gt;&gt; prefix={}, uri={}&quot;, prefix, uri);</span>
             }
 <span class="fc bfc" id="L182" title="All 2 branches covered.">            if (xmlDocument.getXmlNamespaces() == null) {</span>
 <span class="fc" id="L183">                xmlDocument.setXmlNamespaces(new XmlNamespaces());</span>
@@ -282,13 +282,13 @@ import io.atlasmap.xml.v2.XmlNamespaces;
 
 <span class="fc bfc" id="L283" title="All 2 branches covered.">            if (complexType.getStatus() != FieldStatus.CACHED) {</span>
 <span class="fc" id="L284">                printComplexType(element.getType().asComplexType(), complexType, cachedComplexType);</span>
-<span class="fc bfc" id="L285" title="All 2 branches covered.">                if (LOG.isTraceEnabled()) {</span>
-<span class="fc" id="L286">                    LOG.trace(&quot;Element: {}/{}&quot;, parentPath, getNameNS(element));</span>
+<span class="pc bpc" id="L285" title="1 of 2 branches missed.">                if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L286">                    LOG.trace(&quot;Element: {}/{}&quot;, parentPath, getNameNS(element));</span>
                 }
             }
 <span class="pc bpc" id="L289" title="1 of 2 branches missed.">        } else if (elementType.asSimpleType() != null) {</span>
-<span class="fc bfc" id="L290" title="All 2 branches covered.">            if (LOG.isTraceEnabled()) {</span>
-<span class="fc" id="L291">                LOG.trace(&quot;Element: {}/{}&quot;, parentPath, getNameNS(element));</span>
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">            if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L291">                LOG.trace(&quot;Element: {}/{}&quot;, parentPath, getNameNS(element));</span>
             }
 
 <span class="fc" id="L294">            XSRestrictionSimpleType restrictionType = elementType.asSimpleType().asRestriction();</span>

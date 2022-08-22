@@ -277,8 +277,8 @@ public class AtlasXmlSchemaSetParser {
 <span class="fc" id="L277">        ByteArrayOutputStream baos = new ByteArrayOutputStream();</span>
 <span class="fc" id="L278">        this.transformer.transform(new DOMSource(n), new StreamResult(baos));</span>
 <span class="fc" id="L279">        byte[] output = baos.toByteArray();</span>
-<span class="fc bfc" id="L280" title="All 2 branches covered.">        if (LOG.isTraceEnabled()) {</span>
-<span class="fc" id="L281">            LOG.trace(&quot;&gt;&gt;&gt; {}&quot;, new String(output));</span>
+<span class="pc bpc" id="L280" title="1 of 2 branches missed.">        if (LOG.isTraceEnabled()) {</span>
+<span class="nc" id="L281">            LOG.trace(&quot;&gt;&gt;&gt; {}&quot;, new String(output));</span>
         }
 <span class="fc" id="L283">        return new ByteArrayInputStream(output);</span>
     }
