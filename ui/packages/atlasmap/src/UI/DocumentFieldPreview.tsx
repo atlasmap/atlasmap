@@ -25,25 +25,23 @@ export interface IDocumentFieldPreviewProps {
   onChange: (value: string) => void;
 }
 
-export const DocumentFieldPreview: FunctionComponent<IDocumentFieldPreviewProps> =
-  ({ id, value, onChange }) => {
-    const debouncedOnChange = useDebouncedCallback(onChange, 200);
-    return (
-      <Form
-        className={styles.form}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <FormGroup label="Mapping preview" fieldId={id}>
-          <TextInput
-            id={id}
-            type="text"
-            onChange={debouncedOnChange}
-            defaultValue={value || ''}
-            aria-label="Type sample data here"
-            placeholder="Type sample data here"
-            data-testid={`input-document-mapping-preview-${id}-field`}
-          />
-        </FormGroup>
-      </Form>
-    );
-  };
+export const DocumentFieldPreview: FunctionComponent<
+  IDocumentFieldPreviewProps
+> = ({ id, value, onChange }) => {
+  const debouncedOnChange = useDebouncedCallback(onChange, 200);
+  return (
+    <Form className={styles.form} onClick={(event) => event.stopPropagation()}>
+      <FormGroup label="Mapping preview" fieldId={id}>
+        <TextInput
+          id={id}
+          type="text"
+          onChange={debouncedOnChange}
+          defaultValue={value || ''}
+          aria-label="Type sample data here"
+          placeholder="Type sample data here"
+          data-testid={`input-document-mapping-preview-${id}-field`}
+        />
+      </FormGroup>
+    </Form>
+  );
+};

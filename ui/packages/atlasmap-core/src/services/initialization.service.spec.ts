@@ -32,7 +32,7 @@ import atlasmapInspectionOldActionSourceJson from '../../../../test-resources/in
 import atlasmapInspectionOldActionTargetJson from '../../../../test-resources/inspected/atlasmap-inspection-old-action-target.json';
 import atlasmappingCvsToJson from '../../../../test-resources/mapping/atlasmapping-cvs-to-json.json';
 import atlasmappingOldActionJson from '../../../../test-resources/mapping/atlasmapping-old-action.json';
-import ky from 'ky/umd';
+import ky from 'ky';
 import { take } from 'rxjs/operators';
 
 describe('InitializationService', () => {

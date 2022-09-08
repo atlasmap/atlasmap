@@ -14,12 +14,13 @@
     limitations under the License.
 */
 import { ErrorInfo, ErrorLevel, ErrorScope, ErrorType } from '../error.model';
-import { Input, Options } from 'ky';
 
 import { ConfigModel } from '../config.model';
 import { DocumentDefinition } from '../document-definition.model';
 import { Field } from '../field.model';
 import { IField } from '../../contracts/common';
+import { Input } from 'ky/distribution/types/options';
+import { Options } from 'ky';
 
 /**
  * Encapsulates Document inspection context.
