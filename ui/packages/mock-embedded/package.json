@@ -5,11 +5,11 @@
   "version": "2.6.0-SNAPSHOT",
   "private": true,
   "scripts": {
-    "start": "react-scripts --max_old_space_size=4096 start",
-    "build:module": "react-scripts --max_old_space_size=4096 build",
+    "start": "craco --max_old_space_size=4096 start",
+    "build:module": "craco --max_old_space_size=4096 build",
     "build": "npm-run-all build:module lint test",
-    "test": "react-scripts test --watchAll=false --runInBand",
-    "test:coverage": "react-scripts test --watchAll=false --coverage --runInBand",
+    "test": "craco test --watchAll=false --runInBand",
+    "test:coverage": "craco test --watchAll=false --coverage --runInBand",
     "eject": "react-scripts eject",
     "lint": "tsdx lint src",
     "format": "yarn lint --fix"
@@ -31,7 +31,7 @@
     "d3-shape": "^3.1.0",
     "file-saver": "^2.0.5",
     "http-proxy-middleware": "^1.3.1",
-    "ky": "~0.17.0",
+    "ky": "~0.31.3",
     "lodash.clamp": "^4.0.3",
     "monaco-editor": "^0.30.0",
     "monaco-editor-webpack-plugin": "^7.0.0",
@@ -49,6 +49,7 @@
     "use-debounce": "^8.0.1"
   },
   "devDependencies": {
+    "@craco/craco": "5.8.0",
     "@types/jest": "24.9.1",
     "prettier": "^2.5.0",
     "typescript": "~3.9.9"
@@ -94,11 +95,11 @@
   },
   "jest": {
     "moduleNameMapper": {
-      "ky": "ky/umd",
       "monaco-editor": "monaco-editor/esm/vs/editor/editor.api.js"
     },
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "ky": "jest-esm-transformer"
     },
     "transformIgnorePatterns": [
       "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles|monaco-editor)/)"
