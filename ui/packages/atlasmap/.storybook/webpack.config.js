@@ -36,6 +36,21 @@ module.exports = ({ config }) => {
     ]
   })
 
+  config.module.rules.push({
+    test: /\.js$/,
+    use: [
+      {
+        loader: "babel-loader",
+        options: {
+          presets: [
+            "@babel/preset-env"
+          ]
+        },
+      }
+    ],
+    include: [ path.resolve(__dirname, '../../../node_modules/ky') ]
+  })
+
   const cssModuleRegex = /\.module\.css$/;
   config.module.rules.forEach((rule, idx) => {
     if (rule.test.test('.css')) {

@@ -39,47 +39,48 @@ export interface IChangeDocumentNameDialogProps {
   onCancel: IConfirmationDialogProps['onCancel'];
   onConfirm: (updatedDocNameInfo: IDocumentName) => void;
 }
-export const ChangeDocumentNameDialog: FunctionComponent<IChangeDocumentNameDialogProps> =
-  ({ id, name: initialName = '', isSource, isOpen, onCancel, onConfirm }) => {
-    const [documentName, setDocumentName] = useState(initialName);
+export const ChangeDocumentNameDialog: FunctionComponent<
+  IChangeDocumentNameDialogProps
+> = ({ id, name: initialName = '', isSource, isOpen, onCancel, onConfirm }) => {
+  const [documentName, setDocumentName] = useState(initialName);
 
-    const reset = useCallback(() => {
-      setDocumentName(initialName);
-    }, [initialName]);
+  const reset = useCallback(() => {
+    setDocumentName(initialName);
+  }, [initialName]);
 
-    const handleOnConfirm = useCallback(() => {
-      if (id && isSource !== undefined) {
-        onConfirm({ id: id, name: documentName, isSource: isSource });
-      }
-      reset();
-    }, [documentName, id, isSource, onConfirm, reset]);
-
-    const handleOnCancel = useCallback(() => {
-      onCancel();
-      reset();
-    }, [onCancel, reset]);
-
-    function handleOnNameChange(name: string) {
-      setDocumentName(name);
+  const handleOnConfirm = useCallback(() => {
+    if (id && isSource !== undefined) {
+      onConfirm({ id: id, name: documentName, isSource: isSource });
     }
+    reset();
+  }, [documentName, id, isSource, onConfirm, reset]);
 
-    // resync the internal state to the values passed in as props
-    useEffect(reset, [reset]);
+  const handleOnCancel = useCallback(() => {
+    onCancel();
+    reset();
+  }, [onCancel, reset]);
 
-    return (
-      <ConfirmationDialog
-        title={'Change selected document name?'}
-        onCancel={handleOnCancel}
-        onConfirm={handleOnConfirm}
-        isOpen={isOpen}
-      >
-        <TextInput
-          value={documentName}
-          onChange={(value) => handleOnNameChange(value)}
-          id={id}
-          name={documentName}
-          data-testid={id + '-parameter-text-input'}
-        />
-      </ConfirmationDialog>
-    );
-  };
+  function handleOnNameChange(name: string) {
+    setDocumentName(name);
+  }
+
+  // resync the internal state to the values passed in as props
+  useEffect(reset, [reset]);
+
+  return (
+    <ConfirmationDialog
+      title={'Change selected document name?'}
+      onCancel={handleOnCancel}
+      onConfirm={handleOnConfirm}
+      isOpen={isOpen}
+    >
+      <TextInput
+        value={documentName}
+        onChange={(value) => handleOnNameChange(value)}
+        id={id}
+        name={documentName}
+        data-testid={id + '-parameter-text-input'}
+      />
+    </ConfirmationDialog>
+  );
+};

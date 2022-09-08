@@ -21,14 +21,13 @@ import { FieldType } from '../contracts/common';
 import { MappingModel } from '../models/mapping.model';
 import { Multiplicity } from '../contracts/field-action';
 import atlasmapFieldActionJson from '../../../../test-resources/fieldActions/atlasmap-field-action.json';
-import ky from 'ky/umd';
+import ky from 'ky';
 import log from 'loglevel';
 
 describe('FieldActionService', () => {
   let service: FieldActionService;
   beforeEach(() => {
-    const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
-    service = new FieldActionService(api);
+    service = new FieldActionService(ky);
     service.cfg.logger = log.getLogger('copnfig');
   });
 
@@ -84,8 +83,7 @@ describe('FieldActionService.appliesToField()', () => {
     mapping.targetFields.splice(0);
     target = new Field();
     mapping.addField(target, false);
-    const api = ky.create({ headers: { 'ATLASMAP-XSRF-TOKEN': 'awesome' } });
-    service = new FieldActionService(api);
+    service = new FieldActionService(ky);
     service.cfg.logger = log.getLogger('copnfig');
   });
 
