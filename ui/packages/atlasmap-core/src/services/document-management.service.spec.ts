@@ -23,7 +23,7 @@ import { DocumentDefinition } from '../models/document-definition.model';
 import { DocumentManagementService } from '../services/document-management.service';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
-import { Input } from 'ky';
+import type { Input } from 'ky/distribution/types/options';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { TestUtils } from '../../test/test-util';
 import atlasmapInspectionComplexObjectRootedJson from '../../../../test-resources/inspected/atlasmap-inspection-complex-object-rooted.json';
@@ -31,7 +31,7 @@ import atlasmapInspectionPoExampleSchemaJson from '../../../../test-resources/in
 import atlasmapInspectionTargetTestClassJson from '../../../../test-resources/inspected/atlasmap-inspection-io.atlasmap.java.test.TargetTestClass.json';
 import atlasmapInspectionTwitter4jStatusJson from '../../../../test-resources/inspected/atlasmap-inspection-twitter4j.Status.json';
 import fs from 'fs';
-import ky from 'ky/umd';
+import ky from 'ky';
 
 describe('DocumentManagementService', () => {
   let cfg: ConfigModel;

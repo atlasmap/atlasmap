@@ -83,7 +83,7 @@
     "d3-scale": "^3.3.0",
     "d3-shape": "^2.1.0",
     "he": "^1.2.0",
-    "ky": "~0.17.0",
+    "ky": "~0.31.3",
     "react": "^17.0.2",
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
@@ -114,16 +114,16 @@
       "<rootDir>/test/setup.ts"
     ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "ky": "ky/umd"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js"
     },
     "testEnvironment": "jest-environment-jsdom-sixteen",
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest",
-      "^.+\\.(css)$": "jest-css-modules-transform"
+      "^.+\\.(css)$": "jest-css-modules-transform",
+      "ky": "jest-esm-transformer"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky)/)"
+      "/node_modules/(?!(ky|@patternfly/react-styles)/)"
     ]
   },
   "eslintConfig": {

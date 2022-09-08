@@ -13,9 +13,10 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-import ky, { Input, Options } from 'ky';
+import ky, { Options } from 'ky';
 import { ConfigModel } from '../models';
 import { InitializationService } from './initialization.service';
+import { Input } from 'ky/distribution/types/options';
 import { MappingModel } from '../models/mapping.model';
 import { MappingPreviewService } from './mapping-preview.service';
 import { TestUtils } from '../../test/test-util';

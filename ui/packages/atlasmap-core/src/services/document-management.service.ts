@@ -147,6 +147,7 @@ export class DocumentManagementService {
             `Failed to inspect Document: ${docDef.name}(${docDef.id})`,
             error
           );
+          docDef.errorOccurred = true;
           reject(error);
         });
     });
@@ -410,7 +411,12 @@ export class DocumentManagementService {
           docdef.updateFromMappings(this.cfg.mappings!);
           resolve(true);
         })
-        .catch(() => {
+        .catch((error) => {
+          this.cfg.logger?.error(
+            `Failed to inspect Document ${docdef.name}(${docdef.id})`,
+            error
+          );
+          docdef.errorOccurred = true;
           resolve(false);
         });
     });
