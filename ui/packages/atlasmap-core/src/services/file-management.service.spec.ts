@@ -26,7 +26,7 @@ import FileSaver from 'file-saver';
 import { InitializationService } from './initialization.service';
 import { MAPPING_JSON_TYPE } from '../contracts/mapping';
 import fs from 'fs';
-import ky from 'ky/umd';
+import ky from 'ky';
 import log from 'loglevel';
 import { mocked } from 'ts-jest/utils';
 import pako from 'pako';

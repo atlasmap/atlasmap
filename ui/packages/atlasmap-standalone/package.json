@@ -5,11 +5,11 @@
   "version": "2.3.18",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build:module": "react-scripts build",
+    "start": "craco start",
+    "build:module": "craco build",
     "build": "npm-run-all build:module lint test",
-    "test": "react-scripts test --watchAll=false --runInBand",
-    "test:coverage": "react-scripts test --watchAll=false --coverage --runInBand",
+    "test": "craco test --watchAll=false --runInBand",
+    "test:coverage": "craco test --watchAll=false --coverage --runInBand",
     "eject": "react-scripts eject",
     "lint": "tsdx lint src",
     "format": "yarn lint --fix"
@@ -31,7 +31,7 @@
     "d3-shape": "^2.1.0",
     "file-saver": "^2.0.5",
     "http-proxy-middleware": "^1.3.1",
-    "ky": "~0.17.0",
+    "ky": "~0.31.3",
     "lodash.clamp": "^4.0.3",
     "pako": "^2.0.3",
     "react": "^17.0.2",
@@ -47,6 +47,7 @@
     "use-debounce": "^7.0.0"
   },
   "devDependencies": {
+    "@craco/craco": "5.8.0",
     "@types/jest": "24.9.1",
     "typescript": "~3.9.9"
   },
@@ -91,14 +92,12 @@
     "endOfLine": "auto"
   },
   "jest": {
-    "moduleNameMapper": {
-      "ky": "ky/umd"
-    },
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "ky": "jest-esm-transformer"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky|@patternfly/react-styles)/)"
+      "<rootDir>/node_modules/(?!(ky/.*|@patternfly/react-styles)/)"
     ]
   }
 }
