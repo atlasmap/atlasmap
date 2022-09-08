@@ -56,76 +56,77 @@ export interface IAtlasmapToolbarItemProps {
   onExportAtlasFile: () => void;
   onResetAtlasmap: () => void;
 }
-export const AtlasmapToolbarItem: FunctionComponent<IAtlasmapToolbarItemProps> =
-  ({
-    showImportAtlasFileToolbarItem,
-    showImportJarFileToolbarItem,
-    showExportAtlasFileToolbarItem,
-    showResetToolbarItem,
-    onImportAtlasFile,
-    onImportJarFile,
-    onExportAtlasFile,
-    onResetAtlasmap,
-  }) => {
-    const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
-    const runAndClose = (cb: (...args: any[]) => any) => {
-      return (...args: any[]) => {
-        cb(...args);
-        toggleOff();
-      };
+export const AtlasmapToolbarItem: FunctionComponent<
+  IAtlasmapToolbarItemProps
+> = ({
+  showImportAtlasFileToolbarItem,
+  showImportJarFileToolbarItem,
+  showExportAtlasFileToolbarItem,
+  showResetToolbarItem,
+  onImportAtlasFile,
+  onImportJarFile,
+  onExportAtlasFile,
+  onResetAtlasmap,
+}) => {
+  const { state: isOpen, toggle: onToggle, toggleOff } = useToggle(false);
+  const runAndClose = (cb: (...args: any[]) => any) => {
+    return (...args: any[]) => {
+      cb(...args);
+      toggleOff();
     };
-    const dropdownItems = [
-      showImportAtlasFileToolbarItem && (
-        <ImportAtlasFileToolbarItem
-          onFile={runAndClose(onImportAtlasFile)}
-          key="import-catalog"
-        />
-      ),
-      showImportJarFileToolbarItem && (
-        <ImportJarFileToolbarItem
-          onFile={runAndClose(onImportJarFile)}
-          key="import-java-archive"
-        />
-      ),
-      (showImportAtlasFileToolbarItem || showImportJarFileToolbarItem) && (
-        <DropdownSeparator key="import-separator" />
-      ),
-      showExportAtlasFileToolbarItem && (
-        <ExportAtlasFileToolbarItem
-          onClick={runAndClose(onExportAtlasFile)}
-          key={'export-catalog'}
-        />
-      ),
-      showExportAtlasFileToolbarItem && (
-        <DropdownSeparator key="export-separator" />
-      ),
-      showResetToolbarItem && (
-        <ResetToolbarItem
-          onClick={runAndClose(onResetAtlasmap)}
-          key="reset-catalog"
-        />
-      ),
-    ].filter((f) => f);
-    return (
-      <ToolbarItem>
-        <Dropdown
-          toggle={
-            <DropdownToggle
-              id="atlasmap-toggle"
-              onToggle={onToggle}
-              toggleIndicator={CaretDownIcon}
-              data-testid="atlasmap-menu-button"
-            >
-              AtlasMap
-            </DropdownToggle>
-          }
-          isOpen={isOpen}
-          dropdownItems={dropdownItems}
-          isPlain={true}
-        />
-      </ToolbarItem>
-    );
   };
+  const dropdownItems = [
+    showImportAtlasFileToolbarItem && (
+      <ImportAtlasFileToolbarItem
+        onFile={runAndClose(onImportAtlasFile)}
+        key="import-catalog"
+      />
+    ),
+    showImportJarFileToolbarItem && (
+      <ImportJarFileToolbarItem
+        onFile={runAndClose(onImportJarFile)}
+        key="import-java-archive"
+      />
+    ),
+    (showImportAtlasFileToolbarItem || showImportJarFileToolbarItem) && (
+      <DropdownSeparator key="import-separator" />
+    ),
+    showExportAtlasFileToolbarItem && (
+      <ExportAtlasFileToolbarItem
+        onClick={runAndClose(onExportAtlasFile)}
+        key={'export-catalog'}
+      />
+    ),
+    showExportAtlasFileToolbarItem && (
+      <DropdownSeparator key="export-separator" />
+    ),
+    showResetToolbarItem && (
+      <ResetToolbarItem
+        onClick={runAndClose(onResetAtlasmap)}
+        key="reset-catalog"
+      />
+    ),
+  ].filter((f) => f);
+  return (
+    <ToolbarItem>
+      <Dropdown
+        toggle={
+          <DropdownToggle
+            id="atlasmap-toggle"
+            onToggle={onToggle}
+            toggleIndicator={CaretDownIcon}
+            data-testid="atlasmap-menu-button"
+          >
+            AtlasMap
+          </DropdownToggle>
+        }
+        isOpen={isOpen}
+        dropdownItems={dropdownItems}
+        isPlain={true}
+      />
+    </ToolbarItem>
+  );
+};
 
 export const ImportAtlasFileToolbarItem: FunctionComponent<{
   onFile: (file: File) => void;

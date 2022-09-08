@@ -14,11 +14,12 @@
     limitations under the License.
 */
 import { LookupTableData, LookupTableUtil } from '../utils';
-import ky, { Input, Options } from 'ky';
+import ky, { Options } from 'ky';
 
 import { ConfigModel } from '../models/config.model';
 import { Field } from '../models/field.model';
 import { InitializationService } from './initialization.service';
+import { Input } from 'ky/distribution/types/options';
 import { MappingDefinition } from '../models/mapping-definition.model';
 import { MappingManagementService } from '../services/mapping-management.service';
 import { MappingModel } from '../models/mapping.model';

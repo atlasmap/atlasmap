@@ -22,20 +22,21 @@ export interface IEditCSVParamsActionProps {
   id: string;
   onClick: () => void;
 }
-export const EditCSVParamsAction: FunctionComponent<IEditCSVParamsActionProps> =
-  ({ id, onClick }) => (
-    <Tooltip
-      position={'auto'}
-      enableFlip={true}
-      content={<div>Modify CSV Parameters</div>}
+export const EditCSVParamsAction: FunctionComponent<
+  IEditCSVParamsActionProps
+> = ({ id, onClick }) => (
+  <Tooltip
+    position={'auto'}
+    enableFlip={true}
+    content={<div>Modify CSV Parameters</div>}
+  >
+    <Button
+      variant="plain"
+      onClick={onClick}
+      aria-label="Modify CSV parameters"
+      data-testid={`modify-csv-params-${id}-button`}
     >
-      <Button
-        variant="plain"
-        onClick={onClick}
-        aria-label="Modify CSV parameters"
-        data-testid={`modify-csv-params-${id}-button`}
-      >
-        <EditIcon />
-      </Button>
-    </Tooltip>
-  );
+      <EditIcon />
+    </Button>
+  </Tooltip>
+);

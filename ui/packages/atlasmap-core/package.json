@@ -30,6 +30,7 @@
     "babel-jest": "^24.9.0",
     "eslint-plugin-header": "^3.1.1",
     "husky": "^4.2.3",
+    "jest-esm-transformer": "^1.0.0",
     "text-encoding": "^0.7.0",
     "ts-jest": "^24.3.0",
     "tsdx": "^0.13.1",
@@ -39,7 +40,7 @@
     "@types/file-saver": "^2.0.2",
     "@types/pako": "^1.0.1",
     "file-saver": "^2.0.5",
-    "ky": "~0.17.0",
+    "ky": "~0.31.3",
     "loglevel": "^1.7.1",
     "pako": "^2.0.3",
     "rxjs": "^6.6.7"
@@ -67,17 +68,17 @@
     "moduleNameMapper": {
       "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "ky": "ky/umd",
       "@src": "<rootDir>/src/index.ts",
       "@src/(.*)": "<rootDir>/src/$1",
       "@test/(.*)": "<rootDir>/test/$1"
     },
     "testEnvironment": "jsdom",
     "transform": {
-      "^.+\\.(ts|tsx)$": "ts-jest"
+      "^.+\\.(ts|tsx)$": "ts-jest",
+      "ky": "jest-esm-transformer"
     },
     "transformIgnorePatterns": [
-      "<rootDir>/node_modules/(?!(ky)/)"
+      "/node_modules/(?!ky/.*)/"
     ]
   },
   "eslintConfig": {

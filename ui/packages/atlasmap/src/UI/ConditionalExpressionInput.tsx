@@ -24,47 +24,48 @@ import styles from './ConditionalExpressionInput.module.css';
 export interface IConditionalExpressionInputProps
   extends IExpressionContentProps {}
 
-export const ConditionalExpressionInput: FunctionComponent<IConditionalExpressionInputProps> =
-  ({
-    executeFieldSearch,
-    getFieldEnums,
-    mappingExpressionAddField,
-    mappingExpressionClearText,
-    isMappingExpressionEmpty,
-    mappingExpressionInit,
-    mappingExpressionInsertText,
-    mappingExpressionObservable,
-    mappingExpressionRemoveField,
-    mappingExpression,
-    trailerId,
-    disabled,
-    onToggle,
-    setSelectedEnumValue,
-  }) => {
-    return (
-      <ToolbarGroup
-        variant="filter-group"
-        className={styles.toolbarItem}
-        role={'form'}
-      >
-        <ToolbarItem className={styles.toolbarItem}>
-          <ExpressionContent
-            disabled={disabled}
-            executeFieldSearch={executeFieldSearch}
-            getFieldEnums={getFieldEnums}
-            mappingExpressionAddField={mappingExpressionAddField}
-            mappingExpressionClearText={mappingExpressionClearText}
-            isMappingExpressionEmpty={isMappingExpressionEmpty}
-            mappingExpressionInit={mappingExpressionInit}
-            mappingExpressionInsertText={mappingExpressionInsertText}
-            mappingExpressionObservable={mappingExpressionObservable}
-            mappingExpressionRemoveField={mappingExpressionRemoveField}
-            mappingExpression={mappingExpression}
-            trailerId={trailerId}
-            onToggle={onToggle}
-            setSelectedEnumValue={setSelectedEnumValue}
-          />
-        </ToolbarItem>
-      </ToolbarGroup>
-    );
-  };
+export const ConditionalExpressionInput: FunctionComponent<
+  IConditionalExpressionInputProps
+> = ({
+  executeFieldSearch,
+  getFieldEnums,
+  mappingExpressionAddField,
+  mappingExpressionClearText,
+  isMappingExpressionEmpty,
+  mappingExpressionInit,
+  mappingExpressionInsertText,
+  mappingExpressionObservable,
+  mappingExpressionRemoveField,
+  mappingExpression,
+  trailerId,
+  disabled,
+  onToggle,
+  setSelectedEnumValue,
+}) => {
+  return (
+    <ToolbarGroup
+      variant="filter-group"
+      className={styles.toolbarItem}
+      role={'form'}
+    >
+      <ToolbarItem className={styles.toolbarItem}>
+        <ExpressionContent
+          disabled={disabled}
+          executeFieldSearch={executeFieldSearch}
+          getFieldEnums={getFieldEnums}
+          mappingExpressionAddField={mappingExpressionAddField}
+          mappingExpressionClearText={mappingExpressionClearText}
+          isMappingExpressionEmpty={isMappingExpressionEmpty}
+          mappingExpressionInit={mappingExpressionInit}
+          mappingExpressionInsertText={mappingExpressionInsertText}
+          mappingExpressionObservable={mappingExpressionObservable}
+          mappingExpressionRemoveField={mappingExpressionRemoveField}
+          mappingExpression={mappingExpression}
+          trailerId={trailerId}
+          onToggle={onToggle}
+          setSelectedEnumValue={setSelectedEnumValue}
+        />
+      </ToolbarItem>
+    </ToolbarGroup>
+  );
+};

@@ -32,70 +32,71 @@ export interface IExpressionEnumSelectProps {
 }
 let selectValue = '';
 
-export const ExpressionEnumSelect: FunctionComponent<IExpressionEnumSelectProps> =
-  ({ selectedNodeId, enumCandidates, clearEnumSelect, onEnumSelect }) => {
-    const id = `expr-enum-select-${selectValue}`;
-    const { state, toggle, toggleOff } = useToggle(true, onToggleEnumSelect);
+export const ExpressionEnumSelect: FunctionComponent<
+  IExpressionEnumSelectProps
+> = ({ selectedNodeId, enumCandidates, clearEnumSelect, onEnumSelect }) => {
+  const id = `expr-enum-select-${selectValue}`;
+  const { state, toggle, toggleOff } = useToggle(true, onToggleEnumSelect);
 
-    function onToggleEnumSelect(toggled: boolean): any {
-      if (!toggled) {
-        enumCandidates = [];
-        clearEnumSelect();
-      }
+  function onToggleEnumSelect(toggled: boolean): any {
+    if (!toggled) {
+      enumCandidates = [];
+      clearEnumSelect();
     }
+  }
 
-    function selectionChanged(
-      event: any,
-      value: string | SelectOptionObject,
-      _isPlaceholder?: boolean | undefined,
-    ): void {
-      selectValue = value as string;
-      onEnumSelect(selectedNodeId, event.currentTarget.id.split('-').pop());
-      onToggleEnumSelect(false);
-      toggleOff();
+  function selectionChanged(
+    event: any,
+    value: string | SelectOptionObject,
+    _isPlaceholder?: boolean | undefined,
+  ): void {
+    selectValue = value as string;
+    onEnumSelect(selectedNodeId, event.currentTarget.id.split('-').pop());
+    onToggleEnumSelect(false);
+    toggleOff();
+  }
+
+  function createSelectOption(selectField: string, idx: number): any {
+    if (selectField[1].length === 0) {
+      return (
+        <SelectOption
+          isDisabled={true}
+          label={selectField}
+          value={selectField}
+          key={idx}
+          className={styles.document}
+        />
+      );
+    } else {
+      return (
+        <SelectOption
+          label={selectField}
+          value={selectField}
+          key={idx}
+          className={styles.field}
+        />
+      );
     }
+  }
 
-    function createSelectOption(selectField: string, idx: number): any {
-      if (selectField[1].length === 0) {
-        return (
-          <SelectOption
-            isDisabled={true}
-            label={selectField}
-            value={selectField}
-            key={idx}
-            className={styles.document}
-          />
-        );
-      } else {
-        return (
-          <SelectOption
-            label={selectField}
-            value={selectField}
-            key={idx}
-            className={styles.field}
-          />
-        );
-      }
-    }
-
-    return (
-      <div
-        aria-label="Expression Enumeration"
-        className="enumSelectMenu"
-        data-testid={'expression-enumeration-select'}
+  return (
+    <div
+      aria-label="Expression Enumeration"
+      className="enumSelectMenu"
+      data-testid={'expression-enumeration-select'}
+    >
+      <Select
+        onToggle={toggle}
+        isOpen={state}
+        value={selectValue}
+        id={id}
+        onSelect={selectionChanged}
+        data-testid={id}
       >
-        <Select
-          onToggle={toggle}
-          isOpen={state}
-          value={selectValue}
-          id={id}
-          onSelect={selectionChanged}
-          data-testid={id}
-        >
-          {enumCandidates.map((s, idx: number) =>
-            createSelectOption(s.name, idx),
-          )}
-        </Select>
-      </div>
-    );
-  };
+        {enumCandidates.map((s, idx: number) =>
+          createSelectOption(s.name, idx),
+        )}
+      </Select>
+    </div>
+  );
+};

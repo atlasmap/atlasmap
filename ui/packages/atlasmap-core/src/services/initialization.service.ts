@@ -37,7 +37,7 @@ import { MappingPreviewService } from './mapping-preview.service';
 import { MappingSerializer } from '../utils/mapping-serializer';
 import { MappingUtil } from '../utils/mapping-util';
 import { first } from 'rxjs/operators';
-import ky from 'ky/umd';
+import ky from 'ky';
 import log from 'loglevel';
 
 log.setDefaultLevel(log.levels.WARN);
