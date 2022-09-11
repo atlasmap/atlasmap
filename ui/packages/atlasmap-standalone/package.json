@@ -47,7 +47,7 @@
     "use-debounce": "^8.0.3"
   },
   "devDependencies": {
-    "@craco/craco": "5.8.0",
+    "@craco/craco": "5.9.0",
     "@types/jest": "24.9.1",
     "typescript": "~3.9.9"
   },
