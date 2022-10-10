@@ -239,6 +239,7 @@ public class XmlModule extends BaseAtlasModule {
             }
             super.populateTargetField(session);
         } else if (sourceField instanceof FieldGroup) {
+            targetFieldGroup.setStatus(sourceField.getStatus());
             Field previousTargetSubField = null;
             for (int i=0; i<((FieldGroup)sourceField).getField().size(); i++) {
                 Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);
