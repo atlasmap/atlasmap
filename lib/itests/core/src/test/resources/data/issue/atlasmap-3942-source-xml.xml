@@ -1,0 +1,18 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cai3="http://schemas.ericsson.com/cai3g1.2/">
+    <soapenv:Header>
+        <cai3:SessionId>?</cai3:SessionId>
+    </soapenv:Header>
+    <soapenv:Body>
+        <cai3:SetResponse>
+            <!--Optional:-->
+            <cai3:MOAttributes>
+                <!--You may enter ANY elements at this point-->
+
+            </cai3:MOAttributes>
+            <!--Optional:-->
+            <cai3:Status>
+                <cai3:Description>?</cai3:Description>
+            </cai3:Status>
+        </cai3:SetResponse>
+    </soapenv:Body>
+</soapenv:Envelope>
