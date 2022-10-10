@@ -746,7 +746,7 @@ public class DefaultAtlasContext implements AtlasContext, AtlasContextMXBean {
 
     private FieldGroup unwrapNestedGroup(FieldGroup parent) {
 <span class="pc bpc" id="L748" title="1 of 4 branches missed.">        if (parent.getPath() == null &amp;&amp; parent.getField().size() == 1</span>
-<span class="pc bpc" id="L749" title="1 of 2 branches missed.">                &amp;&amp; parent.getField().get(0) instanceof FieldGroup) {</span>
+<span class="fc bfc" id="L749" title="All 2 branches covered.">                &amp;&amp; parent.getField().get(0) instanceof FieldGroup) {</span>
 <span class="fc" id="L750">            return (FieldGroup) parent.getField().get(0);</span>
         }
 <span class="fc" id="L752">        return parent;</span>

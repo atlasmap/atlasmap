@@ -34,354 +34,355 @@ import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
+import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
 
 public class XmlFieldWriter extends XmlFieldTransformer implements AtlasFieldWriter {
-<span class="fc" id="L41">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(XmlFieldWriter.class);</span>
+<span class="fc" id="L42">    private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(XmlFieldWriter.class);</span>
 
-<span class="fc" id="L43">    private Document document = null;</span>
-<span class="fc" id="L44">    private boolean enableElementNamespaces = true;</span>
-<span class="fc" id="L45">    private boolean enableAttributeNamespaces = true;</span>
-<span class="fc" id="L46">    private boolean ignoreMissingNamespaces = true;</span>
+<span class="fc" id="L44">    private Document document = null;</span>
+<span class="fc" id="L45">    private boolean enableElementNamespaces = true;</span>
+<span class="fc" id="L46">    private boolean enableAttributeNamespaces = true;</span>
+<span class="fc" id="L47">    private boolean ignoreMissingNamespaces = true;</span>
 
     public XmlFieldWriter() throws AtlasException {
-<span class="nc" id="L49">        this(XmlFieldWriter.class.getClassLoader(), new HashMap&lt;&gt;(), null);</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L50">        this(XmlFieldWriter.class.getClassLoader(), new HashMap&lt;&gt;(), null);</span>
+<span class="nc" id="L51">    }</span>
 
     public XmlFieldWriter(ClassLoader classLoader, Map&lt;String, String&gt; namespaces, String seedDocument) throws AtlasException {
-<span class="fc" id="L53">        super(classLoader, namespaces);</span>
-<span class="fc" id="L54">        this.classLoader = classLoader;</span>
-<span class="fc" id="L55">        this.document = createDocument(namespaces, seedDocument);</span>
+<span class="fc" id="L54">        super(classLoader, namespaces);</span>
+<span class="fc" id="L55">        this.classLoader = classLoader;</span>
+<span class="fc" id="L56">        this.document = createDocument(namespaces, seedDocument);</span>
         // check to see if the seed document has namespaces
-<span class="fc" id="L57">        seedDocumentNamespaces(document);</span>
-<span class="fc" id="L58">    }</span>
+<span class="fc" id="L58">        seedDocumentNamespaces(document);</span>
+<span class="fc" id="L59">    }</span>
 
     @Override
     public void write(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L62">        Field targetField = session.head().getTargetField();</span>
-<span class="fc bfc" id="L63" title="All 2 branches covered.">        if (targetField == null) {</span>
-<span class="fc" id="L64">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'field' cannot be null&quot;));</span>
+<span class="fc" id="L63">        Field targetField = session.head().getTargetField();</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (targetField == null) {</span>
+<span class="fc" id="L65">            throw new AtlasException(new IllegalArgumentException(&quot;Argument 'field' cannot be null&quot;));</span>
         }
 
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L68">            LOG.debug(&quot;Now processing field path={} type={} value={}&quot;, targetField.getPath(), targetField.getFieldType(),</span>
-<span class="nc" id="L69">                    targetField.getValue());</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L69">            LOG.debug(&quot;Now processing field path={} type={} value={}&quot;, targetField.getPath(), targetField.getFieldType(),</span>
+<span class="nc" id="L70">                    targetField.getValue());</span>
         }
 
-<span class="fc" id="L72">        XmlPath path = new XmlPath(targetField.getPath());</span>
-<span class="fc" id="L73">        XmlSegmentContext lastSegment = path.getLastSegment();</span>
-<span class="fc" id="L74">        Element parentNode = null;</span>
-<span class="fc" id="L75">        XmlSegmentContext parentSegment = null;</span>
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (XmlSegmentContext segment : path.getXmlSegments(false)) {</span>
-<span class="pc bpc" id="L77" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L78">                LOG.debug(&quot;Now processing segment: {}&quot;, segment);</span>
-<span class="nc" id="L79">                LOG.debug(&quot;Parent element is currently: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="fc" id="L73">        XmlPath path = new XmlPath(targetField.getPath());</span>
+<span class="fc" id="L74">        XmlSegmentContext lastSegment = path.getLastSegment();</span>
+<span class="fc" id="L75">        Element parentNode = null;</span>
+<span class="fc" id="L76">        XmlSegmentContext parentSegment = null;</span>
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        for (XmlSegmentContext segment : path.getXmlSegments(false)) {</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L79">                LOG.debug(&quot;Now processing segment: {}&quot;, segment);</span>
+<span class="nc" id="L80">                LOG.debug(&quot;Parent element is currently: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
             }
-<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (parentNode == null) {</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (parentNode == null) {</span>
                 // processing root node
-<span class="fc" id="L83">                parentNode = document.getDocumentElement();</span>
-<span class="fc bfc" id="L84" title="All 2 branches covered.">                if (parentNode == null) {</span>
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L86">                        LOG.debug(&quot;Creating root element with name: {}&quot;, segment.getName());</span>
+<span class="fc" id="L84">                parentNode = document.getDocumentElement();</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">                if (parentNode == null) {</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">                    if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L87">                        LOG.debug(&quot;Creating root element with name: {}&quot;, segment.getName());</span>
                     }
                     // no root node exists yet, create root node with this segment name;
-<span class="fc" id="L89">                    Element rootNode = createElement(segment);</span>
-<span class="fc" id="L90">                    addNamespacesToElement(rootNode, namespaces);</span>
-<span class="fc" id="L91">                    document.appendChild(rootNode);</span>
-<span class="fc" id="L92">                    parentNode = rootNode;</span>
-<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                } else if (!(parentNode.getNodeName().equals(segment.getQName()))) {</span>
+<span class="fc" id="L90">                    Element rootNode = createElement(segment);</span>
+<span class="fc" id="L91">                    addNamespacesToElement(rootNode, namespaces);</span>
+<span class="fc" id="L92">                    document.appendChild(rootNode);</span>
+<span class="fc" id="L93">                    parentNode = rootNode;</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                } else if (!(parentNode.getNodeName().equals(segment.getQName()))) {</span>
                     // make sure root element's name matches.
-<span class="nc" id="L95">                    throw new AtlasException(String.format(</span>
+<span class="nc" id="L96">                    throw new AtlasException(String.format(</span>
                             &quot;Root element name '%s' does not match expected name '%s' from path: %s&quot;,
-<span class="nc" id="L97">                            parentNode.getNodeName(), segment.getName(), targetField.getPath()));</span>
+<span class="nc" id="L98">                            parentNode.getNodeName(), segment.getName(), targetField.getPath()));</span>
                 }
-<span class="fc" id="L99">                parentSegment = segment;</span>
+<span class="fc" id="L100">                parentSegment = segment;</span>
             } else {
-<span class="pc bpc" id="L101" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">                    if (segment.equals(lastSegment)) {</span>
-<span class="nc" id="L103">                        LOG.debug(&quot;Now processing field value segment: {}&quot;, segment);</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                    if (segment.equals(lastSegment)) {</span>
+<span class="nc" id="L104">                        LOG.debug(&quot;Now processing field value segment: {}&quot;, segment);</span>
                     } else {
-<span class="nc" id="L105">                        LOG.debug(&quot;Now processing parent segment: {}&quot;, segment);</span>
+<span class="nc" id="L106">                        LOG.debug(&quot;Now processing parent segment: {}&quot;, segment);</span>
                     }
                 }
 
-<span class="fc bfc" id="L109" title="All 4 branches covered.">                if (segment.equals(lastSegment) &amp;&amp; targetField.getValue() == null) {</span>
-<span class="fc" id="L110">                    break;</span>
+<span class="fc bfc" id="L110" title="All 4 branches covered.">                if (segment.equals(lastSegment) &amp;&amp; targetField.getValue() == null) {</span>
+<span class="fc" id="L111">                    break;</span>
                 }
 
-<span class="fc bfc" id="L113" title="All 2 branches covered.">                if (!segment.isAttribute()) {</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">                if (!segment.isAttribute()) {</span>
                     // if current segment of path isn't attribute, it refers to a child element,
                     // find it or create it..
-<span class="fc" id="L116">                    Element childNode = getChildNode(parentNode, parentSegment, segment);</span>
-<span class="fc bfc" id="L117" title="All 2 branches covered.">                    if (childNode == null) {</span>
-<span class="fc" id="L118">                        childNode = createParentNode(parentNode, parentSegment, segment);</span>
+<span class="fc" id="L117">                    Element childNode = getChildNode(parentNode, parentSegment, segment);</span>
+<span class="fc bfc" id="L118" title="All 4 branches covered.">                    if (childNode == null &amp;&amp; targetField.getStatus() != FieldStatus.NOT_FOUND) {</span>
+<span class="fc" id="L119">                        childNode = createParentNode(parentNode, parentSegment, segment);</span>
                     }
-<span class="fc bfc" id="L120" title="All 2 branches covered.">                    if (childNode == null) {</span>
-<span class="fc" id="L121">                        return;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                    if (childNode == null) {</span>
+<span class="fc" id="L122">                        return;</span>
                     }
-<span class="fc" id="L123">                    parentNode = childNode;</span>
-<span class="fc" id="L124">                    parentSegment = segment;</span>
+<span class="fc" id="L124">                    parentNode = childNode;</span>
+<span class="fc" id="L125">                    parentSegment = segment;</span>
                 }
 
-<span class="fc bfc" id="L127" title="All 2 branches covered.">                if (segment.equals(lastSegment)) {</span>
-<span class="fc" id="L128">                    writeValue(parentNode, segment, targetField);</span>
+<span class="fc bfc" id="L128" title="All 2 branches covered.">                if (segment.equals(lastSegment)) {</span>
+<span class="fc" id="L129">                    writeValue(parentNode, segment, targetField);</span>
                 }
             }
-<span class="fc" id="L131">        }</span>
-<span class="fc" id="L132">    }</span>
+<span class="fc" id="L132">        }</span>
+<span class="fc" id="L133">    }</span>
 
     private void addNamespacesToElement(Element node, Map&lt;String, String&gt; namespaces) {
-<span class="fc bfc" id="L135" title="All 2 branches covered.">        for (String namespaceAlias : namespaces.keySet()) {</span>
-<span class="fc" id="L136">            String namespaceUri = namespaces.get(namespaceAlias);</span>
-<span class="fc" id="L137">            String attributeName = &quot;xmlns&quot;;</span>
-<span class="pc bpc" id="L138" title="1 of 4 branches missed.">            if (namespaceAlias != null &amp;&amp; !namespaceAlias.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L139">                attributeName += &quot;:&quot; + namespaceAlias;</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        for (String namespaceAlias : namespaces.keySet()) {</span>
+<span class="fc" id="L137">            String namespaceUri = namespaces.get(namespaceAlias);</span>
+<span class="fc" id="L138">            String attributeName = &quot;xmlns&quot;;</span>
+<span class="pc bpc" id="L139" title="1 of 4 branches missed.">            if (namespaceAlias != null &amp;&amp; !namespaceAlias.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L140">                attributeName += &quot;:&quot; + namespaceAlias;</span>
             }
-<span class="fc" id="L141">            node.setAttributeNS(&quot;http://www.w3.org/2000/xmlns/&quot;, attributeName, namespaceUri);</span>
-<span class="fc" id="L142">        }</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L142">            node.setAttributeNS(&quot;http://www.w3.org/2000/xmlns/&quot;, attributeName, namespaceUri);</span>
+<span class="fc" id="L143">        }</span>
+<span class="fc" id="L144">    }</span>
 
     private void writeValue(Element parentNode, XmlSegmentContext segment, Field field) throws AtlasException {
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L147">            LOG.debug(&quot;Writing field value in parent node '{}', parentNode: {}&quot;,</span>
-<span class="nc" id="L148">                    segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L148">            LOG.debug(&quot;Writing field value in parent node '{}', parentNode: {}&quot;,</span>
+<span class="nc" id="L149">                    segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
-<span class="fc" id="L150">        String value = convertValue(field);</span>
-<span class="fc bfc" id="L151" title="All 2 branches covered.">        if (segment.isAttribute()) {</span>
-<span class="pc bpc" id="L152" title="1 of 2 branches missed.">            if (this.enableAttributeNamespaces) {</span>
-<span class="pc bpc" id="L153" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L154">                    LOG.debug(&quot;Attribute namespaces are enabled, determining namespace.&quot;);</span>
+<span class="fc" id="L151">        String value = convertValue(field);</span>
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (segment.isAttribute()) {</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">            if (this.enableAttributeNamespaces) {</span>
+<span class="pc bpc" id="L154" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L155">                    LOG.debug(&quot;Attribute namespaces are enabled, determining namespace.&quot;);</span>
                 }
-<span class="fc" id="L156">                String namespaceAlias = null;</span>
-<span class="fc" id="L157">                String namespaceUri = null;</span>
-<span class="fc bfc" id="L158" title="All 2 branches covered.">                if (segment.getNamespace() != null) {</span>
-<span class="fc" id="L159">                    namespaceAlias = segment.getNamespace();</span>
-<span class="fc" id="L160">                    namespaceUri = this.namespaces.get(namespaceAlias);</span>
-<span class="fc" id="L161">                    LOG.debug(&quot;Parsed namespace alias '{}', from segment '{}', namespaceUri: {}&quot;,</span>
+<span class="fc" id="L157">                String namespaceAlias = null;</span>
+<span class="fc" id="L158">                String namespaceUri = null;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">                if (segment.getNamespace() != null) {</span>
+<span class="fc" id="L160">                    namespaceAlias = segment.getNamespace();</span>
+<span class="fc" id="L161">                    namespaceUri = this.namespaces.get(namespaceAlias);</span>
+<span class="fc" id="L162">                    LOG.debug(&quot;Parsed namespace alias '{}', from segment '{}', namespaceUri: {}&quot;,</span>
                             namespaceAlias, segment, namespaceUri);
                 }
-<span class="pc bpc" id="L164" title="3 of 4 branches missed.">                if (!this.ignoreMissingNamespaces &amp;&amp; namespaceUri == null) {</span>
-<span class="nc" id="L165">                    throw new AtlasException(String.format(</span>
+<span class="pc bpc" id="L165" title="3 of 4 branches missed.">                if (!this.ignoreMissingNamespaces &amp;&amp; namespaceUri == null) {</span>
+<span class="nc" id="L166">                    throw new AtlasException(String.format(</span>
                             &quot;Cannot find namespace URI for attribute: '%s', available namespaces: %s&quot;,
                             segment, this.namespaces));
                 }
-<span class="fc bfc" id="L169" title="All 2 branches covered.">                if (namespaceUri != null) {</span>
-<span class="fc" id="L170">                    parentNode.setAttributeNS(namespaceUri, namespaceAlias + &quot;:&quot; + segment.getName(), value);</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">                if (namespaceUri != null) {</span>
+<span class="fc" id="L171">                    parentNode.setAttributeNS(namespaceUri, namespaceAlias + &quot;:&quot; + segment.getName(), value);</span>
                 } else {
-<span class="fc" id="L172">                    parentNode.setAttribute(segment.getName(), value);</span>
+<span class="fc" id="L173">                    parentNode.setAttribute(segment.getName(), value);</span>
                 }
-<span class="fc" id="L174">            } else {</span>
-<span class="nc" id="L175">                parentNode.setAttribute(segment.getName(), value);</span>
+<span class="fc" id="L175">            } else {</span>
+<span class="nc" id="L176">                parentNode.setAttribute(segment.getName(), value);</span>
             }
         } else { // set element value
-<span class="fc" id="L178">            parentNode.setTextContent(value);</span>
+<span class="fc" id="L179">            parentNode.setTextContent(value);</span>
         }
 
-<span class="pc bpc" id="L181" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L182">            LOG.debug(&quot;Parent node after value written: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="pc bpc" id="L182" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L183">            LOG.debug(&quot;Parent node after value written: {}&quot;, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L185">    }</span>
 
     private Element getChildNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L188">            LOG.debug(&quot;Looking for child node '{}' in parent '{}': {}&quot;,</span>
-<span class="nc" id="L189">                    segment, parentSegment, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L189">            LOG.debug(&quot;Looking for child node '{}' in parent '{}': {}&quot;,</span>
+<span class="nc" id="L190">                    segment, parentSegment, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
-<span class="nc" id="L192">            return null;</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (parentNode == null) {</span>
+<span class="nc" id="L193">            return null;</span>
         }
-<span class="fc" id="L194">        String cleanedSegmentName = segment.getName();</span>
-<span class="fc" id="L195">        String namespaceAlias = segment.getNamespace();</span>
-<span class="pc bpc" id="L196" title="1 of 4 branches missed.">        if (namespaceAlias != null &amp;&amp; !namespaceAlias.isEmpty()) {</span>
-<span class="fc" id="L197">            cleanedSegmentName = namespaceAlias + &quot;:&quot; + cleanedSegmentName;</span>
+<span class="fc" id="L195">        String cleanedSegmentName = segment.getName();</span>
+<span class="fc" id="L196">        String namespaceAlias = segment.getNamespace();</span>
+<span class="pc bpc" id="L197" title="1 of 4 branches missed.">        if (namespaceAlias != null &amp;&amp; !namespaceAlias.isEmpty()) {</span>
+<span class="fc" id="L198">            cleanedSegmentName = namespaceAlias + &quot;:&quot; + cleanedSegmentName;</span>
         }
-<span class="fc" id="L199">        List&lt;Element&gt; children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
-<span class="pc bpc" id="L200" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L201">            LOG.debug(&quot;Found {} children in '{}' with the name '{}'&quot;,</span>
-<span class="nc" id="L202">                    children.size(), parentSegment, cleanedSegmentName);</span>
+<span class="fc" id="L200">        List&lt;Element&gt; children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
+<span class="pc bpc" id="L201" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L202">            LOG.debug(&quot;Found {} children in '{}' with the name '{}'&quot;,</span>
+<span class="nc" id="L203">                    children.size(), parentSegment, cleanedSegmentName);</span>
         }
-<span class="fc bfc" id="L204" title="All 2 branches covered.">        Element childNode = children.size() &gt; 0 ? children.get(0) : null;</span>
-<span class="fc bfc" id="L205" title="All 4 branches covered.">        if (children.size() &gt; 0 &amp;&amp; segment.getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc" id="L206">            Integer index = segment.getCollectionIndex();</span>
-<span class="fc bfc" id="L207" title="All 2 branches covered.">            if(index == null) {</span>
+<span class="fc bfc" id="L205" title="All 2 branches covered.">        Element childNode = children.size() &gt; 0 ? children.get(0) : null;</span>
+<span class="fc bfc" id="L206" title="All 4 branches covered.">        if (children.size() &gt; 0 &amp;&amp; segment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L207">            Integer index = segment.getCollectionIndex();</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">            if(index == null) {</span>
                 // no collection entry - it will only create parent nodes of the collection
-<span class="fc" id="L209">                return null;</span>
+<span class="fc" id="L210">                return null;</span>
             }
-<span class="fc" id="L211">            childNode = null;</span>
-<span class="fc bfc" id="L212" title="All 2 branches covered.">            if (children.size() &gt; index) {</span>
-<span class="fc" id="L213">                childNode = children.get(index);</span>
+<span class="fc" id="L212">            childNode = null;</span>
+<span class="fc bfc" id="L213" title="All 2 branches covered.">            if (children.size() &gt; index) {</span>
+<span class="fc" id="L214">                childNode = children.get(index);</span>
             }
         }
-<span class="pc bpc" id="L216" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L217" title="All 2 branches missed.">            if (childNode == null) {</span>
-<span class="nc" id="L218">                LOG.debug(&quot;Could not find child node '{}' in parent '{}'&quot;, segment, parentSegment);</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">            if (childNode == null) {</span>
+<span class="nc" id="L219">                LOG.debug(&quot;Could not find child node '{}' in parent '{}'&quot;, segment, parentSegment);</span>
             } else {
-<span class="nc" id="L220">                LOG.debug(&quot;Found child node '{}' in parent '{}', class: {}, node: {}&quot;,</span>
-<span class="nc" id="L221">                        segment, parentSegment, childNode.getClass().getName(), xmlHelper.writeDocumentToString(true, childNode));</span>
+<span class="nc" id="L221">                LOG.debug(&quot;Found child node '{}' in parent '{}', class: {}, node: {}&quot;,</span>
+<span class="nc" id="L222">                        segment, parentSegment, childNode.getClass().getName(), xmlHelper.writeDocumentToString(true, childNode));</span>
             }
         }
-<span class="fc" id="L224">        return childNode;</span>
+<span class="fc" id="L225">        return childNode;</span>
     }
 
     private Element createParentNode(Element parentNode, XmlSegmentContext parentSegment, XmlSegmentContext segment) throws AtlasException {
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L229">            LOG.debug(&quot;Creating parent node '{}' under previous parent '{}'.&quot;, segment, parentSegment);</span>
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L230">            LOG.debug(&quot;Creating parent node '{}' under previous parent '{}'.&quot;, segment, parentSegment);</span>
         }
-<span class="fc" id="L231">        Element childNode = null;</span>
-<span class="fc" id="L232">        String cleanedSegmentName = segment.getName();</span>
-<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (segment.getCollectionType() != CollectionType.NONE) {</span>
-<span class="fc" id="L234">            Integer index = segment.getCollectionIndex();</span>
-<span class="fc bfc" id="L235" title="All 2 branches covered.">            if (index == null) {</span>
-<span class="fc" id="L236">                return null;</span>
+<span class="fc" id="L232">        Element childNode = null;</span>
+<span class="fc" id="L233">        String cleanedSegmentName = segment.getName();</span>
+<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (segment.getCollectionType() != CollectionType.NONE) {</span>
+<span class="fc" id="L235">            Integer index = segment.getCollectionIndex();</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">            if (index == null) {</span>
+<span class="nc" id="L237">                return null;</span>
             }
-<span class="fc" id="L238">            String namespaceAlias = segment.getNamespace();</span>
-<span class="pc bpc" id="L239" title="1 of 4 branches missed.">            if (namespaceAlias != null &amp;&amp; !&quot;&quot;.equals(namespaceAlias)) {</span>
-<span class="fc" id="L240">                cleanedSegmentName = namespaceAlias + &quot;:&quot; + cleanedSegmentName;</span>
+<span class="fc" id="L239">            String namespaceAlias = segment.getNamespace();</span>
+<span class="pc bpc" id="L240" title="1 of 4 branches missed.">            if (namespaceAlias != null &amp;&amp; !&quot;&quot;.equals(namespaceAlias)) {</span>
+<span class="fc" id="L241">                cleanedSegmentName = namespaceAlias + &quot;:&quot; + cleanedSegmentName;</span>
             }
 
-<span class="fc" id="L243">            List&lt;Element&gt; children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
+<span class="fc" id="L244">            List&lt;Element&gt; children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
 
-<span class="pc bpc" id="L245" title="1 of 2 branches missed.">            if (children.size() &lt; (index + 1)) {</span>
-<span class="pc bpc" id="L246" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L247">                    LOG.debug(&quot;Child Element Array is too small, resizing to accomodate index: {}, current array: {}&quot;, index, children);</span>
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">            if (children.size() &lt; (index + 1)) {</span>
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L248">                    LOG.debug(&quot;Child Element Array is too small, resizing to accomodate index: {}, current array: {}&quot;, index, children);</span>
                 }
                 // if our array doesn't have index + 1 items in it, add objects until we have
                 // the index available
-<span class="fc bfc" id="L251" title="All 2 branches covered.">                while (children.size() &lt; (index + 1)) {</span>
-<span class="fc" id="L252">                    Element child = (Element) parentNode.appendChild(createElement(segment));</span>
-<span class="fc" id="L253">                    children.add(child);</span>
-<span class="fc" id="L254">                }</span>
-<span class="pc bpc" id="L255" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L256">                    LOG.debug(&quot;Child Element Array after resizing: {}&quot;, children);</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">                while (children.size() &lt; (index + 1)) {</span>
+<span class="fc" id="L253">                    Element child = (Element) parentNode.appendChild(createElement(segment));</span>
+<span class="fc" id="L254">                    children.add(child);</span>
+<span class="fc" id="L255">                }</span>
+<span class="pc bpc" id="L256" title="1 of 2 branches missed.">                if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L257">                    LOG.debug(&quot;Child Element Array after resizing: {}&quot;, children);</span>
                 }
             }
-<span class="fc" id="L259">            children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
-<span class="fc" id="L260">            childNode = children.get(index);</span>
-<span class="fc" id="L261">        } else {</span>
-<span class="fc" id="L262">            childNode = (Element) parentNode.appendChild(createElement(segment));</span>
+<span class="fc" id="L260">            children = XmlIOHelper.getChildrenWithName(cleanedSegmentName, parentNode);</span>
+<span class="fc" id="L261">            childNode = children.get(index);</span>
+<span class="fc" id="L262">        } else {</span>
+<span class="fc" id="L263">            childNode = (Element) parentNode.appendChild(createElement(segment));</span>
         }
-<span class="pc bpc" id="L264" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L265">            LOG.debug(&quot;Parent Node '{}' after adding child parent node '{}': {}&quot;,</span>
-<span class="nc" id="L266">                    parentSegment, segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
+<span class="pc bpc" id="L265" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L266">            LOG.debug(&quot;Parent Node '{}' after adding child parent node '{}': {}&quot;,</span>
+<span class="nc" id="L267">                    parentSegment, segment, xmlHelper.writeDocumentToString(true, parentNode));</span>
         }
-<span class="fc" id="L268">        return childNode;</span>
+<span class="fc" id="L269">        return childNode;</span>
     }
 
     private Element createElement(XmlSegmentContext segment) throws AtlasException {
-<span class="pc bpc" id="L272" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L273">            LOG.debug(&quot;Creating element for segment '{}'.&quot;, segment);</span>
+<span class="pc bpc" id="L273" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L274">            LOG.debug(&quot;Creating element for segment '{}'.&quot;, segment);</span>
         }
-<span class="pc bpc" id="L275" title="1 of 2 branches missed.">        if (this.enableElementNamespaces) {</span>
-<span class="pc bpc" id="L276" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L277">                LOG.debug(&quot;Element namespaces are enabled, determining namespace.&quot;);</span>
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">        if (this.enableElementNamespaces) {</span>
+<span class="pc bpc" id="L277" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L278">                LOG.debug(&quot;Element namespaces are enabled, determining namespace.&quot;);</span>
             }
-<span class="fc" id="L279">            String namespaceAlias = null;</span>
-<span class="fc" id="L280">            String namespaceUri = null;</span>
-<span class="fc bfc" id="L281" title="All 2 branches covered.">            if (segment.getNamespace() != null) {</span>
-<span class="fc" id="L282">                namespaceAlias = segment.getNamespace();</span>
-<span class="fc" id="L283">                namespaceUri = this.namespaces.get(namespaceAlias);</span>
-<span class="fc" id="L284">                LOG.debug(&quot;Parsed namespace alias '{}', from segment '{}', namespaceUri: {}, known namespaces: {}&quot;,</span>
+<span class="fc" id="L280">            String namespaceAlias = null;</span>
+<span class="fc" id="L281">            String namespaceUri = null;</span>
+<span class="fc bfc" id="L282" title="All 2 branches covered.">            if (segment.getNamespace() != null) {</span>
+<span class="fc" id="L283">                namespaceAlias = segment.getNamespace();</span>
+<span class="fc" id="L284">                namespaceUri = this.namespaces.get(namespaceAlias);</span>
+<span class="fc" id="L285">                LOG.debug(&quot;Parsed namespace alias '{}', from segment '{}', namespaceUri: {}, known namespaces: {}&quot;,</span>
                         namespaceAlias, segment, namespaceUri, this.namespaces);
             }
-<span class="pc bpc" id="L287" title="3 of 4 branches missed.">            if (!this.ignoreMissingNamespaces &amp;&amp; namespaceUri == null) {</span>
-<span class="nc" id="L288">                throw new AtlasException(String.format(</span>
+<span class="pc bpc" id="L288" title="3 of 4 branches missed.">            if (!this.ignoreMissingNamespaces &amp;&amp; namespaceUri == null) {</span>
+<span class="nc" id="L289">                throw new AtlasException(String.format(</span>
                         &quot;Cannot find namespace URI for element: '%s', available namespaces: %s&quot;,
                         segment, this.namespaces));
             }
-<span class="fc bfc" id="L292" title="All 2 branches covered.">            if (namespaceUri != null) {</span>
-<span class="fc" id="L293">                return document.createElementNS(namespaceUri, namespaceAlias + &quot;:&quot; + segment.getName());</span>
+<span class="fc bfc" id="L293" title="All 2 branches covered.">            if (namespaceUri != null) {</span>
+<span class="fc" id="L294">                return document.createElementNS(namespaceUri, namespaceAlias + &quot;:&quot; + segment.getName());</span>
             }
         }
-<span class="fc" id="L296">        return document.createElement(segment.getName());</span>
+<span class="fc" id="L297">        return document.createElement(segment.getName());</span>
     }
 
     private String convertValue(Field field) {
-<span class="fc" id="L300">        FieldType type = field.getFieldType();</span>
-<span class="fc" id="L301">        Object originalValue = field.getValue();</span>
-<span class="pc bpc" id="L302" title="1 of 2 branches missed.">        String value = originalValue != null ? String.valueOf(originalValue) : null;</span>
-<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc bnc" id="L304" title="All 2 branches missed.">            String valueClass = originalValue == null ? &quot;null&quot; : originalValue.getClass().getName();</span>
-<span class="nc" id="L305">            LOG.debug(&quot;Converted field value. Type: {}, originalValue: {}({}), to: '{}&quot;,</span>
+<span class="fc" id="L301">        FieldType type = field.getFieldType();</span>
+<span class="fc" id="L302">        Object originalValue = field.getValue();</span>
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        String value = originalValue != null ? String.valueOf(originalValue) : null;</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">            String valueClass = originalValue == null ? &quot;null&quot; : originalValue.getClass().getName();</span>
+<span class="nc" id="L306">            LOG.debug(&quot;Converted field value. Type: {}, originalValue: {}({}), to: '{}&quot;,</span>
                     type, originalValue, valueClass, value);
         }
-<span class="fc" id="L308">        return value;</span>
+<span class="fc" id="L309">        return value;</span>
     }
 
     private Document createDocument(Map&lt;String, String&gt; namespaces, String seedDocument) throws AtlasException {
         try {
-<span class="fc" id="L313">            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();</span>
-<span class="pc bpc" id="L314" title="1 of 4 branches missed.">            if (namespaces != null &amp;&amp; !namespaces.isEmpty()) {</span>
-<span class="fc" id="L315">                documentBuilderFactory.setNamespaceAware(true);</span>
+<span class="fc" id="L314">            DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();</span>
+<span class="pc bpc" id="L315" title="1 of 4 branches missed.">            if (namespaces != null &amp;&amp; !namespaces.isEmpty()) {</span>
+<span class="fc" id="L316">                documentBuilderFactory.setNamespaceAware(true);</span>
             }
-<span class="fc" id="L317">            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();</span>
-<span class="pc bpc" id="L318" title="1 of 4 branches missed.">            if (seedDocument != null &amp;&amp; !seedDocument.isEmpty()) {</span>
-<span class="fc" id="L319">                Document document = documentBuilder.parse(new ByteArrayInputStream(seedDocument.getBytes(&quot;UTF-8&quot;)));</span>
+<span class="fc" id="L318">            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();</span>
+<span class="pc bpc" id="L319" title="1 of 4 branches missed.">            if (seedDocument != null &amp;&amp; !seedDocument.isEmpty()) {</span>
+<span class="fc" id="L320">                Document document = documentBuilder.parse(new ByteArrayInputStream(seedDocument.getBytes(&quot;UTF-8&quot;)));</span>
 
-<span class="fc" id="L321">                Element rootNode = document.getDocumentElement();</span>
+<span class="fc" id="L322">                Element rootNode = document.getDocumentElement();</span>
 
                 // extract namespaces from seed document
-<span class="fc" id="L324">                NamedNodeMap attributes = rootNode.getAttributes();</span>
-<span class="pc bpc" id="L325" title="1 of 2 branches missed.">                if (attributes != null) {</span>
-<span class="fc bfc" id="L326" title="All 2 branches covered.">                    for (int i = 0; i &lt; attributes.getLength(); i++) {</span>
-<span class="fc" id="L327">                        Node n = attributes.item(i);</span>
-<span class="fc" id="L328">                        String nodeName = n.getNodeName();</span>
-<span class="pc bpc" id="L329" title="1 of 4 branches missed.">                        if (nodeName != null &amp;&amp; nodeName.startsWith(&quot;xmlns&quot;)) {</span>
-<span class="fc" id="L330">                            String namespaceAlias = &quot;&quot;;</span>
-<span class="fc bfc" id="L331" title="All 2 branches covered.">                            if (nodeName.contains(&quot;:&quot;)) {</span>
-<span class="fc" id="L332">                                namespaceAlias = nodeName.substring(nodeName.indexOf(&quot;:&quot;) + 1);</span>
+<span class="fc" id="L325">                NamedNodeMap attributes = rootNode.getAttributes();</span>
+<span class="pc bpc" id="L326" title="1 of 2 branches missed.">                if (attributes != null) {</span>
+<span class="fc bfc" id="L327" title="All 2 branches covered.">                    for (int i = 0; i &lt; attributes.getLength(); i++) {</span>
+<span class="fc" id="L328">                        Node n = attributes.item(i);</span>
+<span class="fc" id="L329">                        String nodeName = n.getNodeName();</span>
+<span class="pc bpc" id="L330" title="1 of 4 branches missed.">                        if (nodeName != null &amp;&amp; nodeName.startsWith(&quot;xmlns&quot;)) {</span>
+<span class="fc" id="L331">                            String namespaceAlias = &quot;&quot;;</span>
+<span class="fc bfc" id="L332" title="All 2 branches covered.">                            if (nodeName.contains(&quot;:&quot;)) {</span>
+<span class="fc" id="L333">                                namespaceAlias = nodeName.substring(nodeName.indexOf(&quot;:&quot;) + 1);</span>
                             }
-<span class="pc bpc" id="L334" title="1 of 2 branches missed.">                            if (!namespaces.containsKey(namespaceAlias)) {</span>
-<span class="fc" id="L335">                                namespaces.put(namespaceAlias, n.getNodeValue());</span>
+<span class="pc bpc" id="L335" title="1 of 2 branches missed.">                            if (!namespaces.containsKey(namespaceAlias)) {</span>
+<span class="fc" id="L336">                                namespaces.put(namespaceAlias, n.getNodeValue());</span>
                             }
                         }
                     }
                 }
 
                 // rewrite root element to contain user-specified namespaces
-<span class="fc bfc" id="L342" title="All 2 branches covered.">                if (namespaces.size() &gt; 0) {</span>
-<span class="fc" id="L343">                    Element oldRootNode = rootNode;</span>
-<span class="fc" id="L344">                    rootNode = (Element) oldRootNode.cloneNode(true);</span>
-<span class="fc" id="L345">                    addNamespacesToElement(rootNode, namespaces);</span>
-<span class="fc" id="L346">                    document.removeChild(oldRootNode);</span>
-<span class="fc" id="L347">                    document.appendChild(rootNode);</span>
+<span class="fc bfc" id="L343" title="All 2 branches covered.">                if (namespaces.size() &gt; 0) {</span>
+<span class="fc" id="L344">                    Element oldRootNode = rootNode;</span>
+<span class="fc" id="L345">                    rootNode = (Element) oldRootNode.cloneNode(true);</span>
+<span class="fc" id="L346">                    addNamespacesToElement(rootNode, namespaces);</span>
+<span class="fc" id="L347">                    document.removeChild(oldRootNode);</span>
+<span class="fc" id="L348">                    document.appendChild(rootNode);</span>
                 }
 
-<span class="fc" id="L350">                return document;</span>
+<span class="fc" id="L351">                return document;</span>
             }
-<span class="fc" id="L352">            return documentBuilder.newDocument();</span>
-<span class="nc" id="L353">        } catch (Exception e) {</span>
-<span class="nc" id="L354">            throw new AtlasException(e);</span>
+<span class="fc" id="L353">            return documentBuilder.newDocument();</span>
+<span class="nc" id="L354">        } catch (Exception e) {</span>
+<span class="nc" id="L355">            throw new AtlasException(e);</span>
         }
     }
 
     public Document getDocument() {
-<span class="fc" id="L359">        return document;</span>
+<span class="fc" id="L360">        return document;</span>
     }
 
     public boolean isEnableElementNamespaces() {
-<span class="nc" id="L363">        return enableElementNamespaces;</span>
+<span class="nc" id="L364">        return enableElementNamespaces;</span>
     }
 
     public void setEnableElementNamespaces(boolean enableElementNamespaces) {
-<span class="nc" id="L367">        this.enableElementNamespaces = enableElementNamespaces;</span>
-<span class="nc" id="L368">    }</span>
+<span class="nc" id="L368">        this.enableElementNamespaces = enableElementNamespaces;</span>
+<span class="nc" id="L369">    }</span>
 
     public boolean isEnableAttributeNamespaces() {
-<span class="nc" id="L371">        return enableAttributeNamespaces;</span>
+<span class="nc" id="L372">        return enableAttributeNamespaces;</span>
     }
 
     public void setEnableAttributeNamespaces(boolean enableAttributeNamespaces) {
-<span class="nc" id="L375">        this.enableAttributeNamespaces = enableAttributeNamespaces;</span>
-<span class="nc" id="L376">    }</span>
+<span class="nc" id="L376">        this.enableAttributeNamespaces = enableAttributeNamespaces;</span>
+<span class="nc" id="L377">    }</span>
 
     public boolean isIgnoreMissingNamespaces() {
-<span class="nc" id="L379">        return ignoreMissingNamespaces;</span>
+<span class="nc" id="L380">        return ignoreMissingNamespaces;</span>
     }
 
     public void setIgnoreMissingNamespaces(boolean ignoreMissingNamespaces) {
-<span class="nc" id="L383">        this.ignoreMissingNamespaces = ignoreMissingNamespaces;</span>
-<span class="nc" id="L384">    }</span>
+<span class="nc" id="L384">        this.ignoreMissingNamespaces = ignoreMissingNamespaces;</span>
+<span class="nc" id="L385">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

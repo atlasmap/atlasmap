@@ -125,134 +125,135 @@ import io.atlasmap.v2.Validations;
 <span class="fc" id="L125">        FieldGroup targetFieldGroup = null;</span>
 <span class="fc bfc" id="L126" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
 <span class="fc" id="L127">            targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);</span>
-<span class="fc" id="L128">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L128">            targetFieldGroup.setStatus(sourceField.getStatus());</span>
+<span class="fc" id="L129">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
         // Attempt to Auto-detect field type based on input value
-<span class="fc bfc" id="L132" title="All 4 branches covered.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
-<span class="fc" id="L133">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
+<span class="fc bfc" id="L133" title="All 4 branches covered.">        if (targetField.getFieldType() == null &amp;&amp; sourceField.getValue() != null) {</span>
+<span class="fc" id="L134">            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));</span>
         }
 
-<span class="fc bfc" id="L136" title="All 2 branches covered.">        if (targetFieldGroup == null) {</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
-<span class="nc" id="L138">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
-<span class="nc bnc" id="L139" title="All 4 branches missed.">                if (subFields != null &amp;&amp; subFields.size() &gt; 0) {</span>
-<span class="nc" id="L140">                    Integer index = targetField.getIndex();</span>
-<span class="nc bnc" id="L141" title="All 2 branches missed.">                    if (index != null) {</span>
-<span class="nc bnc" id="L142" title="All 2 branches missed.">                        if (subFields.size() &gt; index) {</span>
-<span class="nc" id="L143">                            sourceField = subFields.get(index);</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (targetFieldGroup == null) {</span>
+<span class="pc bpc" id="L138" title="1 of 2 branches missed.">            if (sourceField instanceof FieldGroup) {</span>
+<span class="nc" id="L139">                List&lt;Field&gt; subFields = ((FieldGroup)sourceField).getField();</span>
+<span class="nc bnc" id="L140" title="All 4 branches missed.">                if (subFields != null &amp;&amp; subFields.size() &gt; 0) {</span>
+<span class="nc" id="L141">                    Integer index = targetField.getIndex();</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                    if (index != null) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                        if (subFields.size() &gt; index) {</span>
+<span class="nc" id="L144">                            sourceField = subFields.get(index);</span>
                         } else {
-<span class="nc" id="L145">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
+<span class="nc" id="L146">                            AtlasUtil.addAudit(session, getDocId(), String.format(</span>
                                     &quot;The number of source fields (%s) is smaller than target index (%s) - ignoring&quot;,
-<span class="nc" id="L147">                                    subFields.size(), index),</span>
+<span class="nc" id="L148">                                    subFields.size(), index),</span>
                                     AuditStatus.WARN, null);
-<span class="nc" id="L149">                            return;</span>
+<span class="nc" id="L150">                            return;</span>
                         }
                     } else {
                         // The last one wins for compatibility
-<span class="nc" id="L153">                        sourceField = subFields.get(subFields.size() - 1);</span>
+<span class="nc" id="L154">                        sourceField = subFields.get(subFields.size() - 1);</span>
                     }
-<span class="nc" id="L155">                    session.head().setSourceField(sourceField);</span>
+<span class="nc" id="L156">                    session.head().setSourceField(sourceField);</span>
                 }
             }
-<span class="fc" id="L158">            super.populateTargetField(session);</span>
-<span class="fc bfc" id="L159" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
-<span class="fc" id="L160">            Field previousTargetSubField = null;</span>
-<span class="fc bfc" id="L161" title="All 2 branches covered.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
-<span class="fc" id="L162">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
-<span class="fc" id="L163">                JsonField targetSubField = new JsonField();</span>
-<span class="fc" id="L164">                AtlasJsonModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="fc" id="L165">                getCollectionHelper().copyCollectionIndexes(sourceField, sourceSubField, targetSubField, previousTargetSubField);</span>
-<span class="fc" id="L166">                previousTargetSubField = targetSubField;</span>
-<span class="fc" id="L167">                targetFieldGroup.getField().add(targetSubField);</span>
-<span class="fc" id="L168">                session.head().setSourceField(sourceSubField);</span>
-<span class="fc" id="L169">                session.head().setTargetField(targetSubField);</span>
-<span class="fc" id="L170">                super.populateTargetField(session);</span>
+<span class="fc" id="L159">            super.populateTargetField(session);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        } else if (sourceField instanceof FieldGroup) {</span>
+<span class="fc" id="L161">            Field previousTargetSubField = null;</span>
+<span class="fc bfc" id="L162" title="All 2 branches covered.">            for (int i=0; i&lt;((FieldGroup)sourceField).getField().size(); i++) {</span>
+<span class="fc" id="L163">                Field sourceSubField = ((FieldGroup)sourceField).getField().get(i);</span>
+<span class="fc" id="L164">                JsonField targetSubField = new JsonField();</span>
+<span class="fc" id="L165">                AtlasJsonModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L166">                getCollectionHelper().copyCollectionIndexes(sourceField, sourceSubField, targetSubField, previousTargetSubField);</span>
+<span class="fc" id="L167">                previousTargetSubField = targetSubField;</span>
+<span class="fc" id="L168">                targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L169">                session.head().setSourceField(sourceSubField);</span>
+<span class="fc" id="L170">                session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L171">                super.populateTargetField(session);</span>
             }
-<span class="fc" id="L172">            session.head().setSourceField(sourceField);</span>
-<span class="fc" id="L173">            session.head().setTargetField(targetFieldGroup);</span>
-<span class="fc" id="L174">        } else {</span>
-<span class="fc" id="L175">            JsonField targetSubField = new JsonField();</span>
-<span class="fc" id="L176">            AtlasJsonModelFactory.copyField(targetField, targetSubField, false);</span>
-<span class="fc" id="L177">            path.setVacantCollectionIndex(0);</span>
-<span class="fc" id="L178">            targetSubField.setPath(path.toString());</span>
-<span class="fc" id="L179">            targetFieldGroup.getField().add(targetSubField);</span>
-<span class="fc" id="L180">            session.head().setTargetField(targetSubField);</span>
-<span class="fc" id="L181">            super.populateTargetField(session);</span>
-<span class="fc" id="L182">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L173">            session.head().setSourceField(sourceField);</span>
+<span class="fc" id="L174">            session.head().setTargetField(targetFieldGroup);</span>
+<span class="fc" id="L175">        } else {</span>
+<span class="fc" id="L176">            JsonField targetSubField = new JsonField();</span>
+<span class="fc" id="L177">            AtlasJsonModelFactory.copyField(targetField, targetSubField, false);</span>
+<span class="fc" id="L178">            path.setVacantCollectionIndex(0);</span>
+<span class="fc" id="L179">            targetSubField.setPath(path.toString());</span>
+<span class="fc" id="L180">            targetFieldGroup.getField().add(targetSubField);</span>
+<span class="fc" id="L181">            session.head().setTargetField(targetSubField);</span>
+<span class="fc" id="L182">            super.populateTargetField(session);</span>
+<span class="fc" id="L183">            session.head().setTargetField(targetFieldGroup);</span>
         }
 
-<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L186">            LOG.debug(</span>
+<span class="pc bpc" id="L186" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L187">            LOG.debug(</span>
                     &quot;{}: processTargetFieldMapping completed: SourceField:[docId={}, path={}, type={}, value={}], TargetField:[docId={}, path={}, type={}, value={}]&quot;,
-<span class="nc" id="L188">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
-<span class="nc" id="L189">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
-<span class="nc" id="L190">                    targetField.getValue());</span>
+<span class="nc" id="L189">                    getDocId(), sourceField.getDocId(), sourceField.getPath(), sourceField.getFieldType(),</span>
+<span class="nc" id="L190">                    sourceField.getValue(), targetField.getDocId(), targetField.getPath(), targetField.getFieldType(),</span>
+<span class="nc" id="L191">                    targetField.getValue());</span>
         }
-<span class="fc" id="L192">    }</span>
+<span class="fc" id="L193">    }</span>
 
     public void writeTargetValue(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L195">        JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);</span>
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (session.head().getTargetField() instanceof FieldGroup) {</span>
-<span class="fc" id="L197">            FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();</span>
-<span class="fc bfc" id="L198" title="All 2 branches covered.">            if (targetFieldGroup.getField().size() &gt; 0) {</span>
-<span class="fc bfc" id="L199" title="All 2 branches covered.">                for (Field f : targetFieldGroup.getField()) {</span>
-<span class="fc" id="L200">                    session.head().setTargetField(f);</span>
-<span class="fc" id="L201">                    writer.write(session);</span>
-<span class="fc" id="L202">                }</span>
-<span class="fc" id="L203">                return;</span>
+<span class="fc" id="L196">        JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (session.head().getTargetField() instanceof FieldGroup) {</span>
+<span class="fc" id="L198">            FieldGroup targetFieldGroup = (FieldGroup) session.head().getTargetField();</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            if (targetFieldGroup.getField().size() &gt; 0) {</span>
+<span class="fc bfc" id="L200" title="All 2 branches covered.">                for (Field f : targetFieldGroup.getField()) {</span>
+<span class="fc" id="L201">                    session.head().setTargetField(f);</span>
+<span class="fc" id="L202">                    writer.write(session);</span>
+<span class="fc" id="L203">                }</span>
+<span class="fc" id="L204">                return;</span>
             }
         }
-<span class="fc" id="L206">        writer.write(session);</span>
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L207">        writer.write(session);</span>
+<span class="fc" id="L208">    }</span>
 
     @Override
     public void processPostSourceExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L211">        session.removeFieldReader(getDocId());</span>
+<span class="fc" id="L212">        session.removeFieldReader(getDocId());</span>
 
-<span class="pc bpc" id="L213" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L214">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L214" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L215">            LOG.debug(&quot;{}: processPostSourceExecution completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L216">    }</span>
+<span class="fc" id="L217">    }</span>
 
     @Override
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L220">        JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);</span>
-<span class="pc bpc" id="L221" title="1 of 4 branches missed.">        if (writer != null &amp;&amp; writer.getRootNode() != null) {</span>
-<span class="fc" id="L222">            String outputBody = writer.getRootNode().toString();</span>
-<span class="fc" id="L223">            session.setTargetDocument(getDocId(), outputBody);</span>
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L225">                LOG.debug(String.format(&quot;processPostTargetExecution converting JsonNode to string size=%s&quot;,</span>
-<span class="nc" id="L226">                        outputBody.length()));</span>
+<span class="fc" id="L221">        JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);</span>
+<span class="pc bpc" id="L222" title="1 of 4 branches missed.">        if (writer != null &amp;&amp; writer.getRootNode() != null) {</span>
+<span class="fc" id="L223">            String outputBody = writer.getRootNode().toString();</span>
+<span class="fc" id="L224">            session.setTargetDocument(getDocId(), outputBody);</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L226">                LOG.debug(String.format(&quot;processPostTargetExecution converting JsonNode to string size=%s&quot;,</span>
+<span class="nc" id="L227">                        outputBody.length()));</span>
             }
-<span class="fc" id="L228">        } else {</span>
-<span class="fc" id="L229">            AtlasUtil.addAudit(session, getDocId(), String</span>
-<span class="fc" id="L230">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
+<span class="fc" id="L229">        } else {</span>
+<span class="fc" id="L230">            AtlasUtil.addAudit(session, getDocId(), String</span>
+<span class="fc" id="L231">                    .format(&quot;No target document created for DataSource:[id=%s, uri=%s]&quot;, getDocId(), this.getUri()),</span>
                     AuditStatus.WARN, null);
         }
-<span class="fc" id="L233">        session.removeFieldWriter(getDocId());</span>
+<span class="fc" id="L234">        session.removeFieldWriter(getDocId());</span>
 
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L236">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">        if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L237">            LOG.debug(&quot;{}: processPostTargetExecution completed&quot;, getDocId());</span>
         }
-<span class="fc" id="L238">    }</span>
+<span class="fc" id="L239">    }</span>
 
     @Override
     public Boolean isSupportedField(Field field) {
-<span class="fc bfc" id="L242" title="All 2 branches covered.">        if (super.isSupportedField(field)) {</span>
-<span class="fc" id="L243">            return true;</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        if (super.isSupportedField(field)) {</span>
+<span class="fc" id="L244">            return true;</span>
         }
-<span class="fc bfc" id="L245" title="All 4 branches covered.">        return field instanceof JsonField || field instanceof JsonEnumField;</span>
+<span class="fc bfc" id="L246" title="All 4 branches covered.">        return field instanceof JsonField || field instanceof JsonEnumField;</span>
     }
 
     @Override
     public Field cloneField(Field field) throws AtlasException {
-<span class="nc" id="L250">        return AtlasJsonModelFactory.cloneField((JsonField)field, true);</span>
+<span class="nc" id="L251">        return AtlasJsonModelFactory.cloneField((JsonField)field, true);</span>
     }
 
     @Override
     public JsonField createField() {
-<span class="fc" id="L255">        return AtlasJsonModelFactory.createJsonField();</span>
+<span class="fc" id="L256">        return AtlasJsonModelFactory.createJsonField();</span>
     }
 
 }

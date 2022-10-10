@@ -44,11 +44,12 @@ import io.atlasmap.v2.AuditStatus;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
 public class JsonFieldReader implements AtlasFieldReader {
 
-<span class="fc" id="L51">    private static final Logger LOG = LoggerFactory.getLogger(JsonFieldReader.class);</span>
+<span class="fc" id="L52">    private static final Logger LOG = LoggerFactory.getLogger(JsonFieldReader.class);</span>
 
     private AtlasConversionService conversionService;
     private JsonNode rootNode;
@@ -57,306 +58,312 @@ public class JsonFieldReader implements AtlasFieldReader {
     private JsonFieldReader() {
     }
 
-<span class="fc" id="L60">    public JsonFieldReader(AtlasConversionService conversionService) {</span>
-<span class="fc" id="L61">        this.conversionService = conversionService;</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L61">    public JsonFieldReader(AtlasConversionService conversionService) {</span>
+<span class="fc" id="L62">        this.conversionService = conversionService;</span>
+<span class="fc" id="L63">    }</span>
 
     @Override
     public Field read(AtlasInternalSession session) throws AtlasException {
-<span class="fc" id="L66">        Field field = session.head().getSourceField();</span>
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (rootNode == null) {</span>
-<span class="fc" id="L68">            AtlasUtil.addAudit(session, field,</span>
-<span class="fc" id="L69">                String.format(&quot;Cannot read a field '%s' of JSON document '%s', document is null&quot;,</span>
-<span class="fc" id="L70">                    field.getPath(), field.getDocId()),</span>
+<span class="fc" id="L67">        Field field = session.head().getSourceField();</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        if (rootNode == null) {</span>
+<span class="fc" id="L69">            AtlasUtil.addAudit(session, field,</span>
+<span class="fc" id="L70">                String.format(&quot;Cannot read a field '%s' of JSON document '%s', document is null&quot;,</span>
+<span class="fc" id="L71">                    field.getPath(), field.getDocId()),</span>
                 AuditStatus.ERROR, null);
-<span class="fc" id="L72">            return field;</span>
+<span class="fc" id="L73">            return field;</span>
         }
 
-<span class="fc" id="L75">        AtlasPath path = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L76">        AtlasPath path = new AtlasPath(field.getPath());</span>
 
-<span class="fc" id="L77">        List&lt;Field&gt; fields = getJsonFieldsForPath(session, rootNode, field, path, 0);</span>
-<span class="fc bfc" id="L78" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
-<span class="fc" id="L79">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="fc" id="L80">            fieldGroup.getField().addAll(fields);</span>
-<span class="fc" id="L81">            session.head().setSourceField(fieldGroup);</span>
-<span class="fc" id="L82">            return fieldGroup;</span>
-<span class="fc bfc" id="L83" title="All 2 branches covered.">        } else if (fields.size() == 1) {</span>
-<span class="fc" id="L84">            field.setValue(fields.get(0).getValue());</span>
-<span class="fc" id="L85">            return field;</span>
+<span class="fc" id="L78">        List&lt;Field&gt; fields = getJsonFieldsForPath(session, rootNode, field, path, 0);</span>
+<span class="fc bfc" id="L79" title="All 4 branches covered.">        if (path.hasCollection() &amp;&amp; !path.isIndexedCollection()) {</span>
+<span class="fc" id="L80">            FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="fc" id="L81">            fieldGroup.getField().addAll(fields);</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (fields.size() == 0) {</span>
+<span class="fc" id="L83">                fieldGroup.setStatus(FieldStatus.NOT_FOUND);</span>
+            }
+<span class="fc" id="L85">            session.head().setSourceField(fieldGroup);</span>
+<span class="fc" id="L86">            return fieldGroup;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">        } else if (fields.size() == 1) {</span>
+<span class="fc" id="L88">            field.setValue(fields.get(0).getValue());</span>
+<span class="fc" id="L89">            return field;</span>
         } else {
-<span class="fc" id="L87">            return field;</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">            if (fields.size() == 0) {</span>
+<span class="fc" id="L92">                field.setStatus(FieldStatus.NOT_FOUND);</span>
+            }
+<span class="fc" id="L94">            return field;</span>
         }
     }
 
     private List&lt;Field&gt; getJsonFieldsForPath(AtlasInternalSession session, JsonNode node, Field field, AtlasPath path, int depth) throws AtlasException {
-<span class="fc" id="L92">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L93">        List&lt;SegmentContext&gt; segments = path.getSegments(true);</span>
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (segments.size() &lt; depth) {</span>
-<span class="nc" id="L95">            throw new AtlasException(String.format(&quot;depth '%s' exceeds segment size '%s'&quot;, depth, segments.size()));</span>
+<span class="fc" id="L99">        List&lt;Field&gt; fields = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L100">        List&lt;SegmentContext&gt; segments = path.getSegments(true);</span>
+<span class="pc bpc" id="L101" title="1 of 2 branches missed.">        if (segments.size() &lt; depth) {</span>
+<span class="nc" id="L102">            throw new AtlasException(String.format(&quot;depth '%s' exceeds segment size '%s'&quot;, depth, segments.size()));</span>
         }
-<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (segments.size() == depth) {</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (segments.size() == depth) {</span>
             //if traversed the entire path and found value
-<span class="fc bfc" id="L99" title="All 4 branches covered.">            if (field.getFieldType() == FieldType.COMPLEX &amp;&amp; !node.isValueNode()) {</span>
-<span class="fc" id="L100">                FieldGroup group = (FieldGroup) field;</span>
-<span class="fc" id="L101">                populateChildFields(session, node, group, path);</span>
-<span class="fc" id="L102">                fields.add(group);</span>
-<span class="fc" id="L103">            } else {</span>
-<span class="fc" id="L104">                JsonField jsonField = new JsonField();</span>
-<span class="fc" id="L105">                AtlasModelFactory.copyField(field, jsonField, true);</span>
-<span class="pc bpc" id="L106" title="1 of 4 branches missed.">                if (field instanceof JsonEnumField &amp;&amp; field.getFieldType() == FieldType.COMPLEX) {</span>
-<span class="fc" id="L107">                    jsonField.setFieldType(FieldType.STRING); // enum has COMPLEX by default</span>
+<span class="fc bfc" id="L106" title="All 4 branches covered.">            if (field.getFieldType() == FieldType.COMPLEX &amp;&amp; !node.isValueNode()) {</span>
+<span class="fc" id="L107">                FieldGroup group = (FieldGroup) field;</span>
+<span class="fc" id="L108">                populateChildFields(session, node, group, path);</span>
+<span class="fc" id="L109">                fields.add(group);</span>
+<span class="fc" id="L110">            } else {</span>
+<span class="fc" id="L111">                JsonField jsonField = new JsonField();</span>
+<span class="fc" id="L112">                AtlasModelFactory.copyField(field, jsonField, true);</span>
+<span class="pc bpc" id="L113" title="1 of 4 branches missed.">                if (field instanceof JsonEnumField &amp;&amp; field.getFieldType() == FieldType.COMPLEX) {</span>
+<span class="fc" id="L114">                    jsonField.setFieldType(FieldType.STRING); // enum has COMPLEX by default</span>
                 }
-<span class="fc" id="L109">                Object value = handleValueNode(session, node, jsonField);</span>
-<span class="fc" id="L110">                jsonField.setValue(value);</span>
-<span class="fc" id="L111">                jsonField.setIndex(null); //reset index for subfields</span>
-<span class="fc" id="L112">                fields.add(jsonField);</span>
+<span class="fc" id="L116">                Object value = handleValueNode(session, node, jsonField);</span>
+<span class="fc" id="L117">                jsonField.setValue(value);</span>
+<span class="fc" id="L118">                jsonField.setIndex(null); //reset index for subfields</span>
+<span class="fc" id="L119">                fields.add(jsonField);</span>
             }
-<span class="fc" id="L114">            return fields;</span>
+<span class="fc" id="L121">            return fields;</span>
         }
 
         // segments.size() &gt; depth
         SegmentContext segmentContext;
         JsonNode child;
-<span class="fc bfc" id="L120" title="All 4 branches covered.">        if (depth == 0 &amp;&amp; path.hasCollectionRoot()) {</span>
-<span class="fc" id="L121">            child = node; //if root is a collection</span>
-<span class="fc" id="L122">            segmentContext = segments.get(depth);</span>
+<span class="fc bfc" id="L127" title="All 4 branches covered.">        if (depth == 0 &amp;&amp; path.hasCollectionRoot()) {</span>
+<span class="fc" id="L128">            child = node; //if root is a collection</span>
+<span class="fc" id="L129">            segmentContext = segments.get(depth);</span>
         } else {
-<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (depth == 0) {</span>
-<span class="fc bfc" id="L125" title="All 4 branches covered.">                if (node.size() == 1 &amp;&amp; !path.getSegments(false).get(0).getExpression().startsWith(rootNode.fieldNames().next())) {</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">            if (depth == 0) {</span>
+<span class="fc bfc" id="L132" title="All 4 branches covered.">                if (node.size() == 1 &amp;&amp; !path.getSegments(false).get(0).getExpression().startsWith(rootNode.fieldNames().next())) {</span>
                     //peel off a rooted object, i.e. mapping /orderId works for document { source: { orderId: 123 } }
-<span class="fc" id="L127">                    node = node.elements().next();</span>
+<span class="fc" id="L134">                    node = node.elements().next();</span>
                 }
 
-<span class="fc bfc" id="L130" title="All 2 branches covered.">                if (segments.size() &gt; 1) {</span>
-<span class="fc" id="L131">                    depth = 1; //skip the root, if not a collection</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">                if (segments.size() &gt; 1) {</span>
+<span class="fc" id="L138">                    depth = 1; //skip the root, if not a collection</span>
                 }
             }
-<span class="fc" id="L134">            segmentContext = segments.get(depth);</span>
-<span class="fc" id="L135">            String fieldName = segmentContext.getName();</span>
-<span class="fc" id="L136">            child = node.get(fieldName);</span>
+<span class="fc" id="L141">            segmentContext = segments.get(depth);</span>
+<span class="fc" id="L142">            String fieldName = segmentContext.getName();</span>
+<span class="fc" id="L143">            child = node.get(fieldName);</span>
         }
-<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (child == null) {</span>
-<span class="fc" id="L139">            return fields;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">        if (child == null) {</span>
+<span class="fc" id="L146">            return fields;</span>
         }
 
-<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.NONE) {</span>
-<span class="fc" id="L143">            List&lt;Field&gt; childFields = getJsonFieldsForPath(session, child, field, path, depth + 1);</span>
-<span class="fc" id="L144">            fields.addAll(childFields);</span>
-<span class="fc" id="L145">            return fields;</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (segmentContext.getCollectionType() == CollectionType.NONE) {</span>
+<span class="fc" id="L150">            List&lt;Field&gt; childFields = getJsonFieldsForPath(session, child, field, path, depth + 1);</span>
+<span class="fc" id="L151">            fields.addAll(childFields);</span>
+<span class="fc" id="L152">            return fields;</span>
         }
 
         // collection
-<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (segmentContext.getCollectionIndex() != null) {</span>
-<span class="fc bfc" id="L150" title="All 2 branches covered.">            if (child.size() &lt;= segmentContext.getCollectionIndex()) {</span>
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (segmentContext.getCollectionIndex() != null) {</span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            if (child.size() &lt;= segmentContext.getCollectionIndex()) {</span>
                 //index out of range
-<span class="fc" id="L152">                return fields;</span>
+<span class="fc" id="L159">                return fields;</span>
             }
-<span class="fc" id="L154">            List&lt;Field&gt; arrayFields = getJsonFieldsForPath(session, child.get(segmentContext.getCollectionIndex()), field, path, depth + 1);</span>
-<span class="fc" id="L155">            fields.addAll(arrayFields);</span>
-<span class="fc" id="L156">        } else {</span>
+<span class="fc" id="L161">            List&lt;Field&gt; arrayFields = getJsonFieldsForPath(session, child.get(segmentContext.getCollectionIndex()), field, path, depth + 1);</span>
+<span class="fc" id="L162">            fields.addAll(arrayFields);</span>
+<span class="fc" id="L163">        } else {</span>
             //if index not included, iterate over all
-<span class="fc bfc" id="L158" title="All 2 branches covered.">            for (int i=0; i&lt;child.size(); i++) {</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">            for (int i=0; i&lt;child.size(); i++) {</span>
                 Field itemField;
-<span class="fc bfc" id="L160" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
-<span class="fc" id="L161">                    itemField = AtlasJsonModelFactory.cloneFieldGroup((FieldGroup)field);</span>
-<span class="fc" id="L162">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">                if (field instanceof FieldGroup) {</span>
+<span class="fc" id="L168">                    itemField = AtlasJsonModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="fc" id="L169">                    AtlasPath.setCollectionIndexRecursively((FieldGroup)itemField, depth, i);</span>
                  } else {
-<span class="fc" id="L164">                    itemField = AtlasJsonModelFactory.cloneField((JsonField)field, false);</span>
-<span class="fc" id="L165">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
-<span class="fc" id="L166">                    itemPath.setCollectionIndex(depth, i);</span>
-<span class="fc" id="L167">                    itemField.setPath(itemPath.toString());</span>
+<span class="fc" id="L171">                    itemField = AtlasJsonModelFactory.cloneField((JsonField)field, false);</span>
+<span class="fc" id="L172">                    AtlasPath itemPath = new AtlasPath(field.getPath());</span>
+<span class="fc" id="L173">                    itemPath.setCollectionIndex(depth, i);</span>
+<span class="fc" id="L174">                    itemField.setPath(itemPath.toString());</span>
                  }
-<span class="fc" id="L169">                List&lt;Field&gt; arrayFields = getJsonFieldsForPath(</span>
-<span class="fc" id="L170">                    session, child.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);</span>
-<span class="fc" id="L171">                fields.addAll(arrayFields);</span>
+<span class="fc" id="L176">                List&lt;Field&gt; arrayFields = getJsonFieldsForPath(</span>
+<span class="fc" id="L177">                    session, child.get(i), itemField, new AtlasPath(itemField.getPath()), depth + 1);</span>
+<span class="fc" id="L178">                fields.addAll(arrayFields);</span>
             }
         }
-<span class="fc" id="L174">        return fields;</span>
+<span class="fc" id="L181">        return fields;</span>
     }
 
     private void populateChildFields(AtlasInternalSession session, JsonNode node, FieldGroup fieldGroup, AtlasPath path)
      throws AtlasException {
-<span class="fc" id="L179">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
-<span class="fc bfc" id="L180" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
-<span class="fc" id="L181">            AtlasPath childPath = new AtlasPath(child.getPath());</span>
-<span class="fc" id="L182">            JsonNode childNode = node.get(childPath.getLastSegment().getName());</span>
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
-<span class="nc" id="L184">                FieldGroup childGroup = populateCollectionItems(session, (ArrayNode)childNode, child);</span>
-<span class="nc" id="L185">                newChildren.add(childGroup);</span>
-<span class="nc" id="L186">            } else {</span>
-<span class="pc bpc" id="L187" title="1 of 2 branches missed.">                if (child instanceof FieldGroup) {</span>
-<span class="nc" id="L188">                    populateChildFields(session, childNode, (FieldGroup)child, childPath);</span>
+<span class="fc" id="L186">        List&lt;Field&gt; newChildren = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        for (Field child : fieldGroup.getField()) {</span>
+<span class="fc" id="L188">            AtlasPath childPath = new AtlasPath(child.getPath());</span>
+<span class="fc" id="L189">            JsonNode childNode = node.get(childPath.getLastSegment().getName());</span>
+<span class="pc bpc" id="L190" title="1 of 2 branches missed.">            if (childPath.getLastSegment().getCollectionType() != CollectionType.NONE) {</span>
+<span class="nc" id="L191">                FieldGroup childGroup = populateCollectionItems(session, (ArrayNode)childNode, child);</span>
+<span class="nc" id="L192">                newChildren.add(childGroup);</span>
+<span class="nc" id="L193">            } else {</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">                if (child instanceof FieldGroup) {</span>
+<span class="nc" id="L195">                    populateChildFields(session, childNode, (FieldGroup)child, childPath);</span>
                 } else {
-<span class="fc" id="L190">                    Object value = handleValueNode(session, childNode, (JsonField)child);</span>
-<span class="fc" id="L191">                    child.setValue(value);</span>
+<span class="fc" id="L197">                    Object value = handleValueNode(session, childNode, (JsonField)child);</span>
+<span class="fc" id="L198">                    child.setValue(value);</span>
                 }
-<span class="fc" id="L193">                newChildren.add(child);</span>
+<span class="fc" id="L200">                newChildren.add(child);</span>
             }
-<span class="fc" id="L195">        }</span>
-<span class="fc" id="L196">        fieldGroup.getField().clear();</span>
-<span class="fc" id="L197">        fieldGroup.getField().addAll(newChildren);</span>
-<span class="fc" id="L198">    }</span>
+<span class="fc" id="L202">        }</span>
+<span class="fc" id="L203">        fieldGroup.getField().clear();</span>
+<span class="fc" id="L204">        fieldGroup.getField().addAll(newChildren);</span>
+<span class="fc" id="L205">    }</span>
 
     private FieldGroup populateCollectionItems(AtlasInternalSession session, JsonNode node, Field field)
      throws AtlasException {
-<span class="nc bnc" id="L202" title="All 2 branches missed.">        if (!node.isArray()) {</span>
-<span class="nc" id="L203">            throw new AtlasException(String.format(&quot;Couldn't find JSON array for field %s:%s&quot;,</span>
-<span class="nc" id="L204">                field.getDocId(), field.getPath()));</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (!node.isArray()) {</span>
+<span class="nc" id="L210">            throw new AtlasException(String.format(&quot;Couldn't find JSON array for field %s:%s&quot;,</span>
+<span class="nc" id="L211">                field.getDocId(), field.getPath()));</span>
         }
-<span class="nc bnc" id="L206" title="All 2 branches missed.">        FieldGroup group = field instanceof FieldGroup ?</span>
-<span class="nc" id="L207">         (FieldGroup)field : AtlasModelFactory.createFieldGroupFrom(field, true);</span>
-<span class="nc" id="L208">        ArrayNode arrayNode = (ArrayNode)node;</span>
-<span class="nc bnc" id="L209" title="All 2 branches missed.">        for (int i=0; i&lt;arrayNode.size(); i++) {</span>
-<span class="nc" id="L210">            AtlasPath itemPath = new AtlasPath(group.getPath());</span>
-<span class="nc" id="L211">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
-<span class="nc" id="L212">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
-<span class="nc bnc" id="L213" title="All 2 branches missed.">            if (field instanceof FieldGroup) {</span>
-<span class="nc" id="L214">                FieldGroup itemGroup = AtlasJsonModelFactory.cloneFieldGroup((FieldGroup)field);</span>
-<span class="nc" id="L215">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);</span>
-<span class="nc" id="L216">                populateChildFields(session, arrayNode.get(i), itemGroup, itemPath);</span>
-<span class="nc" id="L217">                group.getField().add(itemGroup);</span>
-<span class="nc" id="L218">            } else {</span>
-<span class="nc" id="L219">                JsonField itemField = AtlasJsonModelFactory.cloneField((JsonField)field, false);</span>
-<span class="nc" id="L220">                itemField.setPath(itemPath.toString());</span>
-<span class="nc" id="L221">                Object value = handleValueNode(session, arrayNode.get(i), itemField);</span>
-<span class="nc" id="L222">                itemField.setValue(value);</span>
-<span class="nc" id="L223">                group.getField().add(itemField);</span>
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        FieldGroup group = field instanceof FieldGroup ?</span>
+<span class="nc" id="L214">         (FieldGroup)field : AtlasModelFactory.createFieldGroupFrom(field, true);</span>
+<span class="nc" id="L215">        ArrayNode arrayNode = (ArrayNode)node;</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">        for (int i=0; i&lt;arrayNode.size(); i++) {</span>
+<span class="nc" id="L217">            AtlasPath itemPath = new AtlasPath(group.getPath());</span>
+<span class="nc" id="L218">            List&lt;SegmentContext&gt; segments = itemPath.getSegments(true);</span>
+<span class="nc" id="L219">            itemPath.setCollectionIndex(segments.size() - 1, i);</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">            if (field instanceof FieldGroup) {</span>
+<span class="nc" id="L221">                FieldGroup itemGroup = AtlasJsonModelFactory.cloneFieldGroup((FieldGroup)field);</span>
+<span class="nc" id="L222">                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);</span>
+<span class="nc" id="L223">                populateChildFields(session, arrayNode.get(i), itemGroup, itemPath);</span>
+<span class="nc" id="L224">                group.getField().add(itemGroup);</span>
+<span class="nc" id="L225">            } else {</span>
+<span class="nc" id="L226">                JsonField itemField = AtlasJsonModelFactory.cloneField((JsonField)field, false);</span>
+<span class="nc" id="L227">                itemField.setPath(itemPath.toString());</span>
+<span class="nc" id="L228">                Object value = handleValueNode(session, arrayNode.get(i), itemField);</span>
+<span class="nc" id="L229">                itemField.setValue(value);</span>
+<span class="nc" id="L230">                group.getField().add(itemField);</span>
             }
         }
-<span class="nc" id="L226">        return group;</span>
+<span class="nc" id="L233">        return group;</span>
     }
 
     private Object handleValueNode(AtlasInternalSession session, JsonNode valueNode, JsonField jsonField) throws AtlasException {
-<span class="fc bfc" id="L230" title="All 2 branches covered.">        if (valueNode.isNull()) {</span>
-<span class="fc" id="L231">            return null;</span>
+<span class="fc bfc" id="L237" title="All 2 branches covered.">        if (valueNode.isNull()) {</span>
+<span class="fc" id="L238">            return null;</span>
             // we can't detect field type if it's null node
         }
-<span class="fc bfc" id="L234" title="All 2 branches covered.">        if (valueNode.isObject()) {</span>
-<span class="fc" id="L235">            jsonField.setFieldType(FieldType.COMPLEX);</span>
-<span class="fc" id="L236">            return null;</span>
+<span class="fc bfc" id="L241" title="All 2 branches covered.">        if (valueNode.isObject()) {</span>
+<span class="fc" id="L242">            jsonField.setFieldType(FieldType.COMPLEX);</span>
+<span class="fc" id="L243">            return null;</span>
         }
-<span class="pc bpc" id="L238" title="1 of 2 branches missed.">        if (valueNode.isArray()) {</span>
-<span class="nc" id="L239">            AtlasUtil.addAudit(session, jsonField,</span>
-<span class="nc" id="L240">                    String.format(&quot;Unexpected array node is detected: '%s'&quot;, valueNode.asText()),</span>
-<span class="nc" id="L241">                    AuditStatus.ERROR, valueNode.asText());</span>
-<span class="nc" id="L242">            return null;</span>
+<span class="pc bpc" id="L245" title="1 of 2 branches missed.">        if (valueNode.isArray()) {</span>
+<span class="nc" id="L246">            AtlasUtil.addAudit(session, jsonField,</span>
+<span class="nc" id="L247">                    String.format(&quot;Unexpected array node is detected: '%s'&quot;, valueNode.asText()),</span>
+<span class="nc" id="L248">                    AuditStatus.ERROR, valueNode.asText());</span>
+<span class="nc" id="L249">            return null;</span>
         }
 
-<span class="fc bfc" id="L245" title="All 2 branches covered.">        if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType</span>
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType</span>
             try {
-<span class="fc" id="L247">                return conversionService.convertType(valueNode.asText(), jsonField.getFormat(),</span>
-<span class="fc" id="L248">                        jsonField.getFieldType(), null);</span>
-<span class="fc" id="L249">            } catch (AtlasConversionException e) {</span>
-<span class="fc" id="L250">                AtlasUtil.addAudit(session, jsonField,</span>
-<span class="fc" id="L251">                        String.format(&quot;Failed to convert field value '%s' into type '%s'&quot;, valueNode.asText(),</span>
-<span class="fc" id="L252">                                jsonField.getFieldType()),</span>
-<span class="fc" id="L253">                        AuditStatus.ERROR, valueNode.asText());</span>
-<span class="fc" id="L254">                return null;</span>
+<span class="fc" id="L254">                return conversionService.convertType(valueNode.asText(), jsonField.getFormat(),</span>
+<span class="fc" id="L255">                        jsonField.getFieldType(), null);</span>
+<span class="fc" id="L256">            } catch (AtlasConversionException e) {</span>
+<span class="fc" id="L257">                AtlasUtil.addAudit(session, jsonField,</span>
+<span class="fc" id="L258">                        String.format(&quot;Failed to convert field value '%s' into type '%s'&quot;, valueNode.asText(),</span>
+<span class="fc" id="L259">                                jsonField.getFieldType()),</span>
+<span class="fc" id="L260">                        AuditStatus.ERROR, valueNode.asText());</span>
+<span class="fc" id="L261">                return null;</span>
             }
         }
 
-<span class="fc bfc" id="L258" title="All 2 branches covered.">        if (valueNode.isTextual()) {</span>
-<span class="fc" id="L259">            return handleTextualNode(valueNode, jsonField);</span>
-<span class="fc bfc" id="L260" title="All 2 branches covered.">        } else if (valueNode.isNumber()) {</span>
-<span class="fc" id="L261">            return handleNumberNode(valueNode, jsonField);</span>
-<span class="pc bpc" id="L262" title="1 of 2 branches missed.">        } else if (valueNode.isBoolean()) {</span>
-<span class="fc" id="L263">            return handleBooleanNode(valueNode, jsonField);</span>
-<span class="nc bnc" id="L264" title="All 2 branches missed.">        } else if (valueNode.isContainerNode()) {</span>
-<span class="nc" id="L265">            return handleContainerNode(valueNode, jsonField);</span>
-<span class="nc bnc" id="L266" title="All 2 branches missed.">        } else if (valueNode.isNull()) {</span>
-<span class="nc" id="L267">            return null;</span>
+<span class="fc bfc" id="L265" title="All 2 branches covered.">        if (valueNode.isTextual()) {</span>
+<span class="fc" id="L266">            return handleTextualNode(valueNode, jsonField);</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">        } else if (valueNode.isNumber()) {</span>
+<span class="fc" id="L268">            return handleNumberNode(valueNode, jsonField);</span>
+<span class="pc bpc" id="L269" title="1 of 2 branches missed.">        } else if (valueNode.isBoolean()) {</span>
+<span class="fc" id="L270">            return handleBooleanNode(valueNode, jsonField);</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        } else if (valueNode.isContainerNode()) {</span>
+<span class="nc" id="L272">            return handleContainerNode(valueNode, jsonField);</span>
+<span class="nc bnc" id="L273" title="All 2 branches missed.">        } else if (valueNode.isNull()) {</span>
+<span class="nc" id="L274">            return null;</span>
 
         } else {
-<span class="nc" id="L270">            LOG.warn(String.format(&quot;Detected unsupported json type for field p=%s docId=%s&quot;,</span>
-<span class="nc" id="L271">                    jsonField.getPath(), jsonField.getDocId()));</span>
-<span class="nc" id="L272">            jsonField.setFieldType(FieldType.UNSUPPORTED);</span>
-<span class="nc" id="L273">            return valueNode.toString();</span>
+<span class="nc" id="L277">            LOG.warn(String.format(&quot;Detected unsupported json type for field p=%s docId=%s&quot;,</span>
+<span class="nc" id="L278">                    jsonField.getPath(), jsonField.getDocId()));</span>
+<span class="nc" id="L279">            jsonField.setFieldType(FieldType.UNSUPPORTED);</span>
+<span class="nc" id="L280">            return valueNode.toString();</span>
         }
     }
 
     private Object handleTextualNode(JsonNode valueNode, JsonField jsonField) {
-<span class="pc bpc" id="L278" title="3 of 4 branches missed.">        if (jsonField.getFieldType() == null || FieldType.STRING.equals(jsonField.getFieldType())) {</span>
-<span class="fc" id="L279">            jsonField.setFieldType(FieldType.STRING);</span>
-<span class="fc" id="L280">            return valueNode.textValue();</span>
+<span class="pc bpc" id="L285" title="3 of 4 branches missed.">        if (jsonField.getFieldType() == null || FieldType.STRING.equals(jsonField.getFieldType())) {</span>
+<span class="fc" id="L286">            jsonField.setFieldType(FieldType.STRING);</span>
+<span class="fc" id="L287">            return valueNode.textValue();</span>
         }
-<span class="nc bnc" id="L282" title="All 2 branches missed.">        if (FieldType.CHAR.equals(jsonField.getFieldType())) {</span>
-<span class="nc" id="L283">            return valueNode.textValue().charAt(0);</span>
+<span class="nc bnc" id="L289" title="All 2 branches missed.">        if (FieldType.CHAR.equals(jsonField.getFieldType())) {</span>
+<span class="nc" id="L290">            return valueNode.textValue().charAt(0);</span>
         }
-<span class="nc" id="L285">        LOG.warn(String.format(&quot;Unsupported FieldType for text data t=%s p=%s docId=%s&quot;,</span>
-<span class="nc" id="L286">                jsonField.getFieldType().value(), jsonField.getPath(), jsonField.getDocId()));</span>
-<span class="nc" id="L287">        return valueNode.textValue();</span>
+<span class="nc" id="L292">        LOG.warn(String.format(&quot;Unsupported FieldType for text data t=%s p=%s docId=%s&quot;,</span>
+<span class="nc" id="L293">                jsonField.getFieldType().value(), jsonField.getPath(), jsonField.getDocId()));</span>
+<span class="nc" id="L294">        return valueNode.textValue();</span>
     }
 
     private Object handleNumberNode(JsonNode valueNode, JsonField jsonField) {
-<span class="fc bfc" id="L291" title="All 2 branches covered.">        if (valueNode.isInt()) {</span>
-<span class="fc" id="L292">            jsonField.setFieldType(FieldType.INTEGER);</span>
-<span class="fc" id="L293">            return valueNode.intValue();</span>
-<span class="fc bfc" id="L294" title="All 2 branches covered.">        } else if (valueNode.isDouble()) {</span>
-<span class="fc" id="L295">            jsonField.setFieldType(FieldType.DOUBLE);</span>
-<span class="fc" id="L296">            return valueNode.doubleValue();</span>
-<span class="pc bpc" id="L297" title="1 of 2 branches missed.">        } else if (valueNode.isBigDecimal()) {</span>
-<span class="nc" id="L298">            jsonField.setFieldType(FieldType.DECIMAL);</span>
-<span class="nc" id="L299">            return valueNode.decimalValue();</span>
-<span class="pc bpc" id="L300" title="1 of 2 branches missed.">        } else if (valueNode.isFloat()) {</span>
-<span class="nc" id="L301">            jsonField.setFieldType(FieldType.DOUBLE);</span>
-<span class="nc" id="L302">            return valueNode.floatValue();</span>
-<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        } else if (valueNode.isLong()) {</span>
-<span class="nc" id="L304">            jsonField.setFieldType(FieldType.LONG);</span>
-<span class="nc" id="L305">            return valueNode.longValue();</span>
-<span class="pc bpc" id="L306" title="1 of 2 branches missed.">        } else if (valueNode.isShort()) {</span>
-<span class="nc" id="L307">            jsonField.setFieldType(FieldType.SHORT);</span>
-<span class="nc" id="L308">            return valueNode.shortValue();</span>
-<span class="pc bpc" id="L309" title="1 of 2 branches missed.">        } else if (valueNode.isBigInteger()) {</span>
-<span class="fc" id="L310">            jsonField.setFieldType(FieldType.BIG_INTEGER);</span>
-<span class="fc" id="L311">            return valueNode.bigIntegerValue();</span>
+<span class="fc bfc" id="L298" title="All 2 branches covered.">        if (valueNode.isInt()) {</span>
+<span class="fc" id="L299">            jsonField.setFieldType(FieldType.INTEGER);</span>
+<span class="fc" id="L300">            return valueNode.intValue();</span>
+<span class="fc bfc" id="L301" title="All 2 branches covered.">        } else if (valueNode.isDouble()) {</span>
+<span class="fc" id="L302">            jsonField.setFieldType(FieldType.DOUBLE);</span>
+<span class="fc" id="L303">            return valueNode.doubleValue();</span>
+<span class="pc bpc" id="L304" title="1 of 2 branches missed.">        } else if (valueNode.isBigDecimal()) {</span>
+<span class="nc" id="L305">            jsonField.setFieldType(FieldType.DECIMAL);</span>
+<span class="nc" id="L306">            return valueNode.decimalValue();</span>
+<span class="pc bpc" id="L307" title="1 of 2 branches missed.">        } else if (valueNode.isFloat()) {</span>
+<span class="nc" id="L308">            jsonField.setFieldType(FieldType.DOUBLE);</span>
+<span class="nc" id="L309">            return valueNode.floatValue();</span>
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">        } else if (valueNode.isLong()) {</span>
+<span class="nc" id="L311">            jsonField.setFieldType(FieldType.LONG);</span>
+<span class="nc" id="L312">            return valueNode.longValue();</span>
+<span class="pc bpc" id="L313" title="1 of 2 branches missed.">        } else if (valueNode.isShort()) {</span>
+<span class="nc" id="L314">            jsonField.setFieldType(FieldType.SHORT);</span>
+<span class="nc" id="L315">            return valueNode.shortValue();</span>
+<span class="pc bpc" id="L316" title="1 of 2 branches missed.">        } else if (valueNode.isBigInteger()) {</span>
+<span class="fc" id="L317">            jsonField.setFieldType(FieldType.BIG_INTEGER);</span>
+<span class="fc" id="L318">            return valueNode.bigIntegerValue();</span>
         } else {
-<span class="nc" id="L313">            jsonField.setFieldType(FieldType.NUMBER);</span>
-<span class="nc" id="L314">            return valueNode.numberValue();</span>
+<span class="nc" id="L320">            jsonField.setFieldType(FieldType.NUMBER);</span>
+<span class="nc" id="L321">            return valueNode.numberValue();</span>
         }
     }
 
     private Object handleBooleanNode(JsonNode valueNode, JsonField jsonField) {
-<span class="fc" id="L319">        jsonField.setFieldType(FieldType.BOOLEAN);</span>
-<span class="fc" id="L320">        return valueNode.booleanValue();</span>
+<span class="fc" id="L326">        jsonField.setFieldType(FieldType.BOOLEAN);</span>
+<span class="fc" id="L327">        return valueNode.booleanValue();</span>
     }
 
     private Object handleContainerNode(JsonNode valueNode, JsonField jsonField) throws AtlasException {
-<span class="nc bnc" id="L324" title="All 2 branches missed.">        if (valueNode.isArray()) {</span>
-<span class="nc bnc" id="L325" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L326">                LOG.debug(</span>
-<span class="nc" id="L327">                        String.format(&quot;Detected json array p=%s docId=%s&quot;, jsonField.getPath(), jsonField.getDocId()));</span>
+<span class="nc bnc" id="L331" title="All 2 branches missed.">        if (valueNode.isArray()) {</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L333">                LOG.debug(</span>
+<span class="nc" id="L334">                        String.format(&quot;Detected json array p=%s docId=%s&quot;, jsonField.getPath(), jsonField.getDocId()));</span>
             }
-<span class="nc" id="L329">            jsonField.setFieldType(FieldType.COMPLEX);</span>
-<span class="nc" id="L330">            jsonField.setCollectionType(CollectionType.ARRAY);</span>
-<span class="nc" id="L331">            return valueNode.toString();</span>
+<span class="nc" id="L336">            jsonField.setFieldType(FieldType.COMPLEX);</span>
+<span class="nc" id="L337">            jsonField.setCollectionType(CollectionType.ARRAY);</span>
+<span class="nc" id="L338">            return valueNode.toString();</span>
         }
-<span class="nc bnc" id="L333" title="All 2 branches missed.">        if (valueNode.isObject()) {</span>
-<span class="nc bnc" id="L334" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
-<span class="nc" id="L335">                LOG.debug(String.format(&quot;Detected json complex object p=%s docId=%s&quot;, jsonField.getPath(),</span>
-<span class="nc" id="L336">                        jsonField.getDocId()));</span>
+<span class="nc bnc" id="L340" title="All 2 branches missed.">        if (valueNode.isObject()) {</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">            if (LOG.isDebugEnabled()) {</span>
+<span class="nc" id="L342">                LOG.debug(String.format(&quot;Detected json complex object p=%s docId=%s&quot;, jsonField.getPath(),</span>
+<span class="nc" id="L343">                        jsonField.getDocId()));</span>
             }
-<span class="nc" id="L338">            jsonField.setFieldType(FieldType.COMPLEX);</span>
-<span class="nc" id="L339">            return valueNode.toString();</span>
+<span class="nc" id="L345">            jsonField.setFieldType(FieldType.COMPLEX);</span>
+<span class="nc" id="L346">            return valueNode.toString();</span>
         }
-<span class="nc" id="L341">        throw new AtlasException(&quot;Unknown error: detected a container JSON node which is not ARRAY nor OBJECT&quot;);</span>
+<span class="nc" id="L348">        throw new AtlasException(&quot;Unknown error: detected a container JSON node which is not ARRAY nor OBJECT&quot;);</span>
     }
 
     public void setDocument(String document) throws AtlasException {
-<span class="fc bfc" id="L345" title="All 4 branches covered.">        if (document == null || document.isEmpty()) {</span>
-<span class="fc" id="L346">            this.rootNode = null;</span>
-<span class="fc" id="L347">            return;</span>
+<span class="fc bfc" id="L352" title="All 4 branches covered.">        if (document == null || document.isEmpty()) {</span>
+<span class="fc" id="L353">            this.rootNode = null;</span>
+<span class="fc" id="L354">            return;</span>
         }
 
         try {
-<span class="fc" id="L351">            JsonFactory factory = new JsonFactory();</span>
-<span class="fc" id="L352">            ObjectMapper mapper = new ObjectMapper()</span>
-<span class="fc" id="L353">                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
-<span class="fc" id="L354">            JsonParser parser = factory.createParser(document);</span>
-<span class="fc" id="L355">            this.rootNode = mapper.readTree(parser);</span>
-<span class="fc" id="L356">        } catch (Exception e) {</span>
-<span class="fc" id="L357">            throw new AtlasException(e);</span>
-<span class="fc" id="L358">        }</span>
-<span class="fc" id="L359">    }</span>
+<span class="fc" id="L358">            JsonFactory factory = new JsonFactory();</span>
+<span class="fc" id="L359">            ObjectMapper mapper = new ObjectMapper()</span>
+<span class="fc" id="L360">                .enable(MapperFeature.BLOCK_UNSAFE_POLYMORPHIC_BASE_TYPES);</span>
+<span class="fc" id="L361">            JsonParser parser = factory.createParser(document);</span>
+<span class="fc" id="L362">            this.rootNode = mapper.readTree(parser);</span>
+<span class="fc" id="L363">        } catch (Exception e) {</span>
+<span class="fc" id="L364">            throw new AtlasException(e);</span>
+<span class="fc" id="L365">        }</span>
+<span class="fc" id="L366">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

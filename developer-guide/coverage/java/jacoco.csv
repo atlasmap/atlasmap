@@ -35,8 +35,8 @@ Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasPreviewContext
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,TemplateCombineStrategy,11,89,8,12,3,18,7,5,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService.ConverterMethodHolder,0,21,0,0,0,7,0,2,0,2
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasValidationService.Validators,0,335,0,0,0,53,0,26,0,26
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseAtlasModule,172,275,20,24,42,82,41,39,26,32
-Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,572,2196,78,236,121,467,71,136,2,48
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,BaseAtlasModule,172,279,20,24,42,83,41,39,26,32
+Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasContext,572,2196,77,237,121,467,70,137,2,48
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCombineStrategy,14,212,4,34,6,57,7,28,3,13
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasConversionService,152,1054,34,191,26,235,35,123,2,25
 Unit Test Coverage Report/atlas-core,io.atlasmap.core,DefaultAtlasCompoundClassLoader,28,123,5,15,8,28,5,12,0,7
@@ -160,7 +160,7 @@ Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Append,0,10,0,0,0,4,0,3,0,3
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,SimpleResolver,44,135,7,11,6,31,10,10,4,7
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Round,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasHandlerInstantiator,8,22,1,3,4,8,4,4,3,3
-Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasModelFactory,291,481,39,46,62,103,34,30,6,15
+Unit Test Coverage Report/atlas-model,io.atlasmap.v2,AtlasModelFactory,285,487,38,47,61,104,33,31,6,15
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,IndexOf,0,10,0,0,0,4,0,3,0,3
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Length,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Uppercase,0,3,0,0,0,1,0,1,0,1
@@ -190,7 +190,7 @@ Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Expression,0,10,0,0,0,4,0,3
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,RemoveFileExtension,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Floor,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,PropertyField,0,10,0,0,0,4,0,3,0,3
-Unit Test Coverage Report/atlas-model,io.atlasmap.v2,FieldStatus,31,53,4,0,5,10,4,2,2,2
+Unit Test Coverage Report/atlas-model,io.atlasmap.v2,FieldStatus,5,79,1,3,1,14,1,5,0,4
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,Minimum,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,CurrentTime,0,3,0,0,0,1,0,1,0,1
 Unit Test Coverage Report/atlas-model,io.atlasmap.v2,FieldAction,0,4,0,0,0,1,0,1,0,1
@@ -284,9 +284,9 @@ Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonInspectio
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonSchemaInspector.JsonFieldBuilder,0,68,0,4,0,18,0,4,0,2
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonSchemaInspector,103,582,28,70,25,129,24,37,0,12
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.inspect,JsonInstanceInspector,125,396,26,50,31,94,21,24,0,7
-Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.core,JsonFieldReader,343,573,36,72,68,138,26,40,2,10
+Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.core,JsonFieldReader,343,585,37,75,68,142,27,41,2,10
 Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.core,JsonComplexTypeFactory,3,9,0,0,1,3,1,1,1,1
-Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.core,JsonFieldWriter,467,550,41,99,48,138,37,43,1,9
+Unit Test Coverage Report/atlas-json-core,io.atlasmap.json.core,JsonFieldWriter,467,560,41,103,48,139,37,45,1,9
 Unit Test Coverage Report/atlas-json-model,io.atlasmap.json.v2,JsonDocument,33,3,8,0,10,1,6,1,2,1
 Unit Test Coverage Report/atlas-json-model,io.atlasmap.json.v2,JsonInspectionRequest,279,29,66,0,94,11,39,9,6,9
 Unit Test Coverage Report/atlas-json-model,io.atlasmap.json.v2,JsonComplexType,120,27,28,0,39,11,17,8,3,8
@@ -299,7 +299,7 @@ Unit Test Coverage Report/atlas-json-model,io.atlasmap.json.v2,InspectionType,31
 Unit Test Coverage Report/atlas-json-model,io.atlasmap.json.v2,JsonDataSource,76,10,18,0,24,4,11,3,2,3
 Unit Test Coverage Report/atlas-json-model,io.atlasmap.json.v2,JsonInspectionResponse,147,20,36,0,49,8,21,6,3,6
 Unit Test Coverage Report/atlas-json-module,io.atlasmap.json.module,JsonValidationService,3,99,0,4,2,21,1,9,1,7
-Unit Test Coverage Report/atlas-json-module,io.atlasmap.json.module,JsonModule,215,429,24,48,31,100,21,28,1,12
+Unit Test Coverage Report/atlas-json-module,io.atlasmap.json.module,JsonModule,215,433,24,48,31,101,21,28,1,12
 Unit Test Coverage Report/atlas-json-service,io.atlasmap.json.service,JsonService,66,96,7,10,14,21,8,9,1,7
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,AtlasXmlSchemaSetParser.NoopErrorHandler,20,10,5,1,7,3,5,2,2,2
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core.schema,AtlasXmlSchemaSetParser,56,379,8,26,18,88,10,23,2,14
@@ -315,9 +315,9 @@ Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlComplexTypeFact
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlCollectionHelper,0,9,0,0,0,3,0,2,0,2
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlFieldTransformer,5,93,2,10,1,23,2,8,0,4
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,AtlasXmlNamespaceContext,44,96,7,5,6,18,7,8,2,7
-Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlFieldReader,215,709,29,93,31,156,26,46,1,10
+Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlFieldReader,215,721,30,96,31,160,27,47,1,10
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,AtlasXmlConstants,3,0,0,0,1,0,1,0,1,0
-Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlFieldWriter,322,662,43,99,48,159,45,44,7,11
+Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlFieldWriter,324,664,44,100,49,158,46,44,7,11
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlPath,49,208,14,20,9,41,12,12,1,6
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlPath.XmlSegmentContext,82,122,8,12,8,23,7,9,1,5
 Unit Test Coverage Report/atlas-xml-core,io.atlasmap.xml.core,XmlIOHelper,12,160,3,23,5,40,3,15,0,5
@@ -339,7 +339,7 @@ Unit Test Coverage Report/atlas-xml-model,io.atlasmap.xml.v2,XmlDocument,76,10,1
 Unit Test Coverage Report/atlas-xml-model,io.atlasmap.xml.v2,XmlInspectionResponse,147,20,36,0,49,8,21,6,3,6
 Unit Test Coverage Report/atlas-xml-model,io.atlasmap.xml.v2,AtlasXmlModelFactory,10,108,2,6,2,28,3,7,1,5
 Unit Test Coverage Report/atlas-xml-module,io.atlasmap.xml.module,XmlValidationService,13,176,5,17,3,37,6,13,1,7
-Unit Test Coverage Report/atlas-xml-module,io.atlasmap.xml.module,XmlModule,277,651,39,77,46,149,34,44,1,19
+Unit Test Coverage Report/atlas-xml-module,io.atlasmap.xml.module,XmlModule,277,655,39,77,46,150,34,44,1,19
 Unit Test Coverage Report/atlas-xml-service,io.atlasmap.xml.service,XmlService,61,67,3,2,12,16,4,6,1,6
 Unit Test Coverage Report/atlas-csv-core,io.atlasmap.csv.core,CsvFieldReader,150,345,21,23,34,84,14,13,0,5
 Unit Test Coverage Report/atlas-csv-core,io.atlasmap.csv.core,CsvFieldWriter,6,373,0,46,2,88,0,28,0,5

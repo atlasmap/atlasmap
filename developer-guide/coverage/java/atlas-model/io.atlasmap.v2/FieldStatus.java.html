@@ -30,13 +30,13 @@ package io.atlasmap.v2;
 <span class="fc" id="L30">    }</span>
 
     public String value() {
-<span class="nc" id="L33">        return value;</span>
+<span class="fc" id="L33">        return value;</span>
     }
 
     public static FieldStatus fromValue(String v) {
-<span class="nc bnc" id="L37" title="All 2 branches missed.">        for (FieldStatus c: FieldStatus.values()) {</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">            if (c.value.equals(v)) {</span>
-<span class="nc" id="L39">                return c;</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        for (FieldStatus c: FieldStatus.values()) {</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (c.value.equals(v)) {</span>
+<span class="fc" id="L39">                return c;</span>
             }
         }
 <span class="nc" id="L42">        throw new IllegalArgumentException(v);</span>
