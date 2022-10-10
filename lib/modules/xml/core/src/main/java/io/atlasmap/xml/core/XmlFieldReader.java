@@ -41,6 +41,7 @@ import io.atlasmap.v2.DataSource;
 import io.atlasmap.v2.DataSourceType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldGroup;
+import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 import io.atlasmap.xml.core.XmlPath.XmlSegmentContext;
 import io.atlasmap.xml.v2.AtlasXmlModelFactory;
@@ -96,12 +97,18 @@ public class XmlFieldReader extends XmlFieldTransformer implements AtlasFieldRea
         if (path.hasCollection() && !path.isIndexedCollection()) {
             FieldGroup fieldGroup = AtlasModelFactory.createFieldGroupFrom(field, true);
             fieldGroup.getField().addAll(fields);
+            if (fields.size() == 0) {
+                fieldGroup.setStatus(FieldStatus.NOT_FOUND);
+            }
             session.head().setSourceField(fieldGroup);
             return fieldGroup;
         } else if (fields.size() == 1) {
             field.setValue(fields.get(0).getValue());
             return field;
         } else {
+            if (fields.size() == 0) {
+                field.setStatus(FieldStatus.NOT_FOUND);
+            }
             return field;
         }
     }

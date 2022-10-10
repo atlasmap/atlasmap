@@ -1,0 +1,118 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "nb_eda_auc_response_xml_create_xsd_schema-49002548-5abe-4333-9e90-d017b4da6262",
+      "name" : "nb_eda_auc_response_xml_create_xsd_schema",
+      "description" : "Source document nb_eda_auc_response_xml_create_xsd_schema type: XML",
+      "uri" : "atlas:xml:nb_eda_auc_response_xml_create_xsd_schema-49002548-5abe-4333-9e90-d017b4da6262",
+      "dataSourceType" : "SOURCE",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://schemas.xmlsoap.org/soap/envelope/"
+        }, {
+          "alias" : "ns1",
+          "uri" : "http://schemas.ericsson.com/cai3g1.2/"
+        } ]
+      }
+    }, {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "nb_eda_auc_response_json_create_schema-37a5b6fe-3c92-4f83-a8b2-66c07e833e8f",
+      "name" : "nb_eda_auc_response_json_create_schema",
+      "description" : "Target document nb_eda_auc_response_json_create_schema type: JSON",
+      "uri" : "atlas:json:nb_eda_auc_response_json_create_schema-37a5b6fe-3c92-4f83-a8b2-66c07e833e8f",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "nb_eda_auc_response_xml_create_xsd_schema-49002548-5abe-4333-9e90-d017b4da6262",
+          "path" : "/tns:Envelope/tns:Body/ns1:SetResponse/ns1:Status/ns1:Description",
+          "fieldType" : "STRING",
+          "name" : "Description",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "nb_eda_auc_response_json_create_schema-37a5b6fe-3c92-4f83-a8b2-66c07e833e8f",
+          "path" : "/SetResponse/Status/Description",
+          "fieldType" : "STRING",
+          "name" : "Description"
+        } ],
+        "id" : "mapping.9464"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "nb_eda_auc_response_xml_create_xsd_schema-49002548-5abe-4333-9e90-d017b4da6262",
+          "path" : "/tns:Envelope/tns:Body/ns1:SetResponse/ns1:Status/ns1:ResultCode",
+          "fieldType" : "STRING",
+          "name" : "ResultCode",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "nb_eda_auc_response_json_create_schema-37a5b6fe-3c92-4f83-a8b2-66c07e833e8f",
+          "path" : "/SetResponse/Status/ResultCode",
+          "fieldType" : "STRING",
+          "name" : "ResultCode"
+        } ],
+        "id" : "mapping.862470"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "nb_eda_auc_response_xml_create_xsd_schema-49002548-5abe-4333-9e90-d017b4da6262",
+          "path" : "/tns:Envelope/tns:Body/ns1:SetResponse/ns1:Status/ns1:Does/ns1:Not/ns1:Exist",
+          "fieldType" : "STRING",
+          "name" : "Exist",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "nb_eda_auc_response_json_create_schema-37a5b6fe-3c92-4f83-a8b2-66c07e833e8f",
+          "path" : "/SetResponse/Status/Does/Not/Exist",
+          "fieldType" : "STRING",
+          "name" : "Exist"
+        } ],
+        "id" : "mapping.862470"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "nb_eda_auc_response_xml_create_xsd_schema-49002548-5abe-4333-9e90-d017b4da6262",
+          "path" : "/tns:Envelope/tns:Body/ns1:SetResponse/ns1:Status/ns1:Does2/ns1:Not<>/ns1:Exist",
+          "fieldType" : "STRING",
+          "name" : "Exist",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.json.v2.JsonField",
+          "docId" : "nb_eda_auc_response_json_create_schema-37a5b6fe-3c92-4f83-a8b2-66c07e833e8f",
+          "path" : "/SetResponse/Status/Does2/Not<>/Exist",
+          "fieldType" : "STRING",
+          "name" : "Exist"
+        } ],
+        "id" : "mapping.862470"
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}

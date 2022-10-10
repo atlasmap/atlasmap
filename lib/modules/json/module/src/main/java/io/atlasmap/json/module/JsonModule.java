@@ -125,6 +125,7 @@ public class JsonModule extends BaseAtlasModule {
         FieldGroup targetFieldGroup = null;
         if (path.hasCollection() && !path.isIndexedCollection()) {
             targetFieldGroup = AtlasModelFactory.createFieldGroupFrom(targetField, true);
+            targetFieldGroup.setStatus(sourceField.getStatus());
             session.head().setTargetField(targetFieldGroup);
         }
 
