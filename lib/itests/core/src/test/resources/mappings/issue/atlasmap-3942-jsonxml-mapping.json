@@ -1,0 +1,189 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.json.v2.JsonDataSource",
+      "id" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+      "name" : "SetSupplementaryService_nbi",
+      "description" : "Source document SetSupplementaryService_nbi type: JSON",
+      "uri" : "atlas:json:SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.xml.v2.XmlDataSource",
+      "id" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+      "name" : "SetSupplementaryService_sbi",
+      "description" : "Target document SetSupplementaryService_sbi type: XSD",
+      "uri" : "atlas:xml:SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+      "dataSourceType" : "TARGET",
+      "xmlNamespaces" : {
+        "xmlNamespace" : [ {
+          "alias" : "tns",
+          "uri" : "http://schemas.xmlsoap.org/soap/envelope/"
+        }, {
+          "alias" : "ns2",
+          "uri" : "http://schemas.ericsson.com/ma/CA/Unn/"
+        }, {
+          "alias" : "ns1",
+          "uri" : "http://schemas.ericsson.com/cai3g1.2/"
+        } ]
+      }
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+            "path" : "/hold<>/name",
+            "fieldType" : "STRING",
+            "name" : "name"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+          "path" : "/tns:Envelope/tns:Body/ns1:Set/ns1:MOAttributes/ns2:SetUnnSubscription/ns2:hold/ns2:item<>/ns2:name",
+          "fieldType" : "STRING",
+          "name" : "name",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.501082"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+            "path" : "/hold<>/value",
+            "fieldType" : "STRING",
+            "name" : "value"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+          "path" : "/tns:Envelope/tns:Body/ns1:Set/ns1:MOAttributes/ns2:SetUnnSubscription/ns2:hold/ns2:item<>/ns2:value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.973417"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+            "path" : "/hold<>/doesnotexist",
+            "fieldType" : "STRING",
+            "name" : "doesnotexist"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+          "path" : "/tns:Envelope/tns:Body/ns1:Set/ns1:MOAttributes/ns2:SetUnnSubscription/ns2:hold/ns2:item<>/ns2:doesnotexist",
+          "fieldType" : "STRING",
+          "name" : "doesnotexist",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.973417"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+            "path" : "/doesnotexist2",
+            "fieldType" : "STRING",
+            "name" : "doesnotexist2"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+          "path" : "/tns:Envelope/tns:Body/ns1:Set/ns1:MOAttributes/ns2:SetUnnSubscription/ns2:doesnotexist2",
+          "fieldType" : "STRING",
+          "name" : "doesnotexist2",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.973417"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+            "path" : "/lock<>/name",
+            "fieldType" : "STRING",
+            "name" : "name"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+          "path" : "/tns:Envelope/tns:Body/ns1:Set/ns1:MOAttributes/ns2:SetUnnSubscription/ns2:lock/ns2:item<>/ns2:name",
+          "fieldType" : "STRING",
+          "name" : "name",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.373617"
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "inputFieldGroup" : {
+          "jsonType" : "io.atlasmap.v2.FieldGroup",
+          "actions" : [ ],
+          "field" : [ {
+            "jsonType" : "io.atlasmap.json.v2.JsonField",
+            "docId" : "SetSupplementaryService_nbi-46cd3ae2-346c-40f1-bedc-823d7365d834",
+            "path" : "/lock<>/value",
+            "fieldType" : "STRING",
+            "name" : "value"
+          } ]
+        },
+        "inputField" : [ ],
+        "outputField" : [ {
+          "jsonType" : "io.atlasmap.xml.v2.XmlField",
+          "docId" : "SetSupplementaryService_sbi-8cae15cf-480a-4427-b567-d49a1e9196d2",
+          "path" : "/tns:Envelope/tns:Body/ns1:Set/ns1:MOAttributes/ns2:SetUnnSubscription/ns2:lock/ns2:item<>/ns2:value",
+          "fieldType" : "STRING",
+          "name" : "value",
+          "userCreated" : false,
+          "attribute" : false
+        } ],
+        "id" : "mapping.400859"
+      }]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "constants" : {
+      "constant" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "UI.0"
+  }
+}
