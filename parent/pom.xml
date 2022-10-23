@@ -92,7 +92,7 @@
     <swagger.version>2.2.3</swagger.version>
     <swagger2markup.version>1.3.4</swagger2markup.version>
     <swagger2markup-maven-plugin.version>1.3.7</swagger2markup-maven-plugin.version>
-    <twitter4j.version>4.0.7</twitter4j.version>
+    <twitter4j.version>4.1.1</twitter4j.version>
     <woodstox.version>4.4.1</woodstox.version>
     <xalan-bundle-version>2.7.2_3</xalan-bundle-version>
     <xmlunit.version>2.9.0</xmlunit.version>
