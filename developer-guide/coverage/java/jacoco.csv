@@ -369,9 +369,9 @@ Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,GenerateInspec
 Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,GenerateInspectionsMojo.Inspection,52,0,0,0,22,0,15,0,15,0
 Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,GenerateFieldActionsMojo,251,0,34,0,57,0,26,0,9,0
 Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,GenerateFieldActionsMojo.FieldAction,34,0,0,0,8,0,6,0,6,0
-Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,HelpMojo,854,0,108,0,153,0,70,0,16,0
 Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,AbstractAtlasMapMojo,235,0,10,0,58,0,18,0,13,0
 Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.maven,GenerateInspectionsMojo,571,0,52,0,117,0,40,0,14,0
+Unit Test Coverage Report/atlasmap-maven-plugin,io.atlasmap.atlasmap_maven_plugin,HelpMojo,861,0,110,0,155,0,71,0,16,0
 Unit Test Coverage Report/camel-atlasmap,org.apache.camel.component.atlasmap,AtlasEndpoint.TargetMapMode,0,21,0,0,0,2,0,1,0,1
 Unit Test Coverage Report/camel-atlasmap,org.apache.camel.component.atlasmap,CamelAtlasPropertyStrategy,0,116,2,12,0,30,2,12,0,7
 Unit Test Coverage Report/camel-atlasmap,org.apache.camel.component.atlasmap,AtlasComponent,55,96,2,6,15,23,5,7,3,5
