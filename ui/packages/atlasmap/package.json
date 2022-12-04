@@ -67,7 +67,7 @@
     "tsdx": "^0.13.1",
     "typed-css-modules": "^0.7.0",
     "typescript": "~3.9.9",
-    "typescript-plugin-css-modules": "^3.2.0"
+    "typescript-plugin-css-modules": "^4.1.0"
   },
   "peerDependencies": {
     "@patternfly/react-core": "^4.224.1",
