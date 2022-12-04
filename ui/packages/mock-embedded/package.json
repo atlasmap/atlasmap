@@ -46,7 +46,7 @@
     "react-scripts": "^3.4.4",
     "react-use-gesture": "^9.1.3",
     "rxjs": "^6.6.7",
-    "use-debounce": "^8.0.1"
+    "use-debounce": "^9.0.2"
   },
   "devDependencies": {
     "@craco/craco": "5.8.0",
