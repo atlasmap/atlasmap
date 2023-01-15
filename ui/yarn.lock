@@ -17357,9 +17357,9 @@ prettier-linter-helpers@^1.0.0:
     fast-diff "^1.1.2"
 
 "prettier@>=2.2.1 <=2.3.0", prettier@^1.19.1, prettier@^2.0.0, prettier@^2.5.0:
-  version "2.8.2"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.2.tgz#c4ea1b5b454d7c4b59966db2e06ed7eec5dfd160"
-  integrity sha512-BtRV9BcncDyI2tsuS19zzhzoxD8Dh8LiCx7j7tHzrkz8GFXAexeWFdi22mjE1d16dftH2qNaytVxqiRTGlMfpw==
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.3.tgz#ab697b1d3dd46fb4626fbe2f543afe0cc98d8632"
+  integrity sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==
 
 pretty-bytes@^5.1.0:
   version "5.6.0"
@@ -21047,9 +21047,9 @@ url@^0.11.0:
     querystring "0.2.0"
 
 use-debounce@^9.0.2:
-  version "9.0.2"
-  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-9.0.2.tgz#2883982ec1eb79affec46f14047244057b78161c"
-  integrity sha512-QLyB0sxt9F5AisGDrUybCRJSLE60bTQR0yXc+IebNGUu1GCXwii1zsZl82mPGdWqDVQy7+1FKMLHQUixxf5Nbw==
+  version "9.0.3"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-9.0.3.tgz#bac660c19ab7b38662e08608fee23c7ad303f532"
+  integrity sha512-FhtlbDtDXILJV7Lix5OZj5yX/fW1tzq+VrvK1fnT2bUrPOGruU9Rw8NCEn+UI9wopfERBEZAOQ8lfeCJPllgnw==
 
 use@^3.1.0:
   version "3.1.1"
