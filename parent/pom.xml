@@ -46,7 +46,7 @@
     <daffodil.version>3.4.0</daffodil.version>
     <guava.version>31.1-jre</guava.version>
     <kubernetes-maven-plugin.version>1.10.1</kubernetes-maven-plugin.version>
-    <jackson.version>2.14.1</jackson.version>
+    <jackson.version>2.14.2</jackson.version>
     <jackson.databind.version>2.14.1</jackson.databind.version>
     <jackson.version.range>[2.6,3)</jackson.version.range>
     <jacoco-maven-plugin.version>0.8.8</jacoco-maven-plugin.version>
