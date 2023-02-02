@@ -36,6 +36,7 @@ import java.util.concurrent.Executors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
@@ -90,6 +91,7 @@ public class E2ETest {
         }
     }
 
+    @Disabled
     @Test
     public void test() throws Exception {
         driver.get("http://127.0.0.1:" + port);

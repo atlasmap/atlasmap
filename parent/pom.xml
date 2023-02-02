@@ -188,6 +188,28 @@
         <artifactId>selenium-java</artifactId>
         <version>${selenium.version}</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-edge-driver</artifactId>
+          </exclusion>
+          <exclusion>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-firefox-driver</artifactId>
+          </exclusion>
+          <exclusion>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-ie-driver</artifactId>
+          </exclusion>
+          <exclusion>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-opera-driver</artifactId>
+          </exclusion>
+           <exclusion>
+	    <groupId>org.seleniumhq.selenium</groupId>
+	    <artifactId>selenium-safari-driver</artifactId>
+          </exclusion>
+         </exclusions>
       </dependency>
       <dependency>
         <groupId>org.seleniumhq.selenium</groupId>
