@@ -41,7 +41,7 @@
     <byte-buddy.version>1.12.22</byte-buddy.version>
     <camel.version>2.25.4</camel.version>
     <camel3.version>3.11.0</camel3.version>
-    <commons-csv.version>1.9.0</commons-csv.version>
+    <commons-csv.version>1.10.0</commons-csv.version>
     <commons-lang3.version>3.12.0</commons-lang3.version>
     <daffodil.version>3.4.0</daffodil.version>
     <guava.version>31.1-jre</guava.version>
