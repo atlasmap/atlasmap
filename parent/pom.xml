@@ -38,7 +38,7 @@
     <atlas.version.range>[1,3)</atlas.version.range>
     <bcel-bundle-version>5.2_4</bcel-bundle-version>
     <build-helper-maven-plugin.version>3.3.0</build-helper-maven-plugin.version>
-    <byte-buddy.version>1.12.22</byte-buddy.version>
+    <byte-buddy.version>1.12.23</byte-buddy.version>
     <camel.version>2.25.4</camel.version>
     <camel3.version>3.11.0</camel3.version>
     <commons-csv.version>1.9.0</commons-csv.version>
