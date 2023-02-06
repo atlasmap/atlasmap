@@ -3162,7 +3162,7 @@
     node-addon-api "^3.2.1"
     node-gyp-build "^4.3.0"
 
-"@patternfly/react-core@^4.224.1", "@patternfly/react-core@^4.267.6":
+"@patternfly/react-core@^4.224.1", "@patternfly/react-core@^4.267.6", "@patternfly/react-core@^4.276.6":
   version "4.276.6"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.276.6.tgz#fa39aa61022f70bf350b2efc660bdeb096bda447"
   integrity sha512-G0K+378jf9jw9g+hCAoKnsAe/UGTRspqPeuAYypF2FgNr+dC7dUpc7/VkNhZBVqSJzUWVEK8NyXcqkfi0IemIg==
@@ -3203,13 +3203,13 @@
   integrity sha512-tm7C6nat+uKMr1hrapis7hS3rN9cr41tpcCKhx6cod6FLU8KwF2Yt5KUxakhIOCEcE/M/EhXhAw/qejp8w0r7Q==
 
 "@patternfly/react-topology@^4.71.1":
-  version "4.90.38"
-  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.90.38.tgz#abd379b01c2cf7ce7c86c6ef752f3b34580419c7"
-  integrity sha512-O8zs8sjGlaKL8E5FW5oM4/stHwJ5yKVQGsM6ILoToFj9t/gnrGRBT7lkYftO5EBlch4aWRZhca5WRTVrseh/ng==
+  version "4.91.27"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-topology/-/react-topology-4.91.27.tgz#ce8be65e545dfa9ab49021ef1ac833bda5370225"
+  integrity sha512-CznY1c3ahsij8wuuxEUBLUssh4D7pLsxl9Fbrp7YXm/0Tx2KPgc76xMdyB9Flz4+SPNY1Z8fdsaI+d075i1aMg==
   dependencies:
-    "@patternfly/react-core" "^4.267.6"
-    "@patternfly/react-icons" "^4.93.3"
-    "@patternfly/react-styles" "^4.92.3"
+    "@patternfly/react-core" "^4.276.6"
+    "@patternfly/react-icons" "^4.93.6"
+    "@patternfly/react-styles" "^4.92.6"
     "@types/d3" "^5.7.2"
     "@types/d3-force" "^1.2.1"
     "@types/dagre" "0.7.42"
