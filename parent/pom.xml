@@ -80,7 +80,7 @@
     <maven-verifier.version>1.8.0</maven-verifier.version>
     <mockito.version>5.1.1</mockito.version>
     <okhttp.version>4.10.0</okhttp.version>
-    <openapi-generator-maven-plugin.version>6.3.0</openapi-generator-maven-plugin.version>
+    <openapi-generator-maven-plugin.version>6.4.0</openapi-generator-maven-plugin.version>
     <osgi.include.resource.atlasmap>${osgi.include.resource}</osgi.include.resource.atlasmap>
     <osgi.symbolic.name>${project.artifactId}</osgi.symbolic.name>
     <osgi.import.pkg>*</osgi.import.pkg>
