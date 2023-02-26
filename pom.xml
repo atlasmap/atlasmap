@@ -69,7 +69,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
     <license-maven-plugin.version>4.1</license-maven-plugin.version>
-    <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
+    <maven-assembly-plugin.version>3.5.0</maven-assembly-plugin.version>
     <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
     <maven-deploy-plugin.version>3.1.0</maven-deploy-plugin.version>
     <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
