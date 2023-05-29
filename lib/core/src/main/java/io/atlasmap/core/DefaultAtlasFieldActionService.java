@@ -175,7 +175,7 @@ public class DefaultAtlasFieldActionService implements AtlasFieldActionService {
         det.setSourceType(annotation.sourceType());
         det.setTargetType(annotation.targetType());
         CollectionType sourceCollection = annotation.sourceCollectionType();
-        CollectionType targetCollection = annotation.sourceCollectionType();
+        CollectionType targetCollection = annotation.targetCollectionType();
         if (sourceCollection != null && sourceCollection != CollectionType.NONE) {
             det.setMultiplicity(Multiplicity.MANY_TO_ONE);
         } else if (targetCollection != null && targetCollection != CollectionType.NONE) {
