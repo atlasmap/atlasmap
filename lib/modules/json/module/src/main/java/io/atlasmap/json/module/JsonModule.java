@@ -17,6 +17,11 @@ package io.atlasmap.json.module;
 
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ContainerNode;
+import io.atlasmap.v2.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -129,9 +134,13 @@ public class JsonModule extends BaseAtlasModule {
             session.head().setTargetField(targetFieldGroup);
         }
 
+
+        //AUTOMAP:handle fieldtype in case of objects and arrays
         // Attempt to Auto-detect field type based on input value
         if (targetField.getFieldType() == null && sourceField.getValue() != null) {
-            targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));
+            if(!(sourceField.getValue().getClass() == String.class && sourceField.getFieldType() == FieldType.COMPLEX)) {
+                targetField.setFieldType(getConversionService().fieldTypeFromClass(sourceField.getValue().getClass()));
+            }
         }
 
         if (targetFieldGroup == null) {
@@ -220,7 +229,14 @@ public class JsonModule extends BaseAtlasModule {
     public void processPostTargetExecution(AtlasInternalSession session) throws AtlasException {
         JsonFieldWriter writer = session.getFieldWriter(getDocId(), JsonFieldWriter.class);
         if (writer != null && writer.getRootNode() != null) {
-            String outputBody = writer.getRootNode().toString();
+            //String outputBody = writer.getRootNode().toString();
+            ContainerNode rootNode = writer.getRootNode();
+            String outputBody = null;
+            try {
+                outputBody = new ObjectMapper().writeValueAsString(rootNode);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
             session.setTargetDocument(getDocId(), outputBody);
             if (LOG.isDebugEnabled()) {
                 LOG.debug(String.format("processPostTargetExecution converting JsonNode to string size=%s",

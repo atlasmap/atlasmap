@@ -1,0 +1,126 @@
+{
+  "DeveloperPlatform;;ID": "Process-GoMechanic__PurchaseRequest-GoMechanic__ReviewPurchase",
+  "DeveloperPlatform;;Name": "GoMechanic",
+  "DeveloperPlatform;;ApplicationName": "mechanic",
+  "DeveloperPlatform;;application": {
+    "name": "Go mechanic",
+    "ID": "6302161b-1a2a-4f56-ad32-1eacf66a59c0",
+    "version": "11.55.0-1",
+    "isolationID": "a21a1909-c664-41be-bfc5-9a3ce0dae52c",
+    "namespace": "GoMechanic"
+  },
+  "DeveloperPlatform;;Nodes": [
+    {
+      "ID": "d9d61467-cec7-4f05-b722-e596b465e755",
+      "ToConnectors": [
+        {
+          "ID": "720fa237-d868-4d64-b230-fa4227209dfc",
+          "Type": "Process-Connector"
+        }
+      ],
+      "Name": "Start",
+      "@class": "Start"
+    },
+    {
+      "ID": "96d182d5-65ff-488e-95f9-3e92cae0274e",
+      "ToConnectors": [
+        {
+          "ID": "e60a2ea5-74c5-4190-addc-43c1df4a3ace",
+          "Type": "Process-Connector",
+          "Name": "Submit",
+          "Value": "Submit"
+        }
+      ],
+      "Name": "Review",
+      "Action": {
+        "ReferenceID": "InProgress",
+        "Namespace": "GoMechanic"
+      },
+      "Routing": {
+        "RoutingType": "CurrentUser"
+      },
+      "@class": "Assignment"
+    },
+    {
+      "ID": "4e2a48aa-5929-4dea-a776-5a6ef5089585",
+      "ToConnectors": [
+        {
+          "ID": "ab584296-c8f0-4f05-93cf-506b3ad5fcf1",
+          "Type": "Process-Connector"
+        }
+      ],
+      "Name": "Create Approve Purchase Case",
+      "Automation": {
+        "CallReference": {
+          "ReferenceID": "CreateApprovePurchaseCase",
+          "Namespace": "GoMechanic"
+        },
+        "CallType": "Automation",
+        "CallInputs": []
+      },
+      "@class": "CallAutomation"
+    },
+    {
+      "ID": "bc382cfc-b982-4252-b06f-bf15bd7008ff",
+      "ToConnectors": [
+        {
+          "ID": "fcc7e61f-9b44-4768-86df-638e44ef885d",
+          "Type": "Process-Connector",
+          "Value": "Submit",
+          "Name": "Submit"
+        }
+      ],
+      "Name": "Wait for approval",
+      "WaitConfiguration": {
+        "WaitForType": "All",
+        "WaitOnReference": {
+          "ReferenceID": "ApprovePurchase",
+          "Namespace": "GoMechanic"
+        }
+      },
+      "@class": "Wait"
+    },
+    {
+      "ID": "99d79372-26b3-458c-83e0-72ad2d64b06d",
+      "ToConnectors": [
+        {
+          "ID": "0d2df97e-8003-4051-b050-376c31980464",
+          "Type": "Process-Connector"
+        }
+      ],
+      "Name": "Change to Review stage",
+      "Automation": {
+        "CallReference": {
+          "ReferenceID": "ChangeToSpecifiedStage",
+          "Namespace": "DeveloperPlatform"
+        },
+        "CallType": "Automation",
+        "CallInputs": [
+          {
+            "ParameterName": "Stage",
+            "Source": {
+              "Type": "ConstantRuleReference",
+              "RuleType": "Stage",
+              "ReferencedRule": {
+                "ReferenceID": "ReviewPurchaseRequest",
+                "ReferenceScope": {
+                  "ReferenceID": "PurchaseRequest",
+                  "Namespace": "GoMechanic"
+                },
+                "Namespace": "GoMechanic",
+                "Type": "RuleReference"
+              }
+            }
+          }
+        ]
+      },
+      "@class": "CallAutomation"
+    },
+    {
+      "ID": "c0e1e8bc-b843-497c-b2da-53060009990d",
+      "ToConnectors": [],
+      "Name": "End",
+      "@class": "End"
+    }
+  ]
+}

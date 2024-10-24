@@ -18,6 +18,8 @@ package io.atlasmap.json.core;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -157,6 +159,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                     + parentNode);
         }
         JsonNode valueNode = createValueNode(field);
+        //System.out.println("Value to write: " + valueNode.asText());
         if (LOG.isDebugEnabled()) {
             LOG.debug("Value to write: " + valueNode);
         }
@@ -219,6 +222,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 
             // set the value in the array
             arrayChild.set(index, valueNode);
+            //System.out.println("valuenode at index" + index + arrayChild.get(index));
         } else if (field.getStatus() != FieldStatus.NOT_FOUND) {
             if (parentNode instanceof ArrayNode) {
                 ((ArrayNode)parentNode).add(valueNode);
@@ -320,7 +324,24 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         } else if (FieldType.BIG_INTEGER.equals(type)) {
             valueNode = rootNode.numberNode(new BigInteger(String.valueOf(value)));
         } else {
-            valueNode = rootNode.textNode(String.valueOf(value));
+            //AUTOMAP: for handling double_quotes we need to avoid creating TextNode for objects
+            String valueStr = String.valueOf(value);
+            boolean isObject =  false;
+            if(valueStr.startsWith("{") && valueStr.endsWith("}"))
+                isObject = true;
+            //System.out.println("valueStr --> " + valueStr + "isObject:" + isObject);
+            //isObject = false;
+            if(isObject) {
+                //valueNode = rootNode.pojoNode(valueStr);
+                try {
+                    valueNode = (ObjectNode) new ObjectMapper().readValue(valueStr, ObjectNode.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else {
+                valueNode = rootNode.textNode(valueStr);
+            }
         }
         if (LOG.isDebugEnabled()) {
             String valueClass = value == null ? "null" : value.getClass().getName();
