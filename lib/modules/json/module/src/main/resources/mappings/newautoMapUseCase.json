@@ -1,0 +1,60 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "input",
+        "name": "test",
+        "description": "input",
+        "uri": "atlas:json:input",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "output",
+        "name": "Servicerequest",
+        "description": "output",
+        "uri": "atlas:json:output",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.customcode.ObjectAutoMapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "application",
+              "path": "/rule/content",
+              "fieldType": "COMPLEX",
+              "docId": "input"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "application",
+              "path": "/",
+              "fieldType": "COMPLEX",
+              "docId": "output"
+            }
+          ],
+          "className": "io.atlasmap.autoMap.ObjectAutoMapper"
+        }
+      ]
+    },
+    "name": "UI.0",
+    "version": "1.0.0",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

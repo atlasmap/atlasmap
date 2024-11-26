@@ -1,5 +1,6 @@
 package io.atlasmap.autoMap;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.atlasmap.api.AtlasContext;
@@ -7,6 +8,9 @@ import io.atlasmap.api.AtlasContextFactory;
 import io.atlasmap.api.AtlasException;
 import io.atlasmap.api.AtlasSession;
 import io.atlasmap.core.DefaultAtlasContextFactory;
+import io.atlasmap.json.inspect.JsonInspectionException;
+import io.atlasmap.json.inspect.JsonSchemaInspector;
+import io.atlasmap.json.v2.JsonDocument;
 
 import java.io.*;
 import java.net.URISyntaxException;
@@ -20,11 +24,24 @@ import java.util.stream.Stream;
 public class AtlasMapLASAUseCase {
 
     public static void main(String[] args) throws AtlasException, URISyntaxException, IOException {
-       // transformJSON("mappings/arrayAutoMapping.json","data/ProcessRule.json" );
-        //transformJSON("mappings/objectAutoMapping.json","data/ProcessRule.json" );
-        transformJSON("mappings/serializationMapping.json","data/serialization.json" );
+        /*String schemaJSON = new String(Files.readAllBytes(Paths.get(
+            Thread.currentThread().getContextClassLoader().getResource("data/processRuleOneOfSchema.json" ).toURI())));
 
-       // testAllUseCases();
+        try {
+            JsonDocument jsonDocument =JsonSchemaInspector.instance().inspect(schemaJSON);
+            System.out.println("---- jsonDocument ----" + new ObjectMapper().writeValueAsString(jsonDocument));
+        } catch (JsonInspectionException e) {
+            throw new RuntimeException(e);
+        }*/
+
+        //transformJSON("mappings/newautoMapUseCase.json","data/ProcessRule.json" );
+        // transformJSON("mappings/arrayAutoMapping.json","data/ProcessRule.json" );
+        //transformJSON("mappings/objectAutoMapping.json","data/ProcessRule.json" );
+        //transformJSON("mappings/arrayAutoMapping.json","data/processRuleSchema.json" );
+
+        //transformJSON("mappings/serializationMapping.json","data/serialization.json" );
+
+       testAllUseCases();
 
     }
 

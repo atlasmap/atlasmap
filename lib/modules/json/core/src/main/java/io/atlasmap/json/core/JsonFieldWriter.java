@@ -42,6 +42,8 @@ import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
+import static io.atlasmap.core.AtlasPath.PATH_SEPARATOR;
+
 /**
  */
 public class JsonFieldWriter implements AtlasFieldWriter {
@@ -92,6 +94,20 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         ContainerNode<?> parentNode = this.rootNode;
 
         SegmentContext parentSegment = null;
+
+        //AUTO-MAP::Map object field from source document as target top level object
+        if (path.getSegments(true).size() == 1) {
+            if (path.getSegments(true).get(0).getName() == "") {
+                LOG.info("targetField.getPath()"+ targetField.getPath());
+                LOG.info("PATH_SEPARATOR"+ PATH_SEPARATOR);
+                if (targetField.getPath().equals(PATH_SEPARATOR)){
+                    JsonNode valueNode = createValueNode(targetField);
+                    ((ObjectNode) parentNode).setAll((ObjectNode) valueNode);
+                    LOG.info("inside new code"+ parentNode);
+                    return;
+                }
+            }
+        }
         for (SegmentContext segment : path.getSegments(true)) {
             if (!segment.equals(lastSegment)) { // this is a parent node.
                 if (LOG.isDebugEnabled()) {
@@ -227,7 +243,11 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             if (parentNode instanceof ArrayNode) {
                 ((ArrayNode)parentNode).add(valueNode);
             } else if (parentNode instanceof ObjectNode) {
-                ((ObjectNode)parentNode).replace(cleanedSegment, valueNode);
+                /*if(null == cleanedSegment || cleanedSegment == "") {
+                    ((ObjectNode) parentNode).setAll((ObjectNode) valueNode);
+                } else {*/
+                    ((ObjectNode) parentNode).replace(cleanedSegment, valueNode);
+               // }
             } else {
                 throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
                         parentNode.getClass(), segment));
