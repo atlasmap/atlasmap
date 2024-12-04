@@ -18,6 +18,8 @@ package io.atlasmap.json.core;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.TextNode;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
@@ -39,6 +41,8 @@ import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
 import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
+
+import static io.atlasmap.core.AtlasPath.PATH_SEPARATOR;
 
 /**
  */
@@ -90,6 +94,20 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         ContainerNode<?> parentNode = this.rootNode;
 
         SegmentContext parentSegment = null;
+
+        //AUTO-MAP::Map object field from source document as target top level object
+        if (path.getSegments(true).size() == 1) {
+            if (path.getSegments(true).get(0).getName() == "") {
+                LOG.info("targetField.getPath()"+ targetField.getPath());
+                LOG.info("PATH_SEPARATOR"+ PATH_SEPARATOR);
+                if (targetField.getPath().equals(PATH_SEPARATOR)){
+                    JsonNode valueNode = createValueNode(targetField);
+                    ((ObjectNode) parentNode).setAll((ObjectNode) valueNode);
+                    LOG.info("inside new code"+ parentNode);
+                    return;
+                }
+            }
+        }
         for (SegmentContext segment : path.getSegments(true)) {
             if (!segment.equals(lastSegment)) { // this is a parent node.
                 if (LOG.isDebugEnabled()) {
@@ -139,7 +157,9 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                 parentSegment = segment;
             } else { // this is the last segment of the path, write the value
                 if (targetField.getFieldType() == FieldType.COMPLEX) {
-                    createParentNode(parentNode, parentSegment, segment, targetField);
+                    JsonNode childNode = createParentNode(parentNode, parentSegment, segment, targetField);
+                    if(childNode.isEmpty())
+                        writeValue(parentNode, parentSegment, segment, targetField);
                     return;
                 }
                 if (LOG.isDebugEnabled()) {
@@ -157,6 +177,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                     + parentNode);
         }
         JsonNode valueNode = createValueNode(field);
+        //System.out.println("Value to write: " + valueNode.asText());
         if (LOG.isDebugEnabled()) {
             LOG.debug("Value to write: " + valueNode);
         }
@@ -219,11 +240,16 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 
             // set the value in the array
             arrayChild.set(index, valueNode);
+            //System.out.println("valuenode at index" + index + arrayChild.get(index));
         } else if (field.getStatus() != FieldStatus.NOT_FOUND) {
             if (parentNode instanceof ArrayNode) {
                 ((ArrayNode)parentNode).add(valueNode);
             } else if (parentNode instanceof ObjectNode) {
-                ((ObjectNode)parentNode).replace(cleanedSegment, valueNode);
+                /*if(null == cleanedSegment || cleanedSegment == "") {
+                    ((ObjectNode) parentNode).setAll((ObjectNode) valueNode);
+                } else {*/
+                    ((ObjectNode) parentNode).replace(cleanedSegment, valueNode);
+               // }
             } else {
                 throw new AtlasException(String.format("Unknown JsonNode type '%s' for segment '%s'",
                         parentNode.getClass(), segment));
@@ -246,7 +272,10 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         if (segment.getCollectionType() != CollectionType.NONE) {
             ArrayNode arrayChild;
             if (parentNode instanceof ObjectNode) {
-                arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
+                arrayChild = (ArrayNode)getChildNode(parentNode,parentSegment,segment);
+                if (arrayChild == null) {
+                    arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
+                }
             } else if (parentNode instanceof ArrayNode) {
                 arrayChild = ((ArrayNode)parentNode).addArray();
             } else {
@@ -320,7 +349,24 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         } else if (FieldType.BIG_INTEGER.equals(type)) {
             valueNode = rootNode.numberNode(new BigInteger(String.valueOf(value)));
         } else {
-            valueNode = rootNode.textNode(String.valueOf(value));
+            //AUTOMAP: for handling double_quotes we need to avoid creating TextNode for objects
+            String valueStr = String.valueOf(value);
+            boolean isObject =  false;
+            if(valueStr.startsWith("{") && valueStr.endsWith("}"))
+                isObject = true;
+            //System.out.println("valueStr --> " + valueStr + "isObject:" + isObject);
+            //isObject = false;
+            if(isObject) {
+                //valueNode = rootNode.pojoNode(valueStr);
+                try {
+                    valueNode = (ObjectNode) new ObjectMapper().readValue(valueStr, ObjectNode.class);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+
+            } else {
+                valueNode = rootNode.textNode(valueStr);
+            }
         }
         if (LOG.isDebugEnabled()) {
             String valueClass = value == null ? "null" : value.getClass().getName();

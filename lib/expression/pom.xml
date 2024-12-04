@@ -48,6 +48,10 @@
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-model</artifactId>
+      </dependency>
   </dependencies>
 
   <build>

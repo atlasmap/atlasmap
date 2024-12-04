@@ -22,6 +22,7 @@ import io.atlasmap.api.AtlasValidationService;
 import io.atlasmap.core.DefaultAtlasCollectionHelper;
 import io.atlasmap.core.DefaultAtlasConversionService;
 import io.atlasmap.core.DefaultAtlasFieldActionService;
+import io.atlasmap.customcode.ObjectAutoMapping;
 import io.atlasmap.spi.AtlasConversionService;
 import io.atlasmap.spi.AtlasFieldActionService;
 import io.atlasmap.spi.AtlasModuleDetail;
@@ -123,6 +124,8 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
         for (BaseMapping fieldMapping : mappings) {
             if (fieldMapping.getClass().isAssignableFrom(CustomMapping.class)) {
                 validateCustomMapping((CustomMapping)fieldMapping, validations);
+            } if (fieldMapping.getClass().isAssignableFrom(ObjectAutoMapping.class)) { //AUTOMAP:as we added new mapping we had to add this check
+                validateMyCustomMapping((ObjectAutoMapping)fieldMapping, validations);
             } else if (fieldMapping.getClass().isAssignableFrom(Mapping.class)
                     && MappingType.SEPARATE.equals(((Mapping) fieldMapping).getMappingType())) {
                 validateSeparateMapping((Mapping) fieldMapping, validations);
@@ -189,6 +192,17 @@ public abstract class BaseModuleValidationService<T extends Field> implements At
             v.setStatus(ValidationStatus.ERROR);
             validations.add(v);
         }
+    }
+
+    protected void validateMyCustomMapping(CustomMapping mapping, List<Validation> validations) {
+        if (mapping.getClassName() == null || mapping.getClassName().isEmpty()) {
+            Validation v = new Validation();
+            v.setScope(ValidationScope.MAPPING);
+            v.setMessage("Class name must be specified for custom mapping");
+            v.setStatus(ValidationStatus.ERROR);
+            validations.add(v);
+        }
+        //todo: add custom validation
     }
 
     protected void validateFieldGroup(String mappingId, FieldGroup fieldGroup, FieldDirection direction, List<Validation> validations) {

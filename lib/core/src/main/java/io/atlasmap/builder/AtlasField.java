@@ -64,7 +64,8 @@ public class AtlasField {
         sourceField.setPath(path);
         session.head().setSourceField(sourceField);
         module.readSourceValue(session);
-        setRawField(sourceField);
+        //AUTOMAP:during readSourceValue() new sourcefieldgroup gets created and gets set on head, so set the src field from head as raw Value
+        setRawField(session.head().getSourceField());
         return this;
     }
 
@@ -129,7 +130,7 @@ public class AtlasField {
     public AtlasField action(String actionName, List<Object> parameters) {
         Object value = parameters != null && parameters.size() > 1 ? parameters.get(parameters.size()-1) : null;
         ActionProcessor ap = this.fieldActionService.findActionProcessor(actionName, value);
-        
+
         return this;
     }
 

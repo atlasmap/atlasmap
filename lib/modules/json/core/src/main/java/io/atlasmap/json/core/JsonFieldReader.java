@@ -17,7 +17,13 @@ package io.atlasmap.json.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.sun.org.apache.xpath.internal.objects.XObject;
+import io.atlasmap.customcode.ObjectAutoMapping;
+import io.atlasmap.json.v2.JsonComplexType;
+import io.atlasmap.v2.CustomMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,6 +92,8 @@ public class JsonFieldReader implements AtlasFieldReader {
             return fieldGroup;
         } else if (fields.size() == 1) {
             field.setValue(fields.get(0).getValue());
+            //AUTOMAP: while getting json fields in the path, type of fields is set so we can set it so that we can avoid setting type to string for objects/array in write code
+            field.setFieldType(fields.get(0).getFieldType());
             return field;
         } else {
             if (fields.size() == 0) {
@@ -103,7 +111,7 @@ public class JsonFieldReader implements AtlasFieldReader {
         }
         if (segments.size() == depth) {
             //if traversed the entire path and found value
-            if (field.getFieldType() == FieldType.COMPLEX && !node.isValueNode()) {
+            if (field.getFieldType() == FieldType.COMPLEX && !node.isValueNode() && (field instanceof FieldGroup)){
                 FieldGroup group = (FieldGroup) field;
                 populateChildFields(session, node, group, path);
                 fields.add(group);
@@ -113,6 +121,23 @@ public class JsonFieldReader implements AtlasFieldReader {
                 if (field instanceof JsonEnumField && field.getFieldType() == FieldType.COMPLEX) {
                     jsonField.setFieldType(FieldType.STRING); // enum has COMPLEX by default
                 }
+                //AUTOMAP: code to tranasform type to @class
+                CustomMapping customMapping = session.head().getCustomMapping();
+                if(customMapping != null && customMapping instanceof ObjectAutoMapping) {
+                    Map<String,String> transformFields = ((ObjectAutoMapping) customMapping).getFieldsMappingAsMap();
+                    //System.out.println("transformFields --" +  transformFields);
+                    for (Map.Entry<String,String> entry : transformFields.entrySet()) {
+                        JsonNode originalNode = node.get(entry.getKey());
+                        if(originalNode != null && node instanceof ObjectNode) {
+                            //System.out.println("transforming  node --" +  node);
+                            ((ObjectNode)node).put(entry.getValue(), originalNode.textValue());
+                            ((ObjectNode)node).remove(entry.getKey());
+                        }
+                       // System.out.println("After transformation , value of node --" +  node);
+
+                    }
+                }
+
                 Object value = handleValueNode(session, node, jsonField);
                 jsonField.setValue(value);
                 jsonField.setIndex(null); //reset index for subfields
@@ -238,7 +263,8 @@ public class JsonFieldReader implements AtlasFieldReader {
             return null;
             // we can't detect field type if it's null node
         }
-        if (valueNode.isObject()) {
+        //AUTOMAP: to support object mapping we shouldnot return null
+        /*if (valueNode.isObject()) {
             jsonField.setFieldType(FieldType.COMPLEX);
             return null;
         }
@@ -247,9 +273,9 @@ public class JsonFieldReader implements AtlasFieldReader {
                     String.format("Unexpected array node is detected: '%s'", valueNode.asText()),
                     AuditStatus.ERROR, valueNode.asText());
             return null;
-        }
+        }*/
 
-        if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
+        if (jsonField.getFieldType() != null && jsonField.getFieldType() != FieldType.COMPLEX) { // mapping is overriding the fieldType
             try {
                 return conversionService.convertType(valueNode.asText(), jsonField.getFormat(),
                         jsonField.getFieldType(), null);

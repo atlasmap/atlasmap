@@ -67,6 +67,14 @@
       <artifactId>atlas-core</artifactId>
       <classifier>tests</classifier>
     </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-api</artifactId>
+    </dependency>
   </dependencies>
 
 </project>
