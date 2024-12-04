@@ -157,7 +157,9 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                 parentSegment = segment;
             } else { // this is the last segment of the path, write the value
                 if (targetField.getFieldType() == FieldType.COMPLEX) {
-                    createParentNode(parentNode, parentSegment, segment, targetField);
+                    JsonNode childNode = createParentNode(parentNode, parentSegment, segment, targetField);
+                    if(childNode.isEmpty())
+                        writeValue(parentNode, parentSegment, segment, targetField);
                     return;
                 }
                 if (LOG.isDebugEnabled()) {
@@ -270,7 +272,10 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         if (segment.getCollectionType() != CollectionType.NONE) {
             ArrayNode arrayChild;
             if (parentNode instanceof ObjectNode) {
-                arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
+                arrayChild = (ArrayNode)getChildNode(parentNode,parentSegment,segment);
+                if (arrayChild == null) {
+                    arrayChild = ((ObjectNode)parentNode).putArray(cleanedSegment);
+                }
             } else if (parentNode instanceof ArrayNode) {
                 arrayChild = ((ArrayNode)parentNode).addArray();
             } else {

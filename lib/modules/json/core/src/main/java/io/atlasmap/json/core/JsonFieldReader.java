@@ -22,6 +22,7 @@ import java.util.Map;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import io.atlasmap.customcode.ObjectAutoMapping;
+import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.v2.CustomMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +111,7 @@ public class JsonFieldReader implements AtlasFieldReader {
         }
         if (segments.size() == depth) {
             //if traversed the entire path and found value
-            if (field.getFieldType() == FieldType.COMPLEX && !node.isValueNode()) {
+            if (field.getFieldType() == FieldType.COMPLEX && !node.isValueNode() && (field instanceof FieldGroup)){
                 FieldGroup group = (FieldGroup) field;
                 populateChildFields(session, node, group, path);
                 fields.add(group);
@@ -274,7 +275,7 @@ public class JsonFieldReader implements AtlasFieldReader {
             return null;
         }*/
 
-        if (jsonField.getFieldType() != null) { // mapping is overriding the fieldType
+        if (jsonField.getFieldType() != null && jsonField.getFieldType() != FieldType.COMPLEX) { // mapping is overriding the fieldType
             try {
                 return conversionService.convertType(valueNode.asText(), jsonField.getFormat(),
                         jsonField.getFieldType(), null);

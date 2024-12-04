@@ -17,15 +17,32 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AtlasMapLASAUseCase {
 
     public static void main(String[] args) throws AtlasException, URISyntaxException, IOException {
+
+       /* WeakHashMap<Employee, String> weakHashMap = testWeakHashMapMethod();
+        System.gc();
+        System.out.println("weakhashmap entries from method: " + weakHashMap);
+        System.gc();
+        System.out.println("weakhashmap entries after gc: " + weakHashMap);
+
+        HashMap<Employee, String> hashMap = testHashMapMethod();
+        System.out.println("hashMap entries from method: " + hashMap);
+        System.gc();
+        System.out.println("hashMap entries after gc: " + hashMap);*/
+
         /*String schemaJSON = new String(Files.readAllBytes(Paths.get(
             Thread.currentThread().getContextClassLoader().getResource("data/processRuleOneOfSchema.json" ).toURI())));
+
 
         try {
             JsonDocument jsonDocument =JsonSchemaInspector.instance().inspect(schemaJSON);
@@ -34,17 +51,55 @@ public class AtlasMapLASAUseCase {
             throw new RuntimeException(e);
         }*/
 
+
+       //transformJSON("mappings/autoMappingWithStdMapping.json","data/ProcessRule.json" );
+       //transformJSON("mappings/jsoncomplexType.json","data/ProcessRule.json" );
+
         //transformJSON("mappings/newautoMapUseCase.json","data/ProcessRule.json" );
-        // transformJSON("mappings/arrayAutoMapping.json","data/ProcessRule.json" );
+         //transformJSON("mappings/arrayAutoMapping.json","data/ProcessRule.json" );
         //transformJSON("mappings/objectAutoMapping.json","data/ProcessRule.json" );
         //transformJSON("mappings/arrayAutoMapping.json","data/processRuleSchema.json" );
-
         //transformJSON("mappings/serializationMapping.json","data/serialization.json" );
 
        testAllUseCases();
 
     }
 
+    private static HashMap<Employee, String> testHashMapMethod() {
+        HashMap<Employee, String> map = new HashMap<>();
+        map.put(new Employee(1, "one"), "one");
+        map.put(new Employee(2, "two"), "two");
+        map.put(new Employee(3, "three"), "three");
+        System.out.println("hashmap entries insidemethod : " + map);
+        return map;
+    }
+
+    private static WeakHashMap testWeakHashMapMethod() {
+        WeakHashMap<Employee, String> map = new WeakHashMap<>();
+        map.put(new Employee(1, "one"), "one");
+        map.put(new Employee(2, "two"), "two");
+        map.put(new Employee(3, "three"), "three");
+        System.gc();
+        System.out.println("weakhashmap entries : " + map);
+        return map;
+    }
+
+    static class Employee {
+
+        private int id;
+        private String name;
+
+        public Employee(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        //constructors, getters and setters
+
+        public String toString() {
+            return "[Employee{id=" + id + " ,name=" + name + "}]";
+        }
+    }
     private static void testAllUseCases() throws AtlasException, URISyntaxException, IOException {
         List<String> scenarios = Stream.of(
             // Serialization

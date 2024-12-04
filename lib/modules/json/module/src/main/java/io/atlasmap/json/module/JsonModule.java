@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ContainerNode;
+import io.atlasmap.json.v2.JsonComplexType;
 import io.atlasmap.v2.FieldType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -259,7 +260,7 @@ public class JsonModule extends BaseAtlasModule {
         if (super.isSupportedField(field)) {
             return true;
         }
-        return field instanceof JsonField || field instanceof JsonEnumField;
+        return field instanceof JsonField || field instanceof JsonEnumField || field instanceof JsonComplexType;
     }
 
     @Override
