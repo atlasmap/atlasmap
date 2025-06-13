@@ -46,6 +46,8 @@ public class DefaultAtlasCustomMappingProcessor {
             Class<?> clazz = factory.getClassLoader().loadClass(className);
             builder = AtlasMappingBuilder.class.cast(clazz.getDeclaredConstructor().newInstance());
             builder.setAtlasSession(session);
+            //AUTOMAP:we require custom mapping details inside processMapping method, so setting it in head of session similar to how other mappings are handled.
+            session.head().setCustomMapping(customMapping);
         } catch (Exception e) {
             AtlasUtil.addAudit(session, className, String.format(
                     "Custom mapping class '%s' could not be loaded: %s",

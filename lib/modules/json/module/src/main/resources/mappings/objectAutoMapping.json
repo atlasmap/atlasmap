@@ -1,0 +1,142 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "input",
+        "name": "test",
+        "description": "input",
+        "uri": "atlas:json:input",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "output",
+        "name": "Servicerequest",
+        "description": "output",
+        "uri": "atlas:json:output",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.457422",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "gid",
+              "path": "/gid",
+              "fieldType": "STRING",
+              "docId": "input",
+              "actions": [
+                {
+                  "delimiter": " ",
+                  "collapseRepeatingDelimiters": "false",
+                  "@type": "Split"
+                }
+              ]
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "ID",
+              "path": "/DeveloperPlatform;;ID",
+              "fieldType": "STRING",
+              "docId": "output"
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.282542",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "namespace",
+              "path": "/namespace",
+              "fieldType": "STRING",
+              "docId": "input",
+              "actions": [
+                {
+                  "delimiter": " ",
+                  "collapseRepeatingDelimiters": "false",
+                  "@type": "Split"
+                }
+              ]
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "Name",
+              "path": "/DeveloperPlatform;;Name",
+              "fieldType": "STRING",
+              "docId": "output"
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.customcode.ObjectAutoMapping",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "aplication",
+              "path": "/application",
+              "fieldType": "COMPLEX",
+              "docId": "input"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "application",
+              "path": "/DeveloperPlatform;;application",
+              "fieldType": "COMPLEX",
+              "docId": "output"
+            }
+          ],
+          "className": "io.atlasmap.autoMap.ObjectAutoMapper"
+        },
+        {
+          "jsonType": "io.atlasmap.customcode.ObjectAutoMapping",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [],
+            "field": [{
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "Connectors",
+              "path": "/rule/content/Connectors<>",
+              "fieldType": "COMPLEX",
+              "docId": "input"
+            }]
+          },
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "Connectors",
+              "path": "/DeveloperPlatform;;Connectors<>",
+              "fieldType": "COMPLEX",
+              "docId": "output"
+            }
+          ],
+          "className": "io.atlasmap.autoMap.ObjectAutoMapper"
+        }
+      ]
+    },
+    "name": "UI.0",
+    "version": "1.0.0",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

@@ -1,0 +1,431 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Generated schema for Root",
+  "type": "object",
+  "properties": {
+    "rule": {
+      "type": "object",
+      "properties": {
+        "updatedBy": {
+          "type": "string"
+        },
+        "updatedOn": {
+          "type": "number"
+        },
+        "origin": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string"
+        },
+        "content": {
+          "type": "object",
+          "properties": {
+            "Connectors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "ID": {
+                    "type": "string"
+                  },
+                  "To": {
+                    "type": "string"
+                  },
+                  "Type": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ID",
+                  "To",
+                  "Type"
+                ]
+              }
+            },
+            "Type": {
+              "type": "string"
+            },
+            "Description": {
+              "type": "string"
+            },
+            "Reusability": {
+              "type": "string"
+            },
+            "SchemaVersion": {
+              "type": "string"
+            },
+            "AppliesTo": {
+              "type": "object",
+              "properties": {
+                "ReferenceID": {
+                  "type": "string"
+                },
+                "Namespace": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "ReferenceID",
+                "Namespace"
+              ]
+            },
+            "RuleResolutionID": {
+              "type": "string"
+            },
+            "Nodes": {
+              "type": "object",
+              "properties": {
+                "ID": {
+                  "type": "string"
+                },
+                "Type": {
+                  "type": "string"
+                },
+                "ToConnectors": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ID": {
+                        "type": "string"
+                      },
+                      "Type": {
+                        "type": "string"
+                      },
+                      "Name": {
+                        "type": "string"
+                      },
+                      "Value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "ID",
+                      "Type"
+                    ]
+                  }
+                },
+                "Name": {
+                  "type": "string"
+                }
+
+              },
+              "oneOf" : [
+
+
+                {"Action": {
+                  "type": "object",
+                  "properties": {
+                    "ReferenceID": {
+                      "type": "string"
+                    },
+                    "Namespace": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ReferenceID",
+                    "Namespace"
+                  ]
+                }},
+                {"Routing": {
+                  "type": "object",
+                  "properties": {
+                    "RoutingType": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "RoutingType"
+                  ]
+                }},
+                {"Automation": {
+                  "type": "object",
+                  "properties": {
+                    "CallReference": {
+                      "type": "object",
+                      "properties": {
+                        "ReferenceID": {
+                          "type": "string"
+                        },
+                        "Namespace": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ReferenceID",
+                        "Namespace"
+                      ]
+                    },
+                    "CallType": {
+                      "type": "string"
+                    },
+                    "CallInputs": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "ParameterName": {
+                            "type": "string"
+                          },
+                          "Source": {
+                            "type": "object",
+                            "properties": {
+                              "Type": {
+                                "type": "string"
+                              },
+                              "RuleType": {
+                                "type": "string"
+                              },
+                              "ReferencedRule": {
+                                "type": "object",
+                                "properties": {
+                                  "ReferenceID": {
+                                    "type": "string"
+                                  },
+                                  "ReferenceScope": {
+                                    "type": "object",
+                                    "properties": {
+                                      "ReferenceID": {
+                                        "type": "string"
+                                      },
+                                      "Namespace": {
+                                        "type": "string"
+                                      }
+                                    },
+                                    "required": [
+                                      "ReferenceID",
+                                      "Namespace"
+                                    ]
+                                  },
+                                  "Namespace": {
+                                    "type": "string"
+                                  },
+                                  "Type": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "ReferenceID",
+                                  "ReferenceScope",
+                                  "Namespace",
+                                  "Type"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "Type",
+                              "RuleType",
+                              "ReferencedRule"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "ParameterName",
+                          "Source"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "CallReference",
+                    "CallType",
+                    "CallInputs"
+                  ]
+                }},
+                {"WaitConfiguration": {
+                  "type": "object",
+                  "properties": {
+                    "WaitForType": {
+                      "type": "string"
+                    },
+                    "WaitOnReference": {
+                      "type": "object",
+                      "properties": {
+                        "ReferenceID": {
+                          "type": "string"
+                        },
+                        "Namespace": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "ReferenceID",
+                        "Namespace"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "WaitForType",
+                    "WaitOnReference"
+                  ]
+                }}
+              ]
+            },
+            "Namespace": {
+              "type": "string"
+            },
+            "Name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Connectors",
+            "Type",
+            "Description",
+            "Reusability",
+            "SchemaVersion",
+            "AppliesTo",
+            "RuleResolutionID",
+            "Nodes",
+            "Namespace",
+            "Name"
+          ]
+        }
+      },
+      "required": [
+        "updatedBy",
+        "updatedOn",
+        "origin",
+        "ID",
+        "content"
+      ]
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "application": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ID": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "isolationID": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "ID",
+        "version",
+        "isolationID",
+        "namespace"
+      ]
+    },
+    "gid": {
+      "type": "string"
+    },
+    "qualifier": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "object",
+          "properties": {
+            "qualifiedName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "qualifiedName"
+          ]
+        },
+        "appliesTo": {
+          "type": "object",
+          "properties": {
+            "qualifiedName": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "qualifiedName"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "appliesTo"
+      ]
+    },
+    "_links": {
+      "type": "object",
+      "properties": {
+        "saveAs": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "href"
+          ]
+        },
+        "save": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "href"
+          ]
+        },
+        "override": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            },
+            "specializeByApp": {
+              "type": "boolean"
+            },
+            "specializeByClass": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "href",
+            "specializeByApp",
+            "specializeByClass"
+          ]
+        },
+        "delete": {
+          "type": "object",
+          "properties": {
+            "href": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "href"
+          ]
+        }
+      },
+      "required": [
+        "saveAs",
+        "save",
+        "override",
+        "delete"
+      ]
+    }
+  },
+  "required": [
+    "rule",
+    "namespace",
+    "application",
+    "gid",
+    "qualifier",
+    "_links"
+  ]
+}

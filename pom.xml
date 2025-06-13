@@ -65,25 +65,27 @@
     </repository>
   </distributionManagement>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
-    <license-maven-plugin.version>4.1</license-maven-plugin.version>
-    <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
-    <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
-    <maven-deploy-plugin.version>3.1.0</maven-deploy-plugin.version>
-    <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
-    <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
-    <!-- DO NOT CHANGE - 3.1.0 changed aggregate behavior drastically, no idea how to generate single aggregated one -->
-    <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
-    <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-    <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
-    <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-    <node.version>v14.20.0</node.version>
-    <npm.version>6.14.17</npm.version>
-    <yarn.version>v1.22.19</yarn.version>
-    <checkstyle.skip>false</checkstyle.skip>
-  </properties>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <frontend-maven-plugin.version>1.12.1</frontend-maven-plugin.version>
+        <license-maven-plugin.version>4.1</license-maven-plugin.version>
+        <maven-assembly-plugin.version>3.4.2</maven-assembly-plugin.version>
+        <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
+        <maven-deploy-plugin.version>3.1.0</maven-deploy-plugin.version>
+        <maven-gpg-plugin.version>3.0.1</maven-gpg-plugin.version>
+        <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
+        <!-- DO NOT CHANGE - 3.1.0 changed aggregate behavior drastically, no idea how to generate single aggregated one -->
+        <maven-javadoc-plugin.version>3.4.1</maven-javadoc-plugin.version>
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+        <node.version>v14.20.0</node.version>
+        <npm.version>6.14.17</npm.version>
+        <yarn.version>v1.22.19</yarn.version>
+        <checkstyle.skip>false</checkstyle.skip>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
   <modules>
     <module>parent</module>

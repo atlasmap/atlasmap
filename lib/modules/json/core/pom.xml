@@ -23,7 +23,19 @@
     <version>2.6.0-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <modelVersion>4.0.0</modelVersion>
 
   <artifactId>atlas-json-core</artifactId>
   <packaging>bundle</packaging>
@@ -80,5 +92,9 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+      <dependency>
+          <groupId>io.atlasmap</groupId>
+          <artifactId>atlas-json-model</artifactId>
+      </dependency>
   </dependencies>
 </project>

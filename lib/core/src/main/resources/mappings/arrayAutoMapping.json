@@ -1,0 +1,125 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "input",
+        "name": "test",
+        "description": "input",
+        "uri": "atlas:json:input",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "output",
+        "name": "Servicerequest",
+        "description": "output",
+        "uri": "atlas:json:output",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.457422",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "gid",
+              "path": "/gid",
+              "fieldType": "STRING",
+              "docId": "input",
+              "actions": [
+                {
+                  "delimiter": " ",
+                  "collapseRepeatingDelimiters": "false",
+                  "@type": "Split"
+                }
+              ]
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "ID",
+              "path": "/<>/DeveloperPlatform;;ID",
+              "fieldType": "STRING",
+              "docId": "output"
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.282542",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "namespace",
+              "path": "/namespace",
+              "fieldType": "STRING",
+              "docId": "input",
+              "actions": [
+                {
+                  "delimiter": " ",
+                  "collapseRepeatingDelimiters": "false",
+                  "@type": "Split"
+                }
+              ]
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "Name",
+              "path": "/<>/DeveloperPlatform;;Name",
+              "fieldType": "STRING",
+              "docId": "output"
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.154884",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "name",
+              "path": "/application/name",
+              "fieldType": "STRING",
+              "docId": "input",
+              "actions": [
+                {
+                  "delimiter": " ",
+                  "collapseRepeatingDelimiters": "false",
+                  "@type": "Split"
+                }
+              ]
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "ApplicationName",
+              "path": "/<>/DeveloperPlatform;;ApplicationName",
+              "fieldType": "STRING",
+              "docId": "output"
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.0",
+    "version": "1.0.0",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

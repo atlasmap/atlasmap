@@ -245,12 +245,16 @@ public class ADMArchiveHandler {
     }
 
     public AtlasMapping getMappingDefinition() {
+        //System.out.println("------ getMappingDefinition() -----, is mappingDefinitionBytes == null ? " + mappingDefinitionBytes == null );
+        //new Throwable().printStackTrace();
         if (this.mappingDefinition == null && this.mappingDefinitionBytes != null) {
             try {
                 this.mappingDefinition = jsonMapper.readValue(this.mappingDefinitionBytes,
                     AtlasMapping.class);
             } catch (Exception e) {
-                LOG.warn("Invalid serialized mapping definition content detected, discarding");
+                LOG.error("Invalid serialized mapping definition content detected, discarding");
+                System.out.println("getMappingDefinition errorrrrrr");
+                e.printStackTrace();
                 this.mappingDefinitionBytes = null;
                 if (LOG.isDebugEnabled()) {
                     LOG.warn("", e);

@@ -26,12 +26,12 @@ The AtlasMap is a data mapping solution with interactive web based user interfac
 
 1. Download AtlasMap standalone jar
 ```
-$ wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/${VERSION}/atlasmap-standalone-${VERSION}.jar
+$ wget https://repo1.maven.org/maven2/io/atlasmap/atlasmap-standalone/2.5.2/atlasmap-standalone-2.5.2.jar
 ```
 
 2. Run
 ```
-$ java -jar atlasmap-standalone-${VERSION}.jar
+$ java -jar atlasmap-standalone-2.5.2.jar
 ```
 
 Then AtlasMap Data Mapper UI is available at http://127.0.0.1:8585/ by default.

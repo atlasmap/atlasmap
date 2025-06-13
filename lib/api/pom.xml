@@ -26,7 +26,19 @@
 
   <artifactId>atlas-api</artifactId>
   <name>Atlas :: API</name>
-  <packaging>bundle</packaging>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <packaging>bundle</packaging>
 
   <properties>
     <osgi.export.pkg>io.atlasmap.api,io.atlasmap.mxbean,io.atlasmap.spi</osgi.export.pkg>

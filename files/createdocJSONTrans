@@ -1,0 +1,10 @@
+{
+  "title": "awesome post",
+  "body": "lorem ipsum",
+  "date": "2024-08-20",
+  "tags": [
+    "blog",
+    "memo"
+  ],
+  "isDraft": false
+}

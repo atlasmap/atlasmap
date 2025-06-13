@@ -1,0 +1,86 @@
+{
+  "AtlasMapping": {
+    "jsonType": "io.atlasmap.v2.AtlasMapping",
+    "dataSource": [
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "input",
+        "name": "test",
+        "description": "input",
+        "uri": "atlas:json:input",
+        "dataSourceType": "SOURCE"
+      },
+      {
+        "jsonType": "io.atlasmap.json.v2.JsonDataSource",
+        "id": "output",
+        "name": "Servicerequest",
+        "description": "output",
+        "uri": "atlas:json:output",
+        "dataSourceType": "TARGET"
+      }
+    ],
+    "mappings": {
+      "mapping": [
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.457426",
+          "inputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonComplexType",
+              "name": "aplication",
+              "path": "/application",
+              "fieldType": "COMPLEX",
+              "docId": "input"
+            }
+          ],
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonComplexType",
+              "name": "application",
+              "path": "/DeveloperPlatform;;application",
+              "fieldType": "COMPLEX",
+              "docId": "output"
+            }
+          ]
+        },
+        {
+          "jsonType": "io.atlasmap.v2.Mapping",
+          "id": "mapping.154884",
+          "inputFieldGroup": {
+            "jsonType": "io.atlasmap.v2.FieldGroup",
+            "actions": [],
+            "field": [
+              {
+                "jsonType": "io.atlasmap.json.v2.JsonField",
+                "name": "Nodes",
+                "path": "/rule/content/Nodes<>",
+                "fieldType": "COMPLEX",
+                "docId": "input"
+              }
+            ]
+          },
+          "outputField": [
+            {
+              "jsonType": "io.atlasmap.json.v2.JsonField",
+              "name": "nodes",
+              "path": "/DeveloperPlatform;;Nodes<>",
+              "fieldType": "COMPLEX",
+              "docId": "output"
+            }
+          ]
+        }
+      ]
+    },
+    "name": "UI.0",
+    "version": "1.0.0",
+    "lookupTables": {
+      "lookupTable": []
+    },
+    "constants": {
+      "constant": []
+    },
+    "properties": {
+      "property": []
+    }
+  }
+}

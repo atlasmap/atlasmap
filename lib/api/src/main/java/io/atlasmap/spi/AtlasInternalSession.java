@@ -18,11 +18,7 @@ package io.atlasmap.spi;
 import java.util.List;
 
 import io.atlasmap.api.AtlasSession;
-import io.atlasmap.v2.Audit;
-import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.LookupTable;
-import io.atlasmap.v2.Mapping;
+import io.atlasmap.v2.*;
 
 public interface AtlasInternalSession extends AtlasSession {
 
@@ -72,6 +68,9 @@ public interface AtlasInternalSession extends AtlasSession {
 
         List<Audit> getAudits();
 
+        //AUTOMAP:required to get the custom mapping in extension of DefaultAtlasMappingBuilder
+        Head setCustomMapping(CustomMapping customMapping);
+        CustomMapping getCustomMapping();
     }
 
 }

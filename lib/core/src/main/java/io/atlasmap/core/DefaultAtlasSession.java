@@ -31,14 +31,7 @@ import io.atlasmap.spi.AtlasFieldWriter;
 import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.spi.AtlasModule;
 import io.atlasmap.spi.AtlasPropertyStrategy;
-import io.atlasmap.v2.AtlasMapping;
-import io.atlasmap.v2.Audit;
-import io.atlasmap.v2.AuditStatus;
-import io.atlasmap.v2.Audits;
-import io.atlasmap.v2.Field;
-import io.atlasmap.v2.LookupTable;
-import io.atlasmap.v2.Mapping;
-import io.atlasmap.v2.Validations;
+import io.atlasmap.v2.*;
 
 public class DefaultAtlasSession implements AtlasInternalSession {
 
@@ -400,6 +393,7 @@ public class DefaultAtlasSession implements AtlasInternalSession {
     private class HeadImpl implements Head {
         private DefaultAtlasSession session;
         private Mapping mapping;
+        private CustomMapping customMapping;
         private LookupTable lookupTable;
         private Field sourceField;
         private Field targetField;
@@ -485,6 +479,17 @@ public class DefaultAtlasSession implements AtlasInternalSession {
         @Override
         public List<Audit> getAudits() {
             return this.audits;
+        }
+
+        @Override
+        public Head setCustomMapping(CustomMapping customMapping) {
+            this.customMapping = customMapping;
+            return this;
+        }
+
+        @Override
+        public CustomMapping getCustomMapping() {
+            return this.customMapping;
         }
 
     }
