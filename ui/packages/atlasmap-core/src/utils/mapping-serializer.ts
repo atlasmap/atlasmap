@@ -487,16 +487,10 @@ export class MappingSerializer {
     );
     MappingUtil.updateMappedFieldsFromDocuments(mapping, cfg, true);
 
-    if (
-      mappingJson.inputFieldGroup.actions &&
-      mappingJson.inputFieldGroup.actions[0]?.delimiter
-    ) {
-      mapping.transition.delimiter = TransitionModel.delimiterToModel(
-        mappingJson.inputFieldGroup.actions[0]?.delimiter
-      )?.delimiter;
+    if (mappingJson.inputFieldGroup.actions) {
       // Check for an InputFieldGroup containing a many-to-one action
       const firstAction = mappingJson.inputFieldGroup.actions[0];
-      if (firstAction) {
+      if (firstAction && firstAction['@type']) {
         // @deprecated Support legacy ADM files that have transformation-action-based expressions.
         if (firstAction.Expression || firstAction['@type'] === 'Expression') {
           mapping.transition.enableExpression = true;
@@ -515,6 +509,13 @@ export class MappingSerializer {
               parsedAction.name,
               Multiplicity.MANY_TO_ONE
             )!;
+          parsedAction.definition.name = firstAction['@type'];
+
+          // If the action has a "Delimiter" field, for example: Concatenate
+          if (firstAction.delimiter) {
+            mapping.transition.delimiter = TransitionModel.delimiterToModel(firstAction.delimiter)?.delimiter;
+          }
+          
           mapping.transition.transitionFieldAction = parsedAction;
         }
       }
