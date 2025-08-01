@@ -219,7 +219,7 @@ public class JsonFieldReader implements AtlasFieldReader {
             itemPath.setCollectionIndex(segments.size() - 1, i);
             if (field instanceof FieldGroup) {
                 FieldGroup itemGroup = AtlasJsonModelFactory.cloneFieldGroup((FieldGroup)field);
-                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size(), i);
+                AtlasPath.setCollectionIndexRecursively(itemGroup, segments.size() - 1, i);
                 populateChildFields(session, arrayNode.get(i), itemGroup, itemPath);
                 group.getField().add(itemGroup);
             } else {
