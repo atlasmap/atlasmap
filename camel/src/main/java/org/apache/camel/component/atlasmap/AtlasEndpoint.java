@@ -31,7 +31,7 @@ import org.apache.camel.Message;
 import org.apache.camel.component.ResourceEndpoint;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
-import org.apache.camel.util.MessageHelper;
+import org.apache.camel.support.MessageHelper;
 import org.apache.camel.util.ObjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +47,7 @@ import io.atlasmap.v2.DataSourceType;
 /**
  * Transforms the message using an AtlasMap transformation.
  */
-@UriEndpoint(firstVersion = "2.19.0", scheme = "atlas", title = "AtlasMap", syntax = "atlas:resourceUri", producerOnly = true, label = "transformation")
+@UriEndpoint(firstVersion = "2.19.0", scheme = "atlas", title = "AtlasMap", syntax = "atlas:resourceUri", producerOnly = true)
 public class AtlasEndpoint extends ResourceEndpoint {
 
     public static final String CONTENT_TYPE_JSON = "application/json";
@@ -343,10 +343,7 @@ public class AtlasEndpoint extends ResourceEndpoint {
     }
 
     private void populateTargetDocuments(AtlasSession session, Exchange exchange) {
-        Message outMessage = exchange.getOut();
-        outMessage.setHeaders(exchange.getIn().getHeaders());
-        outMessage.setAttachments(exchange.getIn().getAttachments());
-
+        Message outMessage = exchange.getMessage();
         if (session.getMapping().getDataSource() == null) {
             return;
         }
