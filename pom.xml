@@ -94,7 +94,7 @@
     <module>ui</module>
     <module>standalone</module>
     <module>coverage-report</module>
-<!--    <module>examples</module>-->
+    <module>examples</module>
     <module>docs</module>
   </modules>
 

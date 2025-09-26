@@ -1,0 +1,83 @@
+{
+  "AtlasMapping" : {
+    "jsonType" : "io.atlasmap.v2.AtlasMapping",
+    "dataSource" : [ {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "JsonSource",
+      "uri" : "atlas:json:JsonSource",
+      "dataSourceType" : "SOURCE"
+    }, {
+      "jsonType" : "io.atlasmap.v2.DataSource",
+      "id" : "JsonTarget",
+      "uri" : "atlas:json:JsonTarget",
+      "dataSourceType" : "TARGET"
+    } ],
+    "mappings" : {
+      "mapping" : [ {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id": "mapping.459765",
+        "inputField" : [ {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "name": "id",
+          "path": "/<>/id",
+          "fieldType": "INTEGER",
+          "docId": "JsonSource",
+          "userCreated": false
+        } ],
+        "outputField" : [ {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "name": "id",
+          "path": "/body<>/id",
+          "fieldType": "INTEGER",
+          "docId": "JsonTarget",
+          "userCreated": false
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id": "mapping.352061",
+        "inputField" : [ {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "name": "completed",
+          "path": "/<>/completed",
+          "fieldType": "INTEGER",
+          "docId": "JsonSource",
+          "userCreated": false
+        } ],
+        "outputField" : [ {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "name": "completed",
+          "path": "/body<>/completed",
+          "fieldType": "INTEGER",
+          "docId": "JsonTarget",
+          "userCreated": false
+        } ]
+      }, {
+        "jsonType" : "io.atlasmap.v2.Mapping",
+        "id": "mapping.252216",
+        "inputField" : [ {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "name": "task",
+          "path": "/<>/task",
+          "fieldType": "STRING",
+          "docId": "JsonSource",
+          "userCreated": false
+        } ],
+        "outputField" : [ {
+          "jsonType": "io.atlasmap.json.v2.JsonField",
+          "name": "completed",
+          "path": "/body<>/task",
+          "fieldType": "STRING",
+          "docId": "JsonTarget",
+          "userCreated": false
+        } ]
+      } ]
+    },
+    "lookupTables" : {
+      "lookupTable" : [ ]
+    },
+    "properties" : {
+      "property" : [ ]
+    },
+    "name" : "mockMapping"
+  }
+}

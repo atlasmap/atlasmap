@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+        <route>
+            <from uri="direct:start-old" />
+            <to uri="atlas:org/apache/camel/component/atlasmap/issue/atlasmapping-2552-old.json" />
+            <to uri="mock:result-old" />
+        </route>
+        <route>
+            <from uri="direct:start-new" />
+            <to uri="atlas:org/apache/camel/component/atlasmap/issue/atlasmapping-2552-new.json" />
+            <to uri="mock:result-new" />
+        </route>
+    </camelContext>
+
+</beans>
