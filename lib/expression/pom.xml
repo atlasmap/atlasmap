@@ -64,12 +64,6 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <excludePackageNames>io.atlasmap.expression.parser</excludePackageNames>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 

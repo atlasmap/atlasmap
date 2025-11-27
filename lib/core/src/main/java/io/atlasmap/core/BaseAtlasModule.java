@@ -109,7 +109,6 @@ public abstract class BaseAtlasModule implements AtlasModule, AtlasModuleMXBean 
             }
         }
         targetField.setValue(targetValue);
-        targetField.setStatus(sourceField.getStatus());
 
         LookupTable lookupTable = session.head().getLookupTable();
         if (lookupTable != null) {

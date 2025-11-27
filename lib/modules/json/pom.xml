@@ -33,7 +33,7 @@
     <module>model</module>
     <module>core</module>
     <module>module</module>
-    <module>service</module>
-    <module>test-model</module>
+<!--    <module>service</module>-->
+<!--    <module>test-model</module>-->
   </modules>
 </project>

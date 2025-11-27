@@ -37,7 +37,6 @@ import io.atlasmap.spi.AtlasInternalSession;
 import io.atlasmap.v2.AtlasModelFactory;
 import io.atlasmap.v2.CollectionType;
 import io.atlasmap.v2.Field;
-import io.atlasmap.v2.FieldStatus;
 import io.atlasmap.v2.FieldType;
 
 /**
@@ -108,7 +107,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                     childNode = getChildNode(parentNode, parentSegment, segment);
                 }
                 if (childNode == null) {
-                    childNode = createParentNode(parentNode, parentSegment, segment, targetField);
+                    childNode = createParentNode(parentNode, parentSegment, segment);
                 } else if (childNode instanceof ArrayNode) {
                     Integer index = segment.getCollectionIndex();
                     if (index == null) {
@@ -139,7 +138,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
                 parentSegment = segment;
             } else { // this is the last segment of the path, write the value
                 if (targetField.getFieldType() == FieldType.COMPLEX) {
-                    createParentNode(parentNode, parentSegment, segment, targetField);
+                    createParentNode(parentNode, parentSegment, segment);
                     return;
                 }
                 if (LOG.isDebugEnabled()) {
@@ -219,7 +218,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
 
             // set the value in the array
             arrayChild.set(index, valueNode);
-        } else if (field.getStatus() != FieldStatus.NOT_FOUND) {
+        } else {
             if (parentNode instanceof ArrayNode) {
                 ((ArrayNode)parentNode).add(valueNode);
             } else if (parentNode instanceof ObjectNode) {
@@ -235,7 +234,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
         }
     }
 
-    private ObjectNode createParentNode(ContainerNode<?> parentNode, SegmentContext parentSegment, SegmentContext segment, Field targetField)
+    private ObjectNode createParentNode(ContainerNode<?> parentNode, SegmentContext parentSegment, SegmentContext segment)
             throws AtlasException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Creating parent node '" + segment + "' under previous parent '" + parentSegment + "' ("
@@ -278,9 +277,7 @@ public class JsonFieldWriter implements AtlasFieldWriter {
             childNode = (ObjectNode) arrayChild.get(index);
         } else {
             if (parentNode instanceof ObjectNode) {
-                if (targetField.getStatus() != FieldStatus.NOT_FOUND) {
-                    childNode = ((ObjectNode) parentNode).putObject(cleanedSegment);
-                }
+                childNode = ((ObjectNode)parentNode).putObject(cleanedSegment);
             } else if (parentNode instanceof ArrayNode) {
                 childNode = ((ArrayNode) parentNode).addObject();
             } else {

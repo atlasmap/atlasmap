@@ -46,7 +46,6 @@ import io.atlasmap.core.CompoundClassLoader;
 
 public class AtlasLibraryLoader extends CompoundClassLoader {
     private static final Logger LOG = LoggerFactory.getLogger(AtlasLibraryLoader.class);
-
     private File saveDir;
     private URLClassLoader urlClassLoader;
     private Set<ClassLoader> alternativeLoaders = new HashSet<>();
@@ -64,10 +63,10 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         reload();
     }
 
-    public void addJarFromStream(InputStream is) throws Exception {
-        File dest = new File(saveDir + File.separator + UUID.randomUUID().toString() + ".jar");
+    public void addJarFromStream(InputStream is) throws IOException {
+        File dest = new File(saveDir + File.separator + UUID.randomUUID() + ".jar");
         while (dest.exists()) {
-            dest = new File(saveDir + File.separator + UUID.randomUUID().toString() + ".jar");
+            dest = new File(saveDir + File.separator + UUID.randomUUID() + ".jar");
         }
         FileOutputStream buffer = new FileOutputStream(dest);
         int nRead;
@@ -103,9 +102,9 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         for (File f : saveDir.listFiles()) {
             try {
                 Files.delete(f.toPath());
-             } catch (Exception e) {
+            } catch (Exception e) {
                 LOG.warn("Failed to remove jar file: '{}'", e.getMessage());
-            };
+            }
         }
         reload();
     }
@@ -119,8 +118,8 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         }
         URL candidateURLs[] = this.urlClassLoader.getURLs();
 
-        for (int i=0; i < candidateURLs.length; i++) {
-            try (ZipInputStream zip = new ZipInputStream(new FileInputStream(candidateURLs[i].toURI().getPath()))) {
+        for (URL candidateURL : candidateURLs) {
+            try (ZipInputStream zip = new ZipInputStream(new FileInputStream(candidateURL.toURI().getPath()))) {
                 for (ZipEntry entry = zip.getNextEntry(); entry != null; entry = zip.getNextEntry()) {
                     if (!entry.isDirectory() && entry.getName().endsWith(classSuffix)) {
                         String className = entry.getName().replace('/', '.');
@@ -129,7 +128,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
                 }
             } catch (IOException | URISyntaxException e) {
                 throw new AtlasException(String.format("URL library '%s' access error: %s",
-                    candidateURLs[i].getPath(), e.getMessage()));
+                        candidateURL.getPath(), e.getMessage()));
             }
         }
         return classNames;
@@ -158,7 +157,6 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
                 }
             } catch (Exception e) {
                 LOG.debug("", e);
-                continue;
             }
         }
         return answer;
@@ -170,7 +168,6 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         if (!saveDir.exists() || !saveDir.isDirectory() || files == null) {
             return;
         }
-
         for (File f : files) {
             try {
                 if (!f.isFile()) {
@@ -187,7 +184,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Reloading library jars: {}", urls);
         }
-        this.urlClassLoader = urls.size() == 0 ? null
+        this.urlClassLoader = urls.isEmpty() ? null
          : new URLClassLoader(urls.toArray(new URL[0]), AtlasLibraryLoader.class.getClassLoader());
         listeners.forEach(l -> l.onUpdate(this));
     }
@@ -201,9 +198,7 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
             } catch (NoClassDefFoundError ncdfe) {
                 throw ncdfe;
             } catch (Throwable t) {
-                LOG.debug("Class not found: [ClassLoader:{}, Class name:{}, message:{}]",
-                    cl, name, t.getMessage(), t);
-                continue;
+                LOG.debug("Class not found: [ClassLoader:{}, Class name:{}, message:{}]", cl, name, t.getMessage(), t);
             }
         }
         return super.loadClass(name);
@@ -287,6 +282,6 @@ public class AtlasLibraryLoader extends CompoundClassLoader {
     }
 
     public interface AtlasLibraryLoaderListener {
-        public void onUpdate(AtlasLibraryLoader loader);
+        void onUpdate(AtlasLibraryLoader loader);
     }
 }

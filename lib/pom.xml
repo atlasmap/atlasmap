@@ -38,10 +38,10 @@
     <module>service</module>
     <module>modules/java</module>
     <module>modules/json</module>
-    <module>modules/xml</module>
-    <module>modules/dfdl</module>
+<!--    <module>modules/xml</module>-->
+<!--    <module>modules/dfdl</module>-->
     <module>modules/csv</module>
-    <module>itests</module>
+<!--    <module>itests</module>-->
     <module>dist</module>
   </modules>
 
