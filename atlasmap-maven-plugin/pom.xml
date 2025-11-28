@@ -34,23 +34,42 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-java-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-json-core</artifactId>
+    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>io.atlasmap</groupId>-->
+<!--      <artifactId>atlas-xml-core</artifactId>-->
+<!--    </dependency>-->
+    <dependency>
+      <groupId>io.atlasmap</groupId>
+      <artifactId>atlas-model</artifactId>
+    </dependency>
 
+<!--    <dependency>-->
+<!--      <groupId>io.atlasmap</groupId>-->
+<!--      <artifactId>atlas-java-service</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.atlasmap</groupId>-->
+<!--      <artifactId>atlas-json-service</artifactId>-->
+<!--    </dependency>-->
+<!--    <dependency>-->
+<!--      <groupId>io.atlasmap</groupId>-->
+<!--      <artifactId>atlas-xml-service</artifactId>-->
+<!--    </dependency>-->
     <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-java-service</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-json-service</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.atlasmap</groupId>
-      <artifactId>atlas-xml-service</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>

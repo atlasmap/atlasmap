@@ -39,8 +39,6 @@ import io.atlasmap.java.v2.JavaClass;
 import io.atlasmap.json.inspect.JsonInspectionService;
 import io.atlasmap.json.v2.JsonDocument;
 import io.atlasmap.v2.CollectionType;
-import io.atlasmap.xml.inspect.XmlInspectionService;
-import io.atlasmap.xml.v2.XmlDocument;
 
 @Mojo(name = "generate-inspections")
 public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
@@ -247,15 +245,15 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
                         // schema inspection by default
                         generateJsonSchemaInspection(child.getAbsolutePath());
                     }
-                } else if (child.getName().toLowerCase().endsWith(".xsd")) {
-                    generateXmlSchemaInspection(child.getAbsolutePath());
-                } else if (child.getName().toLowerCase().endsWith(".xml")) {
-                    if (inspection.inspectionType == InspectionType.SCHEMA) {
-                        // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
-                        generateXmlSchemaInspection(child.getAbsolutePath());
-                    } else {
-                        generateXmlInstanceInspection(child.getAbsolutePath());
-                    }
+//                } else if (child.getName().toLowerCase().endsWith(".xsd")) {
+//                    generateXmlSchemaInspection(child.getAbsolutePath());
+//                } else if (child.getName().toLowerCase().endsWith(".xml")) {
+//                    if (inspection.inspectionType == InspectionType.SCHEMA) {
+//                        // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
+//                        generateXmlSchemaInspection(child.getAbsolutePath());
+//                    } else {
+//                        generateXmlInstanceInspection(child.getAbsolutePath());
+//                    }
                 } else {
                     getLog().warn(String.format("Ignoring unsupported file type '%s'", child.getAbsolutePath()));
                     continue;
@@ -271,15 +269,15 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
                 // schema inspection by default
                 generateJsonSchemaInspection(file.getAbsolutePath());
             }
-        } else if (file.getName().toLowerCase().endsWith(".xsd")) {
-            generateXmlSchemaInspection(file.getAbsolutePath());
-        } else if (file.getName().toLowerCase().endsWith(".xml")) {
-            if (inspection.inspectionType == InspectionType.SCHEMA) {
-                // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
-                generateXmlSchemaInspection(file.getAbsolutePath());
-            } else {
-                generateXmlInstanceInspection(file.getAbsolutePath());
-            }
+//        } else if (file.getName().toLowerCase().endsWith(".xsd")) {
+//            generateXmlSchemaInspection(file.getAbsolutePath());
+//        } else if (file.getName().toLowerCase().endsWith(".xml")) {
+//            if (inspection.inspectionType == InspectionType.SCHEMA) {
+//                // In case it's SchemaSet - XML contains XSDs. InspectionType.SCHEMA have to be specified.
+//                generateXmlSchemaInspection(file.getAbsolutePath());
+//            } else {
+//                generateXmlInstanceInspection(file.getAbsolutePath());
+//            }
         } else {
             throw new MojoFailureException(String.format("Inspection type '%s' is not supported", inspection.getClass().getName()));
         }
@@ -311,27 +309,27 @@ public class GenerateInspectionsMojo extends AbstractAtlasMapMojo {
         }
     }
 
-    private void generateXmlSchemaInspection(String fileName) throws MojoFailureException {
-        try {
-            File f = new File(fileName);
-            XmlDocument d = new XmlInspectionService().inspectSchema(f);
-            String outputName = f.getName().substring(0, f.getName().length() - 4);
-            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
-        } catch (Exception e) {
-            throw new MojoFailureException(e.getMessage(), e);
-        }
-    }
-
-    private void generateXmlInstanceInspection(String fileName) throws MojoFailureException {
-        try {
-            File f = new File(fileName);
-            XmlDocument d = new XmlInspectionService().inspectXmlDocument(f);
-            String outputName = f.getName().substring(0, f.getName().length() - 4);
-            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
-        } catch (Exception e) {
-            throw new MojoFailureException(e.getMessage(), e);
-        }
-    }
+//    private void generateXmlSchemaInspection(String fileName) throws MojoFailureException {
+//        try {
+//            File f = new File(fileName);
+//            XmlDocument d = new XmlInspectionService().inspectSchema(f);
+//            String outputName = f.getName().substring(0, f.getName().length() - 4);
+//            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
+//        } catch (Exception e) {
+//            throw new MojoFailureException(e.getMessage(), e);
+//        }
+//    }
+//
+//    private void generateXmlInstanceInspection(String fileName) throws MojoFailureException {
+//        try {
+//            File f = new File(fileName);
+//            XmlDocument d = new XmlInspectionService().inspectXmlDocument(f);
+//            String outputName = f.getName().substring(0, f.getName().length() - 4);
+//            writeToJsonFile(DEFAULT_OUTPUT_FILE_PREFIX + "-" + outputName, d);
+//        } catch (Exception e) {
+//            throw new MojoFailureException(e.getMessage(), e);
+//        }
+//    }
 
     public List<String> getArtifacts() {
         return artifacts;
